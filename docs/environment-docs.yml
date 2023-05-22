@@ -1,5 +1,5 @@
 # Conda environment for building the CATChem docs
-name: CATChem-docs
+name: catchem-docs
 channels:
   - conda-forge
   - nodefaults
