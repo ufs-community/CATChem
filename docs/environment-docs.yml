@@ -12,11 +12,6 @@ dependencies:
   - typer
   #
   # Docs
-  - ipykernel
-  - jupyterlab=3.*
-  - jupytext
-  - myst-nb>=0.14
-  - nbclient
   - sphinx=6.*
   - sphinx-autobuild
   - sphinx-click
