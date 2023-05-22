@@ -8,7 +8,7 @@ flexible, easy to modify, and well-documented infrastructure. CATChem will
 include the following processes: chemical kinetics, aerosols, photolysis, 
 wet deposition, dry deposition, connections to emissions, and connection to 
 physics schemes. The first use of CATChem will be connecting it to NOAA's 
-Unified Forecasting System to create UFS-Chem. CATChem and UFS-Chem are 
+Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. CATChem and UFS-Chem are 
 currently under development and more information will be provided soon.
  
 
