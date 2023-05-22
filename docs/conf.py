@@ -33,7 +33,6 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
     'sphinx.ext.extlinks',
-    'myst_nb',
     'sphinx_design',
     'sphinx_click',
     'sphinx_togglebutton',
