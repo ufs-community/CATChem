@@ -13,8 +13,3 @@ NOAA GSL          Jordan Schnell (jordanschnell), Kate Zhang (zhanglikate)
 NOAA GML          TBD
 NOAA EMC          TBD
 ================= ========================================================
-
-
-
-
-
