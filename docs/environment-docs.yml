@@ -1,0 +1,30 @@
+# Conda environment for building the CATChem docs
+name: CATChem-docs
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.9
+  #
+  #
+  # Extras
+  - pooch
+  - typer
+  #
+  # Docs
+  - ipykernel
+  - jupyterlab=3.*
+  - jupytext
+  - myst-nb>=0.14
+  - nbclient
+  - sphinx=4.*
+  - sphinx-autobuild
+  - sphinx-click
+  - sphinx-design
+  - sphinx_rtd_theme
+  - sphinx-togglebutton
+  #
+  - pip
+  - pip:
+    # melodies_monet itself
+    - '-e ../'
