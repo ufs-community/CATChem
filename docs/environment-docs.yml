@@ -18,8 +18,3 @@ dependencies:
   - sphinx-design
   - sphinx_rtd_theme
   - sphinx-togglebutton
-  #
-  - pip
-  - pip:
-    # melodies_monet itself
-    - '-e ../'
