@@ -12,7 +12,6 @@ ____
 This is the stable release branch.
 It is updated from the *develop* branch
 and tagged prior to each release.
-The melodies-monet conda package is created from *main*.
 
 develop
 _______
