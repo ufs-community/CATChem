@@ -34,7 +34,6 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.extlinks',
     'sphinx_design',
-    'sphinx_click',
     'sphinx_togglebutton',
 ]
 
