@@ -1,0 +1,14 @@
+# Conda environment for building the CATChem docs
+name: catchem-docs
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10
+  #
+  # Docs
+  - sphinx=6.*
+  - sphinx-autobuild
+  - sphinx-design
+  - sphinx_rtd_theme
+  - sphinx-togglebutton
