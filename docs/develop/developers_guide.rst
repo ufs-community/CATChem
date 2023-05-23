@@ -10,7 +10,7 @@ This is the parent branch which
 consolidates the current development in the repository.
 
 release-vX.Y.Z
-____
+______________
 These represent stable release branches.
 Users should always check out the most recent stable release branch
 when cloning the repository.
