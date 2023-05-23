@@ -9,7 +9,6 @@ dependencies:
   # Docs
   - sphinx=6.*
   - sphinx-autobuild
-  - sphinx-click
   - sphinx-design
   - sphinx_rtd_theme
   - sphinx-togglebutton
