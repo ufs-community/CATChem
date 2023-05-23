@@ -1,4 +1,4 @@
 # Configurable ATmospheric Chemistry 
 
-This is the repository for the Configureable ATmospheric Chemistry modelling component.
+This is the repository for the Configurable ATmospheric Chemistry modelling component.
 
