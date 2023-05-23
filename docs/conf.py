@@ -9,14 +9,14 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'CATChem'
-copyright = u'2023, NOAA'
-author = u''
+project = 'CATChem'
+copyright = '2023, NOAA'
+author = ''
 
 # The short X.Y version
-version = u''
+version = ''
 # The full version, including alpha/beta/rc tags
-release = u''
+release = ''
 
 # -- General configuration ---------------------------------------------------
 
@@ -92,7 +92,7 @@ language = None
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
 exclude_patterns = [
-    u'_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints',
+    '_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
