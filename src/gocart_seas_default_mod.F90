@@ -1,7 +1,7 @@
 !! Revision History:
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-module seas_emis_default_mod
+module gocart_seas_default_mod
 
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only : num_emis_seas,num_chem, &
@@ -20,9 +20,9 @@ CONTAINS
   subroutine gocart_seas_default(ktau,dt,u_phy,              &
           v_phy,chem_arr,dz8w,u10,         &
           v10,delp,tsk,area,       &
-          emis_seas,seas_opt)
+          emis_seas)
 
-     INTEGER,      INTENT(IN   ) :: ktau,seas_opt
+     INTEGER,      INTENT(IN   ) :: ktau
      REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
                                             dz8w,u10,v10,  &
                                             delp,           &
@@ -254,4 +254,4 @@ CONTAINS
 
   END SUBROUTINE source_ss
 
-end module seas_emis_default_mod
+end module gocart_seas_default_mod

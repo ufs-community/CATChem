@@ -10,9 +10,9 @@
    use machine ,        only : kind_phys
    use catchem_config
    !use seas_mod,        only : gocart_seasalt_driver
-   use seas_emis_2bins_mod,    only : gocart_seas_2bins
-   use seas_emis_default_mod,  only : gocart_seas_default
-   use seas_emis_ngac_mod,     only : gocart_seas_ngac
+   use gocart_seas_simple_mod,    only : gocart_seas_simple
+   use gocart_seas_default_mod,  only : gocart_seas_default
+   use gocart_seas_ngac_mod,     only : gocart_seas_ngac
 
    implicit none
 
@@ -148,11 +148,13 @@ contains
             select case (chem_opt)
 
               case (304, 316, 317)
-              ! -- only 2 bins
-              call gocart_seas_2bins(ktau,dt,u_phy(i,kts,j),                 &
+              !JianHe: 06/2023, we do not use this scheme
+              !Maybe we do not need this anymore
+              ! -- simple scheme
+              call gocart_seas_simple(ktau,dt,u_phy(i,kts,j),                 &
                   v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                   v10(i,j),delp,tsk(i,j),dxy(i,j),           &
-                  seashelp(i,j),seas_opt_in)
+                  seashelp(i,j))
 
               case default
 
@@ -164,7 +166,7 @@ contains
                   call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
                       v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                       v10(i,j),delp,tsk(i,j),dxy(i,j),           &
-                      emis_seas(i,1,j,:),seas_opt_in)
+                      emis_seas(i,1,j,:))
 
                   case (2)
                   ! -- NGAC sea salt scheme
@@ -173,7 +175,7 @@ contains
                       v10(i,j),ust(i,j),delp,tsk(i,j),       &
                       frocean(i,j),fraci(i,j),   &
                       xlat(i,j),xlong(i,j),dxy(i,j),emis_seas(i,1,j,:),      &
-                      seas_opt_in,sstemisFlag,seas_emis_scale,random_factor(i,j))
+                      sstemisFlag,seas_emis_scale,random_factor(i,j))
 
                   case default
                   ! -- no sea salt scheme

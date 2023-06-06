@@ -1,43 +1,28 @@
+!! Revision History:
+!! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
+
 module gocart_dmsemis_mod
 
-  use catchem_constants ,         only : kind_chem
-  use catchem_config,  only : smw, NDMS
+  use catchem_constants ,         only : kind_chem, g=>con_g, pi=>con_pi
+  use catchem_config,  only : smw, NDMS, mwdry, num_chem, p_dms
 
   implicit none
 
+  public :: gocart_dmsemis
+
 contains
 
-        subroutine gocart_dmsemis(dt,alt,t_phy,u_phy,  &
-         v_phy,chem,rho_phy,dz8w,u10,v10,p8w,dms_0,tsk,                  &
-         ivgtyp,isltyp,xland,area,g,mwdry, &
-         num_chem,p_dms,ids,ide, jds,jde, kds,kde,                                        &
-         ims,ime, jms,jme, kms,kme,                                        &
-         its,ite, jts,jte, kts,kte                                         )
+        subroutine gocart_dmsemis(dt,u_phy,v_phy,          &
+          chem_arr,dz8w,u10,v10,    &
+          delp,dms_0,tsk,area)
+
   IMPLICIT NONE
 
-   INTEGER,      INTENT(IN   ) :: p_dms,ids,ide, jds,jde, kds,kde,               &
-                                  num_chem,ims,ime, jms,jme, kms,kme,               &
-                                  its,ite, jts,jte, kts,kte
-
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),                 &
-         INTENT(INOUT ) ::                                   chem
-   REAL(kind_chem), DIMENSION( ims:ime, jms:jme),                                     &
-         INTENT(IN ) ::    dms_0,tsk
-   REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme )         ,               &
-          INTENT(IN   ) ::                              alt,               &
-                                                      t_phy,               &
-                                                      dz8w,                &
-                                              p8w,u_phy,v_phy,rho_phy
-   INTEGER,DIMENSION( ims:ime , jms:jme )                  ,               &
-          INTENT(IN   ) ::                                                 &
-                                                     ivgtyp,               &
-                                                     isltyp
-   REAL(kind_chem),  DIMENSION( ims:ime , jms:jme )                   ,               &
-          INTENT(IN   ) ::                                                 &
-                                                     u10,                  &
-                                                     v10,                  &
-                                                area,xland
-   real(kind_chem), intent(in) :: g,dt,mwdry
+   REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
+         INTENT(INOUT ) ::                                   chem_arr
+   REAL(kind_chem), INTENT(IN ) :: dt, u_phy,v_phy, &
+                                   dz8w,u10,v10,  &
+                                   delp,dms_0,tsk, area 
   
 !
 ! local variables
@@ -57,37 +42,27 @@ contains
   jmx=1
   lmx=1
   nmx=1
-  k=kts
   ndt=int(dt)
-  do j=jts,jte
-  do i=its,ite
-!
-! don't do this over land
-!
-     !if(xland(i,j).gt.1.5 .and. tsk(i,j).gt.273.)then
-     if(xland(i,j).lt.0.5 .and. tsk(i,j).gt.273.)then
-     ilwi(1,1)=0
 
-    tc(1,1,1,1)=chem(i,kts,j,p_dms)*1.d-6
-    dmso(1,1)=dms_0(i,j)
-!    w10m(1,1)=sqrt(u10(i,j)*u10(i,j)+v10(i,j)*v10(i,j))
-     airmas(1,1,1)=-1.*(p8w(i,kts+1,j)-p8w(i,kts,j))*area(i,j)/g
-     dxy(1)=area(i,j)
-     tskin(1,1)=tsk(i,j)
-     emsdms(1,1)=0.
+  ilwi(1,1)=0
+
+  tc(1,1,1,1)=chem_arr(p_dms)*1.d-6
+  dmso(1,1)=dms_0
+! w10m(1,1)=sqrt(u10*u10+v10*v10)
+  airmas(1,1,1)=delp*area/g
+  dxy(1)=area
+  tskin(1,1)=tsk
+  emsdms(1,1)=0.
 !
 ! we don't trust the u10,v10 values, is model layers are very thin near surface
 !
-!    if(dz8w(i,kts,j).lt.12.)w10m=sqrt(u_phy(i,kts,j)*u_phy(i,kts,j)+v_phy(i,kts,j)*v_phy(i,kts,j))
-     w10m=sqrt(u_phy(i,kts,j)*u_phy(i,kts,j)+v_phy(i,kts,j)*v_phy(i,kts,j))
+! if(dz8w(i,kts,j).lt.12.)w10m=sqrt(u_phy(i,kts,j)*u_phy(i,kts,j)+v_phy(i,kts,j)*v_phy(i,kts,j))
+  w10m=sqrt(u_phy*u_phy+v_phy*v_phy)
 
-    call  srcdms(imx, jmx, lmx, nmx, ndt, tc, mwdry,&
+  call  srcdms(imx, jmx, lmx, nmx, ndt, tc, mwdry,&
                   tskin, ilwi, dmso, w10m, airmas, dxy, emsdms, bems)
 !    chem(i,kts,j,p_dms)=max(1.e-30,tc(1,1,1,1)*1.e6)
-    chem(i,kts,j,p_dms)=max(max_default,tc(1,1,1,1)*1.e6)
-  endif
-  enddo
-  enddo
+  chem_arr(p_dms)=max(max_default,tc(1,1,1,1)*1.e6)
 !
 end subroutine gocart_dmsemis
 

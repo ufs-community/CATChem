@@ -1,7 +1,7 @@
 !! Revision History:
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-module seas_emis_2bins_mod
+module gocart_seas_simple_mod
 
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only: num_chem, p_seas_1, p_seas_2
@@ -11,16 +11,16 @@ module seas_emis_2bins_mod
 
   private
 
-  public :: gocart_seas_2bins
+  public :: gocart_seas_simple
 
 CONTAINS
 
-  subroutine gocart_seas_2bins(ktau,dt,u_phy,              &
+  subroutine gocart_seas_simple(ktau,dt,u_phy,              &
           v_phy,chem_arr,dz8w,u10,         &
           v10,delp,tsk,area,       &
-          seashelp,seas_opt)
+          seashelp)
 
-     INTEGER,      INTENT(IN   ) :: ktau,seas_opt
+     INTEGER,      INTENT(IN   ) :: ktau
      REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
                                             dz8w,u10,v10,  &
                                             delp,           &
@@ -80,7 +80,7 @@ CONTAINS
     seashelp=tc(2)*converi
      
 
-  end subroutine gocart_seas_2bins
+  end subroutine gocart_seas_simple
 
   SUBROUTINE source_ss(nmx, dt1, tc, &
                        ilwi, dxy, w10m, airmas, &
@@ -241,4 +241,4 @@ CONTAINS
 
   END SUBROUTINE source_ss
 
-end module seas_emis_2bins_mod
+end module gocart_seas_simple_mod

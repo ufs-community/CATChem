@@ -1,7 +1,7 @@
 !! Revision History:
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-module seas_emis_ngac_mod
+module gocart_seas_ngac_mod
 
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only : num_emis_seas,num_chem, &
@@ -25,10 +25,10 @@ CONTAINS
           v10,ustar,delp,tsk,        &
           frocean,fraci, &
           xlat,xlong,area,emis_seas,      &
-          seas_opt,sstemisFlag,emission_scale,&
+          sstemisFlag,emission_scale,&
           random_factor)
 
-     INTEGER,      INTENT(IN   ) :: ktau,seas_opt,sstemisFlag
+     INTEGER,      INTENT(IN   ) :: ktau,sstemisFlag
      REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
                                             dz8w,u10,v10,  &
                                             ustar,delp,           &
@@ -269,4 +269,4 @@ CONTAINS
   end function SeasaltEmissionGong
 
 
-end module seas_emis_ngac_mod
+end module gocart_seas_ngac_mod
