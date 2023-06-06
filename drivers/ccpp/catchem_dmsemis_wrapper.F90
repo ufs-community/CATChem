@@ -9,7 +9,7 @@
    use physcons,        only : g => con_g, pi => con_pi
    use machine ,        only : kind_phys
    use catchem_config
-   use gocart_dmsemis_mod
+   use gocart_dmsemis_mod, only : gocart_dmsemis
    use plume_rise_mod
 
    implicit none
@@ -85,7 +85,7 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-  
+    real(kind_phys) :: delp 
 
     errmsg = ''
     errflg = 0
@@ -118,13 +118,21 @@ contains
 
 
     if (dmsemis_opt == DMSE_OPT_ENABLE) then
-      call gocart_dmsemis(dt,rri,t_phy,u_phy,v_phy,                     &
-         chem,rho_phy,dz8w,u10,v10,p8w,dms_0,tsk,                       &
-         ivgtyp,isltyp,xland,dxy,g,mwdry,                               &
-         num_chem,p_dms,                                                &
-         ids,ide, jds,jde, kds,kde,                                     &
-         ims,ime, jms,jme, kms,kme,                                     &
-         its,ite, jts,jte, kts,kte)
+      do j=jts,jte
+        do i=its,ite
+          !
+          ! don't do this over land
+          !
+          if(xland(i,j).lt.0.5 .and. tsk(i,j).gt.273.)then
+            delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+
+            ! -- GOCART dms scheme 
+            call gocart_dmsemis(dt,u_phy(i,kts,j),v_phy(i,kts,j),          &
+                chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),v10(i,j),    &
+                delp,dms_0(i,j),tsk(i,j),dxy(i,j))
+          endif
+        enddo
+      end do   
     endif
 
 

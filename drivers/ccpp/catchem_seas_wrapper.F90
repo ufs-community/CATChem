@@ -9,7 +9,10 @@
    use physcons,        only : g => con_g, pi => con_pi
    use machine ,        only : kind_phys
    use catchem_config
-   use seas_mod,        only : gocart_seasalt_driver
+   !use seas_mod,        only : gocart_seasalt_driver
+   use seas_emis_2bins_mod,    only : gocart_seas_2bins
+   use seas_emis_default_mod,  only : gocart_seas_default
+   use seas_emis_ngac_mod,     only : gocart_seas_ngac
 
    implicit none
 
@@ -94,7 +97,7 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-  
+    real(kind_phys) :: delp 
 
     errmsg = ''
     errflg = 0
@@ -132,16 +135,60 @@ contains
 
     ! -- compute sea salt
     if (seas_opt_in >= SEAS_OPT_DEFAULT) then
-    call gocart_seasalt_driver(ktau,dt,rri,t_phy,moist,                 &
-        u_phy,v_phy,chem,rho_phy,dz8w,u10,v10,ust,p8w,tsk,              &
-        xland,frocean,fraci,xlat,xlong,dxy,g,emis_seas,                 &
-        seashelp,num_emis_seas,num_moist,num_chem,seas_opt_in,          &
-        sstemisFlag,seas_emis_scale, random_factor,                                                  &
-        ids,ide, jds,jde, kds,kde,                                      &
-        ims,ime, jms,jme, kms,kme,                                      &
-        its,ite, jts,jte, kts,kte)
-    endif 
+      seashelp(:,:) = 0.
 
+      do j=jts,jte
+        do i=its,ite
+
+          ! -- only use sea salt scheme over water
+          if (xland(i,j).lt.0.5) then
+            delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+
+            ! based on chem_opt
+            select case (chem_opt)
+
+              case (304, 316, 317)
+              ! -- only 2 bins
+              call gocart_seas_2bins(ktau,dt,u_phy(i,kts,j),                 &
+                  v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
+                  v10(i,j),delp,tsk(i,j),dxy(i,j),           &
+                  seashelp(i,j),seas_opt_in)
+
+              case default
+
+                ! based on seas_opt
+                select case (seas_opt_in)
+  
+                  case (1)         
+                  ! -- original GOCART sea salt scheme
+                  call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
+                      v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
+                      v10(i,j),delp,tsk(i,j),dxy(i,j),           &
+                      emis_seas(i,1,j,:),seas_opt_in)
+
+                  case (2)
+                  ! -- NGAC sea salt scheme
+                  call gocart_seas_ngac(ktau,dt,u_phy(i,kts,j),              &
+                      v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),         &
+                      v10(i,j),ust(i,j),delp,tsk(i,j),       &
+                      frocean(i,j),fraci(i,j),   &
+                      xlat(i,j),xlong(i,j),dxy(i,j),emis_seas(i,1,j,:),      &
+                      seas_opt_in,sstemisFlag,seas_emis_scale,random_factor(i,j))
+
+                  case default
+                  ! -- no sea salt scheme
+
+                end select
+
+            end select
+
+          endif ! xland < 0.5
+
+        end do
+      end do
+
+    endif
+ 
     ! -- put chem stuff back into tracer array
     do k=kts,kte
      do i=its,ite
