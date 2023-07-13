@@ -4,8 +4,12 @@ module dust_afwa_mod
 !  and Glenn Creighton (AFWA). For serious questions contact
 !
 !  08/31/2017 - Adapted for NUOPC/GOCART, R. Montuoro
+!  06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-  use catchem_constants ,         only : kind_chem
+  use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
+  use catchem_config, only: num_chem,num_emis_dust,&
+                            p_dust_1,p_dust_2,p_dust_3,p_dust_4,p_dust_5, &
+                            p_edust1,p_edust2,p_edust3,p_edust4,p_edust5
   use dust_data_mod
 
   implicit none
@@ -16,61 +20,38 @@ module dust_afwa_mod
 
 contains
 
-  subroutine gocart_dust_afwa_driver(ktau,dt,        &
-         chem,rho_phy,smois,p8w,erod,                   &
-         isltyp,xland,xlat,xlong,area,g,emis_dust,       &
-         srce_dust,ust,znt,clay,sand,                    &
-         num_emis_dust,num_chem,num_soil_layers,                 &
-         ids,ide, jds,jde, kds,kde,                                        &
-         ims,ime, jms,jme, kms,kme,                                        &
-         its,ite, jts,jte, kts,kte                                         )
+  subroutine gocart_dust_afwa_driver(ktau,dt,u_phy,              &
+          v_phy,chem_arr,rho_phy,dz8w,smois,u10,         &
+          v10,delp,erod,isltyp,area,       &
+          emis_dust,ust,znt,clay,sand, &
+          num_soil_layers)
+
   IMPLICIT NONE
 
-   INTEGER,      INTENT(IN   ) :: ktau,                            &
-                                  ids,ide, jds,jde, kds,kde,               &
-                                  ims,ime, jms,jme, kms,kme,               &
-                                  its,ite, jts,jte, kts,kte,               &
-                   num_emis_dust,num_chem,num_soil_layers
-   INTEGER,DIMENSION( ims:ime , jms:jme )                  ,               &
-          INTENT(IN   ) ::                                                 &
-                                                     isltyp
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),                 &
-         INTENT(INOUT ) ::                           chem
-   REAL(kind_chem), DIMENSION( ims:ime, 1, jms:jme,num_emis_dust),                    &
-         INTENT(INOUT ) ::                                                 &
-         emis_dust
-   REAL(kind_chem), DIMENSION( ims:ime, 1, jms:jme,num_emis_dust),                    &
-         INTENT(INOUT ) ::                                                 &
-         srce_dust
-   REAL(kind_chem), DIMENSION( ims:ime, num_soil_layers, jms:jme ) ,     &
-         INTENT(INOUT) ::                            smois
-   REAL(kind_chem), DIMENSION( ims:ime , jms:jme, ndcls )             ,               &
-         INTENT(IN   ) ::                            erod
-   REAL(kind_chem), DIMENSION( ims:ime , jms:jme )                    ,               &
-         INTENT(IN   ) ::                                                  &
-                                                     xland,                &
-                                                     xlat,                 &
-                                                     xlong,area,           &
-                                                     ust,                  &
-                                                     znt,                  &
-                                                     clay,                 &
-                                                     sand
-   REAL(kind_chem), DIMENSION( ims:ime , kms:kme , jms:jme ),              &
-         INTENT(IN   ) ::                                                  &
-                                                     p8w,                  &
-                                                     rho_phy
-  REAL(kind_chem), INTENT(IN   ) :: dt,g
+     INTEGER,      INTENT(IN   ) :: ktau, isltyp,  &
+                                    num_soil_layers
+     REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
+                                            rho_phy, &
+                                            dz8w,u10,v10,  &
+                                            delp,area,     &
+                                            ust,znt, &
+                                            clay,sand
+
+     REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
+           INTENT(INOUT ) ::                                   chem_arr
+     REAL(kind=kind_chem), DIMENSION(num_emis_dust),&
+           INTENT(INOUT ) ::                  emis_dust
+     REAL(kind=kind_chem), DIMENSION( num_soil_layers ) , &
+        INTENT(INOUT) ::                               smois
+     REAL(kind=kind_chem),  DIMENSION( 3 ) ,               &
+            INTENT(IN   ) ::    erod
 
 ! Local variables
 
-  integer :: nmx,smx,i,j,k,imx,jmx,lmx
-  integer,dimension (1,1) :: ilwi
-  real(kind_chem), DIMENSION (1,1) :: erodtot
-  REAL(kind_chem), DIMENSION (1,1) :: gravsm
-  REAL(kind_chem), DIMENSION (1,1) :: drylimit
+  integer :: nmx,smx,ilwi
+  real(kind_chem) :: erodtot, gravsm, drylimit
   real(kind_chem), DIMENSION (5)   :: tc,bems
-  real(kind_chem), dimension (1,1) :: airden,airmas,ustar
-  real(kind_chem), dimension (1) :: dxy
+  real(kind_chem) :: airden,airmas,ustar,dxy
   real(kind_chem), dimension (3) :: massfrac
   real(kind_chem) :: conver,converi
 
@@ -79,46 +60,36 @@ contains
 
 ! Number of dust bins
 
-  imx=1
-  jmx=1
-  lmx=1
   nmx=ndust
   smx=nsalt
 
-  k=kts
-  do j=jts,jte
-  do i=its,ite
-
 ! Don't do dust over water!!!
 
-    ilwi(1,1)=0
-    if(xland(i,j).lt.1.5)then
-      ilwi(1,1)=1
+  ilwi=1
 
 ! Total concentration at lowest model level. This is still hardcoded for 5 bins.
-
-      tc(1)=chem(i,kts,j,p_dust_1)*conver
-      tc(2)=chem(i,kts,j,p_dust_2)*conver
-      tc(3)=chem(i,kts,j,p_dust_3)*conver
-      tc(4)=chem(i,kts,j,p_dust_4)*conver
-      tc(5)=chem(i,kts,j,p_dust_5)*conver
+  tc(1)=chem_arr(p_dust_1)*conver
+  tc(2)=chem_arr(p_dust_2)*conver
+  tc(3)=chem_arr(p_dust_3)*conver
+  tc(4)=chem_arr(p_dust_4)*conver
+  tc(5)=chem_arr(p_dust_5)*conver
 
 ! Air mass and density at lowest model level.
 
-      airmas(1,1)=-(p8w(i,kts+1,j)-p8w(i,kts,j))*area(i,j)/g
-      airden(1,1)=rho_phy(i,kts,j)
-      ustar(1,1)=ust(i,j)
-      dxy(1)=area(i,j)
+  airmas=area * delp / g
+  airden=rho_phy
+  ustar=ust
+  dxy=area
  
 ! Total erodibility.
 
-      erodtot(1,1)=SUM(erod(i,j,:))
+  erodtot=SUM(erod(:))
 
 ! Mass fractions of clay, silt, and sand.
 
-      massfrac(1)=clay(i,j)
-      massfrac(2)=1-(clay(i,j)+sand(i,j))
-      massfrac(3)=sand(i,j)
+  massfrac(1)=clay
+  massfrac(2)=1-(clay+sand)
+  massfrac(3)=sand
 
 ! Don't allow roughness lengths greater than 20 cm to be lofted.
 ! This kludge accounts for land use types like urban areas and
@@ -127,53 +98,51 @@ contains
 ! factor in the literature, which reduces lofting for rough areas.
 ! Forthcoming...
 
-      IF (znt(i,j) .gt. 0.2) then
-        ilwi(1,1)=0
-      ENDIF
+  IF (znt .gt. 0.2) then
+    ilwi=0
+  ENDIF
 
 ! Do not allow areas with bedrock, lava, or land-ice to loft
 
-      IF (isltyp(i,j) .eq. 15 .or. isltyp(i,j) .eq. 16. .or. &
-          isltyp(i,j) .eq. 18) then
-        ilwi(1,1)=0
-      ENDIF
-      IF (isltyp(i,j) .eq. 0)then
-            ilwi(1,1)=0
-      endif
-      if(ilwi(1,1) == 0 ) cycle
+  IF (isltyp.eq. 15 .or. isltyp .eq. 16. .or. &
+          isltyp .eq. 18) then
+    ilwi=0
+  ENDIF
+  IF (isltyp .eq. 0)then
+    ilwi=0
+  endif
 
-! Calculate gravimetric soil moisture and drylimit.
+  if(ilwi == 0 ) return
 
-      gravsm(1,1)=100.*smois(i,1,j)/((1.-maxsmc(isltyp(i,j)))*(2.65*(1.-clay(i,j))+2.50*clay(i,j)))
-      drylimit(1,1)=14.0*clay(i,j)*clay(i,j)+17.0*clay(i,j)
+  ! Calculate gravimetric soil moisture and drylimit.
+
+  gravsm=100.*smois(1)/((1.-maxsmc(isltyp))*(2.65*(1.-clay)+2.50*clay))
+  drylimit=14.0*clay*clay+17.0*clay
  
-! Call dust emission routine.
-      call source_dust(imx, jmx, lmx, nmx, smx, dt, tc, ustar, massfrac, &
-                       erodtot, ilwi, dxy, gravsm, airden, airmas, &
-                       bems, g, drylimit, dust_alpha, dust_gamma)
+  ! Call dust emission routine.
+  call source_dust(nmx, smx, dt, tc, ustar, massfrac, &
+                   erodtot, ilwi, dxy, gravsm, airden, airmas, &
+                   bems, g, drylimit, dust_alpha, dust_gamma)
 
-     chem(i,kts,j,p_dust_1)=tc(1)*converi
-     chem(i,kts,j,p_dust_2)=tc(2)*converi
-     chem(i,kts,j,p_dust_3)=tc(3)*converi
-     chem(i,kts,j,p_dust_4)=tc(4)*converi
-     chem(i,kts,j,p_dust_5)=tc(5)*converi
+  chem_arr(p_dust_1)=tc(1)*converi
+  chem_arr(p_dust_2)=tc(2)*converi
+  chem_arr(p_dust_3)=tc(3)*converi
+  chem_arr(p_dust_4)=tc(4)*converi
+  chem_arr(p_dust_5)=tc(5)*converi
 
-! For output diagnostics
+  ! -- for output diagnostics
+  emis_dust(p_edust1)=bems(1)
+  emis_dust(p_edust2)=bems(2)
+  emis_dust(p_edust3)=bems(3)
+  emis_dust(p_edust4)=bems(4)
+  emis_dust(p_edust5)=bems(5)
 
-      emis_dust(i,1,j,p_edust1)=bems(1)
-      emis_dust(i,1,j,p_edust2)=bems(2)
-      emis_dust(i,1,j,p_edust3)=bems(3)
-      emis_dust(i,1,j,p_edust4)=bems(4)
-      emis_dust(i,1,j,p_edust5)=bems(5)
-    endif
-  enddo
-  enddo
 !
 
 end subroutine gocart_dust_afwa_driver
 
   
-  SUBROUTINE source_dust(imx, jmx, lmx, nmx, smx, dt1, tc, ustar, massfrac,&
+  SUBROUTINE source_dust(nmx, smx, dt1, tc, ustar, massfrac,&
                          erod, ilwi, dxy, gravsm, airden, airmas, &
                          bems, g0, drylimit, alpha, gamma)
 
@@ -238,16 +207,16 @@ end subroutine gocart_dust_afwa_driver
 ! *
 ! ****************************************************************************
 
-  INTEGER, INTENT(IN)   :: nmx,imx,jmx,lmx,smx
-  INTEGER, INTENT(IN)   :: ilwi(imx,jmx)
-  REAL(kind_chem), INTENT(IN)    :: erod(imx,jmx)
-  REAL(kind_chem), INTENT(IN)    :: ustar(imx,jmx)
-  REAL(kind_chem), INTENT(IN)    :: gravsm(imx,jmx)
-  REAL(kind_chem), INTENT(IN)    :: drylimit(imx,jmx) 
-  REAL(kind_chem), INTENT(IN)    :: dxy(jmx)
-  REAL(kind_chem), INTENT(IN)    :: airden(imx,jmx,lmx), airmas(imx,jmx,lmx)
-  REAL(kind_chem), INTENT(INOUT) :: tc(imx,jmx,lmx,nmx)
-  REAL(kind_chem), INTENT(OUT)   :: bems(imx,jmx,nmx) 
+  INTEGER, INTENT(IN)   :: nmx,smx
+  INTEGER, INTENT(IN)   :: ilwi
+  REAL(kind_chem), INTENT(IN)    :: erod
+  REAL(kind_chem), INTENT(IN)    :: ustar
+  REAL(kind_chem), INTENT(IN)    :: gravsm
+  REAL(kind_chem), INTENT(IN)    :: drylimit
+  REAL(kind_chem), INTENT(IN)    :: dxy
+  REAL(kind_chem), INTENT(IN)    :: airden, airmas
+  REAL(kind_chem), INTENT(INOUT) :: tc(nmx)
+  REAL(kind_chem), INTENT(OUT)   :: bems(nmx) 
   REAL(kind_chem), INTENT(IN)    :: g0,dt1
 
   REAL(kind_chem)    :: den(smx), diam(smx)
@@ -327,53 +296,49 @@ end subroutine gocart_dust_afwa_driver
  DO n = 1, smx
    den(n) = den_salt(n)*1.0D-3         ! (g cm^-3)
    diam(n) = 2.0*reff_salt(n)*1.0D2    ! (cm)
-   DO i = 1,imx
-     DO j = 1,jmx
-       rhoa = airden(i,j,1)*1.0D-3       ! (g cm^-3)
+   rhoa = airden*1.0D-3       ! (g cm^-3)
 
-     ! Threshold friction velocity as a function of the dust density and
-     ! diameter from Bagnold (1941) (m s^-1).
+   ! Threshold friction velocity as a function of the dust density and
+   ! diameter from Bagnold (1941) (m s^-1).
 
-       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
+   u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
                SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
                SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
 
-     ! Friction velocity threshold correction function based on physical
-     ! properties related to moisture tension. Soil moisture greater than
-     ! dry limit serves to increase threshold friction velocity (making
-     ! it more difficult to loft dust). When soil moisture has not reached
-     ! dry limit, treat as dry (no correction to threshold friction
-     ! velocity). GC
+   ! Friction velocity threshold correction function based on physical
+   ! properties related to moisture tension. Soil moisture greater than
+   ! dry limit serves to increase threshold friction velocity (making
+   ! it more difficult to loft dust). When soil moisture has not reached
+   ! dry limit, treat as dry (no correction to threshold friction
+   ! velocity). GC
 
-       IF (gravsm(i,j) > drylimit(i,j)) THEN
-         u_ts = MAX(0.0D+0,u_ts0*(sqrt(1.0+1.21*(gravsm(i,j)-drylimit(i,j))**0.68)))
-       ELSE
-         u_ts = u_ts0
-       END IF 
+   IF (gravsm > drylimit) THEN
+      u_ts = MAX(0.0D+0,u_ts0*(sqrt(1.0+1.21*(gravsm-drylimit)**0.68)))
+   ELSE
+      u_ts = u_ts0
+   END IF 
 
-     ! Saltation flux from Marticorena & Bergametti 1995 (MB95). ds_rel is
-     ! the relative surface area distribution
+   ! Saltation flux from Marticorena & Bergametti 1995 (MB95). ds_rel is
+   ! the relative surface area distribution
 
-       IF (ustar(i,j) .gt. u_ts .and. erod(i,j) .gt. 0.0 .and. ilwi(i,j) == 1) THEN
-         salt = cmb*ds_rel(n)*(airden(i,j,1)/g0)*(ustar(i,j)**3)* &
-                (1. + u_ts/ustar(i,j))*(1. - (u_ts**2)/(ustar(i,j)**2))  ! (kg m^-1 s^-1)
-       ELSE 
-         salt = 0.0
-       ENDIF
+   IF (ustar .gt. u_ts .and. erod .gt. 0.0 .and. ilwi == 1) THEN
+      salt = cmb*ds_rel(n)*(airden/g0)*(ustar**3)* &
+                (1. + u_ts/ustar)*(1. - (u_ts**2)/(ustar**2))  ! (kg m^-1 s^-1)
+   ELSE 
+      salt = 0.0
+   ENDIF
 
-     ! Calculate total vertical mass flux (note beta has units of m^-1)
-     ! Beta acts to tone down dust in areas with so few dust-sized particles that the
-     ! lofting efficiency decreases.  Otherwise, super sandy zones would be huge dust
-     ! producers, which is generally not the case.  Equation derived from wind-tunnel 
-     ! experiments (see MB95).
+   ! Calculate total vertical mass flux (note beta has units of m^-1)
+   ! Beta acts to tone down dust in areas with so few dust-sized particles that the
+   ! lofting efficiency decreases.  Otherwise, super sandy zones would be huge dust
+   ! producers, which is generally not the case.  Equation derived from wind-tunnel 
+   ! experiments (see MB95).
 
-       beta=10**(13.6*massfrac(1)-6.0)  ! (unitless)
-       if (beta .gt. betamax) then
-         beta=betamax
-       endif
-       emit=emit+salt*(erod(i,j)**gamma)*alpha*beta    ! (kg m^-2 s^-1)
-     END DO
-   END DO
+   beta=10**(13.6*massfrac(1)-6.0)  ! (unitless)
+   if (beta .gt. betamax) then
+     beta=betamax
+   endif
+   emit=emit+salt*(erod**gamma)*alpha*beta    ! (kg m^-2 s^-1)
  END DO
 
 ! Now that we have the total dust emission, distribute into dust bins using 
@@ -405,18 +370,14 @@ end subroutine gocart_dust_afwa_driver
 ! Now distribute total vertical emission into dust bins and update concentration.
 
  DO n=1,nmx 
-   DO i=1,imx
-     DO j=1,jmx
-      ! Calculate total mass emitted
-        dsrc = emit*distr_dust(n)*dxy(j)*dt1  ! (kg)
-        IF (dsrc < 0.0) dsrc = 0.0
+  ! Calculate total mass emitted
+    dsrc = emit*distr_dust(n)*dxy*dt1  ! (kg)
+    IF (dsrc < 0.0) dsrc = 0.0
 
-      ! Update dust mixing ratio at first model level.
-        tc(i,j,1,n) = tc(i,j,1,n) + dsrc / airmas(i,j,1) ! (kg/kg)
-        !bems(i,j,n) = dsrc/(dxy(j)*dt1) ! diagnostic (kg/m2/s)
-        bems(i,j,n) = 1.e+9*dsrc/(dxy(j)*dt1) ! diagnostic (ug/m2/s)
-     END DO
-   END DO
+  ! Update dust mixing ratio at first model level.
+    tc(n) = tc(n) + dsrc / airmas ! (kg/kg)
+    !bems(i,j,n) = dsrc/(dxy(j)*dt1) ! diagnostic (kg/m2/s)
+    bems(n) = 1.e+9*dsrc/(dxy*dt1) ! diagnostic (ug/m2/s)
  END DO
 
 END SUBROUTINE source_dust

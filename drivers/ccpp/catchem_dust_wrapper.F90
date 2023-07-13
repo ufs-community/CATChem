@@ -9,7 +9,8 @@
    use physcons,        only : g => con_g, pi => con_pi
    use machine ,        only : kind_phys
    use catchem_config
-   use dust_gocart_mod, only : gocart_dust_driver
+   use gocart_dust_simple_mod, only : gocart_dust_simple
+   use gocart_dust_default_mod, only : gocart_dust_default
    use dust_afwa_mod,   only : gocart_dust_afwa_driver
    use dust_fengsha_mod,only : gocart_dust_fengsha_driver
    use dust_data_mod
@@ -121,7 +122,7 @@ contains
     integer :: nbegin, nv, nvv
     integer :: i, j, jp, k, kp, n
     real(kind_phys), dimension(ims:im,jms:jme) :: random_factor
-  
+    real(kind_phys) :: delp
 
     errmsg = ''
     errflg = 0
@@ -178,50 +179,91 @@ contains
 
     !-- compute dust
     !store_arrays = .false.
+    dusthelp(:,:) = 0.
+
     select case (dust_opt)
       case (DUST_OPT_AFWA)
         dust_alpha = dust_alpha_in 
         dust_gamma = dust_gamma_in
-        call gocart_dust_afwa_driver(ktau,dt,                           &
-          chem,rho_phy,smois,p8w,erod,isltyp,                           &
-          xland,xlat,xlong,dxy,g,emis_dust,srce_dust,                   &
-          ust,znt,clayf,sandf,                                          &
-          num_emis_dust,num_chem,nsoil,                       &
-          ids,ide, jds,jde, kds,kde,                                    &
-          ims,ime, jms,jme, kms,kme,                                    &
-          its,ite, jts,jte, kts,kte)
-       !store_arrays = .true.
+
+        do j=jts,jte
+          do i=its,ite
+            if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)            
+              ! -- GOCART afwa dust scheme
+              call gocart_dust_afwa_driver(ktau,dt,u_phy(i,kts,j), &
+                v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
+                v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),    &
+                emis_dust(i,1,j,:),&
+                ust(i,j),znt(i,j),clayf(i,j),sandf(i,j),nsoil)
+              !store_arrays = .true.
+            endif
+          enddo
+        enddo
+
       case (DUST_OPT_FENGSHA)
-       dust_alpha    = dust_alpha_in  !fengsha_alpha
-       dust_gamma    = dust_gamma_in  !fengsha_gamma
-       call gocart_dust_fengsha_driver(dt,chem,rho_phy,smois,p8w,ssm,   &
-            isltyp,vegfrac,snowh,xland,dxy,g,emis_dust,ust,znt,         &
-            clayf,sandf,rdrag,uthr,                                     &
-            num_emis_dust,num_moist,num_chem,nsoil,                     &
-            random_factor,                                              &
-            ids,ide, jds,jde, kds,kde,                                  &
-            ims,ime, jms,jme, kms,kme,                                  &
-            its,ite, jts,jte, kts,kte)
-       !store_arrays = .true.
+        dust_alpha    = dust_alpha_in  !fengsha_alpha
+        dust_gamma    = dust_gamma_in  !fengsha_gamma
+
+        do j=jts,jte
+          do i=its,ite
+            if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+              ! -- GOCART afwa dust scheme
+              call gocart_dust_fengsha_driver(dt,&
+                chem(i,kts,j,:),rho_phy(i,kts,j), &
+                dz8w(i,kts,j),smois(i,:,j), &
+                delp,ssm(i,j),isltyp(i,j),vegfrac(i,j),&
+                snowh(i,j),dxy(i,j),emis_dust(i,1,j,:), &
+                ust(i,j),znt(i,j),clayf(i,j),sandf(i,j), &
+                rdrag(i,j),uthr(i,j),nsoil,random_factor(i,j))
+              !store_arrays = .true.
+            endif
+          enddo
+        enddo
+
       case (DUST_OPT_GOCART)
         dust_alpha = gocart_alpha
         dust_gamma = gocart_gamma
-        call gocart_dust_driver(chem_opt,ktau,dt,rri,t_phy,moist,u_phy, &
-          v_phy,chem,rho_phy,dz8w,smois,u10,v10,p8w,erod,ivgtyp,isltyp, &
-          vegfrac,xland,xlat,xlong,gsw,dxy,g,emis_dust,srce_dust,       &
-          dusthelp,num_emis_dust,num_moist,num_chem,nsoil,              &
-          current_month,                                                &
-          ids,ide, jds,jde, kds,kde,                                    &
-          ims,ime, jms,jme, kms,kme,                                    &
-          its,ite, jts,jte, kts,kte)
+
+        do j=jts,jte
+          do i=its,ite
+            if(xland(i,j).lt.1.5 .and. xland(i,j).gt.0.5)then
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+
+              ! based on chem_opt
+              select case (chem_opt)
+
+                case (304, 316, 317)
+                  !JianHe: 06/2023, we do not use this scheme
+                  !Maybe we do not need this anymore
+                  ! -- simple scheme
+                  call gocart_dust_simple(ktau,dt,u_phy(i,kts,j), &
+                    v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                    dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
+                    v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),           &
+                    emis_dust(i,1,j,:),dusthelp(i,j),nsoil,current_month)
+
+                case default
+                    ! -- default GOCART dust scheme
+                    call gocart_dust_default(ktau,dt,u_phy(i,kts,j), &
+                      v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                      dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
+                      v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),           &
+                      emis_dust(i,1,j,:),srce_dust(i,1,j,:),nsoil,current_month)
+
+              end select
+            endif
+          enddo
+        enddo         
+
       case default
         errmsg = 'Logic error in catchem_dust_wrapper_run: invalid dust_opt'
         errflg = 1
         return
-       !store_arrays = .true.
+        !store_arrays = .true.
     end select
-
-
 
     ! -- put chem stuff back into tracer array
     do k=kts,kte

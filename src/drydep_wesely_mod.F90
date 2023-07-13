@@ -1,9 +1,9 @@
-module dep_simple_mod
+! Revision History:
+!! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
+
+module drydep_wesely_mod
 
   use catchem_config, GOCART_SIMPLE => CHEM_OPT_GOCART, chem_opt=>chem_opt
-!  use chem_tracers_mod, config_flags => chem_config
-
-! USE module_data_sorgam
 
   implicit none
 
@@ -68,83 +68,39 @@ module dep_simple_mod
 !--------------------------------------------------
 ! .. Default Accessibility ..
 !--------------------------------------------------
-    PUBLIC
+    PUBLIC 
 
     logical, allocatable :: is_aerosol(:) ! true if field is aerosol (any phase)
 
     CONTAINS
 
-SUBROUTINE wesely_driver(  ktau, dtstep, current_month,  &
-                          gmt, julday, t_phy,moist, p8w, t8w, raincv,     &
-                          p_phy, chem, rho_phy, dz8w, ddvel, aer_res_def, &
-                          aer_res_zcen, ivgtyp, tsk, gsw, vegfra, pbl,    &
-                          rmol, ust, znt, xlat, xlong,                    &
-                          z, z_at_w, snowh, numgas,                       &
-                          ids,ide, jds,jde, kds,kde,                      &
-                          ims,ime, jms,jme, kms,kme,                      &
-                          its,ite, jts,jte, kts,kte                       )
+SUBROUTINE wesely_driver( current_month, julday, &
+                          t_phy,moist, p8w, raincv,     &
+                          p_phy, ddvel, ivgtyp,tsk, gsw, vegfra,     &
+                          rmol, ust, znt, delz_at_w, snowh        )
 !--------------------------------------------------
 !  Wesely dry dposition driver
 !--------------------------------------------------
 
-!  USE module_model_constants 
-!  USE module_wrf_control,only:num_moist,num_chem
-!  USE module_state_description                       
-! USE module_initial_chem_namelists
-! USE module_data_sorgam
-!  USE module_state_description, only:  param_first_scalar        
-   INTEGER,      INTENT(IN   ) :: julday,                              &
-                                  numgas, current_month,                  &
-                                  ids,ide, jds,jde, kds,kde,              &
-                                  ims,ime, jms,jme, kms,kme,              &
-                                  its,ite, jts,jte, kts,kte     
-   INTEGER,      INTENT(IN   ) :: ktau            
-      REAL,      INTENT(IN   ) :: dtstep,gmt
+   INTEGER,      INTENT(IN   ) :: julday, current_month
+   INTEGER,      INTENT(IN   ) :: ivgtyp
 
 !--------------------------------------------------
 ! advected moisture variables
 !--------------------------------------------------
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme, num_moist ), INTENT(IN ) :: &
+   REAL, DIMENSION( num_moist ), INTENT(IN ) :: &
                                                       moist  
-!--------------------------------------------------
-! advected chemical species
-!--------------------------------------------------
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ), INTENT(INOUT ) :: &
-                                                      chem
 !--------------------------------------------------
 ! deposition velocities
 !--------------------------------------------------
-   REAL, DIMENSION( its:ite, jts:jte, num_chem ), INTENT(INOUT ) ::      &
+   REAL, DIMENSION( num_chem ), INTENT(INOUT ) ::      &
                                                       ddvel                     
 !--------------------------------------------------
 ! input from met model
 !--------------------------------------------------
-   REAL,  DIMENSION( ims:ime , kms:kme , jms:jme ), INTENT(IN   ) ::      &
-                                                      t_phy,              &
-                                                      p_phy,              &
-                                                      dz8w,               &
-                                                      z,                  &
-                                                      t8w,                &
-                                                      p8w,                &
-                                                      z_at_w,             &
-                                                      rho_phy
-   INTEGER,DIMENSION( ims:ime , jms:jme ), INTENT(IN   ) ::               &
-                                                     ivgtyp
-   REAL,  DIMENSION( ims:ime , jms:jme ), INTENT(INOUT   ) ::             &
-                                                     tsk,                 &
-                                                     gsw,                 &
-                                                     vegfra,              &
-                                                     pbl,                 &
-                                                     rmol,                &
-                                                     ust,                 &
-                                                     xlat,                &
-                                                     xlong,               &
-                                                     raincv,              &
-                                                     znt
-   REAL, intent(inout) ::                            aer_res_def(its:ite,jts:jte)
-   REAL, intent(inout) ::                            aer_res_zcen(its:ite,jts:jte)
-   REAL, INTENT(IN)    ::                            snowh(ims:ime,jms:jme)
-
+   REAL, INTENT(IN   ) :: t_phy,p_phy,p8w,delz_at_w,snowh
+   REAL, INTENT(INOUT   ) :: tsk,gsw,vegfra,rmol,ust, &
+                             raincv,znt
 !--------------------------------------------------
 ! .. Local Scalars
 !--------------------------------------------------
@@ -155,9 +111,11 @@ SUBROUTINE wesely_driver(  ktau, dtstep, current_month,  &
 !--------------------------------------------------
 ! .. Local Arrays
 !--------------------------------------------------
-      REAL :: p(kts:kte)
+      REAL :: p
       REAL :: srfres(numgas)
       REAL :: ddvel0d(numgas)
+      REAL :: aer_res_def
+      REAL :: aer_res_zcen
 
 !-----------------------------------------------------------
 ! necessary for aerosols (module dependent)         
@@ -191,60 +149,56 @@ SUBROUTINE wesely_driver(  ktau, dtstep, current_month,  &
       end if
 
 
-tile_lat_loop : &
-      do j = jts,jte 
-tile_lon_loop : &
-         do i = its,ite 
-            iprt  = 0
+      iprt  = 0
 
-            iland = luse2usgs( ivgtyp(i,j) )
+      iland = luse2usgs( ivgtyp )
 !--
 
-            if( chem_opt == MOZART_KPP .or. &
-                chem_opt == MOZCART_KPP .or. &
-                chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-                chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) then
-               if( snowh(i,j) < .01 ) then 
-                  !iseason = seasonal_pft%seasonal_wes(i,j,iland,current_month)
-                  if (current_month.GE.3 .AND. CURRENT_MONTH .LE.5) then
-                     iseason=1
-                  else if &
-                  (current_month.GE.6 .AND. CURRENT_MONTH .LE.8) then
-                     iseason=2
-                  else if & 
-                  (current_month.GE.9 .AND. CURRENT_MONTH .LE.11) then
-                     iseason=3
-                  else
-                     iseason=4
-                  endif
+      if( chem_opt == MOZART_KPP .or. &
+          chem_opt == MOZCART_KPP .or. &
+          chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+          chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) then
+         if( snowh  < .01 ) then 
+            !iseason = seasonal_pft%seasonal_wes(i,j,iland,current_month)
+            if (current_month.GE.3 .AND. CURRENT_MONTH .LE.5) then
+                iseason=1
+            else if &
+               (current_month.GE.6 .AND. CURRENT_MONTH .LE.8) then
+                iseason=2
+            else if & 
+               (current_month.GE.9 .AND. CURRENT_MONTH .LE.11) then
+               iseason=3
+            else
+               iseason=4
+            endif
                                   
-               else
-                  iseason = 4
-               endif
-            end if
-            ta    = tsk(i,j)
-            rad   = gsw(i,j)
-            vegfrac = vegfra(i,j)
-            pa      = .01*p_phy(i,kts,j)
-            clwchem = moist(i,kts,j,p_qc)
-            ustar = ust(i,j)
-            zntt  = znt(i,j)
-            z1    = z_at_w(i,kts+1,j) - z_at_w(i,kts,j)
+         else
+            iseason = 4
+         endif
+      end if
+      ta    = tsk
+      rad   = gsw
+      vegfrac = vegfra
+      pa      = .01*p_phy
+      clwchem = moist(p_qc)
+      ustar = ust
+      zntt  = znt
+      z1    = delz_at_w
 !-----------------------------------------------------------
 !     Set logical default values
 !-----------------------------------------------------------
-            rainflag = .FALSE.
-            wetflag  = .FALSE.
-            highnh3  = .FALSE.
-            if(p_qr > 1) then
-               if(moist(i,kts,j,p_qr) > 1.e-18 .or. raincv(i,j) > 0.) then
-                  rainflag = .true.
-               endif
-            endif
-            rhchem = MIN( 100.,100. * moist(i,kts,j,p_qv) / &
-                     (3.80*exp(17.27*(t_phy(i,kts,j)-273.)/(t_phy(i,kts,j)-36.))/pa))
-            rhchem = MAX(5.,RHCHEM)
-            if (rhchem >= 95.) wetflag = .true.
+      rainflag = .FALSE.
+      wetflag  = .FALSE.
+      highnh3  = .FALSE.
+      if(p_qr > 1) then
+         if(moist(p_qr) > 1.e-18 .or. raincv > 0.) then
+            rainflag = .true.
+         endif
+      endif
+      rhchem = MIN( 100.,100. * moist(p_qv) / &
+               (3.80*exp(17.27*(t_phy-273.)/(t_phy-36.))/pa))
+      rhchem = MAX(5.,RHCHEM)
+      if (rhchem >= 95.) wetflag = .true.
 
 !            if( p_nh3 > 1 .and. p_so2 > 1 ) then
 !               if( chem(i,kts,j,p_nh3) > 2.*chem(i,kts,j,p_so2) ) then
@@ -256,38 +210,37 @@ tile_lon_loop : &
 !--- deposition
 !-----------------------------------------------------------
 !     if(snowc(i,j).gt.0.)iseason=4
-            CALL rc( rcx, ta, rad, rhchem, iland, &
-                     iseason, numgas, wetflag, rainflag, highnh3, &
-                     iprt, moist(i,kts,j,p_qv), p8w(i,kts,j) )
-            if( chem_opt /= MOZART_KPP .and. &
-                chem_opt /= MOZCART_KPP .and. &
-                chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
-                chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP)  then
-               srfres(1:numgas-2) = rcx(1:numgas-2)
-               srfres(numgas-1:numgas) = 0.
-            else
-               srfres(1:numgas) = rcx(1:numgas)
-            end if
-            CALL deppart( rmol(i,j), ustar, rhchem, clwchem, iland, dvpart, dvfog )
-            ddvel0d(1:numgas) = 0.
-            aer_res_def(i,j)  = 0.
-            aer_res_zcen(i,j) = 0.
-            CALL landusevg( ddvel0d, ustar, rmol(i,j), zntt, z1, dvpart, iland,        &
-                            numgas, srfres, aer_res_def(i,j), aer_res_zcen(i,j), p_sulf )
+      CALL rc( rcx, ta, rad, rhchem, iland, &
+               iseason, numgas, wetflag, rainflag, highnh3, &
+               iprt, moist(p_qv), p8w )
+
+      if( chem_opt /= MOZART_KPP .and. &
+          chem_opt /= MOZCART_KPP .and. &
+          chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
+          chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP)  then
+         srfres(1:numgas-2) = rcx(1:numgas-2)
+         srfres(numgas-1:numgas) = 0.
+      else
+         srfres(1:numgas) = rcx(1:numgas)
+      end if
+      CALL deppart( rmol, ustar, rhchem, clwchem, iland, dvpart, dvfog )
+      ddvel0d(1:numgas) = 0.
+      aer_res_def  = 0.
+      aer_res_zcen = 0.
+      CALL landusevg( ddvel0d, ustar, rmol, zntt, z1, dvpart, iland,        &
+                      numgas, srfres, aer_res_def, aer_res_zcen, p_sulf )
 
 !-----------------------------------------------------------
 !wig: CBMZ does not have HO and HO2 last so need to copy all species
 !      ddvel(i,j,1:numgas-2)=ddvel0d(1:numgas-2)
 !-----------------------------------------------------------
-            ddvel(i,j,1:numgas) = ddvel0d(1:numgas)
-            if ( (chem_opt == RADM2           ) .or.   &
-                 (chem_opt == RADM2SORG       ) .or.   &
-                 (chem_opt == RADM2SORG_AQ    ) .or.   &
-                 (chem_opt == RADM2SORG_AQCHEM) ) then
-!                     ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
-            end if
-         end do tile_lon_loop
-      end do tile_lat_loop
+      ddvel(1:numgas) = ddvel0d(1:numgas)
+      if ( (chem_opt == RADM2           ) .or.   &
+           (chem_opt == RADM2SORG       ) .or.   &
+           (chem_opt == RADM2SORG_AQ    ) .or.   &
+           (chem_opt == RADM2SORG_AQCHEM) ) then
+!               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
+      end if
      
 !-----------------------------------------------------------
 ! For the additional CBMZ species, assign similar RADM counter parts for
@@ -310,8 +263,8 @@ tile_lon_loop : &
            (chem_opt == CBMZ_CAM_MAM3_AQ   ) .or.     &
            (chem_opt == CBMZ_CAM_MAM7_NOAQ ) .or.     &
            (chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 !               ddvel(i,j,p_sulf)        = ddvel(i,j,p_hno3)
 !               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
 !               ddvel(i,j,p_ch3o2)       = 0
@@ -356,13 +309,13 @@ tile_lon_loop : &
                    ( chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
 !                  ddvel(i,j,p_soag)        = 0.0
                end if
-            end do
-         end do
+!            end do
+!         end do
       end if
 !
      if  (chem_opt == RACMSOAVBS_KPP)   then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 !               ddvel(i,j,p_cvasoa1) = dep_vap*ddvel(i,j,p_hno3)
 !               ddvel(i,j,p_cvasoa2) = dep_vap*ddvel(i,j,p_hno3)
 !               ddvel(i,j,p_cvasoa3) = dep_vap*ddvel(i,j,p_hno3)
@@ -375,8 +328,8 @@ tile_lon_loop : &
 
 !               ddvel(i,j,p_sesq)    = 0.
 !               ddvel(i,j,p_mbo)     = 0.
-            end do
-         end do
+!            end do
+!         end do
       end if
 !-----------------------------------------------------------
 ! For the additional CBM4 species, assign similar RADM counter parts for
@@ -384,21 +337,21 @@ tile_lon_loop : &
 ! unimportant.
 !-----------------------------------------------------------
       if  (chem_opt == CBM4_KPP          )   then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 !               ddvel(i,j,p_open)        = ddvel(i,j,p_xyl)
 !               ddvel(i,j,p_ro2)         = 0
 !               ddvel(i,j,p_xo2)         = 0
 !               ddvel(i,j,p_ald2)        = ddvel(i,j,p_ald)
 !               ddvel(i,j,p_iso)        = 0
-            end do
-         end do
+!            end do
+!         end do
       end if
 
 
       if  (chem_opt == CBMZ_MOSAIC_KPP  )   then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 !               ddvel(i,j,p_aro1)        = 0
 !               ddvel(i,j,p_aro2)         = 0
 !               ddvel(i,j,p_alk1)         = 0
@@ -409,9 +362,9 @@ tile_lon_loop : &
 !               ddvel(i,j,p_lim2)        = 0
 !               ddvel(i,j,p_api)        = 0
 !               ddvel(i,j,p_lim)        = 0
-
-            end do
-         end do
+!
+!            end do
+!         end do
       end if
 
 
@@ -420,28 +373,24 @@ tile_lon_loop : &
 !-----------------------------------------------------------
       if  ((chem_opt == GOCARTRACM_KPP)  .OR.     &
            (chem_opt == GOCARTRADM2))   then
-         do j=jts,jte
-            do i=its,ite
-               ddvel(i,j,p_sulf)        = 0.
-               ddvel(i,j,p_dms)         = 0.
+!         do j=jts,jte
+!            do i=its,ite
+!               ddvel(i,j,p_sulf)        = 0.
+!               ddvel(i,j,p_dms)         = 0.
 !               ddvel(i,j,p_msa)         = ddvel(i,j,p_hno3)
                if( chem_opt == GOCARTRADM2 ) then
 !               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
                end if
-            end do
-         end do
+!            end do
+!         end do
       end if
 !-----------------------------------------------------------
 ! For gocartsimple : need msa. On the other hand sulf comes from aerosol routine
 !-----------------------------------------------------------
       if  (chem_opt == GOCART_SIMPLE          )   then
-         do j=jts,jte
-            do i=its,ite
-               ddvel(i,j,p_msa)         = ddvel(i,j,p_sulf)
-               ddvel(i,j,p_sulf)        = 0.
-               ddvel(i,j,p_dms)         = 0.
-            end do
-         end do
+         ddvel(p_msa)         = ddvel(p_sulf)
+         ddvel(p_sulf)        = 0.
+         ddvel(p_dms)         = 0.
       end if
 !-----------------------------------------------------------
 ! For mozart
@@ -450,8 +399,8 @@ tile_lon_loop : &
           chem_opt == MOZCART_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP )   then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 !               ddvel(i,j,p_mpan)    = ddvel(i,j,p_mpan)/3.
 !               ddvel(i,j,p_mvkooh)  = ddvel(i,j,p_hno3)
 !               ddvel(i,j,p_isooh)   = ddvel(i,j,p_hno3)
@@ -539,11 +488,11 @@ tile_lon_loop : &
                ENDIF
 
               ENDIF
-            end do
+!            end do
             if ( chem_opt == MOZCART_KPP ) then
-               ddvel(its:ite,j,p_sulf) = 0.
+!               ddvel(its:ite,j,p_sulf) = 0.
             end if
-         end do
+!         end do
       end if
 
       
@@ -553,8 +502,8 @@ tile_lon_loop : &
       if( chem_opt == crimech_kpp .or. &
           chem_opt == cri_mosaic_8bin_aq_kpp .or. &
           chem_opt == cri_mosaic_4bin_aq_kpp  )   then
-         do j=jts,jte
-            do i=its,ite
+!         do j=jts,jte
+!            do i=its,ite
 ! need to add deposition rates for crimech species here
 
 !               ddvel(i,j,p_ch3co2h)  = 0.
@@ -673,8 +622,8 @@ tile_lon_loop : &
 !               ddvel(i,j,p_dmso2 ) = 0. 
 !               
 
-            end do
-         end do
+!            end do
+!         end do
       end if
 
 !-----------------------------------------------------------
@@ -1577,6 +1526,11 @@ is_nh3: if( p_nh3 > 1 ) then
         aer_res = polint/(karman*max(ustar,1.0e-4))
 
       END SUBROUTINE depvel
+
+!
+!JianHe: 06/2023,dep_init needs attention in the future for gasdep
+! Maybe we can have a sperate file for these parameters 
+!
 
 !      SUBROUTINE dep_init( id, numgas, mminlu_loc, &
 !                           ips, ipe, jps, jpe, ide, jde )
@@ -3960,4 +3914,4 @@ is_cbm4_kpp : &
 
       END SUBROUTINE dep_init
 
-end module dep_simple_mod
+end module drydep_wesely_mod

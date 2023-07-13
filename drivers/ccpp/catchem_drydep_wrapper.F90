@@ -9,7 +9,9 @@
    use physcons,        only : g => con_g, pi => con_pi
    use machine ,        only : kind_phys
    use catchem_config
-   use dep_dry_mod
+   use drydep_wesely_mod
+   use drydep_gocart_mod
+   use dep_vertmx_mod
    use gocart_diag_mod
 
    implicit none
@@ -105,8 +107,16 @@ contains
     real(kind_phys), dimension(1:num_chem) :: ppm2ugkg
 
 !>-- local variables
-    integer :: i, j, jp, k, kp, n
-  
+    integer :: i, j, jp, k, kp, n, nv
+    ! dry deposition velocity
+    REAL(kind_phys), DIMENSION( its:im, jts:jte, num_chem ) ::   ddvel
+    real(kind_phys) :: delz_at_w, cdt, factor
+
+    ! turbulent transport
+    real(kind_phys), dimension(kts:kte ) :: pblst,zz
+    real(kind_phys), dimension(kts:kte+1):: ekmfull,zzfull
+    real(kind_phys), dimension(kts:kte ) :: dryrho_1d
+
 
     errmsg = ''
     errflg = 0
@@ -123,7 +133,7 @@ contains
     anh3  = 0.
     e_co  = 0.
     dep_vel_o3 = 0.
-
+    ddvel(:,:,:) = 0.
 
     gmt = real(idat(5))
     julday = real(julian)                                       
@@ -167,19 +177,133 @@ contains
         its,ite, jts,jte, kts,kte)
 
 
-     !>-- compute dry deposition
-     call dry_dep_driver(ktau,dt,julday,current_month,t_phy,p_phy,&
-       moist,p8w,rmol,rri,gmt,t8w,rcav,                           &
-       chem,rho_phy,dz8w,exch_h,hfx,                              &
-       ivgtyp,tsk,gsw,vegfrac,pbl,ust,znt,zmid,z_at_w,            &
-       xland,xlat,xlong,h2oaj,h2oai,nu3,ac3,cor3,asulf,ahno3,     &
-       anh3,dry_fall,dep_vel_o3,g,                             &
-       e_co,kemit,snowh,numgas,                                   &
-       num_chem,num_moist,                                        &
-       ids,ide, jds,jde, kds,kde,                                 &
-       ims,ime, jms,jme, kms,kme,                                 &
-       its,ite, jts,jte, kts,kte)
+    !>-- compute dry deposition
+    do j = jts,jte
+      do i = its,ite
+        delz_at_w = z_at_w(i,kts+1,j) - z_at_w(i,kts,j)
 
+        !JianHe: placeholder, in the future, we will do
+        !gas and aerosol drydep seperately
+        !We will not based on chem_opt, but on gas/aero schemes
+
+        IF( chem_opt /= GOCART_SIMPLE ) THEN
+          ! wesely for gases 
+          call wesely_driver(current_month,julday, &
+              t_phy(i,kts,j),moist(i,kts,j,:),p8w(i,kts,j),     &
+              rcav(i,j),p_phy(i,kts,j),ddvel(i,j,:),     &
+              ivgtyp(i,j), &
+              tsk(i,j),gsw(i,j),vegfrac(i,j),rmol(i,j),        &
+              ust(i,j),znt(i,j),delz_at_w,snowh(i,j))
+        ENDIF
+
+        IF (( chem_opt == GOCART_SIMPLE ) .or.            &
+              ( chem_opt == GOCARTRACM_KPP)  .or.            &
+              ( chem_opt == 316)  .or.            &
+              ( chem_opt == 317)  .or.            &
+!             ( chem_opt == 502)  .or.            &
+              (chem_opt == 304          )) then
+          ! this does aerosol species (dust,seas, bc,oc,sulf) for gocart only
+          call gocart_drydep_driver(  &
+              p8w(i,kts,j),rho_phy(i,kts,j),dz8w(i,kts,j), &
+              ddvel(i,j,:),xland(i,j),hfx(i,j),ivgtyp(i,j), &
+              tsk(i,j),pbl(i,j),ust(i,j),znt(i,j))
+        ELSE if (chem_opt == 501 ) then
+! for caesium .1cm/s
+!
+          ddvel(i,j,:)=.001
+
+        ELSE if (chem_opt == 108 ) then
+!!       call soa_vbs_depdriver (ust,t_phy,                    &
+!!               moist,p8w,rmol,znt,pbl,           &
+!!               alt,p_phy,chem,rho_phy,dz8w,                    &
+!!               h2oaj,h2oai,nu3,ac3,cor3,asulf,ahno3,anh3,      &
+!!               aer_res,ddvel(:,:,numgas+1:num_chem),           &
+!!               num_chem-numgas,                                &
+!!               ids,ide, jds,jde, kds,kde,                      &
+!!               ims,ime, jms,jme, kms,kme,                      &
+!!               its,ite, jts,jte, kts,kte                       )
+! limit aerosol ddvels to <= 0.5 m/s
+! drydep routines occasionally produce unrealistically-large particle
+! diameter leading to unrealistically-large sedimentation velocity 
+          ddvel(i,j,numgas+1:num_chem) = min( 0.50, ddvel(i,j,numgas+1:num_chem))
+        ELSE
+          !Set dry deposition velocity to zero when using the
+          !chemistry tracer mode.
+          ddvel(i,j,:) = 0.
+        END IF
+
+        !
+        !   Compute dry deposition according to NGAC
+        !
+        cdt = real(dt, kind=kind_phys)
+        do nv = 1, num_chem
+          factor = 1._kind_phys - exp(-ddvel(i,j,nv)*cdt/dz8w(i,kts,j))
+          dry_fall(i,j,nv) = max(0.0, factor * chem(i,kts,j,nv)) & !ug/m2/s
+                         * (p8w(i,kts,j)-p8w(i,kts+1,j))/g/dt
+        end do
+      end do
+    end do
+
+        !
+        !   This will be called later from subgrd_transport_driver.F !!!!!!!!
+        !
+    do j=jts,jte
+      do i=its,ite
+        if(p_dust_1.gt.1)dep_vel_o3(i,j)=ddvel(i,j,p_dust_1)
+        pblst=0.
+
+        !
+        !-- start with vertical mixing
+        !
+        do k=kts,kte+1
+           zzfull(k)=z_at_w(i,k,j)-z_at_w(i,kts,j)
+        enddo
+
+        if (chem_conv_tr == CTRA_OPT_NONE) then
+          ekmfull = 0.
+        else
+          ekmfull(kts)=0.
+          do k=kts+1,kte
+           ekmfull(k)=max(1.e-6,exch_h(i,k,j))
+          enddo
+          ekmfull(kte+1)=0.
+        end if
+ 
+        do k=kts,kte
+           zz(k)=zmid(i,k,j)-z_at_w(i,kts,j)
+        enddo
+!   vertical mixing routine (including deposition)
+!   need to be careful here with that dumm tracer in spot 1
+!   do not need lho,lho2
+!   (03-may-2006 rce - calc dryrho_1d and pass it to vertmx)
+!
+!     if(p_o3.gt.1)dep_vel_o3(i,j)=ddvel(i,j,p_o3)
+        do nv=1,num_chem-0
+           do k=kts,kte
+              pblst(k)=max(epsilc,chem(i,k,j,nv))
+              dryrho_1d(k) = 1./rri(i,k,j)
+           enddo
+
+           mix_select: SELECT CASE(chem_opt)
+           CASE (RADM2SORG_AQ, RACMSORG_AQ, CBMZ_MOSAIC_4BIN_AQ, CBMZ_MOSAIC_8BIN_AQ)
+!           if(.not.is_aerosol(nv))then ! mix gases not aerosol
+               call vertmx(dt,pblst,ekmfull,dryrho_1d, &
+                           zzfull,zz,ddvel(i,j,nv),kts,kte)
+
+!           endif
+
+           CASE DEFAULT
+               call vertmx(dt,pblst,ekmfull,dryrho_1d, &
+                           zzfull,zz,ddvel(i,j,nv),kts,kte)
+
+           END SELECT mix_select
+
+           do k=kts,kte
+              chem(i,k,j,nv)=max(epsilc,pblst(k))
+           enddo
+        enddo 
+      enddo
+    enddo
 
     ! -- put chem stuff back into tracer array
     do k=kts,kte

@@ -1,7 +1,7 @@
 [ccpp-table-properties]
   name = catchem_drydep_wrapper
   type = scheme
-  dependencies = ../../parameters/catchem_config.F90,../../parameters/catchem_constants.F90,../../src/dep_dry_gocart_mod.F90,../../src/dep_dry_mod.F90,../../src/dep_simple_mod.F90,../../src/dep_vertmx_mod.F90
+  dependencies = ../../parameters/catchem_config.F90,../../parameters/catchem_constants.F90,../../src/dep_vertmx_mod.F90,../../src/drydep_gocart_mod.F90,../../src/drydep_wesely_mod.F90
 
 ########################################################################
 [ccpp-arg-table]

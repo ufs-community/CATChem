@@ -1,21 +1,21 @@
 [ccpp-table-properties]
-  name = catchem_lsdep_wrapper
+  name = catchem_wetdep_wrapper
   type = scheme
-  dependencies = ../../parameters/catchem_config.F90,../../parameters/catchem_constants.F90,../../parameters/dust_data_mod.F90,../../src/gocart_diag_mod.F90,../../src/gocart_aerosols_mod.F90,../../src/gocart_chem_mod.F90,../../src/dep_wet_ls_mod.F90
+  dependencies = ../../parameters/catchem_config.F90,../../parameters/catchem_constants.F90,../../parameters/dust_data_mod.F90,../../src/gocart_diag_mod.F90,../../src/gocart_aerosols_mod.F90,../../src/gocart_chem_mod.F90,../../src/wetdep_ls_mod.F90
 
 ########################################################################
 [ccpp-arg-table]
-  name = catchem_lsdep_wrapper_init
-  type = scheme
-
-########################################################################
-[ccpp-arg-table]
-  name = catchem_lsdep_wrapper_finalize
+  name = catchem_wetdep_wrapper_init
   type = scheme
 
 ########################################################################
 [ccpp-arg-table]
-  name = catchem_lsdep_wrapper_run
+  name = catchem_wetdep_wrapper_finalize
+  type = scheme
+
+########################################################################
+[ccpp-arg-table]
+  name = catchem_wetdep_wrapper_run
   type = scheme
 [im]
   standard_name = horizontal_loop_extent

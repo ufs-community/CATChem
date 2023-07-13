@@ -137,57 +137,72 @@ contains
     if (seas_opt_in >= SEAS_OPT_DEFAULT) then
       seashelp(:,:) = 0.
 
-      do j=jts,jte
-        do i=its,ite
+      ! based on chem_opt
+      select case (chem_opt)
 
-          ! -- only use sea salt scheme over water
-          if (xland(i,j).lt.0.5) then
-            delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+        case (304, 316, 317)
+          !JianHe: 06/2023, we do not use this scheme
+          !Maybe we do not need this anymore
+          ! -- simple scheme
+          do j=jts,jte
+            do i=its,ite
+              ! -- only use sea salt scheme over water
+              if (xland(i,j).lt.0.5) then
+                delp = p8w(i,kts,j)-p8w(i,kts+1,j)
 
-            ! based on chem_opt
-            select case (chem_opt)
-
-              case (304, 316, 317)
-              !JianHe: 06/2023, we do not use this scheme
-              !Maybe we do not need this anymore
-              ! -- simple scheme
-              call gocart_seas_simple(ktau,dt,u_phy(i,kts,j),                 &
+                call gocart_seas_simple(ktau,dt,u_phy(i,kts,j),                 &
                   v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                   v10(i,j),delp,tsk(i,j),dxy(i,j),           &
                   seashelp(i,j))
-
-              case default
-
-                ! based on seas_opt
-                select case (seas_opt_in)
-  
-                  case (1)         
-                  ! -- original GOCART sea salt scheme
-                  call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
+              endif
+            enddo
+          enddo
+ 
+        case default
+          ! based on seas_opt
+          select case (seas_opt_in)
+            case (1)
+              ! -- original GOCART sea salt scheme
+              do j=jts,jte
+                do i=its,ite
+                  ! -- only use sea salt scheme over water
+                  if (xland(i,j).lt.0.5) then
+                    delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+         
+                    call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
                       v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                       v10(i,j),delp,tsk(i,j),dxy(i,j),           &
                       emis_seas(i,1,j,:))
+                  endif
+                enddo
+              enddo
+  
+            case (2)
+              ! -- NGAC sea salt scheme
+              do j=jts,jte
+                do i=its,ite
+                  ! -- only use sea salt scheme over water
+                  if (xland(i,j).lt.0.5) then
+                    delp = p8w(i,kts,j)-p8w(i,kts+1,j)
 
-                  case (2)
-                  ! -- NGAC sea salt scheme
-                  call gocart_seas_ngac(ktau,dt,u_phy(i,kts,j),              &
+                    call gocart_seas_ngac(ktau,dt,u_phy(i,kts,j),              &
                       v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),         &
                       v10(i,j),ust(i,j),delp,tsk(i,j),       &
                       frocean(i,j),fraci(i,j),   &
                       xlat(i,j),xlong(i,j),dxy(i,j),emis_seas(i,1,j,:),      &
                       sstemisFlag,seas_emis_scale,random_factor(i,j))
+                  endif
+                enddo
+              enddo
 
-                  case default
-                  ! -- no sea salt scheme
+            case default
+              ! -- no sea salt scheme
+              errmsg = 'Logic error in catchem_seas_wrapper_run: invalid seas_opt'
+              errflg = 1
+              return
 
-                end select
-
-            end select
-
-          endif ! xland < 0.5
-
-        end do
-      end do
+          end select
+      end select
 
     endif
  

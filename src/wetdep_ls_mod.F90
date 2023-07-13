@@ -1,12 +1,10 @@
-module dep_wet_ls_mod
+! Revision History:
+!! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
+
+module wetdep_ls_mod
 
   use catchem_constants, only : kind_chem, grav => con_g
   use catchem_config
-
-!  use chem_tracers_mod
-!  use chem_rc_mod
-!  use chem_tracers_mod
-!  use chem_const_mod, only : grav => grvity
 
   implicit none
 
@@ -130,36 +128,31 @@ contains
 
 
 
-  subroutine wetdep_ls(dt,var,rain,moist,rho,var_rmv,lat,       &
-                       num_moist,num_chem,p_qc,p_qi,dz8w,vvel,  &
-                       ids,ide, jds,jde, kds,kde,               &
-                       ims,ime, jms,jme, kms,kme,               &
-                       its,ite, jts,jte, kts,kte                )
+  subroutine wetdep_ls(dt,var,rain,moist_arr,rho,var_rmv,lat,       &
+                       p_qc,p_qi,dz8w,vvel,  &
+                       kms,kme,kts,kte) 
     IMPLICIT NONE
 
-    INTEGER,      INTENT(IN   ) :: num_chem,num_moist,p_qc, p_qi,    &
-                                   ids,ide, jds,jde, kds,kde,      &
-                                   ims,ime, jms,jme, kms,kme,               &
-                                   its,ite, jts,jte, kts,kte
+    INTEGER,      INTENT(IN   ) :: p_qc, p_qi,    &
+                                   kms,kme,               &
+                                   kts,kte
     real(kind_chem), INTENT(IN ) :: dt
-    REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_moist ),                &
-          INTENT(IN ) ::                                   moist
-    REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme ),                        &
+    REAL(kind_chem), DIMENSION( kms:kme, num_moist ),                &
+          INTENT(IN ) ::                                   moist_arr
+    REAL(kind_chem),  DIMENSION( kms:kme ),                        &
            INTENT(IN   ) :: rho,dz8w,vvel
-    REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme ,1:num_chem),             &
+    REAL(kind_chem),  DIMENSION( kms:kme ,1:num_chem),             &
            INTENT(INOUT) :: var
-    REAL(kind_chem),  DIMENSION( ims:ime, jms:jme ),                                   &
-           INTENT(IN   ) :: rain,lat
-    REAL(kind_chem),  DIMENSION( ims:ime ,  jms:jme,num_chem ),                        &
+    REAL(kind_chem),  INTENT(IN   ) :: rain,lat
+    REAL(kind_chem),  DIMENSION( num_chem ),                        &
            INTENT(INOUT   ) :: var_rmv
-    REAL(kind_chem),  DIMENSION( its:ite ,  jts:jte ) :: var_sum
-    REAL(kind_chem),  DIMENSION( its:ite ,  kts:kte, jts:jte ) :: var_rmvl
-    REAL(kind_chem),  DIMENSION( its:ite ,  jts:jte ) :: frc,var_sum_clw,rain_clw
+    REAL(kind_chem) :: var_sum,frc,var_sum_clw,rain_clw
+    REAL(kind_chem),  DIMENSION( kts:kte ) :: var_rmvl
     real(kind_chem) :: dvar,factor,rho_water,ff
     integer :: nv,i,j,k
 
     rho_water = 1000.
-    var_rmv (:,:,:)=0.
+    var_rmv (:)=0.
     do nv=1,num_chem
 !
 ! simple LS removal
@@ -172,65 +165,57 @@ contains
     !frc(:,:)=0.01 !lzhang
     ff=1.0
     if (nv>=p_seas_1 .and. nv<=p_seas_5) ff=1.2
-    do i=its,ite
-    do j=jts,jte
-     var_sum_clw(i,j)=0.
-     var_sum(i,j)=0.
-     var_rmvl(i,:,j)=0.
-     rain_clw(i,j)=0.
-     frc(i,j)=0.
-     if(rain(i,j).gt.1.e-10)then
+     var_sum_clw=0.
+     var_sum=0.
+     var_rmvl(:)=0.
+     rain_clw=0.
+     frc=0.
+     if(rain.gt.1.e-10)then
 ! convert rain back to rate
 !
-        rain_clw(i,j)=rain(i,j)/dt
+        rain_clw=rain/dt
 ! total cloud water
 !
         do k=1,kte
-           dvar=max(0.,(moist(i,k,j,p_qc)+moist(i,k,j,p_qi)))
-           var_sum_clw(i,j)=var_sum_clw(i,j)+dvar
-           var_sum(i,j)=var_sum(i,j)+var(i,k,j,nv)*rho(i,k,j) !lzhang
+           dvar=max(0.,(moist_arr(k,p_qc)+moist_arr(k,p_qi)))
+           var_sum_clw=var_sum_clw+dvar
+           var_sum=var_sum+var(k,nv)*rho(k) !lzhang
         enddo
-           if(var_sum(i,j).gt.1.e-10 .and. var_sum_clw(i,j).gt.1.e-10 ) then
+           if(var_sum.gt.1.e-10 .and. var_sum_clw.gt.1.e-10 ) then
    !        assuming that frc is onstant, it is my conversion factor 
-              frc(i,j)=rain_clw(i,j)/var_sum_clw(i,j)
+              frc=rain_clw/var_sum_clw
 !    write(0,*)'frc ', frc(i,j),var_sum_clw(i,j),var_sum(i,j)
-              if (lat(i,j)<=-65.) then
-              frc(i,j)=max(1.e-6,min(frc(i,j),.005)*ff*10.)
+              if (lat<=-65.) then
+              frc=max(1.e-6,min(frc,.005)*ff*10.)
               else
-              frc(i,j)=max(1.e-6,min(frc(i,j),.005)*ff)
+              frc=max(1.e-6,min(frc,.005)*ff)
               endif
            endif
      endif
-    enddo
-    enddo
 !
 ! get rid of it
 !
-    do i=its,ite
-    do j=jts,jte
-     if(rain(i,j).gt.1.e-10 .and. var_sum(i,j).gt.1.e-10 .and. var_sum_clw(i,j).gt.1.e-10 ) then
+     if(rain.gt.1.e-10 .and. var_sum.gt.1.e-10 .and. var_sum_clw.gt.1.e-10 ) then
        do k=kts,kte
-        if(var(i,k,j,nv).gt.1.e-10 .and. (moist(i,k,j,p_qc)+moist(i,k,j,p_qi)).gt.1.e-10)then
-        factor = max(0.,frc(i,j)*rho(i,k,j)*dz8w(i,k,j)*vvel(i,k,j))
-        dvar=max(0.,alpha(nv)*factor/(1+factor)*var(i,k,j,nv))
-        dvar=min(dvar,var(i,k,j,nv))
-        var_rmvl(i,k,j)=dvar
-        if((var(i,k,j,nv)-dvar).lt.1.e-16)then
-           dvar=var(i,k,j,nv)-1.e-16
-           var_rmvl(i,k,j)=dvar !lzhang
-           var(i,k,j,nv)=var(i,k,j,nv)-dvar
+        if(var(k,nv).gt.1.e-10 .and. (moist_arr(k,p_qc)+moist_arr(k,p_qi)).gt.1.e-10)then
+        factor = max(0.,frc*rho(k)*dz8w(k)*vvel(k))
+        dvar=max(0.,alpha(nv)*factor/(1+factor)*var(k,nv))
+        dvar=min(dvar,var(k,nv))
+        var_rmvl(k)=dvar
+        if((var(k,nv)-dvar).lt.1.e-16)then
+           dvar=var(k,nv)-1.e-16
+           var_rmvl(k)=dvar !lzhang
+           var(k,nv)=var(k,nv)-dvar
         else
-           var(i,k,j,nv)=var(i,k,j,nv)-dvar
+           var(k,nv)=var(k,nv)-dvar
         endif
         !var_rmv(i,j,nv)=var_rmv(i,j,nv)+var_rmvl(i,k,j)
         !!convert wetdeposition into ug/m2/s  
-        var_rmv(i,j,nv)=var_rmv(i,j,nv)+(var_rmvl(i,k,j)*rho(i,k,j)*dz8w(i,k,j)/dt) !lzhang
+        var_rmv(nv)=var_rmv(nv)+(var_rmvl(k)*rho(k)*dz8w(k)/dt) !lzhang
         endif
        enddo
-       var_rmv(i,j,nv)=max(0.,var_rmv(i,j,nv))
+       var_rmv(nv)=max(0.,var_rmv(nv))
     endif
-    enddo
-    enddo
     enddo
 
   end subroutine wetdep_ls
@@ -246,27 +231,24 @@ contains
 ! !INTERFACE:
 !
 
-  subroutine WetRemovalGOCART ( i1, i2, j1, j2, k1, k2, n1, n2, cdt, &
-                                num_chem, var_rmv, chem, ple, tmpu,  &
+  subroutine WetRemovalGOCART ( k1, k2, n1, n2, cdt, &
+                                var_rmv, chem_arr, ple, tmpu,  &
                                 rhoa, dqcond, precc, precl,         &
-                                ims, ime, jms, jme, kms, kme)
-!                                ims, ime, jms, jme, kms, kme, rc )
+                                kms, kme)
 
 ! !USES:
    IMPLICIT NONE
 
 ! !INPUT PARAMETERS:
-   integer, intent(in) :: i1, i2, j1, j2, k1, k2, n1, n2, num_chem, &
-                          ims, ime, jms, jme, kms, kme
+   integer, intent(in) :: k1, k2, n1, n2, kms, kme
    real(kind_chem), intent(in)    :: cdt
-   REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme ,1:num_chem),&
-          INTENT(INOUT) :: chem
-   REAL(kind_chem),  DIMENSION( ims:ime ,  jms:jme,num_chem ), &
+   REAL(kind_chem),  DIMENSION( kms:kme , 1:num_chem),&
+          INTENT(INOUT) :: chem_arr
+   REAL(kind_chem),  DIMENSION( num_chem ), &
           INTENT(INOUT   ) :: var_rmv !! tracer loss flux [kg m-2 s-1]
-   real(kind_chem), dimension(ims:ime, kms:kme, jms:jme),&
+   real(kind_chem), dimension(kms:kme),&
           INTENT(IN)     :: ple, tmpu, rhoa, dqcond
-   real(kind_chem), dimension(ims:ime ,  jms:jme) , &
-          INTENT(IN)      :: precc, precl    ! cv, ls precip [mm day-1]
+   real(kind_chem) :: precc, precl    ! cv, ls precip [mm day-1]
 
 ! !OUTPUT PARAMETERS:
 !   integer, intent(out)             :: rc          ! Error return code:
@@ -289,7 +271,7 @@ contains
 ! !Local Variables
    character(len=*), parameter :: myname = 'WetRemovalGOCART'
    integer  ::  i, j, k, n, nbins, LH, kk, ios,nv
-   real(kind_chem) :: pdog(i1:i2,k1:k2,j1:j2)      ! air mass factor dp/g [kg m-2]
+   real(kind_chem) :: pdog(k1:k2)      ! air mass factor dp/g [kg m-2]
    real(kind_chem) :: pls, pcv, pac             ! ls, cv, tot precip [mm day-1]
    real(kind_chem) :: qls(k1:k2), qcv(k1:k2)          ! ls, cv portion dqcond [kg m-3 s-1]
    real(kind_chem) :: qmx, qd, A                ! temporary variables on moisture
@@ -336,24 +318,18 @@ contains
 !     file=__FILE__, line=__LINE__, rc=rc)) return
 
 !  Accumulate the 3-dimensional arrays of rhoa and pdog
-   do j = j1, j2
-    do i = i1, i2
      !pdog(i,k1:k2,j) = (ple(i,k1+1:k2+1,j)-ple(i,k1:k2,j)) / grav
-      pdog(i,k1:k2,j) = (ple(i,k1:k2,j)-ple(i,k1+1:k2+1,j)) / grav !lzhang
-    enddo
-   enddo
+      pdog(k1:k2) = (ple(k1:k2)-ple(k1+1:k2+1)) / grav !lzhang
 
    do nv=1, num_chem
 !  Loop over spatial indices
-   do j = j1, j2
-    do i = i1, i2
 
 !    Check for total precipitation amount
 !    Assume no precip in column if precl+precc = 0
-     pac = precl(i,j) + precc(i,j)
+     pac = precl + precc
      if(pac .le. 0.) goto 100
-     pls = precl(i,j)
-     pcv = precc(i,j)
+     pls = precl
+     pcv = precc
 
 !    Initialize the precipitation fields
      qls(:)  = 0.
@@ -366,7 +342,7 @@ contains
      LH = k2+1 !lzhang
      !do k = k1, k2
      do k = k2, k1,-1 !lzhang
-      if(dqcond(i,k,j) .lt. 0. .and. tmpu(i,k,j) .gt. 258.) then
+      if(dqcond(k) .lt. 0. .and. tmpu(k) .gt. 258.) then
        LH = k
        goto 15
       endif
@@ -379,8 +355,8 @@ contains
 !    sign so that dqcond < 0. (positive precip) means qls and qcv > 0.
      !do k = LH, k2
      do k = LH, k1, -1  !lzhang
-      qls(k) = -dqcond(i,k,j)*pls/pac*rhoa(i,k,j)
-      qcv(k) = -dqcond(i,k,j)*pcv/pac*rhoa(i,k,j)
+      qls(k) = -dqcond(k)*pls/pac*rhoa(k)
+      qcv(k) = -dqcond(k)*pcv/pac*rhoa(k)
      end do
 
 !    Loop over vertical to do the scavenging!
@@ -404,16 +380,16 @@ contains
 !      Adjust du level:
        do n = 1, nbins
         effRemoval = alpha(nv)
-        DC(n) = chem(i,k,j,nv) * F * effRemoval *(1.-exp(-BT))
+        DC(n) = chem_arr(k,nv) * F * effRemoval *(1.-exp(-BT))
         if (DC(n).lt.0.) DC(n) = 0.
-        chem(i,k,j,nv) = chem(i,k,j,nv)-DC(n)
-        if (chem(i,k,j,nv) .lt. 1.0E-32) chem(i,k,j,nv) = 1.0E-32
+        chem_arr(k,nv) = chem_arr(k,nv)-DC(n)
+        if (chem_arr(k,nv) .lt. 1.0E-32) chem_arr(k,nv) = 1.0E-32
        end do
 !      Flux down:  unit is kg m-2
 !      Formulated in terms of production in the layer.  In the revaporation step
 !      we consider possibly adding flux from above...
        do n = 1, nbins
-        Fd(k,n) = DC(n)*pdog(i,k,j)
+        Fd(k,n) = DC(n)*pdog(k)
        end do
 
       end if                                    ! if Qls > 0  >>>
@@ -448,7 +424,7 @@ contains
 !  units of mm/s (omit the multiply and divide by 1000).
 !-----------------------------------------------------------------------------
 
-        Qd = Qmx /rhoa(i,k,j)*pdog(i,k,j)
+        Qd = Qmx /rhoa(k)*pdog(k)
         if (Qd.ge.50.) then
          B = 0.
         else
@@ -459,12 +435,12 @@ contains
 
 !       Adjust du level:
         do n = 1, nbins
-         DC(n) = chem(i,k,j,nv) * F * (1.-exp(-BT))
+         DC(n) = chem_arr(k,nv) * F * (1.-exp(-BT))
          if (DC(n).lt.0.) DC(n) = 0.
-         chem(i,k,j,nv) = chem(i,k,j,nv)-DC(n)
-         if (chem(i,k,j,nv) .lt. 1.0E-32) &
-          chem(i,k,j,nv) = 1.0E-32
-          var_rmv(i,j,nv) = var_rmv(i,j,nv)+DC(n)*pdog(i,k,j)/cdt !ug/m2/s
+         chem_arr(k,nv) = chem_arr(k,nv)-DC(n)
+         if (chem_arr(k,nv) .lt. 1.0E-32) &
+          chem_arr(k,nv) = 1.0E-32
+          var_rmv(nv) = var_rmv(nv)+DC(n)*pdog(k)/cdt !ug/m2/s
         end do
 
        end if
@@ -486,15 +462,15 @@ contains
 !      Adjust du level:
        do n = 1, nbins
         effRemoval = alpha(nv)
-        DC(n) = chem(i,k,j,nv) * F * effRemoval * (1.-exp(-BT))
+        DC(n) = chem_arr(k,nv) * F * effRemoval * (1.-exp(-BT))
         if (DC(n).lt.0.) DC(n) = 0.
-        chem(i,k,j,nv) = chem(i,k,j,nv)-DC(n)
-        if (chem(i,k,j,nv) .lt. 1.0E-32) chem(i,k,j,nv) = 1.0E-32
+        chem_arr(k,nv) = chem_arr(k,nv)-DC(n)
+        if (chem_arr(k,nv) .lt. 1.0E-32) chem_arr(k,nv) = 1.0E-32
        end do
 
 !------  Flux down:  unit is kg. Including both ls and cv.
        do n = 1, nbins
-        Fd(k,n) = Fd(k,n) + DC(n)*pdog(i,k,j)
+        Fd(k,n) = Fd(k,n) + DC(n)*pdog(k)
        end do
 
       end if                                  ! if Qcv > 0   >>>
@@ -530,7 +506,7 @@ contains
 !  units of mm/s (omit the multiply and divide by 1000).
 !-----------------------------------------------------------------------------
 
-        Qd = Qmx / rhoa(i,k,j)*pdog(i,k,j)
+        Qd = Qmx / rhoa(k)*pdog(k)
         if (Qd.ge.50.) then
          B = 0.
         else
@@ -541,12 +517,12 @@ contains
 
 !       Adjust du level:
         do n = 1, nbins
-         DC(n) = chem(i,k,j,nv) * F * (1.-exp(-BT))
+         DC(n) = chem_arr(k,nv) * F * (1.-exp(-BT))
          if (DC(n).lt.0.) DC(n) = 0.
-         chem(i,k,j,nv) = chem(i,k,j,nv)-DC(n)
-         if (chem(i,k,j,nv) .lt. 1.0E-32) &
-          chem(i,k,j,nv) = 1.0E-32
-          var_rmv(i,j,nv) = var_rmv(i,j,nv)+DC(n)*pdog(i,k,j)/cdt !ug/m2/s
+         chem_arr(k,nv) = chem_arr(k,nv)-DC(n)
+         if (chem_arr(k,nv) .lt. 1.0E-32) &
+          chem_arr(k,nv) = 1.0E-32
+          var_rmv(nv) = var_rmv(nv)+DC(n)*pdog(k)/cdt !ug/m2/s
         end do
 
        end if
@@ -565,24 +541,24 @@ contains
        end do
 
 !      Is there evaporation in the currect layer?
-       if (-dqcond(i,k,j) .lt. 0.) then
+       if (-dqcond(k) .lt. 0.) then
 !       Fraction evaporated = H2O(k)evap / H2O(next condensation level).
         !if (-dqcond(i,k-1,j) .gt. 0.) then
-        if (-dqcond(i,k+1,j) .gt. 0.) then !lzhang
+        if (-dqcond(k+1) .gt. 0.) then !lzhang
 
-          A =  abs(  dqcond(i,k,j) * pdog(i,k,j)    &
+          A =  abs(  dqcond(k) * pdog(k)    &
             !/      ( dqcond(i,k-1,j) * pdog(i,k-1,j))  )
-            /      ( dqcond(i,k+1,j) * pdog(i,k+1,j))  ) !lzhang
+            /      ( dqcond(k+1) * pdog(k+1))  ) !lzhang
           if (A .gt. 1.) A = 1.
 
 !         Adjust tracer in the level
           do n = 1, nbins
-           !DC(n) =  Fd(k-1,n) / pdog(i,k,j) * A
-           DC(n) =  Fd(k+1,n) / pdog(i,k,j) * A  !lzhang
-           chem(i,k,j,nv) = chem(i,k,j,nv) + DC(n)
-           chem(i,k,j,nv) = max(chem(i,k,j,nv),1.e-32)
+           !DC(n) =  Fd(k-1,n) / pdog(k) * A
+           DC(n) =  Fd(k+1,n) / pdog(k) * A  !lzhang
+           chem_arr(k,nv) = chem_arr(k,nv) + DC(n)
+           chem_arr(k,nv) = max(chem_arr(k,nv),1.e-32)
 !          Adjust the flux out of the bottom of the layer
-           Fd(k,n)  = Fd(k,n) - DC(n)*pdog(i,k,j)
+           Fd(k,n)  = Fd(k,n) - DC(n)*pdog(k)
           end do
 
         endif
@@ -592,12 +568,10 @@ contains
 
      do n = 1, nbins
        !var_rmv(i,j,nv) = var_rmv(i,j,nv)+Fd(k2,n)/cdt !lzhang
-       var_rmv(i,j,nv) = var_rmv(i,j,nv)+Fd(k1,n)/cdt ! ug/m2/s
+       var_rmv(nv) = var_rmv(nv)+Fd(k1,n)/cdt ! ug/m2/s
      end do
 
  100 continue
-    end do   ! i
-   end do    ! j
    end do    !nv for num_chem
 
    deallocate(fd,DC,stat=ios)
@@ -606,4 +580,5 @@ contains
 
    end subroutine WetRemovalGOCART
 
-end module dep_wet_ls_mod
+end module wetdep_ls_mod
+

@@ -1,6 +1,6 @@
 module vash_settling_mod
 
-  use catchem_constants ,         only : kind_chem
+  use catchem_constants ,         only : kind_chem, g => con_g
   use catchem_config
 
   implicit none
@@ -11,31 +11,26 @@ module vash_settling_mod
 
 CONTAINS
 
-SUBROUTINE vash_settling_driver(dt,t_phy,moist,                            &
-         chem,rho_phy,dz8w,p8w,p_phy,area,                                 &
-         ash_fall,g,num_moist,num_chem,                                 &
-         ids,ide, jds,jde, kds,kde,                                        &
-         ims,ime, jms,jme, kms,kme,                                        &
-         its,ite, jts,jte, kts,kte                                         )
+SUBROUTINE vash_settling_driver(dt,t_phy,moist,            &
+                                chem_arr,rho_phy,dz8w,     &
+                                p8w,p_phy,area,            &
+                                ash_fall,kms,kme,kts,kte)
 
   IMPLICIT NONE
-   INTEGER,      INTENT(IN   ) ::                                          &
-                                  ids,ide, jds,jde, kds,kde,               &
-                                  ims,ime, jms,jme, kms,kme,               &
-                                  its,ite, jts,jte, kts,kte,               &
-                                  num_chem,num_moist
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_moist ),                &
-         INTENT(IN ) ::                                   moist
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),                 &
-         INTENT(INOUT ) ::                                   chem
-   REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme ),                        &
-          INTENT(IN   ) ::  t_phy,p_phy,dz8w,p8w,rho_phy
-   REAL(kind_chem),  DIMENSION( ims:ime , jms:jme ),                        &
-          INTENT(INOUT   ) ::  ash_fall
-   REAL(kind_chem),  DIMENSION( ims:ime , jms:jme ),                        &
-          INTENT(IN   ) ::  area
 
-  REAL(kind_chem), INTENT(IN   ) :: dt,g
+  INTEGER,      INTENT(IN   ) ::  kms,kme,kts,kte
+
+  REAL(kind_chem), DIMENSION( kms:kme,num_moist ),                &
+         INTENT(IN ) ::                                   moist
+  REAL(kind_chem), DIMENSION( kms:kme, num_chem ),                 &
+         INTENT(INOUT ) ::                                chem_arr
+  REAL(kind_chem), INTENT(IN ) :: area
+  REAL(kind_chem), DIMENSION( kms:kme ),                        &
+          INTENT(IN   ) ::  t_phy,p_phy,dz8w,p8w,rho_phy
+  REAL(kind_chem), INTENT(IN   ) :: dt
+
+  REAL(kind_chem), INTENT(INOUT   ) ::  ash_fall
+
   integer :: nmx,i,j,k,kk,lmx,iseas,idust
   real(kind_chem), DIMENSION (1,1,kte-kts+1) :: tmp,airden,airmas,p_mid,delz,rh
   real(kind_chem), DIMENSION (1,1,kte-kts+1,5) :: dust
@@ -68,22 +63,20 @@ SUBROUTINE vash_settling_driver(dt,t_phy,moist,                            &
        conver=1.e-9
        converi=1.e9
        lmx=kte-kts+1
-       do j=jts,jte
-       do i=its,ite
           kk=0
-          are=area(i,j)
+          are=area
       bstl_ash(:)=0.
           do k=kts,kte 
           kk=kk+1
-          p_mid(1,1,kk)=.01*p_phy(i,kte-k+kts,j) 
-          delz(1,1,kk)=dz8w(i,kte-k+kts,j) 
-          airmas(1,1,kk)=-(p8w(i,k+1,j)-p8w(i,k,j))/g
-          airden(1,1,kk)=rho_phy(i,k,j)
-          tmp(1,1,kk)=t_phy(i,k,j)
+          p_mid(1,1,kk)=.01*p_phy(kte-k+kts) 
+          delz(1,1,kk)=dz8w(kte-k+kts) 
+          airmas(1,1,kk)=-(p8w(k+1)-p8w(k))/g
+          airden(1,1,kk)=rho_phy(k)
+          tmp(1,1,kk)=t_phy(k)
           rh(1,1,kk) = .95
-          rh(1,1,kk) = MIN( .95, moist(i,k,j,p_qv) / &
-               (3.80*exp(17.27*(t_phy(i,k,j)-273.)/ &
-               (t_phy(i,k,j)-36.))/(.01*p_phy(i,k,j))))
+          rh(1,1,kk) = MIN( .95, moist(k,p_qv) / &
+               (3.80*exp(17.27*(t_phy(k)-273.)/ &
+               (t_phy(k)-36.))/(.01*p_phy(k))))
           rh(1,1,kk)=max(1.0D-1,rh(1,1,kk))
           enddo
 
@@ -93,7 +86,7 @@ SUBROUTINE vash_settling_driver(dt,t_phy,moist,                            &
           do nv=p_vash_1,p_vash_10
           kk=kk+1
           do k=kts,kte
-              if(chem(i,k,j,nv).gt.maxash(kk)) maxash(kk)=chem(i,k,j,nv)
+              if(chem_arr(k,nv).gt.maxash(kk)) maxash(kk)=chem_arr(k,nv)
             enddo
           enddo
 
@@ -104,91 +97,82 @@ SUBROUTINE vash_settling_driver(dt,t_phy,moist,                            &
           kk=0
           do k=kts,kte
           kk=kk+1
-          if(chem(i,k,j,p_vash_1).le.1.e-10)chem(i,k,j,p_vash_1)=0.
-          if(chem(i,k,j,p_vash_2).le.1.e-10)chem(i,k,j,p_vash_2)=0.
-          if(chem(i,k,j,p_vash_3).le.1.e-10)chem(i,k,j,p_vash_3)=0.
-          if(chem(i,k,j,p_vash_4).le.1.e-10)chem(i,k,j,p_vash_4)=0.
-          if(chem(i,k,j,p_vash_5).le.1.e-10)chem(i,k,j,p_vash_5)=0.
-          if(chem(i,k,j,p_vash_6).le.1.e-10)chem(i,k,j,p_vash_6)=0.
-          if(chem(i,k,j,p_vash_7).le.1.e-10)chem(i,k,j,p_vash_7)=0.
-          if(chem(i,k,j,p_vash_8).le.1.e-10)chem(i,k,j,p_vash_8)=0.
-          if(chem(i,k,j,p_vash_9).le.1.e-10)chem(i,k,j,p_vash_9)=0.
-          if(chem(i,k,j,p_vash_10).le.1.e-10)chem(i,k,j,p_vash_10)=0.
-          ash(1,1,kk,1)=chem(i,k,j,p_vash_1)*conver
-          ash(1,1,kk,2)=chem(i,k,j,p_vash_2)*conver
-          ash(1,1,kk,3)=chem(i,k,j,p_vash_3)*conver
-          ash(1,1,kk,4)=chem(i,k,j,p_vash_4)*conver
-          ash(1,1,kk,5)=chem(i,k,j,p_vash_5)*conver
-          ash(1,1,kk,6)=chem(i,k,j,p_vash_6)*conver
-          ash(1,1,kk,7)=chem(i,k,j,p_vash_7)*conver
-          ash(1,1,kk,8)=chem(i,k,j,p_vash_8)*conver
-          ash(1,1,kk,9)=chem(i,k,j,p_vash_9)*conver
-          ash(1,1,kk,10)=chem(i,k,j,p_vash_10)*conver
+          if(chem_arr(k,p_vash_1).le.1.e-10)chem_arr(k,p_vash_1)=0.
+          if(chem_arr(k,p_vash_2).le.1.e-10)chem_arr(k,p_vash_2)=0.
+          if(chem_arr(k,p_vash_3).le.1.e-10)chem_arr(k,p_vash_3)=0.
+          if(chem_arr(k,p_vash_4).le.1.e-10)chem_arr(k,p_vash_4)=0.
+          if(chem_arr(k,p_vash_5).le.1.e-10)chem_arr(k,p_vash_5)=0.
+          if(chem_arr(k,p_vash_6).le.1.e-10)chem_arr(k,p_vash_6)=0.
+          if(chem_arr(k,p_vash_7).le.1.e-10)chem_arr(k,p_vash_7)=0.
+          if(chem_arr(k,p_vash_8).le.1.e-10)chem_arr(k,p_vash_8)=0.
+          if(chem_arr(k,p_vash_9).le.1.e-10)chem_arr(k,p_vash_9)=0.
+          if(chem_arr(k,p_vash_10).le.1.e-10)chem_arr(k,p_vash_10)=0.
+          ash(1,1,kk,1)=chem_arr(k,p_vash_1)*conver
+          ash(1,1,kk,2)=chem_arr(k,p_vash_2)*conver
+          ash(1,1,kk,3)=chem_arr(k,p_vash_3)*conver
+          ash(1,1,kk,4)=chem_arr(k,p_vash_4)*conver
+          ash(1,1,kk,5)=chem_arr(k,p_vash_5)*conver
+          ash(1,1,kk,6)=chem_arr(k,p_vash_6)*conver
+          ash(1,1,kk,7)=chem_arr(k,p_vash_7)*conver
+          ash(1,1,kk,8)=chem_arr(k,p_vash_8)*conver
+          ash(1,1,kk,9)=chem_arr(k,p_vash_9)*conver
+          ash(1,1,kk,10)=chem_arr(k,p_vash_10)*conver
           enddo
           iprt=0
           call vsettling(iprt,1, 1, lmx, 10, g,are,&
                     ash, tmp, p_mid, delz, airmas, &
                     den_ash, reff_ash, dt, bstl_ash, rh, idust, iseas,iash)
           kk=0
-          ash_fall(i,j)=ash_fall(i,j)+sum(bstl_ash(1:10))
+          ash_fall=ash_fall+sum(bstl_ash(1:10))
           do k=kts,kte
           kk=kk+1
-            chem(i,k,j,p_vash_1)=min(maxash(1),ash(1,1,kk,1)*converi)
-            chem(i,k,j,p_vash_2)=min(maxash(2),ash(1,1,kk,2)*converi)
-            chem(i,k,j,p_vash_3)=min(maxash(3),ash(1,1,kk,3)*converi)
-            chem(i,k,j,p_vash_4)=min(maxash(4),ash(1,1,kk,4)*converi)
-            chem(i,k,j,p_vash_5)=min(maxash(5),ash(1,1,kk,5)*converi)
-            chem(i,k,j,p_vash_6)=min(maxash(6),ash(1,1,kk,6)*converi)
-            chem(i,k,j,p_vash_7)=min(maxash(7),ash(1,1,kk,7)*converi)
-            chem(i,k,j,p_vash_8)=min(maxash(8),ash(1,1,kk,8)*converi)
-            chem(i,k,j,p_vash_9)=min(maxash(9),ash(1,1,kk,9)*converi)
-            chem(i,k,j,p_vash_10)=min(maxash(10),ash(1,1,kk,10)*converi)
-          if(chem(i,k,j,p_vash_1).le.1.e-10)chem(i,k,j,p_vash_1)=0.
-          if(chem(i,k,j,p_vash_2).le.1.e-10)chem(i,k,j,p_vash_2)=0.
-          if(chem(i,k,j,p_vash_3).le.1.e-10)chem(i,k,j,p_vash_3)=0.
-          if(chem(i,k,j,p_vash_4).le.1.e-10)chem(i,k,j,p_vash_4)=0.
-          if(chem(i,k,j,p_vash_5).le.1.e-10)chem(i,k,j,p_vash_5)=0.
-          if(chem(i,k,j,p_vash_6).le.1.e-10)chem(i,k,j,p_vash_6)=0.
-          if(chem(i,k,j,p_vash_7).le.1.e-10)chem(i,k,j,p_vash_7)=0.
-          if(chem(i,k,j,p_vash_8).le.1.e-10)chem(i,k,j,p_vash_8)=0.
-          if(chem(i,k,j,p_vash_9).le.1.e-10)chem(i,k,j,p_vash_9)=0.
-          if(chem(i,k,j,p_vash_10).le.1.e-10)chem(i,k,j,p_vash_10)=0.
+            chem_arr(k,p_vash_1)=min(maxash(1),ash(1,1,kk,1)*converi)
+            chem_arr(k,p_vash_2)=min(maxash(2),ash(1,1,kk,2)*converi)
+            chem_arr(k,p_vash_3)=min(maxash(3),ash(1,1,kk,3)*converi)
+            chem_arr(k,p_vash_4)=min(maxash(4),ash(1,1,kk,4)*converi)
+            chem_arr(k,p_vash_5)=min(maxash(5),ash(1,1,kk,5)*converi)
+            chem_arr(k,p_vash_6)=min(maxash(6),ash(1,1,kk,6)*converi)
+            chem_arr(k,p_vash_7)=min(maxash(7),ash(1,1,kk,7)*converi)
+            chem_arr(k,p_vash_8)=min(maxash(8),ash(1,1,kk,8)*converi)
+            chem_arr(k,p_vash_9)=min(maxash(9),ash(1,1,kk,9)*converi)
+            chem_arr(k,p_vash_10)=min(maxash(10),ash(1,1,kk,10)*converi)
+          if(chem_arr(k,p_vash_1).le.1.e-10)chem_arr(k,p_vash_1)=0.
+          if(chem_arr(k,p_vash_2).le.1.e-10)chem_arr(k,p_vash_2)=0.
+          if(chem_arr(k,p_vash_3).le.1.e-10)chem_arr(k,p_vash_3)=0.
+          if(chem_arr(k,p_vash_4).le.1.e-10)chem_arr(k,p_vash_4)=0.
+          if(chem_arr(k,p_vash_5).le.1.e-10)chem_arr(k,p_vash_5)=0.
+          if(chem_arr(k,p_vash_6).le.1.e-10)chem_arr(k,p_vash_6)=0.
+          if(chem_arr(k,p_vash_7).le.1.e-10)chem_arr(k,p_vash_7)=0.
+          if(chem_arr(k,p_vash_8).le.1.e-10)chem_arr(k,p_vash_8)=0.
+          if(chem_arr(k,p_vash_9).le.1.e-10)chem_arr(k,p_vash_9)=0.
+          if(chem_arr(k,p_vash_10).le.1.e-10)chem_arr(k,p_vash_10)=0.
           enddo
 
 !ash settling end
 
-
-
-
-       enddo
-       enddo
 END SUBROUTINE vash_settling_driver
 
-SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
-         chem,rho_phy,dz8w,p8w,p_phy,area,                                 &
-         ash_fall,g,num_moist,num_chem,                                    &
-         ids,ide, jds,jde, kds,kde,                                        &
-         ims,ime, jms,jme, kms,kme,                                        &
-         its,ite, jts,jte, kts,kte                                         )
+
+SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
+                                chem_arr,rho_phy,dz8w,     &
+                                p8w,p_phy,area,            &
+                                ash_fall,kms,kme,kts,kte)
 
   IMPLICIT NONE
-   INTEGER,      INTENT(IN   ) ::                                          &
-                                  ids,ide, jds,jde, kds,kde,               &
-                                  ims,ime, jms,jme, kms,kme,               &
-                                  its,ite, jts,jte, kts,kte,               &
-                                  num_chem,num_moist
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_moist ),               &
-         INTENT(IN ) ::                                   moist
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),                 &
-         INTENT(INOUT ) ::                                   chem
-   REAL(kind_chem),  DIMENSION( ims:ime , kms:kme , jms:jme ),                        &
-          INTENT(IN   ) ::  t_phy,p_phy,dz8w,p8w,rho_phy
-   REAL(kind_chem),  DIMENSION( ims:ime , jms:jme ),                        &
-          INTENT(INOUT   ) ::  ash_fall
-   REAL(kind_chem),  DIMENSION( ims:ime , jms:jme ),                        &
-          INTENT(IN   ) ::  area
 
-  REAL(kind_chem), INTENT(IN   ) :: dt,g
+  INTEGER,      INTENT(IN   ) ::  kms,kme,kts,kte
+
+  REAL(kind_chem), DIMENSION( kms:kme,num_moist ),                &
+         INTENT(IN ) ::                                   moist
+  REAL(kind_chem), DIMENSION( kms:kme, num_chem ),                 &
+         INTENT(INOUT ) ::                                chem_arr
+  REAL(kind_chem), INTENT(IN ) :: area
+  REAL(kind_chem), DIMENSION( kms:kme ),                        &
+          INTENT(IN   ) ::  t_phy,p_phy,dz8w,p8w,rho_phy
+  REAL(kind_chem), INTENT(IN   ) :: dt
+
+  REAL(kind_chem), INTENT(INOUT   ) ::  ash_fall
+
   integer :: nmx,i,j,k,kk,lmx,iseas,idust
   real(kind_chem), DIMENSION (1,1,kte-kts+1) :: tmp,airden,airmas,p_mid,delz,rh
   real(kind_chem), DIMENSION (1,1,kte-kts+1,5) :: dust
@@ -215,22 +199,20 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
        conver=1.e-9
        converi=1.e9
        lmx=kte-kts+1
-       do j=jts,jte
-       do i=its,ite
           kk=0
-          are=area(i,j)
+          are=area
       bstl_ash(:)=0.
           do k=kts,kte 
           kk=kk+1
-          p_mid(1,1,kk)=.01*p_phy(i,kte-k+kts,j) 
-          delz(1,1,kk)=dz8w(i,kte-k+kts,j) 
-          airmas(1,1,kk)=-(p8w(i,k+1,j)-p8w(i,k,j))/g
-          airden(1,1,kk)=rho_phy(i,k,j)
-          tmp(1,1,kk)=t_phy(i,k,j)
+          p_mid(1,1,kk)=.01*p_phy(kte-k+kts) 
+          delz(1,1,kk)=dz8w(kte-k+kts) 
+          airmas(1,1,kk)=-(p8w(k+1)-p8w(k))/g
+          airden(1,1,kk)=rho_phy(k)
+          tmp(1,1,kk)=t_phy(k)
           rh(1,1,kk) = .95
-          rh(1,1,kk) = MIN( .95, moist(i,k,j,p_qv) / &
-               (3.80*exp(17.27*(t_phy(i,k,j)-273.)/ &
-               (t_phy(i,k,j)-36.))/(.01*p_phy(i,k,j))))
+          rh(1,1,kk) = MIN( .95, moist(k,p_qv) / &
+               (3.80*exp(17.27*(t_phy(k)-273.)/ &
+               (t_phy(k)-36.))/(.01*p_phy(k))))
           rh(1,1,kk)=max(1.0D-1,rh(1,1,kk))
           enddo
      
@@ -242,7 +224,7 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
           do nv=p_vash_1,p_vash_4
           kk=kk+1
           do k=kts,kte
-              if(chem(i,k,j,nv).gt.maxash(kk)) maxash(kk)=chem(i,k,j,nv)
+              if(chem_arr(k,nv).gt.maxash(kk)) maxash(kk)=chem_arr(k,nv)
             enddo
           enddo
 ! GOCART
@@ -250,12 +232,12 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
           nv=p_p25
           kk=kk+1
           do k=kts,kte
-              if(chem(i,k,j,nv).gt.maxash(kk)) maxash(kk)=chem(i,k,j,nv)
+              if(chem_arr(k,nv).gt.maxash(kk)) maxash(kk)=chem_arr(k,nv)
           enddo
           nv=p_p10
           kk=kk+1
           do k=kts,kte
-              if(chem(i,k,j,nv).gt.maxash(kk)) maxash(kk)=chem(i,k,j,nv)
+              if(chem_arr(k,nv).gt.maxash(kk)) maxash(kk)=chem_arr(k,nv)
           enddo
           endif
 
@@ -268,14 +250,14 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
           kk=0
           do k=kts,kte 
           kk=kk+1
-          if(chem(i,k,j,p_vash_1).le.1.e-10)chem(i,k,j,p_vash_1)=0.
-          if(chem(i,k,j,p_vash_2).le.1.e-10)chem(i,k,j,p_vash_2)=0.
-          if(chem(i,k,j,p_vash_3).le.1.e-10)chem(i,k,j,p_vash_3)=0.
-          if(chem(i,k,j,p_vash_4).le.1.e-10)chem(i,k,j,p_vash_4)=0.
-          ash(1,1,kk,1)=chem(i,k,j,p_vash_1)*conver
-          ash(1,1,kk,2)=chem(i,k,j,p_vash_2)*conver
-          ash(1,1,kk,3)=chem(i,k,j,p_vash_3)*conver
-          ash(1,1,kk,4)=chem(i,k,j,p_vash_4)*conver
+          if(chem_arr(k,p_vash_1).le.1.e-10)chem_arr(k,p_vash_1)=0.
+          if(chem_arr(k,p_vash_2).le.1.e-10)chem_arr(k,p_vash_2)=0.
+          if(chem_arr(k,p_vash_3).le.1.e-10)chem_arr(k,p_vash_3)=0.
+          if(chem_arr(k,p_vash_4).le.1.e-10)chem_arr(k,p_vash_4)=0.
+          ash(1,1,kk,1)=chem_arr(k,p_vash_1)*conver
+          ash(1,1,kk,2)=chem_arr(k,p_vash_2)*conver
+          ash(1,1,kk,3)=chem_arr(k,p_vash_3)*conver
+          ash(1,1,kk,4)=chem_arr(k,p_vash_4)*conver
           enddo
 !
 ! volc ash for gocart, this is crude
@@ -285,9 +267,9 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
              do k=kts,kte 
                 kk=kk+1
                 ash(1,1,kk,1)=0.
-                ash(1,1,kk,4)=chem(i,k,j,p_p25)*conver
-                ash(1,1,kk,3)=.67*chem(i,k,j,p_p10)*conver
-                ash(1,1,kk,2)=(1.-.67)*chem(i,k,j,p_p10)*conver
+                ash(1,1,kk,4)=chem_arr(k,p_p25)*conver
+                ash(1,1,kk,3)=.67*chem_arr(k,p_p10)*conver
+                ash(1,1,kk,2)=(1.-.67)*chem_arr(k,p_p10)*conver
                 if(ash(1,1,kk,2).le.1.e-10)ash(1,1,kk,2)=0.
                 if(ash(1,1,kk,3).le.1.e-10)ash(1,1,kk,3)=0.
                 if(ash(1,1,kk,4).le.1.e-10)ash(1,1,kk,4)=0.
@@ -297,35 +279,32 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,                       &
           call vsettling(iprt,1, 1, lmx, 4, g, are,&
                     ash, tmp, p_mid, delz, airmas, &
                     den_ash, reff_ash, dt, bstl_ash, rh, idust, iseas,iash)
-          ash_fall(i,j)=ash_fall(i,j)+sum(bstl_ash(1:4))
+          ash_fall=ash_fall+sum(bstl_ash(1:4))
           if(p_vash_4.gt.1)then
           kk=0
           do k=kts,kte
           kk=kk+1
-            chem(i,k,j,p_vash_1)=min(maxash(1),ash(1,1,kk,1)*converi)
-            chem(i,k,j,p_vash_2)=min(maxash(2),ash(1,1,kk,2)*converi)
-            chem(i,k,j,p_vash_3)=min(maxash(3),ash(1,1,kk,3)*converi)
-            chem(i,k,j,p_vash_4)=min(maxash(4),ash(1,1,kk,4)*converi)
-          if(chem(i,k,j,p_vash_1).le.1.e-10)chem(i,k,j,p_vash_1)=0.
-          if(chem(i,k,j,p_vash_2).le.1.e-10)chem(i,k,j,p_vash_2)=0.
-          if(chem(i,k,j,p_vash_3).le.1.e-10)chem(i,k,j,p_vash_3)=0.
-          if(chem(i,k,j,p_vash_4).le.1.e-10)chem(i,k,j,p_vash_4)=0.
+            chem_arr(k,p_vash_1)=min(maxash(1),ash(1,1,kk,1)*converi)
+            chem_arr(k,p_vash_2)=min(maxash(2),ash(1,1,kk,2)*converi)
+            chem_arr(k,p_vash_3)=min(maxash(3),ash(1,1,kk,3)*converi)
+            chem_arr(k,p_vash_4)=min(maxash(4),ash(1,1,kk,4)*converi)
+          if(chem_arr(k,p_vash_1).le.1.e-10)chem_arr(k,p_vash_1)=0.
+          if(chem_arr(k,p_vash_2).le.1.e-10)chem_arr(k,p_vash_2)=0.
+          if(chem_arr(k,p_vash_3).le.1.e-10)chem_arr(k,p_vash_3)=0.
+          if(chem_arr(k,p_vash_4).le.1.e-10)chem_arr(k,p_vash_4)=0.
           enddo
           else if(p_bc2.gt.1)then
           kk=0
           do k=kts,kte
           kk=kk+1
-!           chem(i,k,j,p_p25)=min(maxash(1),ash(1,1,kk,4)*converi)
-            chem(i,k,j,p_p10)=min(maxash(2),(ash(1,1,kk,2)+ash(1,1,kk,3))*converi)
-!         if(chem(i,k,j,p_p25).le.1.e-16)chem(i,k,j,p_p25)=1.e-16
-          if(chem(i,k,j,p_p10).le.1.e-16)chem(i,k,j,p_p10)=1.e-16
+!           chem_arr(k,p_p25)=min(maxash(1),ash(1,1,kk,4)*converi)
+            chem_arr(k,p_p10)=min(maxash(2),(ash(1,1,kk,2)+ash(1,1,kk,3))*converi)
+!         if(chem_arr(k,p_p25).le.1.e-16)chem_arr(k,p_p25)=1.e-16
+          if(chem_arr(k,p_p10).le.1.e-16)chem_arr(k,p_p10)=1.e-16
           enddo
           endif
 
 !ash settling end
-
-       enddo
-       enddo
 
 END SUBROUTINE vashshort_settling_driver
 

@@ -1,6 +1,10 @@
-module dep_dry_gocart_mod
+! Revision History:
+!! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-  use catchem_constants ,        only : kind_chem
+module drydep_gocart_mod
+
+  use catchem_constants ,        only : kind_chem, g => con_g
+  use catchem_config,            only : num_chem
 
   implicit none
 
@@ -10,34 +14,17 @@ module dep_dry_gocart_mod
 
 CONTAINS
 
-subroutine gocart_drydep_driver(numgas,        &
-  moist,p8w,chem,rho_phy,dz8w,ddvel,xland,hfx, &
-  ivgtyp,tsk,pbl,ust,znt,g,                    &
-  num_moist,num_chem,                          &
-  ids,ide, jds,jde, kds,kde,                   &
-  ims,ime, jms,jme, kms,kme,                   &
-  its,ite, jts,jte, kts,kte                    )
+subroutine gocart_drydep_driver(               &
+  p8w,rho_phy,dz8w,ddvel,xland,hfx,      &
+  ivgtyp,tsk,pbl,ust,znt)
 
   IMPLICIT NONE
 
-  INTEGER, INTENT(IN   ) :: ids,ide, jds,jde, kds,kde,       &
-                            ims,ime, jms,jme, kms,kme,       &
-                            num_moist,num_chem,              &
-                            its,ite, jts,jte, kts,kte,numgas
-  REAL(kind_chem),    INTENT(IN   ) :: g
-  REAL(kind_chem),    DIMENSION( ims:ime, kms:kme, jms:jme, num_moist ),&
-           INTENT(IN   ) :: moist
-  REAL(kind_chem),    DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ) ,&
-           INTENT(INOUT) :: chem
-  REAL(kind_chem),    DIMENSION( ims:ime , kms:kme , jms:jme )         ,&
-           INTENT(IN   ) :: dz8w, p8w,rho_phy
-  INTEGER, DIMENSION( ims:ime , jms:jme )                   ,&
-           INTENT(IN   ) :: ivgtyp
-  REAL(kind_chem),    DIMENSION( ims:ime , jms:jme )                   ,&
-           INTENT(INOUT) :: tsk,                             &
-                            pbl,                             &
-                            ust,                             &
-                            xland,znt,hfx
+  REAL(kind_chem),    INTENT(IN   ) :: dz8w, p8w,rho_phy
+  REAL(kind_chem),    DIMENSION( num_chem ), &
+           INTENT(INOUT) :: ddvel
+  REAL(kind_chem),    INTENT(INOUT) :: tsk, pbl,ust,xland,znt,hfx
+  INTEGER, INTENT(IN   ) :: ivgtyp
 
 !! .. Local Scalars ..
 
@@ -50,43 +37,34 @@ subroutine gocart_drydep_driver(numgas,        &
   real(kind_chem), dimension (1,1) :: z0,w10m,gwet,airden,airmas,&
                                          delz_sfc,hflux,ts,pblz,ustar,&
                                          ps,dvel,drydf
-  REAL(kind_chem), DIMENSION( its:ite, jts:jte, num_chem ) :: ddvel
 
-  do nv=1,num_chem
-    do j=jts,jte
-      do i=its,ite
-        ddvel(i,j,nv)=0.
-      enddo
-    enddo
-  enddo
   imx=1
   jmx=1
   lmx=1
-  do j=jts,jte
-  do i=its,ite
-     dvel(1,1)=0.
-     ilwi(1,1)=0
-     if(xland(i,j).gt.1.5)ilwi=1
-! for aerosols, ii=1 or ii=2
-     ii=1
-     if(ivgtyp(i,j).eq.19.or.ivgtyp(i,j).eq.23)ii=1
-     airden(1,1)=rho_phy(i,kts,j)
-     delz_sfc(1,1)=dz8w(i,kts,j)
-     ustar(1,1)=ust(i,j)
-     hflux(1,1)=hfx(i,j)
-     pblz(1,1)=pbl(i,j)
-     ps(1,1)=p8w(i,kts,j)*.01
-     z0(1,1)=znt(i,j)
-     ts(1,1)=tsk(i,j)
+  
 
-     call depvel_gocart(ii,imx,jmx,lmx,&
+  dvel(1,1)=0.
+  ilwi(1,1)=0
+  if(xland.gt.1.5)ilwi=1
+! for aerosols, ii=1 or ii=2
+  ii=1
+  if(ivgtyp.eq.19.or.ivgtyp.eq.23)ii=1
+  airden(1,1)=rho_phy
+  delz_sfc(1,1)=dz8w
+  ustar(1,1)=ust
+  hflux(1,1)=hfx
+  pblz(1,1)=pbl
+  ps(1,1)=p8w*.01
+  z0(1,1)=znt
+  ts(1,1)=tsk
+
+  call depvel_gocart(ii,imx,jmx,lmx,&
      airden, delz_sfc, pblz, ts, ustar, hflux, ilwi, &
      ps, z0, dvel, drydf,g)
-     do nv=1,num_chem
-      ddvel(i,j,nv)=dvel(1,1)
-     enddo
+  do nv=1,num_chem
+    ddvel(nv)=dvel(1,1)
   enddo
-  enddo
+
 end subroutine gocart_drydep_driver
 
 
@@ -296,4 +274,4 @@ SUBROUTINE depvel_gocart(      &
 
 END SUBROUTINE depvel_gocart
 
-end module dep_dry_gocart_mod
+end module drydep_gocart_mod

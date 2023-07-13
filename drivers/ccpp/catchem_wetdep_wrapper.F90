@@ -1,15 +1,15 @@
-!>\file catchem_lsdep_wrapper.F90
+!>\file catchem_wetdep_wrapper.F90
 !! This file is GSDChem large-scale wet deposition wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 06/2020
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
- module catchem_lsdep_wrapper
+ module catchem_wetdep_wrapper
 
    use physcons,        only : g => con_g, pi => con_pi
    use machine ,        only : kind_phys
    use catchem_config
-   use dep_wet_ls_mod
+   use wetdep_ls_mod
    use gocart_aerosols_mod
    use dust_data_mod
    use gocart_diag_mod
@@ -18,33 +18,33 @@
 
    private
 
-   public :: catchem_lsdep_wrapper_init, catchem_lsdep_wrapper_run, catchem_lsdep_wrapper_finalize
+   public :: catchem_wetdep_wrapper_init, catchem_wetdep_wrapper_run, catchem_wetdep_wrapper_finalize
 
 contains
 
 !> \brief Brief description of the subroutine
 !!
-      subroutine catchem_lsdep_wrapper_init()
-      end subroutine catchem_lsdep_wrapper_init
+      subroutine catchem_wetdep_wrapper_init()
+      end subroutine catchem_wetdep_wrapper_init
 
 !> \brief Brief description of the subroutine
 !!
-!! \section arg_table_catchem_lsdep_wrapper_finalize Argument Table
+!! \section arg_table_catchem_wetdep_wrapper_finalize Argument Table
 !!
-      subroutine catchem_lsdep_wrapper_finalize()
-      end subroutine catchem_lsdep_wrapper_finalize
+      subroutine catchem_wetdep_wrapper_finalize()
+      end subroutine catchem_wetdep_wrapper_finalize
 
-!> \defgroup catchem_group CATChem lsdep wrapper Module
+!> \defgroup catchem_group CATChem wetdep wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_lsdep_wrapper CATChem lsdep wrapper Module  
-!> \ingroup catchem_lsdep_group
-!! This is the CATChem lsdep wrapper Module
-!! \section arg_table_catchem_lsdep_wrapper_run Argument Table
-!! \htmlinclude catchem_lsdep_wrapper_run.html
+!>\defgroup catchem_wetdep_wrapper CATChem wetdep wrapper Module  
+!> \ingroup catchem_wetdep_group
+!! This is the CATChem wetdep wrapper Module
+!! \section arg_table_catchem_wetdep_wrapper_run Argument Table
+!! \htmlinclude catchem_wetdep_wrapper_run.html
 !!
-!>\section catchem_lsdep_wrapper CATChem Scheme General Algorithm
+!>\section catchem_wetdep_wrapper CATChem Scheme General Algorithm
 !> @{
-    subroutine catchem_lsdep_wrapper_run(im, kte, kme, ktau, dt,       &
+    subroutine catchem_wetdep_wrapper_run(im, kte, kme, ktau, dt,       &
                    rain_cplchm, rainc_cpl,rlat,                         &
                    pr3d, ph3d,phl3d, prl3d, tk3d, us3d, vs3d, spechum,  &
                    w, dqdt, ntrac,ntchmdiag,                            &
@@ -141,7 +141,7 @@ contains
 !!!
 
 !>- get ready for chemistry run
-    call catchem_prep_lsdep(ktau,dtstep,                               &
+    call catchem_prep_wetdep(ktau,dtstep,                               &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w, dqdt,           &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                   &
         t8w,dqdti,z_at_w,vvel,rlat,xlat,                                &
@@ -155,23 +155,39 @@ contains
         ims,ime, jms,jme, kms,kme,                                      &
         its,ite, jts,jte, kts,kte)
 
-     ! -- ls wet deposition
-     select case (wetdep_ls_opt)
-       case (WDLS_OPT_GSD)
-         call wetdep_ls(dt,chem,rnav,moist,rho_phy,var_rmv,xlat,        &
-                        num_moist,num_chem,p_qc,p_qi,dz8w,vvel,         &
-                        ids,ide, jds,jde, kds,kde,                      &
-                        ims,ime, jms,jme, kms,kme,                      &
-                        its,ite, jts,jte, kts,kte)
-       case (WDLS_OPT_NGAC)
-         call WetRemovalGOCART(its,ite, jts,jte, kts,kte, 1,1, dt,      &
-                               num_chem,var_rmv,chem,p_phy,t_phy,       &
-                               rho_phy,dqdti,rcav,rnav,                 &
-                               ims,ime, jms,jme, kms,kme)
+    ! -- ls wet deposition
+    var_rmv(:,:,:)=0.
+
+    select case (wetdep_ls_opt)
+      case (WDLS_OPT_GSD)
+        do j=jts,jte
+          do i=its,ite
+            call wetdep_ls(dt,chem(i,:,j,:),rnav(i,j),moist(i,:,j,:),   &
+                        rho_phy(i,:,j),var_rmv(i,j,:),xlat(i,j),        &
+                        p_qc,p_qi,dz8w(i,:,j),vvel(i,:,j),              &
+                        kms,kme,kts,kte)
+          enddo
+        end do
+
+      case (WDLS_OPT_NGAC)
+        do j=jts,jte
+          do i=its,ite
+            call WetRemovalGOCART(kts,kte, 1,1, dt,   &
+                               var_rmv(i,j,:),chem(i,:,j,:),    &
+                               p_phy(i,:,j),t_phy(i,:,j),       &
+                               rho_phy(i,:,j),dqdti(i,:,j),     &
+                               rcav(i,j),rnav(i,j),             &
+                               kms,kme)
+          enddo
+        enddo
+
          !if (chem_rc_check(localrc, msg="Failure in NGAC wet removal scheme", &
          !  file=__FILE__, line=__LINE__, rc=rc)) return
-       case default
-         ! -- no further option implemented
+      case default
+        ! -- no further option implemented
+        errmsg = 'Logic error in catchem_wetdep_wrapper_run: invalid wdls_opt'
+        errflg = 1
+        return
     end select
 
 
@@ -232,10 +248,10 @@ contains
      wetdpl (:,:)=trdf(:,1,:,3)
 
 !
-   end subroutine catchem_lsdep_wrapper_run
+   end subroutine catchem_wetdep_wrapper_run
 !> @}
 
-  subroutine catchem_prep_lsdep(ktau,dtstep,                          &
+  subroutine catchem_prep_wetdep(ktau,dtstep,                          &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w,dqdt,           &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                  &
         t8w,dqdti,z_at_w,vvel,rlat,xlat,                               &
@@ -416,6 +432,6 @@ contains
     enddo
 
 
-  end subroutine catchem_prep_lsdep
+  end subroutine catchem_prep_wetdep
 !> @}
-  end module catchem_lsdep_wrapper
+  end module catchem_wetdep_wrapper

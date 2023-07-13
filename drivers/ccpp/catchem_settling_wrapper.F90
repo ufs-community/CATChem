@@ -131,22 +131,47 @@ contains
 
     if ((dust_opt /= DUST_OPT_NONE) .or.                                &
         (seas_opt /= SEAS_OPT_NONE)) then
-      call gocart_settling_driver(dt,t_phy,moist,                       &
-        chem,rho_phy,dz8w,p8w,p_phy,sedim,                              &
-        dusthelp,seashelp,dxy,g,                                        &
-        num_moist,num_chem,                                             &
-        ids,ide, jds,jde, kds,kde,                                      &
-        ims,ime, jms,jme, kms,kme,                                      &
-        its,ite, jts,jte, kts,kte)
+
+      select case (chem_opt)
+        case (304, 316, 317)
+          !
+          !  GOCART "very" light
+          !
+          do j=jts,jte
+            do i=its,ite
+              call settling_simple_driver(dt,t_phy(i,:,j),              &
+                  moist(i,:,j,:),chem(i,:,j,:),rho_phy(i,:,j),            &
+                  dz8w(i,:,j),p8w(i,:,j),p_phy(i,:,j),                  &
+                  sedim(i,j,:),dusthelp(i,j),seashelp(i,j),             &
+                  dxy(i,j),kms,kme,kts,kte)
+            enddo
+          enddo
+
+        case default
+          !
+          ! run with all GOCART variables, GOCART sort of HEAVY!
+          !
+          do j=jts,jte
+            do i=its,ite
+              call settling_gocart_driver(dt,t_phy(i,:,j),              &
+                  moist(i,:,j,:),chem(i,:,j,:),rho_phy(i,:,j),            &
+                  dz8w(i,:,j),p8w(i,:,j),p_phy(i,:,j),                  &
+                  sedim(i,j,:),dxy(i,j),kms,kme,kts,kte)
+            enddo
+          enddo
+
+      end select
     end if
 
-      ! -- 4 volcanic size bins
-      call vashshort_settling_driver(dt,t_phy,moist,                    &
-           chem,rho_phy,dz8w,p8w,p_phy,dxy,                             &
-           ash_fall,g,num_moist,num_chem,                               &
-           ids,ide, jds,jde, kds,kde,                                   &
-           ims,ime, jms,jme, kms,kme,                                   &
-           its,ite, jts,jte, kts,kte)
+    ! -- 4 volcanic size bins
+    do j=jts,jte
+      do i=its,ite
+        call vashshort_settling_driver(dt,t_phy(i,:,j),              &
+                  moist(i,:,j,:),chem(i,:,j,:),rho_phy(i,:,j),            &
+                  dz8w(i,:,j),p8w(i,:,j),p_phy(i,:,j),                  &
+                  dxy(i,j),ash_fall(i,j),kms,kme,kts,kte)
+      enddo
+    enddo
 
     ! -- put chem stuff back into tracer array
     do k=kts,kte

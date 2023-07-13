@@ -5,8 +5,12 @@ module dust_fengsha_mod
 !
 !  07/16/2019 - Adapted for NUOPC/GOCART, R. Montuoro
 !  02/01/2020 - Adapted for FV3/CCPP, Haiqin Li
+!  06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-  use catchem_constants ,        only : kind_chem
+  use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
+  use catchem_config, only: num_chem,num_emis_dust,&
+                            p_dust_1,p_dust_2,p_dust_3,p_dust_4,p_dust_5, &
+                            p_edust1,p_edust2,p_edust3,p_edust4,p_edust5
   use dust_data_mod
 
   implicit none
@@ -17,54 +21,41 @@ module dust_fengsha_mod
 
 contains
 
-  subroutine gocart_dust_fengsha_driver(dt,              &
-       chem,rho_phy,smois,p8w,ssm,                       &
-       isltyp,vegfra,snowh,xland,area,g,emis_dust,       &
-       ust,znt,clay,sand,rdrag,uthr,                     &
-       num_emis_dust,num_moist,num_chem,num_soil_layers, &
-       random_factor,                                    &
-       ids,ide, jds,jde, kds,kde,                        &
-       ims,ime, jms,jme, kms,kme,                        &
-       its,ite, jts,jte, kts,kte)
-    IMPLICIT NONE
+  subroutine gocart_dust_fengsha_driver(dt,           &
+          chem_arr,rho_phy,dz8w,smois,         &
+          delp,ssm,isltyp,vegfra,snowh,area,  &
+          emis_dust,ust,znt,clay,sand, &
+          rdrag,uthr,num_soil_layers,random_factor)
 
-    INTEGER,      INTENT(IN   ) ::                       &
-         ids,ide, jds,jde, kds,kde,                      &
-         ims,ime, jms,jme, kms,kme,                      &
-         its,ite, jts,jte, kts,kte,                      &
-         num_emis_dust,num_moist,num_chem,num_soil_layers
+  IMPLICIT NONE
 
-    real(kind_chem), dimension(ims:ime,jms:jme), intent(in) :: random_factor
-    INTEGER,DIMENSION( ims:ime , jms:jme ), INTENT(IN) :: isltyp
-    REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ), INTENT(INOUT) :: chem
-    REAL(kind_chem), DIMENSION( ims:ime, 1, jms:jme,num_emis_dust),OPTIONAL, INTENT(INOUT) :: emis_dust
-    REAL(kind_chem), DIMENSION( ims:ime, num_soil_layers, jms:jme ), INTENT(IN) :: smois
-    REAL(kind_chem), DIMENSION( ims:ime , jms:jme ), INTENT(IN) :: ssm
-    REAL(kind_chem), DIMENSION( ims:ime , jms:jme ), INTENT(IN) :: vegfra,     &
-                                                        snowh,      &
-                                                        xland,      &
-                                                        area,       &
-                                                        ust,        &
-                                                        znt,        &
-                                                        clay,       &
-                                                        sand,       &
-                                                        rdrag,      &
-                                                        uthr
-    REAL(kind_chem), DIMENSION( ims:ime , kms:kme , jms:jme ), INTENT(IN   ) :: &
-         p8w,             &
-         rho_phy
-    REAL(kind_chem), INTENT(IN) :: dt,g
+     INTEGER,      INTENT(IN   ) :: isltyp,  &
+                                    num_soil_layers
+     REAL(kind=kind_chem), INTENT(IN   ) :: dt,&
+                                            rho_phy, &
+                                            dz8w, &
+                                            delp,&
+                                            ssm,vegfra,snowh,&
+                                            area, &
+                                            ust,znt, &
+                                            clay,sand, & 
+                                            rdrag,uthr,&
+                                            random_factor
+
+     REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
+           INTENT(INOUT ) ::                                   chem_arr
+     REAL(kind=kind_chem), DIMENSION(num_emis_dust),&
+           OPTIONAL, INTENT(INOUT ) ::                  emis_dust
+     REAL(kind=kind_chem), DIMENSION( num_soil_layers ) , &
+        INTENT(INOUT) ::                               smois
 
     ! Local variables
 
-    integer :: nmx,smx,i,j,k,imx,jmx,lmx
-    integer,dimension (1,1) :: ilwi
-    real(kind_chem), DIMENSION (1,1) :: erodtot
-    REAL(kind_chem), DIMENSION (1,1) :: gravsm
-    REAL(kind_chem), DIMENSION (1,1) :: drylimit
+    integer :: nmx,smx
+    integer :: ilwi
+    real(kind_chem) :: erodtot, gravsm, drylimit
     real(kind_chem), DIMENSION (5)   :: tc,bems
-    real(kind_chem), dimension (1,1) :: airden,airmas,ustar
-    real(kind_chem), dimension (1) :: dxy
+    real(kind_chem) :: airden,airmas,ustar,dxy
     real(kind_chem), dimension (3) :: massfrac
     real(kind_chem) :: conver,converi
     real(kind_chem) :: R
@@ -75,140 +66,113 @@ contains
 
     ! Number of dust bins
 
-    imx=1
-    jmx=1
-    lmx=1
     nmx=ndust
     smx=nsalt
 
-    k=kts
-    do j=jts,jte
-       do i=its,ite
 
-          ! Don't do dust over water!!!
+    ! Don't do dust over water!!!
 
-          ilwi(1,1)=0
-          if(xland(i,j).lt.1.5)then
-             ilwi(1,1)=1
+    ilwi=1
 
-             ! Total concentration at lowest model level. This is still hardcoded for 5 bins.
+    ! Total concentration at lowest model level. This is still hardcoded for 5 bins.
+    tc(1)=chem_arr(p_dust_1)*conver
+    tc(2)=chem_arr(p_dust_2)*conver
+    tc(3)=chem_arr(p_dust_3)*conver
+    tc(4)=chem_arr(p_dust_4)*conver
+    tc(5)=chem_arr(p_dust_5)*conver
 
-             !    if(config_flags%chem_opt == 2 .or. config_flags%chem_opt == 11 ) then
-             !       tc(:)=1.e-16*conver
-             !    else
-             tc(1)=chem(i,kts,j,p_dust_1)*conver
-             tc(2)=chem(i,kts,j,p_dust_2)*conver
-             tc(3)=chem(i,kts,j,p_dust_3)*conver
-             tc(4)=chem(i,kts,j,p_dust_4)*conver
-             tc(5)=chem(i,kts,j,p_dust_5)*conver
-             !    endif
+    ! Air mass and density at lowest model level.
+    airmas=area * delp / g
+    airden=rho_phy
+    ustar=ust
+    dxy=area
 
-             ! Air mass and density at lowest model level.
-
-             airmas(1,1)=-(p8w(i,kts+1,j)-p8w(i,kts,j))*area(i,j)/g
-             airden(1,1)=rho_phy(i,kts,j)
-             ustar(1,1)=ust(i,j)
-             dxy(1)=area(i,j)
-
-             ! Mass fractions of clay, silt, and sand.
-             massfrac(1)=clay(i,j)
-             massfrac(2)=1-(clay(i,j)+sand(i,j))
-             massfrac(3)=sand(i,j)
+    ! Mass fractions of clay, silt, and sand.
+    massfrac(1)=clay
+    massfrac(2)=1-(clay+sand)
+    massfrac(3)=sand
 
 
-             ! Total erodibility.
+    ! Total erodibility.
+    erodtot = ssm       ! SUM(erod(i,j,:))
              
-             erodtot(1,1) = ssm(i,j) ! SUM(erod(i,j,:))
-             
-             ! Don't allow roughness lengths greater than 20 cm to be lofted.
-             ! This kludge accounts for land use types like urban areas and
-             ! forests which would otherwise show up as high dust emitters.
-             ! This is a placeholder for a more widely accepted kludge
-             ! factor in the literature, which reduces lofting for rough areas.
-             ! Forthcoming...
+    ! Don't allow roughness lengths greater than 20 cm to be lofted.
+    ! This kludge accounts for land use types like urban areas and
+    ! forests which would otherwise show up as high dust emitters.
+    ! This is a placeholder for a more widely accepted kludge
+    ! factor in the literature, which reduces lofting for rough areas.
+    ! Forthcoming...
 
-             IF (znt(i,j) .gt. 0.2) then
-                ilwi(1,1)=0
-             endif
+    IF (znt .gt. 0.2) then
+      ilwi=0
+    ENDIF
 
-             ! limit where there is lots of vegetation
-             if (vegfra(i,j) .gt. .17) then
-                ilwi(1,1) = 0
-             endif
+    ! limit where there is lots of vegetation
+    if (vegfra .gt. .17) then
+       ilwi = 0
+    endif
 
-             ! limit where there is snow on the ground
-             if (snowh(i,j) .gt. 0) then
-                ilwi(1,1) = 0
-             endif
+    ! limit where there is snow on the ground
+    if (snowh .gt. 0) then
+       ilwi = 0
+    endif
 
-             ! Do not allow areas with bedrock, lava, or land-ice to loft
+    ! Do not allow areas with bedrock, lava, or land-ice to loft
 
-             IF (isltyp(i,j) .eq. 15 .or. isltyp(i,j) .eq. 16. .or. &
-                  isltyp(i,j) .eq. 18) then
-                ilwi(1,1)=0
-             ENDIF
-             IF (isltyp(i,j) .eq. 0)then
-                ilwi(1,1)=0
-             endif
-             if(ilwi(1,1) == 0 ) cycle
+    IF (isltyp.eq. 15 .or. isltyp .eq. 16. .or. &
+          isltyp .eq. 18) then
+      ilwi=0
+    ENDIF
+    IF (isltyp .eq. 0)then
+      ilwi=0
+    endif
 
-             ! Calculate gravimetric soil moisture and drylimit.
-             gravsm(1,1)=100.*smois(i,1,j)/((1.-maxsmc(isltyp(i,j)))*(2.65*(1.-clay(i,j))+2.50*clay(i,j)))
-             drylimit(1,1)=14.0*clay(i,j)*clay(i,j)+17.0*clay(i,j)
+    if(ilwi == 1 ) return
 
-             ! get drag partition
-             ! FENGSHA uses the drag partition correction of MacKinnon et al 2004
-             !     doi:10.1016/j.geomorph.2004.03.009
-             if (dust_calcdrag .ne. 1) then
-                call fengsha_drag(znt(i,j),R)
-             else
-                ! use the precalculated version derived from ASCAT; Prigent et al. (2012,2015)
-                ! doi:10.1109/TGRS.2014.2338913 & doi:10.5194/amt-5-2703-2012
-                ! pick only valid values
-                if (rdrag(i,j) > 0.) then
-                  R = real(rdrag(i,j), kind=kind_chem)
-                else
-                  cycle
-                endif
-             endif
+    ! Calculate gravimetric soil moisture and drylimit.
+    gravsm=100.*smois(1)/((1.-maxsmc(isltyp))*(2.65*(1.-clay)+2.50*clay))
+    drylimit=14.0*clay*clay+17.0*clay
 
-             ! Call dust emission routine.
-             call source_dust(imx, jmx, lmx, nmx, smx, dt, tc, ustar, massfrac, & 
+    ! get drag partition
+    ! FENGSHA uses the drag partition correction of MacKinnon et al 2004
+    !     doi:10.1016/j.geomorph.2004.03.009
+    if (dust_calcdrag .ne. 1) then
+       call fengsha_drag(znt,R)
+    else
+      ! use the precalculated version derived from ASCAT; Prigent et al. (2012,2015)
+      ! doi:10.1109/TGRS.2014.2338913 & doi:10.5194/amt-5-2703-2012
+      ! pick only valid values
+      if (rdrag > 0.) then
+        R = real(rdrag, kind=kind_chem)
+      else
+        return 
+      endif
+    endif  
+
+    ! Call dust emission routine.
+    call source_dust(nmx, smx, dt, tc, ustar, massfrac, & 
                   erodtot, dxy, gravsm, airden, airmas, &
-                  bems, g, drylimit, dust_alpha, dust_gamma, R, uthr(i,j), random_factor)
+                  bems, g, drylimit, dust_alpha, dust_gamma, R, uthr, random_factor)
 
-             !    if(config_flags%chem_opt == 2 .or. config_flags%chem_opt == 11 ) then
-             !     dustin(i,j,1:5)=tc(1:5)*converi
-             !    else
-             chem(i,kts,j,p_dust_1)=tc(1)*converi
-             chem(i,kts,j,p_dust_2)=tc(2)*converi
-             chem(i,kts,j,p_dust_3)=tc(3)*converi
-             chem(i,kts,j,p_dust_4)=tc(4)*converi
-             chem(i,kts,j,p_dust_5)=tc(5)*converi
-             !    endif
+    chem_arr(p_dust_1)=tc(1)*converi
+    chem_arr(p_dust_2)=tc(2)*converi
+    chem_arr(p_dust_3)=tc(3)*converi
+    chem_arr(p_dust_4)=tc(4)*converi
+    chem_arr(p_dust_5)=tc(5)*converi
 
-             !     chem(i,kts,j,p_dust_1)=tc(1)*converi
-             !     chem(i,kts,j,p_dust_2)=tc(2)*converi
-             !     chem(i,kts,j,p_dust_3)=tc(3)*converi
-             !     chem(i,kts,j,p_dust_4)=tc(4)*converi
-             !     chem(i,kts,j,p_dust_5)=tc(5)*converi
+    ! -- for output diagnostics
+    emis_dust(p_edust1)=bems(1)
+    emis_dust(p_edust2)=bems(2)
+    emis_dust(p_edust3)=bems(3)
+    emis_dust(p_edust4)=bems(4)
+    emis_dust(p_edust5)=bems(5)
 
-             ! For output diagnostics
-
-             emis_dust(i,1,j,p_edust1)=bems(1)
-             emis_dust(i,1,j,p_edust2)=bems(2)
-             emis_dust(i,1,j,p_edust3)=bems(3)
-             emis_dust(i,1,j,p_edust4)=bems(4)
-             emis_dust(i,1,j,p_edust5)=bems(5)
-          endif
-       enddo
-    enddo
     !
 
   end subroutine gocart_dust_fengsha_driver
 
 
-  SUBROUTINE source_dust(imx, jmx, lmx, nmx, smx, dt1, tc, ustar, massfrac, &
+  SUBROUTINE source_dust(nmx, smx, dt1, tc, ustar, massfrac, &
        erod, dxy, gravsm, airden, airmas, bems, g0, drylimit, alpha,  &
        gamma, R, uthres, random_factor)
 
@@ -275,20 +239,20 @@ contains
     ! *
     ! ****************************************************************************
 
-    INTEGER,            INTENT(IN)    :: imx,jmx,lmx,nmx,smx
+    INTEGER,            INTENT(IN)    :: nmx,smx
     REAL(kind_chem), INTENT(IN)    :: dt1
-    REAL(kind_chem), INTENT(INOUT) :: tc(imx,jmx,lmx,nmx)
-    REAL(kind_chem), INTENT(IN)    :: ustar(imx,jmx)
+    REAL(kind_chem), INTENT(INOUT) :: tc(nmx)
+    REAL(kind_chem), INTENT(IN)    :: ustar
     REAL(kind_chem), INTENT(IN)    :: massfrac(3)
-    REAL(kind_chem), INTENT(IN)    :: erod(imx,jmx)
-    REAL(kind_chem), INTENT(IN)    :: dxy(jmx)
-    REAL(kind_chem), INTENT(IN)    :: gravsm(imx,jmx)
-    REAL(kind_chem), INTENT(IN)    :: random_factor(imx,jmx)
-    REAL(kind_chem), INTENT(IN)    :: airden(imx,jmx,lmx)
-    REAL(kind_chem), INTENT(IN)    :: airmas(imx,jmx,lmx)
-    REAL(kind_chem), INTENT(OUT)   :: bems(imx,jmx,nmx)
+    REAL(kind_chem), INTENT(IN)    :: erod
+    REAL(kind_chem), INTENT(IN)    :: dxy
+    REAL(kind_chem), INTENT(IN)    :: gravsm
+    REAL(kind_chem), INTENT(IN)    :: random_factor
+    REAL(kind_chem), INTENT(IN)    :: airden
+    REAL(kind_chem), INTENT(IN)    :: airmas
+    REAL(kind_chem), INTENT(OUT)   :: bems(nmx)
     REAL(kind_chem), INTENT(IN)    :: g0
-    REAL(kind_chem), INTENT(IN)    :: drylimit(imx,jmx)
+    REAL(kind_chem), INTENT(IN)    :: drylimit
     !! Sandblasting mass efficiency, aka "fudge factor" (based on Tegen et al,
     !! 2006 and Hemold et al, 2007)
     !
@@ -369,9 +333,7 @@ contains
     DO n = 1, smx
        den(n) = den_salt(n)*1.0D-3         ! (g cm^-3)
        diam(n) = 2.0*reff_salt(n)*1.0D2    ! (cm)
-       DO i = 1,imx
-          DO j = 1,jmx
-             rhoa = airden(i,j,1)*1.0D-3       ! (g cm^-3)
+       rhoa = airden*1.0D-3                ! (g cm^-3)
 
              ! FENGSHA uses the 13 category soil type from the USDA
              ! call calc_fengsha_styp(massfrac(1),massfrac(3),massfrac(2),styp)
@@ -384,8 +346,8 @@ contains
              ! it more difficult to loft dust). When soil moisture has not reached
              ! dry limit, treat as dry
 
-             IF (gravsm(i,j) > drylimit(i,j)) THEN
-                u_ts = MAX(0.0D+0,u_ts0*(sqrt(1.0+1.21*(gravsm(i,j)-drylimit(i,j))**0.68)) / R)
+             IF (gravsm > drylimit) THEN
+                u_ts = MAX(0.0D+0,u_ts0*(sqrt(1.0+1.21*(gravsm-drylimit)**0.68)) / R)
              ELSE
                 u_ts = u_ts0 / R
              END IF
@@ -416,16 +378,14 @@ contains
              !
              !--------------------------------------------------------------------
 
-             IF (ustar(i,j) .gt. u_ts) then
-                call fengsha_hflux(ustar(i,j),u_ts,beta, salt)
-                salt = alpha * cmb * ds_rel(n) * airden(i,j,1) / g0 * salt * (erod(i,j)**gamma) * beta
+             IF (ustar .gt. u_ts) then
+                call fengsha_hflux(ustar,u_ts,beta, salt)
+                salt = alpha * cmb * ds_rel(n) * airden / g0 * salt * (erod**gamma) * beta
              else
                 salt = 0.
              endif
              ! EROD is taken into account above
              emit = emit + salt 
-          END DO
-       END DO
     END DO
 
     ! Now that we have the total dust emission, distribute into dust bins using
@@ -458,19 +418,15 @@ contains
     ! Now distribute total vertical emission into dust bins and update concentration.
 
     DO n=1,nmx
-       DO i=1,imx
-          DO j=1,jmx
              ! Calculate total mass emitted
-             dsrc = emit*distr_dust(n)*dxy(j)*dt1 *random_factor(i,j)  ! (kg)
+             dsrc = emit*distr_dust(n)*dxy*dt1 *random_factor  ! (kg)
              IF (dsrc < 0.0) dsrc = 0.0
 
              ! Update dust mixing ratio at first model level.
-             tc(i,j,1,n) = tc(i,j,1,n) + dsrc / airmas(i,j,1) ! (kg/kg)
+             tc(n) = tc(n) + dsrc / airmas ! (kg/kg)
              !   bems(i,j,n) = dsrc  ! diagnostic
              !bems(i,j,n) = 1000.*dsrc/(dxy(j)*dt1) ! diagnostic (g/m2/s)
-             bems(i,j,n) = 1.e+9*dsrc/(dxy(j)*dt1) ! diagnostic (ug/m2/s) !lzhang
-          END DO
-       END DO
+             bems(n) = 1.e+9*dsrc/(dxy*dt1) ! diagnostic (ug/m2/s) !lzhang
     END DO
 
   END SUBROUTINE source_dust
