@@ -213,7 +213,7 @@ contains
               ! -- GOCART afwa dust scheme
               call gocart_dust_fengsha_driver(dt,&
                 chem(i,kts,j,:),rho_phy(i,kts,j), &
-                dz8w(i,kts,j),smois(i,:,j), &
+                dz8w(i,kts,j),smois(i,1,j), &
                 delp,ssm(i,j),isltyp(i,j),vegfrac(i,j),&
                 snowh(i,j),dxy(i,j),emis_dust(i,1,j,:), &
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j), &

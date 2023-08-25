@@ -39,38 +39,7 @@ module dust_data_mod
   ! -- FENGSHA
   real(kind_chem), parameter :: fengsha_alpha = 0.3
   real(kind_chem), parameter :: fengsha_gamma = 1.3
-  ! -- FENGSHA threshold velocities based on Dale A. Gillette's data
-  integer, parameter :: fengsha_maxstypes = 13
-!  real(kind_chem), dimension(fengsha_maxstypes) :: dust_uthres = &
-!    (/ 0.065,   & ! Sand            - 1
-!       0.20,    & ! Loamy Sand      - 2
-!       0.52,    & ! Sandy Loam      - 3
-!       0.50,    & ! Silt Loam       - 4
-!       0.50,    & ! Silt            - 5
-!       0.60,    & ! Loam            - 6
-!       0.73,    & ! Sandy Clay Loam - 7
-!       0.73,    & ! Silty Clay Loam - 8
-!       0.80,    & ! Clay Loam       - 9
-!       0.95,    & ! Sandy Clay      - 10
-!       0.95,    & ! Silty Clay      - 11
-!       1.00,    & ! Clay            - 12
-!       9.999 /)   ! Other           - 13
-!  dust_uthres = 0.065, 0.18, 0.27, 0.30, 0.35, 0.38, 0.35, 0.41, 0.41,
-!                0.45,0.50,0.45,9999.0
-  real(kind_chem), dimension(fengsha_maxstypes) :: dust_uthres = &
-    (/ 0.065,   & ! Sand            - 1
-       0.18,    & ! Loamy Sand      - 2
-       0.27,    & ! Sandy Loam      - 3
-       0.30,    & ! Silt Loam       - 4
-       0.35,    & ! Silt            - 5
-       0.38,    & ! Loam            - 6
-       0.35,    & ! Sandy Clay Loam - 7
-       0.41,    & ! Silty Clay Loam - 8
-       0.41,    & ! Clay Loam       - 9
-       0.45,    & ! Sandy Clay      - 10
-       0.50,    & ! Silty Clay      - 11
-       0.45,    & ! Clay            - 12
-       9999.0 /)   ! Other           - 13
+
   ! -- FENGSHA uses precalculated drag partition from ASCAT. See: Prigent et al. (2012,2015)
   integer :: dust_calcdrag = 1
 
@@ -79,7 +48,7 @@ module dust_data_mod
   real(kind_chem) :: dust_gamma = 0.
 
 
-  ! -- sea salt parameters
+  ! -- Saltation Parameters
   integer,            dimension(nsalt), parameter :: spoint    = (/ 1, 2, 2, 2, 2, 2, 3, 3, 3 /)  ! 1 Clay, 2 Silt, 3 Sand
   real(kind_chem), dimension(nsalt), parameter :: reff_salt = &
     (/ 0.71D-6, 1.37D-6, 2.63D-6, 5.00D-6, 9.50D-6, 18.1D-6, 34.5D-6, 65.5D-6, 125.D-6 /)
@@ -89,7 +58,7 @@ module dust_data_mod
     (/      1.,     0.2,     0.2,     0.2,     0.2,     0.2,   0.333,   0.333,   0.333 /)
 
 
-  ! -- soil vagatation parameters
+  ! -- soil vegatation parameters
   integer, parameter :: max_soiltyp = 30
   real(kind_chem), dimension(max_soiltyp) :: &
     maxsmc = (/ 0.421, 0.464, 0.468, 0.434, 0.406, 0.465, &

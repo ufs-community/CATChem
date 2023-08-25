@@ -6,7 +6,7 @@ module dust_fengsha_mod
 !  07/16/2019 - Adapted for NUOPC/GOCART, R. Montuoro
 !  02/01/2020 - Adapted for FV3/CCPP, Haiqin Li
 !  06/2023, Restructure for CATChem, Jian.He@noaa.gov
-
+!  08/2023, Update to latest version Barry.Baker@noaa.gov
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only: num_chem,num_emis_dust,&
                             p_dust_1,p_dust_2,p_dust_3,p_dust_4,p_dust_5, &
@@ -27,147 +27,117 @@ contains
           emis_dust,ust,znt,clay,sand, &
           rdrag,uthr,num_soil_layers,random_factor)
 
-  IMPLICIT NONE
+    IMPLICIT NONE
 
-     INTEGER,      INTENT(IN   ) :: isltyp,  &
-                                    num_soil_layers
-     REAL(kind=kind_chem), INTENT(IN   ) :: dt,&
-                                            rho_phy, &
-                                            dz8w, &
-                                            delp,&
-                                            ssm,vegfra,snowh,&
-                                            area, &
-                                            ust,znt, &
-                                            clay,sand, & 
-                                            rdrag,uthr,&
-                                            random_factor
-
-     REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
-           INTENT(INOUT ) ::                                   chem_arr
-     REAL(kind=kind_chem), DIMENSION(num_emis_dust),&
-           OPTIONAL, INTENT(INOUT ) ::                  emis_dust
-     REAL(kind=kind_chem), DIMENSION( num_soil_layers ) , &
-        INTENT(INOUT) ::                               smois
+    ! Input Variables
+    ! ---------------
+    INTEGER, INTENT(IN) :: isltyp
+    INTEGER, INTENT(IN) :: num_soil_layers ! number of soil layers 
+    REAL(kind=kind_chem), INTENT(IN) :: dt ! timestep 
+    REAL(kind=kind_chem), INTENT(IN) :: rho_phy ! air density
+    REAL(kind=kind_chem), INTENT(IN) :: dz8w 
+    REAL(kind=kind_chem), INTENT(IN) :: delp    ! del Pressure in first layer
+    REAL(kind=kind_chem), INTENT(IN) :: ssm     ! sediment supply map 
+    REAL(kind=kind_chem), INTENT(IN) :: vegfra  ! vegetation fraction 
+    REAL(kind=kind_chem), INTENT(IN) :: snowh   ! snow height 
+    REAL(kind=kind_chem), INTENT(IN) :: area    ! area of grid cell 
+    REAL(kind=kind_chem), INTENT(IN) :: ust     ! ustar 
+    REAL(kind=kind_chem), INTENT(IN) :: znt     ! surface roughness length 
+    REAL(kind=kind_chem), INTENT(IN) :: clay    ! fractional clay content 
+    REAL(kind=kind_chem), INTENT(IN) :: sand    ! fractional sand content 
+    REAL(kind=kind_chem), INTENT(IN) :: rdrag   ! drag partition 
+    REAL(kind=kind_chem), INTENT(IN) :: uthr    ! dry threshold friction velocity
+    REAL(kind=kind_chem), INTENT(IN) :: random_factor
+  
+    REAL(kind=kind_chem), DIMENSION( num_chem ), INTENT(INOUT)                 :: chem_arr  ! chemical array 
+    REAL(kind=kind_chem), DIMENSION( num_emis_dust ), OPTIONAL, INTENT(INOUT ) :: emis_dust ! final dust emission 
+    REAL(kind=kind_chem), DIMENSION( num_soil_layers ), INTENT(IN)             :: smois     ! volumetric soil moisture at 0-5cm 
 
     ! Local variables
+    ! ---------------
+    integer :: do_dust ! 0 - no dust emission 1 - dust emission 
+    integer :: n       ! looping variable 
+    
+    real(kind=kind_chem), DIMENSION (num_emis_dust) :: tc ! tracer concentration 
+    REAL(kind=kind_chem), DIMENSION (num_emis_dust) :: bin_emis ! bin emisions 
+    real(kind=kind_chem)                            :: emis ! total emission
+    real(kind=kind_chem), DIMENSION (num_emis_dust) :: distribution ! fractional distribution for size bins 
+    
+    real(kind_chem), dimension (3)  :: massfrac      ! fractional mass of sand silt and clay 
+    
+    real(kind=kind_chem), PARAMETER :: conver=1.e-9 ! parameter to convert units   
+    real(kind=kind_chem), PARAMETER :: converi=1.e9 ! parameter to convert units back 
+    ! Total concentration at lowest model level. 
+    do n=0,num_emis_dust-1 
+       tc(n+1)=chem_arr(p_dust_1+n)*conver
+    end do
 
-    integer :: nmx,smx
-    integer :: ilwi
-    real(kind_chem) :: erodtot, gravsm, drylimit
-    real(kind_chem), DIMENSION (5)   :: tc,bems
-    real(kind_chem) :: airden,airmas,ustar,dxy
-    real(kind_chem), dimension (3) :: massfrac
-    real(kind_chem) :: conver,converi
-    real(kind_chem) :: R
-
-    ! threshold values
-    conver=1.e-9
-    converi=1.e9
-
-    ! Number of dust bins
-
-    nmx=ndust
-    smx=nsalt
-
-
-    ! Don't do dust over water!!!
-
-    ilwi=1
-
-    ! Total concentration at lowest model level. This is still hardcoded for 5 bins.
-    tc(1)=chem_arr(p_dust_1)*conver
-    tc(2)=chem_arr(p_dust_2)*conver
-    tc(3)=chem_arr(p_dust_3)*conver
-    tc(4)=chem_arr(p_dust_4)*conver
-    tc(5)=chem_arr(p_dust_5)*conver
-
-    ! Air mass and density at lowest model level.
+    ! Air mass at lowest model level.
     airmas=area * delp / g
-    airden=rho_phy
-    ustar=ust
-    dxy=area
 
-    ! Mass fractions of clay, silt, and sand.
-    massfrac(1)=clay
-    massfrac(2)=1-(clay+sand)
-    massfrac(3)=sand
-
-
-    ! Total erodibility.
-    erodtot = ssm       ! SUM(erod(i,j,:))
-             
-    ! Don't allow roughness lengths greater than 20 cm to be lofted.
-    ! This kludge accounts for land use types like urban areas and
-    ! forests which would otherwise show up as high dust emitters.
-    ! This is a placeholder for a more widely accepted kludge
-    ! factor in the literature, which reduces lofting for rough areas.
-    ! Forthcoming...
-
-    IF (znt .gt. 0.2) then
-      ilwi=0
-    ENDIF
-
+    ! ====================================
+    ! Don't do dust over certain criteria 
+    ! ====================================
+    do_dust = 1
+    
     ! limit where there is lots of vegetation
     if (vegfra .gt. .17) then
-       ilwi = 0
+       do_dust = 0
     endif
 
     ! limit where there is snow on the ground
     if (snowh .gt. 0) then
-       ilwi = 0
+       do_dust = 0
     endif
 
     ! Do not allow areas with bedrock, lava, or land-ice to loft
-
     IF (isltyp.eq. 15 .or. isltyp .eq. 16. .or. &
           isltyp .eq. 18) then
-      ilwi=0
+      do_dust=0
     ENDIF
+    
+    ! do not allow dust over the ocean 
     IF (isltyp .eq. 0)then
-      ilwi=0
+      do_dust=0
     endif
+    
+    ! check ssm input valid range
+    if (ssm .lt. 0.05 .and. ssm .gt. 1.0)  then ! ensure values are realistic
+       do_dust = 0
+    end if
+    
+    ! check drag partition valid range 
+    if (rdrag .lt. 0.05 .and. rdrag .gt. 1.0) then 
+       do_dust = 0
+    endif
+    
+    if(do_dust == 1 ) return
+    ! ====================================
 
-    if(ilwi == 1 ) return
+    ! Call fengsha dust emission for total emission 
+    call DustEmissionFENGSHA(slc, clay, sand, ssm, rdrag, airdens, ustar, uthrs, area, dust_alpha, dust_gamma, emis)
 
-    ! Calculate gravimetric soil moisture and drylimit.
-    gravsm=100.*smois(1)/((1.-maxsmc(isltyp))*(2.65*(1.-clay)+2.50*clay))
-    drylimit=14.0*clay*clay+17.0*clay
+    ! call dust distribution 
+    call DustAerosolDistributionKok(reff_dust, lo_dust, up_dust, distribution)
 
-    ! get drag partition
-    ! FENGSHA uses the drag partition correction of MacKinnon et al 2004
-    !     doi:10.1016/j.geomorph.2004.03.009
-    if (dust_calcdrag .ne. 1) then
-       call fengsha_drag(znt,R)
-    else
-      ! use the precalculated version derived from ASCAT; Prigent et al. (2012,2015)
-      ! doi:10.1109/TGRS.2014.2338913 & doi:10.5194/amt-5-2703-2012
-      ! pick only valid values
-      if (rdrag > 0.) then
-        R = real(rdrag, kind=kind_chem)
-      else
-        return 
-      endif
-    endif  
+    ! Distribute emissions to bins and convert to mass flux (kg s-1)
+    ! --------------------------------------------------------------
+    bin_emis = distribution * emis * dt * random_factor
 
-    ! Call dust emission routine.
-    call source_dust(nmx, smx, dt, tc, ustar, massfrac, & 
-                  erodtot, dxy, gravsm, airden, airmas, &
-                  bems, g, drylimit, dust_alpha, dust_gamma, R, uthr, random_factor)
+    ! now convert to tracer concentration 
+    ! -----------------------------------
+    DO n=1,nmx
+       dsrc = bin_emis(n)
+       IF (dsrc < 0.0) dsrc = 0.0
 
-    chem_arr(p_dust_1)=tc(1)*converi
-    chem_arr(p_dust_2)=tc(2)*converi
-    chem_arr(p_dust_3)=tc(3)*converi
-    chem_arr(p_dust_4)=tc(4)*converi
-    chem_arr(p_dust_5)=tc(5)*converi
-
-    ! -- for output diagnostics
-    emis_dust(p_edust1)=bems(1)
-    emis_dust(p_edust2)=bems(2)
-    emis_dust(p_edust3)=bems(3)
-    emis_dust(p_edust4)=bems(4)
-    emis_dust(p_edust5)=bems(5)
-
-    !
+       ! Update dust mixing ratio at first model level.
+       tc(n) = tc(n) + dsrc / airmas ! (kg/kg)
+       emis_dust(n)= 1.e+9*dsrc/(dxy*dt1) ! diagnostic (ug/m2/s) !lzhang
+    END DO
+    
+    do n = 0, nmx-1
+       chem_arr(p_dust_1+n))=tc(n + 1)*converi
+    end do
 
   end subroutine gocart_dust_fengsha_driver
 
@@ -431,115 +401,204 @@ contains
 
   END SUBROUTINE source_dust
 
-  subroutine fengsha_utst(styp,uth, ut)
-    integer,                            intent(in)  :: styp
-    real(kind_chem), dimension(fengsha_maxstypes), intent(in)  :: uth
-    real(kind_chem),                 intent(out) :: ut
-    ut = uth(styp)
-!     real (kind_chem) :: uth(13) = &
-!          (/ 0.08,   & ! Sand          - 1
-!          0.20,    & ! Loamy Sand      - 2
-!          0.30,    & ! Sandy Loam      - 3
-!          0.30,    & ! Silt Loam       - 4
-!          0.35,    & ! Silt            - 5
-!          0.60,    & ! Loam            - 6
-!          0.30,    & ! Sandy Clay Loam - 7
-!          0.35,    & ! Silty Clay Loam - 8
-!          0.45,    & ! Clay Loam       - 9
-!          0.45,    & ! Sandy Clay      - 10
-!          0.45,    & ! Silty Clay      - 11
-!          0.60,    & ! Clay            - 12
-!          9.999 /)   ! Other           - 13
-    return
-  end subroutine fengsha_utst
+  subroutine DustEmissionFENGSHA(slc, clay, ssm, rdrag, airdens, ustar, uthrs, area, ,alpha, gamma, emissions)
 
-  subroutine calc_fengsha_styp(clay, sand, silt, type)
+      ! !USES:
+      implicit NONE
 
-    !---------------------------------------------------------------
-    ! Function: calculate soil type based on USDA definition.
-    ! Source: USDA soil texture calculator
-    !
-    ! Defintion of soil types:
-    !
-    !
-    ! NOAH 1      2             3           4           5      6      7                 8                9           10           11           12
-    ! PX   1      2             3           4           -      5      6                 7                8           9            10           11
-    ! Soil "Sand" "Loamy Sand" "Sandy Loam" "Silt Loam" "Silt" "Loam" "Sandy Clay Loam" "Silt Clay Loam" "Clay Loam" "Sandy Clay" "Silty Clay" "Clay"
-    !---------------------------------------------------------------
-    REAL(kind_chem), intent(in) ::  clay, sand, silt
-    integer, intent(out) ::  type
-    real(kind_chem) :: cly, snd, slt
+      ! !INPUT PARAMETERS:
+      real(kind=kind_chem), intent(in) :: slc      ! liquid water content of soil layer, volumetric fraction [1]
+      real(kind=kind_chem), intent(in) :: clay     ! fractional clay content [1] - range: [0 1]
+      real(kind=kind_chem), intent(in) :: sand     ! fractional clay content [1] - range: [0 1]
+      real(kind=kind_chem), intent(in) :: ssm      ! erosion map [1] - range: [0 1]
+      real(kind=kind_chem), intent(in) :: rdrag    ! drag partition [1/m] - range: [0 1]
+      real(kind=kind_chem), intent(in) :: airdens  ! air density at lowest level [kg/m^3]
+      real(kind=kind_chem), intent(in) :: ustar    ! friction velocity [m/sec]
+      real(kind=kind_chem), intent(in) :: uthrs    ! threshold velocity [m/2]
+      real(kind=kind_chem), intent(in) :: kvhmax   ! max. vertical to horizontal mass flux ratio [1]
+      real(kind=kind_chem), intent(in) :: area     ! area of dust emission (can be fractional area of grid cell)
 
-    type = 0
+      ! this will need to be read in by a configuration file
+      ! right now I just hard coded it in dust_data_mod.F90
+      !=====================================================
+      real(kind=kind_chem), intent(in) :: alpha    ! scaling factor [1]
+      real(kind=kind_chem), intent(in) :: gamma    ! scaling factor [1]
+      !=====================================================
 
-    snd = sand * 100.
-    cly = clay * 100.
-    slt = silt * 100.
-    if (slt+1.5*cly .lt. 15)                                                                type = 1      ! snd
-    if (slt+1.5*cly .ge. 15 .and.slt+1.5*cly .lt. 30)                                       type = 2      ! loamy snd
-    if (cly .ge. 7 .and. cly .lt. 20 .and. snd .gt. 52 .and. slt+2*cly .ge. 30)             type = 3      ! sndy loam (cond 1)
-    if (cly .lt. 7 .and. slt .lt. 50 .and. slt+2*cly .ge. 30)                               type = 3      ! sndy loam (cond 2)
-    if (slt .ge. 50 .and. cly .ge. 12 .and.cly .lt. 27 )                                    type = 4      ! slt loam (cond 1)
-    if (slt .ge. 50 .and. slt .lt. 80 .and.cly .lt. 12)                                     type = 4      ! slt loam (cond 2)
-    if (slt .ge. 80 .and. cly .lt. 12)                                                      type = 5      ! slt
-    if (cly .ge. 7  .and. cly .lt. 27 .and.slt .ge. 28 .and. slt .lt. 50 .and.snd .le. 52)  type = 6      ! loam
-    if (cly .ge. 20 .and. cly .lt. 35 .and.slt .lt. 28 .and. snd .gt. 45)                   type = 7      ! sndy cly loam
-    if (cly .ge. 27 .and. cly .lt. 40 .and.snd .lt. 20)                                     type = 8      ! slt cly loam
-    if (cly .ge. 27 .and. cly .lt. 40 .and.snd .ge. 20 .and. snd .le. 45)                   type = 9      ! cly loam
-    if (cly .ge. 35 .and. snd .gt. 45)                                                      type = 10     ! sndy cly
-    if (cly .ge. 40 .and. slt .ge. 40)                                                      type = 11     ! slty cly
-    if (cly .ge. 40 .and. snd .le. 45 .and.slt .lt. 40)                                     type = 12     ! clay
-    return
-  end subroutine calc_fengsha_styp
+      ! !OUTPUT PARAMETERS:
+      REAL(kind=kind_chem), dimension(:), intent(inout) :: total_emissions ! binned surface emissions [kg/(m^2 sec)]
 
-  subroutine fengsha_drag(z0,R)
-    real(kind_chem), intent(in) :: z0
-    real(kind_chem), intent(out) :: R
-    real(kind_chem), parameter :: z0s = 1.0e-04 !Surface roughness for ideal bare surface [m]
-    ! ------------------------------------------------------------------------
-    ! Function: Calculates the MacKinnon et al. 2004 Drag Partition Correction
-    !
-    !   R = 1.0 - log(z0 / z0s) / log( 0.7 * (12255./z0s) ** 0.8)
-    !
-    !--------------------------------------------------------------------------
-    ! Drag partition correction. See MacKinnon et al. (2004),
-    !     doi:10.1016/j.geomorph.2004.03.009
-    R = 1.0 - log(z0 / z0s) / log( 0.7 * (12255./z0s) ** 0.8)
+      ! !DESCRIPTION: Compute dust emissions using NOAA/ARL FENGSHA model
+      !
+      ! !REVISION HISTORY:
+      !
+      ! 22Feb2020 B.Baker/NOAA    - Original implementation
+      ! 29Mar2021 R.Montuoro/NOAA - Refactored for process library
+      ! 09Aug2022 B.Baker/NOAA    - Adapted for CCPP-Physics
 
-    ! Drag partition correction. See Marticorena et al. (1997),
-    !     doi:10.1029/96JD02964
-    !R = 1.0 - log(z0 / z0s) / log( 0.7 * (10./z0s) ** 0.8)
+      ! !Local Variables
+      real(kind=kind_chem) :: alpha_grav
+      real(kind=kind_chem) :: h
+      real(kind=kind_chem) :: kvh
+      real(kind=kind_chem) :: q
+      real(kind=kind_chem) :: rustar
+      real(kind=kind_chem) :: u_sum
+      real(kind=kind_chem) :: u_thresh
+      real(kind=kind_chem) :: emission
+      real(kind=kind_chem) :: stotal
+      real(kind=kind_chem) :: dmass
+      real(kind=kind_chem), dimension(nsalt) :: dsurface
+      real(kind=kind_chem), dimension(3) :: massfrac ! fractional soil content of sand(1) silt(2) and clay(3)
 
-    return
-  end subroutine fengsha_drag
+      real(kind=kind_chem), parameter:: clay_thresh = 0.2
+      real(kind=kind_chem), parameter :: rhow = 1000.
 
-  subroutine fengsha_hflux(ust,utst, kvh, salt)
-    !---------------------------------------------------------------------
-    ! Function: Calculates the Horizontal Saltation Flux, Q, and then
-    !           calculates the vertical flux.
-    !
-    ! formula of Draxler & Gillette (2001) Atmos. Environ.
-    ! F   =  K A (r/g) U* ( U*^2 - Ut*^2 )
-    !
-    ! where:
-    !     F   = vertical emission flux  [g/m**2-s]
-    !     K   = constant 2.0E-04                      [1/m]
-    !     A   = 0~3.5  mean = 2.8  (fudge factor)
-    !     U*  = friction velocity                     [m/s]
-    !     Ut* = threshold friction velocity           [m/s]
-    !
-    !--------------------------------------------------------------------
-    real(kind_chem), intent(in) :: ust, & ! friction velocity
-                                     utst, & ! threshold friction velocity
-                                      kvh    ! vertical to horizontal mass flux ratio
+      !EOP
+      !-------------------------------------------------------------------------
+      !  Begin
 
-    real(kind_chem), intent(out) :: salt
-    real(kind_chem) :: Q
-    Q = ust * (ust * ust - utst * utst)
-    salt = Q ! sdep * kvh * Q
+      !  Initialize emissions
+      !  --------------------
+      total_emissions = 0.
 
-    return
-  end subroutine fengsha_hflux
+      !  Prepare scaling factor
+      !  ----------------------
+      alpha_grav = dust_alpha / con_g
+
+      ! Compute vertical-to-horizontal mass flux ratio
+      ! ----------------------------------------------
+      if (clay > clay_thresh) then
+         kvh = kvhmax
+      else
+         kvh = 10.0**(13.4*clay-6.0)
+      end if
+
+      ! Compute total emissions
+      ! -----------------------
+      emission = alpha_grav * (ssm ** dust_gamma) * airdens * kvh
+
+      !  Compute threshold wind friction velocity using drag partition
+      !  -------------------------------------------------------------
+      rustar = rdrag * ustar
+
+      !  Now compute size-dependent total emission flux
+      !  ----------------------------------------------
+      ! Fecan moisture correction
+      ! -------------------------
+      if (DUST_OPT_FENGSHA_FECAN .eq. .true.) then
+         !  Saturated volumetric water content (sand-dependent) ! [m3 m-3]
+         vsat = 0.489 - 0.00126 * ( 100. * sand )
+
+         !  Gravimetric soil content
+         grvsoilm = vsoil * rhow / (dust_den * (1. - vsat))
+
+         !   Compute fecan dry limit
+         drylimit = clay * (14.0 * clay + 17.0)
+
+         !  Compute soil moisture correction
+         h = sqrt(1.0 + 1.21 * max(0., grvsoilm - drylimit)**0.68)
+      else
+         ! Shao soil mositure
+         !--------------------
+         if (slc <= 0.03) then
+            h = exp(22.7 * slc)
+         else
+            h = exp(93.5 * slc - 2.029)
+         end if
+      end if
+
+      ! Adjust threshold
+      ! ----------------
+      u_thresh = uthrs * h
+
+      u_sum = rustar + u_thresh
+
+      ! Compute Horizontal Saltation Flux according to Eq (9) in Webb et al. (2020)
+      ! ---------------------------------------------------------------------------
+      q = max(0., rustar - u_thresh) * u_sum * u_sum
+
+      ! Calculate total dust using the dust potential (q) 
+      ! -------------------------------------------------
+      emission = emission * q 
+      
+      ! Calculate saltation surface area distribution from sand, silt, and clay
+      ! mass fractions and saltation bin fraction. Based on Eqn. (32) in 
+      ! Marticorena & Bergametti, 1995 (hereon, MB95).
+      ! ----------------------------------------------
+      DO n=1,nsalt
+         dmass=massfrac(spoint(n))*frac_salt(n)
+         dsurface(n)=0.75*dmass/(den_salt(n)*reff_salt(n))
+      ENDDO
+
+      ! The following equation yields relative surface area fraction.  
+      ! ------------------------------------------------------------
+      stotal=SUM(dsurface(:))
+      DO n=1,nsalt
+         total_emissions = total_emissions + emission * dsurface(n)/stotal
+      ENDDO
+      
+      ! Distribute emissions to bins and convert to mass flux (kg s-1)
+      ! --------------------------------------------------------------
+      !emissions = distribution * total_emissions * q
 
 
+   end subroutine DustEmissionFENGSHA
+   !-----------------------------------------------------------------
+   subroutine DustAerosolDistributionKok ( radius, rLow, rUp, distribution )
+     
+     ! !USES:
+     implicit NONE
+     
+     ! !INPUT PARAMETERS:
+     real, dimension(:), intent(in)  :: radius      ! Dry particle bin effective radius [um]
+     real, dimension(:), intent(in)  :: rLow, rUp   ! Dry particle bin edge radii [um]
+     
+     ! !OUTPUT PARAMETERS:
+     real, dimension(:), intent(out) :: distribution    ! Normalized dust aerosol distribution [1]
+     
+     ! !DESCRIPTION: Computes lognormal aerosol size distribution for dust bins according to
+     !               J.F.Kok, PNAS, Jan 2011, 108 (3) 1016-1021; doi:10.1073/pnas.1014798108
+     !
+     ! !REVISION HISTORY:
+     !
+     ! 22Feb2020 B.Baker/NOAA    - Original implementation
+     ! 01Apr2021 R.Montuoro/NOAA - Refactored for GOCART process library
+     !
+     
+     ! !Local Variables
+     integer :: n, nbins
+     real    :: diameter, dlam, dvol
+     
+     !   !CONSTANTS
+     real, parameter    :: mmd    = 3.4          ! median mass diameter [um]
+     real, parameter    :: stddev = 3.0          ! geometric standard deviation [1]
+     real, parameter    :: lambda = 12.0         ! crack propagation length [um]
+     real, parameter    :: factor = 1.e0 / (sqrt(2.e0) * log(stddev))  ! auxiliary constant
+     
+     character(len=*), parameter :: myname = 'DustAerosolDistributionKok'
+     
+     !EOP
+     !-------------------------------------------------------------------------
+     !  Begin...
+     
+     distribution = 0.
+     
+     !  Assume all arrays are dimensioned consistently
+     nbins = size(radius)
+     
+     dvol = 0.
+     do n = 1, nbins
+        diameter = 2 * radius(n)
+        dlam = diameter/lambda
+        distribution(n) = diameter * (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
+        dvol = dvol + distribution(n)
+     end do
+     
+     !  Normalize distribution
+     do n = 1, nbins
+        distribution(n) = distribution(n) / dvol
+     end do
+     
+   end subroutine DustAerosolDistributionKok
+   
 end module dust_fengsha_mod
