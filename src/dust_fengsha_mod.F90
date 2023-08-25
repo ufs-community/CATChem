@@ -67,7 +67,9 @@ contains
     
     real(kind=kind_chem), PARAMETER :: conver=1.e-9 ! parameter to convert units   
     real(kind=kind_chem), PARAMETER :: converi=1.e9 ! parameter to convert units back 
+
     ! Total concentration at lowest model level. 
+    ! ------------------------------------------
     do n=0,num_emis_dust-1 
        tc(n+1)=chem_arr(p_dust_1+n)*conver
     end do
@@ -81,7 +83,8 @@ contains
     do_dust = 1
     
     ! limit where there is lots of vegetation
-    if (vegfra .gt. .17) then
+    ! redundent with rdrag but keep because it is updated in NRT right now
+    if (vegfra .gt. .2) then 
        do_dust = 0
     endif
 
@@ -132,11 +135,11 @@ contains
 
        ! Update dust mixing ratio at first model level.
        tc(n) = tc(n) + dsrc / airmas ! (kg/kg)
-       emis_dust(n)= 1.e+9*dsrc/(dxy*dt1) ! diagnostic (ug/m2/s) !lzhang
+       emis_dust(n)= dsrc/(dxy*dt1) ! diagnostic (kg/m2/s)
     END DO
     
     do n = 0, nmx-1
-       chem_arr(p_dust_1+n))=tc(n + 1)*converi
+       chem_arr(p_dust_1+n))=tc(n + 1)*converi ! (ug/kg)
     end do
 
   end subroutine gocart_dust_fengsha_driver
