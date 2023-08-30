@@ -28,7 +28,7 @@ contains
           rdrag,uthr,num_soil_layers,random_factor)
 
     IMPLICIT NONE
-
+    
     ! Input Variables
     ! ---------------
     INTEGER, INTENT(IN) :: isltyp
@@ -48,11 +48,11 @@ contains
     REAL(kind=kind_chem), INTENT(IN) :: rdrag   ! drag partition 
     REAL(kind=kind_chem), INTENT(IN) :: uthr    ! dry threshold friction velocity
     REAL(kind=kind_chem), INTENT(IN) :: random_factor
-  
+    
     REAL(kind=kind_chem), DIMENSION( num_chem ),        INTENT(INOUT)  :: chem_arr  ! chemical array 
     REAL(kind=kind_chem), DIMENSION( ndust ), OPTIONAL, INTENT(INOUT ) :: emis_dust ! final dust emission 
     REAL(kind=kind_chem), DIMENSION( num_soil_layers ), INTENT(IN)     :: smois     ! volumetric soil moisture at 0-5cm 
-
+    
     ! Local variables
     ! ---------------
     integer :: do_dust ! 0 - no dust emission 1 - dust emission 
@@ -69,15 +69,15 @@ contains
     real(kind=kind_chem)            :: airmas 
     ! Total concentration at lowest model level. 
     ! ------------------------------------------
-!    do n=0,ndust-1 
-!       tc(n+1)=chem_arr(p_dust_1+n)*conver
-!    end do
-
+    !    do n=0,ndust-1 
+    !       tc(n+1)=chem_arr(p_dust_1+n)*conver
+    !    end do
+    
     emis_dust = 0.
     
     ! Air mass at lowest model level.
     airmas=area * delp / g
-
+    
     ! ====================================
     ! Don't do dust over certain criteria 
     ! ====================================
@@ -88,21 +88,21 @@ contains
     if (vegfra .gt. .2) then 
        do_dust = 0
     endif
-
+    
     ! limit where there is snow on the ground
     if (snowh .gt. 0) then
        do_dust = 0
     endif
-
+    
     ! Do not allow areas with bedrock, lava, or land-ice to loft
     IF (isltyp.eq. 15 .or. isltyp .eq. 16. .or. &
-          isltyp .eq. 18) then
-      do_dust=0
+         isltyp .eq. 18) then
+       do_dust=0
     ENDIF
     
     ! do not allow dust over the ocean 
     IF (isltyp .eq. 0)then
-      do_dust=0
+       do_dust=0
     endif
     
     ! check ssm input valid range
@@ -117,15 +117,15 @@ contains
     
     if( do_dust == 0 ) return
     ! ====================================
-
+    
     ! Call fengsha dust emission for total emission
     ! ---------------------------------------------
     call DustEmissionFENGSHA(smois(1), clay, sand, ssm, rdrag, rho_phy, ust, uthr, area, dust_alpha, dust_gamma, emis)
-
+    
     ! call dust distribution function 
     ! -------------------------------
     call DustAerosolDistributionKok(reff_dust * 1.e6, lo_dust* 1.e6, up_dust* 1.e6, distribution)
-
+    
     ! Distribute emissions to bins and convert to mass flux (kg s-1)
     ! --------------------------------------------------------------
     do n=1, ndust
@@ -137,23 +137,22 @@ contains
     ! -----------------------------------
     DO n=1,ndust
        if (emis > 0) then
-          ! Update dust mixing ratio at first model level.
+          ! Put emissions into correct units .
+          ! ----------------------------------------------
           tc(n) = tc(n) + bin_emis(n) / airmas ! (kg/kg)
           emis_dust(n)= bin_emis(n) / dt  ! diagnostic (kg/m2/s)
-!          print*, 'DUST', n, tc(n), emis_dust(n), bin_emis(n)
        else
           emis_dust(n) = 0. 
        end if
+       
     END DO
+
     do n = 0, ndust-1
+       ! Update tracer concentrations 
+       ! ----------------------------
        chem_arr(p_dust_1+n)=tc(n + 1)*converi ! (ug/kg)
-       !chem_arr(p_dust_1+n) = tc(n+1)
     end do
     
-    if (emis > 0) then
-       print*, 'DUST', 4, tc(4), emis_dust(4), bin_emis(4)
-    endif
-
   end subroutine gocart_dust_fengsha_driver
 
   subroutine DustEmissionFENGSHA(vsoil, clay, sand, ssm, rdrag, airdens, ustar, uthrs, area, alpha, gamma, total_emissions)
@@ -286,69 +285,66 @@ contains
 
       ! Calculate total dust using the dust potential (q) 
       ! -------------------------------------------------
-      total_emissions = emission * q ! * soil_erosion_potential
+      total_emissions = emission * q * soil_erosion_potential
       
-!      if ( q .gt. 0) then
-!         print *,"dust",emission, soil_erosion_potential, q, h  
-!      end if 
-
-   end subroutine DustEmissionFENGSHA
-   !-----------------------------------------------------------------
-   subroutine DustAerosolDistributionKok ( radius, rLow, rUp, distribution )
+    end subroutine DustEmissionFENGSHA
+    !-----------------------------------------------------------------
+    subroutine DustAerosolDistributionKok ( radius, rLow, rUp, distribution )
+      
+      ! !USES:
+      implicit NONE
+      
+      ! !INPUT PARAMETERS:
+      real, dimension(:), intent(in)  :: radius      ! Dry particle bin effective radius [um]
+      real, dimension(:), intent(in)  :: rLow, rUp   ! Dry particle bin edge radii [um]
+      
+      ! !OUTPUT PARAMETERS:
+      real, dimension(:), intent(out) :: distribution    ! Normalized dust aerosol distribution [1]
+      
+      ! !DESCRIPTION: Computes lognormal aerosol size distribution for dust bins according to
+      !               J.F.Kok, PNAS, Jan 2011, 108 (3) 1016-1021; doi:10.1073/pnas.1014798108
+      !
+      ! !REVISION HISTORY:
+      !
+      ! 22Feb2020 B.Baker/NOAA    - Original implementation
+      ! 01Apr2021 R.Montuoro/NOAA - Refactored for GOCART process library
+      !
+      
+      ! !Local Variables
+      integer :: n, nbins
+      real    :: diameter, dlam, dvol
+      
+      !   !CONSTANTS
+      real, parameter    :: mmd    = 3.4          ! median mass diameter [um]
+      real, parameter    :: stddev = 3.0          ! geometric standard deviation [1]
+      real, parameter    :: lambda = 12.0         ! crack propagation length [um]
+      real, parameter    :: factor = 1.e0 / (sqrt(2.e0) * log(stddev))  ! auxiliary constant
+      
+      character(len=*), parameter :: myname = 'DustAerosolDistributionKok'
+      
+      !EOP
+      !-------------------------------------------------------------------------
+      !  Begin...
+      
+      distribution = 0.
+      !print*, 'radius', radius, rlow,rup
+      !  Assume all arrays are dimensioned consistently
+      nbins = size(radius)
+      
+      dvol = 0.
+      do n = 1, nbins
+         diameter = 2 * radius(n)
+         dlam = diameter/lambda
+         distribution(n) = diameter * (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
+         dvol = dvol + distribution(n)
+      end do
      
-     ! !USES:
-     implicit NONE
-     
-     ! !INPUT PARAMETERS:
-     real, dimension(:), intent(in)  :: radius      ! Dry particle bin effective radius [um]
-     real, dimension(:), intent(in)  :: rLow, rUp   ! Dry particle bin edge radii [um]
-     
-     ! !OUTPUT PARAMETERS:
-     real, dimension(:), intent(out) :: distribution    ! Normalized dust aerosol distribution [1]
-     
-     ! !DESCRIPTION: Computes lognormal aerosol size distribution for dust bins according to
-     !               J.F.Kok, PNAS, Jan 2011, 108 (3) 1016-1021; doi:10.1073/pnas.1014798108
-     !
-     ! !REVISION HISTORY:
-     !
-     ! 22Feb2020 B.Baker/NOAA    - Original implementation
-     ! 01Apr2021 R.Montuoro/NOAA - Refactored for GOCART process library
-     !
-     
-     ! !Local Variables
-     integer :: n, nbins
-     real    :: diameter, dlam, dvol
-     
-     !   !CONSTANTS
-     real, parameter    :: mmd    = 3.4          ! median mass diameter [um]
-     real, parameter    :: stddev = 3.0          ! geometric standard deviation [1]
-     real, parameter    :: lambda = 12.0         ! crack propagation length [um]
-     real, parameter    :: factor = 1.e0 / (sqrt(2.e0) * log(stddev))  ! auxiliary constant
-     
-     character(len=*), parameter :: myname = 'DustAerosolDistributionKok'
-     
-     !EOP
-     !-------------------------------------------------------------------------
-     !  Begin...
-     
-     distribution = 0.
-     !print*, 'radius', radius, rlow,rup
-     !  Assume all arrays are dimensioned consistently
-     nbins = size(radius)
-     
-     dvol = 0.
-     do n = 1, nbins
-        diameter = 2 * radius(n)
-        dlam = diameter/lambda
-        distribution(n) = diameter * (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
-        dvol = dvol + distribution(n)
-     end do
-     
-     !  Normalize distribution
-     do n = 1, nbins
-        distribution(n) = distribution(n) / dvol
-     end do
-     
-   end subroutine DustAerosolDistributionKok
-   
-end module dust_fengsha_mod
+      !  Normalize distribution
+      do n = 1, nbins
+         distribution(n) = distribution(n) / dvol
+      end do
+      
+    end subroutine DustAerosolDistributionKok
+    
+  end module dust_fengsha_mod
+  
