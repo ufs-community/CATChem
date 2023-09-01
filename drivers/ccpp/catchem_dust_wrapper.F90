@@ -210,7 +210,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-              ! -- GOCART afwa dust scheme
+              ! -- FENGSHA dust scheme
               call gocart_dust_fengsha_driver(dt,&
                 chem(i,kts,j,:),rho_phy(i,kts,j), &
                 dz8w(i,kts,j),smois(i,1,j), &
