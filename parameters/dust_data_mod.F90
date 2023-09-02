@@ -58,7 +58,7 @@ module dust_data_mod
     (/      1.,     0.2,     0.2,     0.2,     0.2,     0.2,   0.333,   0.333,   0.333 /)
 
 
-  ! -- soil vegatation parameters
+  ! -- soil vegetation parameters
   integer, parameter :: max_soiltyp = 30
   real(kind_chem), dimension(max_soiltyp) :: &
     maxsmc = (/ 0.421, 0.464, 0.468, 0.434, 0.406, 0.465, &
