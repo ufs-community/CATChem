@@ -988,7 +988,7 @@ MODULE aero_soa_vbs_data_mod
       mw_aer( maxd_acomp, maxd_atype ),  &
       hygro_mastercomp_aer( maxd_acomp ), &
       hygro_aer( maxd_acomp, maxd_atype )
-   character*10, save ::   &
+   character(len=10), save ::   &
       name_mastercomp_aer( maxd_acomp ), &
       name_aer( maxd_acomp, maxd_atype )
 

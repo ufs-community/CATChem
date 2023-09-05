@@ -803,21 +803,21 @@ contains
 ! * sect02 expects input in um
 ! * pass in generic mass of 1.0 just to get a percentage distribution of mass among bins
 !
-!!      ss1=alog(sginin)
+!!      ss1=log(sginin)
 !!      ss2=exp(ss1*ss1*36.0/8.0)
 !!      ss3=(sixpi*vol_ai/(num_ai*ss2))**0.3333333
 !!      dgnum_um=amax1(dgmin,ss3)*1.0e+04
                dgnum_um=dginin*1.E6
                call sect02(dgnum_um,sginin,drydens,iflag,duma,nbin_o,dlo_um,dhi_um, &
                   xnum_secti,xmas_secti)
-!!      ss1=alog(sginia)
+!!      ss1=log(sginia)
 !!      ss2=exp(ss1*ss1*36.0/8.0)
 !!      ss3=(sixpi*vol_aj/(num_aj*ss2))**0.3333333
 !!      dgnum_um=amax1(dgmin,ss3)*1.0e+04
                dgnum_um=dginia*1.E6
                call sect02(dgnum_um,sginia,drydens,iflag,duma,nbin_o,dlo_um,dhi_um, &
                   xnum_sectj,xmas_sectj)
-!!      ss1=alog(sginic)
+!!      ss1=log(sginic)
 !!      ss2=exp(ss1*ss1*36.0/8.0)
 !!      ss3=(sixpi*vol_ac/(num_ac*ss2))**0.3333333
                dgnum_um=dginic*1.E6
@@ -1545,19 +1545,19 @@ contains
 ! * pass in generic mass of 1.0 just to get a percentage distribution of mass
 ! among bins
 !
-               ss1=alog(sginin)
+               ss1=log(sginin)
                ss2=exp(ss1*ss1*36.0/8.0)
                ss3=(sixpi*vol_ai/(num_ai*ss2))**0.3333333
                dgnum_um=amax1(dgmin,ss3)*1.0e+04
                call sect02(dgnum_um,sginin,drydens,iflag,duma,nbin_o,dlo_um,dhi_um, &
                   xnum_secti,xmas_secti)
-               ss1=alog(sginia)
+               ss1=log(sginia)
                ss2=exp(ss1*ss1*36.0/8.0)
                ss3=(sixpi*vol_aj/(num_aj*ss2))**0.3333333
                dgnum_um=amax1(dgmin,ss3)*1.0e+04
                call sect02(dgnum_um,sginia,drydens,iflag,duma,nbin_o,dlo_um,dhi_um, &
                   xnum_sectj,xmas_sectj)
-               ss1=alog(sginic)
+               ss1=log(sginic)
                ss2=exp(ss1*ss1*36.0/8.0)
                ss3=(sixpi*vol_ac/(num_ac*ss2))**0.3333333
                dgnum_um=amax1(dgmin,ss3)*1.0e+04
@@ -1820,7 +1820,7 @@ contains
       parameter (ltype = 1)  ! bracket refractive indices based on information from Rahul, 2002/11/07
       integer nrefr,nrefi,nr,ni
       save nrefr,nrefi
-      complex sforw,sback,tforw(2),tback(2)
+      complex(kind_chem) sforw,sback,tforw(2),tback(2)
       real(kind_chem) pmom(0:7,1)
       logical, save :: ini_fit  ! initial mie fit only for the first time step
       data ini_fit/.true./
@@ -1834,7 +1834,7 @@ contains
       data prnt/.false.,.false./
       integer numang,nmom,ipolzn,momdim
       data numang/0/
-      complex s1(1),s2(1)
+      complex(kind_chem) s1(1),s2(1)
       real(kind_chem) mimcut
       data perfct/.false./,mimcut/0.0/
       data nmom/7/,ipolzn/0/,momdim/7/
@@ -1848,7 +1848,7 @@ contains
       real(kind_chem) qabs4(nsiz)          !  extinction, real*4
       real(kind_chem) asymm(nsiz)  ! array of asymmetry factor
       real(kind_chem) sb2(nsiz)     ! JCB 2007/02/01 - 4*abs(sback)^2/(size parameter)^2 backscattering efficiency
-      complex crefin,crefd,crefw
+      complex(kind_chem) crefin,crefd,crefw
       save crefw
       real(kind_chem), save :: rmin,rmax   ! min, max aerosol size bin
       real(kind_chem) bma,bpa
@@ -2017,8 +2017,8 @@ contains
                nrefi=1
             endif
 
-            bma=0.5*alog(rmax/rmin) ! JCB
-            bpa=0.5*alog(rmax*rmin) ! JCB
+            bma=0.5*log(rmax/rmin) ! JCB
+            bpa=0.5*log(rmax*rmin) ! JCB
 
             do 120 nr=1,nrefr
                do 120 ni=1,nrefi
@@ -2124,8 +2124,8 @@ contains
                nrefi=1
             endif
 
-            bma=0.5*alog(rmax/rmin) ! JCB
-            bpa=0.5*alog(rmax*rmin) ! JCB
+            bma=0.5*log(rmax/rmin) ! JCB
+            bpa=0.5*log(rmax*rmin) ! JCB
 
             do 121 nr=1,nrefr
                do 121 ni=1,nrefi
@@ -2170,8 +2170,8 @@ contains
       endif !ini_fit
 
 
-      xrmin=alog(rmin)
-      xrmax=alog(rmax)
+      xrmin=log(rmin)
+      xrmax=log(rmax)
 
 !######################################################################
 !parameterization of mie calculation for shortwave
@@ -2232,7 +2232,7 @@ contains
                endif
                !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-               x=alog(radius_wet_col(m,klevel)) ! radius in cm
+               x=log(radius_wet_col(m,klevel)) ! radius in cm
                crefin=swrefindx_col(m,klevel,ns)
                refr=real(crefin)
                refi=-Aimag(crefin)
@@ -2249,14 +2249,14 @@ contains
 !lzhang
                if(abs(refr).gt.10.0) then
                   print *,'revised, refr=', refr
-                  refr=sign(1.0,refr)*10.
+                  refr=sign(1.0_kind_chem,refr)*10.
                endif
                if (abs(refr).le.0.001)then
-                  refr=sign(1.0,refr)*0.0011
+                  refr=sign(1.0_kind_chem,refr)*0.0011_kind_chem
                   print *, 'revised, refr=', refr
                endif
                if (abs(refi).gt.10)then
-                  refi=sign(1.0,refi)*10.
+                  refi=sign(1.0_kind_chem,refi)*10.
                   print *, 'revised, refi=', refi
                endif
 !lzhang
@@ -2501,7 +2501,7 @@ contains
             do m=1,nbin_a ! nbin_a is number of bins
 ! here's the size
                sizem=radius_wet_col(m,klevel) ! radius in cm
-               x=alog(radius_wet_col(m,klevel)) ! radius in cm
+               x=log(radius_wet_col(m,klevel)) ! radius in cm
                crefin=lwrefindx_col(m,klevel,ns)
                refr=real(crefin)
                refi=-Aimag(crefin)
@@ -2517,14 +2517,14 @@ contains
 !lzhang
                if(abs(refr).gt.10.0) then
                   print *,'revised, refr=', refr
-                  refr=sign(1.0,refr)*10.
+                  refr=sign(1.0_kind_chem,refr)*10.
                endif
                if (abs(refr).le.0.001)then
-                  refr=sign(1.0,refr)*0.0011
+                  refr=sign(1.0_kind_chem,refr)*0.0011_kind_chem
                   print *, 'revised, refr=', refr
                endif
                if (abs(refi).gt.10)then
-                  refi=sign(1.0,refi)*10.
+                  refi=sign(1.0_kind_chem,refi)*10.
                   print *, 'revised, refi=', refi
                endif
 !lzhang
@@ -2613,12 +2613,12 @@ contains
 
       do 100 m=1,maxm
          if (rs(m).ge.0.)then
-            x(m)=alog(rs(m))
+            x(m)=log(rs(m))
          else
             x (m)=1.2-10
          endif
          if (yin(m).ge.0.)then
-            y(m)=alog(yin(m))
+            y(m)=log(yin(m))
          else
             y(m)=1.e-10
          endif
@@ -2655,8 +2655,8 @@ contains
       character*80 msg
 
       do 100 m=1,maxm
-         x(m)=alog(rs(m))
-         y(m)=yin(m) ! note, no "alog" here
+         x(m)=log(rs(m))
+         y(m)=yin(m) ! note, no "log" here
 100   continue
 
       xmin=x(1)
@@ -2843,7 +2843,7 @@ contains
       integer  ipolzn, momdim, numang, nmom
       real(kind_chem)     gqsc, mimcut, pmom( 0:momdim, * ), qext, qsca,   &
          xmu(*), xx
-      complex  crefin, sforw, sback, s1(*), s2(*), tforw(*),   &
+      complex(kind_chem)  crefin, sforw, sback, s1(*), s2(*), tforw(*),   &
          tback(*)
       integer maxang,mxang2,maxtrm
       real(kind_chem) onethr
@@ -2865,9 +2865,9 @@ contains
       real(kind_chem) rioriv,xmusav,xxsav,sq,fn,rn,twonp1,tcoef, coeff
       real(kind_chem) xinv,psinm1,chinm1,psin,chin,rtmp,taun
       real(kind_chem)      rbiga( maxtrm ), pin( maxang ), pinm1( maxang )
-      complex   an, bn, anm1, bnm1, anp, bnp, anpm, bnpm, cresav,   &
+      complex(kind_chem)   an, bn, anm1, bnm1, anp, bnp, anpm, bnpm, cresav,   &
          cior, cioriv, ctmp, zet, zetnm1, zetn
-      complex   cbiga( maxtrm ), lita( maxtrm ), litb( maxtrm ),   &
+      complex(kind_chem)   cbiga( maxtrm ), lita( maxtrm ), litb( maxtrm ),   &
          sp( maxang ), sm( maxang ), sps( mxang2 ), sms( mxang2 )
       equivalence  ( cbiga, rbiga )
       logical, save :: pass1
@@ -3219,7 +3219,7 @@ contains
       integer  numang, maxang, momdim, nmom, ipolzn, npquan
       real(kind_chem)    xx, xmu(*)
       integer i,l,j,ip
-      complex  crefin
+      complex(kind_chem)  crefin
 !
       character*4  string
       logical  inperr
@@ -3325,7 +3325,7 @@ contains
       logical  calcmo(*)
       integer  ipolzn, momdim, nmom, ntrm, npquan
       real(kind_chem)    pmom( 0:momdim, * )
-      complex  a(*), b(*)
+      complex(kind_chem)  a(*), b(*)
 !
 !           ** specification of local variables
 !
@@ -3595,7 +3595,7 @@ contains
       logical  calcmo(*)
       integer  ipolzn, momdim, nmom,nummom,l
       real(kind_chem)    pmom( 0:momdim, * ),sq,a1sq,b1sq
-      complex  a(*), b(*), ctmp, a1b1c
+      complex(kind_chem)  a(*), b(*), ctmp, a1b1c
       sq( ctmp ) = dble( ctmp )**2 + aimag( ctmp )**2
 !
 !
@@ -3670,8 +3670,8 @@ contains
       logical  calcmo(*)
       integer  ipolzn, momdim, nmom,l,nummom
       real(kind_chem)    pmom( 0:momdim, * ),sq,pm1,pm2,a2sq,b2sq
-      complex  a(*), b(*)
-      complex  a2c, b2c, ctmp, ca, cac, cat, cb, cbc, cbt, cg, ch
+      complex(kind_chem)  a(*), b(*)
+      complex(kind_chem)  a2c, b2c, ctmp, ca, cac, cat, cb, cbc, cbt, cg, ch
       sq( ctmp ) = dble( ctmp )**2 + aimag( ctmp )**2
 !
 !
@@ -3814,7 +3814,7 @@ contains
       integer  ntrm,n
       real(kind_chem)    mre, mim, rbiga(*), xx, rezinv, rtmp, f1,f2,f3
 !      complex  cior, ctmp, confra, cbiga(*), zinv
-      complex  cior, ctmp,  cbiga(*), zinv
+      complex(kind_chem)  cior, ctmp,  cbiga(*), zinv
       f1( mre ) =  - 8.0 + mre**2 * ( 26.22 + mre * ( - 0.4474   &
          + mre**3 * ( 0.00204 - 0.000175 * mre ) ) )
       f2( mre ) = 3.9 + mre * ( - 10.8 + 13.78 * mre )
@@ -3924,8 +3924,8 @@ contains
       real(kind_chem)     xx
       real(kind_chem), save :: eps1,eps2
       data  eps1 / 1.d-2 /, eps2 / 1.d-8 /
-      complex   zinv
-      complex   cak, capt, cdenom, cdtd, cnumer, cntn
+      complex(kind_chem)   zinv
+      complex(kind_chem)   cak, capt, cdenom, cdtd, cnumer, cntn
 !
 !                                      *** ref. 1, eqs. 25a, 27
       confra = ( n + 1 ) * zinv
@@ -4000,7 +4000,7 @@ contains
       integer  ipolzn, momdim, nmom, numang,i,m,j
       real(kind_chem)    gqsc, pmom( 0:momdim, * ), qext, qsca, xx, xmu(*)
       real(kind_chem) fi1,fi2,fnorm
-      complex  crefin, sforw, sback, tforw(*), tback(*), s1(*), s2(*)
+      complex(kind_chem)  crefin, sforw, sback, tforw(*), tback(*), s1(*), s2(*)
       character*22  fmt
 !
 !
@@ -4081,11 +4081,11 @@ contains
       integer  numang,j
       real(kind_chem)    gqsc, qext, qsca, xx, xmu(*)
       real(kind_chem) twothr,fivthr,fivnin,sq,rtmp
-      complex  a( 2 ), b( 2 ), sforw, sback, s1(*), s2(*),   &
+      complex(kind_chem)  a( 2 ), b( 2 ), sforw, sback, s1(*), s2(*),   &
          tforw(*), tback(*)
 !
       parameter  ( twothr = 2./3., fivthr = 5./3., fivnin = 5./9. )
-      complex    ctmp
+      complex(kind_chem)    ctmp
       sq( ctmp ) = dble( ctmp )**2 + aimag( ctmp )**2
 !
 !
@@ -4146,11 +4146,11 @@ contains
       integer  numang,j
       real(kind_chem)    gqsc, qext, qsca, xx, xmu(*)
       real(kind_chem) twothr,fivthr,sq,rtmp
-      complex  a( 2 ), b( 2 ), cior, sforw, sback, s1(*), s2(*),   &
+      complex(kind_chem)  a( 2 ), b( 2 ), cior, sforw, sback, s1(*), s2(*),   &
          tforw(*), tback(*)
 !
       parameter  ( twothr = 2./3., fivthr = 5./3. )
-      complex  ctmp, ciorsq
+      complex(kind_chem)  ctmp, ciorsq
       sq( ctmp ) = dble( ctmp )**2 + aimag( ctmp )**2
 !
 !
@@ -4221,7 +4221,7 @@ contains
       logical  ok, wrong
 !
       real(kind_chem)    accur, testqe, testqs, testgq, testpm( 0:1 )
-      complex testsf, testsb,tests1,tests2,testtf(2), testtb(2)
+      complex(kind_chem) testsf, testsb,tests1,tests2,testtf(2), testtb(2)
       data   testqe / 2.459791 /,  testqs / 1.235144 /,   &
          testgq / 1.139235 /,  testsf / ( 61.49476, -3.177994 ) /,   &
          testsb / ( 1.493434, 0.2963657 ) /,   &
@@ -4405,8 +4405,8 @@ contains
       end if
 !   compute total volume and number for mode
 !       dgnum = dgnum_um*1.0e-4
-!       sx = alog( sigmag )
-!       x0 = alog( dgnum )
+!       sx = log( sigmag )
+!       x0 = log( dgnum )
 !       x3 = x0 + 3.*sx*sx
 !       dstar = dgnum * exp(1.5*sx*sx)
 !       if (iflag .le. 1) then
@@ -4428,8 +4428,8 @@ contains
       end do
 !   compute modal "working" parameters including total num/vol/mass
       dgnum = dgnum_um*1.0e-4
-      sx = alog( sigmag )
-      x0 = alog( dgnum )
+      sx = log( sigmag )
+      x0 = log( dgnum )
       x3 = x0 + 3.*sx*sx
       dstar = dgnum * exp(1.5*sx*sx)
       if (iflag .le. 1) then
@@ -4444,8 +4444,8 @@ contains
       sumnum = 0.
       summas = 0.
       do n = 1, nbin
-         xlo = alog( dlo_sect(n) )
-         xhi = alog( dhi_sect(n) )
+         xlo = log( dlo_sect(n) )
+         xhi = log( dhi_sect(n) )
          tlo = (xlo - x0)/sxroot2
          thi = (xhi - x0)/sxroot2
          if (tlo .le. 0.) then

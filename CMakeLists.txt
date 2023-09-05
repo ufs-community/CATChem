@@ -21,7 +21,7 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95" AND CMAKE_BUILD_TYPE MATCHES "Deb
     -fcheck=all
     -ffpe-trap=invalid,zero,overflow
     -fbacktrace
-    -fmax-errors=5)
+    -fmax-errors=1)
 endif()
 
 set(_param_src

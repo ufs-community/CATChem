@@ -11,9 +11,6 @@ module gocart_seas_ngac_mod
 
    implicit none
 
-   ! -- NGAC parameters
-   integer, parameter :: emission_scheme = 3    ! GEOSS 2012
-
    private
 
    public :: gocart_seas_ngac
