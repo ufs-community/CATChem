@@ -79,7 +79,7 @@ CONTAINS
     airmas=area * delp / g
     ipr=0
 
-    call source_ss( number_ss_bins, dt, tc,ilwi, area, w10m, airmas, bems,ipr)
+    call source_ss( number_ss_bins, dt, tc,ilwi, area, ws10m, airmas, bems,ipr)
     
     ! -- add sea salt emission increments to existing airborne concentrations
     do n = 0, number_ss_bins-1
