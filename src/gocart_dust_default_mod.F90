@@ -190,20 +190,21 @@ CONTAINS
        ! Pointer to the 3 classes considered in the source data files
        m = ipoint(n)
        tsrc = 0.0_kind_chem
-       DO k = 1, ndsrc
-          ! No flux if wet soil 
-          rhoa = airden*1.0D-3
-          u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
+       
+       ! No flux if wet soil 
+       rhoa = airden*1.0D-3
+       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
                SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
                SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
 
-          ! Case of surface dry enough to erode
-          IF (gwet < gthresh) THEN
-             u_ts = MAX(0.0D+0,u_ts0*(1.2D+0+2.0D-1*LOG10(MAX(1.0D-3, gwet))))
-          ELSE
-             ! Case of wet surface, no erosion
-             u_ts = 100.0_kind_chem
-          END IF
+       ! Case of surface dry enough to erode
+       IF (gwet < gthresh) THEN
+          u_ts = MAX(0.0D+0,u_ts0*(1.2D+0+2.0D-1*LOG10(MAX(1.0D-3, gwet))))
+       ELSE
+          ! Case of wet surface, no erosion
+          u_ts = 100.0_kind_chem
+       END IF
+       DO k =1, ndsrc
           srce = frac_s(n)*erod(m,k)*dxy  ! (m2)
           srce_out (k)=srce  ! output dust source
           IF (ilwi == 1 ) THEN
