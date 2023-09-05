@@ -18,7 +18,7 @@ when cloning the repository.
 .. _dev-install-instructions:
 
 How to incorporate updates to CATChem
---------------------------------------------
+-------------------------------------
 
 In order to contribute code to CATChem, you will need to fork the
 repository, make changes on your fork, and submit a pull request with your
@@ -74,3 +74,16 @@ changes.
    you can still clone the repositories via HTTPS, e.g. ::
 
        $ git clone https://github.com/ufs-community/CATChem.git
+
+
+pre-commit setup
+----------------
+
+We use the `pre-commit <https://pre-commit.com/>`__ tool to run automated checks.
+After `installing pre-commit <https://pre-commit.com/#install>`__,
+e.g. with ``pipx`` or ``conda``,
+run ``pre-commit install`` in the repository to set up the hooks.
+
+
+Build and test
+--------------
