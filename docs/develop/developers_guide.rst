@@ -87,3 +87,18 @@ run ``pre-commit install`` in the repository to set up the hooks.
 
 Build and test
 --------------
+
+To build, first configure::
+
+    cmake -B build
+
+then build::
+
+    cmake --build build
+
+To specify a compiler, you can in the configuration step
+use the ``FC`` shell/environment variable
+or the ``CMAKE_Fortran_COMPILER`` CMake variable::
+
+    cmake -B build -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran-12
+    FC=/usr/bin/gfortran-12 cmake -B build
