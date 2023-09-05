@@ -22,7 +22,7 @@ How to incorporate updates to CATChem
 
 In order to contribute code to CATChem, you will need to fork the
 repository, make changes on your fork, and submit a pull request with your
-changes. 
+changes.
 
 (a) Fork the GitHub repository to your own GitHub account
     using the "Fork" button near the top right:
@@ -53,11 +53,11 @@ changes.
 (d) Make changes to your fork.
 
 (e) Submit a pull request back to the main CATChem repository with your
-    changes. 
-	
+    changes.
+
 (f) Select two code reviewers (see list under development team section).
 
-(g) Once those two reviewers approve the code, it can be merged into the develop branch. 
+(g) Once those two reviewers approve the code, it can be merged into the develop branch.
 
 .. _clone-notes:
 .. [#clone] Note that in order to do an SSH clone,
@@ -74,4 +74,3 @@ changes.
    you can still clone the repositories via HTTPS, e.g. ::
 
        $ git clone https://github.com/ufs-community/CATChem.git
-
