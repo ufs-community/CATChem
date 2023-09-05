@@ -2,7 +2,7 @@
 ! Haiqin.Li@noaa.gov
 ! 01/2020
 ! constant parameters and chemistry configurations and tracers
-! (This will be splited into three subroutine for configuration, constant and tracers later)
+! (This will be split into three subroutine for configuration, constant and tracers later)
 ! 08/2020 move configuration into chem nml
 ! Jian.He@noaa.gov, 05/2023
 ! Move to parameters folder for CATChem
@@ -13,7 +13,7 @@ module catchem_config
 
    implicit none
 
-   !-- constant paramters
+   !-- constant parameters
    real(kind=kind_chem), parameter :: epsilc     = 1.e-30
 
    !-- chemistyr module configurations

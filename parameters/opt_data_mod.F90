@@ -12,9 +12,9 @@ MODULE opt_data_mod
 !
 ! * Most of the wavelength refractive indices below are based on values
 !   used in the Community Atmosphere Model (CAM)
-! * For now, shortwave refractive index is not wavelength depenedent
+! * For now, shortwave refractive index is not wavelength-dependent
 !   and set to 0.003 as described in Zhao et al. ACP (2010)
-! * Wavelength dependant shortwave refractive index used by CAM is
+! * Wavelength-dependent shortwave refractive index used by CAM is
 !   commented out for now
 !
    !water
@@ -129,10 +129,10 @@ MODULE opt_data_mod
 
    real(kind_chem),save :: wavmidsw(nswbands)
    data wavmidsw  / 0.30e-4, 0.40e-4, 0.60e-4 ,0.999e-04 /
-   !now czhao use 0.45 instead of 0.40 becaues of incorrect AOD from 0.40
+   !now czhao use 0.45 instead of 0.40 because of incorrect AOD from 0.40
    !data wavmidsw  / 0.30e-4, 0.45e-4, 0.60e-4 ,0.999e-04 /
    real(kind_chem),save :: wavmidlw(nlwbands)
-   complex, save :: crefwsw(nswbands) ! complex refractive index fro water
+   complex, save :: crefwsw(nswbands) ! complex refractive index from water
    complex, save :: crefwlw(nlwbands)
 
    public
