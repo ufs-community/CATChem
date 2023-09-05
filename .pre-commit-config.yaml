@@ -13,3 +13,11 @@ repos:
       # NOTE: doesn't work on Windows currently
       - id: findent-pypi
         args: ['-i3']
+
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+      - id: cmake-format
+        args: ['--in-place', '--line-width=100']
+      - id: cmake-lint
+        args: ['--line-width=100']
