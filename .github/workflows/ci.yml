@@ -10,7 +10,6 @@ jobs:
   build:
     name: Build and test
     runs-on: ubuntu-22.04
-    # if: github.repository == 'ufs-community/CATChem'
     strategy:
       matrix:
         compiler: [gfortran-10, gfortran-11, gfortran-12]

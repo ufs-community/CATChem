@@ -10,7 +10,6 @@ jobs:
   lint:
     name: pre-commit
     runs-on: ubuntu-latest
-    # if: github.repository == 'ufs-community/CATChem'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
