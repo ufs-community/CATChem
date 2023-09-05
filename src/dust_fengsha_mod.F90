@@ -7,10 +7,9 @@ module dust_fengsha_mod
 !  02/01/2020 - Adapted for FV3/CCPP, Haiqin Li
 !  06/2023, Restructure for CATChem, Jian.He@noaa.gov
 !  08/2023, Update to latest version Barry.Baker@noaa.gov
+
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
-  use catchem_config, only: num_chem,num_emis_dust,&
-                            p_dust_1,p_dust_2,p_dust_3,p_dust_4,p_dust_5, &
-                            p_edust1,p_edust2,p_edust3,p_edust4,p_edust5
+  use catchem_config, only: num_chem,num_emis_dust,p_dust_1,p_edust1
   use dust_data_mod
 
   implicit none
