@@ -7,9 +7,7 @@ module dust_afwa_mod
 !  06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
-  use catchem_config, only: num_chem,num_emis_dust,&
-                            p_dust_1,p_dust_2,p_dust_3,p_dust_4,p_dust_5, &
-                            p_edust1,p_edust2,p_edust3,p_edust4,p_edust5
+  use catchem_config, only: num_chem,num_emis_dust,p_dust_1, p_edust1
   use dust_data_mod
 
   implicit none
@@ -87,7 +85,7 @@ contains
     
     ilwi=1
     
-    ! Total concentration at lowest model level. This is still hardcoded for 5 bins.
+    ! Total concentration at lowest model level.
     do n = 0, ndust - 1 
        tc(n+1)=chem_arr(p_dust_1 + n)*conver
     end do
