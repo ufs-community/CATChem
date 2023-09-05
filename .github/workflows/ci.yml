@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        compiler: [gfortran-10, gfortran-11, gfortran-12]
+        # TODO: Intel
+    defaults:
+      run:
+        shell: bash -l {0}
+    env:
+      BUILD_DIR: build
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          cmake -B $BUILD_DIR
+          cmake --build $BUILD_DIR
+        env:
+          FC: ${{ matrix.compiler }}
+
+      # TODO: ctest --test-dir $BUILD_DIR
