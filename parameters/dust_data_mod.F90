@@ -48,14 +48,11 @@ module dust_data_mod
   real(kind_chem) :: dust_gamma = 0.
 
 
-  ! -- Saltation Parameters
-  integer,            dimension(nsalt), parameter :: spoint    = (/ 1, 2, 2, 2, 2, 2, 3, 3, 3 /)  ! 1 Clay, 2 Silt, 3 Sand
-  real(kind_chem), dimension(nsalt), parameter :: reff_salt = &
-    (/ 0.71D-6, 1.37D-6, 2.63D-6, 5.00D-6, 9.50D-6, 18.1D-6, 34.5D-6, 65.5D-6, 125.D-6 /)
-  real(kind_chem), dimension(nsalt), parameter :: den_salt  = &
-    (/   2500.,   2650.,   2650.,   2650.,   2650.,   2650.,   2650.,   2650.,   2650. /)
-  real(kind_chem), dimension(nsalt), parameter :: frac_salt = &
-    (/      1.,     0.2,     0.2,     0.2,     0.2,     0.2,   0.333,   0.333,   0.333 /)
+  ! -- Saltation Parameters -- based on AFWA
+  integer, dimension(nsalt), parameter :: spoint    = (/ 1, 2, 2, 2, 2, 2, 3, 3, 3 /)  ! 1 Clay, 2 Silt, 3 Sand
+  real(kind_chem), dimension(nsalt), parameter :: reff_salt = (/ 0.71D-6, 1.37D-6, 2.63D-6, 5.00D-6, 9.50D-6, 18.1D-6, 34.5D-6, 65.5D-6, 125.D-6 /)
+  real(kind_chem), dimension(nsalt), parameter :: den_salt  = (/ 2500., 2650., 2650., 2650., 2650., 2650., 2650., 2650., 2650. /)
+  real(kind_chem), dimension(nsalt), parameter :: frac_salt = (/ 1., 0.2, 0.2, 0.2, 0.2, 0.2, 0.333, 0.333, 0.333 /)
 
 
   ! -- soil vegetation parameters

@@ -1,3 +1,4 @@
+
 module dust_fengsha_mod
 !
 !  This module developed by Barry Baker (NOAA ARL)
@@ -20,8 +21,8 @@ module dust_fengsha_mod
 
 contains
 
-  subroutine gocart_dust_fengsha_driver(dt,           &
-          chem_arr,rho_phy,dz8w,smois,         &
+  subroutine dust_fengsha_driver(dt,           &
+          rho_phy,dz8w,smois,         &
           delp,ssm,isltyp,vegfra,snowh,area,  &
           emis_dust,ust,znt,clay,sand, &
           rdrag,uthr,num_soil_layers,random_factor)
@@ -46,9 +47,9 @@ contains
     REAL(kind=kind_chem), INTENT(IN) :: sand    ! fractional sand content 
     REAL(kind=kind_chem), INTENT(IN) :: rdrag   ! drag partition 
     REAL(kind=kind_chem), INTENT(IN) :: uthr    ! dry threshold friction velocity
-    REAL(kind=kind_chem), INTENT(IN) :: random_factor
+    REAL(kind=kind_chem), INTENT(IN) :: random_factor ! stochastic physics perturbation 
     
-    REAL(kind=kind_chem), DIMENSION( num_chem ),        INTENT(INOUT)  :: chem_arr  ! chemical array 
+   !  REAL(kind=kind_chem), DIMENSION( num_chem ),        INTENT(INOUT)  :: chem_arr  ! chemical array 
     REAL(kind=kind_chem), DIMENSION( ndust ), OPTIONAL, INTENT(INOUT ) :: emis_dust ! final dust emission 
     REAL(kind=kind_chem), DIMENSION( num_soil_layers ), INTENT(IN)     :: smois     ! volumetric soil moisture at 0-5cm 
     
@@ -57,9 +58,9 @@ contains
     integer :: do_dust ! 0 - no dust emission 1 - dust emission 
     integer :: n       ! looping variable 
     
-    real(kind=kind_chem), DIMENSION (ndust) :: tc ! tracer concentration 
+   !  real(kind=kind_chem), DIMENSION (ndust) :: tc ! tracer concentration 
     REAL(kind=kind_chem), DIMENSION (ndust) :: bin_emis ! bin emisions 
-    real(kind=kind_chem)                            :: emis ! total emission
+    real(kind=kind_chem) :: emis ! total emission
     real(kind=kind_chem), DIMENSION (ndust) :: distribution ! fractional distribution for size bins 
     real(kind=kind_chem)            :: dsrc
     
@@ -100,12 +101,12 @@ contains
     ENDIF
     
     ! do not allow dust over the ocean 
-    IF (isltyp .eq. 0)then
+    IF (isltyp .eq. 0) then
        do_dust=0
     endif
     
     ! check ssm input valid range
-    if (ssm .lt. 0.05 .and. ssm .gt. 1.0)  then ! ensure values are realistic
+    if (ssm .lt. 0.05 .and. ssm .gt. 1.0) then ! ensure values are realistic
        do_dust = 0
     end if
     
@@ -114,7 +115,7 @@ contains
        do_dust = 0
     endif
     
-    if( do_dust == 0 ) return
+    if ( do_dust == 0 ) return
     ! ====================================
     
     ! Call fengsha dust emission for total emission
@@ -135,22 +136,23 @@ contains
     ! now convert to tracer concentration 
     ! -----------------------------------
     DO n=1,ndust
-       if (emis > 0) then
+       emis_dust(n) = max(0, bin_emis(n) / dt)
+      !  if (emis > 0) then
           ! Put emissions into correct units .
           ! ----------------------------------------------
-          tc(n) = tc(n) + bin_emis(n) / airmas ! (kg/kg)
-          emis_dust(n)= bin_emis(n) / dt  ! diagnostic (kg/m2/s)
-       else
-          emis_dust(n) = 0. 
-       end if
+         !  tc(n) = tc(n) + bin_emis(n) / airmas ! (kg/kg)
+      !     emis_dust(n)= bin_emis(n) / dt  ! diagnostic (kg/m2/s)
+      !  else
+      !     emis_dust(n) = 0. 
+      !  end if
        
     END DO
 
-    do n = 0, ndust-1
-       ! Update tracer concentrations 
-       ! ----------------------------
-       chem_arr(p_dust_1+n)=tc(n + 1)*converi ! (ug/kg)
-    end do
+   !  do n = 0, ndust-1
+   !     ! Update tracer concentrations 
+   !     ! ----------------------------
+   !     chem_arr(p_dust_1+n)=tc(n + 1)*converi ! (ug/kg)
+   !  end do
     
   end subroutine gocart_dust_fengsha_driver
 

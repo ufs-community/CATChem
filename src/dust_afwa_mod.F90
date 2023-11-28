@@ -19,7 +19,7 @@ module dust_afwa_mod
 contains
 
   subroutine gocart_dust_afwa_driver(ktau,dt,u_phy,              &
-          v_phy,chem_arr,rho_phy,dz8w,smois,u10,         &
+          v_phy,rho_phy,dz8w,smois,u10,         &
           v10,delp,erod,isltyp,area,       &
           emis_dust,ust,znt,clay,sand, &
           num_soil_layers)
@@ -33,24 +33,23 @@ contains
     INTEGER, INTENT( IN ) :: isltyp
     INTEGER, INTENT( IN ) :: num_soil_layers
     
-    REAL(kind=kind_chem), INTENT(IN) :: dt
-    REAL(kind=kind_chem), INTENT(IN) :: u_phy
-    REAL(kind=kind_chem), INTENT(IN) :: v_phy
-    REAL(kind=kind_chem), INTENT(IN) :: rho_phy
+    REAL(kind=kind_chem), INTENT(IN) :: dt        ! time step
+    REAL(kind=kind_chem), INTENT(IN) :: u_phy     ! first model layer v component velocity
+    REAL(kind=kind_chem), INTENT(IN) :: v_phy     ! first model layer v component velocity
+    REAL(kind=kind_chem), INTENT(IN) :: rho_phy   ! air density
     REAL(kind=kind_chem), INTENT(IN) :: dz8w
-    REAL(kind=kind_chem), INTENT(IN) :: u10
-    REAL(kind=kind_chem), INTENT(IN) :: v10
-    REAL(kind=kind_chem), INTENT(IN) :: delp
-    REAL(kind=kind_chem), INTENT(IN) :: area
-    REAL(kind=kind_chem), INTENT(IN) :: ust
-    REAL(kind=kind_chem), INTENT(IN) :: znt
-    REAL(kind=kind_chem), INTENT(IN) :: clay
-    REAL(kind=kind_chem), INTENT(IN) :: sand
+    REAL(kind=kind_chem), INTENT(IN) :: u10       ! u component of 10m wind speed in m/s
+    REAL(kind=kind_chem), INTENT(IN) :: v10       ! v component of 10m wind speed in m/s
+    REAL(kind=kind_chem), INTENT(IN) :: delp      ! del Pressure in first layer
+    REAL(kind=kind_chem), INTENT(IN) :: area      ! area of grid cell
+    REAL(kind=kind_chem), INTENT(IN) :: ust       ! friction velocity
+    REAL(kind=kind_chem), INTENT(IN) :: znt       ! surface roughness length
+    REAL(kind=kind_chem), INTENT(IN) :: clay      ! fractional clay content
+    REAL(kind=kind_chem), INTENT(IN) :: sand      ! fractional sand content
 
-    REAL(kind=kind_chem), DIMENSION(num_chem), INTENT(INOUT) ::  chem_arr
-    REAL(kind=kind_chem), DIMENSION(ndust), INTENT(INOUT) :: emis_dust
-    REAL(kind=kind_chem), DIMENSION(num_soil_layers), INTENT(INOUT) :: smois
-    REAL(kind=kind_chem), DIMENSION( 3 ), INTENT(IN) :: erod
+    REAL(kind=kind_chem), DIMENSION(ndust), INTENT(INOUT) :: emis_dust ! total dust emission in each bin (ug/m2/s)
+    REAL(kind=kind_chem), DIMENSION(num_soil_layers), INTENT(INOUT) :: smois ! soil moisture
+    REAL(kind=kind_chem), DIMENSION( 3 ), INTENT(IN) :: erod ! erodibility factor
 
     ! Local variables
 
@@ -68,7 +67,7 @@ contains
     
     real(kind_chem), dimension (3) :: massfrac
     
-    real(kind_chem), DIMENSION (ndust) :: tc
+   !  real(kind_chem), DIMENSION (ndust) :: tc
     real(kind_chem), DIMENSION (ndust) :: bems
     
     
@@ -133,12 +132,16 @@ contains
     drylimit=14.0*clay*clay+17.0*clay
     
     ! Call dust emission routine.
-    call source_dust(nmx, smx, dt, tc, ustar, massfrac, erodtot, ilwi, dxy, gravsm, airden, airmas, bems, g, drylimit, dust_alpha, dust_gamma)
+    call source_dust(nmx, smx, dt, ustar, massfrac, erodtot, ilwi, dxy, gravsm, airden, airmas, bems, g, drylimit, dust_alpha, dust_gamma)
     
     do n = 0, ndust-1
+       ! Update tracer concentrations 
+       ! ----------------------------
+      !  chem_arr(p_dust_1+n)=tc(n + 1)*converi
+       
        ! for output diagnostics 
        ! ----------------------
-       emis_dust(p_edust1 + n) = bems(n+1)
+       emis_dust(p_edust1 + n) = bems(n+1) * coveri
     end do
   
 end subroutine gocart_dust_afwa_driver
@@ -202,7 +205,6 @@ end subroutine gocart_dust_afwa_driver
     ! *         DSRC      Mass of emitted dust               (kg/timestep/cell)
     ! *
     ! *  Output:
-    ! *         TC        Total concentration of dust        (kg/kg/timestep/cell)
     ! *         BEMS      Source of each dust type           (kg/timestep/cell) 
     ! *
     ! ****************************************************************************
@@ -315,8 +317,7 @@ end subroutine gocart_dust_afwa_driver
        ! Threshold friction velocity as a function of the dust density and
        ! diameter from Bagnold (1941) (m s^-1).
        
-       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
-            SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
+       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5) / &
             SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
        
        ! Friction velocity threshold correction function based on physical
@@ -336,8 +337,7 @@ end subroutine gocart_dust_afwa_driver
        ! the relative surface area distribution
        
        IF (ustar .gt. u_ts .and. erod .gt. 0.0 .and. ilwi == 1) THEN
-          salt = cmb*ds_rel(n)*(airden/g0)*(ustar**3)* &
-               (1. + u_ts/ustar)*(1. - (u_ts**2)/(ustar**2))  ! (kg m^-1 s^-1)
+          salt = cmb*ds_rel(n)*(airden/g0)*(ustar**3)*(1. + u_ts/ustar)*(1. - (u_ts**2)/(ustar**2))  ! (kg m^-1 s^-1)
        ELSE 
           salt = 0.0
        ENDIF
@@ -389,9 +389,9 @@ end subroutine gocart_dust_afwa_driver
        IF (dsrc < 0.0) dsrc = 0.0
        
        ! Update dust mixing ratio at first model level.
-       tc(n) = tc(n) + dsrc / airmas ! (kg/kg)
+      !  tc(n) = dsrc / airmas ! (kg/kg)
        !bems(i,j,n) = dsrc/(dxy(j)*dt1) ! diagnostic (kg/m2/s)
-       bems(n) = 1.e+9*dsrc/(dxy*dt1) ! diagnostic (ug/m2/s)
+       bems(n) = dsrc/ (dxy * dt1) ! diagnostic (g/m2/s)
     END DO
     
   END SUBROUTINE source_dust

@@ -123,6 +123,7 @@ contains
     integer :: i, j, jp, k, kp, n
     real(kind_phys), dimension(ims:im,jms:jme) :: random_factor
     real(kind_phys) :: delp
+    real(kind_phys) :: airmas
 
     errmsg = ''
     errflg = 0
@@ -189,18 +190,22 @@ contains
         do j=jts,jte
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
-              delp = p8w(i,kts,j)-p8w(i,kts+1,j)            
-              ! -- GOCART afwa dust scheme
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)    
+              airmas = area(i,j) * delp / g        
+              ! -- afwa dust scheme
               call gocart_dust_afwa_driver(ktau,dt,u_phy(i,kts,j), &
-                v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                v_phy(i,kts,j),rho_phy(i,kts,j), &
                 dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
                 v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),    &
                 emis_dust(i,1,j,:),&
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j),nsoil)
               !store_arrays = .true.
-            endif
-          enddo
-        enddo
+              do n=0,ndust-1
+                chem(i,kts,j,p_dust_1 + n) = chem(i,kts,j,p_dust_1 + n) + emis_dust(i,1,j,n+1) * dt * area(i,j) / airmas
+              end do
+            end if
+          end do
+        end do
 
       case (DUST_OPT_FENGSHA)
         dust_alpha    = dust_alpha_in  !fengsha_alpha
@@ -210,18 +215,22 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+              airmas = area(i,j) * delp / g
               ! -- FENGSHA dust scheme
-              call gocart_dust_fengsha_driver(dt,&
-                chem(i,kts,j,:),rho_phy(i,kts,j), &
+              call dust_fengsha_driver(dt,&
+                rho_phy(i,kts,j), &
                 dz8w(i,kts,j),smois(i,1,j), &
                 delp,ssm(i,j),isltyp(i,j),vegfrac(i,j),&
                 snowh(i,j),dxy(i,j),emis_dust(i,1,j,:), &
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j), &
                 rdrag(i,j),uthr(i,j),nsoil,random_factor(i,j))
               !store_arrays = .true.
-            endif
-          enddo
-        enddo
+              do n=0,ndust-1
+                chem(i,kts,j, p_dust_1 + n ) = chem(i,kts,j, p_dust_1 + n ) + emis_dust(i,1,j,n+1) * dt / airmas
+              end do 
+            end if
+          end do
+        end do
 
       case (DUST_OPT_GOCART)
         dust_alpha = gocart_alpha
@@ -231,7 +240,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5 .and. xland(i,j).gt.0.5)then
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-
+              airmas = area(i,j) * delp / g
               ! based on chem_opt
               select case (chem_opt)
 
@@ -247,16 +256,18 @@ contains
 
                 case default
                     ! -- default GOCART dust scheme
-                    call gocart_dust_default(ktau,dt,u_phy(i,kts,j), &
+                    call gocart_dust_ginoux(ktau,dt,u_phy(i,kts,j), &
                       v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
                       dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
                       v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),           &
                       emis_dust(i,1,j,:),srce_dust(i,1,j,:),nsoil,current_month)
 
               end select
-            endif
-          enddo
-        enddo         
+
+
+            end if
+          end do
+        end do         
 
       case default
         errmsg = 'Logic error in catchem_dust_wrapper_run: invalid dust_opt'
@@ -264,6 +275,11 @@ contains
         return
         !store_arrays = .true.
     end select
+
+    ! -- update tracer concentration 
+    do j=jts,jte
+      do i=its,ite
+        chem(i,)
 
     ! -- put chem stuff back into tracer array
     do k=kts,kte

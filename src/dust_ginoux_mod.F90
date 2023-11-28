@@ -1,7 +1,7 @@
 !! Revision History:
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-module gocart_dust_default_mod
+module gocart_dust_ginoux_mod
   
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only: num_chem,num_emis_dust,p_dust_1,p_edust1
@@ -15,10 +15,8 @@ module gocart_dust_default_mod
   
 CONTAINS
   
-  subroutine gocart_dust_default(ktau,dt,u_phy,              &
-       v_phy,chem_arr,rho_phy,dz8w,smois,u10,         &
-       v10,delp,erod,isltyp,area,       &
-       emis_dust,srce_dust,num_soil_layers,start_month)
+  subroutine dust_ginoux(ktau,dt,u_phy, v_phy,rho_phy,dz8w,smois,u10,v10,delp,erod              &
+       isltyp,area,emis_dust,srce_dust,num_soil_layers,start_month)
 
     ! Input Variables 
     ! ---------------
@@ -42,7 +40,6 @@ CONTAINS
     
     ! Output Variables 
     ! ----------------
-    REAL(kind=kind_chem), DIMENSION(num_chem), INTENT(INOUT ) :: chem_arr
     REAL(kind=kind_chem), DIMENSION(ndust), INTENT(INOUT ) :: emis_dust
     REAL(kind=kind_chem), DIMENSION(ndust), INTENT(INOUT ) :: srce_dust
     REAL(kind=kind_chem), DIMENSION(num_soil_layers), INTENT(INOUT) :: smois
@@ -50,8 +47,7 @@ CONTAINS
     ! Local Variables 
     ! ---------------
     integer :: ipr,ilwi, n
-    real(kind=kind_chem), DIMENSION (3,1) :: erodin  ! (ndcls,ndsrc)
-    real(kind=kind_chem), DIMENSION (ndust) :: tc
+    real(kind=kind_chem), DIMENSION (3) :: erodin  ! (ndcls,ndsrc)
     real(kind=kind_chem), DIMENSION (ndust) :: bems
     real(kind=kind_chem), DIMENSION (ndust) :: srce_out
     real(kind=kind_chem) :: w10m
@@ -92,9 +88,9 @@ CONTAINS
     
     ! get erosion potentials 
     ! ----------------------
-    erodin(1,1)=erod(1)!/area(i,j)
-    erodin(2,1)=erod(2)!/area(i,j)
-    erodin(3,1)=erod(3)!/area(i,j)
+    erodin(1)=erod(1)
+    erodin(2)=erod(2)
+    erodin(3)=erod(3)
     
     ! volumetric soil moisture over porosity
     ! --------------------------------------
@@ -107,16 +103,16 @@ CONTAINS
 
     ipr=0
 
-    call source_du( ndust, dt, tc, erodin, ilwi, area, w10m, gwet, rho_phy, airmas, bems,srce_out, start_month, g, ipr)
+    call source_du( ndust, dt, erodin, ilwi, area, w10m, gwet, rho_phy, airmas, bems,srce_out, start_month, g, ipr)
 
     do n = 0, ndust-1 
-       ! Update Tracer concentrations 
-       ! ----------------------------
-       chem_arr(p_dust_1 + n)=max(min_default,tc(n + 1)*converi)
+      !  ! Update Tracer concentrations 
+      !  ! ----------------------------
+      !  chem_arr(p_dust_1 + n)=max(min_default,tc(n + 1)*converi)
 
        ! update diagnostic emission rate
        ! -------------------------------
-       emis_dust(p_edust1 + n)=bems(n+1)
+       emis_dust(p_edust1 + n) = max(0, bems(n+1) * converi)
 
        ! for output diagnostics of dust source
        ! -------------------------------------
@@ -159,7 +155,7 @@ CONTAINS
     REAL(kind=kind_chem), INTENT(IN)    :: w10m, gwet
     REAL(kind=kind_chem), INTENT(IN)    :: dxy
     REAL(kind=kind_chem), INTENT(IN)    :: airden, airmas
-    REAL(kind=kind_chem), INTENT(INOUT) :: tc(nmx)
+   !  REAL(kind=kind_chem), INTENT(INOUT) :: tc(nmx)
     REAL(kind=kind_chem), INTENT(OUT)   :: bems(nmx)
     REAL(kind=kind_chem), INTENT(OUT)   :: srce_out(nmx) !dust source
     INTEGER,            INTENT(OUT)   :: ipr
@@ -171,9 +167,6 @@ CONTAINS
     REAL(kind=kind_chem) :: g
     REAL(kind=kind_chem) :: den(nmx), diam(nmx)
     REAL(kind=kind_chem) :: rhoa, tsrc, u_ts0, u_ts, dsrc, srce
-    REAL(kind=kind_chem) :: tcmw(nmx), ar(nmx), tcvv(nmx)
-    REAL(kind=kind_chem) :: ar_wetdep(nmx), kc(nmx)
-    CHARACTER(LEN=20)  :: tcname(nmx), tcunits(nmx)
     LOGICAL            :: aerosol(nmx)
 
     REAL(kind=kind_chem), PARAMETER :: gthresh = 0.5_kind_chem
@@ -193,8 +186,7 @@ CONTAINS
        
        ! No flux if wet soil 
        rhoa = airden*1.0D-3
-       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
-               SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
+       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
                SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
 
        ! Case of surface dry enough to erode
@@ -217,7 +209,7 @@ CONTAINS
 
           ! Update dust mixing ratio at first model level.
           ! scale down dust by .7
-          tc(n) = tc(n) + .7*dsrc / airmas
+         !  tc(n) = tc(n) + .7*dsrc / airmas
           bems(n) = .7*dsrc/(dxy*dt1) ! diagnostic (kg/m2/s)
        END DO
     END DO
