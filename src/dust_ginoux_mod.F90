@@ -1,7 +1,7 @@
 !! Revision History:
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
-module gocart_dust_ginoux_mod
+module dust_ginoux_mod
   
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
   use catchem_config, only: num_chem,num_emis_dust,p_dust_1,p_edust1
