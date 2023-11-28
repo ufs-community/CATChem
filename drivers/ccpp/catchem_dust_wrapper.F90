@@ -264,6 +264,10 @@ contains
 
               end select
 
+              !store_arrays = .true.
+              do n=0,ndust-1
+                chem(i,kts,j, p_dust_1 + n ) = chem(i,kts,j, p_dust_1 + n ) + emis_dust(i,1,j,n+1) * dt / airmas
+              end do
 
             end if
           end do
