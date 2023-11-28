@@ -85,12 +85,9 @@ contains
     
     ilwi=1
     
-    ! Total concentration at lowest model level.
-    do n = 0, ndust - 1 
-       tc(n+1)=chem_arr(p_dust_1 + n)*conver
-    end do
-    
-    
+    ! set initial tendency to zero
+    tc = 0.
+        
     ! Air mass and density at lowest model level.
     
     airmas=area * delp / g
@@ -139,10 +136,6 @@ contains
     call source_dust(nmx, smx, dt, tc, ustar, massfrac, erodtot, ilwi, dxy, gravsm, airden, airmas, bems, g, drylimit, dust_alpha, dust_gamma)
     
     do n = 0, ndust-1
-       ! Update tracer concentrations 
-       ! ----------------------------
-       chem_arr(p_dust_1+n)=tc(n + 1)*converi
-       
        ! for output diagnostics 
        ! ----------------------
        emis_dust(p_edust1 + n) = bems(n+1)
