@@ -257,7 +257,7 @@ contains
                 case default
                     ! -- default GOCART dust scheme
                     call gocart_dust_ginoux(ktau,dt,u_phy(i,kts,j), &
-                      v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                      v_phy(i,kts,j),rho_phy(i,kts,j), &
                       dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
                       v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),           &
                       emis_dust(i,1,j,:),srce_dust(i,1,j,:),nsoil,current_month)
