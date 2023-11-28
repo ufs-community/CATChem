@@ -15,7 +15,7 @@ module dust_ginoux_mod
   
 CONTAINS
   
-  subroutine dust_ginoux(ktau,dt,u_phy, v_phy,rho_phy,dz8w,smois,u10,v10,delp,erod              &
+  subroutine gocart_dust_ginoux(ktau,dt,u_phy, v_phy,rho_phy,dz8w,smois,u10,v10,delp,erod              &
        isltyp,area,emis_dust,srce_dust,num_soil_layers,start_month)
 
     ! Input Variables 
