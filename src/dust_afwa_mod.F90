@@ -55,7 +55,7 @@ contains
 
     integer :: n, nmx,smx,ilwi
     
-    real(kind_chem) :: erodtot, 
+    real(kind_chem) :: erodtot 
     real(kind_chem) :: gravsm
     real(kind_chem) :: drylimit
     real(kind_chem) :: airden
