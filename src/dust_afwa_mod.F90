@@ -243,7 +243,7 @@ end subroutine gocart_dust_afwa_driver
     REAL(kind_chem) :: emit_vol
     REAL(kind_chem) :: stotal
     REAL(kind_chem) :: rhoa 
-   !  REAL(kind_chem) :: g ! redundant  
+    REAL(kind_chem) :: g_cms ! redundant  
     
     INTEGER :: i, j, m, s, n
 
@@ -303,7 +303,7 @@ end subroutine gocart_dust_afwa_driver
     ! calculate saltation flux (salt) where ustar has exceeded u_ts.  Finally, 
     ! calculate total dust emission (tot_emit), taking into account erodibility. 
     
-    g = g0*1.0E2
+    g_cms = g0*1.0E2
     emit=0.0
     
     DO n = 1, smx
@@ -314,7 +314,7 @@ end subroutine gocart_dust_afwa_driver
        ! Threshold friction velocity as a function of the dust density and
        ! diameter from Bagnold (1941) (m s^-1).
        
-       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5) / &
+       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g_cms*diam(n)/rhoa)* SQRT(1.0+0.006/den(n)/g_cms/(diam(n))**2.5) / &
             SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
        
        ! Friction velocity threshold correction function based on physical
