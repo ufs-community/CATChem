@@ -83,9 +83,6 @@ contains
     ! Don't do dust over water!!!
     
     ilwi=1
-    
-    ! set initial tendency to zero
-    tc = 0.
         
     ! Air mass and density at lowest model level.
     
@@ -246,7 +243,7 @@ end subroutine gocart_dust_afwa_driver
     REAL(kind_chem) :: emit_vol
     REAL(kind_chem) :: stotal
     REAL(kind_chem) :: rhoa 
-    REAL(kind_chem) :: g 
+   !  REAL(kind_chem) :: g ! redundant  
     
     INTEGER :: i, j, m, s, n
 

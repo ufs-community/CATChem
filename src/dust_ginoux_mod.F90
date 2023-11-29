@@ -15,8 +15,7 @@ module dust_ginoux_mod
   
 CONTAINS
   
-  subroutine gocart_dust_ginoux(ktau,dt,u_phy, v_phy,rho_phy,dz8w,smois,u10,v10,delp,erod              &
-       isltyp,area,emis_dust,srce_dust,num_soil_layers,start_month)
+  subroutine gocart_dust_ginoux(ktau,dt,u_phy, v_phy,rho_phy,dz8w,smois,u10,v10,delp,erod,isltyp,area,emis_dust,srce_dust,num_soil_layers,start_month)
 
     ! Input Variables 
     ! ---------------
@@ -30,7 +29,7 @@ CONTAINS
     REAL(kind=kind_chem), INTENT(IN) :: u_phy
     REAL(kind=kind_chem), INTENT(IN) :: v_phy
     REAL(kind=kind_chem), INTENT(IN) :: rho_phy
-    REAL(kind=kind_chem), INTENT(IN) :: dzw8
+    REAL(kind=kind_chem), INTENT(IN) :: dz8w
     REAL(kind=kind_chem), INTENT(IN) :: u10
     REAL(kind=kind_chem), INTENT(IN) :: v10
     REAL(kind=kind_chem), INTENT(IN) :: delp
@@ -122,7 +121,7 @@ CONTAINS
   end subroutine gocart_dust_default
 
 
-  SUBROUTINE source_du( nmx, dt1, tc, & 
+  SUBROUTINE source_du( nmx, dt1,  & 
        erod, ilwi, dxy, w10m, gwet, airden, airmas, &
        bems,srce_out,month,g0,ipr) 
 
@@ -150,11 +149,18 @@ CONTAINS
 
     INTEGER,            INTENT(IN)    :: nmx,ilwi,month
 
-    REAL(kind=kind_chem),               INTENT(IN)    :: dt1, g0
+    REAL(kind=kind_chem), INTENT(IN)    :: dt1
+    REAL(kind=kind_chem), INTENT(IN)    :: g0 
     REAL(kind=kind_chem), INTENT(IN)    :: erod(ndcls,ndsrc)
-    REAL(kind=kind_chem), INTENT(IN)    :: w10m, gwet
+    REAL(kind=kind_chem), INTENT(IN)    :: w10m
+    REAL(kind=kind_chem), INTENT(IN)    :: gwet
     REAL(kind=kind_chem), INTENT(IN)    :: dxy
-    REAL(kind=kind_chem), INTENT(IN)    :: airden, airmas
+    REAL(kind=kind_chem), INTENT(IN)    :: airden
+    REAL(kind=kind_chem), INTENT(IN)    :: airmas
+    
+    !----------------------------------------------------------------------
+    ! Output 
+    !----------------------------------------------------------------------
    !  REAL(kind=kind_chem), INTENT(INOUT) :: tc(nmx)
     REAL(kind=kind_chem), INTENT(OUT)   :: bems(nmx)
     REAL(kind=kind_chem), INTENT(OUT)   :: srce_out(nmx) !dust source
@@ -164,7 +170,7 @@ CONTAINS
     ! local variables
     !-----------------------------------------------------------------------  
     INTEGER            :: i, j, n, m, k
-    REAL(kind=kind_chem) :: g
+   !  REAL(kind=kind_chem) :: g ! redundant variable 
     REAL(kind=kind_chem) :: den(nmx), diam(nmx)
     REAL(kind=kind_chem) :: rhoa, tsrc, u_ts0, u_ts, dsrc, srce
     LOGICAL            :: aerosol(nmx)

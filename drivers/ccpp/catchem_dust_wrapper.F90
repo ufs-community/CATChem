@@ -10,9 +10,9 @@
    use machine ,        only : kind_phys
    use catchem_config
    use gocart_dust_simple_mod, only : gocart_dust_simple
-   use gocart_dust_default_mod, only : gocart_dust_default
+   use dust_ginoux_mod, only : gocart_dust_ginoux
    use dust_afwa_mod,   only : gocart_dust_afwa_driver
-   use dust_fengsha_mod,only : gocart_dust_fengsha_driver
+   use dust_fengsha_mod,only : dust_fengsha_driver
    use dust_data_mod
 
    implicit none
@@ -307,17 +307,15 @@ contains
     enddo
 
     duem(:,:)=ugkg*emis_dust(:,1,1,:)
-!
-   end subroutine catchem_dust_wrapper_run
+    
+  end subroutine catchem_dust_wrapper_run
 !> @}
 
-   subroutine catchem_prep_dust(                                      &
-        ktau,dtstep,                     &
-        u10m,v10m,ustar,land,garea,rlat,rlon,ts2d,                     &
-        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,                &
-        nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,                  &
-        snow_cplchm,dust_in,emi_in,                               &
-        hf2d,pb2d,                              &
+   subroutine catchem_prep_dust(                               &
+        ktau,dtstep,u10m,v10m,ustar,land,garea,rlat,rlon,ts2d, &
+        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,          &
+        nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,          &
+        snow_cplchm,dust_in,emi_in,hf2d,pb2d,                  &
         u10,v10,ust,tsk,xland,xlat,xlong,dxy,                          &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                  &
         t8w,                                              &

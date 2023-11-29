@@ -136,7 +136,7 @@ contains
     ! now convert to tracer concentration 
     ! -----------------------------------
     DO n=1,ndust
-       emis_dust(n) = max(0, bin_emis(n) / dt)
+       emis_dust(n) = max(0., bin_emis(n) / dt)
       !  if (emis > 0) then
           ! Put emissions into correct units .
           ! ----------------------------------------------
@@ -154,7 +154,7 @@ contains
    !     chem_arr(p_dust_1+n)=tc(n + 1)*converi ! (ug/kg)
    !  end do
     
-  end subroutine gocart_dust_fengsha_driver
+  end subroutine dust_fengsha_driver
 
   subroutine DustEmissionFENGSHA(vsoil, clay, sand, ssm, rdrag, airdens, ustar, uthrs, area, alpha, gamma, total_emissions)
 
