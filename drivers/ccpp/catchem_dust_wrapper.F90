@@ -191,7 +191,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)    
-              airmas = area(i,j) * delp / g        
+              airmas = dxy(i,j) * delp / g        
               ! -- afwa dust scheme
               call gocart_dust_afwa_driver(ktau,dt,u_phy(i,kts,j), &
                 v_phy(i,kts,j),rho_phy(i,kts,j), &
@@ -215,7 +215,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-              airmas = area(i,j) * delp / g
+              airmas = dxy(i,j) * delp / g
               ! -- FENGSHA dust scheme
               call dust_fengsha_driver(dt,&
                 rho_phy(i,kts,j), &
@@ -240,7 +240,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5 .and. xland(i,j).gt.0.5)then
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-              airmas = area(i,j) * delp / g
+              airmas = dxy(i,j) * delp / g
               ! based on chem_opt
               select case (chem_opt)
 
@@ -279,12 +279,7 @@ contains
         return
         !store_arrays = .true.
     end select
-
-    ! -- update tracer concentration 
-    do j=jts,jte
-      do i=its,ite
-        chem(i,)
-
+    
     ! -- put chem stuff back into tracer array
     do k=kts,kte
      do i=its,ite
@@ -307,7 +302,7 @@ contains
     enddo
 
     duem(:,:)=ugkg*emis_dust(:,1,1,:)
-    
+
   end subroutine catchem_dust_wrapper_run
 !> @}
 
