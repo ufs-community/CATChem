@@ -11,7 +11,7 @@ module dust_ginoux_mod
   
   private
   
-  public :: gocart_dust_default
+  public :: gocart_dust_ginoux
   
 CONTAINS
   
@@ -60,9 +60,9 @@ CONTAINS
     
     ilwi=1
     
-    do n = 0, ndust -1 
-       tc(n+1)=chem_arr(p_dust_1+ n)*conver
-    end do
+   !  do n = 0, ndust -1 
+   !     tc(n+1)=chem_arr(p_dust_1+ n)*conver
+   !  end do
     
     ! Calculate 10m wind speed from u and v
     ! -------------------------------------
@@ -111,14 +111,14 @@ CONTAINS
 
        ! update diagnostic emission rate
        ! -------------------------------
-       emis_dust(p_edust1 + n) = max(0, bems(n+1) * converi)
+       emis_dust(p_edust1 + n) = max(0., bems(n+1) * converi)
 
        ! for output diagnostics of dust source
        ! -------------------------------------
        srce_dust(p_edust1 + n)=srce_out(n+1)
     end do
 
-  end subroutine gocart_dust_default
+  end subroutine gocart_dust_ginoux
 
 
   SUBROUTINE source_du( nmx, dt1,  & 
@@ -170,7 +170,7 @@ CONTAINS
     ! local variables
     !-----------------------------------------------------------------------  
     INTEGER            :: i, j, n, m, k
-   !  REAL(kind=kind_chem) :: g ! redundant variable 
+    REAL(kind=kind_chem) :: g_cms ! cm/s
     REAL(kind=kind_chem) :: den(nmx), diam(nmx)
     REAL(kind=kind_chem) :: rhoa, tsrc, u_ts0, u_ts, dsrc, srce
     LOGICAL            :: aerosol(nmx)
@@ -185,7 +185,7 @@ CONTAINS
        ! from Bagnold (1941)
        den(n) = den_dust(n)*1.0D-3
        diam(n) = 2.0*reff_dust(n)*1.0D2
-       g = g0*1.0E2
+       g_cms = g0*1.0E2
        ! Pointer to the 3 classes considered in the source data files
        m = ipoint(n)
        tsrc = 0.0_kind_chem
@@ -222,4 +222,4 @@ CONTAINS
 
   END SUBROUTINE source_du
 
-end module gocart_dust_default_mod
+end module dust_ginoux_mod
