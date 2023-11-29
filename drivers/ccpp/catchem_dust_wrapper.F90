@@ -201,7 +201,7 @@ contains
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j),nsoil)
               !store_arrays = .true.
               do n=0,ndust-1
-                chem(i,kts,j,p_dust_1 + n) = chem(i,kts,j,p_dust_1 + n) + emis_dust(i,1,j,n+1) * dt * area(i,j) / airmas
+                chem(i,kts,j,p_dust_1 + n) = chem(i,kts,j,p_dust_1 + n) + emis_dust(i,1,j,n+1) * dt * dxy(i,j) / airmas
               end do
             end if
           end do
@@ -279,7 +279,7 @@ contains
         return
         !store_arrays = .true.
     end select
-    
+
     ! -- put chem stuff back into tracer array
     do k=kts,kte
      do i=its,ite
