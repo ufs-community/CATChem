@@ -138,13 +138,13 @@ contains
        
        ! for output diagnostics 
        ! ----------------------
-       emis_dust(p_edust1 + n) = bems(n+1) * coveri
+       emis_dust(p_edust1 + n) = max(0.,bems(n+1) * converi)
     end do
   
 end subroutine gocart_dust_afwa_driver
 
   
-  SUBROUTINE source_dust(nmx, smx, dt1, tc, ustar, massfrac, erod, ilwi, dxy, gravsm, airden, airmas, bems, g0, drylimit, alpha, gamma)
+  SUBROUTINE source_dust(nmx, smx, dt1, ustar, massfrac, erod, ilwi, dxy, gravsm, airden, airmas, bems, g0, drylimit, alpha, gamma)
     
     ! ****************************************************************************
     ! *  Evaluate the source of each dust particles size bin by soil emission  
@@ -184,7 +184,7 @@ end subroutine gocart_dust_afwa_driver
     ! *         LAMBDA    Side crack propogation length                 (m)
     ! *         CV        Normalization constant                        (-)
     ! *         G0        Gravitational acceleration                    (m/s2)
-    ! *         G         Gravitational acceleration in cgs             (cm/s2)
+    ! *         G_CMS         Gravitational acceleration in cgs             (cm/s2)
     ! *      
     ! *  Working:
     ! *         U_TS0     "Dry" threshold friction velocity             (m/s)
@@ -217,8 +217,7 @@ end subroutine gocart_dust_afwa_driver
     REAL(kind_chem), INTENT(IN)    :: airmas
     REAL(kind_chem), INTENT(IN)    :: g0
     REAL(kind_chem), INTENT(IN)    :: dt1
-    REAL(kind_chem), INTENT(INOUT) :: tc(nmx)
-    REAL(kind_chem), INTENT(OUT)   :: bems(nmx) 
+    REAL(kind_chem), INTENT(OUT)   :: bems(ndust) 
     
     ! Local Variables 
     ! ---------------
