@@ -1,6 +1,7 @@
 !>\file catchem_drydep_wrapper.F90
 !! This file is GSDChem dry deposition wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 06/2020
+!! Kate.Zhang@noaa.gov 02/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -136,7 +137,7 @@ contains
     ddvel(:,:,:) = 0.
 
     gmt = real(idat(5))
-    julday = real(julian)                                       
+    julday = int(julian)                                       
 
     current_month=jdate(2)
 

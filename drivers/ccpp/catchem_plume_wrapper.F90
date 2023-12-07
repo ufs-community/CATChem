@@ -1,6 +1,7 @@
 !>\file catchem_plume_wrapper.F90
 !! This file is GSDChem plume wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 07/2020
+!! Kate.Zhang@noaa.gov 10/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -42,10 +43,10 @@ contains
 !!
 !>\section catchem_plume_wrapper CATChem Scheme General Algorithm
 !> @{
-    subroutine catchem_plume_wrapper_run(im, kte, kme, ktau, dt,                &
+    subroutine catchem_plume_wrapper_run(im, kte, kme, ktau, dt, julian,         &
                    pr3d, ph3d,phl3d, prl3d, tk3d, us3d, vs3d, spechum,           &
                    w,vegtype,fire_GBBEPx,fire_MODIS,                             &
-                   ntrac,ntso2,ntpp25,ntbc1,ntoc1,ntpp10,                        &
+                   ntrac,ntso2,ntpp25,ntbc1,ntoc1,ntpp10,igb,                    &
                    gq0,qgrs,ebu,abem,biomass_burn_opt_in,plumerise_flag_in,      &
                    plumerisefire_frq_in,pert_scale_plume,ca_emis_plume,          &
                    do_ca,ca_sgs,ca_sgs_emis,vegtype_cpl,ca_sgs_gbbepx_frp,       &
@@ -54,9 +55,9 @@ contains
     implicit none
 
 
-    integer,        intent(in) :: im,kte,kme,ktau
+    integer,        intent(in) :: im,kte,kme,ktau,igb
     integer,        intent(in) :: ntrac,ntso2,ntpp25,ntbc1,ntoc1,ntpp10
-    real(kind_phys),intent(in) :: dt, emis_amp_plume, pert_scale_plume
+    real(kind_phys),intent(in) :: dt, emis_amp_plume, pert_scale_plume,julian
 
     integer, parameter :: ids=1,jds=1,jde=1, kds=1
     integer, parameter :: ims=1,jms=1,jme=1, kms=1
@@ -66,7 +67,7 @@ contains
     real(kind_phys), intent(in) :: sppt_wts(:,:), ca_emis_plume(:)
     integer, dimension(im), intent(in) :: vegtype    
     integer, dimension(im), intent(out) :: vegtype_cpl
-    real(kind_phys), dimension(im,    5), intent(in) :: fire_GBBEPx
+    real(kind_phys), dimension(im,    5, igb), intent(in) :: fire_GBBEPx
     real(kind_phys), dimension(im,   13), intent(in) :: fire_MODIS
     real(kind_phys), intent(out) :: ca_sgs_gbbepx_frp(:)
     real(kind_phys), dimension(im,kme), intent(in) :: ph3d, pr3d
@@ -110,7 +111,6 @@ contains
     integer :: nbegin
     integer :: i, j, jp, k, kp, n
   
-
     errmsg = ''
     errflg = 0
 
@@ -147,12 +147,12 @@ contains
     end if
 
 !>- get ready for chemistry run
-    call catchem_prep_plume(ktau,dtstep,                               &
+    call catchem_prep_plume(ktau,dtstep,julian,                         &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w,                 &
         vegtype,fire_GBBEPx,fire_MODIS,                                 &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                   &
         z_at_w,vvel,                                                    &
-        ntso2,ntpp25,ntbc1,ntoc1,ntpp10,ntrac,gq0,                      &
+        ntso2,ntpp25,ntbc1,ntoc1,ntpp10,igb,ntrac,gq0,                  &
         num_chem, num_moist,num_ebu_in,ca_sgs_gbbepx_frp_with_j,        &
         plumerise_flag,num_plume_data,ppm2ugkg,                         &
         mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,        &
@@ -164,7 +164,8 @@ contains
 
     ! Input to cellular automata
     if(doing_sgs_emis) then
-      do i=ids,ide
+      !do i=ids,ide
+      do i=its,ite
         ca_sgs_gbbepx_frp(i) = ca_sgs_gbbepx_frp_with_j(i,jds)
         vegtype_cpl(i) = vegtype(i)
       enddo
@@ -276,7 +277,7 @@ contains
 !> @}
 
    subroutine catchem_prep_plume(                                        &
-        ktau,dtstep,                     &
+        ktau,dtstep, julian,                    &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w,                &
         vegtype,                  &
         fire_GBBEPx,fire_MODIS,                              &
@@ -284,7 +285,7 @@ contains
         z_at_w,vvel,                                              &
         ntso2,ntpp25,                               &
         ntbc1,ntoc1,                                       &
-        ntpp10,                &
+        ntpp10,igb,                &
         ntrac,gq0,                                                     &
         num_chem, num_moist,num_ebu_in,ca_sgs_gbbepx_frp_with_j,       &
         plumerise_flag,num_plume_data,                    &
@@ -299,15 +300,15 @@ contains
 
     !Chem input configuration
     integer, intent(in) :: ktau
-    real(kind=kind_phys), intent(in) :: dtstep
+    real(kind=kind_phys), intent(in) :: dtstep,julian
 
     !FV3 input variables
     integer, dimension(ims:ime), intent(in) :: vegtype
-    integer, intent(in) :: ntrac
+    integer, intent(in) :: ntrac,igb
     integer, intent(in) :: ntso2,ntpp25,ntbc1,ntoc1,ntpp10
     logical, intent(in) :: doing_sgs_emis
     real(kind=kind_phys), intent(in) :: ca_emis_plume(:)
-    real(kind=kind_phys), dimension(ims:ime,     5),   intent(in) :: fire_GBBEPx
+    real(kind=kind_phys), dimension(ims:ime,     5,igb),   intent(in) :: fire_GBBEPx
     real(kind=kind_phys), dimension(ims:ime,    13),   intent(in) :: fire_MODIS
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) ::     &
          pr3d,ph3d
@@ -347,8 +348,8 @@ contains
     ! -- local variables
 !   real(kind=kind_phys), dimension(ims:ime, kms:kme, jms:jme) :: p_phy
     real(kind_phys) ::  factor,factor2
-    integer i,ip,j,jp,k,kp,kk,kkp,l,ll,n
-
+    integer i,ip,j,jp,k,kp,kk,kkp,l,ll,n,ii
+    integer, save :: curr_day
     ! -- initialize output arrays
     ebu_in         = 0._kind_phys
     ivgtyp         = 0._kind_phys
@@ -384,9 +385,8 @@ contains
    
 
     if (ktau <= 1) then
-     !emis_vol = 0.
+    curr_day = int(julian)
     end if
-
     do j=jts,jte
       jp = j - jts + 1
       do i=its,ite
@@ -473,25 +473,30 @@ contains
          enddo
         enddo
       case (FIRE_OPT_GBBEPx)
+          if (igb == 1) then
+            ii=1
+          else
+            ii=int(julian)-curr_day+1
+          endif
         do j=jts,jte
          do i=its,ite
-          emiss_abu(i,j,p_e_bc)   =fire_GBBEPx(i,1)
-          emiss_abu(i,j,p_e_oc)   =fire_GBBEPx(i,2)
-          emiss_abu(i,j,p_e_pm_25)=fire_GBBEPx(i,3)
-          emiss_abu(i,j,p_e_so2)  =fire_GBBEPx(i,4)
+          emiss_abu(i,j,p_e_bc)   =fire_GBBEPx(i,1,ii)
+          emiss_abu(i,j,p_e_oc)   =fire_GBBEPx(i,2,ii)
+          emiss_abu(i,j,p_e_pm_25)=fire_GBBEPx(i,3,ii)
+          emiss_abu(i,j,p_e_so2)  =fire_GBBEPx(i,4,ii)
          enddo
         enddo
         if(doing_sgs_emis) then
           do j=jts,jte
            do i=its,ite
-             ca_sgs_gbbepx_frp_with_j(i,j) = fire_GBBEPx(i,5)
+             ca_sgs_gbbepx_frp_with_j(i,j) = fire_GBBEPx(i,5,ii)
              plume(i,j,1)            =ca_emis_plume(i)! *0.5 + fire_GBBEPx(i,5)*0.5
            enddo
           enddo
         else
           do j=jts,jte
            do i=its,ite
-             plume(i,j,1)            =fire_GBBEPx(i,5)
+             plume(i,j,1)            =fire_GBBEPx(i,5,ii)
            enddo
           enddo
         endif

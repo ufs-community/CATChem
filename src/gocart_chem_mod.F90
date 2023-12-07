@@ -1,3 +1,4 @@
+!10/2023 Updated by Kate.Zhang@noaa.gov for wet removal
 module gocart_chem_mod
 
   use catchem_constants ,        only : kind_chem
@@ -101,13 +102,13 @@ contains
        chpso4=0.
        chlso2_oh=0.
        chlso2_aq=0.
-          cldf(1,1,1)=0.
-          if(p_qc.gt.1)then
-             if(moist(i,k,j,p_qc).gt.0.)cldf(1,1,1)=1.
-          endif
-          if(p_qi.gt.1)then
-             if(moist(i,k,j,p_qi).gt.0.)cldf(1,1,1)=1.
-          endif
+          cldf(1,1,1)=0. ! wet removal not be done here for SO2 and sulfate
+          !if(p_qc.gt.1)then
+          !   if(moist(i,k,j,p_qc).gt.0.)cldf(1,1,1)=1.
+          !endif
+          !if(p_qi.gt.1)then
+          !   if(moist(i,k,j,p_qi).gt.0.)cldf(1,1,1)=1.
+          !endif
           tc(1,1,1,1)=chem(i,k,j,p_dms)*1.d-6
           tc(1,1,1,2)=chem(i,k,j,p_so2)*1.d-6
           tc(1,1,1,3)=chem(i,k,j,p_sulf)*1.d-6
@@ -171,13 +172,8 @@ endif
        chpso4=0.
        chlso2_oh=0.
        chlso2_aq=0.
-          cldf(1,1,1)=0.
-          if(p_qc.gt.1)then
-             if(moist(i,k,j,p_qc).gt.0.)cldf(1,1,1)=1.
-          endif
-          if(p_qi.gt.1)then
-             if(moist(i,k,j,p_qi).gt.0.)cldf(1,1,1)=1.
-          endif
+          cldf(1,1,1)=0. ! wet removal not be done here for SO2 and sulfate
+
           tc(1,1,1,1)=chem(i,k,j,p_dms)*1.d-6
           tc(1,1,1,2)=chem(i,k,j,p_so2)*1.d-6
           tc(1,1,1,3)=chem(i,k,j,p_sulf)*1.d-6

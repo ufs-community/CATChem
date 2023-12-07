@@ -53,6 +53,27 @@
   type = real
   kind = kind_phys
   intent = in
+[imp_physics]
+  standard_name = control_for_microphysics_scheme
+  long_name = choice of microphysics scheme
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = in
+[imp_physics_gfdl]
+  standard_name = identifier_for_gfdl_microphysics_scheme
+  long_name = choice of GFDL microphysics scheme
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = in
+[imp_physics_thompson]
+  standard_name = identifier_for_thompson_microphysics_scheme
+  long_name = choice of Thompson microphysics scheme
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = in
 [rain_cplchm]
   standard_name = lwe_thickness_of_precipitation_amount_for_chemcoupling
   long_name = total rain precipitation chem

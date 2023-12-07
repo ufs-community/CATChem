@@ -1,4 +1,5 @@
- module opt_gocart_mod
+!! 04/2023, Implemented aero_opt_new by Kate.Zhang@noaa.gov 
+module opt_gocart_mod
 
  use catchem_constants ,        only : kind_chem
  implicit none
@@ -8739,6 +8740,10 @@
 
  end subroutine aero_opt
 !-----------------------------------
+! Implemented aero_opt_new, the same calcualtion and and NASA2G lookup table  as GFSv17 for online AOD
+! calcuation by Kate.Zhang@noaa.gov, need to turn on the option in namelist to
+! get it working.
+
        subroutine aero_opt_new                                    &
 !...................................
 

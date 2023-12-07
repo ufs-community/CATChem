@@ -1,6 +1,7 @@
 !>\file catchem_dust_wrapper.F90
 !! This file is GSDChem dsut wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 05/2020
+!! Kate.Zhang@noaa.gov 04/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -46,6 +47,7 @@ contains
 !>\section catchem_dust_wrapper CATChem Scheme General Algorithm
 !> @{
     subroutine catchem_dust_wrapper_run(im, kte, kme, ktau, dt, garea, land,   &
+                   jdate,lakefrac, sncovr,                                      &                                               
                    u10m, v10m, ustar, rlat, rlon, tskin, hf2d, pb2d,            &
                    pr3d, ph3d,phl3d, prl3d, tk3d, us3d, vs3d, spechum,          &
                    nsoil, smc, vegtype, soiltyp, sigmaf, dswsfc, zorl,snow_cplchm, &
@@ -60,7 +62,7 @@ contains
 
 
     integer,        intent(in) :: im,kte,kme,ktau,nsoil
-    integer,        intent(in) :: nseasalt,ntrac
+    integer,        intent(in) :: nseasalt,ntrac,jdate(8)
     integer,        intent(in) :: ntdust1,ntdust2,ntdust3,ntdust4,ntdust5,ndust
     real(kind_phys),intent(in) :: dt, emis_amp_dust, pert_scale_dust
 
@@ -73,10 +75,10 @@ contains
 
     integer, dimension(im), intent(in) :: land, vegtype, soiltyp        
     real(kind_phys), dimension(im,nsoil), intent(in) :: smc
-    real(kind_phys), dimension(im,    5), intent(in) :: dust_in
+    real(kind_phys), dimension(im, 12, 5), intent(in) :: dust_in
     real(kind_phys), dimension(im,   10), intent(in) :: emi_in
     real(kind_phys), dimension(im), intent(in) :: u10m, v10m, ustar,              &
-                garea, rlat,rlon, tskin,                      &
+                lakefrac, sncovr, garea, rlat,rlon, tskin,                      &
                 hf2d, pb2d, sigmaf, dswsfc, zorl, snow_cplchm 
     real(kind_phys), dimension(im,kme), intent(in) :: ph3d, pr3d
     real(kind_phys), dimension(im,kte), intent(in) :: phl3d, prl3d, tk3d,        &
@@ -92,7 +94,7 @@ contains
                      p_phy, z_at_w, dz8w, p8w, t8w, rho_phy
 
     real(kind_phys), dimension(ims:im, jms:jme) :: u10, v10, ust, tsk,            &
-                     xland, xlat, xlong, dxy, rcav, rnav, hfx, pbl
+                     xland, xlat, xlong,flake,fsnow, dxy, rcav, rnav, hfx, pbl
 
 !>- vapor & chemistry variables
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
@@ -101,10 +103,10 @@ contains
     integer :: ide, ime, ite, kde
 
 !>- dust & chemistry variables
-    real(kind_phys), dimension(ims:im, jms:jme, 3) ::    erod ! read from input
+    real(kind_phys), dimension(ims:im, jms:jme, 1:3) ::    erod ! read from input
     real(kind_phys), dimension(ims:im, jms:jme) :: ssm, rdrag, uthr, snowh  ! fengsha dust
     real(kind_phys), dimension(ims:im, jms:jme) :: vegfrac, rmol, gsw, znt, clayf, sandf
-    real(kind_phys), dimension(ims:im, nsoil, jms:jme) :: smois
+    real(kind_phys), dimension(ims:im, 1:nsoil, jms:jme) :: smois
     real(kind_phys), dimension(ims:im, 1:1, jms:jme, 1:num_emis_dust) :: emis_dust
     real(kind_phys), dimension(ims:im, 1:1, jms:jme, 1:5)             :: srce_dust
     real(kind_phys), dimension(ims:im, jms:jme) :: dusthelp
@@ -134,6 +136,7 @@ contains
 
     ! -- initialize dust emissions
     emis_dust = 0._kind_phys
+    current_month=jdate(2)      ! needed for the dust input data
 
     ! -- set domain
     ide=im 
@@ -161,12 +164,12 @@ contains
 
 !>- get ready for chemistry run
     call catchem_prep_dust(                                             &
-        ktau,dtstep,                                                     &
-        u10m,v10m,ustar,land,garea,rlat,rlon,tskin,                      &
+        ktau,dtstep,current_month,                                       &
+        u10m,v10m,ustar,land,lakefrac,sncovr,garea,rlat,rlon,tskin,      &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,                    &
         nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,                    &
         snow_cplchm,dust_in,emi_in,                                      &
-        hf2d,pb2d,u10,v10,ust,tsk,xland,xlat,xlong,dxy,                  &
+        hf2d,pb2d,u10,v10,ust,tsk,xland,xlat,xlong,flake,fsnow,dxy,      &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,t8w,z_at_w,         &
         ntdust1,ntdust2,ntdust3,ntdust4,ntdust5,                         &
         ntrac,gq0,num_chem, num_moist,ppm2ugkg,moist,chem,               &
@@ -179,8 +182,6 @@ contains
 
     !-- compute dust
     !store_arrays = .false.
-    dusthelp(:,:) = 0.
-
     select case (dust_opt)
       case (DUST_OPT_AFWA)
         dust_alpha = dust_alpha_in 
@@ -213,9 +214,10 @@ contains
               ! -- GOCART afwa dust scheme
               call gocart_dust_fengsha_driver(dt,&
                 chem(i,kts,j,:),rho_phy(i,kts,j), &
-                dz8w(i,kts,j),smois(i,:,j), &
-                delp,ssm(i,j),isltyp(i,j),vegfrac(i,j),&
-                snowh(i,j),dxy(i,j),emis_dust(i,1,j,:), &
+                smois(i,:,j),delp,ssm(i,j),       &
+                isltyp(i,j),vegfrac(i,j),&
+                snowh(i,j),xland(i,j),flake(i,j),fsnow(i,j),&
+                dxy(i,j),emis_dust(i,1,j,:), &
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j), &
                 rdrag(i,j),uthr(i,j),nsoil,random_factor(i,j))
               !store_arrays = .true.
@@ -292,29 +294,23 @@ contains
 !> @}
 
    subroutine catchem_prep_dust(                                      &
-        ktau,dtstep,                     &
-        u10m,v10m,ustar,land,garea,rlat,rlon,ts2d,                     &
-        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,                &
+        ktau,dtstep,current_month,                                     &
+        u10m,v10m,ustar,land,lakefrac,sncovr,garea,rlat,rlon,ts2d,     &
+        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,                  &
         nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,                  &
-        snow_cplchm,dust_in,emi_in,                               &
-        hf2d,pb2d,                              &
-        u10,v10,ust,tsk,xland,xlat,xlong,dxy,                          &
-        rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                  &
-        t8w,                                              &
-        z_at_w,                                              &
-        ntdust1,ntdust2,ntdust3,ntdust4,ntdust5,               &
-        ntrac,gq0,                                                     &
-        num_chem, num_moist,                                &
-        ppm2ugkg,                                             &
-        moist,chem,                                   &
+        snow_cplchm,dust_in,emi_in,hf2d,pb2d,                          &
+        u10,v10,ust,tsk,xland,xlat,xlong,flake,fsnow,dxy,              &
+        rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,t8w,              &
+        z_at_w, ntdust1,ntdust2,ntdust3,ntdust4,ntdust5,ntrac,gq0,     &
+        num_chem, num_moist,ppm2ugkg,moist,chem,                       &
         smois,ivgtyp,isltyp,vegfrac,rmol,gsw,znt,hfx,pbl,              &
-        snowh,clayf,rdrag,sandf,ssm,uthr,erod,            &
+        snowh,clayf,rdrag,sandf,ssm,uthr,erod,                         &
         ids,ide, jds,jde, kds,kde,                                     &
         ims,ime, jms,jme, kms,kme,                                     &
         its,ite, jts,jte, kts,kte)
 
     !Chem input configuration
-    integer, intent(in) :: ktau
+    integer, intent(in) :: ktau,current_month
     real(kind=kind_phys), intent(in) :: dtstep
 
     !FV3 input variables
@@ -322,11 +318,11 @@ contains
     integer, dimension(ims:ime), intent(in) :: land, vegtype, soiltyp
     integer, intent(in) :: ntrac
     integer, intent(in) :: ntdust1,ntdust2,ntdust3,ntdust4,ntdust5
-    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                & 
-         u10m, v10m, ustar, garea, rlat, rlon, ts2d, sigmaf, dswsfc,       &
+    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                 & 
+         u10m, v10m, ustar, lakefrac,sncovr,garea, rlat, rlon, ts2d, sigmaf, dswsfc,       &
          zorl, snow_cplchm, hf2d, pb2d
     real(kind=kind_phys), dimension(ims:ime, nsoil),   intent(in) :: smc 
-    real(kind=kind_phys), dimension(ims:ime,     5),   intent(in) :: dust_in
+    real(kind=kind_phys), dimension(ims:ime, 12,  5),   intent(in) :: dust_in
     real(kind=kind_phys), dimension(ims:ime,    10),   intent(in) :: emi_in
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) ::     &
          pr3d,ph3d
@@ -345,17 +341,17 @@ contains
 
     
     integer,dimension(ims:ime, jms:jme), intent(out) :: isltyp, ivgtyp
-    real(kind_phys), dimension(ims:ime, jms:jme, 3), intent(inout) :: erod
+    real(kind_phys), dimension(ims:ime, jms:jme, 1:3), intent(inout) :: erod
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
          rri, t_phy, u_phy, v_phy, p_phy, rho_phy, dz8w, p8w, t8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          u10, v10, ust, tsk, xland, xlat, xlong, dxy, vegfrac, rmol, gsw, znt, hfx,    &
-         pbl, snowh, clayf, rdrag, sandf, ssm, uthr
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
+         pbl, snowh, clayf, rdrag, sandf, ssm, uthr, flake, fsnow
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, 1:num_moist), intent(out) :: moist
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, 1:num_chem),  intent(out) :: chem
 
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) :: z_at_w
-    real(kind_phys), dimension(ims:ime, nsoil, jms:jme), intent(out) :: smois
+    real(kind_phys), dimension(ims:ime, 1:nsoil, jms:jme), intent(out) :: smois
 
     ! -- local variables
 !   real(kind=kind_phys), dimension(ims:ime, kms:kme, jms:jme) :: p_phy
@@ -382,6 +378,8 @@ contains
     xland          = 0._kind_phys
     xlat           = 0._kind_phys
     xlong          = 0._kind_phys
+    flake          = 0._kind_phys
+    fsnow          = 0._kind_phys
     dxy            = 0._kind_phys
     vegfrac        = 0._kind_phys
     rmol           = 0._kind_phys
@@ -405,6 +403,8 @@ contains
      v10  (i,1)=v10m (i)
      tsk  (i,1)=ts2d (i)
      ust  (i,1)=ustar(i)
+     flake(i,1)=lakefrac(i)
+     fsnow(i,1)=sncovr(i)
      dxy  (i,1)=garea(i)
      xland(i,1)=real(land(i))
      xlat (i,1)=rlat(i)*180./pi
@@ -414,11 +414,11 @@ contains
      hfx  (i,1)=hf2d(i)
      pbl  (i,1)=pb2d(i)
      snowh(i,1)=snow_cplchm(i)*0.001
-     clayf(i,1)=dust_in(i,1)
-     rdrag(i,1)=dust_in(i,2)
-     sandf(i,1)=dust_in(i,3)
-     ssm  (i,1)=dust_in(i,4)
-     uthr (i,1)=dust_in(i,5)
+     clayf(i,1)=dust_in(i,current_month,1)
+     rdrag(i,1)=dust_in(i,current_month,2)
+     sandf(i,1)=dust_in(i,current_month,3)
+     ssm  (i,1)=dust_in(i,current_month,4)
+     uthr (i,1)=dust_in(i,current_month,5)
      ivgtyp (i,1)=vegtype(i)
      isltyp (i,1)=soiltyp(i)
      vegfrac(i,1)=sigmaf (i)

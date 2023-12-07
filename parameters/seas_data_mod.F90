@@ -18,9 +18,4 @@ module seas_data_mod
   ! -- particle effective radius (m)
   real(kind=kind_chem), dimension(number_ss_bins), parameter :: reff_seas = (/ 0.079e-6, 0.316e-6, 1.119e-6, 2.818e-6, 7.772e-6 /)
 
-  ! -- NGAC parameters
-  integer, parameter :: emission_scheme = 3    ! GEOSS 2012
-  real(kind=kind_chem), parameter    :: r80fac = 1.65     ! ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
-  real(kind=kind_chem), parameter    :: rhop = 2200.      ! dry seasalt density [kg m-3]
-
 end module seas_data_mod

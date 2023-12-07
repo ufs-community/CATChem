@@ -1,9 +1,9 @@
 !
-! Haiqin.Li@noaa.gov  
-! 01/2020
+! Haiqin.Li@noaa.gov  01/2020
 ! constant parameters and chemistry configurations and tracers
 ! (This will be splited into three subroutine for configuration, constant and tracers later)
 ! 08/2020 move configuration into chem nml
+! Kate.Zhang@noaa.gov, 02/2023
 ! Jian.He@noaa.gov, 05/2023
 ! Move to parameters folder for CATChem
 
@@ -78,6 +78,8 @@ module catchem_config
   ! -- FV3 GFDL microphysics
   integer, parameter :: p_atm_shum = 1
   integer, parameter :: p_atm_cldq = 2
+  integer, parameter :: p_atm_cldi = 3
+  integer, parameter :: p_atm_cldii = 4
   integer, parameter :: p_atm_o3mr = 7
 
   integer :: numgas = 0
