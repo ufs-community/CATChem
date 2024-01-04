@@ -6,6 +6,8 @@ labels: bug
 assignees: ''
 
 ---
+<!-- HTML comments like this don't show up and needn't be deleted.
+     Feel free to remove unused sections. -->
 
 **Describe the bug**
 A clear and concise description of what the bug is.
