@@ -13,7 +13,7 @@
 
     Note that these HTML comments don't show up, so needn't be deleted.
 -->
-# Description
+## Description
 <!-- This description will become the commit message for the PR-->
 <!-- Please use this format for your description:
 
@@ -28,17 +28,17 @@
   Refs NOAA-EMC/repo#5678
 -->
 
-# Type of change
+## Type of change
 <!-- Delete all except one -->
 - Bug fix (fixes something broken)
 - New feature (adds functionality)
 - Maintenance (code refactor, clean-up, new CI test, etc.)
 
-# Change characteristics
+## Change characteristics
 - Is this a breaking change (a change in existing functionality)? YES/NO
 - Does this change require a documentation update? YES/NO
 
-# How has this been tested?
+## How has this been tested?
 <!-- Please list any test you conducted, including the machine.
 
 Example:
@@ -47,7 +47,7 @@ Example:
 - Forecast-only on Hera
 -->
 
-# Checklist
+## Checklist
 - [ ] Any dependent changes have been merged and published
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
