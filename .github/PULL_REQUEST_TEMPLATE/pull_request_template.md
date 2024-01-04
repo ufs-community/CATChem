@@ -17,9 +17,11 @@
 <!-- This description will become the commit message for the PR-->
 <!-- Please use this format for your description:
 
-  Describe your changes. Focus on the *what* and *why*. The *how* will be evident from the changes. In particular, be sure to note any interface changes, such as command line syntax, that will need to be communicated to users.
+  Describe your changes. Focus on the *what* and *why*. The *how* will be evident from the changes.
+  In particular, be sure to note any interface changes, such as command line syntax, that will need to be communicated to users.
 
-  At the end of your description, please be sure to add the issue this PR solves using the word "Resolves". If there are any issues that are related but not yet resolved (including in other repos), you may use "Refs".
+  At the end of your description, please be sure to add the issue this PR solves using the word "Resolves".
+  If there are any issues that are related but not yet resolved (including in other repos), you may use "Refs".
 
   Resolves #1234
   Refs #4321
