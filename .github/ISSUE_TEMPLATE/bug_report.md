@@ -27,5 +27,5 @@ Steps to reproduce the behavior:
 - [] WCOSS2
 - [] Other
 
-**Additional context**
-Add any other context about the problem here.
+### Additional context
+<!-- Add any other context about the problem here. -->
