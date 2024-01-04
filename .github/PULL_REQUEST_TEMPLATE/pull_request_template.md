@@ -9,7 +9,7 @@
     - No temporary or backup files should be committed (including logs).
     - Any code that you disabled by being commented out should be removed or reenabled.
 
-    Please delete all these comments before submitting the PR.
+    Note that these HTML comments don't show up, so needn't be deleted.
 -->
 # Description
 <!-- This description will become the commit message for the PR-->
