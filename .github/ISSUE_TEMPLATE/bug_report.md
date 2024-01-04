@@ -22,12 +22,12 @@ Steps to reproduce the behavior:
 <!-- If applicable, add screenshots to help explain your problem. -->
 
 ### Machine
-- [] Hera
-- [] Orion
-- [] Hercules
-- [] Jet
-- [] WCOSS2
-- [] Other
+- [ ] Hera
+- [ ] Orion
+- [ ] Hercules
+- [ ] Jet
+- [ ] WCOSS2
+- [ ] Other
 
 ### Additional context
 <!-- Add any other context about the problem here. -->
