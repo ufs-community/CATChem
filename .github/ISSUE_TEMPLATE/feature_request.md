@@ -6,6 +6,8 @@ labels: enhancement
 assignees: ''
 
 ---
+<!-- HTML comments like this don't show up and needn't be deleted.
+     Feel free to remove unused sections. -->
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
