@@ -6,7 +6,8 @@
 # Possible non-default docs build dir
 docs/_build/
 
-
+# Fortran
+*.mod
 
 # GitHub default gitignore for Python below:
 
