@@ -3,76 +3,76 @@
 
 module drydep_gocart_mod
 
-  use catchem_constants ,        only : kind_chem, g => con_g
-  use catchem_config,            only : num_chem
+   use catchem_constants ,        only : kind_chem, g => con_g
+   use catchem_config,            only : num_chem
 
-  implicit none
+   implicit none
 
-  private
+   private
 
-  public :: gocart_drydep_driver
+   public :: gocart_drydep_driver
 
 CONTAINS
 
-subroutine gocart_drydep_driver(               &
-  p8w,rho_phy,dz8w,ddvel,xland,hfx,      &
-  ivgtyp,tsk,pbl,ust,znt)
+   subroutine gocart_drydep_driver(               &
+      p8w,rho_phy,dz8w,ddvel,xland,hfx,      &
+      ivgtyp,tsk,pbl,ust,znt)
 
-  IMPLICIT NONE
+      IMPLICIT NONE
 
-  REAL(kind_chem),    INTENT(IN   ) :: dz8w, p8w,rho_phy
-  REAL(kind_chem),    DIMENSION( num_chem ), &
-           INTENT(INOUT) :: ddvel
-  REAL(kind_chem),    INTENT(INOUT) :: tsk, pbl,ust,xland,znt,hfx
-  INTEGER, INTENT(IN   ) :: ivgtyp
+      REAL(kind_chem),    INTENT(IN   ) :: dz8w, p8w,rho_phy
+      REAL(kind_chem),    DIMENSION( num_chem ), &
+         INTENT(INOUT) :: ddvel
+      REAL(kind_chem),    INTENT(INOUT) :: tsk, pbl,ust,xland,znt,hfx
+      INTEGER, INTENT(IN   ) :: ivgtyp
 
 !! .. Local Scalars ..
 
-  INTEGER :: iland, iprt, iseason, jce, jcs,  &
-             n, nr, ipr, jpr, nvr,            &
-             idrydep_onoff,imx,jmx,lmx
-  integer :: ii,jj,kk,i,j,k,nv
-  integer,            dimension (1,1) :: ilwi
-  real(kind_chem), DIMENSION (5)   :: tc,bems
-  real(kind_chem), dimension (1,1) :: z0,w10m,gwet,airden,airmas,&
-                                         delz_sfc,hflux,ts,pblz,ustar,&
-                                         ps,dvel,drydf
+      INTEGER :: iland, iprt, iseason, jce, jcs,  &
+         n, nr, ipr, jpr, nvr,            &
+         idrydep_onoff,imx,jmx,lmx
+      integer :: ii,jj,kk,i,j,k,nv
+      integer,            dimension (1,1) :: ilwi
+      real(kind_chem), DIMENSION (5)   :: tc,bems
+      real(kind_chem), dimension (1,1) :: z0,w10m,gwet,airden,airmas,&
+         delz_sfc,hflux,ts,pblz,ustar,&
+         ps,dvel,drydf
 
-  imx=1
-  jmx=1
-  lmx=1
-  
+      imx=1
+      jmx=1
+      lmx=1
 
-  dvel(1,1)=0.
-  ilwi(1,1)=0
-  if(xland.gt.1.5)ilwi=1
+
+      dvel(1,1)=0.
+      ilwi(1,1)=0
+      if(xland.gt.1.5)ilwi=1
 ! for aerosols, ii=1 or ii=2
-  ii=1
-  if(ivgtyp.eq.19.or.ivgtyp.eq.23)ii=1
-  airden(1,1)=rho_phy
-  delz_sfc(1,1)=dz8w
-  ustar(1,1)=ust
-  hflux(1,1)=hfx
-  pblz(1,1)=pbl
-  ps(1,1)=p8w*.01
-  z0(1,1)=znt
-  ts(1,1)=tsk
+      ii=1
+      if(ivgtyp.eq.19.or.ivgtyp.eq.23)ii=1
+      airden(1,1)=rho_phy
+      delz_sfc(1,1)=dz8w
+      ustar(1,1)=ust
+      hflux(1,1)=hfx
+      pblz(1,1)=pbl
+      ps(1,1)=p8w*.01
+      z0(1,1)=znt
+      ts(1,1)=tsk
 
-  call depvel_gocart(ii,imx,jmx,lmx,&
-     airden, delz_sfc, pblz, ts, ustar, hflux, ilwi, &
-     ps, z0, dvel, drydf,g)
-  do nv=1,num_chem
-    ddvel(nv)=dvel(1,1)
-  enddo
+      call depvel_gocart(ii,imx,jmx,lmx,&
+         airden, delz_sfc, pblz, ts, ustar, hflux, ilwi, &
+         ps, z0, dvel, drydf,g)
+      do nv=1,num_chem
+         ddvel(nv)=dvel(1,1)
+      enddo
 
-end subroutine gocart_drydep_driver
+   end subroutine gocart_drydep_driver
 
 
 
-SUBROUTINE depvel_gocart(      &
-     ii,imx,jmx,lmx,&
-     airden, delz_sfc, pblz, ts, ustar, hflux, ilwi, &
-     ps, z0, dvel, drydf,g0)
+   SUBROUTINE depvel_gocart(      &
+      ii,imx,jmx,lmx,&
+      airden, delz_sfc, pblz, ts, ustar, hflux, ilwi, &
+      ps, z0, dvel, drydf,g0)
 
 ! ****************************************************************************
 ! *                                                                          *
@@ -92,7 +92,7 @@ SUBROUTINE depvel_gocart(      &
 ! *  Determined in this subroutine (local):                                  *
 ! *    OBK             - Monin-Obukhov length (m): set to 1.E5 m under       *
 ! *                      neutral conditions                                  *
-! *    Rs(ldt)         - Bulk surface resistance(s m-1) for species k to     * 
+! *    Rs(ldt)         - Bulk surface resistance(s m-1) for species k to     *
 ! *                      surface ldt                                         *
 ! *    Ra              - Aerodynamic resistance.                             *
 ! *    Rb              - Sublayer resistance.                                *
@@ -105,40 +105,40 @@ SUBROUTINE depvel_gocart(      &
 ! *    DRYDf(i,j,k)    - Deposition frequency (s-1) of species k,            *
 ! *                    = DVEL / DELZ_SFC                                     *
 ! *                                                                          *
-! **************************************************************************** 
+! ****************************************************************************
 
 
-  IMPLICIT NONE
+      IMPLICIT NONE
 
-  INTEGER, INTENT(IN)  :: imx,jmx,lmx
-  REAL(kind_chem),    INTENT(IN)  :: airden(imx,jmx), delz_sfc(imx,jmx)
-  REAL(kind_chem),    INTENT(IN)  :: hflux(imx,jmx), ts(imx,jmx)
-  REAL(kind_chem),    INTENT(IN)  :: ustar(imx,jmx), pblz(imx,jmx)
-  REAL(kind_chem),    INTENT(IN)  :: ps(imx,jmx)
-  INTEGER, INTENT(IN)  :: ilwi(imx,jmx)
-  REAL(kind_chem),    INTENT(IN)  :: z0(imx,jmx)
-  REAL(kind_chem),    INTENT(IN)  :: g0
-  REAL(kind_chem),    INTENT(OUT) :: dvel(imx,jmx), drydf(imx,jmx)
-  
-  REAL(kind_chem)    :: obk, vds, czh, rttl, frac, logmfrac, psi_h, cz, eps
-  REAL(kind_chem)    :: vd, ra, rb, rs  
-  INTEGER :: i, j, k, ldt, iolson, ii
-  CHARACTER(LEN=50) :: msg
-  REAL(kind_chem)     :: prss, tempk, tempc, xnu, ckustr, reyno, aird, diam, xm, z
-  REAL(kind_chem)     :: frpath, speed, dg, dw, rt
-  REAL(kind_chem)     :: rad0, rix, gfact, gfaci, rdc, rixx, rluxx, rgsx, rclx
-  REAL(kind_chem)     :: dtmp1, dtmp2, dtmp3, dtmp4
-  REAL(kind_chem)     :: biofit,vk
+      INTEGER, INTENT(IN)  :: imx,jmx,lmx
+      REAL(kind_chem),    INTENT(IN)  :: airden(imx,jmx), delz_sfc(imx,jmx)
+      REAL(kind_chem),    INTENT(IN)  :: hflux(imx,jmx), ts(imx,jmx)
+      REAL(kind_chem),    INTENT(IN)  :: ustar(imx,jmx), pblz(imx,jmx)
+      REAL(kind_chem),    INTENT(IN)  :: ps(imx,jmx)
+      INTEGER, INTENT(IN)  :: ilwi(imx,jmx)
+      REAL(kind_chem),    INTENT(IN)  :: z0(imx,jmx)
+      REAL(kind_chem),    INTENT(IN)  :: g0
+      REAL(kind_chem),    INTENT(OUT) :: dvel(imx,jmx), drydf(imx,jmx)
 
-   psi_h=0.0
-  ! executable statements
-  j_loop: DO j = 1,jmx               
-     i_loop: DO i = 1,imx            
-        vk=.4                                     
-        vd    = 0.0
-        ra    = 0.0
-        rb    = 0.0 ! only required for gases (SO2)
-        rs = 0.0
+      REAL(kind_chem)    :: obk, vds, czh, rttl, frac, logmfrac, psi_h, cz, eps
+      REAL(kind_chem)    :: vd, ra, rb, rs
+      INTEGER :: i, j, k, ldt, iolson, ii
+      CHARACTER(LEN=50) :: msg
+      REAL(kind_chem)     :: prss, tempk, tempc, xnu, ckustr, reyno, aird, diam, xm, z
+      REAL(kind_chem)     :: frpath, speed, dg, dw, rt
+      REAL(kind_chem)     :: rad0, rix, gfact, gfaci, rdc, rixx, rluxx, rgsx, rclx
+      REAL(kind_chem)     :: dtmp1, dtmp2, dtmp3, dtmp4
+      REAL(kind_chem)     :: biofit,vk
+
+      psi_h=0.0
+      ! executable statements
+      j_loop: DO j = 1,jmx
+         i_loop: DO i = 1,imx
+            vk=.4
+            vd    = 0.0
+            ra    = 0.0
+            rb    = 0.0 ! only required for gases (SO2)
+            rs = 0.0
 
 ! ****************************************************************************
 ! *  Compute the the Monin-Obhukov length.                                   *
@@ -152,19 +152,19 @@ SUBROUTINE depvel_gocart(      &
 ! *    vK = 0.4            = von Karman's constant                           *
 ! ****************************************************************************
 
-        IF (hflux(i,j) == 0.0) THEN
-           obk = 1.0E5
-        ELSE
-           ! MINVAL(hflux), MINVAL(airden), MINVAL(ustar) =??
-           obk = -airden(i,j) * 1000.0 * ts(i,j) * (ustar(i,j))**3 &
-                / (vk * g0 * hflux(i,j)) 
+            IF (hflux(i,j) == 0.0) THEN
+               obk = 1.0E5
+            ELSE
+               ! MINVAL(hflux), MINVAL(airden), MINVAL(ustar) =??
+               obk = -airden(i,j) * 1000.0 * ts(i,j) * (ustar(i,j))**3 &
+                  / (vk * g0 * hflux(i,j))
 ! -- debug:
-           IF ( obk == 0.0 ) WRITE(*,211) obk, i, j
-211        FORMAT(1X,'OBK=', E11.2, 1X,' i,j = ', 2I4)
-           
-        END IF
+               IF ( obk == 0.0 ) WRITE(*,211) obk, i, j
+211            FORMAT(1X,'OBK=', E11.2, 1X,' i,j = ', 2I4)
 
-        cz = delz_sfc(i,j) / 2.0 ! center of the grid box above surface
+            END IF
+
+            cz = delz_sfc(i,j) / 2.0 ! center of the grid box above surface
 
 ! ****************************************************************************
 ! *  (1) Aerosodynamic resistance Ra and sublayer resistance Rb.             *
@@ -207,40 +207,40 @@ SUBROUTINE depvel_gocart(      &
 ! *                                                                          *
 ! ****************************************************************************
 
-        frac = cz / obk
-        IF (frac > 1.0) frac = 1.0
-        IF (frac > 0.0 .AND. frac <= 1.0) THEN 
-           psi_h = -5.0*frac
-        ELSE IF (frac < 0.0) THEN
-           eps = MIN(1.0D0, -frac)
-           logmfrac = LOG(eps)
-           psi_h = EXP( 0.598 + 0.39 * logmfrac - 0.09 * (logmfrac)**2 )
-        END IF
-           !--------------------------------------------------------------
-           !  Aerosol species, Rs here is the combination of Rb and Rs.
+            frac = cz / obk
+            IF (frac > 1.0) frac = 1.0
+            IF (frac > 0.0 .AND. frac <= 1.0) THEN
+               psi_h = -5.0*frac
+            ELSE IF (frac < 0.0) THEN
+               eps = MIN(1.0D0, -frac)
+               logmfrac = LOG(eps)
+               psi_h = EXP( 0.598 + 0.39 * logmfrac - 0.09 * (logmfrac)**2 )
+            END IF
+            !--------------------------------------------------------------
+            !  Aerosol species, Rs here is the combination of Rb and Rs.
 
-              ra = (LOG(cz/z0(i,j)) - psi_h) / (vk*ustar(i,j))
+            ra = (LOG(cz/z0(i,j)) - psi_h) / (vk*ustar(i,j))
 
-           vds = 0.002*ustar(i,j)
-           IF (obk < 0.0) &
-                vds = vds * (1.0+(-300.0/obk)**0.6667)
+            vds = 0.002*ustar(i,j)
+            IF (obk < 0.0) &
+               vds = vds * (1.0+(-300.0/obk)**0.6667)
 
-           czh  = pblz(i,j)/obk
-           IF (czh < -30.0) vds = 0.0009*ustar(i,j)*(-czh)**0.6667
+            czh  = pblz(i,j)/obk
+            IF (czh < -30.0) vds = 0.0009*ustar(i,j)*(-czh)**0.6667
 
-           ! --Set Vds to be less than VDSMAX (entry in input file divided --
-           !   by 1.E4). VDSMAX is taken from Table 2 of Walcek et al. [1986].
-           !   Invert to get corresponding R
-           if(ii.eq.1)then
-              rs=1.0/MIN(vds,2.0D-2)
-           else
-              rs=1.0/MIN(vds,2.0D-3)
-           endif
-           
+            ! --Set Vds to be less than VDSMAX (entry in input file divided --
+            !   by 1.E4). VDSMAX is taken from Table 2 of Walcek et al. [1986].
+            !   Invert to get corresponding R
+            if(ii.eq.1)then
+               rs=1.0/MIN(vds,2.0D-2)
+            else
+               rs=1.0/MIN(vds,2.0D-3)
+            endif
 
-        ! ------ Set max and min values for bulk surface resistances ------
 
-           rs= MAX(1.0D0, MIN(rs, 9.9990D+3))
+            ! ------ Set max and min values for bulk surface resistances ------
+
+            rs= MAX(1.0D0, MIN(rs, 9.9990D+3))
 
 ! ****************************************************************************
 ! *                                                                          *
@@ -255,23 +255,23 @@ SUBROUTINE depvel_gocart(      &
 ! *                                                                          *
 ! ****************************************************************************
 
-           rttl = ra + rb + rs
-           vd   = vd + 1./rttl
+            rttl = ra + rb + rs
+            vd   = vd + 1./rttl
 
-        ! ------ Load array DVEL ------
-           dvel(i,j) = vd * 1.2
+            ! ------ Load array DVEL ------
+            dvel(i,j) = vd * 1.2
 
-        ! -- Set a minimum value for DVEL
-        !    MIN(VdSO2)      = 2.0e-3 m/s  over ice
-        !                    = 3.0e-3 m/s  over land
-        !    MIN(vd_aerosol) = 1.0e-4 m/s
+            ! -- Set a minimum value for DVEL
+            !    MIN(VdSO2)      = 2.0e-3 m/s  over ice
+            !                    = 3.0e-3 m/s  over land
+            !    MIN(vd_aerosol) = 1.0e-4 m/s
 
-           IF (dvel(i,j) < 1.0E-4) dvel(i,j) = 1.0E-4
-        drydf(i,j) = dvel(i,j) / delz_sfc(i,j)
+            IF (dvel(i,j) < 1.0E-4) dvel(i,j) = 1.0E-4
+            drydf(i,j) = dvel(i,j) / delz_sfc(i,j)
 
-     END DO i_loop
-  END DO j_loop
+         END DO i_loop
+      END DO j_loop
 
-END SUBROUTINE depvel_gocart
+   END SUBROUTINE depvel_gocart
 
 end module drydep_gocart_mod

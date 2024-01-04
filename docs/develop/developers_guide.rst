@@ -18,11 +18,11 @@ when cloning the repository.
 .. _dev-install-instructions:
 
 How to incorporate updates to CATChem
---------------------------------------------
+-------------------------------------
 
 In order to contribute code to CATChem, you will need to fork the
 repository, make changes on your fork, and submit a pull request with your
-changes. 
+changes.
 
 (a) Fork the GitHub repository to your own GitHub account
     using the "Fork" button near the top right:
@@ -53,11 +53,11 @@ changes.
 (d) Make changes to your fork.
 
 (e) Submit a pull request back to the main CATChem repository with your
-    changes. 
-	
+    changes.
+
 (f) Select two code reviewers (see list under development team section).
 
-(g) Once those two reviewers approve the code, it can be merged into the develop branch. 
+(g) Once those two reviewers approve the code, it can be merged into the develop branch.
 
 .. _clone-notes:
 .. [#clone] Note that in order to do an SSH clone,
@@ -75,3 +75,30 @@ changes.
 
        $ git clone https://github.com/ufs-community/CATChem.git
 
+
+pre-commit setup
+----------------
+
+We use the `pre-commit <https://pre-commit.com/>`__ tool to run automated checks.
+After `installing pre-commit <https://pre-commit.com/#install>`__,
+e.g. with ``pipx`` or ``conda``,
+run ``pre-commit install`` in the repository to set up the hooks.
+
+
+Build and test
+--------------
+
+To build, first configure::
+
+    cmake -B build
+
+then build::
+
+    cmake --build build
+
+To specify a compiler, you can in the configuration step
+use the ``FC`` shell/environment variable
+or the ``CMAKE_Fortran_COMPILER`` CMake variable::
+
+    cmake -B build -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran-12
+    FC=/usr/bin/gfortran-12 cmake -B build

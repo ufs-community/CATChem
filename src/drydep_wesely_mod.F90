@@ -3,104 +3,104 @@
 
 module drydep_wesely_mod
 
-  use catchem_config, GOCART_SIMPLE => CHEM_OPT_GOCART, chem_opt=>chem_opt
+   use catchem_config, GOCART_SIMPLE => CHEM_OPT_GOCART, chem_opt=>chem_opt
 
-  implicit none
+   implicit none
 
 !--------------------------------------------------
 ! many of these parameters will depend on the RADM mechanism!
 ! if you change it, lets talk about it and get it done!!!
 !--------------------------------------------------
 
-      INTEGER, PARAMETER :: dep_seasons = 5
-      INTEGER, PARAMETER :: nlu = 25
-      REAL, parameter    :: small_value = 1.e-36
-      REAL, parameter    :: large_value = 1.e36
+   INTEGER, PARAMETER :: dep_seasons = 5
+   INTEGER, PARAMETER :: nlu = 25
+   REAL, parameter    :: small_value = 1.e-36
+   REAL, parameter    :: large_value = 1.e36
 
 !--------------------------------------------------
 ! following currently hardwired to USGS
 !--------------------------------------------------
-      integer, parameter :: isice_temp   = 24
-      integer, parameter :: iswater_temp = 16
-      integer, parameter :: wrf2mz_lt_map(nlu) = (/ 1, 2, 2, 2, 2, &
-                                                    4, 3, 3, 3, 3, &
-                                                    4, 5, 4, 5, 6, &
-                                                    7, 9, 6, 8, 9, &
-                                                    6, 6, 8, 0, 0 /)
-      real, parameter    :: wh2o = 18.0153
-      real, parameter    :: wpan = 121.04793
-      real, PARAMETER ::  KARMAN=0.4
-      INTEGER,  parameter :: luse2usgs(21) = (/14,13,12,11,15,8,9,10,10,7, &
-                              17,4,1,5,24,19,16,21,22,23,16 /)
-      character(len=4), parameter :: mminlu = 'USGS'
+   integer, parameter :: isice_temp   = 24
+   integer, parameter :: iswater_temp = 16
+   integer, parameter :: wrf2mz_lt_map(nlu) = (/ 1, 2, 2, 2, 2, &
+      4, 3, 3, 3, 3, &
+      4, 5, 4, 5, 6, &
+      7, 9, 6, 8, 9, &
+      6, 6, 8, 0, 0 /)
+   real, parameter    :: wh2o = 18.0153
+   real, parameter    :: wpan = 121.04793
+   real, PARAMETER ::  KARMAN=0.4
+   INTEGER,  parameter :: luse2usgs(21) = (/14,13,12,11,15,8,9,10,10,7, &
+      17,4,1,5,24,19,16,21,22,23,16 /)
+   character(len=4), parameter :: mminlu = 'USGS'
 
-      INTEGER :: month = 0
-      INTEGER :: ixxxlu(nlu)
-!     include modis landuse 
+   INTEGER :: month = 0
+   INTEGER :: ixxxlu(nlu)
+!     include modis landuse
 !--
 
-      REAL    :: kpart(nlu)
-      REAL    :: rac(nlu,dep_seasons), rclo(nlu,dep_seasons), rcls(nlu,dep_seasons)
-      REAL    :: rgso(nlu,dep_seasons), rgss(nlu,dep_seasons)
-      REAL    :: ri(nlu,dep_seasons), rlu(nlu,dep_seasons)
-      REAL    :: ri_pan(5,11)
-      real    :: c0_pan(11) = (/ 0.000, 0.006, 0.002, 0.009, 0.015, &
-                                 0.006, 0.000, 0.000, 0.000, 0.002, 0.002 /)
-      real    :: k_pan (11) = (/ 0.000, 0.010, 0.005, 0.004, 0.003, &
-                                 0.005, 0.000, 0.000, 0.000, 0.075, 0.002 /)
+   REAL    :: kpart(nlu)
+   REAL    :: rac(nlu,dep_seasons), rclo(nlu,dep_seasons), rcls(nlu,dep_seasons)
+   REAL    :: rgso(nlu,dep_seasons), rgss(nlu,dep_seasons)
+   REAL    :: ri(nlu,dep_seasons), rlu(nlu,dep_seasons)
+   REAL    :: ri_pan(5,11)
+   real    :: c0_pan(11) = (/ 0.000, 0.006, 0.002, 0.009, 0.015, &
+      0.006, 0.000, 0.000, 0.000, 0.002, 0.002 /)
+   real    :: k_pan (11) = (/ 0.000, 0.010, 0.005, 0.004, 0.003, &
+      0.005, 0.000, 0.000, 0.000, 0.075, 0.002 /)
 
 !--------------------------------------------------
 ! NO MORE THAN 1000 SPECIES FOR DEPOSITION
 !--------------------------------------------------
-      REAL    :: dratio(1000), hstar(1000), hstar4(1000)
-      REAL    :: f0(1000), dhr(1000), scpr23(1000)
+   REAL    :: dratio(1000), hstar(1000), hstar4(1000)
+   REAL    :: f0(1000), dhr(1000), scpr23(1000)
 
-      type wesely_pft
-        integer          :: npft
-        integer          :: months
-        INTEGER, pointer :: seasonal_wes(:,:,:,:)
-        logical          :: is_allocated
-      end type wesely_pft
+   type wesely_pft
+      integer          :: npft
+      integer          :: months
+      INTEGER, pointer :: seasonal_wes(:,:,:,:)
+      logical          :: is_allocated
+   end type wesely_pft
 
-      !type(wesely_pft), allocatable :: seasonal_pft(:)
-      type(wesely_pft) :: seasonal_pft
+   !type(wesely_pft), allocatable :: seasonal_pft(:)
+   type(wesely_pft) :: seasonal_pft
 
 !--------------------------------------------------
 ! .. Default Accessibility ..
 !--------------------------------------------------
-    PUBLIC 
+   PUBLIC
 
-    logical, allocatable :: is_aerosol(:) ! true if field is aerosol (any phase)
+   logical, allocatable :: is_aerosol(:) ! true if field is aerosol (any phase)
 
-    CONTAINS
+CONTAINS
 
-SUBROUTINE wesely_driver( current_month, julday, &
-                          t_phy,moist, p8w, raincv,     &
-                          p_phy, ddvel, ivgtyp,tsk, gsw, vegfra,     &
-                          rmol, ust, znt, delz_at_w, snowh        )
+   SUBROUTINE wesely_driver( current_month, julday, &
+      t_phy,moist, p8w, raincv,     &
+      p_phy, ddvel, ivgtyp,tsk, gsw, vegfra,     &
+      rmol, ust, znt, delz_at_w, snowh        )
 !--------------------------------------------------
 !  Wesely dry dposition driver
 !--------------------------------------------------
 
-   INTEGER,      INTENT(IN   ) :: julday, current_month
-   INTEGER,      INTENT(IN   ) :: ivgtyp
+      INTEGER,      INTENT(IN   ) :: julday, current_month
+      INTEGER,      INTENT(IN   ) :: ivgtyp
 
 !--------------------------------------------------
 ! advected moisture variables
 !--------------------------------------------------
-   REAL, DIMENSION( num_moist ), INTENT(IN ) :: &
-                                                      moist  
+      REAL, DIMENSION( num_moist ), INTENT(IN ) :: &
+         moist
 !--------------------------------------------------
 ! deposition velocities
 !--------------------------------------------------
-   REAL, DIMENSION( num_chem ), INTENT(INOUT ) ::      &
-                                                      ddvel                     
+      REAL, DIMENSION( num_chem ), INTENT(INOUT ) ::      &
+         ddvel
 !--------------------------------------------------
 ! input from met model
 !--------------------------------------------------
-   REAL, INTENT(IN   ) :: t_phy,p_phy,p8w,delz_at_w,snowh
-   REAL, INTENT(INOUT   ) :: tsk,gsw,vegfra,rmol,ust, &
-                             raincv,znt
+      REAL, INTENT(IN   ) :: t_phy,p_phy,p8w,delz_at_w,snowh
+      REAL, INTENT(INOUT   ) :: tsk,gsw,vegfra,rmol,ust, &
+         raincv,znt
 !--------------------------------------------------
 ! .. Local Scalars
 !--------------------------------------------------
@@ -118,16 +118,16 @@ SUBROUTINE wesely_driver( current_month, julday, &
       REAL :: aer_res_zcen
 
 !-----------------------------------------------------------
-! necessary for aerosols (module dependent)         
+! necessary for aerosols (module dependent)
 !-----------------------------------------------------------
       real :: rcx(numgas)
 
 !-----------------------------------------------------------
 ! .. Intrinsic Functions
 !-----------------------------------------------------------
-!      integer :: chem_opt 
- 
-      INTRINSIC max, min                             
+!      integer :: chem_opt
+
+      INTRINSIC max, min
 
 !      chem_opt = chem_opt
 
@@ -137,9 +137,9 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !      CALL wrf_debug(15,'in dry_dep_wesely')
 
       if( chem_opt /= MOZART_KPP .and. &
-          chem_opt /= MOZCART_KPP .and. &
-          chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
-          chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP) then
+         chem_opt /= MOZCART_KPP .and. &
+         chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
+         chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP) then
          if( julday < 90 .or. julday > 270 ) then
             iseason = 2
 !            CALL wrf_debug(15,'setting iseason to 2')
@@ -155,23 +155,23 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !--
 
       if( chem_opt == MOZART_KPP .or. &
-          chem_opt == MOZCART_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) then
-         if( snowh  < .01 ) then 
+         chem_opt == MOZCART_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) then
+         if( snowh  < .01 ) then
             !iseason = seasonal_pft%seasonal_wes(i,j,iland,current_month)
             if (current_month.GE.3 .AND. CURRENT_MONTH .LE.5) then
-                iseason=1
+               iseason=1
             else if &
                (current_month.GE.6 .AND. CURRENT_MONTH .LE.8) then
-                iseason=2
-            else if & 
+               iseason=2
+            else if &
                (current_month.GE.9 .AND. CURRENT_MONTH .LE.11) then
                iseason=3
             else
                iseason=4
             endif
-                                  
+
          else
             iseason = 4
          endif
@@ -196,7 +196,7 @@ SUBROUTINE wesely_driver( current_month, julday, &
          endif
       endif
       rhchem = MIN( 100.,100. * moist(p_qv) / &
-               (3.80*exp(17.27*(t_phy-273.)/(t_phy-36.))/pa))
+         (3.80*exp(17.27*(t_phy-273.)/(t_phy-36.))/pa))
       rhchem = MAX(5.,RHCHEM)
       if (rhchem >= 95.) wetflag = .true.
 
@@ -211,13 +211,13 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !-----------------------------------------------------------
 !     if(snowc(i,j).gt.0.)iseason=4
       CALL rc( rcx, ta, rad, rhchem, iland, &
-               iseason, numgas, wetflag, rainflag, highnh3, &
-               iprt, moist(p_qv), p8w )
+         iseason, numgas, wetflag, rainflag, highnh3, &
+         iprt, moist(p_qv), p8w )
 
       if( chem_opt /= MOZART_KPP .and. &
-          chem_opt /= MOZCART_KPP .and. &
-          chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
-          chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP)  then
+         chem_opt /= MOZCART_KPP .and. &
+         chem_opt /= MOZART_MOSAIC_4BIN_KPP .and. &
+         chem_opt /= MOZART_MOSAIC_4BIN_AQ_KPP)  then
          srfres(1:numgas-2) = rcx(1:numgas-2)
          srfres(numgas-1:numgas) = 0.
       else
@@ -228,7 +228,7 @@ SUBROUTINE wesely_driver( current_month, julday, &
       aer_res_def  = 0.
       aer_res_zcen = 0.
       CALL landusevg( ddvel0d, ustar, rmol, zntt, z1, dvpart, iland,        &
-                      numgas, srfres, aer_res_def, aer_res_zcen, p_sulf )
+         numgas, srfres, aer_res_def, aer_res_zcen, p_sulf )
 
 !-----------------------------------------------------------
 !wig: CBMZ does not have HO and HO2 last so need to copy all species
@@ -236,33 +236,33 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !-----------------------------------------------------------
       ddvel(1:numgas) = ddvel0d(1:numgas)
       if ( (chem_opt == RADM2           ) .or.   &
-           (chem_opt == RADM2SORG       ) .or.   &
-           (chem_opt == RADM2SORG_AQ    ) .or.   &
-           (chem_opt == RADM2SORG_AQCHEM) ) then
+         (chem_opt == RADM2SORG       ) .or.   &
+         (chem_opt == RADM2SORG_AQ    ) .or.   &
+         (chem_opt == RADM2SORG_AQCHEM) ) then
 !               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
       end if
-     
+
 !-----------------------------------------------------------
 ! For the additional CBMZ species, assign similar RADM counter parts for
 ! now. Short lived species get a zero velocity since dry dep should be
 ! unimportant.  **ALSO**, treat p_sulf as h2so4 vapor, not aerosol sulfate
 !-----------------------------------------------------------
       if ( (chem_opt == CBMZ          ) .or.          &
-           (chem_opt == CBMZ_BB       ) .or.          &
-           (chem_opt == CBMZ_BB_KPP   ) .or.          &
-           (chem_opt == CBMZ_MOSAIC_KPP   ) .or.      &
-           (chem_opt == CBMZ_MOSAIC_4BIN_AQ) .or.     &
-           (chem_opt == CBMZ_MOSAIC_8BIN_AQ) .or.     &
-           (chem_opt == CBMZ_MOSAIC_4BIN) .or.        &
-           (chem_opt == CBMZ_MOSAIC_8BIN) .or.        &
-           (chem_opt == CBMZ_MOSAIC_DMS_4BIN_AQ) .or. &
-           (chem_opt == CBMZ_MOSAIC_DMS_8BIN_AQ) .or. &
-           (chem_opt == CBMZ_MOSAIC_DMS_4BIN) .or.    &
-           (chem_opt == CBMZ_MOSAIC_DMS_8BIN) .or.    &
-           (chem_opt == CBMZ_CAM_MAM3_NOAQ ) .or.     &
-           (chem_opt == CBMZ_CAM_MAM3_AQ   ) .or.     &
-           (chem_opt == CBMZ_CAM_MAM7_NOAQ ) .or.     &
-           (chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
+         (chem_opt == CBMZ_BB       ) .or.          &
+         (chem_opt == CBMZ_BB_KPP   ) .or.          &
+         (chem_opt == CBMZ_MOSAIC_KPP   ) .or.      &
+         (chem_opt == CBMZ_MOSAIC_4BIN_AQ) .or.     &
+         (chem_opt == CBMZ_MOSAIC_8BIN_AQ) .or.     &
+         (chem_opt == CBMZ_MOSAIC_4BIN) .or.        &
+         (chem_opt == CBMZ_MOSAIC_8BIN) .or.        &
+         (chem_opt == CBMZ_MOSAIC_DMS_4BIN_AQ) .or. &
+         (chem_opt == CBMZ_MOSAIC_DMS_8BIN_AQ) .or. &
+         (chem_opt == CBMZ_MOSAIC_DMS_4BIN) .or.    &
+         (chem_opt == CBMZ_MOSAIC_DMS_8BIN) .or.    &
+         (chem_opt == CBMZ_CAM_MAM3_NOAQ ) .or.     &
+         (chem_opt == CBMZ_CAM_MAM3_AQ   ) .or.     &
+         (chem_opt == CBMZ_CAM_MAM7_NOAQ ) .or.     &
+         (chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
 !         do j=jts,jte
 !            do i=its,ite
 !               ddvel(i,j,p_sulf)        = ddvel(i,j,p_hno3)
@@ -286,11 +286,11 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !               ddvel(i,j,p_isopp)       = 0
 !               ddvel(i,j,p_isopn)       = 0
 !               ddvel(i,j,p_isopo2)      = 0
-               if((chem_opt == CBMZ ) .or.                   &
-                  (chem_opt == CBMZ_MOSAIC_DMS_4BIN) .or.    &
-                  (chem_opt == CBMZ_MOSAIC_DMS_8BIN) .or.    &
-                  (chem_opt == CBMZ_MOSAIC_DMS_4BIN_AQ) .or. &
-                  (chem_opt == CBMZ_MOSAIC_DMS_8BIN_AQ) ) then
+         if((chem_opt == CBMZ ) .or.                   &
+            (chem_opt == CBMZ_MOSAIC_DMS_4BIN) .or.    &
+            (chem_opt == CBMZ_MOSAIC_DMS_8BIN) .or.    &
+            (chem_opt == CBMZ_MOSAIC_DMS_4BIN_AQ) .or. &
+            (chem_opt == CBMZ_MOSAIC_DMS_8BIN_AQ) ) then
 !                  ddvel(i,j,p_dms)         = 0
 !                  ddvel(i,j,p_msa)         = ddvel(i,j,p_hno3)
 !                  ddvel(i,j,p_dmso)        = 0
@@ -302,18 +302,18 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !                  ddvel(i,j,p_ch3so2oo)    = 0
 !                  ddvel(i,j,p_ch3so2ch2oo) = 0
 !                  ddvel(i,j,p_mtf)         = 0
-               end if
-               if( ( chem_opt == CBMZ_CAM_MAM3_NOAQ ) .or.   &
-                   ( chem_opt == CBMZ_CAM_MAM3_AQ   ) .or.   &
-                   ( chem_opt == CBMZ_CAM_MAM7_NOAQ ) .or.   &
-                   ( chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
+         end if
+         if( ( chem_opt == CBMZ_CAM_MAM3_NOAQ ) .or.   &
+            ( chem_opt == CBMZ_CAM_MAM3_AQ   ) .or.   &
+            ( chem_opt == CBMZ_CAM_MAM7_NOAQ ) .or.   &
+            ( chem_opt == CBMZ_CAM_MAM7_AQ   ) ) then
 !                  ddvel(i,j,p_soag)        = 0.0
-               end if
+         end if
 !            end do
 !         end do
       end if
 !
-     if  (chem_opt == RACMSOAVBS_KPP)   then
+      if  (chem_opt == RACMSOAVBS_KPP)   then
 !         do j=jts,jte
 !            do i=its,ite
 !               ddvel(i,j,p_cvasoa1) = dep_vap*ddvel(i,j,p_hno3)
@@ -372,15 +372,15 @@ SUBROUTINE wesely_driver( current_month, julday, &
 ! For gocartracm,radm
 !-----------------------------------------------------------
       if  ((chem_opt == GOCARTRACM_KPP)  .OR.     &
-           (chem_opt == GOCARTRADM2))   then
+         (chem_opt == GOCARTRADM2))   then
 !         do j=jts,jte
 !            do i=its,ite
 !               ddvel(i,j,p_sulf)        = 0.
 !               ddvel(i,j,p_dms)         = 0.
 !               ddvel(i,j,p_msa)         = ddvel(i,j,p_hno3)
-               if( chem_opt == GOCARTRADM2 ) then
+         if( chem_opt == GOCARTRADM2 ) then
 !               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
-               end if
+         end if
 !            end do
 !         end do
       end if
@@ -396,9 +396,9 @@ SUBROUTINE wesely_driver( current_month, julday, &
 ! For mozart
 !-----------------------------------------------------------
       if( chem_opt == MOZART_KPP .or. &
-          chem_opt == MOZCART_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP )   then
+         chem_opt == MOZCART_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP )   then
 !         do j=jts,jte
 !            do i=its,ite
 !               ddvel(i,j,p_mpan)    = ddvel(i,j,p_mpan)/3.
@@ -448,8 +448,8 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !               ddvel(i,j,p_meko2)   = 0.
 !              ddvel(i,j,p_sulf)    = 0.
 !               ddvel(i,j,p_dms)     = 0.
-               IF ( chem_opt == MOZART_MOSAIC_4BIN_KPP .OR. &
-                    chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) THEN
+         IF ( chem_opt == MOZART_MOSAIC_4BIN_KPP .OR. &
+            chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) THEN
 !               ddvel(i,j,p_benzene)  = 0.
 !               ddvel(i,j,p_phen)     = 0.
 !               ddvel(i,j,p_bepomuc)  = 0.
@@ -480,147 +480,147 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !               ddvel(i,j,p_xyleno2)  = 0.
 !               ddvel(i,j,p_xylenooh) = ddvel(i,j,p_h2o2)
 
-               IF ( chem_opt == MOZART_MOSAIC_4BIN_KPP) THEN
+            IF ( chem_opt == MOZART_MOSAIC_4BIN_KPP) THEN
 !                 ddvel(i,j,p_voca)     = 0.
 !                 ddvel(i,j,p_vocbb)     = 0.
 !                 ddvel(i,j,p_smpa)        = 0.
 !                 ddvel(i,j,p_smpbb)        = 0.
-               ENDIF
+            ENDIF
 
-              ENDIF
+         ENDIF
 !            end do
-            if ( chem_opt == MOZCART_KPP ) then
+         if ( chem_opt == MOZCART_KPP ) then
 !               ddvel(its:ite,j,p_sulf) = 0.
-            end if
+         end if
 !         end do
       end if
 
-      
+
 !-----------------------------------------------------------
 ! For CRI
 !-----------------------------------------------------------
       if( chem_opt == crimech_kpp .or. &
-          chem_opt == cri_mosaic_8bin_aq_kpp .or. &
-          chem_opt == cri_mosaic_4bin_aq_kpp  )   then
+         chem_opt == cri_mosaic_8bin_aq_kpp .or. &
+         chem_opt == cri_mosaic_4bin_aq_kpp  )   then
 !         do j=jts,jte
 !            do i=its,ite
 ! need to add deposition rates for crimech species here
 
 !               ddvel(i,j,p_ch3co2h)  = 0.
-!               ddvel(i,j,p_clno2)    = 0. 
-!               !ddvel(i,j,p_n2o5 )    = 0. 
-!               !ddvel(i,j,p_o1d)    = 0. 
-!               !ddvel(i,j,p_o3p)    = 0. 
-!               ddvel(i,j,p_c2h6)    = 0. 
-!               ddvel(i,j,p_aco3)    = 0. 
-!               !ddvel(i,j,p_ch3oo)    = 0. 
-!               ddvel(i,j,p_hso3)    = 0. 
-!               ddvel(i,j,p_so3)    = 0.       
-!               ddvel(i,j,p_c3h8)    = 0. 
-!               ddvel(i,j,p_nc4h10)    = 0. 
-!               ddvel(i,j,p_c5h8)    = 0. 
-!               ddvel(i,j,p_benzene)    = 0. 
-!               ddvel(i,j,p_toluene)    = 0. 
-!               ddvel(i,j,p_oxyl)    = 0. 
-!               ddvel(i,j,p_npropol)    = 0. 
-!!               ddvel(i,j,p_c2h2)    = 0. 
-!               ddvel(i,j,p_c3h6)    = 0. 
-!               ddvel(i,j,p_c2h4) = 0.                
-!               ddvel(i,j,p_tbut2ene)    = 0. 
-!               ddvel(i,j,p_mek)    = 0. 
-!               ddvel(i,j,p_ipropol)    = 0. 
-!               ddvel(i,j,p_apinene)    = 0.   
-!               ddvel(i,j,p_bpinene)    = 0.      
-!               !ddvel(i,j,p_c2h5co3)    = 0.       
-!               !ddvel(i,j,p_hoch2co3)    = 0.               
-!               ddvel(i,j,p_ch3cl)    = 0.   
-!               ddvel(i,j,p_ch2cl2)    = 0.   
-!               ddvel(i,j,p_chcl3)    = 0.   
-!               ddvel(i,j,p_ch3ccl3)    = 0.  
-!               ddvel(i,j,p_cdicleth)    = 0.  
-!               ddvel(i,j,p_tdicleth)    = 0.  
-!               ddvel(i,j,p_tricleth )    = 0.  
-!               ddvel(i,j,p_tce)    = 0.   
-!               ddvel(i,j,p_noa)    = 0.    
-!               ddvel(i,j,p_aroh14)    = 0.    
-!               ddvel(i,j,p_raroh14)    = 0.   
-!               ddvel(i,j,p_arnoh14)    = 0.  
-!               ddvel(i,j,p_aroh17)    = 0.    
-!               ddvel(i,j,p_raroh17)    = 0.   
-!               ddvel(i,j,p_arnoh17)    = 0.  
-!               ddvel(i,j,p_anhy)    = 0.  
-!               ddvel(i,j,p_ch4)    = 0.  
-!               ddvel(i,j,p_sulf) = ddvel(i,j,p_hno3) 
-!               ddvel(i,j,p_hcl)    = ddvel(i,j,p_hno3)  
-!               ddvel(i,j,p_h2)    = 0.  
-!               ddvel(i,j,p_tm123b)    = 0. 
-!               ddvel(i,j,p_tm124b)    = 0. 
-!               ddvel(i,j,p_tm135b)    = 0. 
-!               ddvel(i,j,p_oethtol)    = 0. 
-!               ddvel(i,j,p_methtol)    = 0. 
-!               ddvel(i,j,p_pethtol)    = 0. 
-!               ddvel(i,j,p_dime35eb)    = 0. 
-!               ddvel(i,j,p_dms) = 0. 
+!               ddvel(i,j,p_clno2)    = 0.
+!               !ddvel(i,j,p_n2o5 )    = 0.
+!               !ddvel(i,j,p_o1d)    = 0.
+!               !ddvel(i,j,p_o3p)    = 0.
+!               ddvel(i,j,p_c2h6)    = 0.
+!               ddvel(i,j,p_aco3)    = 0.
+!               !ddvel(i,j,p_ch3oo)    = 0.
+!               ddvel(i,j,p_hso3)    = 0.
+!               ddvel(i,j,p_so3)    = 0.
+!               ddvel(i,j,p_c3h8)    = 0.
+!               ddvel(i,j,p_nc4h10)    = 0.
+!               ddvel(i,j,p_c5h8)    = 0.
+!               ddvel(i,j,p_benzene)    = 0.
+!               ddvel(i,j,p_toluene)    = 0.
+!               ddvel(i,j,p_oxyl)    = 0.
+!               ddvel(i,j,p_npropol)    = 0.
+!!               ddvel(i,j,p_c2h2)    = 0.
+!               ddvel(i,j,p_c3h6)    = 0.
+!               ddvel(i,j,p_c2h4) = 0.
+!               ddvel(i,j,p_tbut2ene)    = 0.
+!               ddvel(i,j,p_mek)    = 0.
+!               ddvel(i,j,p_ipropol)    = 0.
+!               ddvel(i,j,p_apinene)    = 0.
+!               ddvel(i,j,p_bpinene)    = 0.
+!               !ddvel(i,j,p_c2h5co3)    = 0.
+!               !ddvel(i,j,p_hoch2co3)    = 0.
+!               ddvel(i,j,p_ch3cl)    = 0.
+!               ddvel(i,j,p_ch2cl2)    = 0.
+!               ddvel(i,j,p_chcl3)    = 0.
+!               ddvel(i,j,p_ch3ccl3)    = 0.
+!               ddvel(i,j,p_cdicleth)    = 0.
+!               ddvel(i,j,p_tdicleth)    = 0.
+!               ddvel(i,j,p_tricleth )    = 0.
+!               ddvel(i,j,p_tce)    = 0.
+!               ddvel(i,j,p_noa)    = 0.
+!               ddvel(i,j,p_aroh14)    = 0.
+!               ddvel(i,j,p_raroh14)    = 0.
+!               ddvel(i,j,p_arnoh14)    = 0.
+!               ddvel(i,j,p_aroh17)    = 0.
+!               ddvel(i,j,p_raroh17)    = 0.
+!               ddvel(i,j,p_arnoh17)    = 0.
+!               ddvel(i,j,p_anhy)    = 0.
+!               ddvel(i,j,p_ch4)    = 0.
+!               ddvel(i,j,p_sulf) = ddvel(i,j,p_hno3)
+!               ddvel(i,j,p_hcl)    = ddvel(i,j,p_hno3)
+!               ddvel(i,j,p_h2)    = 0.
+!               ddvel(i,j,p_tm123b)    = 0.
+!               ddvel(i,j,p_tm124b)    = 0.
+!               ddvel(i,j,p_tm135b)    = 0.
+!               ddvel(i,j,p_oethtol)    = 0.
+!               ddvel(i,j,p_methtol)    = 0.
+!               ddvel(i,j,p_pethtol)    = 0.
+!               ddvel(i,j,p_dime35eb)    = 0.
+!               ddvel(i,j,p_dms) = 0.
 !               ddvel(i,j,p_ch3sch2oo) = 0.
-!               ddvel(i,j,p_dmso) = 0. 
-!               ddvel(i,j,p_ch3s) = 0. 
+!               ddvel(i,j,p_dmso) = 0.
+!               ddvel(i,j,p_ch3s) = 0.
 !               ddvel(i,j,p_ch3so) = 0.
 !               ddvel(i,j,p_ch3so3) = 0.
-!               ddvel(i,j,p_msa) = 0. 
+!               ddvel(i,j,p_msa) = 0.
 !               ddvel(i,j,p_msia) = 0.
-!               ddvel(i,j,p_ho) = 0. 
+!               ddvel(i,j,p_ho) = 0.
 !               ddvel(i,j,p_ho2) = 0.
-!               ddvel(i,j,p_ch3oo) = 0. 
-!               ddvel(i,j,p_c2h5o2) = 0.       
+!               ddvel(i,j,p_ch3oo) = 0.
+!               ddvel(i,j,p_c2h5o2) = 0.
 !               ddvel(i,j,p_hoch2ch2o2) = 0.
 !               ddvel(i,j,p_ic3h7o2) = 0.
-!               ddvel(i,j,p_rn10o2) = 0.    
-!               ddvel(i,j,p_rn13o2) = 0.           
-!               ddvel(i,j,p_rn16o2) = 0.     
-!               ddvel(i,j,p_rn19o2) = 0.   
-!               ddvel(i,j,p_rn9o2) = 0.       
-!               ddvel(i,j,p_rn12o2) = 0.       
-!               ddvel(i,j,p_rn15o2) = 0.     
-!               ddvel(i,j,p_rn18o2) = 0.      
-!               ddvel(i,j,p_nrn6o2) = 0.    
-!               ddvel(i,j,p_nrn9o2) = 0.      
-!               ddvel(i,j,p_nrn12o2) = 0.        
-!               ddvel(i,j,p_rn11o2) = 0.      
-!               ddvel(i,j,p_rn14o2) = 0.      
-!               ddvel(i,j,p_rn8o2) = 0.       
-!               ddvel(i,j,p_rn17o2) = 0.     
-!               ddvel(i,j,p_rn13ao2) = 0.  
-!               ddvel(i,j,p_rn16ao2) = 0.      
-!               ddvel(i,j,p_rn15ao2) = 0.     
-!               ddvel(i,j,p_rn18ao2) = 0.     
-!               ddvel(i,j,p_ru14o2) = 0.  
-!               ddvel(i,j,p_ru12o2) = 0.  
-!               ddvel(i,j,p_ru10o2) = 0.  
-!               ddvel(i,j,p_nru14o2) = 0. 
-!               ddvel(i,j,p_nru12o2) = 0.  
-!               ddvel(i,j,p_ra13o2) = 0.  
-!               ddvel(i,j,p_ra16o2) = 0.  
-!               ddvel(i,j,p_ra19ao2) = 0.   
-!               ddvel(i,j,p_ra19co2) = 0.   
-!               ddvel(i,j,p_rtn28o2) = 0.  
-!               ddvel(i,j,p_rtn26o2) = 0. 
-!               ddvel(i,j,p_nrtn28o2) = 0. 
-!               ddvel(i,j,p_rtn25o2) = 0.  
-!               ddvel(i,j,p_rtn24o2) = 0. 
-!               ddvel(i,j,p_rtn23o2) = 0.  
-!               ddvel(i,j,p_rtn14o2) = 0.  
-!               ddvel(i,j,p_rtn10o2) = 0.  
-!               ddvel(i,j,p_rtx28o2) = 0.  
-!               ddvel(i,j,p_rtx24o2) = 0.  
-!               ddvel(i,j,p_rtx22o2) = 0. 
-!               ddvel(i,j,p_nrtx28o2) = 0. 
-!               ddvel(i,j,p_ch3o2no2) = 0. 
+!               ddvel(i,j,p_rn10o2) = 0.
+!               ddvel(i,j,p_rn13o2) = 0.
+!               ddvel(i,j,p_rn16o2) = 0.
+!               ddvel(i,j,p_rn19o2) = 0.
+!               ddvel(i,j,p_rn9o2) = 0.
+!               ddvel(i,j,p_rn12o2) = 0.
+!               ddvel(i,j,p_rn15o2) = 0.
+!               ddvel(i,j,p_rn18o2) = 0.
+!               ddvel(i,j,p_nrn6o2) = 0.
+!               ddvel(i,j,p_nrn9o2) = 0.
+!               ddvel(i,j,p_nrn12o2) = 0.
+!               ddvel(i,j,p_rn11o2) = 0.
+!               ddvel(i,j,p_rn14o2) = 0.
+!               ddvel(i,j,p_rn8o2) = 0.
+!               ddvel(i,j,p_rn17o2) = 0.
+!               ddvel(i,j,p_rn13ao2) = 0.
+!               ddvel(i,j,p_rn16ao2) = 0.
+!               ddvel(i,j,p_rn15ao2) = 0.
+!               ddvel(i,j,p_rn18ao2) = 0.
+!               ddvel(i,j,p_ru14o2) = 0.
+!               ddvel(i,j,p_ru12o2) = 0.
+!               ddvel(i,j,p_ru10o2) = 0.
+!               ddvel(i,j,p_nru14o2) = 0.
+!               ddvel(i,j,p_nru12o2) = 0.
+!               ddvel(i,j,p_ra13o2) = 0.
+!               ddvel(i,j,p_ra16o2) = 0.
+!               ddvel(i,j,p_ra19ao2) = 0.
+!               ddvel(i,j,p_ra19co2) = 0.
+!               ddvel(i,j,p_rtn28o2) = 0.
+!               ddvel(i,j,p_rtn26o2) = 0.
+!               ddvel(i,j,p_nrtn28o2) = 0.
+!               ddvel(i,j,p_rtn25o2) = 0.
+!               ddvel(i,j,p_rtn24o2) = 0.
+!               ddvel(i,j,p_rtn23o2) = 0.
+!               ddvel(i,j,p_rtn14o2) = 0.
+!               ddvel(i,j,p_rtn10o2) = 0.
+!               ddvel(i,j,p_rtx28o2) = 0.
+!               ddvel(i,j,p_rtx24o2) = 0.
+!               ddvel(i,j,p_rtx22o2) = 0.
+!               ddvel(i,j,p_nrtx28o2) = 0.
+!               ddvel(i,j,p_ch3o2no2) = 0.
 !               ddvel(i,j,p_ra22ao2) = 0.
 !               ddvel(i,j,p_ra22bo2) = 0.
 !               ddvel(i,j,p_ra25o2) = 0.
 !               ddvel(i,j,p_ch3so2) = 0.
-!               ddvel(i,j,p_dmso2 ) = 0. 
-!               
+!               ddvel(i,j,p_dmso2 ) = 0.
+!
 
 !            end do
 !         end do
@@ -786,11 +786,11 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !      end if
 
 
-END SUBROUTINE wesely_driver
+   END SUBROUTINE wesely_driver
 
-      SUBROUTINE rc( rcx, t, rad, rh, iland, &
-                     iseason, numgas, wetflag, rainflag, highnh3, &
-                     iprt, spec_hum, p_srf )
+   SUBROUTINE rc( rcx, t, rad, rh, iland, &
+      iseason, numgas, wetflag, rainflag, highnh3, &
+      iprt, spec_hum, p_srf )
 !----------------------------------------------------------------------
 !     THIS SUBROUTINE CALCULATES SURFACE RESISTENCES ACCORDING
 !     TO THE MODEL OF
@@ -804,52 +804,52 @@ END SUBROUTINE wesely_driver
 !                    FOR MM5 VERSION 3
 !----------------------------------------------------------------------
 
-!  USE module_state_description                       
+!  USE module_state_description
 !  USE module_initial_chem_namelists
 
 !----------------------------------------------------------------------
 !	... dummy arguments
 !----------------------------------------------------------------------
-        INTEGER, intent(in) :: iland, iseason, numgas
-        INTEGER, intent(in) :: iprt
-        REAL, intent(in)    :: rad, rh
-        REAL, intent(in)    :: t                            ! surface temp (K)
-        REAL, intent(in)    :: p_srf                        ! surface pressure (Pa)
-        REAL, intent(in)    :: spec_hum                     ! surface specific humidity (kg/kg)
-        real, intent(out)   :: rcx(numgas)
-        LOGICAL, intent(in) :: highnh3, rainflag, wetflag
+      INTEGER, intent(in) :: iland, iseason, numgas
+      INTEGER, intent(in) :: iprt
+      REAL, intent(in)    :: rad, rh
+      REAL, intent(in)    :: t                            ! surface temp (K)
+      REAL, intent(in)    :: p_srf                        ! surface pressure (Pa)
+      REAL, intent(in)    :: spec_hum                     ! surface specific humidity (kg/kg)
+      real, intent(out)   :: rcx(numgas)
+      LOGICAL, intent(in) :: highnh3, rainflag, wetflag
 
 !----------------------------------------------------------------------
 ! .. Local Scalars ..
 !----------------------------------------------------------------------
-        REAL, parameter :: t0    = 298.
-        REAL, parameter :: tmelt = 273.16
-        INTEGER :: lt, n
-        INTEGER :: chem_opt
-        REAL    :: rclx, rdc, resice, rgsx, rluo1, rluo2
-        REAL    :: rlux, rmx, rs, rsmx, rdtheta, z, wrk
-        REAL    :: qs, es, ws, dewm, dv_pan, drat
-        REAL    :: crs, tc
-        REAL    :: rs_pan, tc_pan
-        LOGICAL :: has_dew
+      REAL, parameter :: t0    = 298.
+      REAL, parameter :: tmelt = 273.16
+      INTEGER :: lt, n
+      INTEGER :: chem_opt
+      REAL    :: rclx, rdc, resice, rgsx, rluo1, rluo2
+      REAL    :: rlux, rmx, rs, rsmx, rdtheta, z, wrk
+      REAL    :: qs, es, ws, dewm, dv_pan, drat
+      REAL    :: crs, tc
+      REAL    :: rs_pan, tc_pan
+      LOGICAL :: has_dew
 !----------------------------------------------------------------------
 ! .. Local Arrays ..
 !----------------------------------------------------------------------
-        REAL :: hstary(numgas)
+      REAL :: hstary(numgas)
 
 !----------------------------------------------------------------------
 ! .. Intrinsic Functions ..
 !----------------------------------------------------------------------
-        INTRINSIC exp
+      INTRINSIC exp
 
-        chem_opt = chem_opt
+      chem_opt = chem_opt
 
-        rcx(1:numgas) = 1.
+      rcx(1:numgas) = 1.
 
-        tc = t - 273.15
-        rdtheta = 0.
+      tc = t - 273.15
+      rdtheta = 0.
 
-        z = 200./(rad+0.1)
+      z = 200./(rad+0.1)
 
 !!!  HARDWIRE VALUES FOR TESTING
 !       z=0.4727409
@@ -859,28 +859,28 @@ END SUBROUTINE wesely_driver
 !       rainflag=.false.
 !       wetflag=.false.
 
-        IF ( tc<=0. .OR. tc>=40. ) THEN
-          rs = 9999.
-        ELSE
-          rs = ri(iland,iseason)*(1+z*z)*(400./(tc*(40.-tc)))
-        END IF
-        rdc   = 100.*(1. + 1000./(rad + 10.))/(1. + 1000.*rdtheta)
-        rluo1 = 1./(1./3000. + 3./rlu(iland,iseason))
-        rluo2 = 1./(1./1000. + 3./rlu(iland,iseason))
-        resice = 1000.*exp( -(tc + 4.) )
-        wrk    = (t0 - t)/(t0*t)
+      IF ( tc<=0. .OR. tc>=40. ) THEN
+         rs = 9999.
+      ELSE
+         rs = ri(iland,iseason)*(1+z*z)*(400./(tc*(40.-tc)))
+      END IF
+      rdc   = 100.*(1. + 1000./(rad + 10.))/(1. + 1000.*rdtheta)
+      rluo1 = 1./(1./3000. + 3./rlu(iland,iseason))
+      rluo2 = 1./(1./1000. + 3./rlu(iland,iseason))
+      resice = 1000.*exp( -(tc + 4.) )
+      wrk    = (t0 - t)/(t0*t)
 
 
-        DO n = 1, numgas
-          IF( hstar(n) /= 0. ) then
-             hstary(n) = hstar(n)*exp( dhr(n)*wrk )
+      DO n = 1, numgas
+         IF( hstar(n) /= 0. ) then
+            hstary(n) = hstar(n)*exp( dhr(n)*wrk )
 !----------------------------------------------------------------------
 !     SPECIAL TREATMENT FOR HNO3, HNO4, H2O2, PAA
 !----------------------------------------------------------------------
-is_mozart :  if( chem_opt == MOZART_KPP .or. &
-                 chem_opt == MOZCART_KPP .or. &
-                 chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-                 chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+            is_mozart :  if( chem_opt == MOZART_KPP .or. &
+               chem_opt == MOZCART_KPP .or. &
+               chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !                 if( n == p_hno3 ) then
 !                    hstary(n) = 2.6e6*exp( 8700.*wrk )*1.e5
 !                 else if( n == p_hno4 ) then
@@ -890,82 +890,82 @@ is_mozart :  if( chem_opt == MOZART_KPP .or. &
 !                 else if( n == p_paa ) then
 !                    hstary(n) = hstary(n)*(1. + 1.8e-4*exp( -1510.*wrk )*1.e5)
 !                 end if
-             endif is_mozart
-             rmx = 1./(hstary(n)/3000. + 100.*f0(n))
-             rsmx = rs*dratio(n) + rmx
-             if( (chem_opt == MOZART_KPP .or. &
-                  chem_opt == MOZCART_KPP .or. &
-                  chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-                  chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) .and. &
-                 iseason /= 4 .and. p_pan > 1 ) then
-                if( iland /= iswater_temp .and. n == p_pan ) then
+            endif is_mozart
+            rmx = 1./(hstary(n)/3000. + 100.*f0(n))
+            rsmx = rs*dratio(n) + rmx
+            if( (chem_opt == MOZART_KPP .or. &
+               chem_opt == MOZCART_KPP .or. &
+               chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) .and. &
+               iseason /= 4 .and. p_pan > 1 ) then
+               if( iland /= iswater_temp .and. n == p_pan ) then
 !-------------------------------------------------------------------------------------
 ! 	saturation vapor pressure (Pascals)
 ! 	saturation mixing ratio
 ! 	saturation specific humidity
 !-------------------------------------------------------------------------------------
-                    es = 611.*exp( 5414.77*(t - tmelt)/(tmelt*t) )
-                    ws = .622*es/(p_srf - es)
-                    qs = ws/(1. + ws)
-                    has_dew = .false.
-                    if( qs <= spec_hum ) then
-                      has_dew = .true.
-                    end if
-                    if( t < tmelt ) then
-                       has_dew = .false.
-                    end if
-                    if( has_dew .or. rainflag ) then
-                       dewm = 3.
-                    else
-                       dewm = 1.
-                    endif
-                    drat   = wpan/wh2o
-                    tc_pan = t - tmelt
-                    if( t > tmelt .and. t < 313.15 ) then
-                       crs = (1. + (200./(rad + .1))**2) * (400./(tc_pan*(40. - tc_pan)))
-                    else
-                       crs = large_value
-                    end if
-                    lt     = wrf2mz_lt_map(iland)
-                    rs_pan = ri_pan(iseason,lt)*crs
-                    dv_pan = c0_pan(lt) * (1. - exp( -k_pan(lt)*(dewm*rs_pan*drat)*1.e-2 ))
-                    if( dv_pan > 0. ) then
-                       rsmx = 1./dv_pan
-                    end if
-                endif
-             endif
-             rclx = 1./(1.e-5*hstary(n)/rcls(iland,iseason) &
-                        + f0(n)/rclo(iland,iseason)) + resice
-             rgsx = 1./(1.e-5*hstary(n)/rgss(iland,iseason) &
-                        + f0(n)/rgso(iland,iseason)) + resice
-             rlux = rlu(iland,iseason)/(1.e-5*hstary(n) + f0(n)) + resice
-             IF( wetflag ) THEN
+                  es = 611.*exp( 5414.77*(t - tmelt)/(tmelt*t) )
+                  ws = .622*es/(p_srf - es)
+                  qs = ws/(1. + ws)
+                  has_dew = .false.
+                  if( qs <= spec_hum ) then
+                     has_dew = .true.
+                  end if
+                  if( t < tmelt ) then
+                     has_dew = .false.
+                  end if
+                  if( has_dew .or. rainflag ) then
+                     dewm = 3.
+                  else
+                     dewm = 1.
+                  endif
+                  drat   = wpan/wh2o
+                  tc_pan = t - tmelt
+                  if( t > tmelt .and. t < 313.15 ) then
+                     crs = (1. + (200./(rad + .1))**2) * (400./(tc_pan*(40. - tc_pan)))
+                  else
+                     crs = large_value
+                  end if
+                  lt     = wrf2mz_lt_map(iland)
+                  rs_pan = ri_pan(iseason,lt)*crs
+                  dv_pan = c0_pan(lt) * (1. - exp( -k_pan(lt)*(dewm*rs_pan*drat)*1.e-2 ))
+                  if( dv_pan > 0. ) then
+                     rsmx = 1./dv_pan
+                  end if
+               endif
+            endif
+            rclx = 1./(1.e-5*hstary(n)/rcls(iland,iseason) &
+               + f0(n)/rclo(iland,iseason)) + resice
+            rgsx = 1./(1.e-5*hstary(n)/rgss(iland,iseason) &
+               + f0(n)/rgso(iland,iseason)) + resice
+            rlux = rlu(iland,iseason)/(1.e-5*hstary(n) + f0(n)) + resice
+            IF( wetflag ) THEN
                rlux = 1./(1./(3.*rlu(iland,iseason)) + 1.e-7*hstary(n) + f0(n)/rluo1)
-             END IF
-             IF( rainflag ) THEN
+            END IF
+            IF( rainflag ) THEN
                rlux = 1./(1./(3.*rlu(iland,iseason)) + 1.e-7*hstary(n) + f0(n)/rluo2)
-             END IF
-             rcx(n) = 1./(1./rsmx + 1./rlux + 1./(rdc + rclx) + 1./(rac(iland,iseason) + rgsx))
-             rcx(n) = max( 1.,rcx(n) )
-          end IF
-        END DO
+            END IF
+            rcx(n) = 1./(1./rsmx + 1./rlux + 1./(rdc + rclx) + 1./(rac(iland,iseason) + rgsx))
+            rcx(n) = max( 1.,rcx(n) )
+         end IF
+      END DO
 
 !--------------------------------------------------
 !     SPECIAL TREATMENT FOR OZONE
 !--------------------------------------------------
-        if(p_o3 > 1)then
-           hstary(p_o3) = hstar(p_o3)*exp( dhr(p_o3)*(298. - t)/(298.*t) )
-           rmx = 1./(hstary(p_o3)/3000.+100.*f0(p_o3))
-           rsmx = rs*dratio(p_o3) + rmx
-           rlux = rlu(iland,iseason)/(1.E-5*hstary(p_o3)+f0(p_o3)) + resice
-           rclx = rclo(iland,iseason) + resice
-           rgsx = rgso(iland,iseason) + resice
-           IF (wetflag) rlux = rluo1
-           IF (rainflag) rlux = rluo2
-           rcx(p_o3) = 1. &
-                       /(1./rsmx+1./rlux+1./(rdc+rclx)+1./(min(100.,rac(iland,iseason))+rgsx))
-           rcx(p_o3) = max( 1.,rcx(p_o3) )
-        endif
+      if(p_o3 > 1)then
+         hstary(p_o3) = hstar(p_o3)*exp( dhr(p_o3)*(298. - t)/(298.*t) )
+         rmx = 1./(hstary(p_o3)/3000.+100.*f0(p_o3))
+         rsmx = rs*dratio(p_o3) + rmx
+         rlux = rlu(iland,iseason)/(1.E-5*hstary(p_o3)+f0(p_o3)) + resice
+         rclx = rclo(iland,iseason) + resice
+         rgsx = rgso(iland,iseason) + resice
+         IF (wetflag) rlux = rluo1
+         IF (rainflag) rlux = rluo2
+         rcx(p_o3) = 1. &
+            /(1./rsmx+1./rlux+1./(rdc+rclx)+1./(min(100.,rac(iland,iseason))+rgsx))
+         rcx(p_o3) = max( 1.,rcx(p_o3) )
+      endif
 
 !     SPECIAL TREATMENT FOR SO2 (Wesely)
 !       HSTARY(P_SO2)=HSTAR(P_SO2)*EXP(DHR(P_SO2)*(1./T-1./298.))
@@ -990,217 +990,217 @@ is_mozart :  if( chem_opt == MOZART_KPP .or. &
 !     SO2 according to Erisman et al. 1994
 !       R_STOM
 !--------------------------------------------------
-is_so2 : &
-     if( p_so2 > 1 ) then
-        rsmx = rs*dratio(p_so2)
+      is_so2 : &
+         if( p_so2 > 1 ) then
+         rsmx = rs*dratio(p_so2)
 !--------------------------------------------------
 !       R_EXT
 !--------------------------------------------------
-        IF (tc> -1. ) THEN
-          IF (rh<81.3) THEN
-            rlux = 25000.*exp(-0.0693*rh)
-          ELSE
-            rlux = 0.58E12*exp(-0.278*rh)
-          END IF
-        END IF
-        IF (((wetflag) .OR. (rainflag)) .AND. (tc> -1. )) THEN
-          rlux = 1.
-        END IF
-        IF ((tc>= -5. ) .AND. (tc<= -1. )) THEN
-          rlux = 200.
-        END IF
-        IF (tc< -5. ) THEN
-          rlux = 500.
-        END IF
+         IF (tc> -1. ) THEN
+            IF (rh<81.3) THEN
+               rlux = 25000.*exp(-0.0693*rh)
+            ELSE
+               rlux = 0.58E12*exp(-0.278*rh)
+            END IF
+         END IF
+         IF (((wetflag) .OR. (rainflag)) .AND. (tc> -1. )) THEN
+            rlux = 1.
+         END IF
+         IF ((tc>= -5. ) .AND. (tc<= -1. )) THEN
+            rlux = 200.
+         END IF
+         IF (tc< -5. ) THEN
+            rlux = 500.
+         END IF
 !--------------------------------------------------
 !       INSTEAD OF R_INC R_CL and R_DC of Wesely are used
 !--------------------------------------------------
-        rclx = rcls(iland,iseason)
+         rclx = rcls(iland,iseason)
 !--------------------------------------------------
 !       DRY SURFACE
 !--------------------------------------------------
-        rgsx = 1000.
+         rgsx = 1000.
 !--------------------------------------------------
 !       WET SURFACE
 !--------------------------------------------------
-        IF ((wetflag) .OR. (rainflag)) THEN
-          IF (highnh3) THEN
-            rgsx = 0.
-          ELSE
-            rgsx = 500.
-          END IF
-        END IF
+         IF ((wetflag) .OR. (rainflag)) THEN
+            IF (highnh3) THEN
+               rgsx = 0.
+            ELSE
+               rgsx = 500.
+            END IF
+         END IF
 !--------------------------------------------------
 !       WATER
 !--------------------------------------------------
-        IF (iland==iswater_temp) THEN
-          rgsx = 0.
-        END IF
+         IF (iland==iswater_temp) THEN
+            rgsx = 0.
+         END IF
 !--------------------------------------------------
 !       SNOW
 !--------------------------------------------------
-        IF( iseason==4 .OR. iland==isice_temp ) THEN
-          IF( tc > 2. ) THEN
-            rgsx = 0.
-          else IF ( tc >= -1. .AND. tc <= 2. ) THEN
-            rgsx = 70.*(2. - tc)
-          else IF ( tc < -1. ) THEN
-            rgsx = 500.
-          END IF
-        END IF
+         IF( iseason==4 .OR. iland==isice_temp ) THEN
+            IF( tc > 2. ) THEN
+               rgsx = 0.
+            else IF ( tc >= -1. .AND. tc <= 2. ) THEN
+               rgsx = 70.*(2. - tc)
+            else IF ( tc < -1. ) THEN
+               rgsx = 500.
+            END IF
+         END IF
 !--------------------------------------------------
 !       TOTAL SURFACE RESISTENCE
 !--------------------------------------------------
-        IF ((iseason/=4) .AND. (ixxxlu(iland)/=1) .AND. (iland/=iswater_temp) .AND. &
+         IF ((iseason/=4) .AND. (ixxxlu(iland)/=1) .AND. (iland/=iswater_temp) .AND. &
             (iland/=isice_temp)) THEN
-          rcx(p_so2) = 1./(1./rsmx+1./rlux+1./(rclx+rdc+rgsx))
-        ELSE
-          rcx(p_so2) = rgsx
-        END IF
-        rcx(p_so2) = max( 1.,rcx(p_so2) )
-     end if is_so2
+            rcx(p_so2) = 1./(1./rsmx+1./rlux+1./(rclx+rdc+rgsx))
+         ELSE
+            rcx(p_so2) = rgsx
+         END IF
+         rcx(p_so2) = max( 1.,rcx(p_so2) )
+      end if is_so2
 !--------------------------------------------------
 !     NH3 according to Erisman et al. 1994
 !       R_STOM
 !--------------------------------------------------
-is_nh3: if( p_nh3 > 1 ) then
-        rsmx = rs*dratio(p_nh3)
+      is_nh3: if( p_nh3 > 1 ) then
+         rsmx = rs*dratio(p_nh3)
 !--------------------------------------------------
 !       GRASSLAND (PASTURE DURING GRAZING)
 !--------------------------------------------------
-        IF (ixxxlu(iland)==3) THEN
-          IF (iseason==1) THEN
+         IF (ixxxlu(iland)==3) THEN
+            IF (iseason==1) THEN
 !--------------------------------------------------
 !           SUMMER
 !--------------------------------------------------
-            rcx(p_nh3) = 1000.
-          END IF
-          IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
+               rcx(p_nh3) = 1000.
+            END IF
+            IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
 !--------------------------------------------------
 !           WINTER, NO SNOW
 !--------------------------------------------------
-            IF (tc>-1.) THEN
-              IF (rad/=0.) THEN
-                rcx(p_nh3) = 50.
-              ELSE
-                rcx(p_nh3) = 100.
-              END IF
-              IF ((wetflag) .OR. (rainflag)) THEN
-                rcx(p_nh3) = 20.
-              END IF
+               IF (tc>-1.) THEN
+                  IF (rad/=0.) THEN
+                     rcx(p_nh3) = 50.
+                  ELSE
+                     rcx(p_nh3) = 100.
+                  END IF
+                  IF ((wetflag) .OR. (rainflag)) THEN
+                     rcx(p_nh3) = 20.
+                  END IF
+               END IF
+               IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
+                  rcx(p_nh3) = 200.
+               END IF
+               IF (tc<(-5.)) THEN
+                  rcx(p_nh3) = 500.
+               END IF
             END IF
-            IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
-              rcx(p_nh3) = 200.
-            END IF
-            IF (tc<(-5.)) THEN
-              rcx(p_nh3) = 500.
-            END IF
-          END IF
-        END IF
+         END IF
 !--------------------------------------------------
 !       AGRICULTURAL LAND (CROPS AND UNGRAZED PASTURE)
 !--------------------------------------------------
-        IF (ixxxlu(iland)==2) THEN
-          IF (iseason==1) THEN
+         IF (ixxxlu(iland)==2) THEN
+            IF (iseason==1) THEN
 !--------------------------------------------------
 !           SUMMER
 !--------------------------------------------------
-            IF (rad/=0.) THEN
-              rcx(p_nh3) = rsmx
-            ELSE
-              rcx(p_nh3) = 200.
+               IF (rad/=0.) THEN
+                  rcx(p_nh3) = rsmx
+               ELSE
+                  rcx(p_nh3) = 200.
+               END IF
+               IF ((wetflag) .OR. (rainflag)) THEN
+                  rcx(p_nh3) = 50.
+               END IF
             END IF
-            IF ((wetflag) .OR. (rainflag)) THEN
-              rcx(p_nh3) = 50.
-            END IF
-          END IF
-          IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
+            IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
 !--------------------------------------------------
 !           WINTER, NO SNOW
 !--------------------------------------------------
-            IF (tc>-1.) THEN
-              IF (rad/=0.) THEN
-                rcx(p_nh3) = rsmx
-              ELSE
-                rcx(p_nh3) = 300.
-              END IF
-              IF ((wetflag) .OR. (rainflag)) THEN
-                rcx(p_nh3) = 100.
-              END IF
+               IF (tc>-1.) THEN
+                  IF (rad/=0.) THEN
+                     rcx(p_nh3) = rsmx
+                  ELSE
+                     rcx(p_nh3) = 300.
+                  END IF
+                  IF ((wetflag) .OR. (rainflag)) THEN
+                     rcx(p_nh3) = 100.
+                  END IF
+               END IF
+               IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
+                  rcx(p_nh3) = 200.
+               END IF
+               IF (tc<(-5.)) THEN
+                  rcx(p_nh3) = 500.
+               END IF
             END IF
-            IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
-              rcx(p_nh3) = 200.
-            END IF
-            IF (tc<(-5.)) THEN
-              rcx(p_nh3) = 500.
-            END IF
-          END IF
-        END IF
+         END IF
 !--------------------------------------------------
 !       SEMI-NATURAL ECOSYSTEMS AND FORESTS
 !--------------------------------------------------
-        IF ((ixxxlu(iland)==4) .OR. (ixxxlu(iland)==5) .OR. (ixxxlu( &
+         IF ((ixxxlu(iland)==4) .OR. (ixxxlu(iland)==5) .OR. (ixxxlu( &
             iland)==6)) THEN
-          IF (rad/=0.) THEN
-            rcx(p_nh3) = 500.
-          ELSE
-            rcx(p_nh3) = 1000.
-          END IF
-          IF ((wetflag) .OR. (rainflag)) THEN
-            IF (highnh3) THEN
-              rcx(p_nh3) = 100.
+            IF (rad/=0.) THEN
+               rcx(p_nh3) = 500.
             ELSE
-              rcx(p_nh3) = 0.
+               rcx(p_nh3) = 1000.
             END IF
-          END IF
-          IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
+            IF ((wetflag) .OR. (rainflag)) THEN
+               IF (highnh3) THEN
+                  rcx(p_nh3) = 100.
+               ELSE
+                  rcx(p_nh3) = 0.
+               END IF
+            END IF
+            IF ((iseason==2) .OR. (iseason==3) .OR. (iseason==5)) THEN
 !--------------------------------------------------
 !           WINTER, NO SNOW
 !--------------------------------------------------
-            IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
-              rcx(p_nh3) = 200.
+               IF ((tc>=(-5.)) .AND. (tc<=-1.)) THEN
+                  rcx(p_nh3) = 200.
+               END IF
+               IF (tc<(-5.)) THEN
+                  rcx(p_nh3) = 500.
+               END IF
             END IF
-            IF (tc<(-5.)) THEN
-              rcx(p_nh3) = 500.
-            END IF
-          END IF
-        END IF
+         END IF
 !--------------------------------------------------
 !       WATER
 !--------------------------------------------------
-        IF (iland==iswater_temp) THEN
-          rcx(p_nh3) = 0.
-        END IF
+         IF (iland==iswater_temp) THEN
+            rcx(p_nh3) = 0.
+         END IF
 !--------------------------------------------------
 !       URBAN AND DESERT (SOIL SURFACES)
 !--------------------------------------------------
-        IF (ixxxlu(iland)==1) THEN
-          IF ( .NOT. wetflag) THEN
-            rcx(p_nh3) = 50.
-          ELSE
-            rcx(p_nh3) = 0.
-          END IF
-        END IF
+         IF (ixxxlu(iland)==1) THEN
+            IF ( .NOT. wetflag) THEN
+               rcx(p_nh3) = 50.
+            ELSE
+               rcx(p_nh3) = 0.
+            END IF
+         END IF
 !--------------------------------------------------
 !       SNOW COVERED SURFACES OR PERMANENT ICE
 !--------------------------------------------------
-        IF ((iseason==4) .OR. (iland==isice_temp)) THEN
-          IF (tc>2.) THEN
-            rcx(p_nh3) = 0.
-          END IF
-          IF ((tc>=(-1.)) .AND. (tc<=2.)) THEN
-            rcx(p_nh3) = 70.*(2.-tc)
-          END IF
-          IF (tc<(-1.)) THEN
-            rcx(p_nh3) = 500.
-          END IF
-        END IF
-        rcx(p_nh3) = max( 1.,rcx(p_nh3) )
-        endif is_nh3
-      END SUBROUTINE rc
+         IF ((iseason==4) .OR. (iland==isice_temp)) THEN
+            IF (tc>2.) THEN
+               rcx(p_nh3) = 0.
+            END IF
+            IF ((tc>=(-1.)) .AND. (tc<=2.)) THEN
+               rcx(p_nh3) = 70.*(2.-tc)
+            END IF
+            IF (tc<(-1.)) THEN
+               rcx(p_nh3) = 500.
+            END IF
+         END IF
+         rcx(p_nh3) = max( 1.,rcx(p_nh3) )
+      endif is_nh3
+   END SUBROUTINE rc
 
-      SUBROUTINE deppart( rmol, ustar, rh, clw, iland, &
-                          dvpart, dvfog )
+   SUBROUTINE deppart( rmol, ustar, rh, clw, iland, &
+      dvpart, dvfog )
 !--------------------------------------------------
 !     THIS SUBROUTINE CALCULATES SURFACE DEPOSITION VELOCITIES
 !     FOR FINE AEROSOL PARTICLES ACCORDING TO THE MODEL OF
@@ -1214,51 +1214,51 @@ is_nh3: if( p_nh3 > 1 ) then
 !--------------------------------------------------
 ! .. Scalar Arguments ..
 !--------------------------------------------------
-        INTEGER, intent(in) :: iland
-        REAL, intent(in)    :: clw, rh, rmol, ustar
-        REAL, intent(out)   :: dvfog, dvpart
+      INTEGER, intent(in) :: iland
+      REAL, intent(in)    :: clw, rh, rmol, ustar
+      REAL, intent(out)   :: dvfog, dvpart
 
 !--------------------------------------------------
 ! .. Intrinsic Functions ..
 !--------------------------------------------------
-        INTRINSIC exp
+      INTRINSIC exp
 
-        dvpart = ustar/kpart(iland)
-        IF (rmol<0.) THEN
+      dvpart = ustar/kpart(iland)
+      IF (rmol<0.) THEN
 !--------------------------------------------------
 !         UNSTABLE LAYERING CORRECTION
 !--------------------------------------------------
-          dvpart = dvpart*(1.+(-300.*rmol)**0.66667)
-        END IF
-        IF (rh>80.) THEN
+         dvpart = dvpart*(1.+(-300.*rmol)**0.66667)
+      END IF
+      IF (rh>80.) THEN
 !--------------------------------------------------
 !         HIGH RELATIVE HUMIDITY CORRECTION
 !         ACCORDING TO J. W. ERISMAN ET AL.
 !         ATMOSPHERIC ENVIRONMENT 31 (1997), 321-332
 !--------------------------------------------------
-          dvpart = dvpart*(1.+0.37*exp((rh-80.)/20.))
-        END IF
+         dvpart = dvpart*(1.+0.37*exp((rh-80.)/20.))
+      END IF
 
 !--------------------------------------------------
 !       SEDIMENTATION VELOCITY OF FOG WATER ACCORDING TO
 !       R. FORKEL, W. SEIDL, R. DLUGI AND E. DEIGELE
 !       J. GEOPHYS. RES. 95D (1990), 18501-18515
 !--------------------------------------------------
-        dvfog = 0.06*clw
-        IF (ixxxlu(iland)==5) THEN
+      dvfog = 0.06*clw
+      IF (ixxxlu(iland)==5) THEN
 !--------------------------------------------------
 !         TURBULENT DEPOSITION OF FOG WATER IN CONIFEROUS FOREST ACCORDI
 !         A. T. VERMEULEN ET AL.
 !         ATMOSPHERIC ENVIRONMENT 31 (1997), 375-386
 !--------------------------------------------------
-          dvfog = dvfog + 0.195*ustar*ustar
-        END IF
+         dvfog = dvfog + 0.195*ustar*ustar
+      END IF
 
-      END SUBROUTINE deppart
+   END SUBROUTINE deppart
 
-      SUBROUTINE landusevg( vgs, ustar, rmol, z0, zz, &
-                            dvparx, iland, numgas, srfres, aer_res_def, &
-                            aer_res_zcen, p_sulf )
+   SUBROUTINE landusevg( vgs, ustar, rmol, z0, zz, &
+      dvparx, iland, numgas, srfres, aer_res_def, &
+      aer_res_zcen, p_sulf )
 !--------------------------------------------------
 !     This subroutine calculates the species specific deposition velocit
 !     as a function of the local meteorology and land use.  The depositi
@@ -1298,71 +1298,71 @@ is_nh3: if( p_nh3 > 1 ) then
 !--------------------------------------------------
 ! .. Scalar Arguments ..
 !--------------------------------------------------
-        INTEGER, intent(in) :: iland, numgas, p_sulf
-        REAL, intent(in)    :: dvparx, ustar, z0, zz
-        REAL, intent(inout) :: rmol
-        REAL, intent(inout) :: aer_res_def
-        REAL, intent(inout) :: aer_res_zcen
+      INTEGER, intent(in) :: iland, numgas, p_sulf
+      REAL, intent(in)    :: dvparx, ustar, z0, zz
+      REAL, intent(inout) :: rmol
+      REAL, intent(inout) :: aer_res_def
+      REAL, intent(inout) :: aer_res_zcen
 !--------------------------------------------------
 ! .. Array Arguments ..
 !--------------------------------------------------
-        REAL, intent(in)  :: srfres(numgas)
-        REAL, intent(out) :: vgs(numgas)
+      REAL, intent(in)  :: srfres(numgas)
+      REAL, intent(out) :: vgs(numgas)
 
 !--------------------------------------------------
 ! .. Local Scalars ..
 !--------------------------------------------------
-        INTEGER :: jspec
-        REAL    :: vgp, vgpart, zr
-        REAL    :: rmol_tmp
+      INTEGER :: jspec
+      REAL    :: vgp, vgpart, zr
+      REAL    :: rmol_tmp
 !--------------------------------------------------
 ! .. Local Arrays ..
 !--------------------------------------------------
-        REAL :: vgspec(numgas)
+      REAL :: vgspec(numgas)
 
 !--------------------------------------------------
 !   Calculate aerodynamic resistance for reference
 !   height = layer center
 !--------------------------------------------------
-        zr = zz*.5
-        rmol_tmp = rmol
-        CALL depvel( numgas, rmol_tmp, zr, z0, ustar, &
-                     vgspec, vgpart, aer_res_zcen )
+      zr = zz*.5
+      rmol_tmp = rmol
+      CALL depvel( numgas, rmol_tmp, zr, z0, ustar, &
+         vgspec, vgpart, aer_res_zcen )
 !--------------------------------------------------
 !   Set the reference height (2.0 m)
 !--------------------------------------------------
 !       zr = 10.0
-        zr = 2.0
+      zr = 2.0
 
 !--------------------------------------------------
 !   CALCULATE THE DEPOSITION VELOCITY without any surface
 !   resistance term, i.e. 1 / (ra + rb)
 !--------------------------------------------------
-        CALL depvel( numgas, rmol, zr, z0, ustar, &
-                     vgspec, vgpart, aer_res_def )
+      CALL depvel( numgas, rmol, zr, z0, ustar, &
+         vgspec, vgpart, aer_res_def )
 
 !--------------------------------------------------
 !   Calculate the deposition velocity for each species
 !   and grid cell by looping through all the possibile combinations
 !   of the two
 !--------------------------------------------------
-        vgp = 1.0/((1.0/vgpart)+(1.0/dvparx))
+      vgp = 1.0/((1.0/vgpart)+(1.0/dvparx))
 !--------------------------------------------------
 !   Loop through the various species
 !--------------------------------------------------
-        DO jspec = 1, numgas
+      DO jspec = 1, numgas
 !--------------------------------------------------
 !   Add in the surface resistance term, rc (SrfRes)
 !--------------------------------------------------
-          vgs(jspec) = 1.0/(1.0/vgspec(jspec) + srfres(jspec))
-        END DO
-        vgs(p_sulf) = vgp
+         vgs(jspec) = 1.0/(1.0/vgspec(jspec) + srfres(jspec))
+      END DO
+      vgs(p_sulf) = vgp
 
-        CALL cellvg( vgs, ustar, zz, zr, rmol, numgas )
+      CALL cellvg( vgs, ustar, zz, zr, rmol, numgas )
 
-      END SUBROUTINE landusevg
+   END SUBROUTINE landusevg
 
-      SUBROUTINE cellvg( vgtemp, ustar, dz, zr, rmol, nspec )
+   SUBROUTINE cellvg( vgtemp, ustar, dz, zr, rmol, nspec )
 !--------------------------------------------------
 !     THIS PROGRAM HAS BEEN DESIGNED TO CALCULATE THE CELL AVERAGE
 !     DEPOSITION VELOCITY GIVEN THE VALUE OF VG AT SOME REFERENCE
@@ -1384,26 +1384,26 @@ is_nh3: if( p_nh3 > 1 ) then
 !--------------------------------------------------
 ! .. Scalar Arguments ..
 !--------------------------------------------------
-        INTEGER, intent(in) :: nspec
-        REAL, intent(in)    :: dz, rmol, ustar, zr
+      INTEGER, intent(in) :: nspec
+      REAL, intent(in)    :: dz, rmol, ustar, zr
 !--------------------------------------------------
 ! .. Array Arguments ..
 !--------------------------------------------------
-        REAL, intent(out) :: vgtemp(nspec)
+      REAL, intent(out) :: vgtemp(nspec)
 !--------------------------------------------------
 ! .. Local Scalars ..
 !--------------------------------------------------
-        INTEGER :: nss
-        REAL    :: a, fac, pdz, pzr, vk
+      INTEGER :: nss
+      REAL    :: a, fac, pdz, pzr, vk
 !--------------------------------------------------
 ! .. Intrinsic Functions ..
 !--------------------------------------------------
-        INTRINSIC alog, sqrt
+      INTRINSIC alog, sqrt
 
 !--------------------------------------------------
 !     Set the von Karman constant
 !--------------------------------------------------
-        vk = karman
+      vk = karman
 
 !--------------------------------------------------
 !     DETERMINE THE STABILITY BASED ON THE CONDITIONS
@@ -1411,27 +1411,27 @@ is_nh3: if( p_nh3 > 1 ) then
 !             1/L = 0 NEUTRAL
 !             1/L > 0 STABLE
 !--------------------------------------------------
-        DO nss = 1, nspec
-          IF (rmol < 0.) THEN
+      DO nss = 1, nspec
+         IF (rmol < 0.) THEN
             pdz = sqrt(1.0 - 9.0*dz*rmol)
             pzr = sqrt(1.0 - 9.0*zr*rmol)
             fac = ((pdz - 1.0)/(pzr - 1.0))*((pzr + 1.0)/(pdz + 1.0))
             a   = 0.74*dz*alog(fac) + (0.164/rmol)*(pdz-pzr)
-          ELSE IF (rmol == 0.) THEN
+         ELSE IF (rmol == 0.) THEN
             a = 0.74*(dz*alog(dz/zr) - dz + zr)
-          ELSE
+         ELSE
             a = 0.74*(dz*alog(dz/zr) - dz + zr) + (2.35*rmol)*(dz - zr)**2
-          END IF
+         END IF
 !--------------------------------------------------
 !     CALCULATE THE DEPOSITION VELOCITIY
 !--------------------------------------------------
-          vgtemp(nss) = vgtemp(nss)/(1.0 + vgtemp(nss)*a/(vk*ustar*(dz - zr)))
-        END DO
+         vgtemp(nss) = vgtemp(nss)/(1.0 + vgtemp(nss)*a/(vk*ustar*(dz - zr)))
+      END DO
 
-      END SUBROUTINE cellvg
+   END SUBROUTINE cellvg
 
-      SUBROUTINE depvel( numgas, rmol, zr, z0, ustar, &
-                         depv, vgpart, aer_res )
+   SUBROUTINE depvel( numgas, rmol, zr, z0, ustar, &
+      depv, vgpart, aer_res )
 !--------------------------------------------------
 !     THIS FUNCTION HAS BEEN DESIGNED TO EVALUATE AN UPPER LIMIT
 !     FOR THE POLLUTANT DEPOSITION VELOCITY AS A FUNCTION OF THE
@@ -1471,27 +1471,27 @@ is_nh3: if( p_nh3 > 1 ) then
 !--------------------------------------------------
 ! .. Scalar Arguments ..
 !--------------------------------------------------
-        INTEGER, intent(in) :: numgas
-        REAL, intent(in)    :: ustar, z0, zr
-        REAL, intent(out)   :: vgpart, aer_res
-        REAL, intent(inout) :: rmol
+      INTEGER, intent(in) :: numgas
+      REAL, intent(in)    :: ustar, z0, zr
+      REAL, intent(out)   :: vgpart, aer_res
+      REAL, intent(inout) :: rmol
 !--------------------------------------------------
 ! .. Array Arguments ..
 !--------------------------------------------------
-        REAL, intent(out) :: depv(numgas)
+      REAL, intent(out) :: depv(numgas)
 !--------------------------------------------------
 ! .. Local Scalars ..
 !--------------------------------------------------
-        INTEGER :: l
-        REAL    :: ao, ar, polint, vk
+      INTEGER :: l
+      REAL    :: ao, ar, polint, vk
 !--------------------------------------------------
 ! .. Intrinsic Functions ..
 !--------------------------------------------------
-        INTRINSIC alog
+      INTRINSIC alog
 !--------------------------------------------------
 !     Set the von Karman constant
 !--------------------------------------------------
-        vk = karman
+      vk = karman
 
 !--------------------------------------------------
 !     Calculate the diffusion correction factor
@@ -1504,79 +1504,79 @@ is_nh3: if( p_nh3 > 1 ) then
 !             1/L > 0 STABLE
 !--------------------------------------------------
 
-        if(abs(rmol) < 1.E-6 ) rmol = 0.
+      if(abs(rmol) < 1.E-6 ) rmol = 0.
 
-        IF (rmol<0) THEN
-          ar = ((1.0-9.0*zr*rmol)**(0.25)+0.001)**2
-          ao = ((1.0-9.0*z0*rmol)**(0.25)+0.001)**2
-          polint = 0.74*(alog((ar-1.0)/(ar+1.0))-alog((ao-1.0)/(ao+1.0)))
-        ELSE IF (rmol==0.) THEN
-          polint = 0.74*alog(zr/z0)
-        ELSE
-          polint = 0.74*alog(zr/z0) + 4.7*rmol*(zr-z0)
-        END IF
+      IF (rmol<0) THEN
+         ar = ((1.0-9.0*zr*rmol)**(0.25)+0.001)**2
+         ao = ((1.0-9.0*z0*rmol)**(0.25)+0.001)**2
+         polint = 0.74*(alog((ar-1.0)/(ar+1.0))-alog((ao-1.0)/(ao+1.0)))
+      ELSE IF (rmol==0.) THEN
+         polint = 0.74*alog(zr/z0)
+      ELSE
+         polint = 0.74*alog(zr/z0) + 4.7*rmol*(zr-z0)
+      END IF
 
 !--------------------------------------------------
 !     CALCULATE THE Maximum DEPOSITION VELOCITY
 !--------------------------------------------------
-        DO l = 1, numgas
-          depv(l) = ustar*vk/(2.0*scpr23(l)+polint)
-        END DO
-        vgpart = ustar*vk/polint
-        aer_res = polint/(karman*max(ustar,1.0e-4))
+      DO l = 1, numgas
+         depv(l) = ustar*vk/(2.0*scpr23(l)+polint)
+      END DO
+      vgpart = ustar*vk/polint
+      aer_res = polint/(karman*max(ustar,1.0e-4))
 
-      END SUBROUTINE depvel
+   END SUBROUTINE depvel
 
 !
 !JianHe: 06/2023,dep_init needs attention in the future for gasdep
-! Maybe we can have a sperate file for these parameters 
+! Maybe we can have a sperate file for these parameters
 !
 
 !      SUBROUTINE dep_init( id, numgas, mminlu_loc, &
 !                           ips, ipe, jps, jpe, ide, jde )
-      SUBROUTINE dep_init(  numgas,  &
-                           ips, ipe, jps, jpe, ide, jde )
+   SUBROUTINE dep_init(  numgas,  &
+      ips, ipe, jps, jpe, ide, jde )
 !--
 !--------------------------------------------------
 ! .. Scalar Arguments ..
 !--------------------------------------------------
-        integer, intent(in) ::  numgas
-        integer, intent(in) :: ips, ipe, jps, jpe
-        integer, intent(in) :: ide, jde
+      integer, intent(in) ::  numgas
+      integer, intent(in) :: ips, ipe, jps, jpe
+      integer, intent(in) :: ide, jde
 
 !--------------------------------------------------
 ! .. Local Scalars
 !--------------------------------------------------
-        INTEGER :: iland, iseason, l
-        integer :: iprt
-        integer :: astat
-        integer :: ncid
-        integer :: dimid
-        integer :: varid
-        integer :: cpos, slen
-        integer :: lon_e, lat_e
-        integer :: iend, jend
-        integer :: chem_opt
-        integer, allocatable :: input_wes_seasonal(:,:,:,:)
-        REAL    :: sc
-        character(len=128) :: err_msg
-        character(len=128) :: filename
-        character(len=3)   :: id_num
+      INTEGER :: iland, iseason, l
+      integer :: iprt
+      integer :: astat
+      integer :: ncid
+      integer :: dimid
+      integer :: varid
+      integer :: cpos, slen
+      integer :: lon_e, lat_e
+      integer :: iend, jend
+      integer :: chem_opt
+      integer, allocatable :: input_wes_seasonal(:,:,:,:)
+      REAL    :: sc
+      character(len=128) :: err_msg
+      character(len=128) :: filename
+      character(len=3)   :: id_num
 !--------------------------------------------------
 ! .. Local Arrays
 !--------------------------------------------------
-        REAL :: dat1(nlu,dep_seasons), dat2(nlu,dep_seasons),         &
-                dat3(nlu,dep_seasons), dat4(nlu,dep_seasons),         &
-                dat5(nlu,dep_seasons), dat6(nlu,dep_seasons),         &
-                dat7(nlu,dep_seasons), dvj(numgas)
+      REAL :: dat1(nlu,dep_seasons), dat2(nlu,dep_seasons),         &
+         dat3(nlu,dep_seasons), dat4(nlu,dep_seasons),         &
+         dat5(nlu,dep_seasons), dat6(nlu,dep_seasons),         &
+         dat7(nlu,dep_seasons), dvj(numgas)
 
       chem_opt = chem_opt
 
       if( chem_opt == MOZART_KPP .or. &
-          chem_opt == MOZCART_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-          chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-         print *, 'dep_init: mozart,mozcart chem option requires netcdf' 
+         chem_opt == MOZCART_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+         chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+         print *, 'dep_init: mozart,mozcart chem option requires netcdf'
          stop
       end if
 
@@ -1584,37 +1584,37 @@ is_nh3: if( p_nh3 > 1 ) then
 ! .. Data Statements ..
 !     RI for stomatal resistance
 !      data ((ri(ILAND,ISEASON),ILAND=1,nlu),ISEASON=1,dep_seasons)/0.10E+11, &
-        DATA ((dat1(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
-          0.60E+02, 0.60E+02, 0.60E+02, 0.60E+02, 0.70E+02, 0.12E+03, &
-          0.12E+03, 0.12E+03, 0.12E+03, 0.70E+02, 0.13E+03, 0.70E+02, &
-          0.13E+03, 0.10E+03, 0.10E+11, 0.80E+02, 0.10E+03, 0.10E+11, &
-          0.80E+02, 0.10E+03, 0.10E+03, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.10E+11, 0.10E+11, &
-          0.70E+02, 0.25E+03, 0.50E+03, 0.10E+11, 0.10E+11, 0.50E+03, &
-          0.10E+11, 0.10E+11, 0.50E+03, 0.50E+03, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.10E+11, &
-          0.10E+11, 0.70E+02, 0.25E+03, 0.50E+03, 0.10E+11, 0.10E+11, &
-          0.50E+03, 0.10E+11, 0.10E+11, 0.50E+03, 0.50E+03, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.70E+02, 0.40E+03, 0.80E+03, 0.10E+11, &
-          0.10E+11, 0.80E+03, 0.10E+11, 0.10E+11, 0.80E+03, 0.80E+03, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.12E+03, &
-          0.12E+03, 0.12E+03, 0.14E+03, 0.24E+03, 0.24E+03, 0.24E+03, &
-          0.12E+03, 0.14E+03, 0.25E+03, 0.70E+02, 0.25E+03, 0.19E+03, &
-          0.10E+11, 0.16E+03, 0.19E+03, 0.10E+11, 0.16E+03, 0.19E+03, &
-          0.19E+03, 0.10E+11, 0.10E+11, 0.10E+11/
+      DATA ((dat1(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
+         0.60E+02, 0.60E+02, 0.60E+02, 0.60E+02, 0.70E+02, 0.12E+03, &
+         0.12E+03, 0.12E+03, 0.12E+03, 0.70E+02, 0.13E+03, 0.70E+02, &
+         0.13E+03, 0.10E+03, 0.10E+11, 0.80E+02, 0.10E+03, 0.10E+11, &
+         0.80E+02, 0.10E+03, 0.10E+03, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.10E+11, 0.10E+11, &
+         0.70E+02, 0.25E+03, 0.50E+03, 0.10E+11, 0.10E+11, 0.50E+03, &
+         0.10E+11, 0.10E+11, 0.50E+03, 0.50E+03, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.10E+11, &
+         0.10E+11, 0.70E+02, 0.25E+03, 0.50E+03, 0.10E+11, 0.10E+11, &
+         0.50E+03, 0.10E+11, 0.10E+11, 0.50E+03, 0.50E+03, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.70E+02, 0.40E+03, 0.80E+03, 0.10E+11, &
+         0.10E+11, 0.80E+03, 0.10E+11, 0.10E+11, 0.80E+03, 0.80E+03, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.12E+03, 0.12E+03, &
+         0.12E+03, 0.12E+03, 0.14E+03, 0.24E+03, 0.24E+03, 0.24E+03, &
+         0.12E+03, 0.14E+03, 0.25E+03, 0.70E+02, 0.25E+03, 0.19E+03, &
+         0.10E+11, 0.16E+03, 0.19E+03, 0.10E+11, 0.16E+03, 0.19E+03, &
+         0.19E+03, 0.10E+11, 0.10E+11, 0.10E+11/
 ! ..
-        IF (nlu/=25) THEN
-          write(0,*) 'number of land use classifications not correct '
-          stop
-        END IF
-        IF (dep_seasons/=5) THEN
-          write(0,*) 'number of dep_seasons not correct '
-          stop
-        END IF
+      IF (nlu/=25) THEN
+         write(0,*) 'number of land use classifications not correct '
+         stop
+      END IF
+      IF (dep_seasons/=5) THEN
+         write(0,*) 'number of dep_seasons not correct '
+         stop
+      END IF
 
 !     SURFACE RESISTANCE DATA FOR DEPOSITION MODEL OF
 !     M. L. WESELY, ATMOSPHERIC ENVIRONMENT 23 (1989) 1293-1304
@@ -1662,171 +1662,171 @@ is_nh3: if( p_nh3 > 1 ) then
 !     ---> landuse type
 !     1       2       3       4       5       6       7       8       9
 !     RLU for outer surfaces in the upper canopy
-        DO iseason = 1, dep_seasons
-           ri(1:nlu,iseason) = dat1(1:nlu,iseason)
-        END DO
+      DO iseason = 1, dep_seasons
+         ri(1:nlu,iseason) = dat1(1:nlu,iseason)
+      END DO
 !      data ((rlu(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.10E+11, &
-        DATA ((dat2(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
-          0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.10E+11, 0.25E+04, 0.20E+04, 0.10E+11, &
-          0.25E+04, 0.20E+04, 0.20E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
-          0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, 0.90E+04, &
-          0.20E+04, 0.40E+04, 0.80E+04, 0.10E+11, 0.90E+04, 0.80E+04, &
-          0.10E+11, 0.90E+04, 0.80E+04, 0.80E+04, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
-          0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, &
-          0.90E+04, 0.20E+04, 0.40E+04, 0.80E+04, 0.10E+11, 0.90E+04, &
-          0.80E+04, 0.10E+11, 0.90E+04, 0.80E+04, 0.80E+04, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.20E+04, 0.60E+04, 0.90E+04, 0.10E+11, &
-          0.90E+04, 0.90E+04, 0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.40E+04, 0.40E+04, &
-          0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, &
-          0.20E+04, 0.40E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.30E+04, &
-          0.10E+11, 0.40E+04, 0.30E+04, 0.10E+11, 0.40E+04, 0.30E+04, &
-          0.30E+04, 0.10E+11, 0.10E+11, 0.10E+11/
-        DO iseason = 1, dep_seasons
-           rlu(1:nlu,iseason) = dat2(1:nlu,iseason)
-        END DO
+      DATA ((dat2(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
+         0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.10E+11, 0.25E+04, 0.20E+04, 0.10E+11, &
+         0.25E+04, 0.20E+04, 0.20E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
+         0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, 0.90E+04, &
+         0.20E+04, 0.40E+04, 0.80E+04, 0.10E+11, 0.90E+04, 0.80E+04, &
+         0.10E+11, 0.90E+04, 0.80E+04, 0.80E+04, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
+         0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, &
+         0.90E+04, 0.20E+04, 0.40E+04, 0.80E+04, 0.10E+11, 0.90E+04, &
+         0.80E+04, 0.10E+11, 0.90E+04, 0.80E+04, 0.80E+04, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.20E+04, 0.60E+04, 0.90E+04, 0.10E+11, &
+         0.90E+04, 0.90E+04, 0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.40E+04, 0.40E+04, &
+         0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, &
+         0.20E+04, 0.40E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.30E+04, &
+         0.10E+11, 0.40E+04, 0.30E+04, 0.10E+11, 0.40E+04, 0.30E+04, &
+         0.30E+04, 0.10E+11, 0.10E+11, 0.10E+11/
+      DO iseason = 1, dep_seasons
+         rlu(1:nlu,iseason) = dat2(1:nlu,iseason)
+      END DO
 !     RAC for transfer that depends on canopy height and density
 !      data ((rac(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.10E+03, &
-        DATA ((dat3(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+04, 0.10E+03, &
-          0.10E+03, 0.10E+03, 0.10E+03, 0.20E+04, 0.20E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.00E+00, 0.30E+03, 0.20E+04, 0.00E+00, &
-          0.30E+03, 0.20E+04, 0.20E+04, 0.00E+00, 0.00E+00, 0.00E+00, &
-          0.10E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+04, &
-          0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.15E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.17E+04, 0.00E+00, 0.20E+03, 0.17E+04, &
-          0.00E+00, 0.20E+03, 0.17E+04, 0.17E+04, 0.00E+00, 0.00E+00, &
-          0.00E+00, 0.10E+03, 0.10E+02, 0.10E+02, 0.10E+02, 0.10E+02, &
-          0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+04, &
-          0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, 0.00E+00, 0.10E+03, &
-          0.15E+04, 0.00E+00, 0.10E+03, 0.15E+04, 0.15E+04, 0.00E+00, &
-          0.00E+00, 0.00E+00, 0.10E+03, 0.10E+02, 0.10E+02, 0.10E+02, &
-          0.10E+02, 0.10E+04, 0.10E+02, 0.10E+02, 0.10E+02, 0.10E+02, &
-          0.10E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, 0.00E+00, &
-          0.50E+02, 0.15E+04, 0.00E+00, 0.50E+02, 0.15E+04, 0.15E+04, &
-          0.00E+00, 0.00E+00, 0.00E+00, 0.10E+03, 0.50E+02, 0.50E+02, &
-          0.50E+02, 0.50E+02, 0.12E+04, 0.80E+02, 0.80E+02, 0.80E+02, &
-          0.10E+03, 0.12E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, &
-          0.00E+00, 0.20E+03, 0.15E+04, 0.00E+00, 0.20E+03, 0.15E+04, &
-          0.15E+04, 0.00E+00, 0.00E+00, 0.00E+00/
-        DO iseason = 1, dep_seasons
-           rac(1:nlu,iseason) = dat3(1:nlu,iseason)
-        END DO
+      DATA ((dat3(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+04, 0.10E+03, &
+         0.10E+03, 0.10E+03, 0.10E+03, 0.20E+04, 0.20E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.00E+00, 0.30E+03, 0.20E+04, 0.00E+00, &
+         0.30E+03, 0.20E+04, 0.20E+04, 0.00E+00, 0.00E+00, 0.00E+00, &
+         0.10E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+04, &
+         0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.15E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.17E+04, 0.00E+00, 0.20E+03, 0.17E+04, &
+         0.00E+00, 0.20E+03, 0.17E+04, 0.17E+04, 0.00E+00, 0.00E+00, &
+         0.00E+00, 0.10E+03, 0.10E+02, 0.10E+02, 0.10E+02, 0.10E+02, &
+         0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+04, &
+         0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, 0.00E+00, 0.10E+03, &
+         0.15E+04, 0.00E+00, 0.10E+03, 0.15E+04, 0.15E+04, 0.00E+00, &
+         0.00E+00, 0.00E+00, 0.10E+03, 0.10E+02, 0.10E+02, 0.10E+02, &
+         0.10E+02, 0.10E+04, 0.10E+02, 0.10E+02, 0.10E+02, 0.10E+02, &
+         0.10E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, 0.00E+00, &
+         0.50E+02, 0.15E+04, 0.00E+00, 0.50E+02, 0.15E+04, 0.15E+04, &
+         0.00E+00, 0.00E+00, 0.00E+00, 0.10E+03, 0.50E+02, 0.50E+02, &
+         0.50E+02, 0.50E+02, 0.12E+04, 0.80E+02, 0.80E+02, 0.80E+02, &
+         0.10E+03, 0.12E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.15E+04, &
+         0.00E+00, 0.20E+03, 0.15E+04, 0.00E+00, 0.20E+03, 0.15E+04, &
+         0.15E+04, 0.00E+00, 0.00E+00, 0.00E+00/
+      DO iseason = 1, dep_seasons
+         rac(1:nlu,iseason) = dat3(1:nlu,iseason)
+      END DO
 !     RGSS for ground surface  SO2
 !      data ((rgss(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.40E+03, &
-        DATA ((dat4(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.40E+03, &
-          0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.50E+03, 0.35E+03, &
-          0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, 0.50E+03, 0.50E+03, &
-          0.50E+03, 0.10E+03, 0.10E+01, 0.10E+01, 0.10E+03, 0.10E+04, &
-          0.10E+01, 0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, 0.10E+04, &
-          0.40E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.50E+03, &
-          0.35E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, 0.50E+03, &
-          0.50E+03, 0.50E+03, 0.10E+03, 0.10E+01, 0.10E+01, 0.10E+03, &
-          0.10E+04, 0.10E+01, 0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, &
-          0.10E+04, 0.40E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, &
-          0.50E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, &
-          0.50E+03, 0.50E+03, 0.50E+03, 0.20E+03, 0.10E+01, 0.10E+01, &
-          0.20E+03, 0.10E+04, 0.10E+01, 0.20E+03, 0.20E+03, 0.10E+04, &
-          0.10E+03, 0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, &
-          0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, &
-          0.10E+03, 0.10E+03, 0.50E+03, 0.10E+03, 0.10E+03, 0.10E+01, &
-          0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, &
-          0.10E+04, 0.10E+03, 0.10E+04, 0.50E+03, 0.15E+03, 0.15E+03, &
-          0.15E+03, 0.15E+03, 0.50E+03, 0.35E+03, 0.35E+03, 0.35E+03, &
-          0.35E+03, 0.50E+03, 0.50E+03, 0.50E+03, 0.50E+03, 0.20E+03, &
-          0.10E+01, 0.10E+01, 0.20E+03, 0.10E+04, 0.10E+01, 0.20E+03, &
-          0.20E+03, 0.10E+04, 0.10E+03, 0.10E+04/
-        DO iseason = 1, dep_seasons
-           rgss(1:nlu,iseason) = dat4(1:nlu,iseason)
-        END DO
+      DATA ((dat4(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.40E+03, &
+         0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.50E+03, 0.35E+03, &
+         0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, 0.50E+03, 0.50E+03, &
+         0.50E+03, 0.10E+03, 0.10E+01, 0.10E+01, 0.10E+03, 0.10E+04, &
+         0.10E+01, 0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, 0.10E+04, &
+         0.40E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.50E+03, &
+         0.35E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, 0.50E+03, &
+         0.50E+03, 0.50E+03, 0.10E+03, 0.10E+01, 0.10E+01, 0.10E+03, &
+         0.10E+04, 0.10E+01, 0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, &
+         0.10E+04, 0.40E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, &
+         0.50E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.35E+03, 0.50E+03, &
+         0.50E+03, 0.50E+03, 0.50E+03, 0.20E+03, 0.10E+01, 0.10E+01, &
+         0.20E+03, 0.10E+04, 0.10E+01, 0.20E+03, 0.20E+03, 0.10E+04, &
+         0.10E+03, 0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, &
+         0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, 0.10E+03, &
+         0.10E+03, 0.10E+03, 0.50E+03, 0.10E+03, 0.10E+03, 0.10E+01, &
+         0.10E+03, 0.10E+03, 0.10E+04, 0.10E+03, 0.10E+03, 0.10E+03, &
+         0.10E+04, 0.10E+03, 0.10E+04, 0.50E+03, 0.15E+03, 0.15E+03, &
+         0.15E+03, 0.15E+03, 0.50E+03, 0.35E+03, 0.35E+03, 0.35E+03, &
+         0.35E+03, 0.50E+03, 0.50E+03, 0.50E+03, 0.50E+03, 0.20E+03, &
+         0.10E+01, 0.10E+01, 0.20E+03, 0.10E+04, 0.10E+01, 0.20E+03, &
+         0.20E+03, 0.10E+04, 0.10E+03, 0.10E+04/
+      DO iseason = 1, dep_seasons
+         rgss(1:nlu,iseason) = dat4(1:nlu,iseason)
+      END DO
 !     RGSO for ground surface  O3
 !      data ((rgso(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.30E+03, &
-        DATA ((dat5(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.30E+03, &
-          0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.20E+03, 0.20E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
-          0.20E+03, 0.30E+03, 0.20E+04, 0.10E+04, 0.30E+03, 0.40E+03, &
-          0.10E+04, 0.30E+03, 0.30E+03, 0.40E+03, 0.35E+04, 0.40E+03, &
-          0.30E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.20E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
-          0.20E+03, 0.20E+03, 0.30E+03, 0.20E+04, 0.80E+03, 0.30E+03, &
-          0.40E+03, 0.80E+03, 0.30E+03, 0.30E+03, 0.40E+03, 0.35E+04, &
-          0.40E+03, 0.30E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.30E+03, 0.20E+04, 0.10E+04, &
-          0.30E+03, 0.40E+03, 0.10E+04, 0.30E+03, 0.30E+03, 0.40E+03, &
-          0.35E+04, 0.40E+03, 0.60E+03, 0.35E+04, 0.35E+04, 0.35E+04, &
-          0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, &
-          0.35E+04, 0.35E+04, 0.20E+03, 0.35E+04, 0.35E+04, 0.20E+04, &
-          0.35E+04, 0.35E+04, 0.40E+03, 0.35E+04, 0.35E+04, 0.35E+04, &
-          0.40E+03, 0.35E+04, 0.40E+03, 0.30E+03, 0.15E+03, 0.15E+03, &
-          0.15E+03, 0.15E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
-          0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.30E+03, &
-          0.20E+04, 0.10E+04, 0.30E+03, 0.40E+03, 0.10E+04, 0.30E+03, &
-          0.30E+03, 0.40E+03, 0.35E+04, 0.40E+03/
-        DO iseason = 1, dep_seasons
-           rgso(1:nlu,iseason) = dat5(1:nlu,iseason)
-        END DO
+      DATA ((dat5(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.30E+03, &
+         0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.20E+03, 0.20E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
+         0.20E+03, 0.30E+03, 0.20E+04, 0.10E+04, 0.30E+03, 0.40E+03, &
+         0.10E+04, 0.30E+03, 0.30E+03, 0.40E+03, 0.35E+04, 0.40E+03, &
+         0.30E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.20E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
+         0.20E+03, 0.20E+03, 0.30E+03, 0.20E+04, 0.80E+03, 0.30E+03, &
+         0.40E+03, 0.80E+03, 0.30E+03, 0.30E+03, 0.40E+03, 0.35E+04, &
+         0.40E+03, 0.30E+03, 0.15E+03, 0.15E+03, 0.15E+03, 0.15E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.30E+03, 0.20E+04, 0.10E+04, &
+         0.30E+03, 0.40E+03, 0.10E+04, 0.30E+03, 0.30E+03, 0.40E+03, &
+         0.35E+04, 0.40E+03, 0.60E+03, 0.35E+04, 0.35E+04, 0.35E+04, &
+         0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, 0.35E+04, &
+         0.35E+04, 0.35E+04, 0.20E+03, 0.35E+04, 0.35E+04, 0.20E+04, &
+         0.35E+04, 0.35E+04, 0.40E+03, 0.35E+04, 0.35E+04, 0.35E+04, &
+         0.40E+03, 0.35E+04, 0.40E+03, 0.30E+03, 0.15E+03, 0.15E+03, &
+         0.15E+03, 0.15E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, &
+         0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.20E+03, 0.30E+03, &
+         0.20E+04, 0.10E+04, 0.30E+03, 0.40E+03, 0.10E+04, 0.30E+03, &
+         0.30E+03, 0.40E+03, 0.35E+04, 0.40E+03/
+      DO iseason = 1, dep_seasons
+         rgso(1:nlu,iseason) = dat5(1:nlu,iseason)
+      END DO
 !     RCLS for exposed surfaces in the lower canopy  SO2
 !      data ((rcls(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.10E+11, &
-        DATA ((dat6(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
-          0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
-          0.20E+04, 0.20E+04, 0.10E+11, 0.25E+04, 0.20E+04, 0.10E+11, &
-          0.25E+04, 0.20E+04, 0.20E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
-          0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, 0.90E+04, &
-          0.20E+04, 0.20E+04, 0.40E+04, 0.10E+11, 0.90E+04, 0.40E+04, &
-          0.10E+11, 0.90E+04, 0.40E+04, 0.40E+04, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, &
-          0.90E+04, 0.20E+04, 0.30E+04, 0.60E+04, 0.10E+11, 0.90E+04, &
-          0.60E+04, 0.10E+11, 0.90E+04, 0.60E+04, 0.60E+04, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.90E+04, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.90E+04, 0.90E+04, 0.20E+04, 0.20E+03, 0.40E+03, 0.10E+11, &
-          0.90E+04, 0.40E+03, 0.10E+11, 0.90E+04, 0.40E+03, 0.40E+03, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.40E+04, 0.40E+04, &
-          0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, &
-          0.20E+04, 0.40E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.30E+04, &
-          0.10E+11, 0.40E+04, 0.30E+04, 0.10E+11, 0.40E+04, 0.30E+04, &
-          0.30E+04, 0.10E+11, 0.10E+11, 0.10E+11/
-        DO iseason = 1, dep_seasons
-           rcls(1:nlu,iseason) = dat6(1:nlu,iseason)
-        END DO
+      DATA ((dat6(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
+         0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.20E+04, &
+         0.20E+04, 0.20E+04, 0.10E+11, 0.25E+04, 0.20E+04, 0.10E+11, &
+         0.25E+04, 0.20E+04, 0.20E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, &
+         0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, 0.90E+04, &
+         0.20E+04, 0.20E+04, 0.40E+04, 0.10E+11, 0.90E+04, 0.40E+04, &
+         0.10E+11, 0.90E+04, 0.40E+04, 0.40E+04, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.90E+04, 0.90E+04, 0.90E+04, 0.90E+04, 0.20E+04, 0.90E+04, &
+         0.90E+04, 0.20E+04, 0.30E+04, 0.60E+04, 0.10E+11, 0.90E+04, &
+         0.60E+04, 0.10E+11, 0.90E+04, 0.60E+04, 0.60E+04, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.90E+04, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.90E+04, 0.90E+04, 0.20E+04, 0.20E+03, 0.40E+03, 0.10E+11, &
+         0.90E+04, 0.40E+03, 0.10E+11, 0.90E+04, 0.40E+03, 0.40E+03, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.40E+04, 0.40E+04, &
+         0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, 0.40E+04, &
+         0.20E+04, 0.40E+04, 0.20E+04, 0.20E+04, 0.20E+04, 0.30E+04, &
+         0.10E+11, 0.40E+04, 0.30E+04, 0.10E+11, 0.40E+04, 0.30E+04, &
+         0.30E+04, 0.10E+11, 0.10E+11, 0.10E+11/
+      DO iseason = 1, dep_seasons
+         rcls(1:nlu,iseason) = dat6(1:nlu,iseason)
+      END DO
 !     RCLO for exposed surfaces in the lower canopy  O3
 !      data ((rclo(ILAND,ISEASON),ILAND=1,25),ISEASON=1,5)/0.10E+11, &
-        DATA ((dat7(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
-          0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
-          0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
-          0.10E+04, 0.10E+04, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+11, &
-          0.10E+04, 0.10E+04, 0.10E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, &
-          0.40E+03, 0.40E+03, 0.40E+03, 0.10E+04, 0.40E+03, 0.40E+03, &
-          0.10E+04, 0.10E+04, 0.60E+03, 0.10E+11, 0.40E+03, 0.60E+03, &
-          0.10E+11, 0.40E+03, 0.60E+03, 0.60E+03, 0.10E+11, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
-          0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, 0.10E+04, 0.40E+03, &
-          0.40E+03, 0.10E+04, 0.10E+04, 0.60E+03, 0.10E+11, 0.80E+03, &
-          0.60E+03, 0.10E+11, 0.80E+03, 0.60E+03, 0.60E+03, 0.10E+11, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+04, &
-          0.10E+04, 0.40E+03, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
-          0.40E+03, 0.40E+03, 0.10E+04, 0.15E+04, 0.60E+03, 0.10E+11, &
-          0.80E+03, 0.60E+03, 0.10E+11, 0.80E+03, 0.60E+03, 0.60E+03, &
-          0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, &
-          0.10E+04, 0.10E+04, 0.50E+03, 0.50E+03, 0.50E+03, 0.50E+03, &
-          0.10E+04, 0.50E+03, 0.15E+04, 0.10E+04, 0.15E+04, 0.70E+03, &
-          0.10E+11, 0.60E+03, 0.70E+03, 0.10E+11, 0.60E+03, 0.70E+03, &
-          0.70E+03, 0.10E+11, 0.10E+11, 0.10E+11/
+      DATA ((dat7(iland,iseason),iland=1,nlu),iseason=1,dep_seasons)/0.10E+11, &
+         0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
+         0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
+         0.10E+04, 0.10E+04, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+11, &
+         0.10E+04, 0.10E+04, 0.10E+04, 0.10E+11, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, &
+         0.40E+03, 0.40E+03, 0.40E+03, 0.10E+04, 0.40E+03, 0.40E+03, &
+         0.10E+04, 0.10E+04, 0.60E+03, 0.10E+11, 0.40E+03, 0.60E+03, &
+         0.10E+11, 0.40E+03, 0.60E+03, 0.60E+03, 0.10E+11, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
+         0.40E+03, 0.40E+03, 0.40E+03, 0.40E+03, 0.10E+04, 0.40E+03, &
+         0.40E+03, 0.10E+04, 0.10E+04, 0.60E+03, 0.10E+11, 0.80E+03, &
+         0.60E+03, 0.10E+11, 0.80E+03, 0.60E+03, 0.60E+03, 0.10E+11, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, 0.10E+04, &
+         0.10E+04, 0.40E+03, 0.10E+04, 0.10E+04, 0.10E+04, 0.10E+04, &
+         0.40E+03, 0.40E+03, 0.10E+04, 0.15E+04, 0.60E+03, 0.10E+11, &
+         0.80E+03, 0.60E+03, 0.10E+11, 0.80E+03, 0.60E+03, 0.60E+03, &
+         0.10E+11, 0.10E+11, 0.10E+11, 0.10E+11, 0.10E+04, 0.10E+04, &
+         0.10E+04, 0.10E+04, 0.50E+03, 0.50E+03, 0.50E+03, 0.50E+03, &
+         0.10E+04, 0.50E+03, 0.15E+04, 0.10E+04, 0.15E+04, 0.70E+03, &
+         0.10E+11, 0.60E+03, 0.70E+03, 0.10E+11, 0.60E+03, 0.70E+03, &
+         0.70E+03, 0.10E+11, 0.10E+11, 0.10E+11/
 
-        DO iseason = 1, dep_seasons
-           rclo(1:nlu,iseason) = dat7(1:nlu,iseason)
-        END DO
+      DO iseason = 1, dep_seasons
+         rclo(1:nlu,iseason) = dat7(1:nlu,iseason)
+      END DO
 
 !     data ((dat8(iseason,iland),iseason=1,5),iland=1,11) / &
 !                          1.e36,  60., 120.,  70., 130., 100.,1.e36,1.e36,  80., 100., 150., &
@@ -1839,27 +1839,27 @@ is_nh3: if( p_nh3 > 1 ) then
 !--------------------------------------------------
 !	Initialize parameters
 !--------------------------------------------------
-        hstar(1:numgas)  = 0.
-        hstar4(1:numgas) = 0.
-        dhr(1:numgas)    = 0.
-        f0(1:numgas)     = 0.
-        dvj(1:numgas)    = 99.
+      hstar(1:numgas)  = 0.
+      hstar4(1:numgas) = 0.
+      dhr(1:numgas)    = 0.
+      f0(1:numgas)     = 0.
+      dvj(1:numgas)    = 99.
 
 !--------------------------------------------------
 !     HENRY''S LAW COEFFICIENTS
 !     Effective Henry''s law coefficient at pH 7
 !     [KH298]=mole/(l atm)
 !--------------------------------------------------
-is_cbm4_kpp : &
+      is_cbm4_kpp : &
 
-        if (chem_opt /= CBM4_KPP .or. &
-             chem_opt /= CB05_SORG_AQ_KPP .or. &
-             chem_opt /= CB05_SORG_VBS_AQ_KPP) then
-           if( chem_opt == MOZART_KPP .or. &
-               chem_opt == MOZCART_KPP .or. &
-               chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-              hstar(p_o3)      = 1.15E-2
+         if (chem_opt /= CBM4_KPP .or. &
+         chem_opt /= CB05_SORG_AQ_KPP .or. &
+         chem_opt /= CB05_SORG_VBS_AQ_KPP) then
+         if( chem_opt == MOZART_KPP .or. &
+            chem_opt == MOZCART_KPP .or. &
+            chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+            chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+            hstar(p_o3)      = 1.15E-2
 !              hstar(p_co)      = 1.e-3
 !              hstar(p_h2o2)    = 8.33E+4
 !              hstar(p_hcho)    = 6.3e3
@@ -1885,27 +1885,27 @@ is_cbm4_kpp : &
 !              hstar(p_tolooh)  = 311.
 !              hstar(p_terpooh) = 311.
 
-           if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+            if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
                chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-              hstar(p_sulf) = 2.600E+06
-           end if
-              if ( chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+               hstar(p_sulf) = 2.600E+06
+            end if
+            if ( chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !               hstar(p_cvasoaX) = 0.0
 !               hstar(p_cvasoa1) = 1.06E+08
 !               hstar(p_cvasoa2) = 1.84E+07
 !               hstar(p_cvasoa3) = 3.18E+06
 !               hstar(p_cvasoa4) = 5.50E+05
 !!               hstar(p_cvbsoaX) = 0.0
- !              hstar(p_cvbsoa1) = 5.25E+09
- !              hstar(p_cvbsoa2) = 7.00E+08
- !              hstar(p_cvbsoa3) = 9.33E+07
- !              hstar(p_cvbsoa4) = 1.24E+07
-              endif
-              
-     else if( chem_opt == crimech_kpp .or. &
-          chem_opt == cri_mosaic_8bin_aq_kpp .or. &
-          chem_opt == cri_mosaic_4bin_aq_kpp )   then
-              hstar(p_o3)      = 1.15E-2
+               !              hstar(p_cvbsoa1) = 5.25E+09
+               !              hstar(p_cvbsoa2) = 7.00E+08
+               !              hstar(p_cvbsoa3) = 9.33E+07
+               !              hstar(p_cvbsoa4) = 1.24E+07
+            endif
+
+         else if( chem_opt == crimech_kpp .or. &
+            chem_opt == cri_mosaic_8bin_aq_kpp .or. &
+            chem_opt == cri_mosaic_4bin_aq_kpp )   then
+            hstar(p_o3)      = 1.15E-2
 !              hstar(p_co)      = 1.e-3
 !              hstar(p_h2o2)    = 8.33E+4
 !              hstar(p_hcho)    = 6.3e3
@@ -1915,14 +1915,14 @@ is_cbm4_kpp : &
 !              hstar(p_ket)    = 27.
 !              hstar(p_paa)     = 837.
 !               hstar(p_c2h5co3h)    = 837.
-!               hstar(p_hoch2co3h)    = 837.               
+!               hstar(p_hoch2co3h)    = 837.
 !              hstar(p_c3h6ooh) = 220.
 !              hstar(p_pan)     = 5.
 !              hstar(p_mpan)    = 1.15e-2
 !              hstar(p_ru12pan)    = 1.15e-2
 !              hstar(p_rtn26pan)    = 1.15e-2
-!               hstar(p_phan)    = 1.15e-2  
-!               hstar(p_ppn)    = 1.15e-2 
+!               hstar(p_phan)    = 1.15e-2
+!               hstar(p_ppn)    = 1.15e-2
 !              hstar(p_c2h5oh)  = 200.
 !              hstar(p_c2h5ooh)   = 336.
 !              hstar(p_ic3h7ooh)   = 336.
@@ -1932,103 +1932,103 @@ is_cbm4_kpp : &
 !              hstar(p_acetol)  = 6.3e3
 !              hstar(p_glyald)  = 4.14e4
 !              hstar(p_hydrald) = 70.
-!               hstar(p_hcooh) = 311. 
-!               hstar(p_prooh) = 311. 
-!               hstar(p_hoc2h4ooh) = 311. 
-!               hstar(p_rn10ooh) = 311. 
-!               hstar(p_rn13ooh) = 311. 
-!               hstar(p_rn16ooh) = 311. 
-!               hstar(p_rn19ooh) = 311. 
-!               hstar(p_rn8ooh) = 311. 
-!               hstar(p_rn11ooh) = 311. 
-!               hstar(p_rn14ooh) = 311. 
-!               hstar(p_rn17ooh) = 311. 
-!               hstar(p_rn9ooh) = 311. 
-!               hstar(p_rn12ooh) = 311. 
-!               hstar(p_rn15ooh) = 311. 
-!               hstar(p_rn18ooh) = 311. 
-!               hstar(p_nrn6ooh) = 311. 
-!               hstar(p_nrn9ooh) = 311. 
-!               hstar(p_nrn12ooh) = 311. 
-!               hstar(p_ru14ooh) = 311. 
-!               hstar(p_ru12ooh) = 311. 
-!               hstar(p_ru10ooh) = 311. 
-!               hstar(p_nru14ooh) = 311. 
-!               hstar(p_nru12ooh) = 311. 
-!               hstar(p_ra13ooh) = 311. 
-!               hstar(p_ra16ooh) = 311. 
-!               hstar(p_ra19ooh) = 311. 
-!               hstar(p_rtn28ooh) = 311. 
-!               hstar(p_rtn26ooh) = 311. 
-!               hstar(p_nrtn28ooh) = 311. 
-!               hstar(p_rtn25ooh) = 311. 
-!               hstar(p_rtn24ooh) = 311. 
-!               hstar(p_rtn23ooh) = 311. 
-!               hstar(p_rtn14ooh) = 311. 
-!               hstar(p_rtn10ooh) = 311. 
-!               hstar(p_rcooh25) = 311. 
-!               hstar(p_rtx28ooh) = 311. 
-!               hstar(p_rtx24ooh) = 311. 
-!               hstar(p_rtx22ooh) = 311. 
-!               hstar(p_nrtx28ooh) = 311. 
-!               hstar(p_ra22ooh) = 311. 
-!               hstar(p_ra25ooh) = 311. 
-!               hstar(p_ch3no3) =  1.e3 
-!               hstar(p_c2h5no3) =  1.e3 
-!               hstar(p_hoc2h4no3) =  1.e3 
-!               hstar(p_rn10no3) =  1.e3 
-!               hstar(p_rn13no3) =  1.e3 
-!               hstar(p_rn19no3) =  1.e3 
-!               hstar(p_rn9no3) =  1.e3 
-!               hstar(p_rn12no3) =  1.e3 
-!               hstar(p_rn15no3) =  1.e3 
-!               hstar(p_rn18no3) =  1.e3 
-!               hstar(p_rn16no3) =  1.e3 
-!               hstar(p_ru14no3) =  1.e3 
-!               hstar(p_ra13no3) =  1.e3 
-!               hstar(p_ra16no3) =  1.e3 
-!               hstar(p_ra19no3) =  1.e3 
-!               hstar(p_rtn28no3) =  1.e3 
-!               hstar(p_rtn25no3) =  1.e3 
-!               hstar(p_rtx28no3) =  1.e3 
-!               hstar(p_rtx24no3) =  1.e3 
-!               hstar(p_rtx22no3) =  1.e3 
-!               hstar(p_rtn23no3) =  1.e3 
-!               hstar(p_ra22no3) =  1.e3 
-!               hstar(p_ra25no3) =  1.e3 
+!               hstar(p_hcooh) = 311.
+!               hstar(p_prooh) = 311.
+!               hstar(p_hoc2h4ooh) = 311.
+!               hstar(p_rn10ooh) = 311.
+!               hstar(p_rn13ooh) = 311.
+!               hstar(p_rn16ooh) = 311.
+!               hstar(p_rn19ooh) = 311.
+!               hstar(p_rn8ooh) = 311.
+!               hstar(p_rn11ooh) = 311.
+!               hstar(p_rn14ooh) = 311.
+!               hstar(p_rn17ooh) = 311.
+!               hstar(p_rn9ooh) = 311.
+!               hstar(p_rn12ooh) = 311.
+!               hstar(p_rn15ooh) = 311.
+!               hstar(p_rn18ooh) = 311.
+!               hstar(p_nrn6ooh) = 311.
+!               hstar(p_nrn9ooh) = 311.
+!               hstar(p_nrn12ooh) = 311.
+!               hstar(p_ru14ooh) = 311.
+!               hstar(p_ru12ooh) = 311.
+!               hstar(p_ru10ooh) = 311.
+!               hstar(p_nru14ooh) = 311.
+!               hstar(p_nru12ooh) = 311.
+!               hstar(p_ra13ooh) = 311.
+!               hstar(p_ra16ooh) = 311.
+!               hstar(p_ra19ooh) = 311.
+!               hstar(p_rtn28ooh) = 311.
+!               hstar(p_rtn26ooh) = 311.
+!               hstar(p_nrtn28ooh) = 311.
+!               hstar(p_rtn25ooh) = 311.
+!               hstar(p_rtn24ooh) = 311.
+!               hstar(p_rtn23ooh) = 311.
+!               hstar(p_rtn14ooh) = 311.
+!               hstar(p_rtn10ooh) = 311.
+!               hstar(p_rcooh25) = 311.
+!               hstar(p_rtx28ooh) = 311.
+!               hstar(p_rtx24ooh) = 311.
+!               hstar(p_rtx22ooh) = 311.
+!               hstar(p_nrtx28ooh) = 311.
+!               hstar(p_ra22ooh) = 311.
+!               hstar(p_ra25ooh) = 311.
+!               hstar(p_ch3no3) =  1.e3
+!               hstar(p_c2h5no3) =  1.e3
+!               hstar(p_hoc2h4no3) =  1.e3
+!               hstar(p_rn10no3) =  1.e3
+!               hstar(p_rn13no3) =  1.e3
+!               hstar(p_rn19no3) =  1.e3
+!               hstar(p_rn9no3) =  1.e3
+!               hstar(p_rn12no3) =  1.e3
+!               hstar(p_rn15no3) =  1.e3
+!               hstar(p_rn18no3) =  1.e3
+!               hstar(p_rn16no3) =  1.e3
+!               hstar(p_ru14no3) =  1.e3
+!               hstar(p_ra13no3) =  1.e3
+!               hstar(p_ra16no3) =  1.e3
+!               hstar(p_ra19no3) =  1.e3
+!               hstar(p_rtn28no3) =  1.e3
+!               hstar(p_rtn25no3) =  1.e3
+!               hstar(p_rtx28no3) =  1.e3
+!               hstar(p_rtx24no3) =  1.e3
+!               hstar(p_rtx22no3) =  1.e3
+!               hstar(p_rtn23no3) =  1.e3
+!               hstar(p_ra22no3) =  1.e3
+!               hstar(p_ra25no3) =  1.e3
 !               hstar(p_ic3h7no3) =  1.e3
 !		       hstar(p_ch3cho)    = 1.14E+1
 !        	   hstar(p_c2h5cho)    = 1.14E+1
 !        	   hstar(p_hoch2cho)    = 1.14E+1
-!               hstar(p_carb14)    = 1.14E+1  
-!               hstar(p_carb17)    = 1.14E+1       
-!               hstar(p_carb7)    = 1.14E+1        
-!               hstar(p_carb10)    = 1.14E+1       
-!               hstar(p_carb13)    = 1.14E+1       
-!               hstar(p_carb16)    = 1.14E+1    
-!               hstar(p_carb3)    = 1.14E+1        
-!               hstar(p_carb6)    = 1.14E+1        
-!               hstar(p_carb9)    = 1.14E+1  
-!               hstar(p_carb12)    = 1.14E+1       
-!               hstar(p_carb15)    = 1.14E+1     
-!               hstar(p_ccarb12)    = 1.14E+1   
-!               hstar(p_ucarb12)    = 1.14E+1  
-!               hstar(p_ucarb10)    = 1.14E+1  
-!               hstar(p_nucarb12)    = 1.14E+1  
-!               hstar(p_udcarb8)    = 1.14E+1   
-!               hstar(p_udcarb11)    = 1.14E+1    
-!               hstar(p_udcarb14)    = 1.14E+1   
-!               hstar(p_tncarb26)    = 1.14E+1  
-!               hstar(p_tncarb10)    = 1.14E+1   
-!               hstar(p_tncarb15)    = 1.14E+1  
-!               hstar(p_txcarb24)    = 1.14E+1   
-!               hstar(p_txcarb22)    = 1.14E+1  
-!               hstar(p_carb11a)    = 1.14E+1 
-!               hstar(p_tncarb12)    = 1.14E+1 
-!               hstar(p_tncarb11)    = 1.14E+1 
-!               hstar(p_udcarb17)    = 1.14E+1 
-!        
-           else
+!               hstar(p_carb14)    = 1.14E+1
+!               hstar(p_carb17)    = 1.14E+1
+!               hstar(p_carb7)    = 1.14E+1
+!               hstar(p_carb10)    = 1.14E+1
+!               hstar(p_carb13)    = 1.14E+1
+!               hstar(p_carb16)    = 1.14E+1
+!               hstar(p_carb3)    = 1.14E+1
+!               hstar(p_carb6)    = 1.14E+1
+!               hstar(p_carb9)    = 1.14E+1
+!               hstar(p_carb12)    = 1.14E+1
+!               hstar(p_carb15)    = 1.14E+1
+!               hstar(p_ccarb12)    = 1.14E+1
+!               hstar(p_ucarb12)    = 1.14E+1
+!               hstar(p_ucarb10)    = 1.14E+1
+!               hstar(p_nucarb12)    = 1.14E+1
+!               hstar(p_udcarb8)    = 1.14E+1
+!               hstar(p_udcarb11)    = 1.14E+1
+!               hstar(p_udcarb14)    = 1.14E+1
+!               hstar(p_tncarb26)    = 1.14E+1
+!               hstar(p_tncarb10)    = 1.14E+1
+!               hstar(p_tncarb15)    = 1.14E+1
+!               hstar(p_txcarb24)    = 1.14E+1
+!               hstar(p_txcarb22)    = 1.14E+1
+!               hstar(p_carb11a)    = 1.14E+1
+!               hstar(p_tncarb12)    = 1.14E+1
+!               hstar(p_tncarb11)    = 1.14E+1
+!               hstar(p_udcarb17)    = 1.14E+1
+!
+         else
 !              hstar(p_o3)   = 1.13E-2
 !              hstar(p_co)   = 8.20E-3
 !              hstar(p_h2o2) = 7.45E+4
@@ -2036,7 +2036,7 @@ is_cbm4_kpp : &
 !              hstar(p_pan)  = 2.97
 !              hstar(p_paa)  = 473.
 !              hstar(p_onit) = 1.13
-           end if
+         end if
 !        hstar(p_no2)  = 6.40E-3
 !        hstar(p_no)   = 1.90E-3
 !        hstar(p_aco3) = 1.14E+1
@@ -2069,13 +2069,13 @@ is_cbm4_kpp : &
 !        hstar(p_n2o5) = 1.00E+10
 !        if(p_ol2 > 1) hstar(p_ol2) = 4.67E-3
 !        if(p_par > 1) hstar(p_par) = 1.13E-3  !wig, 1-May-2007: for CBMZ
-!        if(p_ch4 > 1) then 
+!        if(p_ch4 > 1) then
 !           hstar(p_ch4) = 1.50E-3
 !           dhr(p_ch4)   = 0.
 !           f0(p_ch4)    = 0.
 !           dvj(p_ch4)   = 0.250
 !        end if
-!        if(p_co2 > 1) then 
+!        if(p_co2 > 1) then
 !           hstar(p_co2) = 1.86E-1
 !           dhr(p_co2)   = 1636.
 !           f0(p_co2)    = 0.
@@ -2118,7 +2118,7 @@ is_cbm4_kpp : &
 !     -DH/R (for temperature correction)
 !     [-DH/R]=K
 !--------------------------------------------------
-        if( chem_opt == MOZART_KPP .or. &
+         if( chem_opt == MOZART_KPP .or. &
             chem_opt == MOZCART_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
@@ -2147,12 +2147,12 @@ is_cbm4_kpp : &
 !           dhr(p_tolooh)  = 5241.
 !           dhr(p_terpooh) = 5241.
 !
-           if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-             chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-             dhr(p_sulf) = 0.000E+00
-          end if
+            if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+               dhr(p_sulf) = 0.000E+00
+            end if
 
-           if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+            if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !             dhr(p_cvasoaX) = 0.
 !             dhr(p_cvasoa1) = 6014.
 !             dhr(p_cvasoa2) = 6014.
@@ -2163,11 +2163,11 @@ is_cbm4_kpp : &
 !             dhr(p_cvbsoa2) = 6014.
 !             dhr(p_cvbsoa3) = 6014.
 !             dhr(p_cvbsoa4) = 6014.
-           endif
+            endif
 
-     	else if( chem_opt == crimech_kpp .or. &
-          chem_opt == cri_mosaic_8bin_aq_kpp .or. &
-          chem_opt == cri_mosaic_4bin_aq_kpp )   then
+         else if( chem_opt == crimech_kpp .or. &
+            chem_opt == cri_mosaic_8bin_aq_kpp .or. &
+            chem_opt == cri_mosaic_4bin_aq_kpp )   then
 !           dhr(p_o3)      = 2560.
 !           dhr(p_h2o2)    = 7379.
 !           dhr(p_hcho)    = 6425.
@@ -2177,14 +2177,14 @@ is_cbm4_kpp : &
 !           dhr(p_ket)    = 5300.
 !           dhr(p_paa)     = 5308.
 !            dhr(p_c2h5co3h)    = 5308.
-!            dhr(p_hoch2co3h)    = 5308.           
+!            dhr(p_hoch2co3h)    = 5308.
 !           dhr(p_c3h6ooh) = 5653.
 !           dhr(p_pan)     = 0.
 !           dhr(p_mpan)    = 2560.
 !           dhr(p_ru12pan)    = 2560.
 !           dhr(p_rtn26pan)    = 2560.
-!           dhr(p_phan)    = 2560. 
-!           dhr(p_ppn)    = 2560.           
+!           dhr(p_phan)    = 2560.
+!           dhr(p_ppn)    = 2560.
 !           dhr(p_c2h5oh)  = 6500.
 !!              dhr(p_c3h6ooh) = 220.
 !           dhr(p_c2h5ooh)   = 5995.
@@ -2237,68 +2237,68 @@ is_cbm4_kpp : &
 !               dhr(p_nrtx28ooh) =  5241.
 !               dhr(p_ra22ooh) =  5241.
 !               dhr(p_ra25ooh) =  5241.
-!               dhr(p_ch3no3) = 6000. 
-!               dhr(p_c2h5no3) = 6000. 
-!               dhr(p_hoc2h4no3) = 6000. 
-!               dhr(p_rn10no3) = 6000. 
-!               dhr(p_rn13no3) = 6000. 
-!               dhr(p_rn19no3) = 6000. 
-!               dhr(p_rn9no3) = 6000. 
-!               dhr(p_rn12no3) = 6000. 
-!               dhr(p_rn15no3) = 6000. 
-!               dhr(p_rn18no3) = 6000. 
-!               dhr(p_rn16no3) = 6000. 
-!               dhr(p_ru14no3) = 6000. 
-!               dhr(p_ra13no3) = 6000. 
-!               dhr(p_ra16no3) = 6000. 
-!               dhr(p_ra19no3) = 6000. 
-!               dhr(p_rtn28no3) = 6000. 
-!               dhr(p_rtn25no3) = 6000. 
-!               dhr(p_rtx28no3) = 6000. 
-!               dhr(p_rtx24no3) = 6000. 
-!               dhr(p_rtx22no3) = 6000. 
-!               dhr(p_rtn23no3) = 6000. 
-!               dhr(p_ra22no3) = 6000. 
-!               dhr(p_ra25no3) = 6000. 
+!               dhr(p_ch3no3) = 6000.
+!               dhr(p_c2h5no3) = 6000.
+!               dhr(p_hoc2h4no3) = 6000.
+!               dhr(p_rn10no3) = 6000.
+!               dhr(p_rn13no3) = 6000.
+!               dhr(p_rn19no3) = 6000.
+!               dhr(p_rn9no3) = 6000.
+!               dhr(p_rn12no3) = 6000.
+!               dhr(p_rn15no3) = 6000.
+!               dhr(p_rn18no3) = 6000.
+!               dhr(p_rn16no3) = 6000.
+!               dhr(p_ru14no3) = 6000.
+!               dhr(p_ra13no3) = 6000.
+!               dhr(p_ra16no3) = 6000.
+!               dhr(p_ra19no3) = 6000.
+!               dhr(p_rtn28no3) = 6000.
+!               dhr(p_rtn25no3) = 6000.
+!               dhr(p_rtx28no3) = 6000.
+!               dhr(p_rtx24no3) = 6000.
+!               dhr(p_rtx22no3) = 6000.
+!               dhr(p_rtn23no3) = 6000.
+!               dhr(p_ra22no3) = 6000.
+!               dhr(p_ra25no3) = 6000.
 !               dhr(p_ic3h7no3) = 6000.
 !        	   dhr(p_ch3cho)    = 6266.
 !        	   dhr(p_c2h5cho)    = 6266.
-!        	   dhr(p_hoch2cho)    = 6266.   
-!               dhr(p_carb14)    = 6266. 
-!               dhr(p_carb17)    = 6266.      
-!               dhr(p_carb7)    = 6266.       
-!               dhr(p_carb10)    = 6266.      
-!               dhr(p_carb13)    = 6266.      
-!               dhr(p_carb16)    = 6266.   
-!               dhr(p_carb3)    = 6266.       
-!               dhr(p_carb6)    = 6266.       
-!               dhr(p_carb9)    = 6266. 
-!               dhr(p_carb12)    = 6266.      
-!               dhr(p_carb15)    = 6266.    
-!               dhr(p_ccarb12)    = 6266.  
-!               dhr(p_ucarb12)    = 6266. 
-!               dhr(p_ucarb10)    = 6266. 
-!               dhr(p_nucarb12)    = 6266. 
-!               dhr(p_udcarb8)    = 6266.  
-!               dhr(p_udcarb11)    = 6266.   
-!               dhr(p_udcarb14)    = 6266.  
-!               dhr(p_tncarb26)    = 6266. 
-!               dhr(p_tncarb10)    = 6266.  
-!               dhr(p_tncarb15)    = 6266. 
-!               dhr(p_txcarb24)    = 6266.  
-!               dhr(p_txcarb22)    = 6266. 
+!        	   dhr(p_hoch2cho)    = 6266.
+!               dhr(p_carb14)    = 6266.
+!               dhr(p_carb17)    = 6266.
+!               dhr(p_carb7)    = 6266.
+!               dhr(p_carb10)    = 6266.
+!               dhr(p_carb13)    = 6266.
+!               dhr(p_carb16)    = 6266.
+!               dhr(p_carb3)    = 6266.
+!               dhr(p_carb6)    = 6266.
+!               dhr(p_carb9)    = 6266.
+!               dhr(p_carb12)    = 6266.
+!               dhr(p_carb15)    = 6266.
+!               dhr(p_ccarb12)    = 6266.
+!               dhr(p_ucarb12)    = 6266.
+!               dhr(p_ucarb10)    = 6266.
+!               dhr(p_nucarb12)    = 6266.
+!               dhr(p_udcarb8)    = 6266.
+!               dhr(p_udcarb11)    = 6266.
+!               dhr(p_udcarb14)    = 6266.
+!               dhr(p_tncarb26)    = 6266.
+!               dhr(p_tncarb10)    = 6266.
+!               dhr(p_tncarb15)    = 6266.
+!               dhr(p_txcarb24)    = 6266.
+!               dhr(p_txcarb22)    = 6266.
 !               dhr(p_carb11a)    = 6266.
 !               dhr(p_tncarb12)    = 6266.
 !               dhr(p_tncarb11)    = 6266.
 !               dhr(p_udcarb17)    = 6266.
-        else
+         else
 !           dhr(p_o3)   = 2300.
 !           dhr(p_h2o2) = 6615.
 !           dhr(p_hcho) = 7190.
 !           dhr(p_pan)  = 5760.
 !           dhr(p_onit) = 5487.
 !           dhr(p_paa)  = 6170.
-        end if
+         end if
 !        dhr(p_no2)  = 2500.
 !        dhr(p_no)   = 1480.
 !        dhr(p_aco3) = 6266.
@@ -2336,7 +2336,7 @@ is_cbm4_kpp : &
 !     REACTIVITY FACTORS
 !     [f0]=1
 !--------------------------------------------------
-        if( chem_opt == MOZART_KPP .or. &
+         if( chem_opt == MOZART_KPP .or. &
             chem_opt == MOZCART_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
@@ -2362,11 +2362,11 @@ is_cbm4_kpp : &
 !           f0(p_terpooh) = .1
 
             if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
-              chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-             f0(p_sulf) = 0.
+               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+               f0(p_sulf) = 0.
             end if
-           
-           if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+
+            if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !             f0(p_cvasoaX) = 0.
 !             f0(p_cvasoa1) = 0.
 !             f0(p_cvasoa2) = 0.
@@ -2377,11 +2377,11 @@ is_cbm4_kpp : &
 !             f0(p_cvbsoa2) = 0.
 !             f0(p_cvbsoa3) = 0.
 !             f0(p_cvbsoa4) = 0.
-           endif
+            endif
 
-     	else if( chem_opt == crimech_kpp .or. &
-          chem_opt == cri_mosaic_8bin_aq_kpp .or. &
-          chem_opt == cri_mosaic_4bin_aq_kpp )   then
+         else if( chem_opt == crimech_kpp .or. &
+            chem_opt == cri_mosaic_8bin_aq_kpp .or. &
+            chem_opt == cri_mosaic_4bin_aq_kpp )   then
 
 
 !           f0(p_hcho)    = small_value
@@ -2396,7 +2396,7 @@ is_cbm4_kpp : &
 !           f0(p_ru12pan)    = .1
 !           f0(p_rtn26pan)    = .1
 !           f0(p_phan)    = .1
-!           f0(p_ppn)    = .1           
+!           f0(p_ppn)    = .1
 !           f0(p_c2h5oh)  = small_value
 !!              f0(p_c3h6ooh) = .1
 !           f0(p_c2h5ooh)   = .1
@@ -2477,37 +2477,37 @@ is_cbm4_kpp : &
 !               f0(p_c2h5cho)    = 0.
 !               f0(p_hoch2cho)    = 0.
 !               f0(p_carb14)    = 0.
-!               f0(p_carb17)    = 0.     
-!               f0(p_carb7)    = 0.      
-!               f0(p_carb10)    = 0.     
-!               f0(p_carb13)    = 0.     
-!               f0(p_carb16)    = 0.  
-!               f0(p_carb3)    = 0.      
-!               f0(p_carb6)    = 0.      
+!               f0(p_carb17)    = 0.
+!               f0(p_carb7)    = 0.
+!               f0(p_carb10)    = 0.
+!               f0(p_carb13)    = 0.
+!               f0(p_carb16)    = 0.
+!               f0(p_carb3)    = 0.
+!               f0(p_carb6)    = 0.
 !               f0(p_carb9)    = 0.
-!               f0(p_carb12)    = 0.     
-!               f0(p_carb15)    = 0.   
-!               f0(p_ccarb12)    = 0. 
+!               f0(p_carb12)    = 0.
+!               f0(p_carb15)    = 0.
+!               f0(p_ccarb12)    = 0.
 !               f0(p_ucarb12)    = 0.
 !               f0(p_ucarb10)    = 0.
 !               f0(p_nucarb12)    = 0.
-!               f0(p_udcarb8)    = 0. 
-!               f0(p_udcarb11)    = 0.  
-!               f0(p_udcarb14)    = 0. 
+!               f0(p_udcarb8)    = 0.
+!               f0(p_udcarb11)    = 0.
+!               f0(p_udcarb14)    = 0.
 !               f0(p_tncarb26)    = 0.
-!               f0(p_tncarb10)    = 0. 
+!               f0(p_tncarb10)    = 0.
 !               f0(p_tncarb15)    = 0.
-!               f0(p_txcarb24)    = 0. 
+!               f0(p_txcarb24)    = 0.
 !               f0(p_txcarb22)    = 0.
 !               f0(p_carb11a)    = 0.
 !               f0(p_tncarb12)    = 0.
 !               f0(p_tncarb11)    = 0.
 !               f0(p_udcarb17)    = 0.
-!        
-        else
+!
+         else
 !           f0(p_hcho) = 0.
 !           f0(p_onit) = 0.
-        end if
+         end if
 !        f0(p_no2)  = 0.1
 !        f0(p_no)   = 0.
 !        f0(p_pan)  = 0.1
@@ -2549,7 +2549,7 @@ is_cbm4_kpp : &
 !     DIFFUSION COEFFICIENTS
 !     [DV]=cm2/s (assumed: 1/SQRT(molar mass) when not known)
 !--------------------------------------------------
-        if( chem_opt == MOZART_KPP .or. &
+         if( chem_opt == MOZART_KPP .or. &
             chem_opt == MOZCART_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
             chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
@@ -2577,12 +2577,12 @@ is_cbm4_kpp : &
 !           dvj(p_tolooh)  = 0.084
 !           dvj(p_terpooh) = 0.073
 !
-           if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
+            if( chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
                chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-             dvj(p_sulf) = 1.200E-01
-           end if
+               dvj(p_sulf) = 1.200E-01
+            end if
 
-           if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
+            if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !             dvj(p_cvasoaX) = 0.120 ! ??
 !             dvj(p_cvasoa1) = 0.120 ! ??
 !             dvj(p_cvasoa2) = 0.120 ! ??
@@ -2593,11 +2593,11 @@ is_cbm4_kpp : &
 !             dvj(p_cvbsoa2) = 0.120 ! ??
 !             dvj(p_cvbsoa3) = 0.120 ! ??
 !             dvj(p_cvbsoa4) = 0.120 ! ??
-           endif
+            endif
 
-     else if( chem_opt == crimech_kpp .or. &
-          chem_opt == cri_mosaic_8bin_aq_kpp .or. &
-          chem_opt == cri_mosaic_4bin_aq_kpp )   then
+         else if( chem_opt == crimech_kpp .or. &
+            chem_opt == cri_mosaic_8bin_aq_kpp .or. &
+            chem_opt == cri_mosaic_4bin_aq_kpp )   then
 !           dvj(p_o3)      = 0.144
 !           dvj(p_h2o2)    = 0.1715
 !           dvj(p_hcho)    = 0.1825
@@ -2607,13 +2607,13 @@ is_cbm4_kpp : &
 !           dvj(p_ket)    = 0.1312
 !           dvj(p_paa)     = 0.1147
 !            dvj(p_c2h5co3h)    = 0.1147
-!            dvj(p_hoch2co3h)    = 0.1147           
+!            dvj(p_hoch2co3h)    = 0.1147
 !!           dvj(p_c3h6ooh) = 0.1042
 !           dvj(p_mpan)    = 0.0825
 !            dvj(p_ru12pan)    = 0.0825
 !            dvj(p_rtn26pan)    = 0.0825
 !            dvj(p_phan)    = 0.0825
-!            dvj(p_ppn)    = 0.0825            
+!            dvj(p_ppn)    = 0.0825
 !           dvj(p_c2h5oh)  = 0.1473
 !
 !              dvj(p_c3h6ooh) = 0.0916
@@ -2693,42 +2693,42 @@ is_cbm4_kpp : &
 !               dvj(p_ic3h7no3) = 0.0916
 !               dvj(p_ch3cho)    = 0.151
 !               dvj(p_c2h5cho)    = 0.151
-!               dvj(p_hoch2cho)    = 0.151    
+!               dvj(p_hoch2cho)    = 0.151
 !               dvj(p_carb14)    = 0.151
-!               dvj(p_carb17)    = 0.151     
-!               dvj(p_carb7)    = 0.151      
-!               dvj(p_carb10)    = 0.151     
-!               dvj(p_carb13)    = 0.151     
-!               dvj(p_carb16)    = 0.151  
-!               dvj(p_carb3)    = 0.151      
-!               dvj(p_carb6)    = 0.151      
+!               dvj(p_carb17)    = 0.151
+!               dvj(p_carb7)    = 0.151
+!               dvj(p_carb10)    = 0.151
+!               dvj(p_carb13)    = 0.151
+!               dvj(p_carb16)    = 0.151
+!               dvj(p_carb3)    = 0.151
+!               dvj(p_carb6)    = 0.151
 !               dvj(p_carb9)    = 0.151
-!               dvj(p_carb12)    = 0.151     
-!               dvj(p_carb15)    = 0.151   
-!               dvj(p_ccarb12)    = 0.151 
+!               dvj(p_carb12)    = 0.151
+!               dvj(p_carb15)    = 0.151
+!               dvj(p_ccarb12)    = 0.151
 !               dvj(p_ucarb12)    = 0.151
 !               dvj(p_ucarb10)    = 0.151
 !               dvj(p_nucarb12)    = 0.151
-!               dvj(p_udcarb8)    = 0.151 
-!               dvj(p_udcarb11)    = 0.151  
-!               dvj(p_udcarb14)    = 0.151 
+!               dvj(p_udcarb8)    = 0.151
+!               dvj(p_udcarb11)    = 0.151
+!               dvj(p_udcarb14)    = 0.151
 !               dvj(p_tncarb26)    = 0.151
-!               dvj(p_tncarb10)    = 0.151 
+!               dvj(p_tncarb10)    = 0.151
 !               dvj(p_tncarb15)    = 0.151
-!               dvj(p_txcarb24)    = 0.151 
+!               dvj(p_txcarb24)    = 0.151
 !               dvj(p_txcarb22)    = 0.151
 !               dvj(p_carb11a)    = 0.151
 !               dvj(p_tncarb12)    = 0.151
 !               dvj(p_tncarb11)    = 0.151
 !               dvj(p_udcarb17)    = 0.151
-!        
-        else
+!
+         else
 !           dvj(p_o3)   = 0.175
 !           dvj(p_h2o2) = 0.171
 !           dvj(p_hcho) = 0.183
 !           dvj(p_paa)  = 0.115
 !           dvj(p_onit) = 0.092
-        end if
+         end if
 !        dvj(p_no2)  = 0.147
 !        dvj(p_no)   = 0.183
 !        dvj(p_pan)  = 0.091
@@ -3304,22 +3304,22 @@ is_cbm4_kpp : &
 !
 
 
-        DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary              
+         DO l = 1, numgas
+            hstar4(l) = hstar(l) ! preliminary
 !--------------------------------------------------
 ! Correction of diff. coefficient
 !--------------------------------------------------
-          dvj(l) = dvj(l)*(293.15/298.15)**1.75
-          sc = 0.15/dvj(l)                             ! Schmidt Number at 20C
-          dratio(l) = 0.242/dvj(l)                     ! of water vapor and gas at
+            dvj(l) = dvj(l)*(293.15/298.15)**1.75
+            sc = 0.15/dvj(l)                             ! Schmidt Number at 20C
+            dratio(l) = 0.242/dvj(l)                     ! of water vapor and gas at
 !--------------------------------------------------
 ! Ratio of diffusion coefficient
 !--------------------------------------------------
-          scpr23(l) = (sc/0.72)**(2./3.)               ! (Schmidt # / Prandtl #)**
-        END DO
+            scpr23(l) = (sc/0.72)**(2./3.)               ! (Schmidt # / Prandtl #)**
+         END DO
 
 ! start of addition
-        else if ( (chem_opt == CB05_SORG_AQ_KPP) ) then
+      else if ( (chem_opt == CB05_SORG_AQ_KPP) ) then
 
 !        hstar(p_no2) = 6.40E-3
 !        hstar(p_no) = 1.90E-3
@@ -3458,17 +3458,17 @@ is_cbm4_kpp : &
 !        dvj(p_eth) = 0.189
 !        dvj(p_par) = 0.118   !wig, 1-May-2007: for CB05
 !
-        DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary
+         DO l = 1, numgas
+            hstar4(l) = hstar(l) ! preliminary
 ! Correction of diff. coeff
-          dvj(l) = dvj(l)*(293.15/298.15)**1.75
-          sc = 0.15/dvj(l) ! Schmidt Number at 20degC
-          dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
+            dvj(l) = dvj(l)*(293.15/298.15)**1.75
+            sc = 0.15/dvj(l) ! Schmidt Number at 20degC
+            dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
 ! Ratio of diffusion coeffi
-          scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
-        END DO
+            scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
+         END DO
 
-        else if ( (chem_opt == CB05_SORG_VBS_AQ_KPP) ) then
+      else if ( (chem_opt == CB05_SORG_VBS_AQ_KPP) ) then
 
 !        hstar(p_no2) = 6.40E-3
 !        hstar(p_no) = 1.90E-3
@@ -3607,19 +3607,19 @@ is_cbm4_kpp : &
 !        dvj(p_eth) = 0.189
 !        dvj(p_par) = 0.118   !wig, 1-May-2007: for CB05
 !
-        DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary
+         DO l = 1, numgas
+            hstar4(l) = hstar(l) ! preliminary
 ! Correction of diff. coeff
-          dvj(l) = dvj(l)*(293.15/298.15)**1.75
-          sc = 0.15/dvj(l) ! Schmidt Number at 20degC
-          dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
+            dvj(l) = dvj(l)*(293.15/298.15)**1.75
+            sc = 0.15/dvj(l) ! Schmidt Number at 20degC
+            dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
 ! Ratio of diffusion coeffi
-          scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
-        END DO
+            scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
+         END DO
 
 ! end of addition
 
-        else is_cbm4_kpp
+      else is_cbm4_kpp
 
 !        hstar(p_no2)   = 6.40E-3
 !        hstar(p_no)    = 1.90E-3
@@ -3642,7 +3642,7 @@ is_cbm4_kpp : &
 !        hstar(p_hno3)  = 2.69E+13
 !        hstar(p_nh3)   = 1.04E+4
 !        hstar(p_n2o5)  = 1.00E+10
-!        hstar(p_par)   = 1.13E-3  
+!        hstar(p_par)   = 1.13E-3
 
 !     -DH/R (for temperature correction)
 !     [-DH/R]=K
@@ -3668,7 +3668,7 @@ is_cbm4_kpp : &
 !        dhr(p_hno3) = 8684.
 !        dhr(p_nh3)  = 3660.
 !        dhr(p_n2o5) = 0.
-!        dhr(p_par)  = 0.  
+!        dhr(p_par)  = 0.
 !     REACTIVITY FACTORS
 !!     [f0]=1
 
@@ -3693,7 +3693,7 @@ is_cbm4_kpp : &
 !        f0(p_hno3) = 0.
 !        f0(p_nh3)  = 0.
 !        f0(p_n2o5) = 1.
-!        f0(p_par)  = 0.   
+!        f0(p_par)  = 0.
 !!     DIFFUSION COEFFICIENTS
 !     [DV]=cm2/s (assumed: 1/SQRT(molar mass) when not known)
 
@@ -3718,18 +3718,18 @@ is_cbm4_kpp : &
 !        dvj(p_hno3) = 0.126
 !        dvj(p_nh3)  = 0.227
 !        dvj(p_n2o5) = 0.110
-!        dvj(p_par)  = 0.118  
-        DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary              
+!        dvj(p_par)  = 0.118
+         DO l = 1, numgas
+            hstar4(l) = hstar(l) ! preliminary
 ! Correction of diff. coeff
-          dvj(l) = dvj(l)*(293.15/298.15)**1.75
-          sc = 0.15/dvj(l) ! Schmidt Number at 20C
-          dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
+            dvj(l) = dvj(l)*(293.15/298.15)**1.75
+            sc = 0.15/dvj(l) ! Schmidt Number at 20C
+            dratio(l) = 0.242/dvj(l) !                                            ! of water vapor and gas at
 ! Ratio of diffusion coeffi
-          scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
+            scpr23(l) = (sc/0.72)**(2./3.) ! (Schmidt # / Prandtl #)**
 
-       end DO
-    end if is_cbm4_kpp
+         end DO
+      end if is_cbm4_kpp
 
 
 
@@ -3740,56 +3740,56 @@ is_cbm4_kpp : &
 !     vd = (u* / k) * CORRECTION FACTORS
 
 !     CONSTANT K FOR LANDUSE TYPES:
-! urban and built-up land                  
-        kpart(1) = 500.
-! dryland cropland and pasture             
-        kpart(2) = 500.
-! irrigated cropland and pasture           
-        kpart(3) = 500.
+! urban and built-up land
+      kpart(1) = 500.
+! dryland cropland and pasture
+      kpart(2) = 500.
+! irrigated cropland and pasture
+      kpart(3) = 500.
 ! mixed dryland/irrigated cropland and past
-        kpart(4) = 500.
-! cropland/grassland mosaic                
-        kpart(5) = 500.
-! cropland/woodland mosaic                 
-        kpart(6) = 100.
-! grassland                                
-        kpart(7) = 500.
-! shrubland                                
-        kpart(8) = 500.
-! mixed shrubland/grassland                
-        kpart(9) = 500.
-! savanna                                  
-        kpart(10) = 500.
-! deciduous broadleaf forest               
-        kpart(11) = 100.
-! deciduous needleleaf forest              
-        kpart(12) = 100.
-! evergreen broadleaf forest               
-        kpart(13) = 100.
-! evergreen needleleaf forest              
-        kpart(14) = 100.
-! mixed forest                             
-        kpart(15) = 100.
-! water bodies                             
-        kpart(16) = 500.
-! herbaceous wetland                       
-        kpart(17) = 500.
-! wooded wetland                           
-        kpart(18) = 500.
-! barren or sparsely vegetated             
-        kpart(19) = 500.
-! herbaceous tundra                        
-        kpart(20) = 500.
-! wooded tundra                            
-        kpart(21) = 100.
-! mixed tundra                             
-        kpart(22) = 500.
-! bare ground tundra                       
-        kpart(23) = 500.
-! snow or ice                              
-        kpart(24) = 500.
+      kpart(4) = 500.
+! cropland/grassland mosaic
+      kpart(5) = 500.
+! cropland/woodland mosaic
+      kpart(6) = 100.
+! grassland
+      kpart(7) = 500.
+! shrubland
+      kpart(8) = 500.
+! mixed shrubland/grassland
+      kpart(9) = 500.
+! savanna
+      kpart(10) = 500.
+! deciduous broadleaf forest
+      kpart(11) = 100.
+! deciduous needleleaf forest
+      kpart(12) = 100.
+! evergreen broadleaf forest
+      kpart(13) = 100.
+! evergreen needleleaf forest
+      kpart(14) = 100.
+! mixed forest
+      kpart(15) = 100.
+! water bodies
+      kpart(16) = 500.
+! herbaceous wetland
+      kpart(17) = 500.
+! wooded wetland
+      kpart(18) = 500.
+! barren or sparsely vegetated
+      kpart(19) = 500.
+! herbaceous tundra
+      kpart(20) = 500.
+! wooded tundra
+      kpart(21) = 100.
+! mixed tundra
+      kpart(22) = 500.
+! bare ground tundra
+      kpart(23) = 500.
+! snow or ice
+      kpart(24) = 500.
 !     Comments:
-        kpart(25) = 500.
+      kpart(25) = 500.
 !     Erisman et al. (1994) give
 !     k = 500 for low vegetation and k = 100 for forests.
 
@@ -3833,7 +3833,7 @@ is_cbm4_kpp : &
 !     The Sizes of Particulate Sulfate and Nitrate in the Atmosphere
 !     - A Review
 !     JAPCA 37 (1987), 125-134
-! no data                                  
+! no data
 !       WRITE (0,*) ' return from rcread '
 !     *********************************************************
 
@@ -3850,68 +3850,68 @@ is_cbm4_kpp : &
 !     6 other natural landuse categories
 
 
-        IF (mminlu=='OLD ') THEN
-          ixxxlu(1) = 1
-          ixxxlu(2) = 2
-          ixxxlu(3) = 3
-          ixxxlu(4) = 4
-          ixxxlu(5) = 5
-          ixxxlu(6) = 5
-          ixxxlu(7) = 0
-          ixxxlu(8) = 6
-          ixxxlu(9) = 1
-          ixxxlu(10) = 6
-          ixxxlu(11) = 0
-          ixxxlu(12) = 4
-          ixxxlu(13) = 6
-        END IF
-        IF (mminlu=='USGS') THEN
-          ixxxlu(1) = 1
-          ixxxlu(2) = 2
-          ixxxlu(3) = 2
-          ixxxlu(4) = 2
-          ixxxlu(5) = 2
-          ixxxlu(6) = 4
-          ixxxlu(7) = 3
-          ixxxlu(8) = 6
-          ixxxlu(9) = 3
-          ixxxlu(10) = 6
-          ixxxlu(11) = 4
-          ixxxlu(12) = 5
-          ixxxlu(13) = 4
-          ixxxlu(14) = 5
-          ixxxlu(15) = 5
-          ixxxlu(16) = 0
-          ixxxlu(17) = 6
-          ixxxlu(18) = 4
-          ixxxlu(19) = 1
-          ixxxlu(20) = 6
-          ixxxlu(21) = 4
-          ixxxlu(22) = 6
-          ixxxlu(23) = 1
-          ixxxlu(24) = 0
-          ixxxlu(25) = 1
-        END IF
-        IF (mminlu=='SiB ') THEN
-          ixxxlu(1) = 4
-          ixxxlu(2) = 4
-          ixxxlu(3) = 4
-          ixxxlu(4) = 5
-          ixxxlu(5) = 5
-          ixxxlu(6) = 6
-          ixxxlu(7) = 3
-          ixxxlu(8) = 6
-          ixxxlu(9) = 6
-          ixxxlu(10) = 6
-          ixxxlu(11) = 1
-          ixxxlu(12) = 2
-          ixxxlu(13) = 6
-          ixxxlu(14) = 1
-          ixxxlu(15) = 0
-          ixxxlu(16) = 0
-          ixxxlu(17) = 1
-        END IF
+      IF (mminlu=='OLD ') THEN
+         ixxxlu(1) = 1
+         ixxxlu(2) = 2
+         ixxxlu(3) = 3
+         ixxxlu(4) = 4
+         ixxxlu(5) = 5
+         ixxxlu(6) = 5
+         ixxxlu(7) = 0
+         ixxxlu(8) = 6
+         ixxxlu(9) = 1
+         ixxxlu(10) = 6
+         ixxxlu(11) = 0
+         ixxxlu(12) = 4
+         ixxxlu(13) = 6
+      END IF
+      IF (mminlu=='USGS') THEN
+         ixxxlu(1) = 1
+         ixxxlu(2) = 2
+         ixxxlu(3) = 2
+         ixxxlu(4) = 2
+         ixxxlu(5) = 2
+         ixxxlu(6) = 4
+         ixxxlu(7) = 3
+         ixxxlu(8) = 6
+         ixxxlu(9) = 3
+         ixxxlu(10) = 6
+         ixxxlu(11) = 4
+         ixxxlu(12) = 5
+         ixxxlu(13) = 4
+         ixxxlu(14) = 5
+         ixxxlu(15) = 5
+         ixxxlu(16) = 0
+         ixxxlu(17) = 6
+         ixxxlu(18) = 4
+         ixxxlu(19) = 1
+         ixxxlu(20) = 6
+         ixxxlu(21) = 4
+         ixxxlu(22) = 6
+         ixxxlu(23) = 1
+         ixxxlu(24) = 0
+         ixxxlu(25) = 1
+      END IF
+      IF (mminlu=='SiB ') THEN
+         ixxxlu(1) = 4
+         ixxxlu(2) = 4
+         ixxxlu(3) = 4
+         ixxxlu(4) = 5
+         ixxxlu(5) = 5
+         ixxxlu(6) = 6
+         ixxxlu(7) = 3
+         ixxxlu(8) = 6
+         ixxxlu(9) = 6
+         ixxxlu(10) = 6
+         ixxxlu(11) = 1
+         ixxxlu(12) = 2
+         ixxxlu(13) = 6
+         ixxxlu(14) = 1
+         ixxxlu(15) = 0
+         ixxxlu(16) = 0
+         ixxxlu(17) = 1
+      END IF
 
-      END SUBROUTINE dep_init
+   END SUBROUTINE dep_init
 
 end module drydep_wesely_mod

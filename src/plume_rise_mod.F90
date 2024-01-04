@@ -1,65 +1,65 @@
 module plume_rise_mod
 
-  use catchem_constants, only : kind_chem,g => con_g, cp => con_cp, &
-                                 r_d => con_rd, r_v => con_rv 
+   use catchem_constants, only : kind_chem,g => con_g, cp => con_cp, &
+      r_d => con_rd, r_v => con_rv
 
-  use catchem_config
+   use catchem_config
 
-  use plume_data_mod,  only : nveg_agreg
-  use plume_zero_mod
-  use plume_scalar_mod
+   use plume_data_mod,  only : nveg_agreg
+   use plume_zero_mod
+   use plume_scalar_mod
 
-  implicit none
+   implicit none
 
-  real(kind=kind_chem), parameter :: p1000 = 100000.  ! p at 1000mb (pascals)
+   real(kind=kind_chem), parameter :: p1000 = 100000.  ! p at 1000mb (pascals)
 
 
-  private
+   private
 
-  public :: num_frp_plume
-  public :: plumerise_driver
+   public :: num_frp_plume
+   public :: plumerise_driver
 
 contains
 
-  subroutine plumerise_driver (ktau,dtstep,num_chem,num_ebu,num_ebu_in,          &
-             ebu,ebu_in,                                                         &
-             mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,            &
-             firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr,            &
-             chem_opt,burn_opt,t_phy,q_vap,                                      &
-             rho_phy,vvel,u_phy,v_phy,p_phy,                                     &
-             z_at_w,scale_fire_emiss,plume_frp,plumerise_flag,                   &
-             ids,ide, jds,jde, kds,kde,                                          &
-             ims,ime, jms,jme, kms,kme,                                          &
-             its,ite, jts,jte, kts,kte                                         )
+   subroutine plumerise_driver (ktau,dtstep,num_chem,num_ebu,num_ebu_in,          &
+      ebu,ebu_in,                                                         &
+      mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,            &
+      firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr,            &
+      chem_opt,burn_opt,t_phy,q_vap,                                      &
+      rho_phy,vvel,u_phy,v_phy,p_phy,                                     &
+      z_at_w,scale_fire_emiss,plume_frp,plumerise_flag,                   &
+      ids,ide, jds,jde, kds,kde,                                          &
+      ims,ime, jms,jme, kms,kme,                                          &
+      its,ite, jts,jte, kts,kte                                         )
 
-   IMPLICIT NONE
+      IMPLICIT NONE
 
-   INTEGER,      INTENT(IN   ) :: ktau,num_chem,num_ebu,               &
-                                  num_ebu_in,plumerise_flag,           &
-                                  ids,ide, jds,jde, kds,kde,           &
-                                  ims,ime, jms,jme, kms,kme,           &
-                                  its,ite, jts,jte, kts,kte
-   REAL(kind=kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_ebu ),              &
+      INTEGER,      INTENT(IN   ) :: ktau,num_chem,num_ebu,               &
+         num_ebu_in,plumerise_flag,           &
+         ids,ide, jds,jde, kds,kde,           &
+         ims,ime, jms,jme, kms,kme,           &
+         its,ite, jts,jte, kts,kte
+      REAL(kind=kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_ebu ),              &
          INTENT(INOUT ) ::                                   ebu
-   REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme, num_ebu_in ),                    &
+      REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme, num_ebu_in ),                    &
          INTENT(INOUT ) ::                                   ebu_in
-   REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme, num_frp_plume ),                 &
+      REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme, num_frp_plume ),                 &
          INTENT(INOUT ) ::                                   plume_frp
-   REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme ),INTENT(IN ) ::     &
-           mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,       &
-           firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr
+      REAL(kind=kind_chem), DIMENSION( ims:ime, jms:jme ),INTENT(IN ) ::     &
+         mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,       &
+         firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr
 
 !
 !
 !
-   REAL(kind=kind_chem), DIMENSION( ims:ime , kms:kme , jms:jme ),                     &
+      REAL(kind=kind_chem), DIMENSION( ims:ime , kms:kme , jms:jme ),                     &
          INTENT(IN   ) ::                                              &
-                                                      t_phy,           &
-                 z_at_w,vvel,u_phy,v_phy,rho_phy,p_phy,q_vap
-   REAL(kind=kind_chem), INTENT(IN   ) ::                             dtstep
+         t_phy,           &
+         z_at_w,vvel,u_phy,v_phy,rho_phy,p_phy,q_vap
+      REAL(kind=kind_chem), INTENT(IN   ) ::                             dtstep
 
-   LOGICAL,      INTENT(IN   ) :: scale_fire_emiss
-   character (len=*), intent(in) :: chem_opt,burn_opt
+      LOGICAL,      INTENT(IN   ) :: scale_fire_emiss
+      character (len=*), intent(in) :: chem_opt,burn_opt
 
 !
 ! Local variables...
@@ -68,11 +68,11 @@ contains
 
 
 !     integer, parameter :: nspecies=num_ebu
-      real(kind=kind_chem), dimension (num_ebu) :: eburn_in 
+      real(kind=kind_chem), dimension (num_ebu) :: eburn_in
       real(kind=kind_chem), dimension (kte,num_ebu) :: eburn_out
       real(kind=kind_chem), dimension (kte) :: u_in ,v_in ,w_in ,theta_in ,pi_in  &
-                              ,rho_phyin ,qv_in ,zmid    &
-                              ,z_lev
+         ,rho_phyin ,qv_in ,zmid    &
+         ,z_lev
       real(kind=kind_chem), dimension(nveg_agreg) :: firesize,mean_fct
       real(kind=kind_chem) :: sum, ffirs, rcp,ratio,zk
 !     real(kind=kind_chem),save,dimension(its:ite,jts:jte) :: ffirs
@@ -81,18 +81,18 @@ contains
       nspecies=num_ebu
 
       if( scale_fire_emiss ) then
-        if( chem_opt /= 'MOZCART_KPP' .and. &
+         if( chem_opt /= 'MOZCART_KPP' .and. &
             chem_opt /= 'MOZART_KPP' .and. &
             chem_opt /= 'MOZART_MOSAIC_4BIN_VBS0_KPP' ) then
-          print*,"Fire emission scaling only supported for MOZART_KPP, MOZCART_KPP chem chem_opts"
-          !call chem_comm_abort(msg="Fire emission scaling only supported for MOZART_KPP, MOZCART_KPP chem chem_opts")
-        endif
+            print*,"Fire emission scaling only supported for MOZART_KPP, MOZCART_KPP chem chem_opts"
+            !call chem_comm_abort(msg="Fire emission scaling only supported for MOZART_KPP, MOZCART_KPP chem chem_opts")
+         endif
       endif
 
-       if ( burn_opt == 'BIOMASSB' ) then
+      if ( burn_opt == 'BIOMASSB' ) then
          do j=jts,jte
             do i=its,ite
-            if ( chem_opt == 'GOCARTRACM'.or.chem_opt == 'RACMSOAVBS' ) then
+               if ( chem_opt == 'GOCARTRACM'.or.chem_opt == 'RACMSOAVBS' ) then
 !               ebu(i,kts,j,p_ebu_no)=ebu_in(i,j,p_ebu_in_no)
 !               ebu(i,kts,j,p_ebu_no2)=ebu_in(i,j,p_ebu_in_no2)
 !               ebu(i,kts,j,p_ebu_co)=ebu_in(i,j,p_ebu_in_co)
@@ -127,8 +127,8 @@ contains
                ebu(i,kts,j,p_ebu_pm10)=ebu_in(i,j,p_ebu_in_pm10)
             enddo
          enddo
-       elseif ( burn_opt == 'BIOMASSB_MOZC' .or. &
-                burn_opt == 'BIOMASSB_MOZ' ) then
+      elseif ( burn_opt == 'BIOMASSB_MOZC' .or. &
+         burn_opt == 'BIOMASSB_MOZ' ) then
          do j=jts,jte
             do i=its,ite
 !               ebu(i,kts,j,p_ebu_no)=ebu_in(i,j,p_ebu_in_no)
@@ -163,74 +163,74 @@ contains
             enddo
          enddo
          if( burn_opt == 'BIOMASSB_MOZC' ) then
-           do j=jts,jte
+            do j=jts,jte
 !             ebu(its:ite,kts,j,p_ebu_pm10) = ebu_in(its:ite,j,p_ebu_in_pm10)
 !             ebu(its:ite,kts,j,p_ebu_pm25) = ebu_in(its:ite,j,p_ebu_in_pm25)
 !             ebu(its:ite,kts,j,p_ebu_oc) = ebu_in(its:ite,j,p_ebu_in_oc)
 !             ebu(its:ite,kts,j,p_ebu_bc) = ebu_in(its:ite,j,p_ebu_in_bc)
-           enddo
+            enddo
          endif
-       elseif ( burn_opt == 'BIOMASSB_GHG' ) then
+      elseif ( burn_opt == 'BIOMASSB_GHG' ) then
          do j=jts,jte
             do i=its,ite
 !               ebu(i,kts,j,p_ebu_co)  = ebu_in(i,j,p_ebu_in_co)
 !               ebu(i,kts,j,p_ebu_co2) = ebu_in(i,j,p_ebu_in_co2)
 !               ebu(i,kts,j,p_ebu_ch4) = ebu_in(i,j,p_ebu_in_ch4)
             enddo
-          enddo
-       endif
+         enddo
+      endif
 !
-       do nv=1,num_ebu
-          do j=jts,jte
+      do nv=1,num_ebu
+         do j=jts,jte
             do k=kts+1,kte
                do i=its,ite
-                 ebu(i,k,j,nv)=0.
+                  ebu(i,k,j,nv)=0.
                enddo
             enddo
-          enddo
-       enddo
-       
-       do j=jts,jte
-          do i=its,ite
+         enddo
+      enddo
+
+      do j=jts,jte
+         do i=its,ite
             select case (plumerise_flag)
-              case (FIRE_OPT_MODIS)
-                sum=mean_fct_agtf(i,j)+mean_fct_agef(i,j)+mean_fct_agsv(i,j)    &
-                        +mean_fct_aggr(i,j)
-                if(sum.lt.1.e-6)Cycle
-    !           ffirs=ffirs+1
-                sum=firesize_agtf(i,j)+firesize_agef(i,j)+firesize_agsv(i,j)    &
-                        +firesize_aggr(i,j)
-                if(sum.lt.1.e-6)Cycle
-                eburn_out=0.
-                mean_fct(1)=mean_fct_agtf(i,j)
-                mean_fct(2)=mean_fct_agef(i,j)
-                mean_fct(3)=mean_fct_agsv(i,j)
-                mean_fct(4)=mean_fct_aggr(i,j)
-                firesize(1)=firesize_agtf(i,j)
-                firesize(2)=firesize_agef(i,j)
-                firesize(3)=firesize_agsv(i,j)
-                firesize(4)=firesize_aggr(i,j)
-              case (FIRE_OPT_GBBEPx)
-                if (plume_frp(i,j,p_frp_mean) < 1.e-06) cycle
-              case default
-                ! -- no further option available
+             case (FIRE_OPT_MODIS)
+               sum=mean_fct_agtf(i,j)+mean_fct_agef(i,j)+mean_fct_agsv(i,j)    &
+                  +mean_fct_aggr(i,j)
+               if(sum.lt.1.e-6)Cycle
+               !           ffirs=ffirs+1
+               sum=firesize_agtf(i,j)+firesize_agef(i,j)+firesize_agsv(i,j)    &
+                  +firesize_aggr(i,j)
+               if(sum.lt.1.e-6)Cycle
+               eburn_out=0.
+               mean_fct(1)=mean_fct_agtf(i,j)
+               mean_fct(2)=mean_fct_agef(i,j)
+               mean_fct(3)=mean_fct_agsv(i,j)
+               mean_fct(4)=mean_fct_aggr(i,j)
+               firesize(1)=firesize_agtf(i,j)
+               firesize(2)=firesize_agef(i,j)
+               firesize(3)=firesize_agsv(i,j)
+               firesize(4)=firesize_aggr(i,j)
+             case (FIRE_OPT_GBBEPx)
+               if (plume_frp(i,j,p_frp_mean) < 1.e-06) cycle
+             case default
+               ! -- no further option available
             end select
             do nv=1,num_ebu
-            eburn_in(nv)=ebu(i,kts,j,nv)
+               eburn_in(nv)=ebu(i,kts,j,nv)
             enddo
             if( maxval( eburn_in(:) ) == 0. ) cycle
             do k=kts,kte
-              u_in(k)=u_phy(i,k,j)
-              v_in(k)=v_phy(i,k,j)
-              w_in(k)=vvel(i,k,j)
-              qv_in(k)=q_vap(i,k,j)
-              pi_in(k)=cp*(p_phy(i,k,j)/p1000mb)**rcp
-              !zk=.5*(z_at_w(i,k+1,j)-z_at_w(i,k,j))
-              zk=.5*(z_at_w(i,k+1,j)+z_at_w(i,k,j)) !lzhang
-              zmid(k)=zk-z_at_w(i,kts,j)
-              z_lev(k)=z_at_w(i,k,j)-z_at_w(i,kts,j)
-              rho_phyin(k)=rho_phy(i,k,j)
-              theta_in(k)=t_phy(i,k,j)/pi_in(k)*cp
+               u_in(k)=u_phy(i,k,j)
+               v_in(k)=v_phy(i,k,j)
+               w_in(k)=vvel(i,k,j)
+               qv_in(k)=q_vap(i,k,j)
+               pi_in(k)=cp*(p_phy(i,k,j)/p1000mb)**rcp
+               !zk=.5*(z_at_w(i,k+1,j)-z_at_w(i,k,j))
+               zk=.5*(z_at_w(i,k+1,j)+z_at_w(i,k,j)) !lzhang
+               zmid(k)=zk-z_at_w(i,kts,j)
+               z_lev(k)=z_at_w(i,k,j)-z_at_w(i,kts,j)
+               rho_phyin(k)=rho_phy(i,k,j)
+               theta_in(k)=t_phy(i,k,j)/pi_in(k)*cp
             enddo
 !!$              pi_in(kte)=pi_in(kte-1)  !wig: These are no longer needed after changing definition
 !!$              u_in(kte)=u_in(kte-1)    !     of kte in chem_driver (12-Oct-2007)
@@ -242,42 +242,42 @@ contains
 !!$              rho_phyin(kte)=rho_phyin(kte-1)
 !!$              theta_in(kte)=theta_in(kte-1)
             call plumerise(kte,1,1,1,1,1,1,firesize,mean_fct  &
-                    ,nspecies,eburn_in,eburn_out &
-                    ,u_in ,v_in ,w_in ,theta_in ,pi_in  &
-                    ,rho_phyin ,qv_in ,zmid    &
-                    ,z_lev,plume_frp(i,j,:),plumerise_flag)
+               ,nspecies,eburn_in,eburn_out &
+               ,u_in ,v_in ,w_in ,theta_in ,pi_in  &
+               ,rho_phyin ,qv_in ,zmid    &
+               ,z_lev,plume_frp(i,j,:),plumerise_flag)
 
             do nv=1,num_ebu
-              do k=kts+1,kte
-                ebu(i,k,j,nv)=eburn_out(k,nv)*(z_at_w(i,k+1,j)-z_at_w(i,k,j))
-              enddo
+               do k=kts+1,kte
+                  ebu(i,k,j,nv)=eburn_out(k,nv)*(z_at_w(i,k+1,j)-z_at_w(i,k,j))
+               enddo
             enddo
 !            print*,'hli plumerise',maxval(eburn_out),maxval(plume_frp(i,j,:))
 
-has_total_emissions : &
-            if( scale_fire_emiss ) then
-is_mozcart : &
-              if( (chem_opt == 'MOZCART_KPP' .and. &
-                   burn_opt == 'BIOMASSB_MOZC') .or. &
+            has_total_emissions : &
+               if( scale_fire_emiss ) then
+               is_mozcart : &
+                  if( (chem_opt == 'MOZCART_KPP' .and. &
+                  burn_opt == 'BIOMASSB_MOZC') .or. &
                   (chem_opt == 'MOZART_KPP' .and. &
-                   burn_opt == 'BIOMASSB_MOZ') .or. &
+                  burn_opt == 'BIOMASSB_MOZ') .or. &
                   (chem_opt == 'MOZART_MOSAIC_4BIN_VBS0_KPP' .and. &
-                   burn_opt == 'BIOMASSB_MOZC') ) then
+                  burn_opt == 'BIOMASSB_MOZC') ) then
 !-------------------------------------------------------------------
 ! we input total emissions instead of smoldering emissions:
 ! ratio of smolderling to total
 !-------------------------------------------------------------------
-                sum = 0.
-                do k = kts,kte
-                  sum = sum + ebu(i,k,j,p_ebu_co)
-                end do
-                if( sum > 0. ) then             
-                  ratio = ebu(i,kts,j,p_ebu_co)/sum
-                else
-                  ratio = 0.
-                endif
+                  sum = 0.
+                  do k = kts,kte
+                     sum = sum + ebu(i,k,j,p_ebu_co)
+                  end do
+                  if( sum > 0. ) then
+                     ratio = ebu(i,kts,j,p_ebu_co)/sum
+                  else
+                     ratio = 0.
+                  endif
 
-                do k = kts,kte
+                  do k = kts,kte
 !                  ebu(i,k,j,p_ebu_no) = ebu(i,k,j,p_ebu_no)*ratio
 !                  ebu(i,k,j,p_ebu_co) = ebu(i,k,j,p_ebu_co)*ratio
 !                  ebu(i,k,j,p_ebu_bigalk) = ebu(i,k,j,p_ebu_bigalk)*ratio
@@ -307,21 +307,21 @@ is_mozcart : &
 !                  ebu(i,k,j,p_ebu_isop) = ebu(i,k,j,p_ebu_isop)*ratio
 !                  ebu(i,k,j,p_ebu_macr) = ebu(i,k,j,p_ebu_macr)*ratio
 !                  ebu(i,k,j,p_ebu_mvk)  = ebu(i,k,j,p_ebu_mvk)*ratio
-                end do
-                if( chem_opt == 'MOZCART_KPP' .or. &
-                    chem_opt == 'MOZART_MOSAIC_4BIN_VBS0_KPP' ) then
-                  do k = kts,kte
+                  end do
+                  if( chem_opt == 'MOZCART_KPP' .or. &
+                     chem_opt == 'MOZART_MOSAIC_4BIN_VBS0_KPP' ) then
+                     do k = kts,kte
 !                    ebu(i,k,j,p_ebu_pm10) = ebu(i,k,j,p_ebu_pm10)*ratio
 !                    ebu(i,k,j,p_ebu_pm25) = ebu(i,k,j,p_ebu_pm25)*ratio
 !                    ebu(i,k,j,p_ebu_oc)  = ebu(i,k,j,p_ebu_oc)*ratio
 !                    ebu(i,k,j,p_ebu_bc)  = ebu(i,k,j,p_ebu_bc)*ratio
-                  end do
-                endif
-              end if is_mozcart
+                     end do
+                  endif
+               end if is_mozcart
             end if has_total_emissions
 
-          enddo
-          enddo
-  end subroutine plumerise_driver
+         enddo
+      enddo
+   end subroutine plumerise_driver
 
 end module plume_rise_mod

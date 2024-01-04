@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.4.0"
+    hooks:
+      - id: trailing-whitespace
+        args: ['--markdown-linebreak-ext=md,markdown']
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  - repo: https://github.com/zmoon/findent-pre-commit
+    rev: "65627b8"
+    hooks:
+      # NOTE: doesn't work on Windows currently
+      - id: findent-pypi
+        args: ['-i3']
+
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+      - id: cmake-format
+        args: ['--in-place', '--line-width=100']
+      - id: cmake-lint
+        args: ['--line-width=100']
