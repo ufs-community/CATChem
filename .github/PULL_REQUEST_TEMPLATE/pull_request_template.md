@@ -1,7 +1,9 @@
 <!-- PLEASE READ -->
 <!-- Any PRs not following this template will be closed -->
 <!--
-    Please use a short (<60 char), descriptive title above. It should complete the sentence "If merged, this PR will _____". Capitalize the first word and do not end with a period.
+    Please use a short (<60 char), descriptive title above.
+    It should complete the sentence "If merged, this PR will _____".
+    Capitalize the first word and do not end with a period.
 
     PRs should meet these guidelines:
     - Each PR should address ONE topic and have an associated issue.
