@@ -1,3 +1,4 @@
+!11/2023, Optimized and Updated by Kate.Zhang@noaa.gov for 2 threads job
 module plume_rise_mod
 
   use catchem_constants, only : kind_chem,g => con_g, cp => con_cp, &
@@ -11,8 +12,7 @@ module plume_rise_mod
 
   implicit none
 
-  real(kind=kind_chem), parameter :: p1000 = 100000.  ! p at 1000mb (pascals)
-
+  real(kind=kind_chem),parameter :: p1000mb = 100000.  ! p at 1000mb (pascals)
 
   private
 
@@ -66,7 +66,8 @@ contains
 !
       INTEGER :: nv, i, j, k, ksub, nspecies
 
-
+      character(len=100)  :: errmsg
+      integer           :: errflg
 !     integer, parameter :: nspecies=num_ebu
       real(kind=kind_chem), dimension (num_ebu) :: eburn_in 
       real(kind=kind_chem), dimension (kte,num_ebu) :: eburn_out
@@ -74,10 +75,12 @@ contains
                               ,rho_phyin ,qv_in ,zmid    &
                               ,z_lev
       real(kind=kind_chem), dimension(nveg_agreg) :: firesize,mean_fct
-      real(kind=kind_chem) :: sum, ffirs, rcp,ratio,zk
+      real(kind=kind_chem) :: sum, ffirs, rcp,ratio,zk,cpor
 !     real(kind=kind_chem),save,dimension(its:ite,jts:jte) :: ffirs
       ffirs=0.
       rcp=r_d/cp
+      cpor=cp/r_d
+
       nspecies=num_ebu
 
       if( scale_fire_emiss ) then
@@ -242,10 +245,11 @@ contains
 !!$              rho_phyin(kte)=rho_phyin(kte-1)
 !!$              theta_in(kte)=theta_in(kte-1)
             call plumerise(kte,1,1,1,1,1,1,firesize,mean_fct  &
-                    ,nspecies,eburn_in,eburn_out &
-                    ,u_in ,v_in ,w_in ,theta_in ,pi_in  &
-                    ,rho_phyin ,qv_in ,zmid    &
-                    ,z_lev,plume_frp(i,j,:),plumerise_flag)
+                    ,nspecies,eburn_in,eburn_out              &
+                    ,u_in ,v_in ,w_in ,theta_in ,pi_in        &
+                    ,rho_phyin ,qv_in ,zmid                   &
+                    ,z_lev,plume_frp(i,j,:),plumerise_flag    &
+                    ,g, cp,r_d, cpor,errmsg, errflg )
 
             do nv=1,num_ebu
               do k=kts+1,kte

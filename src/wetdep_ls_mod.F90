@@ -1,5 +1,7 @@
 ! Revision History:
+!! 03/2023, Updated by Kate.Zhang@noaa.gov for large scale wet depostion calculation and tuning factor.
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
+!! 11/2023, Optimized and Updated by Kate.Zhang@noaa.gov for 2 threads job
 
 module wetdep_ls_mod
 
@@ -8,62 +10,57 @@ module wetdep_ls_mod
 
   implicit none
 
-  ! -- large scale wet deposition scavenging factors
-  real(kind_chem), dimension(:), allocatable :: alpha
-
   private
 
-  public :: dep_wet_ls_init
   public :: wetdep_ls
   public :: WetRemovalGOCART
 
 contains
 
-! subroutine dep_wet_ls_init(config, rc)
-  subroutine dep_wet_ls_init()
+  subroutine wetdep_ls(dt,var,rain,moist_arr,rho,var_rmv,lat,       &
+                       p_qc,p_qi,dz8w,vvel,  &
+                       kms,kme,kts,kte)
+    IMPLICIT NONE
 
-    ! -- I/O arguments
-!    type(chem_config_type), intent(in)  :: config
-!    integer,                intent(out) :: rc
-
-    ! -- local variables
-    integer :: ios, n
-
-    ! -- begin
-    !rc = CHEM_RC_SUCCESS
-
-    ! -- set aerosol wet scavenging coefficients
-    if (allocated(alpha)) then
-      deallocate(alpha, stat=ios)
-      !if (chem_rc_test((ios /= 0), msg="Failed to deallocate memory", &
-      !  file=__FILE__, line=__LINE__, rc=rc)) return
-    end if
-
-    allocate(alpha(num_chem), stat=ios)
-    !if (chem_rc_test((ios /= 0), msg="Failed to allocate memory", &
-    !  file=__FILE__, line=__LINE__, rc=rc)) return
+    INTEGER,      INTENT(IN   ) :: p_qc, p_qi,    &
+                                   kms,kme,               &
+                                   kts,kte
+    real(kind_chem), INTENT(IN ) :: dt
+    REAL(kind_chem), DIMENSION( kms:kme, 1:num_moist ),                &
+          INTENT(IN ) ::                                   moist_arr
+    REAL(kind_chem),  DIMENSION( kms:kme ),                        &
+           INTENT(IN   ) :: rho,dz8w,vvel
+    REAL(kind_chem),  DIMENSION( kms:kme ,1:num_chem),             &
+           INTENT(INOUT) :: var
+    REAL(kind_chem),  INTENT(IN   ) :: rain,lat
+    REAL(kind_chem),  DIMENSION( num_chem ),                        &
+           INTENT(INOUT   ) :: var_rmv
+    REAL(kind_chem) :: var_sum,frc,var_sum_clw,rain_clw
+    REAL(kind_chem),  DIMENSION( kts:kte ) :: var_rmvl
+    real(kind_chem) :: dvar,factor,rho_water,ff
+  ! -- large scale wet deposition scavenging factors
+    real(kind_chem), dimension(num_chem):: alpha
+    integer :: nv,i,j,k
 
     alpha = 0.
 
-    select case (wetdep_ls_opt)
-      case (WDLS_OPT_GSD)
 
         select case (chem_opt)
           case (CHEM_OPT_GOCART)
             alpha = 1.0
-            alpha(p_so2   ) = 0.0
-            alpha(p_msa   ) = 0.0
-            alpha(p_dms   ) = 0.0
-            alpha(p_sulf) = 0.3
+            alpha(p_so2   ) = 0.3
+            alpha(p_msa   ) = 0.3
+            alpha(p_dms   ) = 0.3
+            alpha(p_sulf) = 0.6
             alpha(p_bc1) = 0.3
             alpha(p_bc2) = 0.6
             alpha(p_oc1) = 0.1
             alpha(p_oc2) = 0.2
-            alpha(p_dust_1) = 0.1
-            alpha(p_dust_2) = 0.1
-            alpha(p_dust_3) = 0.1
-            alpha(p_dust_4) = 0.1
-            alpha(p_dust_5) = 0.1
+            alpha(p_dust_1) = 0.2
+            alpha(p_dust_2) = 0.2
+            alpha(p_dust_3) = 0.2
+            alpha(p_dust_4) = 0.2
+            alpha(p_dust_5) = 0.2
 
           case (CHEM_OPT_GOCART_RACM)
             alpha = 1.0
@@ -84,75 +81,12 @@ contains
 !            alpha(p_so4ai) = 1.0
 !            alpha(p_so4aj) = 1.0
 !            alpha(p_seas)  = 1.0
-        end select
-
-      case (WDLS_OPT_NGAC)
-
-        select case (chem_opt)
-          case (CHEM_OPT_GOCART)
-            alpha(p_so2   ) = 0.
-            alpha(p_sulf  ) = 1.5
-            alpha(p_dms   ) = 0.
-            alpha(p_msa   ) = 0.
-            alpha(p_p25   ) = 1.
-            alpha(p_bc1   ) = 0.7
-            alpha(p_bc2   ) = 0.7
-            alpha(p_oc1   ) = 1.
-            alpha(p_oc2   ) = 1.
-            alpha(p_dust_1) = 1.
-            alpha(p_dust_2) = 1.
-            alpha(p_dust_3) = 1.
-            alpha(p_dust_4) = 1.
-            alpha(p_dust_5) = 1.
-            alpha(p_seas_1) = 1.
-            alpha(p_seas_2) = 1.
-            alpha(p_seas_3) = 1.
-            alpha(p_seas_4) = 1.
-            alpha(p_seas_5) = 1.
-            alpha(p_p10   ) = 1.
           case default
-            ! -- NGAC large scale wet deposition only works with GOCART
         end select
-
-      case default
-    end select
-
-   ! -- replace first default wet scavenging coefficients with input values if
-   ! available
-   if (any(wetdep_ls_alpha > 0._kind_chem)) then
-     n = min(size(alpha), size(wetdep_ls_alpha))
-     alpha(1:n) = real(wetdep_ls_alpha(1:n))
-   end if
-
-  end subroutine dep_wet_ls_init
-
-
-
-  subroutine wetdep_ls(dt,var,rain,moist_arr,rho,var_rmv,lat,       &
-                       p_qc,p_qi,dz8w,vvel,  &
-                       kms,kme,kts,kte) 
-    IMPLICIT NONE
-
-    INTEGER,      INTENT(IN   ) :: p_qc, p_qi,    &
-                                   kms,kme,               &
-                                   kts,kte
-    real(kind_chem), INTENT(IN ) :: dt
-    REAL(kind_chem), DIMENSION( kms:kme, num_moist ),                &
-          INTENT(IN ) ::                                   moist_arr
-    REAL(kind_chem),  DIMENSION( kms:kme ),                        &
-           INTENT(IN   ) :: rho,dz8w,vvel
-    REAL(kind_chem),  DIMENSION( kms:kme ,1:num_chem),             &
-           INTENT(INOUT) :: var
-    REAL(kind_chem),  INTENT(IN   ) :: rain,lat
-    REAL(kind_chem),  DIMENSION( num_chem ),                        &
-           INTENT(INOUT   ) :: var_rmv
-    REAL(kind_chem) :: var_sum,frc,var_sum_clw,rain_clw
-    REAL(kind_chem),  DIMENSION( kts:kte ) :: var_rmvl
-    real(kind_chem) :: dvar,factor,rho_water,ff
-    integer :: nv,i,j,k
 
     rho_water = 1000.
     var_rmv (:)=0.
+
     do nv=1,num_chem
 !
 ! simple LS removal
@@ -164,40 +98,39 @@ contains
     !frc(:,:)=0.1
     !frc(:,:)=0.01 !lzhang
     ff=1.0
-    if (nv>=p_seas_1 .and. nv<=p_seas_5) ff=1.2
+    if (nv>=p_seas_1 .and. nv<=p_seas_5) ff=2.0*10.
      var_sum_clw=0.
      var_sum=0.
      var_rmvl(:)=0.
      rain_clw=0.
      frc=0.
-     if(rain.gt.1.e-10)then
+     if(rain.gt.1.e-30)then
 ! convert rain back to rate
 !
         rain_clw=rain/dt
 ! total cloud water
 !
         do k=1,kte
-           dvar=max(0.,(moist_arr(k,p_qc)+moist_arr(k,p_qi)))
+           !dvar=max(0.,(moist(i,k,j,p_qc)+moist(i,k,j,p_qi)))
+           !dvar=max(0.,(moist(i,k,j,p_qc)+moist(i,k,j,p_qi))*rho(i,k,j)*vvel(i,k,j)*dz8w(i,k,j))
+           dvar=max(0.,(moist_arr(k,p_qc))*rho(k)*vvel(k)*dz8w(k))
            var_sum_clw=var_sum_clw+dvar
            var_sum=var_sum+var(k,nv)*rho(k) !lzhang
         enddo
-           if(var_sum.gt.1.e-10 .and. var_sum_clw.gt.1.e-10 ) then
+           if(var_sum.gt.1.e-30 .and. var_sum_clw.gt.1.e-30 ) then
    !        assuming that frc is onstant, it is my conversion factor 
               frc=rain_clw/var_sum_clw
-!    write(0,*)'frc ', frc(i,j),var_sum_clw(i,j),var_sum(i,j)
-              if (lat<=-65.) then
-              frc=max(1.e-6,min(frc,.005)*ff*10.)
-              else
-              frc=max(1.e-6,min(frc,.005)*ff)
-              endif
+
+              !frc=max(1.e-6,min(frc,.005)*ff)
+              frc=max(1.e-6,min(frc,1.))
            endif
      endif
 !
 ! get rid of it
 !
-     if(rain.gt.1.e-10 .and. var_sum.gt.1.e-10 .and. var_sum_clw.gt.1.e-10 ) then
+     if(rain.gt.1.e-30 .and. var_sum.gt.1.e-30 .and. var_sum_clw.gt.1.e-30 ) then
        do k=kts,kte
-        if(var(k,nv).gt.1.e-10 .and. (moist_arr(k,p_qc)+moist_arr(k,p_qi)).gt.1.e-10)then
+        if(var(k,nv).gt.1.e-30 .and. (moist_arr(k,p_qc)+moist_arr(k,p_qi)).gt.1.e-30)then
         factor = max(0.,frc*rho(k)*dz8w(k)*vvel(k))
         dvar=max(0.,alpha(nv)*factor/(1+factor)*var(k,nv))
         dvar=min(dvar,var(k,nv))
@@ -209,14 +142,13 @@ contains
         else
            var(k,nv)=var(k,nv)-dvar
         endif
-        !var_rmv(i,j,nv)=var_rmv(i,j,nv)+var_rmvl(i,k,j)
         !!convert wetdeposition into ug/m2/s  
         var_rmv(nv)=var_rmv(nv)+(var_rmvl(k)*rho(k)*dz8w(k)/dt) !lzhang
         endif
        enddo
        var_rmv(nv)=max(0.,var_rmv(nv))
-    endif
-    enddo
+       endif
+      enddo
 
   end subroutine wetdep_ls
 
@@ -288,7 +220,7 @@ contains
 !  Duration of rain: ls = model timestep, cv = 1800 s (<= cdt)
    real(kind_chem)            :: Td_ls
    real(kind_chem)            :: Td_cv
-
+   real(kind_chem), dimension(num_chem):: alpha
 
 !  Efficiency of dust wet removal (since dust is really not too hygroscopic)
 !  Applied only to in-cloud scavenging
@@ -303,6 +235,32 @@ contains
 !  Initialize local variables
 !  --------------------------
 !   rc = CHEM_RC_SUCCESS
+
+        select case (chem_opt)
+          case (CHEM_OPT_GOCART)
+            alpha(p_so2   ) = 0.
+            alpha(p_sulf  ) = 1.5
+            alpha(p_dms   ) = 0.
+            alpha(p_msa   ) = 0.
+            alpha(p_p25   ) = 1.
+            alpha(p_bc1   ) = 0.7
+            alpha(p_bc2   ) = 0.7
+            alpha(p_oc1   ) = 1.
+            alpha(p_oc2   ) = 1.
+            alpha(p_dust_1) = 1.
+            alpha(p_dust_2) = 1.
+            alpha(p_dust_3) = 1.
+            alpha(p_dust_4) = 1.
+            alpha(p_dust_5) = 1.
+            alpha(p_seas_1) = 1.
+            alpha(p_seas_2) = 1.
+            alpha(p_seas_3) = 1.
+            alpha(p_seas_4) = 1.
+            alpha(p_seas_5) = 1.
+            alpha(p_p10   ) = 1.
+          case default
+            ! -- NGAC large scale wet deposition only works with GOCART
+        end select
 
    Td_ls = cdt
    Td_cv = cdt

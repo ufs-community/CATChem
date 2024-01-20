@@ -1,6 +1,7 @@
 !>\file catchem_seas_wrapper.F90
 !! This file is GSDChem sea salt wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 05/2020
+!! Li.Zhang@noaa.gov 02/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -86,7 +87,6 @@ contains
                      xland, frocean,fraci,xlat, xlong, dxy
 
 !>- sea salt & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
     real(kind_phys), dimension(ims:im, 1, jms:jme, 1:num_emis_seas  ) :: emis_seas
     real(kind_phys), dimension(ims:im, jms:jme) :: seashelp
@@ -97,7 +97,7 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-    real(kind_phys) :: delp 
+    real(kind_phys) :: delp   
 
     errmsg = ''
     errflg = 0
@@ -127,7 +127,7 @@ contains
         u10,v10,ust,tsk,xland,frocean,fraci,xlat,xlong,dxy,             &
         rri,t_phy,u_phy,v_phy,rho_phy,dz8w,p8w,                         &
         ntss1,ntss2,ntss3,ntss4,ntss5,ntrac,gq0,                        &
-        num_chem, num_moist,ppm2ugkg,moist,chem,                        &
+        num_chem, ppm2ugkg,chem,                                        &
         ids,ide, jds,jde, kds,kde,                                      &
         ims,ime, jms,jme, kms,kme,                                      &
         its,ite, jts,jte, kts,kte)
@@ -147,14 +147,14 @@ contains
           do j=jts,jte
             do i=its,ite
               ! -- only use sea salt scheme over water
-              if (xland(i,j).lt.0.5) then
+              !if (xland(i,j).lt.0.5) then
                 delp = p8w(i,kts,j)-p8w(i,kts+1,j)
 
                 call gocart_seas_simple(ktau,dt,u_phy(i,kts,j),                 &
                   v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                   v10(i,j),delp,tsk(i,j),dxy(i,j),           &
                   seashelp(i,j))
-              endif
+              !endif
             enddo
           enddo
  
@@ -166,14 +166,14 @@ contains
               do j=jts,jte
                 do i=its,ite
                   ! -- only use sea salt scheme over water
-                  if (xland(i,j).lt.0.5) then
+                 ! if (xland(i,j).lt.0.5) then
                     delp = p8w(i,kts,j)-p8w(i,kts+1,j)
          
                     call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
                       v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                       v10(i,j),delp,tsk(i,j),dxy(i,j),           &
                       emis_seas(i,1,j,:))
-                  endif
+                 ! endif
                 enddo
               enddo
   
@@ -182,7 +182,7 @@ contains
               do j=jts,jte
                 do i=its,ite
                   ! -- only use sea salt scheme over water
-                  if (xland(i,j).lt.0.5) then
+                  !if (xland(i,j).lt.0.5) then
                     delp = p8w(i,kts,j)-p8w(i,kts+1,j)
 
                     call gocart_seas_ngac(ktau,dt,u_phy(i,kts,j),              &
@@ -191,7 +191,7 @@ contains
                       frocean(i,j),fraci(i,j),   &
                       xlat(i,j),xlong(i,j),dxy(i,j),emis_seas(i,1,j,:),      &
                       sstemisFlag,seas_emis_scale,random_factor(i,j))
-                  endif
+                  !endif
                 enddo
               enddo
 
@@ -243,7 +243,7 @@ contains
         u10,v10,ust,tsk,xland,frocean,fraci,xlat,xlong,dxy,            &
         rri,t_phy,u_phy,v_phy,rho_phy,dz8w,p8w,                        &
         ntss1,ntss2,ntss3,ntss4,ntss5,ntrac,gq0,                       &
-        num_chem, num_moist,ppm2ugkg,moist,chem,                       &
+        num_chem, ppm2ugkg,chem,                                       &
         ids,ide, jds,jde, kds,kde,                                     &
         ims,ime, jms,jme, kms,kme,                                     &
         its,ite, jts,jte, kts,kte)
@@ -262,7 +262,7 @@ contains
 
 
     !GSD Chem variables
-    integer,intent(in) ::  num_chem, num_moist
+    integer,intent(in) ::  num_chem
     integer,intent(in) ::  ids,ide, jds,jde, kds,kde,                       &
                            ims,ime, jms,jme, kms,kme,                       &
                            its,ite, jts,jte, kts,kte
@@ -273,7 +273,6 @@ contains
          rri, t_phy, u_phy, v_phy, rho_phy, dz8w, p8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          u10, v10, ust, tsk, xland, frocean,fraci, xlat, xlong, dxy
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
 
 
@@ -299,7 +298,6 @@ contains
     xlat           = 0._kind_phys
     xlong          = 0._kind_phys
     dxy            = 0._kind_phys
-    moist          = 0._kind_phys  
     chem           = 0._kind_phys
 
 
@@ -361,17 +359,6 @@ contains
           v_phy(i,k,j)=vs3d(ip,kkp)
           rho_phy(i,k,j)=p_phy(i,k,j)/(287.04*t_phy(i,k,j)*(1.+.608*spechum(ip,kkp)))
           rri(i,k,j)=1./rho_phy(i,k,j)
-          moist(i,k,j,:)=0.
-          moist(i,k,j,1)=gq0(ip,kkp,p_atm_shum)
-          if (t_phy(i,k,j) > 265.) then
-            moist(i,k,j,2)=gq0(ip,kkp,p_atm_cldq)
-            moist(i,k,j,3)=0.
-            if (moist(i,k,j,2) < 1.e-8) moist(i,k,j,2)=0.
-          else
-            moist(i,k,j,2)=0.
-            moist(i,k,j,3)=gq0(ip,kkp,p_atm_cldq)
-            if(moist(i,k,j,3) < 1.e-8)moist(i,k,j,3)=0.
-          endif
           !--
         enddo
       enddo

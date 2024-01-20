@@ -1,6 +1,7 @@
 !>\file catchem_diag_wrapper.F90
 !! This file is GSDChem diagnostic wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 09/2020
+!! Kate.Zhang@noaa.gov 02/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 

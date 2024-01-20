@@ -73,10 +73,9 @@ module dust_data_mod
        9999.0 /)   ! Other           - 13
   ! -- FENGSHA uses precalculated drag partition from ASCAT. See: Prigent et al. (2012,2015)
   integer :: dust_calcdrag = 1
-
   ! -- values set at initialization
-  real(kind_chem) :: dust_alpha = 0.
-  real(kind_chem) :: dust_gamma = 0.
+  real(kind_chem) :: dust_alpha = 2.2
+  real(kind_chem) :: dust_gamma = 1.0
 
 
   ! -- sea salt parameters

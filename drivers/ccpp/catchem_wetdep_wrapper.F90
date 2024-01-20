@@ -1,8 +1,10 @@
 !>\file catchem_wetdep_wrapper.F90
 !! This file is GSDChem large-scale wet deposition wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 06/2020
+!! Kate.Zhang@noaa.gov 02/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
+!! Kate.Zhang@noaa.gov 11/2023
 
  module catchem_wetdep_wrapper
 
@@ -25,6 +27,7 @@ contains
 !> \brief Brief description of the subroutine
 !!
       subroutine catchem_wetdep_wrapper_init()
+      
       end subroutine catchem_wetdep_wrapper_init
 
 !> \brief Brief description of the subroutine
@@ -45,6 +48,7 @@ contains
 !>\section catchem_wetdep_wrapper CATChem Scheme General Algorithm
 !> @{
     subroutine catchem_wetdep_wrapper_run(im, kte, kme, ktau, dt,       &
+                   imp_physics, imp_physics_gfdl, imp_physics_thompson, &
                    rain_cplchm, rainc_cpl,rlat,                         &
                    pr3d, ph3d,phl3d, prl3d, tk3d, us3d, vs3d, spechum,  &
                    w, dqdt, ntrac,ntchmdiag,                            &
@@ -78,7 +82,7 @@ contains
     integer,           intent(in) :: wetdep_ls_opt_in
     character(len=*), intent(out) :: errmsg
     integer,          intent(out) :: errflg
-
+    integer, intent(in) :: imp_physics, imp_physics_gfdl, imp_physics_thompson
     real(kind_phys), dimension(1:im, 1:kme,jms:jme) :: rri, t_phy, u_phy, v_phy,       &
                      p_phy, z_at_w, dz8w, p8w, t8w, rho_phy, vvel, dqdti
 
@@ -119,9 +123,9 @@ contains
     ppm2ugkg(p_sulf) = 1.e+03_kind_phys * mw_so4_aer / mwdry
 
     ! -- initialize large-sacle wet depostion
-    if (ktau==1) then
-     call dep_wet_ls_init()
-    endif
+!    if (ktau==1) then
+!     call dep_wet_ls_init()
+!    endif
 
     ! -- set control flags
 
@@ -142,6 +146,7 @@ contains
 
 !>- get ready for chemistry run
     call catchem_prep_wetdep(ktau,dtstep,                               &
+        imp_physics, imp_physics_gfdl, imp_physics_thompson,            &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w, dqdt,           &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                   &
         t8w,dqdti,z_at_w,vvel,rlat,xlat,                                &
@@ -252,6 +257,7 @@ contains
 !> @}
 
   subroutine catchem_prep_wetdep(ktau,dtstep,                          &
+        imp_physics, imp_physics_gfdl, imp_physics_thompson,           &
         pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,w,dqdt,           &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                  &
         t8w,dqdti,z_at_w,vvel,rlat,xlat,                               &
@@ -273,6 +279,7 @@ contains
     integer, intent(in) :: ntrac,ntss1,ntss2,ntss3,ntss4,ntss5
     integer, intent(in) :: ntdust1,ntdust2,ntdust3,ntdust4,ntdust5
     integer, intent(in) :: ntso2,ntpp25,ntbc1,ntoc1,ntpp10
+    integer, intent(in) :: imp_physics, imp_physics_gfdl, imp_physics_thompson
     integer,        intent(in) :: ntsulf,ntbc2,ntoc2,ntDMS,ntmsa
     real(kind=kind_phys), dimension(ims:ime), intent(in) ::rlat
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) :: pr3d,ph3d
@@ -291,8 +298,8 @@ contains
     
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
          rri, t_phy, u_phy, v_phy, p_phy, rho_phy, dz8w, p8w, t8w, vvel, dqdti
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, 1:num_moist), intent(out) :: moist
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, 1:num_chem),  intent(out) :: chem
 
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) :: z_at_w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) :: xlat
@@ -373,17 +380,15 @@ contains
           rho_phy(i,k,j)=p_phy(i,k,j)/(287.04*t_phy(i,k,j)*(1.+.608*spechum(ip,kkp)))
           rri(i,k,j)=1./rho_phy(i,k,j)
           vvel(i,k,j)=-w(ip,kkp)*rri(i,k,j)/g 
-          moist(i,k,j,:)=0.
           moist(i,k,j,1)=gq0(ip,kkp,p_atm_shum)
-          if (t_phy(i,k,j) > 265.) then
-            moist(i,k,j,2)=gq0(ip,kkp,p_atm_cldq)
-            moist(i,k,j,3)=0.
-            if (moist(i,k,j,2) < 1.e-8) moist(i,k,j,2)=0.
-          else
-            moist(i,k,j,2)=0.
-            moist(i,k,j,3)=gq0(ip,kkp,p_atm_cldq)
-            if(moist(i,k,j,3) < 1.e-8)moist(i,k,j,3)=0.
-          endif
+          moist(i,k,j,2)=gq0(ip,kkp,p_atm_cldq)
+          if (moist(i,k,j,2) < 1.e-30) moist(i,k,j,2)=0.
+            if (imp_physics==imp_physics_thompson) then
+            moist(i,k,j,3)=gq0(ip,kkp,p_atm_cldi)
+            else if (imp_physics==imp_physics_gfdl) then
+            moist(i,k,j,3)=gq0(ip,kkp,p_atm_cldii)
+            endif
+          if(moist(i,k,j,3) < 1.e-30) moist(i,k,j,3)=0.
           !--
         enddo
       enddo

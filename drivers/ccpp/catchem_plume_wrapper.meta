@@ -53,6 +53,14 @@
   type = real
   kind = kind_phys
   intent = in
+[julian]
+  standard_name = forecast_julian_day
+  long_name = julian day
+  units = days
+  dimensions = ()
+  type = real
+  kind = kind_phys
+  intent = in
 [vegtype_cpl]
   standard_name = vegetation_type_classification_for_coupling
   long_name = vegetation type at each grid cell copied from vegtype
@@ -143,7 +151,7 @@
   standard_name = emission_fire_GBBEPx
   long_name = emission fire GBBEPx
   units = various
-  dimensions = (horizontal_loop_extent,5)
+  dimensions = (horizontal_loop_extent,5,35)
   type = real
   kind = kind_phys
   intent = in
@@ -154,6 +162,13 @@
   dimensions = (horizontal_loop_extent,13)
   type = real
   kind = kind_phys
+  intent = in
+[igb]
+  standard_name = catchem_emiss_opt
+  long_name = catchem emiss option not used
+  units = index
+  dimensions = ()
+  type = integer
   intent = in
 [ca_sgs_gbbepx_frp]
   standard_name = GBBEPx_fire_radiative_power_for_stochastic_physics

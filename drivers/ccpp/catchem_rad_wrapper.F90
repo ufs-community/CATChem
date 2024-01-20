@@ -1,6 +1,7 @@
 !>\file catchem_rad_wrapper.F90
 !! This file is GSDChem radiation wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 06/2020
+!! Kate.Zhang@noaa.gov 04/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -126,7 +127,9 @@ contains
     extt =0.
     ssca   =0.
     asympar=0.
-
+    aod=0.
+    aod2d=0.
+    aerodp=0.
 
     curr_secs = ktau * dt
 
@@ -165,7 +168,7 @@ contains
         its,ite, jts,jte, kts,kte)
 
 
-    if (call_radiation) then
+    if (call_radiation .and. aer_ra_feedback > 0 ) then
       store_arrays = .false.
       select case (aer_ra_feedback)
         case (1)
@@ -223,7 +226,6 @@ contains
         end do
         aod2d(its:ite) = aod(its:ite,1)
       end if
-    endif
 
     abem(its:ite,7)=aod2d(its:ite)
     abem(:,8)=aerodp(:,1,1)
@@ -231,7 +233,7 @@ contains
     abem(:,10)=aerodp(:,1,3)
     abem(:,11)=aerodp(:,1,4)
     abem(:,12)=aerodp(:,1,5)
-
+    endif
 !>---- feedback to radiation
 !    if (cplchp_rad_opt) then
 !     do nv = 1, nbands

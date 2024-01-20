@@ -1,4 +1,5 @@
 !! Revision History:
+!! 03/2023, Updated it as NASA 2G GOCART, Kate.Zhang@noaa.gov
 !! 06/2023, Restructure for CATChem, Jian.He@noaa.gov
 
 module gocart_seas_ngac_mod
@@ -88,11 +89,11 @@ CONTAINS
       fgridefficiency = min(max(0.,(frocean-fraci)*deep_lakes_mask),1.)
 
       ! -- compute auxiliary variables
-      if (dz8w < 12.) then
-        ws10m = sqrt(u_phy*u_phy+v_phy*v_phy)
-      else
+      !if (dz8w < 12.) then
+      !  ws10m = sqrt(u_phy*u_phy+v_phy*v_phy)
+      !else
         ws10m = sqrt(u10*u10+v10*v10)
-      end if
+      !end if
 
       ! -- compute NGAC SST correction
       if (sstemisFlag == 1) then          ! SST correction folowing Jaegle et al. 2011

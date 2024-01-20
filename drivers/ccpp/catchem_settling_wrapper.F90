@@ -1,6 +1,7 @@
 !>\file catchem_settling_wrapper.F90
 !! This file is GSDChem settling wrapper with CCPP coupling to FV3
 !! Haiqin.Li@noaa.gov 06/2020
+!! Kate.Zhang@noaa.gov 02/2023
 !! Revision History:
 !! 05/2023, Restructure for CATChem, Jian.He@noaa.gov
 
@@ -132,23 +133,6 @@ contains
     if ((dust_opt /= DUST_OPT_NONE) .or.                                &
         (seas_opt /= SEAS_OPT_NONE)) then
 
-      select case (chem_opt)
-        case (304, 316, 317)
-          !
-          !  GOCART "very" light
-          !
-          do j=jts,jte
-            do i=its,ite
-              call settling_simple_driver(dt,t_phy(i,:,j),              &
-                  moist(i,:,j,:),chem(i,:,j,:),rho_phy(i,:,j),            &
-                  dz8w(i,:,j),p8w(i,:,j),p_phy(i,:,j),                  &
-                  sedim(i,j,:),dusthelp(i,j),seashelp(i,j),             &
-                  dxy(i,j),kms,kme,kts,kte)
-            enddo
-          enddo
-
-        case default
-          !
           ! run with all GOCART variables, GOCART sort of HEAVY!
           !
           do j=jts,jte
@@ -160,7 +144,6 @@ contains
             enddo
           enddo
 
-      end select
     end if
 
     ! -- 4 volcanic size bins

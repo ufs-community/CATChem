@@ -68,6 +68,29 @@
   dimensions = (horizontal_loop_extent)
   type = integer
   intent = in
+[jdate]
+  standard_name = date_and_time_of_forecast_in_united_states_order
+  long_name = current forecast date and time
+  units = none
+  dimensions = (8)
+  type = integer
+  intent = in
+[lakefrac]
+  standard_name = lake_area_fraction
+  long_name = fraction of horizontal grid area occupied by lake
+  units = frac
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  intent = in
+[sncovr]
+  standard_name = surface_snow_area_fraction_over_land
+  long_name = surface snow area fraction
+  units = frac
+  dimensions = (horizontal_loop_extent)
+  type = real
+  kind = kind_phys
+  intent = in
 [u10m]
   standard_name = x_wind_at_10m
   long_name = 10 meter u wind speed
@@ -261,7 +284,7 @@
   standard_name = fengsha_dust_input
   long_name = fengsha dust input
   units = various
-  dimensions = (horizontal_loop_extent,5)
+  dimensions = (horizontal_loop_extent,12,5)
   type = real
   kind = kind_phys
   intent = in
