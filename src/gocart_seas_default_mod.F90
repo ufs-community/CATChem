@@ -17,81 +17,77 @@ module gocart_seas_default_mod
 
 CONTAINS
 
-  subroutine gocart_seas_default(ktau,dt,u_phy,              &
-          v_phy,chem_arr,dz8w,u10,         &
-          v10,delp,tsk,area,       &
-          emis_seas)
-
-     INTEGER,      INTENT(IN   ) :: ktau
-     REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
-                                            dz8w,u10,v10,  &
-                                            delp,           &
-                                            tsk,            &
-                                            area
-
-     REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
-           INTENT(INOUT ) ::                                   chem_arr
-     REAL(kind=kind_chem), DIMENSION( num_emis_seas),                    &
-           INTENT(OUT   ) ::                                   emis_seas
-
-!
-!
-! local variables
-!
+  subroutine gocart_seas_default(ktau,dt,u_phy,v_phy,chem_arr,dz8w,u10,         &
+       v10,delp,tsk,area,emis_seas)
+    
+    ! Input Variables 
+    ! ---------------
+    INTEGER, INTENT(IN) :: ktau
+    REAL(kind=kind_chem), INTENT(IN) :: dt
+    REAL(kind=kind_chem), INTENT(IN) :: u_phy
+    REAL(kind=kind_chem), INTENT(IN) :: v_phy
+    REAL(kind=kind_chem), INTENT(IN) :: dz8w
+    REAL(kind=kind_chem), INTENT(IN) :: u10
+    REAL(kind=kind_chem), INTENT(IN) :: v10
+    REAL(kind=kind_chem), INTENT(IN) :: delp
+    REAL(kind=kind_chem), INTENT(IN) :: tsk ! this isn't used anywhere
+    REAL(kind=kind_chem), INTENT(IN) :: area
+    
+    ! Output Variables 
+    ! ----------------
+    REAL(kind=kind_chem), DIMENSION( num_chem ), INTENT(INOUT ) :: chem_arr
+    REAL(kind=kind_chem), DIMENSION( num_emis_seas), INTENT(OUT) :: emis_seas
+    
+    ! local variables
+    ! ---------------
     integer :: ipr,n,rc,ilwi
-    real(kind=kind_chem) :: fsstemis, memissions, nemissions, tskin_c, ws10m
-    real(kind=kind_chem) :: dummylon, fgridefficiency,deep_lakes_mask
-    real(kind=kind_chem), DIMENSION (number_ss_bins) :: tc,bems
-    real(kind=kind_chem) :: w10m,airmas,tskin
-    real(kind=kind_chem) :: dxy
-
+    real(kind=kind_chem) :: fsstemis
+    real(kind=kind_chem) :: memissions
+    real(kind=kind_chem) :: nemissions
+    real(kind=kind_chem) :: ws10m
+    real(kind=kind_chem) :: dummylon
+    real(kind=kind_chem) :: fgridefficiency
+    real(kind=kind_chem) :: deep_lakes_mask
+    real(kind=kind_chem) :: w10m 
+    real(kind=kind_chem) :: airmas
+    real(kind=kind_chem), DIMENSION (number_ss_bins) :: tc
+    real(kind=kind_chem), DIMENSION (number_ss_bins) :: bems
+    
     real(kind=kind_chem) :: airmas1
-    real(kind=kind_chem), dimension(number_ss_bins) :: tc1
-    real(kind=kind_chem), dimension(number_ss_bins) :: bems1
-    real(kind=kind_chem) :: one
 
-! local parameters
-!
+    ! local parameters
+    ! ----------------
     real(kind=kind_chem), parameter :: conver  = 1.e-9_kind_chem
     real(kind=kind_chem), parameter :: converi = 1.e+9_kind_chem
-!
-    one = 1.0
 
-! -- original GOCART sea salt scheme
+
+    ! -- original GOCART sea salt scheme
     ! -- compute auxiliary variables
+
+    ! Calcualte 10m from first model layer if first layer is low
     if (dz8w < 12.) then
       ws10m = sqrt(u_phy*u_phy+v_phy*v_phy)
     else
       ws10m = sqrt(u10*u10+v10*v10)
     end if
 
-    ilwi=0
+    ilwi=0 ! this is always zero is it needed? 
     tc = 0.
-    tskin=tsk
+        
+    ! calcualte airmass 
+    ! -----------------
     airmas=area * delp / g
-    dxy=area
     ipr=0
 
-    airmas1 = airmas
-    tc1(:) = tc
-    bems1(:) = bems
-    call source_ss( number_ss_bins, dt, tc1,ilwi, dxy, w10m, airmas1, bems1,ipr)
-    tc = tc1(:)
-    bems = bems1(:)
-
+    call source_ss( number_ss_bins, dt, tc,ilwi, area, ws10m, airmas, bems,ipr)
+    
     ! -- add sea salt emission increments to existing airborne concentrations
-    chem_arr(p_seas_1)=chem_arr(p_seas_1)+tc(1)*converi
-    chem_arr(p_seas_2)=chem_arr(p_seas_2)+tc(2)*converi
-    chem_arr(p_seas_3)=chem_arr(p_seas_3)+tc(3)*converi
-    chem_arr(p_seas_4)=chem_arr(p_seas_4)+tc(4)*converi
-    chem_arr(p_seas_5)=chem_arr(p_seas_5)+tc(5)*converi
-
-    ! for output diagnostics
-    emis_seas(p_eseas1) = bems(1)
-    emis_seas(p_eseas2) = bems(2)
-    emis_seas(p_eseas3) = bems(3)
-    emis_seas(p_eseas4) = bems(4)
-    emis_seas(p_eseas5) = bems(5)
+    do n = 0, number_ss_bins-1
+       chem_arr(p_seas_1 + n)=chem_arr(p_seas_1 +n)+tc(n+1)*converi
+    
+       ! for output diagnostics
+       emis_seas(p_eseas1 + n) = bems(n+1)
+    end do
        
   end subroutine gocart_seas_default
 
@@ -171,28 +167,21 @@ CONTAINS
     REAL(kind=kind_chem), TARGET :: tcgm(nmx) ! g/m3
 
     !-----------------------------------------------------------------------  
-    ! sea salt specific
-    !-----------------------------------------------------------------------  
-! REAL(kind=kind_chem), DIMENSION(nmx) :: ra, rb
-! REAL(kind=kind_chem) :: ch_ss(nmx,12)
-
-    !-----------------------------------------------------------------------  
     ! emissions (input)
     !-----------------------------------------------------------------------  
-    REAL(kind=kind_chem) :: e_an(2,nmx), e_bb(nmx), &
-            e_ac(nmx)
+    REAL(kind=kind_chem) :: e_an(2,nmx), e_bb(nmx), e_ac(nmx)
 
     !-----------------------------------------------------------------------  
     ! diagnostics (budget)
     !-----------------------------------------------------------------------
-!  ! tendencies per time step and process
-!  REAL(kind=kind_chem), TARGET :: bems(nmx), bdry(nmx), bstl(nmx)
-!  REAL(kind=kind_chem), TARGET :: bwet(nmx), bcnv(nmx)!
-
-!  ! integrated tendencies per process
-!  REAL(kind=kind_chem), TARGET :: tems(nmx), tstl(nmx)
-!  REAL(kind=kind_chem), TARGET :: tdry(nmx), twet(nmx), tcnv(nmx)
-
+    !  ! tendencies per time step and process
+    !  REAL(kind=kind_chem), TARGET :: bems(nmx), bdry(nmx), bstl(nmx)
+    !  REAL(kind=kind_chem), TARGET :: bwet(nmx), bcnv(nmx)!
+    
+    !  ! integrated tendencies per process
+    !  REAL(kind=kind_chem), TARGET :: tems(nmx), tstl(nmx)
+    !  REAL(kind=kind_chem), TARGET :: tdry(nmx), twet(nmx), tcnv(nmx)
+    
     ! global mass balance per time step 
     REAL(kind=kind_chem) :: tmas0(nmx), tmas1(nmx)
     REAL(kind=kind_chem) :: dtems(nmx), dttrp(nmx), dtdif(nmx), dtcnv(nmx)
@@ -206,12 +195,9 @@ CONTAINS
     REAL(kind=kind_chem), TARGET :: ems_co(nmx)
 
     ! executable statements
-! decrease seasalt emissions (Colarco et al. 2010)
-!
-    !fudge_fac= 1. !.5
-    !fudge_fac= .5 !lzhang
+    ! decrease seasalt emissions (Colarco et al. 2010)
     fudge_fac= .25 !lzhang
-!
+
     DO n = 1,nmx
        bems(n) = 0.0
        rho_d = den_seas(n)
@@ -241,7 +227,7 @@ CONTAINS
 
           IF (ilwi == 0) THEN
              src = dfm*dxy*w10m**c0(2)
-!            src = ch_ss(n,dt(1)%mn)*dfm*dxy(j)*w10m(i,j)**c0(2)
+             ! src = ch_ss(n,dt(1)%mn)*dfm*dxy(j)*w10m(i,j)**c0(2)
              tc(n) = tc(n) + fudge_fac*src/airmas
           ELSE
              src = 0.0

@@ -4,9 +4,7 @@
 module gocart_seas_ngac_mod
 
   use catchem_constants, only : kind_chem, g=>con_g, pi=>con_pi
-  use catchem_config, only : num_emis_seas,num_chem, &
-                             p_seas_1,p_seas_2,p_seas_3,p_seas_4,p_seas_5, &
-                             p_eseas1,p_eseas2,p_eseas3,p_eseas4,p_eseas5
+  use catchem_config, only : num_emis_seas, num_chem, p_seas_1, p_eseas1
   use seas_data_mod
 
   implicit none
@@ -28,47 +26,54 @@ CONTAINS
           sstemisFlag,emission_scale,&
           random_factor)
 
-     INTEGER,      INTENT(IN   ) :: ktau,sstemisFlag
-     REAL(kind=kind_chem), INTENT(IN   ) :: dt,u_phy,v_phy, &
-                                            dz8w,u10,v10,  &
-                                            ustar,delp,           &
-                                            tsk,            &
-                                            frocean,fraci,        &
-                                            xlat,xlong,           &
-                                            area,random_factor
+     INTEGER, INTENT(IN) :: ktau,sstemisFlag
+     REAL(kind=kind_chem), INTENT(IN) :: dt
+     REAL(kind=kind_chem), INTENT(IN) :: u_phy
+     REAL(kind=kind_chem), INTENT(IN) :: v_phy
+     REAL(kind=kind_chem), INTENT(IN) :: dz8w
+     REAL(kind=kind_chem), INTENT(IN) :: u10
+     REAL(kind=kind_chem), INTENT(IN) :: v10
+     REAL(kind=kind_chem), INTENT(IN) :: ustar
+     REAL(kind=kind_chem), INTENT(IN) :: delp
+     REAL(kind=kind_chem), INTENT(IN) :: tsk
+     REAL(kind=kind_chem), INTENT(IN) :: frocean
+     REAL(kind=kind_chem), INTENT(IN) :: fraci
+     REAL(kind=kind_chem), INTENT(IN) :: xlat
+     REAL(kind=kind_chem), INTENT(IN) :: xlong
+     REAL(kind=kind_chem), INTENT(IN) :: area ! not used 
+     REAL(kind=kind_chem), INTENT(IN) :: random_factor
                                              
-     REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
-           INTENT(INOUT ) ::                                   chem_arr
-     REAL(kind=kind_chem), DIMENSION( num_emis_seas),                    &
-           INTENT(OUT   ) ::                                   emis_seas
-     REAL(kind=kind_chem),  DIMENSION( 5 ),                        &
-            INTENT(IN   ) :: emission_scale
-!
-!
-! local variables
-!
-    integer :: ipr,i,j,n,rc,ilwi
-    real(kind=kind_chem) :: fsstemis, memissions, nemissions, tskin_c, ws10m
-    real(kind=kind_chem) :: dummylon, fgridefficiency,deep_lakes_mask
-    real(kind=kind_chem), DIMENSION (number_ss_bins) :: tc,bems
-    real(kind=kind_chem) :: w10m,airmas,tskin
-    real(kind=kind_chem) :: dxy
+     REAL(kind=kind_chem), DIMENSION(num_chem), INTENT(INOUT) :: chem_arr
+     REAL(kind=kind_chem), DIMENSION(num_emis_seas), INTENT(OUT) :: emis_seas
+     REAL(kind=kind_chem), DIMENSION(num_emis_seas), INTENT(IN) :: emission_scale
 
-    real(kind=kind_chem) :: airmas1
-    real(kind=kind_chem), dimension(number_ss_bins) :: tc1
-    real(kind=kind_chem), dimension(number_ss_bins) :: bems1
-    real(kind=kind_chem) :: one
-!
-! local parameters
-!
+     ! local variables
+     ! --------------
+    integer :: ipr,i,j,n,rc,ilwi
+    real(kind=kind_chem) :: fsstemis
+    real(kind=kind_chem) :: memissions
+    real(kind=kind_chem) :: nemissions
+    real(kind=kind_chem) :: tskin_c
+    real(kind=kind_chem) :: ws10m
+    real(kind=kind_chem) :: dummylon
+    real(kind=kind_chem) :: fgridefficiency
+    real(kind=kind_chem) :: deep_lakes_mask
+    real(kind=kind_chem) :: airmas
+    real(kind=kind_chem) :: tskin
+    real(kind=kind_chem), DIMENSION (number_ss_bins) :: tc
+    real(kind=kind_chem), DIMENSION (number_ss_bins) :: bems
+    
+    ! local parameters
+    ! ----------------
     real(kind=kind_chem), parameter :: conver  = 1.e-9_kind_chem
     real(kind=kind_chem), parameter :: converi = 1.e+9_kind_chem
-!
+
+    ! ==========================================================
     one = 1.0
     emis_seas = 0.
 
-! -- NGAC sea salt scheme
-!Grid box efficiency to emission (fraction of sea water)
+    ! -- NGAC sea salt scheme
+    !Grid box efficiency to emission (fraction of sea water)
               
     deep_lakes_mask=1.0
     dummylon = xlong
@@ -121,18 +126,12 @@ CONTAINS
       end do
 
       ! -- add sea salt emission increments to existing airborne concentrations
-      chem_arr(p_seas_1) = chem_arr(p_seas_1) + tc(1)*converi
-      chem_arr(p_seas_2) = chem_arr(p_seas_2) + tc(2)*converi
-      chem_arr(p_seas_3) = chem_arr(p_seas_3) + tc(3)*converi
-      chem_arr(p_seas_4) = chem_arr(p_seas_4) + tc(4)*converi
-      chem_arr(p_seas_5) = chem_arr(p_seas_5) + tc(5)*converi
+      do n = 0, number_ss_bins -1 
+         chem_arr(p_seas_1 + n) = chem_arr(p_seas_1+ n) + tc(n+1)*converi
 
-      ! for output diagnostics kg/m2/s
-      emis_seas(p_eseas1) = bems(1)
-      emis_seas(p_eseas2) = bems(2)
-      emis_seas(p_eseas3) = bems(3)
-      emis_seas(p_eseas4) = bems(4)
-      emis_seas(p_eseas5) = bems(5)
+         ! Update Diagnostic emission
+         emis_seas(p_eseas1+ n) = bems(n+1)
+      end do
 
   end subroutine gocart_seas_ngac
 

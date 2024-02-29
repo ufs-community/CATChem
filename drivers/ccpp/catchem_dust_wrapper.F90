@@ -10,9 +10,9 @@
    use machine ,        only : kind_phys
    use catchem_config
    use gocart_dust_simple_mod, only : gocart_dust_simple
-   use gocart_dust_default_mod, only : gocart_dust_default
+   use dust_ginoux_mod, only : gocart_dust_ginoux
    use dust_afwa_mod,   only : gocart_dust_afwa_driver
-   use dust_fengsha_mod,only : gocart_dust_fengsha_driver
+   use dust_fengsha_mod,only : dust_fengsha_driver
    use dust_data_mod
 
    implicit none
@@ -123,6 +123,7 @@ contains
     integer :: i, j, jp, k, kp, n
     real(kind_phys), dimension(ims:im,jms:jme) :: random_factor
     real(kind_phys) :: delp
+    real(kind_phys) :: airmas
 
     errmsg = ''
     errflg = 0
@@ -189,18 +190,22 @@ contains
         do j=jts,jte
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
-              delp = p8w(i,kts,j)-p8w(i,kts+1,j)            
-              ! -- GOCART afwa dust scheme
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)    
+              airmas = dxy(i,j) * delp / g        
+              ! -- afwa dust scheme
               call gocart_dust_afwa_driver(ktau,dt,u_phy(i,kts,j), &
-                v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                v_phy(i,kts,j),rho_phy(i,kts,j), &
                 dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
                 v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),    &
                 emis_dust(i,1,j,:),&
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j),nsoil)
               !store_arrays = .true.
-            endif
-          enddo
-        enddo
+              do n=0,ndust-1
+                chem(i,kts,j,p_dust_1 + n) = chem(i,kts,j,p_dust_1 + n) + emis_dust(i,1,j,n+1) * dt * dxy(i,j) / airmas
+              end do
+            end if
+          end do
+        end do
 
       case (DUST_OPT_FENGSHA)
         dust_alpha    = dust_alpha_in  !fengsha_alpha
@@ -210,18 +215,22 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-              ! -- GOCART afwa dust scheme
-              call gocart_dust_fengsha_driver(dt,&
-                chem(i,kts,j,:),rho_phy(i,kts,j), &
-                dz8w(i,kts,j),smois(i,:,j), &
+              airmas = dxy(i,j) * delp / g
+              ! -- FENGSHA dust scheme
+              call dust_fengsha_driver(dt,&
+                rho_phy(i,kts,j), &
+                dz8w(i,kts,j),smois(i,1,j), &
                 delp,ssm(i,j),isltyp(i,j),vegfrac(i,j),&
                 snowh(i,j),dxy(i,j),emis_dust(i,1,j,:), &
                 ust(i,j),znt(i,j),clayf(i,j),sandf(i,j), &
                 rdrag(i,j),uthr(i,j),nsoil,random_factor(i,j))
               !store_arrays = .true.
-            endif
-          enddo
-        enddo
+              do n=0,ndust-1
+                chem(i,kts,j, p_dust_1 + n ) = chem(i,kts,j, p_dust_1 + n ) + emis_dust(i,1,j,n+1) * dt / airmas
+              end do 
+            end if
+          end do
+        end do
 
       case (DUST_OPT_GOCART)
         dust_alpha = gocart_alpha
@@ -231,7 +240,7 @@ contains
           do i=its,ite
             if(xland(i,j).lt.1.5 .and. xland(i,j).gt.0.5)then
               delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-
+              airmas = dxy(i,j) * delp / g
               ! based on chem_opt
               select case (chem_opt)
 
@@ -247,16 +256,22 @@ contains
 
                 case default
                     ! -- default GOCART dust scheme
-                    call gocart_dust_default(ktau,dt,u_phy(i,kts,j), &
-                      v_phy(i,kts,j),chem(i,kts,j,:),rho_phy(i,kts,j), &
+                    call gocart_dust_ginoux(ktau,dt,u_phy(i,kts,j), &
+                      v_phy(i,kts,j),rho_phy(i,kts,j), &
                       dz8w(i,kts,j),smois(i,:,j),u10(i,j), &
                       v10(i,j),delp,erod(i,j,:),isltyp(i,j),dxy(i,j),           &
                       emis_dust(i,1,j,:),srce_dust(i,1,j,:),nsoil,current_month)
 
               end select
-            endif
-          enddo
-        enddo         
+
+              !store_arrays = .true.
+              do n=0,ndust-1
+                chem(i,kts,j, p_dust_1 + n ) = chem(i,kts,j, p_dust_1 + n ) + emis_dust(i,1,j,n+1) * dt / airmas
+              end do
+
+            end if
+          end do
+        end do         
 
       case default
         errmsg = 'Logic error in catchem_dust_wrapper_run: invalid dust_opt'
@@ -287,17 +302,15 @@ contains
     enddo
 
     duem(:,:)=ugkg*emis_dust(:,1,1,:)
-!
-   end subroutine catchem_dust_wrapper_run
+
+  end subroutine catchem_dust_wrapper_run
 !> @}
 
-   subroutine catchem_prep_dust(                                      &
-        ktau,dtstep,                     &
-        u10m,v10m,ustar,land,garea,rlat,rlon,ts2d,                     &
-        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,                &
-        nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,                  &
-        snow_cplchm,dust_in,emi_in,                               &
-        hf2d,pb2d,                              &
+   subroutine catchem_prep_dust(                               &
+        ktau,dtstep,u10m,v10m,ustar,land,garea,rlat,rlon,ts2d, &
+        pr3d,ph3d,phl3d,tk3d,prl3d,us3d,vs3d,spechum,          &
+        nsoil,smc,vegtype,soiltyp,sigmaf,dswsfc,zorl,          &
+        snow_cplchm,dust_in,emi_in,hf2d,pb2d,                  &
         u10,v10,ust,tsk,xland,xlat,xlong,dxy,                          &
         rri,t_phy,u_phy,v_phy,p_phy,rho_phy,dz8w,p8w,                  &
         t8w,                                              &
