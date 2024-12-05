@@ -1,0 +1,4 @@
+<map id="charpak_mod::readoneline" name="charpak_mod::readoneline">
+<area shape="rect" id="node1" title="Read one line from a file." alt="" coords="5,5,200,32"/>
+<area shape="rect" id="node2" href="$group__core__modules.html#ga3471258b163494d335f7c37fd4769f75" title="Remove leading and trailing blanks from a string." alt="" coords="248,5,437,32"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="config_mod::config_grid" name="config_mod::config_grid">
+<area shape="rect" id="node1" title="Process grid configuration." alt="" coords="5,31,181,57"/>
+<area shape="rect" id="node2" href="$group__core__modules.html#ga51caf927c8403a431dd55956762ad350" title="CC_Error." alt="" coords="236,5,385,32"/>
+<area shape="rect" id="node5" href="$group__core__modules.html#ga0ee5218b21cf850e303a4380e9ce220b" title="Split a string into substrings." alt="" coords="229,56,392,83"/>
+<area shape="rect" id="node3" href="$group__core__modules.html#ga3890886a8d25cb4253fe2706c44e6e78" title="Print a string in multiple lines." alt="" coords="440,5,652,32"/>
+<area shape="rect" id="node4" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="701,5,865,32"/>
+<area shape="rect" id="node6" href="$group__core__modules.html#ga1849bf292b78e7b221ebb9da47db21bb" title="Extract text from a string." alt="" coords="467,56,625,83"/>
+<area shape="rect" id="node7" href="$group__core__modules.html#gab3380e435c78f855e451be2b17e7cd9e" title="Copy characters from one string to another." alt="" coords="700,56,867,83"/>
+</map>

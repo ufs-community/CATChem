@@ -1,0 +1,4 @@
+<map id="chemstate_mod::chemstatetype" name="chemstate_mod::chemstatetype">
+<area shape="rect" id="node1" title="Data type for managing the state of the chemical model." alt="" coords="5,95,239,121"/>
+<area shape="rect" id="node2" href="$structspecies__mod_1_1speciestype.html" title="Module for catchem species." alt="" coords="25,5,219,32"/>
+</map>

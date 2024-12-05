@@ -1,0 +1,7 @@
+<map id="chemstate_mod::chem_allocate" name="chemstate_mod::chem_allocate">
+<area shape="rect" id="node1" title="Allocate the chem state." alt="" coords="5,23,176,65"/>
+<area shape="rect" id="node2" href="$group__core__modules.html#ga9d9a1354b84c23bc24cd4db6a547d348" title="CC_CheckVar." alt="" coords="224,5,401,32"/>
+<area shape="rect" id="node3" href="$group__core__modules.html#ga51caf927c8403a431dd55956762ad350" title="CC_Error." alt="" coords="449,31,599,57"/>
+<area shape="rect" id="node4" href="$group__core__modules.html#ga3890886a8d25cb4253fe2706c44e6e78" title="Print a string in multiple lines." alt="" coords="647,31,859,57"/>
+<area shape="rect" id="node5" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="907,31,1071,57"/>
+</map>

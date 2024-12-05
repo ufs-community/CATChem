@@ -1,0 +1,4 @@
+<map id="ccpr_scheme_ginoux_mod::ccpr_scheme_ginoux" name="ccpr_scheme_ginoux_mod::ccpr_scheme_ginoux">
+<area shape="rect" id="node1" title="Calculates the dust emission flux in ug m&#45;2 s&#45;1." alt="" coords="5,5,208,47"/>
+<area shape="rect" id="node2" href="$group__catchem__dust__process.html#ga4500164b113bfafb04f34b3dbdbd5acb" title="Computes the Threshold Friction Velocity from MB97." alt="" coords="256,5,451,47"/>
+</map>

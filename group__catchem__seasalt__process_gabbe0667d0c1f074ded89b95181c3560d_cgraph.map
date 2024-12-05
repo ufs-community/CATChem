@@ -1,0 +1,6 @@
+<map id="ccpr_scheme_gong97_mod::ccpr_scheme_gong97" name="ccpr_scheme_gong97_mod::ccpr_scheme_gong97">
+<area shape="rect" id="node1" title="Run the Gong97 Sea Salt Emission scheme." alt="" coords="5,71,212,112"/>
+<area shape="rect" id="node2" href="$group__catchem__seasalt__process.html#ga275eee2242132e3c0e6b39aeab71ab55" title="Jeagle et al. 2012 SST correction." alt="" coords="267,5,457,47"/>
+<area shape="rect" id="node3" href="$group__catchem__seasalt__process.html#gae88d813a03a04ba38a4bd900773d8064" title="Function to compute sea salt emissions following the Gong style parameterization." alt="" coords="260,71,464,112"/>
+<area shape="rect" id="node4" href="$group__catchem__seasalt__process.html#gaf4e9c720d3143836adb1a5fcf0fe011f" title="Calculate the weibull distribution for 10m wind speed (u10, v10)" alt="" coords="269,136,455,177"/>
+</map>

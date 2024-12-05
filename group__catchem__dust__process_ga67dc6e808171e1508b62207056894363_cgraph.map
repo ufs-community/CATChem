@@ -1,0 +1,10 @@
+<map id="ccpr_scheme_fengsha_mod::ccpr_scheme_fengsha" name="ccpr_scheme_fengsha_mod::ccpr_scheme_fengsha">
+<area shape="rect" id="node1" title="This is the FENGSHA dust emission scheme developed at NOAA Air Resources Laboratory." alt="" coords="5,201,216,243"/>
+<area shape="rect" id="node2" href="$group__catchem__dust__process.html#gadd3264685e064288275b0d8e6c00037f" title="Computes Draxler Hoirizontal Flux." alt="" coords="264,5,448,47"/>
+<area shape="rect" id="node3" href="$group__catchem__dust__process.html#ga68df8ef7e173610a8570dc03b06f5ec1" title="Computes the soil moisture attenuation factor for dust emission." alt="" coords="264,71,448,112"/>
+<area shape="rect" id="node4" href="$group__catchem__dust__process.html#ga852341e0d9876a7c2a3a653e5036ea46" title="Computes Kawamura Hoirizontal Flux." alt="" coords="264,136,448,177"/>
+<area shape="rect" id="node5" href="$group__catchem__dust__process.html#gac1050e21be1dd102128fd53670dff630" title="KokDistribution." alt="" coords="264,201,448,243"/>
+<area shape="rect" id="node6" href="$group__catchem__dust__process.html#ga5fafbb4ea27c7b29911094fa8f2b157f" title="Computes the Drag Partition from MB95." alt="" coords="264,267,448,308"/>
+<area shape="rect" id="node7" href="$group__catchem__dust__process.html#ga98e5900d9bfa60f94bbb661f30f7567b" title="Computes the soil moisture attenuation factor for dust emission." alt="" coords="264,332,448,373"/>
+<area shape="rect" id="node8" href="$group__catchem__dust__process.html#ga86799789075704c8682e43e376519182" title="Computes the soil erosion potential." alt="" coords="264,397,448,439"/>
+</map>
