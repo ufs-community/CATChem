@@ -2,9 +2,9 @@ name: Doxygen docs
 
 on:
   push:
-    branches: [feature/catchem_begins]
+    branches: [develop]
   pull_request:
-    branches: [feature/catchem_begins]
+    branches: [develop]
 permissions:
   contents: write
 
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get install -y doxygen graphviz
+        run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
 
       - name: Build
         run: |
@@ -24,7 +24,7 @@ jobs:
           cd -
 
       - name: Deploy
-        if: github.ref == 'refs/heads/feature/catchem_begins'
+        if: github.ref == 'refs/heads/develop'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages

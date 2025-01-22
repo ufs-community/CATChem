@@ -137,10 +137,10 @@ program test_drydep
       stop 1
    end if
 
-  ! Please revisit statements below - confirm only 1 valid value is being returned
+   ! Please revisit statements below - confirm only 1 valid value is being returned
    call print_info(Config, DryDepState, MetState, title)
    call assert(DiagState%drydep_frequency(1) > 0.0_fp, "Test 2 GOCART drydep Scheme (resuspension activated)")
- 
+
 
 contains
 
