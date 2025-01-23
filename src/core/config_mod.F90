@@ -1436,7 +1436,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%drydep_activate = v_bool
+      Config%SUVolcanicEmissions_activate = v_bool
 
 
       key   = "process%SUVolcanicEmissions%scheme_opt"
