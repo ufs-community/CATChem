@@ -1,5 +1,7 @@
 <map id="charpak_mod::txtext" name="charpak_mod::txtext">
-<area shape="rect" id="node1" title="Extract text from a string." alt="" coords="5,31,163,57"/>
-<area shape="rect" id="node2" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="212,5,376,32"/>
-<area shape="rect" id="node3" href="$group__core__modules.html#gab3380e435c78f855e451be2b17e7cd9e" title="Copy characters from one string to another." alt="" coords="211,56,377,83"/>
+<area shape="rect" id="Node000001" title="Extract text from a string." alt="" coords="5,31,163,56"/>
+<area shape="rect" id="Node000002" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="212,5,376,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,31,198,27,198,32,163,36"/>
+<area shape="rect" id="Node000003" href="$group__core__modules.html#gab3380e435c78f855e451be2b17e7cd9e" title="Copy characters from one string to another." alt="" coords="211,55,377,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,50,198,54,197,59,163,55"/>
 </map>

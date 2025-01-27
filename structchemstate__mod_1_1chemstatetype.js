@@ -1,7 +1,6 @@
 var structchemstate__mod_1_1chemstatetype =
 [
     [ "aeroindex", "structchemstate__mod_1_1chemstatetype.html#adca2841739c15194d8d9b9d2d585a888", null ],
-    [ "chemspecies", "structchemstate__mod_1_1chemstatetype.html#accbd386dace4c75e9114377a3e75d208", null ],
     [ "drydepindex", "structchemstate__mod_1_1chemstatetype.html#ae99d71e3b01f5565476429b2590414a5", null ],
     [ "dustindex", "structchemstate__mod_1_1chemstatetype.html#ad3c61fba845ccf8eea8d00cdee61a2be", null ],
     [ "gasindex", "structchemstate__mod_1_1chemstatetype.html#a8ae3db54a3bf578488a09704427228e7", null ],
@@ -15,6 +14,5 @@ var structchemstate__mod_1_1chemstatetype =
     [ "seasaltindex", "structchemstate__mod_1_1chemstatetype.html#ab18e842883467663e0affcb032f3c777", null ],
     [ "speciesindex", "structchemstate__mod_1_1chemstatetype.html#a3189df799e068086fc24d1b09ee1d7f2", null ],
     [ "speciesnames", "structchemstate__mod_1_1chemstatetype.html#abe9801b0a00bd7cb501ab1bf6cbd11a6", null ],
-    [ "state", "structchemstate__mod_1_1chemstatetype.html#a37f88babeb32e8121c774c18c6f94fea", null ],
     [ "tracerindex", "structchemstate__mod_1_1chemstatetype.html#a245469cf7604df1b83fb0143ec6d14f9", null ]
 ];

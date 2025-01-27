@@ -1,6 +1,0 @@
-<map id="diagstate_mod::diag_allocate" name="diagstate_mod::diag_allocate">
-<area shape="rect" id="node1" title="Allocate memory for the diagnostic state variables." alt="" coords="5,5,160,47"/>
-<area shape="rect" id="node2" href="$group__core__modules.html#ga51caf927c8403a431dd55956762ad350" title="CC_Error." alt="" coords="208,13,357,39"/>
-<area shape="rect" id="node3" href="$group__core__modules.html#ga3890886a8d25cb4253fe2706c44e6e78" title="Print a string in multiple lines." alt="" coords="405,13,617,39"/>
-<area shape="rect" id="node4" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="665,13,829,39"/>
-</map>

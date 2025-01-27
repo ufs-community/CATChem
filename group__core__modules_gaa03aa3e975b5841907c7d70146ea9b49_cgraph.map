@@ -1,0 +1,12 @@
+<map id="init_mod::init_diag" name="init_mod::init_diag">
+<area shape="rect" id="Node000001" title="Initialize the diag state." alt="" coords="5,5,148,31"/>
+<area shape="rect" id="Node000002" href="$group__core__modules.html#gadf8890c67762a792dcff25da9d3e10f7" title="CC_Error." alt="" coords="399,5,548,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,13,196,11,351,11,385,12,385,17,351,17,196,17,149,18"/>
+<area shape="rect" id="Node000005" href="$group__core__modules.html#gaed9ebba232550992e997424692a21afe" title="Allocate memory for the diagnostic state variables." alt="" coords="196,26,351,66"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="148,25,183,30,182,36,148,31"/>
+<area shape="rect" id="Node000003" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="596,5,808,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="548,15,582,15,582,21,548,21"/>
+<area shape="rect" id="Node000004" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="856,5,1020,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="808,15,842,15,842,21,808,21"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="351,33,385,28,386,33,351,38"/>
+</map>

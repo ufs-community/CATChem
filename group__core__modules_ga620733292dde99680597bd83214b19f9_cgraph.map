@@ -1,7 +1,0 @@
-<map id="init_mod::init_diag" name="init_mod::init_diag">
-<area shape="rect" id="node1" title="Initialize the diag state." alt="" coords="5,5,148,32"/>
-<area shape="rect" id="node2" href="$group__core__modules.html#ga51caf927c8403a431dd55956762ad350" title="CC_Error." alt="" coords="399,5,548,32"/>
-<area shape="rect" id="node5" href="$group__core__modules.html#gabf3ec0431a95ac83746d3880f64d23f7" title="Allocate memory for the diagnostic state variables." alt="" coords="196,27,351,69"/>
-<area shape="rect" id="node3" href="$group__core__modules.html#ga3890886a8d25cb4253fe2706c44e6e78" title="Print a string in multiple lines." alt="" coords="596,5,808,32"/>
-<area shape="rect" id="node4" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="856,5,1020,32"/>
-</map>

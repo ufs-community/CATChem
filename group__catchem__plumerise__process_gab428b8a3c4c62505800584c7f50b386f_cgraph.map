@@ -1,0 +1,7 @@
+<map id="ccpr_scheme_sofiev_mod::ccpr_sofiev_plmrise" name="ccpr_scheme_sofiev_mod::ccpr_sofiev_plmrise">
+<area shape="rect" id="Node000001" title="Find the plume height index." alt="" coords="5,37,200,77"/>
+<area shape="rect" id="Node000002" href="$group__catchem__plumerise__process.html#ga2cd9d766689a53f13141891438fe9d8d" title="Distribute emissions around a given height." alt="" coords="248,5,456,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,42,234,38,235,43,200,48"/>
+<area shape="rect" id="Node000003" href="$group__catchem__plumerise__process.html#ga570e08e300b22e962e19e77efc60474e" title="Sofiev Plume Rise Algorithm." alt="" coords="267,69,437,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,67,253,74,252,79,200,72"/>
+</map>

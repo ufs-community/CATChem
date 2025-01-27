@@ -1,0 +1,12 @@
+<map id="chemstate_mod::chem_allocate" name="chemstate_mod::chem_allocate">
+<area shape="rect" id="Node000001" title="Allocate the chem state." alt="" coords="5,23,176,63"/>
+<area shape="rect" id="Node000002" href="$group__core__modules.html#ga07c7634132d8b5cc9561f69d070df2ae" title="CC_CheckVar." alt="" coords="224,5,401,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,31,210,27,211,32,176,36"/>
+<area shape="rect" id="Node000003" href="$group__core__modules.html#gadf8890c67762a792dcff25da9d3e10f7" title="CC_Error." alt="" coords="449,31,599,56"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="176,41,435,41,435,46,176,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="402,26,436,30,435,35,402,31"/>
+<area shape="rect" id="Node000004" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="647,31,859,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="599,41,633,41,633,46,599,46"/>
+<area shape="rect" id="Node000005" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="907,31,1071,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="859,41,893,41,893,46,859,46"/>
+</map>

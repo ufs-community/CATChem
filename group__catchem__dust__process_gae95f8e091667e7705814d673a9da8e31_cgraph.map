@@ -1,0 +1,29 @@
+<map id="ccpr_dust_mod::ccpr_dust_run" name="ccpr_dust_mod::ccpr_dust_run">
+<area shape="rect" id="Node000001" title="Run the dust scheme." alt="" coords="5,247,160,287"/>
+<area shape="rect" id="Node000002" href="$group__core__modules.html#gadf8890c67762a792dcff25da9d3e10f7" title="CC_Error." alt="" coords="239,101,388,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,245,280,132,283,137,115,250"/>
+<area shape="rect" id="Node000005" href="$group__catchem__dust__process.html#ga1f5babce155118b168002bb27061ce6a" title="This is the FENGSHA dust emission scheme developed at NOAA Air Resources Laboratory." alt="" coords="208,247,419,287"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,265,194,265,194,270,161,270"/>
+<area shape="rect" id="Node000013" href="$group__catchem__dust__process.html#ga0bfc1eb5989d49cb0d21ba5b34192f4d" title="Calculates the dust emission flux in ug m&#45;2 s&#45;1." alt="" coords="212,407,415,447"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="114,285,274,397,271,402,111,290"/>
+<area shape="rect" id="Node000003" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="467,5,679,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="337,99,395,70,466,41,496,32,498,37,468,46,397,75,339,104"/>
+<area shape="rect" id="Node000004" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="727,5,891,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="679,15,713,15,713,21,679,21"/>
+<area shape="rect" id="Node000006" href="$group__catchem__dust__process.html#gac3626613360de409c9107999c4ba8a3b" title="Computes Draxler Hoirizontal Flux." alt="" coords="481,55,665,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="326,245,382,177,421,138,465,105,476,99,479,104,468,110,425,142,386,180,331,249"/>
+<area shape="rect" id="Node000007" href="$group__catchem__dust__process.html#ga93a132e6c9f6fd942cd1147c04cc593b" title="Computes the soil moisture attenuation factor for dust emission." alt="" coords="481,119,665,159"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="340,245,396,207,466,169,483,162,485,167,468,174,399,212,343,250"/>
+<area shape="rect" id="Node000008" href="$group__catchem__dust__process.html#ga80a119b65872fe0898652f4c2e6296f8" title="Computes Kawamura Hoirizontal Flux." alt="" coords="481,183,665,223"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="395,245,477,224,479,229,396,250"/>
+<area shape="rect" id="Node000009" href="$group__catchem__dust__process.html#ga96afb53858c96c94ce32ec40ced2a7b0" title="KokDistribution." alt="" coords="481,247,665,287"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="419,265,467,265,467,270,419,270"/>
+<area shape="rect" id="Node000010" href="$group__catchem__dust__process.html#gaee4d4444a314502c6bf42238f50aa5f0" title="Computes the Drag Partition from MB95." alt="" coords="481,311,665,351"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="396,285,479,305,477,311,395,290"/>
+<area shape="rect" id="Node000011" href="$group__catchem__dust__process.html#gaa31b82a72b3b7b428efc67a12901a87c" title="Computes the soil moisture attenuation factor for dust emission." alt="" coords="481,375,665,415"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="343,285,399,323,468,361,485,368,483,373,466,366,396,328,340,290"/>
+<area shape="rect" id="Node000012" href="$group__catchem__dust__process.html#gad21ea8aed958c878f59df1eede283403" title="Computes the soil erosion potential." alt="" coords="481,439,665,479"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="331,286,386,354,425,392,468,425,479,431,476,436,465,430,421,396,382,358,326,289"/>
+<area shape="rect" id="Node000014" href="$group__catchem__dust__process.html#ga4500164b113bfafb04f34b3dbdbd5acb" title="Computes the Threshold Friction Velocity from MB97." alt="" coords="475,503,670,543"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="360,445,468,489,490,497,488,502,466,494,358,450"/>
+</map>

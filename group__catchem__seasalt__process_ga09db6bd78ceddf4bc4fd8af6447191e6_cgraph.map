@@ -1,0 +1,30 @@
+<map id="ccpr_seasalt_mod::ccpr_seasalt_init" name="ccpr_seasalt_mod::ccpr_seasalt_init">
+<area shape="rect" id="Node000001" title="Initialize the CATCHem SeaSalt Process." alt="" coords="5,106,180,146"/>
+<area shape="rect" id="Node000002" href="$group__core__modules.html#ga07c7634132d8b5cc9561f69d070df2ae" title="CC_CheckVar." alt="" coords="243,5,420,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,104,171,75,227,48,268,32,270,37,229,52,174,80,126,108"/>
+<area shape="rect" id="Node000003" href="$group__core__modules.html#gadf8890c67762a792dcff25da9d3e10f7" title="CC_Error." alt="" coords="510,25,659,51"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="173,103,227,91,369,66,496,47,497,52,370,72,229,97,174,109"/>
+<area shape="rect" id="Node000006" href="$group__catchem__seasalt__process.html#ga3dcdac86dbde4809a96fcf44f2153d62" title="Scheme GEOS2012 Sea Salt Emission scheme." alt="" coords="229,106,434,146"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="180,123,215,123,215,129,180,129"/>
+<area shape="rect" id="Node000009" href="$group__catchem__seasalt__process.html#ga42b2d994254dd920584737041e437348" title="Run the Gong Sea Salt Emission scheme." alt="" coords="228,234,435,274"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="119,144,168,182,229,220,245,227,242,231,227,224,165,186,116,148"/>
+<area shape="rect" id="Node000011" href="$group__catchem__seasalt__process.html#ga2f6d00aea8020d681883bf382aace9b8" title="Run the Gong97 Sea Salt Emission scheme." alt="" coords="228,170,435,210"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="169,144,244,164,242,169,167,149"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="421,22,497,28,496,34,420,28"/>
+<area shape="rect" id="Node000004" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="735,25,947,51"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="660,35,721,35,721,41,660,41"/>
+<area shape="rect" id="Node000005" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="995,25,1159,51"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="947,35,981,35,981,41,947,41"/>
+<area shape="rect" id="Node000007" href="$group__catchem__seasalt__process.html#ga17e279a7fa7b1e2281777d6d6ad5ab81" title="Jeagle et al. 2012 SST correction." alt="" coords="489,94,680,134"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="434,118,476,116,476,122,434,124"/>
+<area shape="rect" id="Node000008" href="$group__catchem__seasalt__process.html#gac87a23a565b881d337429c359072736a" title="Function to compute sea salt emissions following the Gong style parameterization." alt="" coords="483,182,687,222"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="400,144,505,175,503,180,398,149"/>
+<area shape="poly" id="edge9_Node000008_Node000008" title=" " alt="" coords="538,182,535,172,542,163,559,157,585,155,614,158,630,165,628,170,613,163,585,161,560,163,545,167,540,173,543,181"/>
+<area shape="poly" id="edge11_Node000009_Node000007" title=" " alt="" coords="414,231,433,220,449,202,456,183,464,163,481,144,489,139,492,143,484,148,469,166,461,185,453,205,436,224,417,236"/>
+<area shape="poly" id="edge12_Node000009_Node000008" title=" " alt="" coords="429,231,473,222,474,227,430,237"/>
+<area shape="rect" id="Node000010" href="$group__catchem__seasalt__process.html#ga9591e00ed2cbd88486efc31256a042be" title="Calculate the weibull distribution for 10m wind speed (u10, v10)" alt="" coords="491,246,678,286"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="435,256,478,258,477,264,435,262"/>
+<area shape="poly" id="edge15_Node000011_Node000007" title=" " alt="" coords="398,167,503,136,505,141,400,172"/>
+<area shape="poly" id="edge16_Node000011_Node000008" title=" " alt="" coords="435,192,469,194,469,199,435,198"/>
+<area shape="poly" id="edge17_Node000011_Node000010" title=" " alt="" coords="400,208,505,239,503,244,398,213"/>
+</map>

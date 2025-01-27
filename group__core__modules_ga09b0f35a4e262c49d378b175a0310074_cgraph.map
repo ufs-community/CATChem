@@ -1,7 +1,0 @@
-<map id="init_mod::init_met" name="init_mod::init_met">
-<area shape="rect" id="node1" title="Initialize the met state." alt="" coords="5,5,147,32"/>
-<area shape="rect" id="node2" href="$group__core__modules.html#ga51caf927c8403a431dd55956762ad350" title="CC_Error." alt="" coords="453,5,603,32"/>
-<area shape="rect" id="node5" href="$group__core__modules.html#gad1e148405a99dea51c273511b9c1ce5c" title="Allocate the MetState object." alt="" coords="195,31,405,57"/>
-<area shape="rect" id="node3" href="$group__core__modules.html#ga3890886a8d25cb4253fe2706c44e6e78" title="Print a string in multiple lines." alt="" coords="651,5,863,32"/>
-<area shape="rect" id="node4" href="$group__core__modules.html#ga36b722fb300c543f0eb910116bb28973" title="Count the number of times a character appears in a string." alt="" coords="911,5,1075,32"/>
-</map>
