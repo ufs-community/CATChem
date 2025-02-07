@@ -64,9 +64,9 @@ program test_suvolcanic
    SUVolcanicEmissionsState%Activate = .true.
 
    ! Meteorological State
+   MetState%NLEVS = 2
    allocate(MetState%BXHEIGHT(MetState%NLEVS))
    allocate(MetState%DELP(MetState%NLEVS))
-   MetState%NLEVS = 2
 
    MetState%DELP(1:MetState%NLEVS)= 10000      ! Need to change to something more reasonable and check units.
    MetState%BXHEIGHT(1:MetState%NLEVS) = 100  ! temporary, change to something more reasonable and check units
