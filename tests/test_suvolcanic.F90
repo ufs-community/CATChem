@@ -97,6 +97,8 @@ program test_suvolcanic
       stop 1
    end if
 
+! TODO: Pull from Volcanic Emissions sample ASCII file
+   call assert(SUVolcanicEmissionsState%SO2 > 0.0_fp, "Test Sulfur Volcanic Emissions")
    call print_info(Config, SUVolcanicEmissionsState, MetState, title)
    call cc_suvolcanic_finalize( SUVolcanicEmissionsState, rc)
    if (rc /= CC_SUCCESS) then
