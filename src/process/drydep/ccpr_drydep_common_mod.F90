@@ -211,12 +211,9 @@ contains
    !!
    !! \ingroup catchem_drydep_process
    !!!>
-   subroutine Wesely_Rc_Gas(  RADIAT,    TEMP,       SUNCOS,                &
-      F0,        HSTAR,     XMW,            &
-      USTAR,     CFRAC,  PRESSU,     &
-      XLAI, II,  SPC, SALINITY, TSKIN, IODIDE, XLON, YLAT, &
-      CO2_EFFECT, CO2_LEVEL, CO2_REF, &
-      RSURFC,   RC)
+   subroutine Wesely_Rc_Gas(  RADIAT, TEMP, SUNCOS, F0, HSTAR, XMW, USTAR, CFRAC, PRESSU,     &
+      XLAI,   II,   SPC, SALINITY, TSKIN, IODIDE, XLON, YLAT,         &
+      CO2_EFFECT, CO2_LEVEL, CO2_REF, RSURFC,   RC)
       IMPLICIT NONE
       ! Parameters
       !-----------
@@ -796,7 +793,7 @@ contains
    !! \ingroup catchem_drydep_process
    !!!>
 
-   FUNCTION AERO_SFCRSII( SPC, II, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, &
+   FUNCTION AERO_SFCRSII(  SPC, II, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, &
       PRESS, TEMP, USTAR, RHB, W10, VTSout, RC) RESULT( RS )
 
       IMPLICIT NONE
@@ -1105,12 +1102,11 @@ contains
 
 
    !>
-   !! \brief calculates the dry deposition velocity of O3 to ocean
+   !! \brief updates the diameter and density of non-dust aerosols
    !!
    !!References:
-   !! Pound, R. J., Sherwen, T., Helmig, D., Carpenter, L. J., and Evans, M. J.:
-   !! Influence of oceanic ozone deposition on tropospheric photochemistry,
-   !! Atmos. Chem. Phys., https://doi.org/10.5194/acp-20-4227-2020, 2020.
+   !! Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90)
+   !! ADUST_SFCRSII and AERO_SFCRSII functions
    !!
    !! \param SPC        Species name
    !! \param IS_SEASALT Is seasalt species?
@@ -1302,7 +1298,8 @@ contains
 !  of bin and SALT_V = dV/dln(D) [in um3].
    !!
    !!References:
-   !!
+   !! Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90)
+   !! INIT_WEIGHTSS function
    !!
    !!
    !! \param SALT_RLOW_um  lowest edge of sea salt radius [um]
