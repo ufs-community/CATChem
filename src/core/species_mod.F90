@@ -50,6 +50,12 @@ module species_mod
       real(kind=fp) :: upper_radius         !< upper radius in meters
       real(kind=fp) :: viscosity            !< kinematic viscosity (m2/s)
 
+      ! used for dry deposition
+      real(kind=fp) :: dd_f0                !< reactivity factor for oxidation of biological substances
+      real(kind=fp) :: dd_hstar             !< Henry’s law constant
+      real(kind=fp) :: dd_DvzAerSnow        !< fix dry deposition velocity (cm/s) over ice and snow for certain aerosol species
+      real(kind=fp) :: dd_DvzMinVal_snow    !< minimum dry deposition velocity (cm/s) over snow and ice
+      real(kind=fp) :: dd_DvzMinVal_land    !< minimum dry deposition velocity (cm/s) over land
 
       ! Default background concentration
       real(kind=fp) :: BackgroundVV        !< Background conc [v/v]

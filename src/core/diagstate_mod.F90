@@ -117,19 +117,42 @@ CONTAINS
       ! If dry deposition process is activated then allocate dry dep related diagnostics
       !write (*,*) "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
       if (Config%drydep_activate) then
-         Allocate(DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
-         IF ( RC /= CC_SUCCESS ) THEN
-            ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
-            CALL CC_Error( ErrMsg, RC, thisLoc )
-         ENDIF
-         DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)= ZERO
+         if (Config%drydep_scheme == 1) then
 
-         Allocate(DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
-         IF ( RC /= CC_SUCCESS ) THEN
-            ErrMsg = 'Could not Allocate DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
-            CALL CC_Error( ErrMsg, RC, thisLoc )
-         ENDIF
-         DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)= ZERO
+            Allocate(DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
+            IF ( RC /= CC_SUCCESS ) THEN
+               ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
+               CALL CC_Error( ErrMsg, RC, thisLoc )
+               RETURN
+            ENDIF
+            DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)= ZERO
+
+            Allocate(DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
+            IF ( RC /= CC_SUCCESS ) THEN
+               ErrMsg = 'Could not Allocate DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
+               CALL CC_Error( ErrMsg, RC, thisLoc )
+               RETURN
+            ENDIF
+            DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)= ZERO
+
+         else if (Config%drydep_scheme == 2) then
+
+            Allocate(DiagState%drydep_frequency(ChemState%nSpeciesDryDep), STAT=RC)
+            IF ( RC /= CC_SUCCESS ) THEN
+               ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesDryDep)'
+               CALL CC_Error( ErrMsg, RC, thisLoc )
+               RETURN
+            ENDIF
+            DiagState%drydep_frequency(ChemState%nSpeciesDryDep)= ZERO
+
+            Allocate(DiagState%drydep_vel(ChemState%nSpeciesDryDep), STAT=RC)
+            IF ( RC /= CC_SUCCESS ) THEN
+               ErrMsg = 'Could not Allocate DiagState%drydep_vel(ChemState%nSpeciesDryDep)'
+               CALL CC_Error( ErrMsg, RC, thisLoc )
+               RETURN
+            ENDIF
+            DiagState%drydep_vel(ChemState%nSpeciesDryDep)= ZERO
+         endif
 
       endif
 

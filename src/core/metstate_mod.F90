@@ -215,6 +215,15 @@ MODULE MetState_Mod
       !real(fp)          :: AEF_OCIM           !< Emission factor of OCIM read from file
       !real(fp)          :: AEF_SABI           !< Emission factor of SABI read from file
 
+      !some met fields need for Wesely dry deposition but not included yet
+      !---------------------------------------
+      real(fp)             :: OBK        !< Monin-Obhukov length [m]
+      integer, allocatable :: ILAND(:)      !< Land type ID in current grid box
+      real(fp)             :: SALINITY   !< Sea water salinity
+      real(fp)             :: IODIDE     !< Iodine concentration (TODO: may be get from ChemState)
+      real(fp)             :: LON        !< Longitude
+      logical              :: LNLPBL     !< non-local PBL scheme flag (TODO:where to put this )
+
    END TYPE MetStateType
 
 CONTAINS

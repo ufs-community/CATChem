@@ -47,6 +47,10 @@ process:
     activate: true
     scheme_opt: 1
     resuspension: false
+    #CO2 effect on stomatal conductance in wesely (opt2)
+    co2_effect: true
+    co2_level: 600.0
+    co2_reference: 380.0
   bvoc:
     activate: true
     scheme_opt: 1

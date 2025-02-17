@@ -245,7 +245,7 @@ CONTAINS
       real    :: v_real
       logical :: v_logical
 
-      Character(len=17) :: tags(17)
+      Character(len=17) :: tags(22)
 
       RC = CC_SUCCESS
 
@@ -267,7 +267,12 @@ CONTAINS
          'mw_g             ', &
          'viscosity        ', &
          'density          ', &
-         'BackgroundVV     '/)
+         'BackgroundVV     ', &
+         'dd_f0            ', &
+         'dd_hstar         ', &
+         'dd_DvzAerSnow    ', &
+         'dd_DvzMinVal_snow', &
+         'dd_DvzMinVal_land'/)
 
 
       !========================================================================
@@ -547,6 +552,83 @@ CONTAINS
          ENDIF
          ChemState%ChemSpecies(n)%viscosity = v_real
          write(*,*) '|  viscosity: ', ChemState%ChemSpecies(n)%viscosity
+
+         !-------------------------------------------------
+         !  Initialize variables needed for dry deposition
+         !-------------------------------------------------
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'dd_f0'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_drydep ) then
+               ! if is_drydep dd_f0 must be present
+               errMsg = 'dd_f0 required for dry deposition of ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%dd_f0 = v_real
+         write(*,*) '|  dd_f0: ', ChemState%ChemSpecies(n)%dd_f0
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'dd_hstar'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_drydep) then
+               ! if is_drydep dd_hstar must be present
+               errMsg = 'dd_hstar required for dry deposition of ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%dd_hstar = v_real
+         write(*,*) '|  dd_hstar: ', ChemState%ChemSpecies(n)%dd_hstar
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'dd_DvzAerSnow'
+         !if missing set to zero or MISSING_REAL
+         v_real = ZERO
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_drydep) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: dd_DvzAerSnow is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%dd_DvzAerSnow = v_real
+         write(*,*) '|  dd_DvzAerSnow: ', ChemState%ChemSpecies(n)%dd_DvzAerSnow
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'dd_DvzMinVal_snow'
+         !if missing set to zero or MISSING_REAL
+         v_real = ZERO
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_drydep) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: dd_DvzMinVal_snow is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%dd_DvzMinVal_snow = v_real
+         write(*,*) '|  dd_DvzMinVal_snow: ', ChemState%ChemSpecies(n)%dd_DvzMinVal_snow
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'dd_DvzMinVal_land'
+         !if missing set to zero or MISSING_REAL
+         v_real = ZERO
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_drydep) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: dd_DvzMinVal_land is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%dd_DvzMinVal_land = v_real
+         write(*,*) '|  dd_DvzMinVal_land: ', ChemState%ChemSpecies(n)%dd_DvzMinVal_land
+
 
          !---------------------------------------
          ! Allocate initial Species Concentration
@@ -1324,6 +1406,7 @@ CONTAINS
       !
       ! Scalars
       LOGICAL                      :: v_bool
+      real(fp)                     :: v_real
       INTEGER                      :: v_int
 
       ! Strings
@@ -1372,11 +1455,43 @@ CONTAINS
       ENDIF
       Config%drydep_resuspension = v_bool
 
+      key   = "process%drydep%co2_effect"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
+         CALL CC_Error( errMsg, RC, thisLoc )
+      ENDIF
+      Config%drydep_co2_effect = v_bool
+
+      key   = "process%drydep%co2_level"
+      v_real = MISSING_REAL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 600.0'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         v_real = 600.0_fp
+      ENDIF
+      Config%drydep_co2_level = v_real
+
+      key   = "process%drydep%co2_reference"
+      v_real = MISSING_REAL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 380.0'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         v_real = 380.0_fp
+      ENDIF
+      Config%drydep_co2_reference = v_real
+
       write(*,*) "DryDeposition Configuration"
       write(*,*) '------------------------------------'
       write(*,*) 'Config%drydep_activate = ', Config%drydep_activate
       write(*,*) 'Config%drydep_scheme = ', Config%drydep_scheme
       write(*,*) 'Config%drydep_resuspension = ', Config%drydep_resuspension
+      write(*,*) 'Config%drydep_co2_effect = ', Config%drydep_co2_effect
+      write(*,*) 'Config%drydep_co2_level = ', Config%drydep_co2_level
+      write(*,*) 'Config%drydep_co2_reference = ', Config%drydep_co2_reference
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_DryDep
