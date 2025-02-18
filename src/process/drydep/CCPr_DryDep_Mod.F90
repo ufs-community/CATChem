@@ -298,7 +298,6 @@ CONTAINS
                do i = 1, ChemState%nSpeciesDryDep
 
                   radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
-                  !if (radius > 0.1_fp) radius = radius * 1.e-6_fp !TODO: This is temporary solution if A_RADI is in um in the input
                   rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
                   !These two can be changed in the function so as not to modify the original values in the States
                   THIK = MetState%BXHEIGHT(1) !codespell:ignore
@@ -320,7 +319,7 @@ CONTAINS
                      THIK,  & !codespell:ignore
                      MetState%Z0,     &
                      MetState%RH(1)/100.0_fp,     & !TODO: input is percent & RH is a array
-                     MetState%PS * 100.0_fp,     & !TODO: input is hPa
+                     MetState%PS * 100.0_fp,     & !TODO: input is hPa; change to Pa
                      W10,     &
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%short_name,     &
                      MetState%FRLAI,     & !TODO: whether LAI is separated to each land type?
@@ -357,7 +356,7 @@ CONTAINS
                   DiagState%drydep_frequency(i)= DDFreq
                   DiagState%drydep_vel(i) = VD
 
-                  ! apply drydep velocities/freq to chem species (TODO: need to see if the mapping is right)
+                  ! apply drydep velocities/freq to chem species
                   dqa = 0.
                   SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
                   dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*DDFreq * MetState%TSTEP)))

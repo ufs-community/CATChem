@@ -350,4 +350,44 @@ contains
 
    end subroutine CCPr_Scheme_Wesely
 
+
+!=============================================a to do list======================================================================
+!   1, There are some land type specific parameters (constants) used in the scheme. GEOS-Chem uses Olson land types as input,
+!      which is further mapped to the 11 land types with constants provided by Wesely (1989). In addition, these constants are
+!      separated to seasons in the paper and I am not sure how GEOS-Chem derived its one-season constants from there, although
+!      they mentioned to refer to Wesely (1989).
+!
+!      Some land type specific constants are also used in the aerosol scheme adapted from Zhang et al., (2001). They averaged
+!      the five-season constants to get one. The 11 internal land types in GEOS-Chem is further mapped to the different 11 land
+!      types in Zhang et al., (2001). So the mapping is as following:
+!
+!        Olson ----(by IDEP)----> 11 GEOS-Chem land types for gas ----(by LUCINDEX_GC)----> 11 Zhang's land types for aerosols
+!
+!      Therefore, the IDEP and LUCINDEX_GC are based on Olson land use and defined as parameters in ccpr_drydep_common_mod.F90.
+!      There is a ddep_data_mod.F90 file with some pre-defined constants. I am not sure if we should move mine to that file and
+!      we may also create a mapping for GFS's Noah-MP if needed in the future.
+!
+!      Another aspect is that the land use types and LAI are fractions, not dominant type. If LAI is not separated to subgrid
+!      land types, we can use fractional land use to calculate fractional LAI.
+
+!   2, The sea salt bins are needed to calculate the diameter and density through hygroscopic growth. There are two bins in
+!      GEOS-Chem defined as below in ccpr_drydep_common_mod.F90. There are currently five bins in the sea salt emission process.
+!      I am not sure if we should or even can make it flexible to use any bins.
+!
+!           real(fp), parameter :: SALA_REDGE_um(2)=(/0.01, 0.5/) !< accumulation mode Sea salt radius bin [um]
+!           real(fp), parameter :: SALC_REDGE_um(2)=(/0.5, 8.0/) !< coarse mode Sea salt radius bin [um]
+!
+!      Similarly, there are four dust bins (with radius bins of 0.1–1.0, 1.0–1.8, 1.8–3.0 and 3.0–6.0 µm) in GEOS-Chem and
+!      we have one more coarse bin (6.0-10.0 µm) in the dust emission scheme. It is noted that the diameter of dust is hardcoded
+!      in the dry deposition scheme and we probably want to change it to use our own dust bins.
+!
+!   3, There are two PBL mixing options in GEOS-Chem: full PBL mixing and non-local mixing. It seems Vd is similar between these two
+!      options while they can have different dry deposition frequencies. DryDepFre = Vd / PBL height in full PBL mixing and in the
+!      non-local mixing, DryDepFre = Vd / height of first layer. In addition, the Wesely dry deposition scheme is only applied to the
+!      layers above PBL for the non-local mixing while dry deposition within PBL is conducted through vertical divvision. Conversely,
+!      Wesely dry deposition scheme is applied to all PBL layers in the full PBL mixing, although Vd is calculated only from surface
+!      meterorological conditions. Since CAT-Chem is a column model, we may want to call dry deposition at each layer and thus the
+!      DryDepFre is derived from the specific layer height to skip this option.
+
+
 end module CCPr_Scheme_Wesely_Mod

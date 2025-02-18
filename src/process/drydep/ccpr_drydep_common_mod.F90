@@ -917,6 +917,7 @@ contains
       DEN   = A_DEN
 
       !update DIAM of dust species; no hygroscopic growth for dust
+      !TODO: diameter for dust is hardcoded here; may need to change it to be flexible for different dust bins
       !IF ( K == idd_DST1 .or. K == idd_DSTAL1 .or. K == idd_NITD1 .or. K == idd_SO4D1 ) THEN
       IF ( SPC == 'DST1' .or. SPC == 'DSTAL1' .or. SPC == 'NITD1' .or. SPC == 'SO4D1' .or. SPC == 'dust1') THEN
          DIAM = 0.66895E-6
