@@ -224,7 +224,7 @@ CONTAINS
    !!
    !!!>
    SUBROUTINE Config_Chem_State( filename, GridState, ChemState, RC )
-      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Index_of_Species
+      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Index_of_Species, Find_SeaSalt_Bin
       use Config_Opt_Mod, ONLY : ConfigType
       USE Error_Mod
       USE GridState_Mod, ONLY : GridStateType
@@ -651,6 +651,13 @@ CONTAINS
          RETURN
       ENDIF
 
+      CALL Find_SeaSalt_Bin(ChemState, RC)
+      IF (RC /= CC_SUCCESS) THEN
+         errMsg = 'Error in Find_SeaSalt_Bin'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+
       write(*,*) '========================================================='
       write(*,*) '| Chemstate SUMMARY'
       write(*,*) '|  number_of_species:  ', ChemState%nSpecies
@@ -660,6 +667,8 @@ CONTAINS
       write(*,*) '|  number of tracers:  ', ChemState%nSpeciesTracer
       write(*,*) '|  number of dust:     ', ChemState%nSpeciesDust
       write(*,*) '|  number of seasalt:  ', ChemState%nSpeciesSeaSalt
+      write(*,*) '|  Sea Salt bin lower: ', ChemState%SeaSaltBinLower
+      write(*,*) '|  Sea Salt bin upper: ', ChemState%SeaSaltBinUpper
       write(*,*) '========================================================='
 
    END SUBROUTINE Config_Chem_State

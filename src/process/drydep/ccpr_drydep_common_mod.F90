@@ -34,7 +34,8 @@ module CCPr_drydep_Common_Mod
    real(fp) :: IRI(NDRYDTYPE),   IVSMAX(NDRYDTYPE)
    !some Olson land use (74 types) related parameters
    real(fp):: DRYCOEFF(20) !< DRYCOEFF : Baldocchi polynomial coeffs
-   integer :: IOLSON (74), IDEP(74)
+   integer :: IOLSON (74), IDEP_IOLSON(74)
+   integer :: IDEP_NOAH(20), IDEP_IGBP(17)
    integer :: IZO(74) !< Roughness height for each Olson land types
 
    !assign some drydep values to arrays based on the 11 drydep land use in GEOS-Chem.
@@ -74,9 +75,12 @@ module CCPr_drydep_Common_Mod
    DATA IOLSON /1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, &
       28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, &
       53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74/
-   DATA IDEP  / 11,10, 5, 3, 3, 2, 2, 5, 8, 7,  5,  8,  1,  9,  11, 11, 5,   5,  5,  2, 6,  3,   3,  2,  2,  2,  2, &
+   DATA IDEP_IOLSON  / 11,10, 5, 3, 3, 2, 2, 5, 8, 7,  5,  8,  1,  9,  11, 11, 5,   5,  5,  2, 6,  3,   3,  2,  2,  2,  2, &
       3, 6,   6,  4,  4,  2,  6,  2,  4,  9,  4,  4,  4,  5, 5,   5,  2,  5, 9,  5,   5,  2,  8,  8,  5, &
       5, 7,   2,  4,  2,  2,  2,  5,  2,  2,  3,  5,  5,  9, 9,   9,  9,  8, 8,  8,   9,  11/
+   DATA IDEP_NOAH / 3, 6, 3, 2, 2, 5, 5, 2, 5, 5, 9, 4, 10, 5, 1, 8, 11, 7, 7, 7 /
+   DATA IDEP_IGBP / 3, 6, 3, 2, 2, 5, 5, 2, 5, 5, 9, 4, 10, 5, 1, 8, 11 / !same as NOAH without the last three tundra types
+   !roughness height is not used now and is read from MET directly
    DATA IZO  /  10,  25000, 100,  10000, 10000, 10000, 10000, 100,  10, 2000, 100, 10,  1,   100,  1000,  1000,  1000, 100, 100, 2000, &
       10000,  10000,10000, 10000, 10000, 10000, 10000,10000,1000,10000,1000,1000,2000,10000,10000, 1000,  100, 1000, 1000,1000, &
       100,    100,   100, 2000,  100,    100,  1000, 1000, 1000, 1000,1000, 50,  50,  50,  2000,  2000, 2000, 2000, 1000, 100, &
@@ -108,6 +112,10 @@ module CCPr_drydep_Common_Mod
    !=======================================================================
    ! GEOS-CHEM LUC                 1, 2, 3, 4, 5, 6, 7  8, 9,10,11 (TODO:may add other land types later)
    INTEGER :: LUCINDEX_GC(11) = (/12, 4, 1, 7,10, 2, 9, 8,11,15,14/)
+   ! Noah-MP LUC mapping
+   INTEGER :: LUCINDEX_NOAH(20) = (/ 1, 2, 3, 4, 5, 10, 10, 10, 10, 6, 11, 7, 15, 7, 12, 8, 14, 9, 9, 9 /)
+   ! IGBP LUC mapping
+   INTEGER :: LUCINDEX_IGBP(17) = (/ 1, 2, 3, 4, 5, 10, 10, 10, 10, 6, 11, 7, 15, 7, 12, 8, 14 /)
 
    !=======================================================================
    !   LUC       1,    2,    3,    4,    5,    6,    7,    8,
@@ -786,6 +794,8 @@ contains
    !! \param USTAR      Fictional Velocity [m/s]
    !! \param RHB        Relative humidity [fraction]
    !! \param W10        10m wind speed [m/s]
+   !! \param LOWERBIN   lower bound of sea-salt bins
+   !! \param UPPERBIN   upper bound of sea-salt bins
    !! \param VTSout     output of setttling velocity [m/s]
    !! \param RC         success flag
    !! \param RS         return value of surface resistance [s/m]
@@ -793,17 +803,17 @@ contains
    !! \ingroup catchem_drydep_process
    !!!>
 
-   FUNCTION AERO_SFCRSII(  SPC, II, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, &
-      PRESS, TEMP, USTAR, RHB, W10, VTSout, RC) RESULT( RS )
+   FUNCTION AERO_SFCRSII(  SPC, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, &
+      PRESS, TEMP, USTAR, RHB, W10, LOWERBIN, UPPERBIN, VTSout, RC) RESULT( RS )
 
       IMPLICIT NONE
       !INPUT PARAMETERS
       CHARACTER(len=20), INTENT(IN) :: SPC    ! Species name
       !TODO: not sure if SPC or index is better
       !INTEGER,  INTENT(IN) :: K    ! Drydep species index (range: 1-NUMDEP)
-      INTEGER,  INTENT(IN) :: II    ! Surface type index of host model (e.g., GEOS-CHEM)
+      !INTEGER,  INTENT(IN) :: II    ! Surface type index of host model (e.g., GEOS-CHEM)
       LOGICAL,  INTENT(IN) :: IS_DUST, IS_SEASALT ! Is dust or seasalt species?
-      INTEGER,  DIMENSION(:), INTENT(IN) :: LUCINDEX !mapping above II to the 15 drydep land use categories
+      INTEGER,  INTENT(IN) :: LUCINDEX !mapping to the 15 drydep land use categories
       REAL(fp), INTENT(IN) :: A_RADI ! Aerosol radius [m]
       REAL(fp), INTENT(IN) :: A_DEN  ! Aerosol density [kg/m3]
       REAL(fp), INTENT(IN) :: PRESS ! Pressure [kPa] (1 mb = 100 Pa = 0.1 kPa)
@@ -811,6 +821,8 @@ contains
       REAL(fp), INTENT(IN) :: USTAR ! Friction velocity [m/s]
       REAL(fp), INTENT(IN) :: RHB   ! Relative humidity (fraction)
       REAL(fp), INTENT(IN) :: W10   ! 10m wind speed [m/s]; only need for SeaSalt over water
+      REAL(fp), DIMENSION(:), INTENT(IN) :: LOWERBIN ! lower bound of sea-salt bins
+      REAL(fp), DIMENSION(:), INTENT(IN) :: UPPERBIN ! upper bound of sea-salt bins
       !OUTPUT PARAMETERS
       REAL(fp), INTENT(OUT) :: VTSout ! Settling velocity [m/s]
       INTEGER,  INTENT(OUT) :: RC     ! success flag
@@ -829,7 +841,7 @@ contains
       REAL(fp), PARAMETER   :: DR       =  5.0e-2_fp
       !LOCAL VARIABLES
       INTEGER   :: LUC
-      INTEGER   :: ID,NR
+      INTEGER   :: ID,NR,n, n1
       REAL(fp)  :: AIRVS       ! kinematic viscosity of Air (m^2/s)
       REAL(fp)  :: DP          ! Diameter of aerosol [um]
       REAL(fp)  :: PDP         ! Press * Dp
@@ -858,7 +870,7 @@ contains
       ! Annual average of A
       Aavg(:) = (A(:,1)+A(:,2)+A(:,3)+A(:,4)+A(:,5))/5.
 
-      LUC     = LUCINDEX(II)
+      LUC     = LUCINDEX
       AA      = Aavg(LUC) * 1.e-3_fp
       RS = 0e+0_fp !initialize returned value first
 
@@ -917,26 +929,26 @@ contains
       DEN   = A_DEN
 
       !update DIAM of dust species; no hygroscopic growth for dust
-      !TODO: diameter for dust is hardcoded here; may need to change it to be flexible for different dust bins
+      !TODO: here we comment out these hardcoded lines and use the radius from inputs directly
       !IF ( K == idd_DST1 .or. K == idd_DSTAL1 .or. K == idd_NITD1 .or. K == idd_SO4D1 ) THEN
-      IF ( SPC == 'DST1' .or. SPC == 'DSTAL1' .or. SPC == 'NITD1' .or. SPC == 'SO4D1' .or. SPC == 'dust1') THEN
-         DIAM = 0.66895E-6
-      ENDIF
+      !IF ( SPC == 'DST1' .or. SPC == 'DSTAL1' .or. SPC == 'NITD1' .or. SPC == 'SO4D1' .or. SPC == 'dust1') THEN
+      !   DIAM = 0.66895E-6
+      !ENDIF
 
       !IF ( K == idd_DST2 .or. K == idd_DSTAL2 .or. K == idd_NITD2 .or. K == idd_SO4D2 ) THEN
-      IF ( SPC == 'DST2' .or. SPC == 'DSTAL2' .or. SPC == 'NITD2' .or. SPC == 'SO4D2' .or. SPC == 'dust2') THEN
-         DIAM = 2.4907E-6
-      ENDIF
+      !IF ( SPC == 'DST2' .or. SPC == 'DSTAL2' .or. SPC == 'NITD2' .or. SPC == 'SO4D2' .or. SPC == 'dust2') THEN
+      !   DIAM = 2.4907E-6
+      !ENDIF
 
       !IF ( K == idd_DST3  .or. K == idd_DSTAL3 .or. K == idd_NITD3 .or. K == idd_SO4D3 ) THEN
-      IF ( SPC == 'DST3'  .or. SPC == 'DSTAL3' .or. SPC == 'NITD3' .or. SPC == 'SO4D3' ) THEN
-         DIAM = 4.164E-6
-      ENDIF
+      !IF ( SPC == 'DST3'  .or. SPC == 'DSTAL3' .or. SPC == 'NITD3' .or. SPC == 'SO4D3' ) THEN
+      !   DIAM = 4.164E-6
+      !ENDIF
 
       !IF ( K == idd_DST4  .or. K == idd_DSTAL4 .or. K == idd_NITD4 .or. K == idd_SO4D4 ) THEN
-      IF ( SPC == 'DST4'  .or. SPC == 'DSTAL4' .or. SPC == 'NITD4' .or. SPC == 'SO4D4' ) THEN
-         DIAM = 6.677E-6
-      ENDIF
+      !IF ( SPC == 'DST4'  .or. SPC == 'DSTAL4' .or. SPC == 'NITD4' .or. SPC == 'SO4D4' ) THEN
+      !   DIAM = 6.677E-6
+      !ENDIF
 
       ! Hygroscopic growth following Latimer and Martin (2019) ACP
       RHBL    = MAX( TINY(RHB), RHB )
@@ -957,8 +969,13 @@ contains
          endif
       ENDIF
 
-      ! Dp [m] --> [um] = particle diameter
-      DP    = DIAM * 1.e+6_fp
+      ! Dp [m] --> [um] = particle diameter if necessary
+      IF (DIAM > 0.001) THEN !here use 0.001 to determine if the unit is in m or um
+         DP    = DIAM
+         DIAM  = DIAM * 1.e-6_fp
+      ELSE
+         DP    = DIAM * 1.e+6_fp
+      ENDIF
 
       ! Constant for settling velocity calculation
       CONST = DEN * DIAM**2 * g0 / 18.e+0_fp
@@ -1010,8 +1027,7 @@ contains
          !   CALL ERROR_STOP( MSG, LOCATION )
          !ENDIF
          !TODO: need to figure out how to read in these values from the namelist
-         NR = INT((( SALC_REDGE_um(2) - SALA_REDGE_um(1) ) &
-            / DR ) + 0.5e+0_fp )
+         NR = INT((( MAXVAL(UPPERBIN) - MINVAL(LOWERBIN) ) / DR ) + 0.5e+0_fp )
 
          SALT_MASS_TOTAL = 0e+0_fp
          VTS_WEIGHT      = 0e+0_fp
@@ -1020,12 +1036,26 @@ contains
          RUM  = RDRY * 1.e+6_fp
 
          ! Check what the min/max range of the SS size bins are
-         IF ( RUM .le. SALA_REDGE_um(2) ) THEN
-            D0 = SALA_REDGE_um(1)*2e+0_fp
-            D1 = SALA_REDGE_um(2)*2e+0_fp
-         ELSE
-            D0 = SALC_REDGE_um(1)*2e+0_fp
-            D1 = SALC_REDGE_um(2)*2e+0_fp
+         !IF ( RUM .le. SALA_REDGE_um(2) ) THEN
+         !   D0 = SALA_REDGE_um(1)*2e+0_fp
+         !   D1 = SALA_REDGE_um(2)*2e+0_fp
+         !ELSE
+         !   D0 = SALC_REDGE_um(1)*2e+0_fp
+         !   D1 = SALC_REDGE_um(2)*2e+0_fp
+         !ENDIF
+         D0 = 0e+0_fp; D1 = 0e+0_fp; n1=1
+         DO n =1, size(UPPERBIN)
+            IF ( (RUM .ge. LOWERBIN(n)) .and. (RUM .le. UPPERBIN(n)) ) THEN
+               D0 = LOWERBIN(n)*2e+0_fp
+               D1 = UPPERBIN(n)*2e+0_fp
+               n1=0
+               EXIT
+            ENDIF
+         ENDDO
+         IF (n1 > 0) THEN ! D0 and D1 may not be set properly
+            errMsg = 'Sea salt radius is not in any bins. Check the species namelist.'
+            CALL CC_Error( errMsg, RC, thisLoc )
+            RETURN
          ENDIF
 
          DO ID = 1, NR
@@ -1087,6 +1117,13 @@ contains
          R1 = 1.e+0_fp
       ELSE
          R1 = EXP( -1e+0_fp * SQRT( ST ) )
+      ENDIF
+
+      !add error check here to make sure RS below is not a infinite value
+      IF (rae(R1, 0.0_fp) .or. rae(USTAR, 0.0_fp)) THEN
+         errMsg = 'USTAR or R1 is zero. Check met field or diameter (in m) of aerosol is too big.'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
       ENDIF
 
       ! surface resistance for particle
@@ -1179,7 +1216,7 @@ contains
          DIAM  = 0.17378e-6_fp
          RDRY = DIAM / 2.0e+0_fp !Not needed for further calculations for dust species
 
-         ! SIA
+         ! SIA (TODO: keep this for now and need to be consistent with real species names in the future)
          !IF ( K == idd_NIT .or. K == idd_NH4 .or. K == idd_SO4 ) THEN
          IF ( SPC == 'NIT' .or. SPC == 'NH4' .or. SPC == 'SO4' ) THEN
             ! Efflorescence transitions
@@ -1217,16 +1254,16 @@ contains
          !drydepRadius = A_RADI(K)
          RDRY = DIAM / 2.0e+0_fp
 
-         ! Coarse seasalt
+         ! Coarse seasalt (TODO: we commented out these hardcoded lines and use the radius from inputs directly)
          !IF ( K == idd_NITS .or. K == idd_SALC .or. K == idd_SO4S .or. K == idd_BRSALC .or. K == idd_ISALC ) THEN
-         IF ( SPC == 'NITS' .or. SPC == 'SALC' .or. SPC == 'SO4S' .or. SPC == 'BRSALC' .or. SPC == 'ISALC' ) THEN
-            RDRY = 0.74025E-6
-         ENDIF
+         !IF ( SPC == 'NITS' .or. SPC == 'SALC' .or. SPC == 'SO4S' .or. SPC == 'BRSALC' .or. SPC == 'ISALC' ) THEN
+         !   RDRY = 0.74025E-6
+         !ENDIF
 
          !IF ( K == idd_SALA .OR. K == idd_BRSALA .or. K == idd_ISALA ) THEN
-         IF ( SPC == 'SALA' .OR. SPC == 'BRSALA' .or. SPC == 'ISALA' ) THEN
-            RDRY = 0.114945E-6
-         ENDIF
+         !IF ( SPC == 'SALA' .OR. SPC == 'BRSALA' .or. SPC == 'ISALA' ) THEN
+         !   RDRY = 0.114945E-6
+         !ENDIF
 
          ! Dry particle radius [um]
          RUM  = RDRY * 1.e+6_fp
@@ -1413,7 +1450,6 @@ contains
    !! \param OBK         Monin-Obhukov length [m]
    !! \param ZO          Roughness length [m]
    !! \param THIK        height of first model layer [m]
-   !! \param LNLPBL      flag to use non-local mixing
    !! \param IS_GAS      flag for gas
    !! \param Ra          output of aerodynamic resistance [s/m]
    !! \param Rb          output of quasi-laminar boundary layer resistance [s/m]
@@ -1421,7 +1457,7 @@ contains
    !!
    !! \ingroup catchem_drydep_process
    !!!>
-   subroutine Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, LNLPBL, IS_GAS, Ra, Rb, RC)
+   subroutine Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, IS_GAS, Ra, Rb, RC)
       IMPLICIT NONE
       ! Parameters
       !-----------
@@ -1432,7 +1468,6 @@ contains
       real(fp), intent(in)  :: OBK         !< Monin-Obhukov length [m]
       real(fp), intent(in)  :: ZO          !< Roughness length [m]
       real(fp), intent(in)  :: THIK        !< height of first model layer [m]
-      logical, intent(in)   :: LNLPBL      !< flag to use non-local mixing
       logical, intent(in)   :: IS_GAS      !< flag for gas
       !output
       real(fp), intent(out) :: Ra          !< aerodynamic resistance [s/m]
@@ -1586,14 +1621,14 @@ contains
 
       LRGERA = .FALSE.
       ! Add option for non-local PBL
-      IF (.NOT. LNLPBL) THEN
-         IF (CORR1 .GT. 0.e+0_fp) THEN
-            IF (CORR1 .GT.  1.5e+0_fp) LRGERA = .TRUE.
-         ELSEIF(CORR1 .LE. 0.e+0_fp) THEN
-            IF (CORR1 .LE. -2.5e+0_fp) CORR1 = -2.5e+0_fp
-            CORR2 = LOG(-CORR1)
-         ENDIF
-      ENDIF
+      !IF (.NOT. LNLPBL) THEN
+      !   IF (CORR1 .GT. 0.e+0_fp) THEN
+      !      IF (CORR1 .GT.  1.5e+0_fp) LRGERA = .TRUE.
+      !   ELSEIF(CORR1 .LE. 0.e+0_fp) THEN
+      !      IF (CORR1 .LE. -2.5e+0_fp) CORR1 = -2.5e+0_fp
+      !      CORR2 = LOG(-CORR1)
+      !   ENDIF
+      !ENDIF
 
       !use rae function from pecision_mod to avoid "equality comparison for real" warning
       IF ( rae(CKUSTR, 0.0e+0_fp) ) THEN
@@ -1623,72 +1658,72 @@ contains
       ! surface to REYNO > 0.1
       IF ( REYNO > 0.1e+0_fp ) THEN !rough surface
          ! Add option for non-local PBL
-         !TODO: do we need to include both options?
-         IF (.NOT. LNLPBL) THEN
+         !TODO: we only use non-local option
+         !IF (.NOT. LNLPBL) THEN
 
-            !...aerodynamically rough surface.
-            !*
-            IF (CORR1.LE.0.0e+0_fp .AND. Z0OBK .LT. -1.e+0_fp)THEN
-               !*... unstable condition; set RA to zero.
-               !*    (first implemented in V. 3.2)
-               RA     = 0.e+0_fp
-               !*... error trap: prevent CORR1 or Z0OBK from being
-               !*... zero or close to zero (ckeller, 3/15/16)
-            ELSEIF ( ABS(CORR1)<=SMALL .OR. ABS(Z0OBK)<=SMALL ) THEN
-               RA = 0.e+0_fp
-            ELSEIF (CORR1.LE.0.0e+0_fp .AND. Z0OBK .GE. -1.e+0_fp) THEN
-               !*... unstable conditions;
-               !*... compute Ra as described above
-               DUMMY1 = (1.e+0_fp - 9e+0_fp*CORR1)**0.5e+0_fp
-               DUMMY2 = (1.e+0_fp - 9e+0_fp*Z0OBK)**0.5e+0_fp
-               DUMMY3 = ABS((DUMMY1 - 1.e+0_fp)/(DUMMY1 + 1.e+0_fp))
-               DUMMY4 = ABS((DUMMY2 - 1.e+0_fp)/(DUMMY2 + 1.e+0_fp))
-               RA = 0.74e+0_fp* (1.e+0_fp/CKUSTR) * LOG(DUMMY3/DUMMY4)
+         !...aerodynamically rough surface.
+         !*
+         !   IF (CORR1.LE.0.0e+0_fp .AND. Z0OBK .LT. -1.e+0_fp)THEN
+         !*... unstable condition; set RA to zero.
+         !*    (first implemented in V. 3.2)
+         !      RA     = 0.e+0_fp
+         !*... error trap: prevent CORR1 or Z0OBK from being
+         !*... zero or close to zero (ckeller, 3/15/16)
+         !   ELSEIF ( ABS(CORR1)<=SMALL .OR. ABS(Z0OBK)<=SMALL ) THEN
+         !      RA = 0.e+0_fp
+         !   ELSEIF (CORR1.LE.0.0e+0_fp .AND. Z0OBK .GE. -1.e+0_fp) THEN
+         !*... unstable conditions;
+         !*... compute Ra as described above
+         !      DUMMY1 = (1.e+0_fp - 9e+0_fp*CORR1)**0.5e+0_fp
+         !      DUMMY2 = (1.e+0_fp - 9e+0_fp*Z0OBK)**0.5e+0_fp
+         !      DUMMY3 = ABS((DUMMY1 - 1.e+0_fp)/(DUMMY1 + 1.e+0_fp))
+         !      DUMMY4 = ABS((DUMMY2 - 1.e+0_fp)/(DUMMY2 + 1.e+0_fp))
+         !      RA = 0.74e+0_fp* (1.e+0_fp/CKUSTR) * LOG(DUMMY3/DUMMY4)
 
-            ELSEIF((CORR1.GT.0.0e+0_fp).AND.(.NOT.LRGERA))  THEN
-               !*... moderately stable conditions (z/zMO <1);
-               !*... compute Ra as described above
-               RA = (1e+0_fp/CKUSTR) * (.74e+0_fp*LOG(CORR1/Z0OBK) + &
-                  4.7e+0_fp*(CORR1-Z0OBK))
-            ELSEIF(LRGERA) THEN
-               !*... very stable conditions
-               RA     = 1.e+04_fp
-            ENDIF
-            !* check that RA is positive; if RA is negative (as occasionally
-            !* happened in version 3.1) send a warning message.
+         !   ELSEIF((CORR1.GT.0.0e+0_fp).AND.(.NOT.LRGERA))  THEN
+         !*... moderately stable conditions (z/zMO <1);
+         !*... compute Ra as described above
+         !      RA = (1e+0_fp/CKUSTR) * (.74e+0_fp*LOG(CORR1/Z0OBK) + &
+         !         4.7e+0_fp*(CORR1-Z0OBK))
+         !   ELSEIF(LRGERA) THEN
+         !*... very stable conditions
+         !      RA     = 1.e+04_fp
+         !   ENDIF
+         !* check that RA is positive; if RA is negative (as occasionally
+         !* happened in version 3.1) send a warning message.
 
-         ELSE !not using non-local PBL
+         !ELSE !not using non-local PBL
 
-            IF (CORR1.LT.0.0e+0_fp) THEN
-               !*... unstable conditions; compute Ra as described
-               !*... above.
-               !coef_a=1.e+0_fp
-               !coef_b=15.e+0_fp
-               DUMMY1 = (1.e+0_fp - 15.e+0_fp*CORR1)**0.5e+0_fp
-               DUMMY2 = (1.e+0_fp - 15.e+0_fp*Z0OBK)**0.5e+0_fp
-               DUMMY3 = ABS((DUMMY1 - 1.e+0_fp)/(DUMMY1 + 1.e+0_fp))
-               DUMMY4 = ABS((DUMMY2 - 1.e+0_fp)/(DUMMY2 + 1.e+0_fp))
-               RA = 1.e+0_fp * (1.e+0_fp/CKUSTR) * LOG(DUMMY3/DUMMY4)
+         IF (CORR1.LT.0.0e+0_fp) THEN
+            !*... unstable conditions; compute Ra as described
+            !*... above.
+            !coef_a=1.e+0_fp
+            !coef_b=15.e+0_fp
+            DUMMY1 = (1.e+0_fp - 15.e+0_fp*CORR1)**0.5e+0_fp
+            DUMMY2 = (1.e+0_fp - 15.e+0_fp*Z0OBK)**0.5e+0_fp
+            DUMMY3 = ABS((DUMMY1 - 1.e+0_fp)/(DUMMY1 + 1.e+0_fp))
+            DUMMY4 = ABS((DUMMY2 - 1.e+0_fp)/(DUMMY2 + 1.e+0_fp))
+            RA = 1.e+0_fp * (1.e+0_fp/CKUSTR) * LOG(DUMMY3/DUMMY4)
 
-            ELSEIF((CORR1.GE.0.0e+0_fp).AND.(CORR1.LE.1.0e+0_fp)) THEN
-               !coef_a=1.e+0_fp
-               !coef_b=5.e+0_fp
-               RA = (1.e+0_fp/CKUSTR) * (1.e+0_fp*LOG(CORR1/Z0OBK) + &
-                  5.e+0_fp*(CORR1-Z0OBK))
+         ELSEIF((CORR1.GE.0.0e+0_fp).AND.(CORR1.LE.1.0e+0_fp)) THEN
+            !coef_a=1.e+0_fp
+            !coef_b=5.e+0_fp
+            RA = (1.e+0_fp/CKUSTR) * (1.e+0_fp*LOG(CORR1/Z0OBK) + &
+               5.e+0_fp*(CORR1-Z0OBK))
 
-            ELSE ! CORR1 .GT. 1.0D0
-               !coef_a=5e+0_fp
-               !coef_b=1.e+0_fp
-               RA = (1.e+0_fp/CKUSTR) * (5.e+0_fp*LOG(CORR1/Z0OBK) + &
-                  1.e+0_fp*(CORR1-Z0OBK))
-            ENDIF
+         ELSE ! CORR1 .GT. 1.0D0
+            !coef_a=5e+0_fp
+            !coef_b=1.e+0_fp
+            RA = (1.e+0_fp/CKUSTR) * (5.e+0_fp*LOG(CORR1/Z0OBK) + &
+               1.e+0_fp*(CORR1-Z0OBK))
+         ENDIF
 
-            !* check that RA is positive and maximize at 1.E4 s m-1
-            RA   = MIN(RA,1.e+4_fp)
-            ! If RA is < 0, set RA = 0
-            IF (RA .LT. 0.e+0_fp) RA = 0.0e+0_fp
+         !* check that RA is positive and maximize at 1.E4 s m-1
+         RA   = MIN(RA,1.e+4_fp)
+         ! If RA is < 0, set RA = 0
+         IF (RA .LT. 0.e+0_fp) RA = 0.0e+0_fp
 
-         END IF !PBL or non-local PBL options
+         !END IF !PBL or non-local PBL options
 
          !get Rb for a gas species; arosol Rb is set to zero
          !** DAIR is the thermal diffusivity of air; value 0.2*1.E-4 m2 s-1 cited on p. 16,476 of

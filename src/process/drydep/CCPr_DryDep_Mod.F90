@@ -156,7 +156,7 @@ CONTAINS
 
             !calculate the volume distribution of sea salt aerosols (only need to do this once)
             !TODO: The bin is hard coded in ccpr_drydep_common_mod.F90
-            CALL INIT_WEIGHTSS(SALA_REDGE_um(1), SALC_REDGE_um(2), RC)
+            CALL INIT_WEIGHTSS(MINVAL(ChemState%SeaSaltBinLower), MAXVAL(ChemState%SeaSaltBinUpper), RC)
             IF ( RC /= CC_SUCCESS ) THEN
                ErrMsg = 'Could not Allocate arrays in INIT_WEIGHTSS'
                CALL CC_Error( ErrMsg, RC, ThisLoc )
@@ -314,8 +314,7 @@ CONTAINS
                      rhop,             &
                      MetState%USTAR,   &
                      MetState%OBK,     & !TODO: Need to add Obukhov length to met state
-                     MetState%CLDFRC,   &
-                     MetState%PBLH,    &
+                     MetState%CLDFRC,  &
                      THIK,  & !codespell:ignore
                      MetState%Z0,     &
                      MetState%RH(1)/100.0_fp,     & !TODO: input is percent & RH is a array
@@ -325,15 +324,17 @@ CONTAINS
                      MetState%FRLAI,     & !TODO: whether LAI is separated to each land type?
                      MetState%ILAND,     & !TODO: Need to add land use type to met state
                      MetState%FRLANDUSE,     &
+                     ChemState%SeaSaltBinLower,     &
+                     ChemState%SeaSaltBinUpper,     &
                      MetState%SALINITY,     & !TODO: Need to add salinity to met state
                      MetState%TSKIN,     &
                      MetState%IODIDE,   & !TODO: Need to read from ChemState in the future
                      MetState%LON,     & !TODO: Need to add longitude to met state
                      MetState%LAT,     &
+                     MetState%LUCNAME,  &
                      DryDepState%co2_effect,     &
                      DryDepState%co2_level,     &
                      DryDepState%co2_reference,     &
-                     MetState%LNLPBL,     & !TODO: Need to add PBL option somewhere
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_gas,     &
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_dust,     &
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_seasalt,     &

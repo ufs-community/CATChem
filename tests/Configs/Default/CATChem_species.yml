@@ -177,10 +177,10 @@ SALA:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
-  radius: 2.55e-7
+  radius: 1.14945e-7
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.01
+  upper_radius: 0.5
 SALC:
   name: SALC
   description: Coarse (0.5-8.0 microns) sea salt aerosol
@@ -190,10 +190,10 @@ SALC:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
-  radius: 4.25e-6
+  radius: 0.74025e-6
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.5
+  upper_radius: 8.0
 SO4S:
   name: SO4S
   description: Sulfate aerosol on surface of seasalt aerosol
@@ -203,10 +203,10 @@ SO4S:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
-  radius: 4.25e-6
+  radius: 0.74025e-6
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.5
+  upper_radius: 8.0
 NITS:
   name: NITS
   description: Inorganic nitrate aerosol on surface of seasalt aerosol
@@ -216,10 +216,10 @@ NITS:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
-  radius: 4.25e-6
+  radius: 0.74025e-6
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.5
+  upper_radius: 8.0
 BRSALC:
   name: BRSALC
   description: Coarse sea salt bromine
@@ -229,10 +229,10 @@ BRSALC:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 79.90
-  radius: 4.25e-6
+  radius: 0.74025e-6
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.5
+  upper_radius: 8.0
 ISALC:
   name: ISALC
   description: Coarse sea salt iodine
@@ -242,10 +242,10 @@ ISALC:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 126.90
-  radius: 4.25e-6
+  radius: 0.74025e-6
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.5
+  upper_radius: 8.0
 BRSALA:
   name: BRSALA
   description: Fine sea salt bromine
@@ -255,10 +255,10 @@ BRSALA:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 79.90
-  radius: 2.55e-7
+  radius: 1.14945e-7
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.01
+  upper_radius: 0.5
 ISALA:
   name: ISALA
   description: Fine sea salt iodine
@@ -268,10 +268,10 @@ ISALA:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 126.90
-  radius: 2.55e-7
+  radius: 1.14945e-7
   density: 2200.0
-  lower_radius: 0.1
-  upper_radius: 1.0
+  lower_radius: 0.01
+  upper_radius: 0.5
 #here we go with GEOS-Chem dust bins
 DST1:
   name: DST1
@@ -282,7 +282,7 @@ DST1:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
-  radius: 7.3e-7
+  radius: 3.334475e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -295,7 +295,7 @@ DST2:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
-  radius: 1.4e-6
+  radius: 1.24535e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -308,7 +308,7 @@ DST3:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
-  radius: 2.4e-6
+  radius: 2.082e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -321,7 +321,7 @@ DST4:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
-  radius: 4.5e-6
+  radius: 3.3385e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -334,7 +334,7 @@ SO4D1:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 7.3e-7
+  radius: 3.334475e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -347,7 +347,7 @@ SO4D2:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 1.4e-6
+  radius: 1.24535e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -360,7 +360,7 @@ SO4D3:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 2.4e-6
+  radius: 2.082e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -373,7 +373,7 @@ SO4D4:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 4.5e-6
+  radius: 3.3385e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -386,7 +386,7 @@ NITD1:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 7.3e-7
+  radius: 3.334475e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -399,7 +399,7 @@ NITD2:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 1.4e-6
+  radius: 1.24535e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -412,7 +412,7 @@ NITD3:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 2.4e-6
+  radius: 2.082e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
@@ -425,7 +425,7 @@ NITD4:
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
-  radius: 4.5e-6
+  radius: 3.3385e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0

@@ -22,6 +22,7 @@ module ChemState_Mod
    PUBLIC :: Chem_Allocate
    PUBLIC :: Find_Number_of_Species
    PUBLIC :: Find_Index_of_Species
+   PUBLIC :: Find_SeaSalt_Bin
    PUBLIC :: FindSpecByName
    PUBLIC :: GetSpecConc
    PUBLIC :: GetSpecConcByName
@@ -67,12 +68,15 @@ module ChemState_Mod
       INTEGER              :: nSpeciesTracer    !< Number of Tracer Species
       INTEGER              :: nSpeciesDust      !< Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
+      INTEGER              :: nSpeciesBin       !< Number of SeaSalt Species Bin
       INTEGER, ALLOCATABLE :: SpeciesIndex(:)   !< Total Species Index
       INTEGER, ALLOCATABLE :: TracerIndex(:)    !< Tracer Species Index
       INTEGER, ALLOCATABLE :: AeroIndex(:)      !< Aerosol Species Index
       INTEGER, ALLOCATABLE :: GasIndex(:)       !< Gas Species Index
       INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   !< SeaSalt Species Index
+      real(fp),ALLOCATABLE :: SeaSaltBinLower(:)  !< SeaSalt Species Bin Lower edge
+      real(fp),ALLOCATABLE :: SeaSaltBinUpper(:) !< SeaSalt Species Bin upper edge
       INTEGER, ALLOCATABLE :: AeroDryDepIndex(:) !< Aerosol DryDep Species Index for Dry Dep
       INTEGER, ALLOCATABLE :: DryDepIndex(:)   !< All DryDep Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  !< Species Names
@@ -347,6 +351,101 @@ CONTAINS
       enddo
 
    end subroutine Find_index_of_Species
+
+   !> \brief Find the bins of sea salt species
+   !!
+   !! \param ChemState The ChemState object
+   !! \param RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   subroutine Find_SeaSalt_Bin(ChemState, RC)
+      ! USES
+      !USE Species_Mod,  ONLY : SpeciesType
+
+      IMPLICIT NONE
+
+      ! INOUT Params
+      type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
+      ! OUTPUT Params
+      INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
+
+      ! Error handling
+      CHARACTER(LEN=255) :: ErrMsg
+      CHARACTER(LEN=255) :: thisLoc
+
+      ! Local variables
+      integer   :: n                  ! looping variable
+      integer   :: n_bin              ! number of sea salt bins
+      !real(fp)  :: radius0           ! initial radius of sea salt bin
+      real(fp)  :: lower_radius(10)   ! lower radius of sea salt bin holder
+      real(fp)  :: upper_radius(10)   ! upper radius of sea salt bin holder
+      logical   :: mask(10) = .FALSE. ! flag to for sorting bins by radius
+
+      ! Initialize
+      RC = CC_SUCCESS
+      ErrMsg = ''
+      thisLoc = ' -> at Find_SeaSalt_Bin (in core/chemstate_mod.F90)'
+
+
+      ! Initialize to zero before counting species
+      n_bin = 0
+      !radius0 = 0.0_fp
+
+      ! Find possible sea salt bins
+      do n = 1, ChemState%nSpeciesSeaSalt
+         if (n == 1) then
+            n_bin = 1
+            lower_radius(n_bin) = ChemState%ChemSpecies(Chemstate%SeaSaltIndex(n))%lower_radius
+            upper_radius(n_bin) = ChemState%ChemSpecies(Chemstate%SeaSaltIndex(n))%upper_radius
+         else
+            if (  ALL( ABS(lower_radius(1:n_bin) - ChemState%ChemSpecies(Chemstate%SeaSaltIndex(n))%lower_radius) > 0.0_fp )) then
+               n_bin = n_bin + 1
+               lower_radius(n_bin) = ChemState%ChemSpecies(Chemstate%SeaSaltIndex(n))%lower_radius
+               upper_radius(n_bin) = ChemState%ChemSpecies(Chemstate%SeaSaltIndex(n))%upper_radius
+            endif
+         endif
+      enddo
+
+      ! Allocate index arrays
+      ALLOCATE(Chemstate%SeaSaltBinLower(n_bin), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%SeaSaltBinLower'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+
+      ALLOCATE(Chemstate%SeaSaltBinUpper(n_bin), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%SeaSaltBinUpper'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+
+      !sort bins by radius from low to high for lower_radius
+      mask(1:n_bin) = .TRUE.
+      do n = 1, n_bin
+         Chemstate%SeaSaltBinLower(n) =  MINVAL(lower_radius,mask)
+         mask(MINLOC(lower_radius,mask)) = .FALSE.
+      enddo
+
+      !sort bins by radius from low to high for upper_radius
+      mask(1:n_bin) = .TRUE.
+      do n = 1, n_bin
+         Chemstate%SeaSaltBinUpper(n) =  MINVAL(upper_radius,mask)
+         mask(MINLOC(upper_radius,mask)) = .FALSE.
+      enddo
+
+      !check if the bins are continuous
+      do n = 1, n_bin-1
+         if ( .not. rae(Chemstate%SeaSaltBinUpper(n), Chemstate%SeaSaltBinLower(n+1)) ) then
+            errMsg = 'Sea Salt Bins are not continuous'
+            call CC_Error(errMsg, RC, thisLoc)
+            RETURN
+         endif
+      enddo
+
+   end subroutine Find_SeaSalt_Bin
 
    !> \brief Find the species by name
    !!

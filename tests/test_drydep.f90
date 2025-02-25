@@ -183,6 +183,7 @@ program test_drydep
    MetState%IODIDE = 100_fp !in [nM; nanoMolar]
    MetState%LON = -92.0_fp
    MetState%LAT = 38.0_fp
+   MetState%LUCNAME = 'OLSON'
    MetState%LNLPBL = .true.
    MetState%IsSnow = .false.
    MetState%IsIce = .false.

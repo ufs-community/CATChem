@@ -222,6 +222,7 @@ MODULE MetState_Mod
       real(fp)             :: SALINITY   !< Sea water salinity
       real(fp)             :: IODIDE     !< Iodine concentration (TODO: may be get from ChemState)
       real(fp)             :: LON        !< Longitude
+      character(len=20)    :: LUCNAME    !< name of land use category
       logical              :: LNLPBL     !< non-local PBL scheme flag (TODO:where to put this )
 
    END TYPE MetStateType

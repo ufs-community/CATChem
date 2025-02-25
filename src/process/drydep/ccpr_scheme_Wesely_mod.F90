@@ -40,7 +40,6 @@ contains
    !! \param USTAR       Friction velocity [m/s]
    !! \param OBK         Monin-Obhukov length [m]
    !! \param CFRAC       Surface cloud fraction
-   !! \param ZH          PBL height [m]
    !! \param THIK        height of first model layer [m]
    !! \param ZO          Roughness length [m]
    !! \param RHB         Relative humidity at surface [uniteless]
@@ -50,11 +49,14 @@ contains
    !! \param XLAI        Leaf area index (Note: change to fraction LAI of each land type)
    !! \param ILAND       Land type ID in current grid box (mapped to deposition surface types
    !! \param IUSE        Fraction of gridbox area occupied by each land type
+   !! \param SeaSalt_Lower_Bin Lower bin boundary of sea salt radius [um]
+   !! \param SeaSalt_UPPER_Bin Upper bin boundary of sea salt radius [um]
    !! \param SALINITY    Salinity of the ocean
    !! \param TSKIN       Skin temperature
    !! \param IODIDE      Iodide concentration
    !! \param XLON        Longitude
    !! \param YLAT        Latitude
+   !! \param LUC         name of land use category (one of OLSON, NOAH and IGBP for now)
    !! \param IS_GAS      Flag for gas species
    !! \param IS_DUST     Flag for dust species
    !! \param IS_SEASALT  Flag for sea salt species
@@ -70,13 +72,11 @@ contains
    !!
    !! \ingroup catchem_drydep_process
    !!!>
-   subroutine CCPr_Scheme_Wesely(   RADIAT, TEMP, SUNCOS, F0, HSTAR, XMW, A_RADI, A_DEN,       &
-      USTAR,  OBK,  CFRAC,  ZH, THIK,  ZO,  RHB,    PRESSU,      &
-      W10,    SPC,  XLAI,  ILAND, IUSE, SALINITY, TSKIN, IODIDE, &
-      XLON, YLAT, CO2_EFFECT, CO2_LEVEL, CO2_REF, LNLPBL,        &
-      IS_GAS, IS_DUST, IS_SEASALT, IS_SNOW, IS_ICE, IS_LAND,     &
-      DD_DvzAerSnow, DD_DvzMinVal_SNOW, DD_DvzMinVal_LAND,       &
-      VD, DDFreq, RC)
+   subroutine CCPr_Scheme_Wesely(   RADIAT, TEMP, SUNCOS, F0, HSTAR, XMW, A_RADI, A_DEN,          &
+      USTAR,  OBK,  CFRAC, THIK,  ZO,  RHB,    PRESSU,  W10,    SPC,  XLAI,  ILAND, IUSE,    &
+      SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin, SALINITY, TSKIN, IODIDE, XLON, YLAT, LUC, CO2_EFFECT, &
+      CO2_LEVEL, CO2_REF, IS_GAS, IS_DUST, IS_SEASALT, IS_SNOW, IS_ICE, IS_LAND,          &
+      DD_DvzAerSnow, DD_DvzMinVal_SNOW, DD_DvzMinVal_LAND, VD, DDFreq, RC)
       ! Uses
       !USE Constants,     Only : PI_180      !pull in a constant from the CONSTANTS MODULE
       use precision_mod, only : fp           !pull in a precision from the PRECISION MODULE
@@ -97,7 +97,7 @@ contains
       real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
       real(fp), intent(in)  :: OBK         !< Monin-Obhukov length [m]
       real(fp), intent(in)  :: CFRAC       !< Surface cloud fraction [unitless]
-      real(fp), intent(in)  :: ZH          !< PBL height [m]
+      !real(fp), intent(in)  :: ZH          !< PBL height [m]
       real(fp), intent(inout)  :: THIK        !< height of first model layer [m]
       real(fp), intent(in)  :: ZO          !< Roughness length [m]
       real(fp), intent(in)  :: RHB         !< Relative humidity at surface [uniteless]
@@ -108,17 +108,19 @@ contains
       real(fp), dimension(:), intent(in)  :: XLAI        !< Leaf area index (Note: change to fraction LAI of each land type)
       integer,  dimension(:), intent(in)  :: ILAND       !< Land type ID in current grid box (mapped to deposition surface types
       real(fp), dimension(:), intent(in)  :: IUSE        !< Fraction (per mille) of gridbox area occupied by each land type (TODO!!)
+      real(fp), dimension(:), intent(in)  :: SeaSalt_Lower_Bin !< Lower bin boundary of sea salt radius [um]
+      real(fp), dimension(:), intent(in)  :: SeaSalt_UPPER_Bin !< Upper bin boundary of sea salt radius [um]
       !some inputs are for O3 over water and Hg over Amazon forest (not sure if we should include them for now)
       real(fp), intent(in)  :: SALINITY    !< Salinity of the ocean
       real(fp), intent(in)  :: TSKIN       !< Skin temperature
       real(fp), intent(in)  :: IODIDE      !< Iodide concentration
       real(fp), intent(in)  :: XLON        !< Longitude
       real(fp), intent(in)  :: YLAT        !< Latitude
+      character(len=20), intent(in) :: LUC !< name of land use category (one of OLSON, NOAH and IGBP for now)
       ! CO2 effect on Rs
       logical, intent(in)   :: CO2_EFFECT  !< Flag for CO2 effect on Rs
       real(fp), intent(in)  :: CO2_LEVEL   !< CO2 level
       real(fp), intent(in)  :: CO2_REF     !< Reference CO2 level
-      logical, intent(in)   :: LNLPBL      !< Flag for non-local PBL mixing instead of full PBL mixing
       logical, intent(in)   :: IS_GAS, IS_DUST, IS_SEASALT
       logical, intent(in)   :: IS_SNOW, IS_ICE, IS_LAND !< Flags for snow, ice or land
       !set range of dry deposition velocities
@@ -138,6 +140,7 @@ contains
       integer  :: II     !< Index of the drydep land type
       integer  :: ILDT   !< index of the land types in the grid box
       integer  :: LDT    !loop index of land types
+      integer  :: LUCINDEX !mapping above II to Zhang's 15 land types for aerosols
       !string
       character(len=255)       :: thisLoc
       character(len=512)       :: ErrMsg
@@ -151,10 +154,9 @@ contains
       ErrMsg  = ''
       ThisLoc = ' -> at CCPr_scheme_Wesely (in process/drydep/CCPr_Scheme_Wesely_Mod.F90)'
 
-      ! Add option for non-local PBL mixing scheme: THIK must
-      ! be the first box height.
-      ! We do not use PBL_DRYDEP as the original codes
-      IF (.NOT. LNLPBL) THIK = MAX( ZH, THIK )
+      ! Add option for non-local PBL mixing scheme: THIK must be the first box height.
+      ! TODO: we only use non-local mixing here
+      !IF (.NOT. LNLPBL) THIK = MAX( ZH, THIK )
 
       ! Zero variables that aren't zeroed below
       VD         = 0.0_fp
@@ -177,12 +179,26 @@ contains
             ! If the land type is not represented in grid
             ! box, then skip to the next land type
             IF ( IUSE(LDT) <= 0 ) CYCLE
-            ! Olson land type index + 1
-            !TODO: not always +1???
-            ILDT = ILAND(LDT)+1
-            ! Dry deposition land type index
-            !TODO: this IDEP is predefined based on Olson
-            II   = IDEP(ILDT)
+
+            ILDT = ILAND(LDT)
+            IF ( LUC == 'OLSON' ) THEN
+               ! Olson land type index + 1
+               ILDT = ILDT + 1
+               ! Dry deposition land type index
+               II   = IDEP_IOLSON(ILDT)
+               LUCINDEX = LUCINDEX_GC(II)
+            ELSE IF ( LUC == 'NOAH' ) THEN
+               ! it is possible that water is given as 0 not 17 in GFS CCPP
+               IF (ILDT == 0) ILDT = 17
+               II   = IDEP_NOAH(ILDT)
+               !Note: we use ILDT, instead of II,  to get LUCINDEX here
+               LUCINDEX = LUCINDEX_NOAH(ILDT)
+            ELSE IF ( LUC == 'IGBP' ) THEN
+               ! it is possible that water is given as 0 not 17
+               IF (ILDT == 0) ILDT = 17
+               II   = IDEP_IGBP(ILDT)
+               LUCINDEX = LUCINDEX_IGBP(ILDT)
+            ENDIF
 
             !LAI of the landtype in the subgrid
             !XLAI_IN = XLAI * DBLE(IUSE(LDT)) !TODO: may be able to calculate online if fraction LAI is not provided
@@ -194,16 +210,13 @@ contains
 
             !get bulk surface resistances (Rs)
             IF (IS_GAS) THEN
-               call Wesely_Rc_Gas( RADIAT,    TEMP,       SUNCOS,                &
-                  F0,        HSTAR,     XMW,            &
-                  USTAR,     CFRAC,  PRESSU,     &
+               call Wesely_Rc_Gas( RADIAT, TEMP, SUNCOS,  F0, HSTAR, XMW, USTAR, CFRAC, PRESSU,  &
                   XLAI_IN, II,  SPC, SALINITY, TSKIN, IODIDE, XLON, YLAT, &
-                  CO2_EFFECT, CO2_LEVEL, CO2_REF, &
-                  RSURFC,   RC)
+                  CO2_EFFECT, CO2_LEVEL, CO2_REF, RSURFC,   RC)
             ELSE
                !Note to change pressure unit from Pa to kPa
-               RSURFC = AERO_SFCRSII ( SPC, II, IS_DUST, IS_SEASALT, LUCINDEX_GC, A_RADI, A_DEN, &
-                  PRESSU*1e-3_fp, TEMP, USTAR, RHB, W10, VTSoutput, RC)
+               RSURFC = AERO_SFCRSII ( SPC, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, PRESSU*1e-3_fp, &
+                  TEMP, USTAR, RHB, W10, SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin,VTSoutput, RC)
 
             ENDIF
             if (RC /= CC_SUCCESS ) then
@@ -223,7 +236,7 @@ contains
             IF ( HSTAR .gt. 1.e+10_fp ) RSURFC= 1.e+0_fp
 
             !get Ra and Rb
-            call Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, LNLPBL, IS_GAS, Ra, Rb,  RC)
+            call Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, IS_GAS, Ra, Rb,  RC)
 
             !get VD (TODO: IUSE is decimal not percent or permille as in GEOS-Chem)
             C1X = RSURFC + Ra + Rb
