@@ -1444,7 +1444,7 @@ CONTAINS
       Config%drydep_activate = v_bool
 
 
-      key   = "process%drydep%scheme_opt"
+      key   = "process%drydep%aero_scheme_opt"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1452,7 +1452,7 @@ CONTAINS
          v_int = 1 ! default is one
          RETURN
       ENDIF
-      Config%drydep_scheme = v_int
+      Config%drydep_aero_scheme = v_int
 
 
       key   = "process%drydep%resuspension"
@@ -1463,6 +1463,16 @@ CONTAINS
          RETURN
       ENDIF
       Config%drydep_resuspension = v_bool
+
+      key   = "process%drydep%gas_scheme_opt"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         v_int = 1 ! default is one
+         RETURN
+      ENDIF
+      Config%drydep_gas_scheme = v_int
 
       key   = "process%drydep%co2_effect"
       v_bool = MISSING_BOOL
@@ -1496,7 +1506,8 @@ CONTAINS
       write(*,*) "DryDeposition Configuration"
       write(*,*) '------------------------------------'
       write(*,*) 'Config%drydep_activate = ', Config%drydep_activate
-      write(*,*) 'Config%drydep_scheme = ', Config%drydep_scheme
+      write(*,*) 'Config%drydep_aero_scheme = ', Config%drydep_aero_scheme
+      write(*,*) 'Config%drydep_gas_scheme = ', Config%drydep_gas_scheme
       write(*,*) 'Config%drydep_resuspension = ', Config%drydep_resuspension
       write(*,*) 'Config%drydep_co2_effect = ', Config%drydep_co2_effect
       write(*,*) 'Config%drydep_co2_level = ', Config%drydep_co2_level

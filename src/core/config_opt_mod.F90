@@ -108,8 +108,9 @@ MODULE Config_Opt_Mod
 
       ! DryDeposition Process
       LOGICAL                     :: drydep_activate
-      INTEGER                     :: drydep_scheme
+      INTEGER                     :: drydep_aero_scheme
       LOGICAL                     :: drydep_resuspension  !< Turn on resuspension
+      INTEGER                     :: drydep_gas_scheme
       LOGICAL                     :: drydep_co2_effect
       real(fp)                    :: drydep_co2_level
       real(fp)                    :: drydep_co2_reference
@@ -185,8 +186,9 @@ CONTAINS
 
       ! Dry Dep Process
       Config%drydep_activate = .FALSE.
-      Config%drydep_scheme = 1
+      Config%drydep_aero_scheme = 1
       Config%drydep_resuspension = .FALSE.
+      Config%drydep_gas_scheme = 1
       Config%drydep_co2_effect = .FALSE.
       Config%drydep_co2_level = 600.0_fp
       Config%drydep_co2_reference = 380.0_fp

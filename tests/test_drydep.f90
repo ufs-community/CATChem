@@ -50,22 +50,15 @@ program test_drydep
 
 
    title = 'drydep Test 1 | Read Config'
-   !DryDepState%SchemeOpt = 1
+   !DryDepState%AeroSchemeOpt = 1
    DryDepState%Activate = .false.
    call print_info(Config, DryDepState, MetState, ChemState, title)
    write (*,*) '-- '
    write (*,*) 'Completed ', title
    write (*,*) '--'
 
-   !----------------------------
-   ! Test 2
-   !----------------------------
-   ! Set number of drydep species
 
-   !ChemState%nSpeciesAerodrydep = 2
-   DryDepState%Activate = .true.
-
-   ! Meteorological State
+   ! Meteorological State to run the tests
    MetState%LWI = 1.0_fp
    MetState%USTAR = 0.1_fp
    MetState%PBLH = 1000.0_fp
@@ -88,9 +81,43 @@ program test_drydep
       MetState%ZMID(i) = (MetState%NLEVS*100 - I*100)   ! m
    end do
 
-   DryDepState%SchemeOpt = 1
+   !used for Wesely & Zhang drydep scheme (need to be put here otherwise it cannot run without allocation of some variables)
+   MetState%SWGDN = 500.0_fp
+   MetState%TS = 301.0_fp
+   MetState%SUNCOSmid=  0.97_fp
+   MetState%USTAR = 0.05_fp
+   MetState%OBK = 100.0_fp
+   MetState%CLDFRC = 0.1
+   allocate(MetState%BXHEIGHT(MetState%NLEVS))
+   MetState%BXHEIGHT = 40.0_fp
+   MetState%Z0 = 10_fp
+   allocate(MetState%RH(MetState%NLEVS))
+   MetState%RH = 0.4661  !unitless (low values[<=0.466 in this test] will lead to the error of DEN for seasalt species)
+   MetState%PS = 1000.0_fp ! hPa
+   MetState%FRLAI = (/  3.0, 3.0, 1.0, 0.0/)      !TODO: whether LAI is separated to each land type?
+   MetState%ILAND = (/   5,   6,  18,   11 /)
+   MetState%FRLANDUSE = (/ 0.4, 0.4, 0.1, 0.1 /)
+   MetState%SALINITY=25     ! greater than 20 (in ppt; part per thousand) is considered as ocean
+   MetState%TSKIN = 305.0_fp
+   MetState%IODIDE = 100_fp !in [nM; nanoMolar]
+   MetState%LON = -92.0_fp
+   MetState%LAT = 38.0_fp
+   MetState%LUCNAME = 'OLSON'
+   !MetState%LNLPBL = .true.
+   MetState%IsSnow = .false.
+   MetState%IsIce = .false.
+   MetState%IsLand = .true.
+
+   !----------------------------
+   ! Test 2
+   !----------------------------
+   title = "DryDep Test 2 | Test GOCART DryDep defaults"
+
+   !ChemState%nSpeciesDrydep = 2
+   !DryDepState%Activate = .true.
+   !DryDepState%AeroSchemeOpt = 1
    ! Turn off resuspension
-   DryDepState%Resuspension = .FALSE.
+   !DryDepState%Resuspension = .FALSE.
 
    ! Allocate DiagState
    call cc_allocate_diagstate(Config, DiagState, ChemState, RC)
@@ -98,8 +125,6 @@ program test_drydep
       errMsg = 'Error in cc_allocate_diagstate'
       stop 1
    endif
-
-   title = "DryDep Test 2 | Test GOCART DryDep defaults"
 
    call cc_drydep_init(Config, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -124,7 +149,7 @@ program test_drydep
    ! Test 3
    !----------------------------
    title = "drydep Test 3 | resuspension is .TRUE. "
-   !ChemState%nSpeciesAerodrydep = 1
+   !ChemState%nSpeciesDrydep = 1
    ! Turn on resuspension
    DryDepState%Resuspension = .TRUE.
    DryDepState%particleradius = 0.000001   ! [m]
@@ -145,7 +170,7 @@ program test_drydep
    !----------------------------
    ! Test 4
    !----------------------------
-   title = "drydep Test 4 | scheme_opt=2 "
+   title = "drydep Test 4 | Wesely & Zhang Scheme"
 
    !clean up the test above for a different scheme test (Test 4)
    call cc_drydep_finalize( DryDepState, rc)
@@ -159,38 +184,9 @@ program test_drydep
    if (allocated(DiagState%drydep_frequency)) deallocate(DiagState%drydep_frequency)
    if (allocated(DiagState%drydep_vel)) deallocate(DiagState%drydep_vel)
 
-   !assign MetState values
-   MetState%SWGDN = 500.0_fp
-   MetState%TS = 301.0_fp
-   MetState%SUNCOSmid=  0.97_fp
-   MetState%USTAR = 0.1_fp
-   MetState%OBK = -100
-   MetState%CLDFRC = 0.1
-   MetState%PBLH = 1000.0_fp
-   allocate(MetState%BXHEIGHT(MetState%NLEVS))
-   MetState%BXHEIGHT = 40.0_fp
-   MetState%Z0 = 1000_fp
-   allocate(MetState%RH(MetState%NLEVS))
-   MetState%RH = 0.4661  !unitless (low values[<=0.466 in this test] will lead to the error of DEN for seasalt species)
-   MetState%PS = 1000.0_fp ! hPa
-   Metstate%U10M = 3.0
-   Metstate%V10M = 3.0
-   MetState%FRLAI = (/  3.0, 3.0, 1.0, 0.0/)      !TODO: whether LAI is separated to each land type?
-   MetState%ILAND = (/   5,   6,  18,   1 /)
-   MetState%FRLANDUSE = (/ 0.4, 0.4, 0.1, 0.1 /)
-   MetState%SALINITY=10     ! greater than 20 (in ppt; part per thousand) is considered as ocean
-   MetState%TSKIN = 305.0_fp
-   MetState%IODIDE = 100_fp !in [nM; nanoMolar]
-   MetState%LON = -92.0_fp
-   MetState%LAT = 38.0_fp
-   MetState%LUCNAME = 'OLSON'
-   MetState%LNLPBL = .true.
-   MetState%IsSnow = .false.
-   MetState%IsIce = .false.
-   MetState%IsLand = .true.
-
-   Config%drydep_scheme = 2
    !ChemState%nSpeciesDrydep = 34
+   Config%drydep_aero_scheme = 2
+   Config%drydep_gas_scheme = 1
 
    ! Allocate DiagState
    call cc_allocate_diagstate(Config, DiagState, ChemState, RC)
@@ -235,13 +231,15 @@ contains
       write(*,*) 'Configuration '
       write(*,*) '*************'
       write(*,*) 'Config%drydep_activate = ', Config_%drydep_activate
-      write(*,*) 'Config%drydep_scheme = ', Config_%drydep_scheme
+      write(*,*) 'Config%drydep_aero_scheme = ', Config_%drydep_aero_scheme
+      write(*,*) 'Config%drydep_gas_scheme = ', Config_%drydep_gas_scheme
       write(*,*) 'Config%drydep_resuspension = ', Config_%drydep_resuspension
 
       if (DryDepState_%Activate) then
 
          write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
-         write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
+         write(*,*) 'DryDepState%AeroSchemeOpt = ', DryDepState_%AeroSchemeOpt
+         write(*,*) 'DryDepState%GasSchemeOpt = ', DryDepState_%GasSchemeOpt
          write(*,*) 'DryDepState%Resuspension = ', DryDepState_%Resuspension
 
          if (DryDepState_%Resuspension) then
@@ -251,17 +249,10 @@ contains
 
          write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
 
-         if (DryDepState_%SchemeOpt == 1) then
-            write(*,*) 'ChemState%nSpeciesAerodrydep = ', ChemState_%nSpeciesAerodrydep
-            write(*,*) 'ChemState%chemSpecies%name =', ChemState_%chemSpecies(ChemState%AeroDryDepIndex(:))%short_name
-            write(*,*) 'DryDepState_%drydep_vel =', DryDepState_%drydep_vel
-            write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
-         else if (DryDepState_%SchemeOpt == 2) then
-            write(*,*) 'ChemState%nSpeciesDrydep = ', ChemState_%nSpeciesDrydep
-            write(*,*) 'ChemState%chemSpecies%name =', ChemState_%chemSpecies(ChemState%DryDepIndex(:))%short_name
-            write(*,*) 'DryDepState_%drydep_vel =', DryDepState_%drydep_vel
-            write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
-         end if
+         write(*,*) 'ChemState%nSpeciesDrydep = ', ChemState_%nSpeciesDrydep
+         write(*,*) 'ChemState%chemSpecies%name =', ChemState_%chemSpecies(ChemState%DryDepIndex(:))%short_name
+         write(*,*) 'DryDepState_%drydep_vel =', DryDepState_%drydep_vel
+         write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
 
       end if
 

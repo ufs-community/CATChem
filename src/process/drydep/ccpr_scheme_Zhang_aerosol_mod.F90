@@ -1,24 +1,29 @@
 !>
 !! \file
-!! \brief CCPr Scheme for dry deposition
+!! \brief CCPr Scheme for dry deposition of aeroosl species from Zhang et al., (2001) with
+!! Emerson's updates. The Ra and Rb are still from Wesely (1989) for now.
 !!
 !!
 !! Reference:
 !! (1) Wesely, M. L. (1989). Parameterization of surface resistances to gaseous dry
 !!     deposition in regional-scale numerical models. Atmospheric Environment.
-!! (2) Most of the codes are adopted from GEOS-Chem drydep_mod.F90 module.
+!! (2) Zhang, L., Gong, S., Padro, J., & Barrie, L. (2001). A size-segregated particle
+!!     dry deposition scheme for an atmospheric aerosol module. Atmospheric environment.
+!! (3) Emerson, E. W., et al. (2020). Revisiting particle dry deposition and its role
+!!     in radiative effect estimates. PNAS, 117(42), 26076-26082.
+!! (4) Most of the codes are adopted from GEOS-Chem drydep_mod.F90 module.
 !!     https://github.com/geoschem/geos-chem
 !!
 !! \author Wei Li
 !! \date 02/2025
 !!!>
-module CCPr_Scheme_Wesely_Mod
+module CCPr_Scheme_Zhang_aerosol_Mod
 
    implicit none
 
    private
 
-   public :: CCPr_Scheme_Wesely
+   public :: CCPr_Scheme_Zhang_Aero
 
 contains
 
@@ -70,10 +75,9 @@ contains
    !!
    !! \ingroup catchem_drydep_process
    !!!>
-   subroutine CCPr_Scheme_Wesely(   RADIAT, TEMP, SUNCOS, F0, HSTAR, XMW,          &
-      USTAR,  OBK,  CFRAC, THIK,  ZO, PRESSU, SPC,  XLAI,  ILAND, IUSE,    &
-      SALINITY, TSKIN, IODIDE, XLON, YLAT, LUC, CO2_EFFECT, &
-      CO2_LEVEL, CO2_REF, IS_SNOW, IS_ICE, IS_LAND,          &
+   subroutine CCPr_Scheme_Zhang_Aero( TEMP, HSTAR, XMW, A_RADI, A_DEN,                   &
+      USTAR,  OBK, THIK,  ZO,  RHB,    PRESSU,  W10,    SPC, ILAND, IUSE,                &
+      SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin, LUC, IS_DUST, IS_SEASALT, IS_SNOW, IS_ICE,   &
       DD_DvzAerSnow, DD_DvzMinVal_SNOW, DD_DvzMinVal_LAND, VD, DDFreq, RC)
       ! Uses
       !USE Constants,     Only : PI_180      !pull in a constant from the CONSTANTS MODULE
@@ -84,37 +88,43 @@ contains
       IMPLICIT NONE
       ! Parameters
       !-----------
-      real(fp), intent(in)  :: RADIAT      !< Solar radiation [W/m2]
+      !real(fp), intent(in)  :: RADIAT      !< Solar radiation [W/m2]
       real(fp), intent(in)  :: TEMP        !< Temperature [K]
-      real(fp), intent(in)  :: SUNCOS      !< Cosine of solar zenith angle at middle of current chem timestep
-      real(fp), intent(inout)  :: F0       !< React. factor for oxidation depends on species
+      !real(fp), intent(in)  :: SUNCOS      !< Cosine of solar zenith angle at middle of current chem timestep
+      !real(fp), intent(inout)  :: F0          !< React. factor for oxidation depends on species
       real(fp), intent(in)  :: HSTAR       !< Henry's law constant depends on species
       real(fp), intent(in)  :: XMW         !< Molecular weight [kg/mol]
+      real(fp), intent(in)  :: A_RADI      !< Aerosol radius [m]
+      real(fp), intent(in)  :: A_DEN       !< Aerosol density [kg/m3]
       real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
       real(fp), intent(in)  :: OBK         !< Monin-Obhukov length [m]
-      real(fp), intent(in)  :: CFRAC       !< Surface cloud fraction [unitless]
+      !real(fp), intent(in)  :: CFRAC       !< Surface cloud fraction [unitless]
+      !real(fp), intent(in)  :: ZH          !< PBL height [m]
       real(fp), intent(in)  :: THIK        !< height of first model layer [m]
       real(fp), intent(in)  :: ZO          !< Roughness length [m]
-      !real(fp), intent(in)  :: RHB         !< Relative humidity at surface [uniteless]
+      real(fp), intent(in)  :: RHB         !< Relative humidity at surface [uniteless]
       real(fp), intent(in)  :: PRESSU      !< Surface pressure [Pa]
-      !real(fp), intent(in)  :: W10         !< Wind speed at 10m [m/s]
+      real(fp), intent(in)  :: W10         !< Wind speed at 10m [m/s]
       !integer,  intent(in)  :: N_SPC      !< Species ID (TODO: may be changed to species name)
       character(len=20), intent(in) :: SPC !< Species name
-      real(fp), dimension(:), intent(in)  :: XLAI        !< Leaf area index (Note: change to fraction LAI of each land type)
+      !real(fp), dimension(:), intent(in)  :: XLAI        !< Leaf area index (Note: change to fraction LAI of each land type)
       integer,  dimension(:), intent(in)  :: ILAND       !< Land type ID in current grid box (mapped to deposition surface types
       real(fp), dimension(:), intent(in)  :: IUSE        !< Fraction (per mille) of gridbox area occupied by each land type (TODO!!)
+      real(fp), dimension(:), intent(in)  :: SeaSalt_Lower_Bin !< Lower bin boundary of sea salt radius [um]
+      real(fp), dimension(:), intent(in)  :: SeaSalt_UPPER_Bin !< Upper bin boundary of sea salt radius [um]
       !some inputs are for O3 over water and Hg over Amazon forest (not sure if we should include them for now)
-      real(fp), intent(in)  :: SALINITY    !< Salinity of the ocean
-      real(fp), intent(in)  :: TSKIN       !< Skin temperature
-      real(fp), intent(in)  :: IODIDE      !< Iodide concentration
-      real(fp), intent(in)  :: XLON        !< Longitude
-      real(fp), intent(in)  :: YLAT        !< Latitude
+      !real(fp), intent(in)  :: SALINITY    !< Salinity of the ocean
+      !real(fp), intent(in)  :: TSKIN       !< Skin temperature
+      !real(fp), intent(in)  :: IODIDE      !< Iodide concentration
+      !real(fp), intent(in)  :: XLON        !< Longitude
+      !real(fp), intent(in)  :: YLAT        !< Latitude
       character(len=20), intent(in) :: LUC !< name of land use category (one of OLSON, NOAH and IGBP for now)
       ! CO2 effect on Rs
-      logical, intent(in)   :: CO2_EFFECT  !< Flag for CO2 effect on Rs
-      real(fp), intent(in)  :: CO2_LEVEL   !< CO2 level
-      real(fp), intent(in)  :: CO2_REF     !< Reference CO2 level
-      logical, intent(in)   :: IS_SNOW, IS_ICE, IS_LAND !< Flags for snow, ice or land
+      !logical, intent(in)   :: CO2_EFFECT  !< Flag for CO2 effect on Rs
+      !real(fp), intent(in)  :: CO2_LEVEL   !< CO2 level
+      !real(fp), intent(in)  :: CO2_REF     !< Reference CO2 level
+      logical, intent(in)   :: IS_DUST, IS_SEASALT
+      logical, intent(in)   :: IS_SNOW, IS_ICE !< Flags for snow, ice
       !set range of dry deposition velocities
       real(fp), intent(in)  :: DD_DvzAerSnow !< Fixed VD for some aerosols over snow and ice [cm/s]
       real(fp), intent(in)  :: DD_DvzMinVal_SNOW !< Minimum VD for some sulfate species over snow and ice [cm/s]
@@ -126,10 +136,11 @@ contains
 
       ! Local Variables
       !----------------
-      real(fp) :: XLAI_IN, C1X, RA, RB, RSURFC, VK, DVZ
+      real(fp) :: C1X, RA, RB, RSURFC, VTSoutput, VK, DVZ
       integer  :: II     !< Index of the drydep land type
       integer  :: ILDT   !< index of the land types in the grid box
       integer  :: LDT    !loop index of land types
+      integer  :: LUCINDEX !mapping above II to Zhang's 15 land types for aerosols
       !string
       character(len=255)       :: thisLoc
       character(len=512)       :: ErrMsg
@@ -141,7 +152,7 @@ contains
       ! Assume success
       RC      =  CC_SUCCESS
       ErrMsg  = ''
-      ThisLoc = ' -> at CCPr_scheme_Wesely (in process/drydep/CCPr_Scheme_Wesely_Mod.F90)'
+      ThisLoc = ' -> at CCPr_scheme_Zhang_Aero (in process/drydep/CCPr_Scheme_Zhang_aerosol_Mod.F90)'
 
       ! Add option for non-local PBL mixing scheme: THIK must be the first box height.
       ! TODO: we only use non-local mixing here
@@ -156,102 +167,67 @@ contains
       RB         = 0.0_fp
       C1X        = 0.0_fp
       VK         = 0.0_fp
-      XLAI_IN    = 0.0_fp
+      VTSoutput  = 0.0_fp
 
       ! Better test for depositing species: We need both HSTAR and XMW
       ! to be nonzero, OR the value of AIROSOL to be true.  This should
       ! avoid any further floating point invalid issues caused by putting
       ! a zero value in a denominator.
-      IF ( ( HSTAR > 0e+0_fp .and. XMW > 0e+0_fp ) ) THEN
-         DO LDT =1 , SIZE(IUSE)
-            ! If the land type is not represented in grid
-            ! box, then skip to the next land type
-            IF ( IUSE(LDT) <= 0 ) CYCLE
+      DO LDT =1 , SIZE(IUSE)
+         ! If the land type is not represented in grid
+         ! box, then skip to the next land type
+         IF ( IUSE(LDT) <= 0 ) CYCLE
 
-            ILDT = ILAND(LDT)
-            IF ( LUC == 'OLSON' ) THEN
-               ! Olson land type index + 1
-               ILDT = ILDT + 1
-               ! Dry deposition land type index
-               II   = IDEP_IOLSON(ILDT)
-            ELSE IF ( LUC == 'NOAH' ) THEN
-               ! it is possible that water is given as 0 not 17 in GFS CCPP
-               IF (ILDT == 0) ILDT = 17
-               II   = IDEP_NOAH(ILDT)
-            ELSE IF ( LUC == 'IGBP' ) THEN
-               ! it is possible that water is given as 0 not 17
-               IF (ILDT == 0) ILDT = 17
-               II   = IDEP_IGBP(ILDT)
-            ENDIF
+         ILDT = ILAND(LDT)
+         IF ( LUC == 'OLSON' ) THEN
+            ! Olson land type index + 1
+            ILDT = ILDT + 1
+            ! Dry deposition land type index
+            II   = IDEP_IOLSON(ILDT)
+            LUCINDEX = LUCINDEX_GC(II)
+         ELSE IF ( LUC == 'NOAH' ) THEN
+            ! it is possible that water is given as 0 not 17 in GFS CCPP
+            IF (ILDT == 0) ILDT = 17
+            II   = IDEP_NOAH(ILDT)
+            !Note: we use ILDT, instead of II,  to get LUCINDEX here
+            LUCINDEX = LUCINDEX_NOAH(ILDT)
+         ELSE IF ( LUC == 'IGBP' ) THEN
+            ! it is possible that water is given as 0 not 17
+            IF (ILDT == 0) ILDT = 17
+            II   = IDEP_IGBP(ILDT)
+            LUCINDEX = LUCINDEX_IGBP(ILDT)
+         ENDIF
 
-            !LAI of the landtype in the subgrid
-            !XLAI_IN = XLAI * DBLE(IUSE(LDT)) !TODO: may be able to calculate online if fraction LAI is not provided
-            XLAI_IN = XLAI(LDT)
+         !get bulk surface resistances (Rs)
+         !Note to change pressure unit from Pa to kPa
+         RSURFC = AERO_SFCRSII ( SPC, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, PRESSU*1e-3_fp, &
+            TEMP, USTAR, RHB, W10, SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin,VTSoutput, RC)
 
-            !If the surface to be snow or ice;set II to 1 instead
-            !We do not use II index to specify directly since IS_SNOW and IS_ICE are given at each grid not subgrid as ILAND
-            IF( (IS_SNOW) .OR. (IS_ICE) ) II=1
+         if (RC /= CC_SUCCESS ) then
+            errMsg = 'Error in getting bulk surface resistances (RSURFC)'
+            CALL CC_Error( errMsg, RC, thisLoc )
+            RETURN
+         endif
 
-            !get bulk surface resistances (Rs)
-            call Wesely_Rc_Gas( RADIAT, TEMP, SUNCOS,  F0, HSTAR, XMW, USTAR, CFRAC, PRESSU,  &
-               XLAI_IN, II,  SPC, SALINITY, TSKIN, IODIDE, XLON, YLAT, &
-               CO2_EFFECT, CO2_LEVEL, CO2_REF, RSURFC,   RC)
+         !*Set max and min values for bulk surface resistances
+         RSURFC = MAX(1.e+0_fp, MIN(RSURFC,9999.e+0_fp))
+         ! Set Rc for strong acids (HNO3,HCl,HBr) to 1 s/m
+         ! Ref. Jaegle et al. 2018, cf. Erisman,van Pul,Ayers 1994
+         IF ( HSTAR .gt. 1.e+10_fp ) RSURFC= 1.e+0_fp
 
-            if (RC /= CC_SUCCESS ) then
-               errMsg = 'Error in getting bulk surface resistances (RSURFC)'
-               CALL CC_Error( errMsg, RC, thisLoc )
-               RETURN
-            endif
+         !get Ra and Rb
+         call Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, .FALSE., Ra, Rb,  RC)
 
-            !*Set max and min values for bulk surface resistances
-            RSURFC = MAX(1.e+0_fp, MIN(RSURFC,9999.e+0_fp))
-            !*because of high resistance values, different rule applied for ocean ozone
-            IF ((SPC .EQ. 'O3') .AND. (II .EQ. 11)) THEN
-               RSURFC = MAX(1.e+0_fp, MIN(RSURFC,999999.e+0_fp))
-            ENDIF
-            ! Set Rc for strong acids (HNO3,HCl,HBr) to 1 s/m
-            ! Ref. Jaegle et al. 2018, cf. Erisman,van Pul,Ayers 1994
-            IF ( HSTAR .gt. 1.e+10_fp ) RSURFC= 1.e+0_fp
+         !get VD (TODO: IUSE is decimal not percent or permille as in GEOS-Chem)
+         C1X = RSURFC + Ra + Rb
+         VK = VD
+         !VD = VK + DBLE( IUSE(LDT) ) / C1X + DBLE( IUSE(LDT) ) * VTSoutput
+         VD = VK +  IUSE(LDT)  / C1X +  IUSE(LDT) * VTSoutput
+      END DO
 
-            !get Ra and Rb
-            call Wesely_Ra_Rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, .TRUE., Ra, Rb,  RC)
-
-            !get VD (TODO: IUSE is decimal not percent or permille as in GEOS-Chem)
-            C1X = RSURFC + Ra + Rb
-            VK = VD
-            !VD = VK + DBLE( IUSE(LDT) ) / C1X !This seems to be useless in the original codes
-
-            !VD = VK + DBLE( IUSE(LDT) ) / C1X
-            VD = VK + IUSE(LDT)  / C1X
-
-         END DO
-      ENDIF
 
       !apply spectial treatment or scaling factor to Vd
       DVZ = VD *100.e+0_fp !m/s -- > cm/s
-
-      ! Scale relative to specified species(Note:we do not use FLAG but match names instead)
-      !TODO: We simply hardcode the scaling factor here
-
-      !IF ( FLAG(D) .eq. 1 )  THEN
-      IF ((SPC .eq. 'N2O5') .or. (SPC .eq. 'HC187') ) THEN
-
-         ! Scale species to HNO3 (MW_g = 63.012 g/mol)
-         DVZ = DVZ * sqrt(63.01) / sqrt( XMW*1e3_fp )
-
-         !ELSE IF ( FLAG(D) .eq. 2 ) THEN
-      ELSE IF ((SPC .eq. 'MPAN') .or. (SPC .eq. 'PPN') .or. (SPC .eq. 'R4N2')) THEN
-
-         ! Scale species to PAN (MW_g = 121.06 g/mol)
-         DVZ = DVZ * sqrt(121.06) / sqrt( XMW*1e3_fp )
-
-         !ELSE IF ( FLAG(D) .eq. 3 ) THEN
-      ELSE IF ((SPC .eq. 'MONITS') .or. (SPC .eq. 'MONITU') .or. (SPC .eq. 'HONIT')) THEN
-
-         ! Scale species to ISOPN (MW_g = 147.15 g/mol)
-         DVZ = DVZ * sqrt(147.15)  / sqrt(XMW*1e3_fp)
-
-      ENDIF
 
       !-----------------------------------------------------------
       ! Special treatment for snow and ice
@@ -294,34 +270,6 @@ contains
       ENDIF
 
       !-----------------------------------------------------------
-      ! Special treatment for ACETONE
-      !-----------------------------------------------------------
-
-      ! For ACET, we need to only do drydep over the land
-      ! and not over the oceans.
-      !IF ( N == id_ACET ) THEN
-      IF ( SPC == 'ACET' ) THEN
-         IF ( Is_Land ) THEN
-            DVZ = 0.1e+0_fp
-         ELSE
-            DVZ = 0e+0_fp
-         ENDIF
-      ENDIF
-
-      !-----------------------------------------------------------
-      ! Special treatment for ALD2,MENO3,ETNO3,MOH
-      !-----------------------------------------------------------
-
-      ! we need to only do drydep over the land
-      ! and not over the oceans.
-      !IF ( N == id_ALD2 ) THEN
-      IF ( (SPC == 'ALD2') .or. (SPC == 'MENO3') .or. (SPC == 'ETNO3') .or. (SPC == 'MOH') ) THEN
-         IF ( .not. Is_Land ) THEN
-            DVZ = 0e+0_fp
-         ENDIF
-      ENDIF
-
-      !-----------------------------------------------------------
       ! Compute drydep velocity and frequency
       !-----------------------------------------------------------
 
@@ -335,7 +283,7 @@ contains
       !write(*,*) 'Test finish for species () with Vd (): ', SPC, VD
 
 
-   end subroutine CCPr_Scheme_Wesely
+   end subroutine CCPr_Scheme_Zhang_Aero
 
 
-end module CCPr_Scheme_Wesely_Mod
+end module CCPr_Scheme_Zhang_aerosol_Mod

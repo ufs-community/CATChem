@@ -228,7 +228,7 @@ contains
       real(fp), intent(in)  :: RADIAT      !< Solar radiation [W/m2]
       real(fp), intent(in)  :: TEMP        !< Temperature [K]
       real(fp), intent(in)  :: SUNCOS      !< Cosine of solar zenith angle
-      real(fp), intent(inout)  :: F0          !< React. factor for oxidation depends on species (inout because it is changed in the function)
+      real(fp), intent(inout)  :: F0       !< React. factor for oxidation depends on species (inout because it is changed in the function)
       real(fp), intent(in)  :: HSTAR       !< Henry's law constant depends on species
       real(fp), intent(in)  :: XMW         !< Molecular weight [kg/mol]
       real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
@@ -1656,7 +1656,7 @@ contains
       ! surface and now change to "REYNO > 1". (hyl, 10/15/99)
       ! D. J. Jacob change the criterion for aerodynamically rough
       ! surface to REYNO > 0.1
-      IF ( REYNO > 0.1e+0_fp ) THEN !rough surface
+      IF ( REYNO >= 0.1e+0_fp ) THEN !rough surface
          ! Add option for non-local PBL
          !TODO: we only use non-local option
          !IF (.NOT. LNLPBL) THEN

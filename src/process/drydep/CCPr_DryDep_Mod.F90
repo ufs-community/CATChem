@@ -49,7 +49,8 @@ MODULE CCPR_DryDep_mod
 
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
-      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
+      INTEGER                         :: AeroSchemeOpt         ! Scheme Option for aerosol drydep
+      INTEGER                         :: GasSchemeOpt          ! Scheme Option for gas drydep
       real                            :: particleradius        ! Particle radius (m)
       real                            :: particledensity       ! Particle density (kg/m^3)
       LOGICAL                         :: co2_effect            ! CO2 effect on drydep
@@ -116,53 +117,34 @@ CONTAINS
          ! Set scheme option
          !------------------
          ! For now, the only option is SchemeOpt = 1,2; default is 1
-         DryDepState%SchemeOpt = Config%drydep_scheme
+         DryDepState%AeroSchemeOpt = Config%drydep_aero_scheme
+         DryDepState%GasSchemeOpt = Config%drydep_gas_scheme
 
-         if (DryDepState%SchemeOpt == 1) then !only aerosol drydep
+         allocate(DryDepState%drydep_frequency(ChemState%nSpeciesDryDep), STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate DryDepState%drydep_frequency(ChemState%nSpeciesDryDep)'
+            CALL CC_Error( ErrMsg, RC, ThisLoc )
+            RETURN
+         ENDIF
+         DryDepState%drydep_frequency(1:ChemState%nSpeciesDryDep)=ZERO
 
-            allocate(DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
-            IF ( RC /= CC_SUCCESS ) THEN
-               ErrMsg = 'Could not Allocate DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
-               CALL CC_Error( ErrMsg, RC, ThisLoc )
-               RETURN
-            ENDIF
-            DryDepState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)=ZERO
+         allocate(DryDepState%drydep_vel(ChemState%nSpeciesDryDep), STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate DryDepState%drydep_vel(ChemState%nSpeciesDryDep)'
+            CALL CC_Error( ErrMsg, RC, ThisLoc )
+            RETURN
+         ENDIF
+         DryDepState%drydep_vel(1:ChemState%nSpeciesDryDep)=ZERO
 
-            allocate(DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
-            IF ( RC /= CC_SUCCESS ) THEN
-               ErrMsg = 'Could not Allocate DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
-               CALL CC_Error( ErrMsg, RC, ThisLoc )
-               RETURN
-            ENDIF
-            DryDepState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)=ZERO
-
-         else if (DryDepState%SchemeOpt == 2) then  !aerosol and gas drydep wesely
-
-            allocate(DryDepState%drydep_frequency(ChemState%nSpeciesDryDep), STAT=RC)
-            IF ( RC /= CC_SUCCESS ) THEN
-               ErrMsg = 'Could not Allocate DryDepState%drydep_frequency(ChemState%nSpeciesDryDep)'
-               CALL CC_Error( ErrMsg, RC, ThisLoc )
-               RETURN
-            ENDIF
-            DryDepState%drydep_frequency(1:ChemState%nSpeciesDryDep)=ZERO
-
-            allocate(DryDepState%drydep_vel(ChemState%nSpeciesDryDep), STAT=RC)
-            IF ( RC /= CC_SUCCESS ) THEN
-               ErrMsg = 'Could not Allocate DryDepState%drydep_vel(ChemState%nSpeciesDryDep)'
-               CALL CC_Error( ErrMsg, RC, ThisLoc )
-               RETURN
-            ENDIF
-            DryDepState%drydep_vel(1:ChemState%nSpeciesDryDep)=ZERO
-
+         if (DryDepState%AeroSchemeOpt == 2) then !Zhang scheme
             !calculate the volume distribution of sea salt aerosols (only need to do this once)
-            !TODO: The bin is hard coded in ccpr_drydep_common_mod.F90
             CALL INIT_WEIGHTSS(MINVAL(ChemState%SeaSaltBinLower), MAXVAL(ChemState%SeaSaltBinUpper), RC)
             IF ( RC /= CC_SUCCESS ) THEN
                ErrMsg = 'Could not Allocate arrays in INIT_WEIGHTSS'
                CALL CC_Error( ErrMsg, RC, ThisLoc )
                RETURN
             ENDIF
-         end if  ! if (DryDepState%SchemeOpt == 1)
+         end if
 
          ! Set other scheme-related  options
          !-----------------------------------
@@ -193,6 +175,7 @@ CONTAINS
       USE constants, only : Cp, g0, VON_KARMAN
       use CCPr_Scheme_GOCART_DryDep_Mod, only : CCPr_Scheme_GOCART_DryDep
       use CCPr_Scheme_Wesely_Mod, only : CCPr_Scheme_Wesely
+      use CCPr_Scheme_Zhang_Aerosol_Mod, only : CCPr_Scheme_Zhang_Aero
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -213,7 +196,7 @@ CONTAINS
       real :: radius
       real :: rhop
       real(fp) :: W10, F0   !calculated 10m wind speed from U10M and V10M
-      real(fp) :: THIK   !codespell:ignore
+      !real(fp) :: THIK   !codespell:ignore
       real(fp) :: VD, DDFreq
       real :: drydepf(1,1)
       REAL(fp) :: dqa                                    ! Change in Species due to drydep
@@ -231,146 +214,184 @@ CONTAINS
       if (DryDepState%Activate) then
          ! Run the DryDep Scheme
          !-------------------------
-         if (DryDepState%SchemeOpt == 1) then
-            ! Run the DryDep Scheme - Only Applicable to AEROSOL species
-            !-------------------------
-            if (ChemState%nSpeciesAeroDryDep > 0) then
+         if (ChemState%nSpeciesDryDep > 0) then
 
-               ! loop through aerosol species
-               do i = 1, ChemState%nSpeciesAeroDryDep
+            !TODO: used for Zhang aerosol scheme; may be read from MetState in the future
+            W10 = sqrt(MetState%U10M**2 + MetState%V10M**2)
 
-                  radius = ChemState%chemSpecies(ChemState%AeroDryDepIndex(i))%radius
-                  rhop = ChemState%chemSpecies(ChemState%AeroDryDepIndex(i))%density
+            ! loop through all drydep species
+            do i = 1, ChemState%nSpeciesDryDep
 
-                  call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
-                     MetState%T,       &
-                     MetState%AIRDEN,  &
-                     MetState%ZMID,    &
-                     MetState%LWI,     &
-                     MetState%USTAR,   &
-                     MetSTate%PBLH,    &
-                     MetState%HFLUX,   &
-                     VON_KARMAN,       &
-                     Cp,               &
-                     g0,               &
-                     MetState%Z0H,     &
-                     drydepf,          &
-                     DryDepState%Resuspension, &
-                     radius,           &
-                     rhop,             &
-                     MetState%U10M,    &
-                     MetSTate%V10M,    &
-                     MetState%FRLAKE,  &
-                     MetState%GWETTOP, &
-                     RC)
-
-
-                  if (RC /= 0) then
-                     errMsg = 'Error in GOCART DryDeposition'
-                     CALL CC_Error( errMsg, RC, thisLoc )
-                  endif  !if (RC /= CC_SUCCESS)
-
-                  ! Fill Diagnostic Variables
-                  !--------------------------
-                  DryDepState%drydep_frequency(i) = drydepf(1,1)
-                  DryDepState%drydep_vel(i) = MetState%ZMID(1) * drydepf(1,1)
-                  DiagState%drydep_frequency(i)= drydepf(1,1)
-                  DiagState%drydep_vel(i) = MetState%ZMID(1) * drydepf(1,1)
-
-                  ! apply drydep velocities/freq to chem species
-                  dqa = 0.
-                  SpecConc = ChemState%chemSpecies(ChemState%AeroDryDepIndex(i))%conc(1)
-                  dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*drydepf(1,1) * MetState%TSTEP)))
-                  ChemState%chemSpecies(ChemState%AeroDryDepIndex(i))%conc(1) = SpecConc - dqa
-
-               end do ! do i = 1, ChemState%nSpeciesAeroDryDep
-
-            endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
-
-         else if (DryDepState%SchemeOpt == 2) then
-            ! Run the DryDep Scheme - Wesely scheme
-            !-------------------------
-            if (ChemState%nSpeciesDryDep > 0) then
-
-               W10 = sqrt(MetState%U10M**2 + MetState%V10M**2)
-               ! loop through aerosol species
-               !TODO: nSpeciesAeroDryDep is actually all the drydep species, not just aerosols
-               do i = 1, ChemState%nSpeciesDryDep
+               if (ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_aerosol) then
 
                   radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
                   rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
-                  !These two can be changed in the function so as not to modify the original values in the States
-                  THIK = MetState%BXHEIGHT(1) !codespell:ignore
-                  F0 = ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_f0
 
-                  call CCPr_Scheme_Wesely( &
-                     MetState%SWGDN, &
-                     MetState%TS,       &
-                     MetState%SUNCOSmid,  &
-                     F0, &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_hstar, &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%mw_g/1000.0_fp, &
-                     radius,           &
-                     rhop,             &
-                     MetState%USTAR,   &
-                     MetState%OBK,     & !TODO: Need to add Obukhov length to met state
-                     MetState%CLDFRC,  &
-                     THIK,  & !codespell:ignore
-                     MetState%Z0,     &
-                     MetState%RH(1)/100.0_fp,     & !TODO: input is percent & RH is a array
-                     MetState%PS * 100.0_fp,     & !TODO: input is hPa; change to Pa
-                     W10,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%short_name,     &
-                     MetState%FRLAI,     & !TODO: whether LAI is separated to each land type?
-                     MetState%ILAND,     & !TODO: Need to add land use type to met state
-                     MetState%FRLANDUSE,     &
-                     ChemState%SeaSaltBinLower,     &
-                     ChemState%SeaSaltBinUpper,     &
-                     MetState%SALINITY,     & !TODO: Need to add salinity to met state
-                     MetState%TSKIN,     &
-                     MetState%IODIDE,   & !TODO: Need to read from ChemState in the future
-                     MetState%LON,     & !TODO: Need to add longitude to met state
-                     MetState%LAT,     &
-                     MetState%LUCNAME,  &
-                     DryDepState%co2_effect,     &
-                     DryDepState%co2_level,     &
-                     DryDepState%co2_reference,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_gas,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_dust,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_seasalt,     &
-                     MetState%IsSnow, MetState%IsIce, MetState%IsLand, &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzAerSnow,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_snow,     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_land,     &
-                     VD, DDFreq, RC )
+                  if (DryDepState%AeroSchemeOpt == 1) then
+                     ! Run the DryDep Scheme - GOCART scheme
+                     !-------------------------
+                     call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
+                        MetState%T,       &
+                        MetState%AIRDEN,  &
+                        MetState%ZMID,    &
+                        MetState%LWI,     &
+                        MetState%USTAR,   &
+                        MetSTate%PBLH,    &
+                        MetState%HFLUX,   &
+                        VON_KARMAN,       &
+                        Cp,               &
+                        g0,               &
+                        MetState%Z0H,     &
+                        drydepf,          &
+                        DryDepState%Resuspension, &
+                        radius,           &
+                        rhop,             &
+                        MetState%U10M,    &
+                        MetSTate%V10M,    &
+                        MetState%FRLAKE,  &
+                        MetState%GWETTOP, &
+                        RC)
 
-                  if (RC /= CC_SUCCESS ) then
-                     errMsg = 'Error in Wesely DryDeposition'
-                     CALL CC_Error( errMsg, RC, thisLoc )
-                     RETURN
-                  endif
+                     if (RC /= 0) then
+                        errMsg = 'Error in GOCART DryDeposition'
+                        CALL CC_Error( errMsg, RC, thisLoc )
+                     endif  !if (RC /= CC_SUCCESS)
 
-                  ! Fill Diagnostic Variables
-                  !--------------------------
-                  DryDepState%drydep_frequency(i) = DDFreq
-                  DryDepState%drydep_vel(i) = VD
-                  DiagState%drydep_frequency(i)= DDFreq
-                  DiagState%drydep_vel(i) = VD
+                     ! Fill Diagnostic Variables
+                     !--------------------------
+                     DryDepState%drydep_frequency(i) = drydepf(1,1)
+                     DryDepState%drydep_vel(i) = MetState%ZMID(1) * drydepf(1,1)
+                     DiagState%drydep_frequency(i)= drydepf(1,1)
+                     DiagState%drydep_vel(i) = MetState%ZMID(1) * drydepf(1,1)
 
-                  ! apply drydep velocities/freq to chem species
-                  dqa = 0.
-                  SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
-                  dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*DDFreq * MetState%TSTEP)))
-                  ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) = SpecConc - dqa
+                     ! apply drydep velocities/freq to chem species
+                     dqa = 0.
+                     SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
+                     dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*drydepf(1,1) * MetState%TSTEP)))
+                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) = SpecConc - dqa
 
-               end do ! do i = 1, ChemState%nSpeciesDryDep
+                  else if (DryDepState%AeroSchemeOpt == 2) then
+                     ! Run the DryDep Scheme - Zhang aerosol  scheme
+                     !-------------------------
 
-            endif  ! if (ChemState%nSpeciesDryDep > 0)
+                     call CCPr_Scheme_Zhang_Aero( &
+                        MetState%TS,       &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_hstar, &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%mw_g/1000.0_fp, &
+                        radius,           &
+                        rhop,             &
+                        MetState%USTAR,   &
+                        MetState%OBK,     & !TODO: Need to add Obukhov length to met state
+                        MetState%BXHEIGHT(1),  &
+                        MetState%Z0,     &
+                        MetState%RH(1)/100.0_fp,     & !TODO: input is percent & RH is a array
+                        MetState%PS * 100.0_fp,     & !TODO: input is hPa; change to Pa
+                        W10,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%short_name,     &
+                        MetState%ILAND,     & !TODO: Need to add land use type to met state
+                        MetState%FRLANDUSE,     &
+                        ChemState%SeaSaltBinLower,     &
+                        ChemState%SeaSaltBinUpper,     &
+                        MetState%LUCNAME,  &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_dust,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%is_seasalt,     &
+                        MetState%IsSnow, MetState%IsIce, &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzAerSnow,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_snow,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_land,     &
+                        VD, DDFreq, RC )
 
-         endif  ! if (DryDepState%SchemeOpt == 1 or 2)
+                     if (RC /= CC_SUCCESS ) then
+                        errMsg = 'Error in Zhang Aerosol DryDeposition'
+                        CALL CC_Error( errMsg, RC, thisLoc )
+                        RETURN
+                     endif
+
+                     ! Fill Diagnostic Variables
+                     !--------------------------
+                     DryDepState%drydep_frequency(i) = DDFreq
+                     DryDepState%drydep_vel(i) = VD
+                     DiagState%drydep_frequency(i)= DDFreq
+                     DiagState%drydep_vel(i) = VD
+
+                     ! apply drydep velocities/freq to chem species
+                     dqa = 0.
+                     SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
+                     dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*DDFreq * MetState%TSTEP)))
+                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) = SpecConc - dqa
+
+                  end if  !aeorsol scheme option end
+
+               else  !if gas or aerosol species
+
+                  if (DryDepState%GasSchemeOpt == 1) then
+                     ! Run the DryDep Scheme - Wesely scheme
+                     !-------------------------
+
+                     !It can be changed in the function so as not to modify the original values in the States
+                     F0 = ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_f0
+
+                     call CCPr_Scheme_Wesely( &
+                        MetState%SWGDN, &
+                        MetState%TS,       &
+                        MetState%SUNCOSmid,  &
+                        F0, &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_hstar, &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%mw_g/1000.0_fp, &
+                        MetState%USTAR,   &
+                        MetState%OBK,     & !TODO: Need to add Obukhov length to met state
+                        MetState%CLDFRC,  &
+                        MetState%BXHEIGHT(1),  &
+                        MetState%Z0,     &
+                        MetState%PS * 100.0_fp,     & !TODO: input is hPa; change to Pa
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%short_name,     &
+                        MetState%FRLAI,     & !TODO: whether LAI is separated to each land type?
+                        MetState%ILAND,     & !TODO: Need to add land use type to met state
+                        MetState%FRLANDUSE,     &
+                        MetState%SALINITY,     & !TODO: Need to add salinity to met state
+                        MetState%TSKIN,     &
+                        MetState%IODIDE,   & !TODO: Need to read from ChemState in the future
+                        MetState%LON,     & !TODO: Need to add longitude to met state
+                        MetState%LAT,     &
+                        MetState%LUCNAME,  &
+                        DryDepState%co2_effect,     &
+                        DryDepState%co2_level,     &
+                        DryDepState%co2_reference,     &
+                        MetState%IsSnow, MetState%IsIce, MetState%IsLand, &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzAerSnow,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_snow,     &
+                        ChemState%chemSpecies(ChemState%DryDepIndex(i))%dd_DvzMinVal_land,     &
+                        VD, DDFreq, RC )
+
+                     if (RC /= CC_SUCCESS ) then
+                        errMsg = 'Error in Wesely DryDeposition'
+                        CALL CC_Error( errMsg, RC, thisLoc )
+                        RETURN
+                     endif
+
+                     ! Fill Diagnostic Variables
+                     !--------------------------
+                     DryDepState%drydep_frequency(i) = DDFreq
+                     DryDepState%drydep_vel(i) = VD
+                     DiagState%drydep_frequency(i)= DDFreq
+                     DiagState%drydep_vel(i) = VD
+
+                     ! apply drydep velocities/freq to chem species
+                     dqa = 0.
+                     SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
+                     dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*DDFreq * MetState%TSTEP)))
+                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) = SpecConc - dqa
+
+                  end if  !gas scheme option end
+
+               end if !gas or aerosol species end
+
+            end do ! do i = 1, ChemState%nSpeciesDryDep
+
+         endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
 
          ! TO DO:  apply dry dep velocities/freq to chem species
-         write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
+         write(*,*) 'TODO: Need to figure out how to add back to the chemical species state'
 
       endif   !  if (DryDepState%Activate)
 
@@ -404,14 +425,14 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
 
-      DEALLOCATE( DryDepState%drydep_frequency, STAT=RC )
+      IF ( ALLOCATED( DryDepState%drydep_frequency ) ) DEALLOCATE( DryDepState%drydep_frequency, STAT=RC )
       IF ( RC /= CC_SUCCESS ) THEN
          ErrMsg = 'Could not Deallocate DryDepState%drydep_frequency'
          CALL CC_Error( ErrMsg, RC, ThisLoc )
          RETURN
       ENDIF
 
-      DEALLOCATE( DryDepState%drydep_vel, STAT=RC )
+      IF ( ALLOCATED( DryDepState%drydep_vel ) ) DEALLOCATE( DryDepState%drydep_vel, STAT=RC )
       IF ( RC /= CC_SUCCESS ) THEN
          ErrMsg = 'Could not Deallocate DryDepState%drydep_vel'
          CALL CC_Error( ErrMsg, RC, ThisLoc )

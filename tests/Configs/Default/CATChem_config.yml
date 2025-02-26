@@ -45,9 +45,10 @@ process:
     dust_beta: 1.0
   drydep:
     activate: true
-    scheme_opt: 1
+    aero_scheme_opt: 1
     resuspension: false
-    #CO2 effect on stomatal conductance in wesely (opt2)
+    #CO2 effect on stomatal conductance in wesely
+    gas_scheme_opt: 1
     co2_effect: true
     co2_level: 600.0
     co2_reference: 380.0
