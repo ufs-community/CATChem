@@ -33,31 +33,25 @@ contains
    !! \param F0          React. factor for oxidation depends on species
    !! \param HSTAR       Henry's law constant depends on species
    !! \param XMW         Molecular weight [kg/mol]
-   !! \param A_RADI      Aerosol radius [m]
-   !! \param A_DEN       Aerosol density [kg/m3]
    !! \param USTAR       Friction velocity [m/s]
    !! \param OBK         Monin-Obhukov length [m]
    !! \param CFRAC       Surface cloud fraction
    !! \param THIK        height of first model layer [m]
    !! \param ZO          Roughness length [m]
-   !! \param RHB         Relative humidity at surface [uniteless]
    !! \param PRESSU      Surface pressure [Pa]
-   !! \param W10         Wind speed at 10m [m/s]
    !! \param SPC         Species name
    !! \param XLAI        Leaf area index (Note: change to fraction LAI of each land type)
    !! \param ILAND       Land type ID in current grid box (mapped to deposition surface types
    !! \param IUSE        Fraction of gridbox area occupied by each land type
-   !! \param SeaSalt_Lower_Bin Lower bin boundary of sea salt radius [um]
-   !! \param SeaSalt_UPPER_Bin Upper bin boundary of sea salt radius [um]
    !! \param SALINITY    Salinity of the ocean
    !! \param TSKIN       Skin temperature
    !! \param IODIDE      Iodide concentration
    !! \param XLON        Longitude
    !! \param YLAT        Latitude
    !! \param LUC         name of land use category (one of OLSON, NOAH and IGBP for now)
-   !! \param IS_GAS      Flag for gas species
-   !! \param IS_DUST     Flag for dust species
-   !! \param IS_SEASALT  Flag for sea salt species
+   !! \param CO2_EFFECT  Flag for CO2 effect on Rs
+   !! \param CO2_LEVEL   CO2 level
+   !! \param CO2_REF     Reference CO2 level
    !! \param IS_SNOW     Flag for snow surface
    !! \param IS_ICE      Flag for ice surface
    !! \param IS_LAND     Flag for land surface

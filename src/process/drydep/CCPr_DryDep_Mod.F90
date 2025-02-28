@@ -2,7 +2,7 @@
 !!
 !! \defgroup catchem_drydep_process
 !!
-!! \author Lacey Holland
+!! \authors Lacey Holland, Wei Li
 !! \date 07/2024
 !!!>
 MODULE CCPR_DryDep_mod
