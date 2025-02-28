@@ -80,11 +80,11 @@ module CCPr_drydep_Common_Mod
       5, 7,   2,  4,  2,  2,  2,  5,  2,  2,  3,  5,  5,  9, 9,   9,  9,  8, 8,  8,   9,  11/
    DATA IDEP_NOAH / 3, 6, 3, 2, 2, 5, 5, 2, 5, 5, 9, 4, 10, 5, 1, 8, 11, 7, 7, 7 /
    DATA IDEP_IGBP / 3, 6, 3, 2, 2, 5, 5, 2, 5, 5, 9, 4, 10, 5, 1, 8, 11 / !same as NOAH without the last three tundra types
-   !roughness height is not used now and is read from MET directly
-   DATA IZO  /  10,  25000, 100,  10000, 10000, 10000, 10000, 100,  10, 2000, 100, 10,  1,   100,  1000,  1000,  1000, 100, 100, 2000, &
-      10000,  10000,10000, 10000, 10000, 10000, 10000,10000,1000,10000,1000,1000,2000,10000,10000, 1000,  100, 1000, 1000,1000, &
-      100,    100,   100, 2000,  100,    100,  1000, 1000, 1000, 1000,1000, 50,  50,  50,  2000,  2000, 2000, 2000, 1000, 100, &
-      2000,   2000, 10000, 2000,  1000,  1000,  1000, 1000, 1000, 10,  1000,1000,500, 100 /
+   !roughness height is not used now and is read from MET directly; so comment out
+   !DATA IZO  /  10,  25000, 100,  10000, 10000, 10000, 10000, 100,  10, 2000, 100, 10,  1,   100,  1000,  1000,  1000, 100, 100, 2000, &
+   !   10000,  10000,10000, 10000, 10000, 10000, 10000,10000,1000,10000,1000,1000,2000,10000,10000, 1000,  100, 1000, 1000,1000, &
+   !   100,    100,   100, 2000,  100,    100,  1000, 1000, 1000, 1000,1000, 50,  50,  50,  2000,  2000, 2000, 2000, 1000, 100, &
+   !   2000,   2000, 10000, 2000,  1000,  1000,  1000, 1000, 1000, 10,  1000,1000,500, 100 /
    ! Baldocchi polynomial coeffs
    DATA DRYCOEFF /-0.358, 3.02,  3.85, -0.0978,  -3.66,   12,   0.252,  -7.8,  0.226,  0.274,  &
       1.14,  -2.19,  0.261, -4.62,   0.685, -0.254, 4.37,  -0.266, -0.159, -0.206  /
@@ -192,7 +192,9 @@ contains
    !! \brief Computes the bulk surface resistance (Rc) for the gas species
    !!
    !!References:
-   !! Wesely [1989]
+   !! Wesely, M. L. "Parameterization of surface resistances to gaseous dry deposition in
+   !! regional-scale numerical models." Atmospheric environment 41 (2007): 52-63.
+   !! https://doi.org/10.1016/0004-6981(89)90153-4
    !!
    !! \param RADIAT      Solar radiation [W/m2]
    !! \param TEMP        Temperature [K]
@@ -1441,7 +1443,9 @@ contains
    !! \brief calculates the Ra and Rb term in the Wesely scheme
    !!
    !!References:
-   !! Wesely et al., 1989
+   !! Wesely, M. L. "Parameterization of surface resistances to gaseous dry deposition in
+   !! regional-scale numerical models." Atmospheric environment 41 (2007): 52-63.
+   !! https://doi.org/10.1016/0004-6981(89)90153-4
    !!
    !! \param TEMPK       Temperatue [K]
    !! \param PRESSU      Pressure [Pa]

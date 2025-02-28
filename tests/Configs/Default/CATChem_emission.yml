@@ -44,7 +44,7 @@ BVOC:
     scale: [1.0]
     map: [SABI]
   MYRC:
-    long_name: "Mycrene"
+    long_name: "Myrcene"
     scale: [1.0]
     map: [MYRC]
   CARE:
