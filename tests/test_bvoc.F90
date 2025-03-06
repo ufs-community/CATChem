@@ -130,7 +130,6 @@ program test_bvoc
 
    call print_info(Config, BvocState, MetState, DiagState, title)
    call assert(BvocState%TotalEmission > 0.0_fp, "Test BVOC species")
-   BvocState%TotalEmission = 0.0_fp
 
 
 contains

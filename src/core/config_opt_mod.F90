@@ -46,6 +46,7 @@ MODULE Config_Opt_Mod
    !! - `drydep_scheme` : Scheme option for drydep process
    !! - `drydep_resuspension` : Activate resuspension
    !! - `bvoc_activate` : Activate BVOC process
+   !! - `bvoc_scheme` : Scheme option for BVOC process
    !! - `megan_co2_inhib` : use CO2 inhibition for isoprene?
    !! - `megan_co2_conc_ppm` : If so, provide CO2 concentrations
    !!

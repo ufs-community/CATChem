@@ -7,9 +7,9 @@
 !! \date 07/2024
 !!!>
 MODULE CCPR_BVOC_mod
-   USE Precision_mod
-   USE Error_Mod
-   USE constants
+   USE Precision_mod, only : fp
+   USE Error_Mod,   Only : CC_Error, CC_SUCCESS, CC_FAILURE, CC_CheckVar
+   USE constants, only : PI_180
    USE DiagState_Mod, Only : DiagStateType
    USE MetState_Mod,  Only : MetStateType
    USE ChemState_Mod, Only : ChemStateType
@@ -31,7 +31,7 @@ CONTAINS
    !! \brief Initialize the CATChem BVOC module
    !!
    !! \param Config_Opt       CATCHem configuration options
-   !! \param BvocState       CATCHem Bvoc state
+   !! \param BvocState        CATCHem Bvoc state
    !! \param EmisState        CATCHem Emission state
    !! \param ChmState         CATCHem chemical state
    !! \param RC               Error return code
@@ -44,13 +44,13 @@ CONTAINS
       IMPLICIT NONE
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(ConfigType),  intent(in)    :: Config     ! Module options
+      TYPE(ConfigType),  intent(in)    :: Config        ! Module options
       !TYPE(ChemStateType),  intent(in)    :: ChemState  ! Chemical state
       TYPE(EmisStateType),  intent(in)    :: EmisState  ! Emission state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(BvocStateType), intent(inout) :: BvocState ! Bvoc state
+      TYPE(BvocStateType), intent(inout) :: BvocState   ! Bvoc state
       INTEGER,              intent(inout) :: RC         ! Success or failure
 
       ! Error handling
@@ -127,24 +127,24 @@ CONTAINS
 
          !------------------------------------
          ! Allocate emission species index
-         ALLOCATE( BvocState%BvocSpeciesIndex(BvocState%nBvocSpecies) )
+         ALLOCATE( BvocState%BvocSpeciesIndex(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
          ! Allocate emission speceis names
-         ALLOCATE( BvocState%BvocSpeciesName(BvocState%nBvocSpecies) )
+         ALLOCATE( BvocState%BvocSpeciesName(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
          ! Allocate emission flux
-         ALLOCATE( BvocState%EmissionPerSpecies(BvocState%nBvocSpecies) )
+         ALLOCATE( BvocState%EmissionPerSpecies(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
          ! Allocate normalized factor
          ! There should be a different normalization factor for each compound, but
          ! we calculate only 1 normalization factor for all compounds
-         ALLOCATE( BvocState%EmisNormFactor(1) )
+         ALLOCATE( BvocState%EmisNormFactor(1) , STAT=RC)
          CALL CC_CheckVar('BvocState%EmisNormFactor', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
@@ -181,7 +181,7 @@ CONTAINS
    SUBROUTINE CCPr_BVOC_Run( MetState, EmisState, DiagState, BvocState, RC )
 
       ! USE
-      USE CCPr_Scheme_Megan_Mod, ONLY: CCPr_Scheme_Megan  ! Megan scheme
+      USE CCPr_Scheme_MeganV21_Mod, ONLY: CCPr_Scheme_MeganV21  ! Megan scheme
       USE CCPr_BVOC_Common_Mod, Only : CALC_NORM_FAC
 
       IMPLICIT NONE
@@ -242,7 +242,7 @@ CONTAINS
          do s = 1, EmisState%Cats(BvocState%CatIndex)%nSpecies
 
             if (BvocState%SchemeOpt == 1) then ! MEGANv2.1
-               call CCPr_Scheme_Megan(                                   &
+               call CCPr_Scheme_MeganV21(                                &
                   EmisState%Cats(BvocState%CatIndex)%Species(s)%name,    &
                   EmisState%Cats(BvocState%CatIndex)%Species(s)%Flux(1), &
                   MetState%LAI,                 &
@@ -265,7 +265,7 @@ CONTAINS
                   MetState%D_BTW_M,             &
                   RC)
                if (RC /= CC_SUCCESS) then
-                  errMsg = 'Error in CCPr_Scheme_Megan'
+                  errMsg = 'Error in CCPr_Scheme_MeganV21'
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif
             else

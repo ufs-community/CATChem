@@ -51,13 +51,13 @@ module DiagState_Mod
       real(fp), allocatable :: drydep_frequency(:)
       real(fp), allocatable :: drydep_vel(:)
 
-      !add MEGAN historical variables
-      !TODO: this is better to be done in restart files if possible in the future
-      real(fp), allocatable :: T_LAST24H         !temperature of last 24 hours
-      real(fp), allocatable :: T_LASTXDAYS       !temperature of last NUM_DAYS
-      real(fp), allocatable :: PARDR_LASTXDAYS   !direct radiation of last NUM_DAYS
-      real(fp), allocatable :: PARDF_LASTXDAYS   !diffuse radiation of last NUM_DAYS
-      real(fp), allocatable :: PMISOLAI          !LAI of last 24 hours
+      ! MEGAN historical variables
+      ! TODO: this is better to be done in restart files if possible in the future
+      real(fp), allocatable :: T_LAST24H         !< temperature of last 24 hours
+      real(fp), allocatable :: T_LASTXDAYS       !< temperature of last NUM_DAYS
+      real(fp), allocatable :: PARDR_LASTXDAYS   !< direct radiation of last NUM_DAYS
+      real(fp), allocatable :: PARDF_LASTXDAYS   !< diffuse radiation of last NUM_DAYS
+      real(fp), allocatable :: PMISOLAI          !< LAI of last 24 hours
 
 
       ! Species Specific Variables

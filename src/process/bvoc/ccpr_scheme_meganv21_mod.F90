@@ -14,13 +14,13 @@
 !! \ingroup catchem_bvoc_process
 !!!>
 
-module CCPr_Scheme_Megan_Mod
+module CCPr_Scheme_MeganV21_Mod
 
    implicit none
 
    private
 
-   public :: CCPr_Scheme_Megan
+   public :: CCPr_Scheme_MeganV21
 
 contains
 
@@ -57,7 +57,7 @@ contains
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
-   subroutine CCPr_Scheme_Megan( &
+   subroutine CCPr_Scheme_MeganV21( &
       MeganSpecName,       &
       EmisPerSpec,         &
       LAI,                 &
@@ -173,7 +173,7 @@ contains
 
       ! Initialize parameters, gamma values, and return value
       errMsg = ''
-      thisLoc = ' -> at CCPr_Scheme_Megan (in CCPr_Scheme_Megan_mod.F90)'
+      thisLoc = ' -> at CCPr_Scheme_MeganV21 (in CCPr_Scheme_MeganV21_mod.F90)'
       RC = CC_SUCCESS
 
       CDEA       = 0.0_fp  !canopy add
@@ -198,7 +198,7 @@ contains
       BIDIR      = .FALSE.
 
       !----------------------------------
-      ! Begin SchemeCCPr_Scheme_Megan
+      ! Begin SchemeCCPr_Scheme_MeganV21
       !----------------------------------
 
       EmisPerSpec = 0.0_fp
@@ -437,6 +437,6 @@ contains
 
       return
 
-   end subroutine CCPr_Scheme_Megan
+   end subroutine CCPr_Scheme_MeganV21
 
-end module CCPr_Scheme_Megan_Mod
+end module CCPr_Scheme_MeganV21_Mod
