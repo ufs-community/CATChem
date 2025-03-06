@@ -158,8 +158,8 @@ CONTAINS
       call Config_Process_Bvoc(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_Bvoc"!'
-         CALL CC_Error( errMsg, RC, thisLoc  )
-         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL CC_Error( errMsg, RC, thisLoc )
+         CALL QFYAML_CleanUp( ConfigInput )
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       ENDIF
@@ -1574,8 +1574,9 @@ CONTAINS
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-         CALL CC_Error( errMsg, RC, thisLoc )
+         errMsg = TRIM( key ) // ' Not Found, Setting Default to 1'
+         CALL CC_Warning( errMsg, RC, thisLoc )
+         v_int = 1 ! default is one
       ENDIF
       Config%bvoc_scheme = v_int
 
@@ -1583,8 +1584,9 @@ CONTAINS
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to TRUE'
-         CALL CC_Error( errMsg, RC, thisLoc )
+         errMsg = TRIM( key ) // ' Not Found, Setting Default to TRUE'
+         CALL CC_Warning( errMsg, RC, thisLoc )
+         v_bool = .TRUE. ! default is true
       ENDIF
       Config%megan_co2_inhib = v_bool
 
@@ -1592,8 +1594,9 @@ CONTAINS
       v_real = MISSING_REAL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to 390.0'
-         CALL CC_Error( errMsg, RC, thisLoc )
+         errMsg = TRIM( key ) // ' Not Found, Setting Default to 390.0'
+         CALL CC_Warning( errMsg, RC, thisLoc )
+         v_real = 390.0_fp ! default is 390 ppm
       ENDIF
       Config%megan_co2_conc_ppm = v_real
 

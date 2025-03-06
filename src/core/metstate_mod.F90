@@ -206,14 +206,6 @@ MODULE MetState_Mod
       integer           :: DOY                !< Day of year
       real(fp)          :: LocalHour          !< Local hour
       real(fp)          :: D_BTW_M            !< Days between mid-months
-      !now move to the online calculation of EFs for these seven species
-      !real(fp)          :: AEF_ISOP           !< Emission factor of ISOP read from file
-      !real(fp)          :: AEF_MBOX           !< Emission factor of MBOX read from file
-      !real(fp)          :: AEF_BPIN           !< Emission factor of BPIN read from file
-      !real(fp)          :: AEF_CARE           !< Emission factor of CARE read from file
-      !real(fp)          :: AEF_LIMO           !< Emission factor of LIMO read from file
-      !real(fp)          :: AEF_OCIM           !< Emission factor of OCIM read from file
-      !real(fp)          :: AEF_SABI           !< Emission factor of SABI read from file
 
       !some met fields need for Wesely dry deposition but not included yet
       !---------------------------------------

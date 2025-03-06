@@ -83,13 +83,13 @@ module CATChem
    use CCPr_DryDep_mod, only: cc_drydep_run => CCPr_DryDep_Run           !< DryDep Process Run Routine
    use CCPr_DryDep_mod, only: cc_drydep_finalize => CCPr_DryDep_Finalize !< DryDep Process Finalization Routine
 
-   ! Megan
-   use CCPr_Bvoc_Common_Mod, only: BvocStateType                              !< Megan State
-   use CCPr_Bvoc_mod, only: cc_bvoc_init => CCPr_Bvoc_Init                   !< Megan Process Initialization Routine
-   use CCPr_Bvoc_mod, only: cc_bvoc_run => CCPr_Bvoc_Run                     !< Megan Process Run Routine
-   use CCPr_Bvoc_mod, only: cc_bvoc_finalize => CCPr_Bvoc_Final              !< Megan Process Finalization Routine
+   ! BVOC emissions
+   use CCPr_Bvoc_Common_Mod, only: BvocStateType                             !< BVOC State
+   use CCPr_Bvoc_mod, only: cc_bvoc_init => CCPr_Bvoc_Init                   !< BVOC Process Initialization Routine
+   use CCPr_Bvoc_mod, only: cc_bvoc_run => CCPr_Bvoc_Run                     !< BVOC Process Run Routine
+   use CCPr_Bvoc_mod, only: cc_bvoc_finalize => CCPr_Bvoc_Final              !< BVOC Process Finalization Routine
 
-   !
+
    implicit none
 
    public
