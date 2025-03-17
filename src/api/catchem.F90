@@ -83,7 +83,7 @@ module CATChem
    use CCPr_DryDep_mod, only: cc_drydep_run => CCPr_DryDep_Run           !< DryDep Process Run Routine
    use CCPr_DryDep_mod, only: cc_drydep_finalize => CCPr_DryDep_Finalize !< DryDep Process Finalization Routine
    ! SUVolcanicEmissions
-   use CCPr_SUVolcanicEmissions_mod, only: SUVolcanicEmissionsStateType                            !< SUVolcanicEmissions State
+   use CCPr_SUVolcanicEmissions_mod, only: SUVolcanicStateType                                         !< SUVolcanic State
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_init => CCPr_SUVolcanicEmissions_Init         !< SUVolcanicEmissions Process Initialization Routine
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_run => CCPr_SUVolcanicEmissions_Run           !< SUVolcanicEmissions Process Run Routine
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_finalize => CCPr_SUVolcanicEmissions_Finalize !< SUVolcanicEmissions Process Finalization Routine

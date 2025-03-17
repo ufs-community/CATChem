@@ -22,3 +22,10 @@ dust:
   DU10:
     long_name: "Dust Species Coarse Mode"
     map: ["dust1", "dust2"]
+SUVOLCANIC:
+  SO2:
+    long_name: "Sulfur Dioxide"
+    scale: [1.0]
+    map: ["SO2"]
+    plumerise_opt: 1
+  

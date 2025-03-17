@@ -9,7 +9,7 @@
 !! Geosci. Model Development, 17, 14431468, 2024
 !! https://doi.org/10.5194/gmd-17-1443-2024
 !!
-!! \author Lacey Holland
+!! \author Lacey Holland and Wei Li
 !! \date 07/2024
 !!!>
 module CCPr_Scheme_GOCART_SUVolcanicEmissions_Mod
@@ -24,21 +24,29 @@ contains
 
    !> \brief Brief description of the subroutine
    !!
-   !! \param MetState     Meteorological Variables
-   !! \param DiagState    Diagnostic Variables
-   !! \param EmisState    Emission State variables
-   !! \param SUVolcanicEmissions  SUVolcanicEmissions Variables
+   !! \param km          Number of vertical levels
+   !! \param cdt         Model timestep [sec]
+   !! \param VStart      Emissions Start time [sec]
+   !! \param VEnd        Emissions end time [sec]
+   !! \param nVolc       Number of volcanic sources
+   !! \param iPoint      Grid cell index i of each volcanic source
+   !! \param jPoint      Grid cell index j of each volcanic source
+   !! \param hms         Current model time [sec]
+   !! \param g0          Gravity [m/s^2]
+   !! \param zbox        Geopotential Height difference [m] for layer
+   !! \param delp        Pressure Thickness for layer [Pa]
+   !! \param area        Area of grid cell [m^2]
+   !! \param vSO2        Volcanic emissions  [kg S/s]
+   !! \param nSO2        Index of SO2 relative to other sulfate tracers
+   !! \param SO2         SO2 emissions [kg kg-1]
+   !! \param SU_emis     SU emissions, kg/m2/s
+   !! \param vCloud      Top elevation of emissions [m]
+   !! \param vElev       Bottom elevation of emissions [m]
+   !! \param vLat        Latitude specified in file [degree]
+   !! \param VLon        Longitude specified in file [degree]
    !! \param RC           Success or Failure
    !!
-   !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
-
-   ! Need to change this so that it includes only what is necessary
-   !  May need to do something to connect iPoint, jPoint to vlat, vlon
-   ! should only run this where we know there is a volcano????
-   !subroutine CCPr_Scheme_GOCART_SUVolcanicEmissions( MetState, DiagState, EmisState, &
-   !   SUVolcanicEmissionsState, &
-   !   RC)
    subroutine CCPr_Scheme_GOCART_SUVolcanicEmissions(km, &
       cdt, &
       VStart, &
@@ -46,8 +54,7 @@ contains
       nVolc, &
       iPoint, &
       jPoint, &
-   !YMD, &
-      HMS, &
+      hms, &
       g0, &
       zbox, &
       delp, &
@@ -55,7 +62,6 @@ contains
       vSO2, &
       nSO2, &
       SO2, &
-      SU_emis, &
       vCloud, &
       vElev, &
       vLat, &
@@ -63,57 +69,41 @@ contains
       RC )
 
       USE GOCART2G_Process, only: SUVolcanicEmissions
-      USE ReadEmissions, only:  ReadASCIIPointEmissions
+      USE PrepMetVars, only:  PrepMetVarsForGOCARTSUV
 
       IMPLICIT NONE
 
       ! Arguments
-      INTEGER, intent(in)              :: km                ! number of vertical levels
-
-      INTEGER, intent(inout),dimension(1)   :: vStart      ! Emissions Start time [sec]
-      INTEGER, intent(inout),dimension(1)   :: vEnd        ! Emissions end time [sec]
+      INTEGER, intent(in)                   :: km          ! number of vertical levels
+      REAL, intent(in)                      :: cdt         ! model timestep [sec]
+      INTEGER, intent(inout),dimension(:)   :: vStart      ! Emissions Start time [sec]
+      INTEGER, intent(inout),dimension(:)   :: vEnd        ! Emissions end time [sec]
       INTEGER, intent(inout)                :: nVolc       ! number of volcanic sources
-      INTEGER, intent(inout)                :: rc          ! error code - is this inout or out???
-      INTEGER, intent(inout),dimension(1)   :: iPoint, jPoint ! sub-domain - we only run this at the place/time of eruption??
+      INTEGER, intent(inout),dimension(:)   :: iPoint, jPoint ! grid cell index of each volcanic source
       !INTEGER, intent(in)                  :: YMD
-      INTEGER, intent(in)                   :: HMS    ! current model time [sec]
-      INTEGER, intent(inout)                :: nSO2     ! index of SO2 relative to other sulfate tracers
-
-
-      REAL, intent(in)                      :: g0
-      REAL, intent(in)                      :: cdt               ! model timestep [sec]
-
+      INTEGER, intent(in)                   :: hms    ! current model time [sec]
+      REAL, intent(in)                      :: g0      
+      REAL, allocatable, DIMENSION(:) :: zbox  ! geopotential Height difference [m] for layer
+      REAL, allocatable, DIMENSION(:) :: delp   ! Pressure Thickness for layer [Pa]
       REAL, intent(inout),dimension(:,:)    :: area     ! area of grid cell [m^2]
-      REAL, intent(inout),dimension(:)      :: vSO2   ! volcanic emissions  [kg]
-      !!!!  Below can be figured out from ChemSpeciesState%nSpeciesSUVolcanicIndex???
-      REAL, intent(inout),dimension(:,:,:),pointer  :: SO2       ! SO2 [kg kg-1]
-      REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
+      REAL, intent(inout),dimension(:)      :: vSO2   ! volcanic emissions  [kg S/s]
+      INTEGER, intent(in)                   :: nSO2     ! index of SO2 relative to other sulfate tracers
+      REAL, intent(inout),dimension(:,:,:),pointer  :: SO2       ! SO2 emissions [kg kg-1]
+      !REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
       REAL, intent(inout),dimension(:)        :: vCloud    ! top elevation of emissions [m]
       REAL, intent(inout),dimension(:)        :: vElev     ! bottom elevation of emissions [m]
       REAL, intent(inout),dimension(:)        :: vLat     ! latitude specified in file [degree]
       REAL, intent(inout),dimension(:)        :: VLon     ! longitude specified in file [degree]
+      INTEGER, intent(inout)                :: rc          ! error code
 
-      !CHARACTER                :: fname
-      REAL, DIMENSION(:,:),pointer    :: SO2EMVN   ! non-explosive volcanic emissions [kg m-2 s-1]
-      REAL, DIMENSION(:,:),pointer    :: SO2EMVE   ! explosive volcanic emissions [kg m-2 s-1]
-      REAL, allocatable, DIMENSION(:) :: delp   ! Pressure Thickness for layer [Pa]
-      REAL, allocatable, DIMENSION(:) :: zbox  ! geopotential Height difference [m] for layer
-
-      !TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
-      !TYPE(DiagStateType), INTENT(IN) :: DiagState       ! DiagState Instance
-      !TYPE(SUVolcanicEmissionsStateType), INTENT(IN) :: SUVolcanicEmissionsState       ! SUVolcanicEmissionsState Instance
-
-      ! should these be pulled from ChemSpeciesState and the species YAML?
+      !local variables
+      REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions [kg/m2/s; not really allocated]
+      REAL, DIMENSION(:,:),pointer    :: SO2EMVN   ! non-explosive volcanic emissions [kg m-2 s-1; not really allocated]
+      REAL, DIMENSION(:,:),pointer    :: SO2EMVE   ! explosive volcanic emissions [kg m-2 s-1; not really allocated]
       REAL, parameter :: fMassSulfur = 32.  !  gram molecular weights of species
       REAL, parameter :: fMassSO2 = 64.     !  gram molecular weights of species
-      !REAL, parameter :: fMassSO4 = 96.     !  gram molecular weights of species
-      !CHARACTER(len=7), parameter :: label='volcano'
-
-
-      ! Local Variables
       real, pointer :: GOCART_ZBOX(:,:,:)
       real, pointer :: GOCART_DELP(:,:,:)
-
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
 
@@ -124,30 +114,23 @@ contains
       RC = 0
 
       ! transform data for GOCART SUVolcanicEmissions call
-
-      !  Need to re-write for individual variables
-      ! put into the src/core directory as a module???
       call PrepMetVarsForGOCARTSUV(km,  &
          delp,            &
          zbox,           &
          GOCART_DELP,     &
          GOCART_ZBOX)
 
-      !------------------
-      ! Begin Scheme Code
-      !------------------
-
-      !!! I don't know if we need the line below, if we are just reading in??
+      !convert SO2 unit from Kg S to Kg SO2
       vSO2 = vSO2 * fMassSO2 / fMassSulfur
-
-!!!!!!!!!!!!!!!!!!!!! NEED TO EDIT ABOVE !!!!!!!!!!!!!!!!!!!!!
-!!!! Most of the volcanic stuff, is going directly into the call below
-
-!! Need to replace below.  Not sure if ipoint, jpoint coordinates are necessary
+      
+      !call gocart emission function
       if (nVolc > 0) then
 
-         iPoint(1) = 0
-         jPoint(1) = 0
+         !iPoint(1) = 0
+         !jPoint(1) = 0
+
+         allocate(SU_emis(1,1,nSO2)) !TODO: nSO2 =1 for now
+         allocate(SO2EMVN, SO2EMVE, mold=area)
 
          call SUvolcanicEmissions (nVolc, vStart, vEnd, vSO2, &
             vElev, vCloud, &
@@ -160,6 +143,9 @@ contains
 
       if (associated(GOCART_DELP)) nullify(GOCART_DELP)
       if (associated(GOCART_zbox)) nullify(GOCART_zbox)
+      if (associated(SU_emis)) nullify(SU_emis)
+      if (associated(SO2EMVN)) nullify(SO2EMVN)
+      if (associated(SO2EMVE)) nullify(SO2EMVE)
 
 
    end subroutine CCPr_Scheme_GOCART_SUVolcanicEmissions

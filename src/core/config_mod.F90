@@ -1412,6 +1412,7 @@ CONTAINS
       ! Scalars
       LOGICAL                      :: v_bool
       INTEGER                      :: v_int
+      CHARACTER(LEN=1055)           :: v_str
 
       ! Strings
       CHARACTER(LEN=255)           :: thisLoc
@@ -1428,7 +1429,7 @@ CONTAINS
       errMsg = ''
 
       ! TODO #105 Fix reading of config file
-      key   = "process%SUVolcanicEmissions%activate"
+      key   = "process%suvolcanic%activate"
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1436,10 +1437,10 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%SUVolcanicEmissions_activate = v_bool
+      Config%suvolcanic_activate = v_bool
 
 
-      key   = "process%SUVolcanicEmissions%scheme_opt"
+      key   = "process%suvolcanic%scheme_opt"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1447,13 +1448,23 @@ CONTAINS
          v_int = 1 ! default is one
          RETURN
       ENDIF
-      Config%SUVolcanicEmissions_scheme = v_int
+      Config%suvolcanic_scheme = v_int
+
+      key   = "process%suvolcanic%filedir"
+      v_str = MISSING_STR
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Warning( errMsg, RC, thisLoc )
+      ENDIF
+      Config%suvolcanic_filedir = TRIM( v_str )
 
 
-      write(*,*) "SUVolcanicEmissions Configuration"
+      write(*,*) "SUVolcanic Configuration"
       write(*,*) '------------------------------------'
-      write(*,*) 'Config%SUVolcanicEmissions_activate = ', Config%SUVolcanicEmissions_activate
-      write(*,*) 'Config%SUVolcanicEmissions_scheme = ', Config%SUVolcanicEmissions_scheme
+      write(*,*) 'Config%suvolcanic_activate = ', Config%suvolcanic_activate
+      write(*,*) 'Config%suvolcanic_scheme = ', Config%suvolcanic_scheme
+      write(*,*) 'Config%suvolcanic_filedir = ', Config%suvolcanic_filedir
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_SUVolcanicEmissions

@@ -10,6 +10,7 @@ MODULE ReadEmissions
    private
 
    public :: ReadASCIIPointEmissions
+   public :: VolcanicEmissionData
 
 
    ! Define a derived type to hold the data for each emission entry
@@ -25,11 +26,11 @@ MODULE ReadEmissions
       character(len=255) :: label
    end type VolcanicEmissionData
 
-   integer :: rc
-   character(len=1055) :: filename
-   character(len=1055) :: label
+   !integer :: rc
+   !character(len=1055) :: filename
+   !character(len=1055) :: label
 
-   type(VolcanicEmissionData), allocatable :: VolcanicEmiss(:)
+   !type(VolcanicEmissionData), allocatable :: VolcanicEmiss(:)
 
    !filename="./so2_volcanic_emissions_Carns.20220101.rc"
    !label="volcano"
@@ -50,19 +51,19 @@ contains
       integer :: i
       character(1056) :: line
       character(len=1055), intent(in) :: filename
-      character(len=1055), intent(in) :: label
+      character(len=7), intent(in) :: label
       character(len=255) :: errmsg
 
       type(VolcanicEmissionData), allocatable :: VolcanicEmissions(:)
       type(VolcanicEmissionData), allocatable :: temp_emissions(:)
-      allocate(VolcanicEmiss(9))
+      !allocate(VolcanicEmiss(9))
 
 
       ! Open the file
       open(unit=10, file=filename, status='old', action='read', iostat=rc)
 
       if (rc /= 0) then
-         print *, "Error opening file:", filename, "  RC=", rc
+         print *, "Error opening file: ", filename, "  RC=", rc
          return
       end if
 
@@ -81,7 +82,7 @@ contains
          if (line(1:1)=="#") then
             num_skip = num_skip + 1
             continue
-         else if (line==trim(label)//"::") then
+         else if (trim(line)==trim(label)//"::") then
             num_skip = num_skip + 1
             continue
          else if (line(1:2)=="::") then
@@ -123,7 +124,6 @@ contains
       temp_emissions%label = trim(label)
 
       VolcanicEmissions = temp_emissions
-
 
    end subroutine ReadASCIIPointEmissions
 
