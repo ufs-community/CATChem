@@ -37,7 +37,7 @@ MODULE CCPR_SUVolcanicEmissions_mod
    !! \param CatIndex Index of emission category in EmisState
    !! \param TotalEmission Total emission of all species at each level [kg/m^2/s]
    !! \param EmissionPerSpecies Emission per species at each level [kg/m^2/s]
-   !! \param FileDir Input file directory for reading in emissions 
+   !! \param FileDir Input file directory for reading in emissions
    !!
    !! \ingroup core_modules
    !!!>
@@ -55,7 +55,7 @@ MODULE CCPR_SUVolcanicEmissions_mod
       ! Process Specific Parameters
       real(fp), pointer               :: TotalEmission(:)          !< Total emission of all species at each level [kg/m^2/s]
       real(fp), pointer               :: EmissionPerSpecies(:,:)   !< Emission per species at each level          [kg/m^2/s]
-      character(len=1055)             :: FileDir                  !< Input file directory for reading in emissions 
+      character(len=1055)             :: FileDir                  !< Input file directory for reading in emissions
 
 
    END TYPE SUVolcanicStateType
@@ -147,7 +147,7 @@ CONTAINS
 
          ! Allocate emission flux
          ALLOCATE( SUVolcanicState%EmissionPerSpecies(SUVolcanicState%nSUVolcanicSpecies, &
-                   SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
+            SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
@@ -240,10 +240,10 @@ CONTAINS
                ymd = MetState%YMD; hms = MetState%HMS
                write(ymd_str, "(i0)") ymd ! converting integer to string
                fname = TRIM(SUVolcanicState%FileDir) // '.' // TRIM(ymd_str) // '.rc'
-               call ReadASCIIPointEmissions (fname, label, VolcanicEmis, RC) 
+               call ReadASCIIPointEmissions (fname, label, VolcanicEmis, RC)
                nVolc = VolcanicEmis(1)%nPts
                allocate(vSO2(nVolc), vCloud(nVolc), vElev(nVolc), vLat(nVolc), VLon(nVolc))
-               vSO2 = VolcanicEmis(:)%VEmis  
+               vSO2 = VolcanicEmis(:)%VEmis
                vCloud = VolcanicEmis(:)%Vtop
                vElev = VolcanicEmis(:)%Vbase
                vLon = VolcanicEmis(:)%Vlon
@@ -257,13 +257,13 @@ CONTAINS
                allocate(vStart(nVolc), vEnd(nVolc))
                vStart = ymd  + 000000
                vEnd =   ymd  + 235959
-               hms = ymd + hms 
+               hms = ymd + hms
                !set area and SO2
-               allocate(area(1,1), SO2(1,1, MetState%NLEVS)) 
+               allocate(area(1,1), SO2(1,1, MetState%NLEVS))
                area(1,1) = MetState%AREA_M2
 
                ! loop through all species. Right now, GOCART only has SO2
-               do i = 1, SUVolcanicState%nSUVolcanicSpecies 
+               do i = 1, SUVolcanicState%nSUVolcanicSpecies
 
                   !Need to look up which is the index for SO2 concentrations
                   !TODO: is level index reversed in the GOCART???
@@ -282,24 +282,24 @@ CONTAINS
                      vSO2, &    !volcanic contribution to so2 emissions
                      nSO2, &    !tracer number for so2 within sulfur trace
                      SO2, &     !total so2 concentration intent(inout)
-                     !SU_emis, & !total emission rate for each sulfur species, !SU_emis(:,:,nSO2), nSO2=2, nDMS=1, nSO4=3, nMSA=4
+                  !SU_emis, & !total emission rate for each sulfur species, !SU_emis(:,:,nSO2), nSO2=2, nDMS=1, nSO4=3, nMSA=4
                      vCloud, &
                      vElev, &
                      vLat, &
                      VLon, &
                      RC)
                   !  nso2 is used to define SU_emis:  SU_emis(:,:,nSO2). We only use SO2 for now and assign nSO2=1
-                  
+
                   !put it back to SUVolcanicState
                   SUVolcanicState%SUVolcanicSpeciesIndex(i) = i
                   SUVolcanicState%SUVolcanicSpeciesName(i) = EmisState%Cats(SUVolcanicState%CatIndex)%Species(i)%name
-                  !TODO: convert unit from kg kg-1 to kg m-2 s-1; 
-                  !TODO: The test only has 8 levels and we give EmissionPerSpecies 28 levels from GridState. In real run, 
+                  !TODO: convert unit from kg kg-1 to kg m-2 s-1;
+                  !TODO: The test only has 8 levels and we give EmissionPerSpecies 28 levels from GridState. In real run,
                   ! "1:8" should be changed to ":" for all the vertical levels.
                   SUVolcanicState%EmissionPerSpecies(i,1:8) = SO2(1, 1, :) * MetState%DELP / g0 / MetState%TSTEP
                   SUVolcanicState%TotalEmission(:) = SUVolcanicState%TotalEmission(:) + SUVolcanicState%EmissionPerSpecies(i,:)
 
-               end do ! do i = 1, SUVolcanicState%nSUVolcanicSpecies 
+               end do ! do i = 1, SUVolcanicState%nSUVolcanicSpecies
 
             endif  ! if (SUVolcanicState%nSUVolcanicSpecies  > 0)
 

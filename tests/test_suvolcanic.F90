@@ -90,7 +90,7 @@ program test_suvolcanic
    allocate(MetState%DELP(MetState%NLEVS))
    MetState%DELP(1:MetState%NLEVS)= (/25000, 20000, 15000, 110000, 10000, 9000,5000,4000/)! Need to change to something more reasonable and check units.
    MetState%BXHEIGHT(1:MetState%NLEVS) =(/10000, 8000, 7000, 5000, 3000, 1000, 100, 50/)  ! temporary, change to something more reasonable and check units
-   
+
    !SUVolcanicState%SchemeOpt = 1
 
    ! Allocate DiagState
