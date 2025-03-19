@@ -46,7 +46,8 @@ module ChemState_Mod
    !! \param GasIndex: An array containing the gas species index.
    !! \param DustIndex: An array containing the dust species index.
    !! \param SeaSaltIndex: An array containing the sea salt species index.
-   !! \param chemSpecies: A 2-D array containing the concentration of each species.
+   !! \param DryDepIndex: An array containing the dry deposition species index.
+   !! \param SpeciesNames: A character array containing the names of the species.
    !!
    !! \ingroup core_modules
    !!!>
@@ -66,7 +67,6 @@ module ChemState_Mod
       INTEGER              :: nSpeciesTracer    !< Number of Tracer Species
       INTEGER              :: nSpeciesDust      !< Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
-      INTEGER              :: nSpeciesSUVolcanic !< Number of Volcanic Sulfur Species
       INTEGER, ALLOCATABLE :: SpeciesIndex(:)   !< Total Species Index
       INTEGER, ALLOCATABLE :: TracerIndex(:)    !< Tracer Species Index
       INTEGER, ALLOCATABLE :: AeroIndex(:)      !< Aerosol Species Index
@@ -74,7 +74,6 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   !< SeaSalt Species Index
       INTEGER, ALLOCATABLE :: DryDepIndex(:)   !< SeaSalt Species Index
-      INTEGER, ALLOCATABLE :: SUVolcanicIndex(:)   !< Volcanic sulfur Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  !< Species Names
 
       !---------------------------------------------------------------------
@@ -185,7 +184,6 @@ CONTAINS
       ChemState%nSpeciesGas = 0
       ChemState%nSpeciesSeaSalt = 0
       ChemState%nSpeciesTracer = 0
-      ChemState%nSpeciesSUVolcanic = 0
 
       ! Count number of species
       do i = 1, ChemState%nSpecies
@@ -206,9 +204,6 @@ CONTAINS
          endif
          if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true.) then
             ChemState%nSpeciesAeroDryDep = ChemState%nSpeciesAeroDryDep + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_suvolcanic .eqv. .true.) then
-            ChemState%nSpeciesSUVolcanic = ChemState%nSpeciesSUVolcanic + 1
          endif
       enddo
 
@@ -244,7 +239,6 @@ CONTAINS
       integer :: seasalt_index   ! Current Seas Salt Index
       integer :: tracer_index    ! Current Tracer Index
       integer :: drydep_index    ! Current DryDep Index
-      integer :: suvolcanic_index    ! Current SUVolcanic Index
 
 
       ! Initialize
@@ -260,7 +254,6 @@ CONTAINS
       seasalt_index = 1
       tracer_index = 1
       drydep_index = 1
-      suvolcanic_index = 1
 
       ! Allocate index arrays
       ALLOCATE(Chemstate%AeroIndex(ChemState%nSpeciesAero), STAT=RC)
@@ -305,13 +298,6 @@ CONTAINS
          RETURN
       ENDIF
 
-      ALLOCATE(Chemstate%SUVolcanicIndex(ChemState%nSpeciesSUVolcanic), STAT=RC)
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error allocating Chemstate%SUVolcanicIndex'
-         call CC_Error(errMsg, RC, thisLoc)
-         RETURN
-      ENDIF
-
       ! Find indices for species groups
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
@@ -337,10 +323,6 @@ CONTAINS
          if (ChemState%ChemSpecies(n)%is_drydep .eqv. .true.) then
             Chemstate%DryDepIndex(drydep_index) = n
             drydep_index = drydep_index + 1
-         endif
-         if (ChemState%ChemSpecies(n)%is_suvolcanic .eqv. .true.) then
-            Chemstate%SUVolcanicIndex(suvolcanic_index) = n
-            suvolcanic_index = suvolcanic_index + 1
          endif
       enddo
 

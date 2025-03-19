@@ -578,8 +578,6 @@ CONTAINS
       write(*,*) '|  number of tracers:  ', ChemState%nSpeciesTracer
       write(*,*) '|  number of dust:     ', ChemState%nSpeciesDust
       write(*,*) '|  number of seasalt:  ', ChemState%nSpeciesSeaSalt
-      write(*,*) '|  number of volcanic:  ', ChemState%nSpeciesSUVolcanic
-
       write(*,*) '========================================================='
 
    END SUBROUTINE Config_Chem_State
