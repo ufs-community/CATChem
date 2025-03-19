@@ -48,6 +48,8 @@ MODULE Config_Opt_Mod
    !! - `suvolcanic_activate` : Activate SU Volcanic process
    !! - `suvolcanic_scheme` : Scheme option for SU Volcanic process
    !! - `suvolcanic_filedir` : File directory for SU Volcanic process
+   !! - `DMS_activate` : Activate DMS emissions
+   !! - `DMS_scheme` : Scheme option DMS process
    !!
    !! \ingroup core_modules
    !!!>
@@ -109,6 +111,10 @@ MODULE Config_Opt_Mod
       LOGICAL                     :: suvolcanic_activate
       INTEGER                     :: suvolcanic_scheme
       character(len=1055)         :: suvolcanic_filedir
+
+      ! DMS Process
+      LOGICAL                     :: DMS_activate
+      INTEGER                     :: DMS_scheme
 
    END TYPE ConfigType
 
@@ -188,6 +194,10 @@ CONTAINS
       Config%suvolcanic_activate = .FALSE.
       Config%suvolcanic_scheme = 1
       Config%suvolcanic_filedir = ' '
+
+      ! DMS Process
+      Config%DMS_activate = .FALSE.
+      Config%DMS_scheme = 1
 
    END SUBROUTINE Set_Config
    !> \brief Cleanup the Config options

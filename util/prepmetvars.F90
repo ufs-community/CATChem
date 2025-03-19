@@ -1,11 +1,14 @@
-module PrepMetVars
+
+module PrepMetVars_Mod
 
    implicit none
 
    private
 
    public :: PrepMetVarsForGOCARTSUV
-   public :: PrepAnyMetVarForGOCART
+   public :: INCR_REAL_RANK3, INCR_REAL_RANK2
+   public :: INCR_INT_RANK3, INCR_INT_RANK2
+
 
 CONTAINS
 
@@ -51,40 +54,44 @@ CONTAINS
       GOCART_DELP(1,1,:) = delp !  pressure  in middle of layer
       GOCART_ZBOX(1,1,:) = zbox    ! mid layer geopotential height [m]
 
-
    end subroutine PrepMetVarsForGOCARTSUV
 
 
-   subroutine PrepAnyMetVarForGOCART(km,        &
-      var,            &
-      GOCART_VAR)
+   SUBROUTINE INCR_REAL_RANK2(ARR, RESULT)
+      REAL, INTENT(IN), TARGET :: ARR
+      REAL, INTENT(INOUT), POINTER :: RESULT(:,:)
 
-      IMPLICIT NONE
+      ALLOCATE(RESULT(1, 1))
+      RESULT(1,1)=ARR
 
-      ! INPUTS
-      INTEGER, intent(in)                     :: km     ! number of vertical levels
-      REAL, intent(in), DIMENSION(:), target :: var   ! any variable
-      REAL, pointer, DIMENSION(:,:,:) :: GOCART_3D_VAR
-      REAL, pointer, DIMENSION(:,:) :: GOCART_2D_VAR
-      REAL, pointer, DIMENSION(:,:,:) :: GOCART_VAR
+   END SUBROUTINE INCR_REAL_RANK2
+
+   SUBROUTINE INCR_REAL_RANK3(ARR, RESULT)
+      REAL, INTENT(IN), TARGET :: ARR(:)
+      REAL, INTENT(INOUT), POINTER :: RESULT(:,:,:)
+
+      ALLOCATE(RESULT(1, 1, SIZE(ARR, 1)))
+      RESULT(1,1,:)=ARR
+
+   END SUBROUTINE INCR_REAL_RANK3
+
+   SUBROUTINE INCR_INT_RANK2(ARR, RESULT)
+      INTEGER, INTENT(IN), TARGET :: ARR
+      INTEGER, INTENT(INOUT), POINTER :: RESULT(:,:)
+
+      ALLOCATE(RESULT(1, 1))
+      RESULT(1,1)=ARR
+
+   END SUBROUTINE INCR_INT_RANK2
+
+   SUBROUTINE INCR_INT_RANK3(ARR, RESULT)
+      INTEGER, INTENT(IN), TARGET :: ARR(:)
+      INTEGER, INTENT(INOUT), POINTER :: RESULT(:,:,:)
+
+      ALLOCATE(RESULT(1, 1, SIZE(ARR, 1)))
+      RESULT(1,1,:)=ARR
+
+   END SUBROUTINE INCR_INT_RANK3
 
 
-      if (km == 0 ) then
-         ! point
-         allocate(GOCART_2D_VAR(1, 1))
-         Allocate(GOCART_VAR(1,1,1))
-         GOCART_2D_VAR(1,1) = var(1)
-         GOCART_2D_VAR => GOCART_VAR(:,:,1)
-      else
-         ! column
-         allocate(GOCART_3D_VAR(1, 1, km))
-         Allocate(GOCART_VAR(1,1,km))
-         GOCART_3D_VAR(1,1,:) = var
-         GOCART_3D_VAR => GOCART_VAR
-      end if
-
-
-   end subroutine PrepAnyMetVarForGOCART
-
-
-end module PrepMetVars
+end module PrepMetVars_Mod

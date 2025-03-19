@@ -87,6 +87,11 @@ module CATChem
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_init => CCPr_SUVolcanicEmissions_Init         !< SUVolcanicEmissions Process Initialization Routine
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_run => CCPr_SUVolcanicEmissions_Run           !< SUVolcanicEmissions Process Run Routine
    use CCPr_SUVolcanicEmissions_mod, only: cc_suvolcanic_finalize => CCPr_SUVolcanicEmissions_Finalize !< SUVolcanicEmissions Process Finalization Routine
+   ! DMS
+   use CCPr_DMS_mod, only: DMSStateType                         !< DMS State
+   use CCPr_DMS_mod, only: cc_dms_init => CCPr_DMS_Init         !< DMS Process Initialization Routine
+   use CCPr_DMS_mod, only: cc_dms_run => CCPr_DMS_Run           !< DMS Process Run Routine
+   use CCPr_DMS_mod, only: cc_dms_finalize => CCPr_DMS_Finalize !< DMS Process Finalization Routine
 
    implicit none
 

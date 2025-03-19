@@ -51,3 +51,6 @@ process:
     activate: true
     scheme_opt: 1
     filedir: ./Emissions/so2_volcanic_emissions_Carns
+  DMS:
+    activate: true
+    scheme_opt: 1
