@@ -118,7 +118,10 @@ program test_suvolcanic
       stop 1
    end if
 
-   call assert( sum(SUVolcanicState%TotalEmission) > 0.0_fp, "Test Sulfur Volcanic Emissions")
+   !TODO: This is specific to the inputs in this test only. Change it when inputs are changed.
+   call assert( sum(SUVolcanicState%TotalEmission) > 1.0e-2_fp, "Test non-zero Sulfur Volcanic Emissions")
+   call assert( rae(sum(SUVolcanicState%TotalEmission(1:3)), 0.0_fp) , "Test1 zero Sulfur Volcanic Emissions")
+   call assert( rae(sum(SUVolcanicState%TotalEmission(8:28)),  0.0_fp),  "Test2 zero Sulfur Volcanic Emissions")
    call print_info(Config, SUVolcanicState, MetState, title)
 
    call cc_suvolcanic_finalize( SUVolcanicState, rc)
