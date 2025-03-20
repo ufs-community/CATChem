@@ -194,6 +194,9 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE :: PMID(:)        !< Average wet air pressure [hPa] defined as arithmetic average of edge pressures
       REAL(fp), ALLOCATABLE :: PMID_DRY(:)    !< Dry air partial pressure [hPa] defined as arithmetic avg of edge pressures
 
+      !TODO: temporary put DMS concentration here for DMS emissions from gocart; may read from ChemState in the future
+      REAL(fp)              :: DMSO_CONC      !< DMS concentration [mol/L]
+
    END TYPE MetStateType
 
 CONTAINS

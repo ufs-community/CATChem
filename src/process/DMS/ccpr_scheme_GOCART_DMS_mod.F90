@@ -13,6 +13,7 @@
 !! \date 01/2025
 !!!>
 module CCPr_Scheme_GOCART_DMS_Mod
+   USE Precision_mod, only : ZERO
 
    implicit none
 
@@ -33,7 +34,7 @@ contains
    !!!>
 
    subroutine CCPr_Scheme_GOCART_DMS(km, cdt, g0, tmpu, u10m, v10m, lwi, delp, &
-      dmso_conc, dms, SU_emis, ndms, RC)
+      dmso_conc, SU_emis, ndms, RC)
 
       ! Uses
       USE GOCART2G_process, only: DMSemission
@@ -50,13 +51,13 @@ contains
       REAL, intent(in)    :: u10m                   ! 10-m u-wind component [m/sec]
       REAL, intent(in)    :: v10m                   ! 10-m v-wind component [m/sec]
 
-      REAL, dimension(:,:),pointer  :: DMSO_CONC      ! DMS source concentration [units??]
-      REAL, allocatable, DIMENSION(:) :: tmpu   ! Temperature [K]
-      REAL, allocatable, DIMENSION(:) :: delp   ! Pressure Thickness for layer [Pa]
+      REAL, intent(in)  :: DMSO_CONC      ! DMS source concentration [mol/L]
+      REAL, dimension(:), intent(in) :: tmpu   ! Temperature [K]
+      REAL, dimension(:), intent(in) :: delp   ! Pressure Thickness for layer [Pa]
 
       INTEGER, intent(in)       :: lwi                   ! orography flag; Land, ocean, ice mask
 
-      REAL, intent(inout),dimension(:,:,:),pointer  :: DMS      ! DMS [kg kg-1]
+      !REAL, intent(inout),dimension(:,:,:),pointer  :: DMS      ! DMS [kg kg-1]
       REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
       REAL, parameter :: fMassDMS=62.   ! g mol-1  -  should this go somewhere else in the future??
 
@@ -71,6 +72,8 @@ contains
       real, pointer :: GOCART_LWI(:,:)
       real, pointer :: GOCART_U10(:,:)
       real, pointer :: GOCART_V10(:,:)
+      real, pointer :: GOCART_DMSO_CONC(:,:)
+      REAL, allocatable, dimension(:,:,:)  :: DMS      ! DMS [kg kg-1]
 
 
       ! Initialize
@@ -82,11 +85,13 @@ contains
       call INCR_REAL_RANK2(u10m, GOCART_U10)
       call INCR_REAL_RANK2(v10m, GOCART_V10)
       call INCR_REAL_RANK2(real(LWI), GOCART_LWI)
+      call INCR_REAL_RANK2(DMSO_CONC, GOCART_DMSO_CONC)
+      allocate(DMS(1,1,km)); DMS(:,:,:)= ZERO
 
       call DMSemission (km, cdt, g0, &
          GOCART_TMPU, GOCART_U10, &
          GOCART_V10, GOCART_LWI, &
-         GOCART_DELP, fMassDMS, dmso_conc, &
+         GOCART_DELP, fMassDMS, GOCART_DMSO_CONC, &
          dms, SU_emis, ndms, rc)
 
       if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)

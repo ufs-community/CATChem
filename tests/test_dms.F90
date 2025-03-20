@@ -4,12 +4,9 @@ program test_DMS
    use precision_mod, only: rae
    implicit none
 
-   !type(ConfigType) :: Config
-   !type(ChemStateType) :: ChemState
-   !type(DMSStateType) :: DMSState
-   TYPE(ConfigType), POINTER       :: Config    ! Module options
-   type(ChemStateType), POINTER :: ChemState
-   type(DMSStateType), POINTER :: DMSState
+   type(ConfigType) :: Config
+   type(ChemStateType) :: ChemState
+   type(DMSStateType) :: DMSState
    type(MetStateType) :: MetState
    type(DiagStateType) :: DiagState
    type(GridStateType) :: GridState
@@ -17,8 +14,6 @@ program test_DMS
 
    ! Integers
    INTEGER:: rc          ! Success or failure
-   INTEGER:: i           ! indexer
-
    character(len=:), allocatable :: title
 
    ! Error handling
@@ -59,6 +54,7 @@ program test_DMS
    write (*,*) 'Completed ', title
    write (*,*) '--'
 
+  
    !----------------------------
    ! Test 2
    !----------------------------
@@ -66,20 +62,16 @@ program test_DMS
    DMSState%Activate = .true.
 
    ! Meteorological State
+   MetState%TSTEP = 300
+   MetState%NLEVS = 1
    allocate(MetState%T(MetState%NLEVS))
    allocate(MetState%DELP(MetState%NLEVS))
-   MetState%NLEVS = 2
-   MetState%DELP(1:MetState%NLEVS)= 10000      ! Need to change to something more reasonable and check units.
-   MetState%T(1:MetState%NLEVS) = 100  ! temporary, change to something more reasonable and check units
-   MetState%U10M = 1.0_fp
-   MetState%V10M = 1.0_fp
-   MetState%LWI = 0
-
-
-   do i = 1, MetState%NLEVS
-      MetState%T(i)=273.15 + I   ! K -
-      MetState%DELP(i) = 5000  ! check units (Pa), this is shallow for near sfc!
-   end do
+   MetState%DELP(1:MetState%NLEVS)= 5000   ! Need to change to something more reasonable and check units.
+   MetState%T(1:MetState%NLEVS) = 300      ! temporary, change to something more reasonable and check units
+   MetState%U10M = 5.0_fp
+   MetState%V10M = 5.0_fp
+   MetState%LWI = 0   !gocart OCEAN=0.0, LAND = 1.0, SEA_ICE = 2.0
+   MetState%DMSO_CONC = 1.25e10_fp  !DMS ocean concentration [mol/L];TODO: may read from ChemState in the future
 
    DMSState%SchemeOpt = 1
 

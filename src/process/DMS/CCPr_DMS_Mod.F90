@@ -69,12 +69,12 @@ CONTAINS
       IMPLICIT NONE
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(ConfigType), POINTER       :: Config    ! Module options
-      TYPE(ChemStateType), POINTER    :: ChemState ! Chemical state
+      TYPE(ConfigType)       :: Config    ! Module options
+      TYPE(ChemStateType)    :: ChemState ! Chemical state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(DMSStateType), POINTER  :: DMSState ! DMS state
+      TYPE(DMSStateType)     :: DMSState ! DMS state
       INTEGER,         INTENT(INOUT)    :: RC       ! Success or failure
 
       ! Error handling
@@ -144,9 +144,9 @@ CONTAINS
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
-      INTEGER            :: NDMS
-      REAL, dimension(:,:), pointer   :: dmso_conc   ! concentration of DMS
-      REAL, dimension(:,:,:),pointer  :: DMS       ! DMS [kg kg-1]
+      INTEGER, parameter :: NDMS = 1
+      !REAL, dimension(:,:), pointer   :: dmso_conc   ! concentration of DMS
+      !REAL, dimension(:,:,:),pointer  :: DMS       ! DMS [kg kg-1]
       REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
 
       ! Initialize
@@ -162,6 +162,7 @@ CONTAINS
          if (DMSState%SchemeOpt == 1) then
             ! Run the DMS Scheme
             !-------------------------
+            allocate(SU_emis(1,1, NDMS)); SU_emis = ZERO
 
             call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
                MetState%TSTEP, &
@@ -171,8 +172,7 @@ CONTAINS
                MetState%V10M, &
                MetState%LWI, &
                MetState%DELP, &
-               dmso_conc, &
-               dms, &
+               MetState%DMSO_CONC, &
                SU_emis, &
                ndms, &
                RC)
