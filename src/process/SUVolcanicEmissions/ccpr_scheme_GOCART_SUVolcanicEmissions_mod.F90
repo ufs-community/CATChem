@@ -69,7 +69,7 @@ contains
       RC )
 
       USE GOCART2G_Process, only: SUVolcanicEmissions
-      USE PrepMetVars, only:  PrepMetVarsForGOCARTSUV
+      USE PrepMetVars_Mod, only:  PrepMetVarsForGOCARTSUV
 
       IMPLICIT NONE
 
