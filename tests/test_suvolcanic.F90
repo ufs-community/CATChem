@@ -118,7 +118,7 @@ program test_suvolcanic
       stop 1
    end if
 
-   call assert( ANY(SUVolcanicState%TotalEmission > 0.0_fp), "Test Sulfur Volcanic Emissions")
+   call assert( sum(SUVolcanicState%TotalEmission) > 0.0_fp, "Test Sulfur Volcanic Emissions")
    call print_info(Config, SUVolcanicState, MetState, title)
 
    call cc_suvolcanic_finalize( SUVolcanicState, rc)

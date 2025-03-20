@@ -134,27 +134,32 @@ CONTAINS
          ALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         SUVolcanicState%SUVolcanicSpeciesIndex = -1
 
          ! Allocate emission speceis names
          ALLOCATE( SUVolcanicState%SUVolcanicSpeciesName(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         SUVolcanicState%SUVolcanicSpeciesName = ''
 
          ! Allocate CatChem species index
          ALLOCATE( SUVolcanicState%SpcIDs(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         SUVolcanicState%SpcIDs = -1
 
          ! Allocate emission flux
          ALLOCATE( SUVolcanicState%EmissionPerSpecies(SUVolcanicState%nSUVolcanicSpecies, &
             SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         SUVolcanicState%EmissionPerSpecies = ZERO
 
          ! Allocate total emissions
          ALLOCATE( SUVolcanicState%TotalEmission(SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
          CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         SUVolcanicState%TotalEmission = ZERO
 
          ! Set the file directory
          SUVolcanicState%FileDir = TRIM(Config%suvolcanic_filedir)
@@ -261,6 +266,7 @@ CONTAINS
                !set area and SO2
                allocate(area(1,1), SO2(1,1, MetState%NLEVS))
                area(1,1) = MetState%AREA_M2
+               SO2 = ZERO
 
                ! loop through all species. Right now, GOCART only has SO2
                do i = 1, SUVolcanicState%nSUVolcanicSpecies
