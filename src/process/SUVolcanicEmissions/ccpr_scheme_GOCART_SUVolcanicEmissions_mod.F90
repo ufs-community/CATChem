@@ -82,7 +82,7 @@ contains
       INTEGER, intent(inout),dimension(:)   :: iPoint, jPoint ! grid cell index of each volcanic source
       !INTEGER, intent(in)                  :: YMD
       INTEGER, intent(in)                   :: hms    ! current model time [sec]
-      REAL, intent(in)                      :: g0      
+      REAL, intent(in)                      :: g0
       REAL, allocatable, DIMENSION(:) :: zbox  ! geopotential Height difference [m] for layer
       REAL, allocatable, DIMENSION(:) :: delp   ! Pressure Thickness for layer [Pa]
       REAL, intent(inout),dimension(:,:)    :: area     ! area of grid cell [m^2]
@@ -122,7 +122,7 @@ contains
 
       !convert SO2 unit from Kg S to Kg SO2
       vSO2 = vSO2 * fMassSO2 / fMassSulfur
-      
+
       !call gocart emission function
       if (nVolc > 0) then
 
