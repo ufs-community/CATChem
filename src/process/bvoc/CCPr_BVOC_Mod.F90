@@ -136,6 +136,11 @@ CONTAINS
          CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
 
+         ! Allocate CatChem species index
+         ALLOCATE( BvocState%SpcIDs(BvocState%nBvocSpecies), STAT=RC )
+         CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+
          ! Allocate emission flux
          ALLOCATE( BvocState%EmissionPerSpecies(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
@@ -354,35 +359,25 @@ CONTAINS
       thisLoc = ' -> at CCPr_BVOC_Final (in process/bvoc/ccpr_BVOC_mod.F90)'
 
       ! Deallocate any arrays here
-      IF ( ASSOCIATED( BvocState%SpcIDs ) ) THEN
-         DEALLOCATE( BvocState%SpcIDs, STAT=RC )
-         CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( BvocState%BvocSpeciesIndex, STAT=RC )
+      CALL CC_CheckVar('BvocState%BvocSpeciesIndex', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( BvocState%BvocSpeciesIndex ) ) THEN
-         DEALLOCATE( BvocState%BvocSpeciesIndex, STAT=RC )
-         CALL CC_CheckVar('BvocState%BvocSpeciesIndex', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( BvocState%BvocSpeciesName, STAT=RC )
+      CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( BvocState%BvocSpeciesName ) ) THEN
-         DEALLOCATE( BvocState%BvocSpeciesName, STAT=RC )
-         CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( BvocState%SpcIDs, STAT=RC )
+      CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( BvocState%EmissionPerSpecies ) ) THEN
-         DEALLOCATE( BvocState%EmissionPerSpecies, STAT=RC )
-         CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( BvocState%EmissionPerSpecies, STAT=RC )
+      CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( BvocState%EmisNormFactor ) ) THEN
-         DEALLOCATE( BvocState%EmisNormFactor, STAT=RC )
-         CALL CC_CheckVar('BvocState%EmisNormFactor', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( BvocState%EmisNormFactor, STAT=RC )
+      CALL CC_CheckVar('BvocState%EmisNormFactor', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
    end subroutine CCPr_BVOC_Final
 
