@@ -15,6 +15,7 @@ program test_DMS
    ! Integers
    INTEGER:: rc          ! Success or failure
    character(len=:), allocatable :: title
+   integer :: c ,s  ! Loop counter for emission state
 
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
@@ -54,12 +55,23 @@ program test_DMS
    write (*,*) 'Completed ', title
    write (*,*) '--'
 
-  
+   !allocate emission state
+   if (EmisState%nCats > 0) then
+      do c = 1, EmisState%nCats
+         do s = 1, EmisState%Cats(c)%nSpecies
+            ALLOCATE(EmisState%Cats(c)%Species(s)%Flux(GridState%number_of_levels), STAT=RC)
+            if (RC /= CC_SUCCESS) then
+               ErrMsg = 'Error allocating "EmisState%Cats%Species%Flux"!'
+               call cc_emit_error(ErrMsg, RC, ThisLoc)
+               stop 1  !!Note here is not 'return'
+            endif
+         end do
+      end do
+   end if
+
    !----------------------------
    ! Test 2
    !----------------------------
-
-   DMSState%Activate = .true.
 
    ! Meteorological State
    MetState%TSTEP = 300
@@ -73,8 +85,6 @@ program test_DMS
    MetState%LWI = 0   !gocart OCEAN=0.0, LAND = 1.0, SEA_ICE = 2.0
    MetState%DMSO_CONC = 1.25e10_fp  !DMS ocean concentration [mol/L];TODO: may read from ChemState in the future
 
-   DMSState%SchemeOpt = 1
-
    ! Allocate DiagState
    call cc_allocate_diagstate(Config, DiagState, ChemState, RC)
    if (rc /= CC_SUCCESS) then
@@ -83,23 +93,27 @@ program test_DMS
    endif
 
    title = "DMS Test 2 | Test GOCART DMS defaults"
+   !---------------------------------------------
+   DMSState%Activate = .true.
+   DMSState%SchemeOpt = 1
 
-   call cc_dms_init(Config, DMSState, ChemState, rc)
+   call cc_dms_init(Config, DMSState, EmisState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dms_init'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call cc_dms_run(MetState, DiagState, &
-      DMSState, ChemState, rc)
+   call cc_dms_run(MetState, DMSState, EmisState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in _dms_run'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
+   call assert( DMSState%TotalEmission > 0.0_fp, "Test DMS Emissions")
    call print_info(Config, DMSState, MetState, title)
+   
    call cc_dms_finalize( DMSState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in _dms_finalize'
@@ -135,6 +149,11 @@ contains
          write(*,*) 'MetState%U10M = ', MetState_%U10M
          write(*,*) 'MetState%V10M = ', MetState_%V10M
          write(*,*) 'MetState%LWI = ', MetState_%LWI
+         write(*,*) 'DMSState%CatIndex = ', DMSState_%CatIndex
+         write(*,*) 'DMSState%nDMSSpecies = ', DMSState_%nDMSSpecies
+         write(*,*) 'DMSState%DMSSpeciesName = ', DMSState_%DMSSpeciesName
+         write(*,*) 'DMSState%EmissionPerSpecies = ', DMSState_%EmissionPerSpecies
+         write(*,*) 'DMSState%TotalEmission = ', DMSState_%TotalEmission
 
       end if
 

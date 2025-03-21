@@ -11,6 +11,8 @@ MODULE CCPR_DMS_mod
    USE DiagState_Mod, Only : DiagStateType
    USE MetState_Mod,  Only : MetStateType
    USE ChemState_Mod, Only : ChemStateType
+   USE EmisState_Mod,  Only : EmisStateType
+   USE GridState_Mod,  Only : GridStateType
    USE Config_Opt_Mod, Only : ConfigType
 
    IMPLICIT NONE
@@ -24,28 +26,33 @@ MODULE CCPR_DMS_mod
 
    !> \brief DMSStateType
    !!
-   !! DMSStateType is the process-specific derived type. It should hold all module
-   !! variables and arrays that are required to compute the emissions.
-   !! For instance, if the process relies on an input field read through the
-   !! CATChem configuration file (e.g. MY_INPUT_FIELD), the data array pointer
-   !! to that field should be listed within the instance and NOT outside of it.
-   !! This ensures that the same process can be invoked in various instances,
-   !! all of them potentially pointing to different data fields.
+   !! DMSStateType is the process-specific derived type. 
    !!
    !! \param Activate Activate Process (True/False)
    !! \param SchemeOpt Scheme Option
+   !! \param nDMSSpecies Number of DMS species
+   !! \param DMSSpeciesIndex Index of DMS species
+   !! \param DMSSpeciesName Name of DMS species
+   !! \param SpcIDs CATChem species IDs
+   !! \param CatIndex Index of emission category in EmisState
+   !! \param TotalEmission Total emission [kg/m^2/s]
+   !! \param EmissionPerSpecies Emission per species [kg/m^2/s]
+   !!
+   !! \ingroup core_modules
    !!!>
 
    TYPE :: DMSStateType
       LOGICAL                         :: Activate              ! Activate Process (True/False)
-      INTEGER                         :: SchemeOpt              ! SchemeOption (True/False)
+      INTEGER                         :: SchemeOpt             ! SchemeOption
+      integer                         :: nDMSSpecies           !< Number of DMS species
+      integer, allocatable            :: DMSSpeciesIndex(:)    !< Index of DMS species
+      character(len=31), allocatable  :: DMSSpeciesName(:)     !< name of DMS species
+      integer, allocatable            :: SpcIDs(:)             !< CATChem species IDs
+      integer                         :: CatIndex              !< Index of emission category in EmisState
 
       ! Process Specific Parameters
-
-      ! Namelist parameters for specific DMS goes here as well
-      !=================================================================
-      ! Module specific variables/arrays/data pointers come below
-      !=================================================================
+      real(fp)                        :: TotalEmission         !< Total emission [kg/m^2/s]
+      real(fp), allocatable           :: EmissionPerSpecies(:) !< Emission per species [kg/m^2/s]
 
    END TYPE DMSStateType
 
@@ -62,7 +69,7 @@ CONTAINS
    !!!>
 
 
-   SUBROUTINE CCPR_DMS_Init( Config, DMSState, ChemState, RC )
+   SUBROUTINE CCPR_DMS_Init( Config, DMSState, EmisState, RC )
       ! USE
 
 
@@ -70,7 +77,7 @@ CONTAINS
       ! INPUT PARAMETERS
       !-----------------
       TYPE(ConfigType)       :: Config    ! Module options
-      TYPE(ChemStateType)    :: ChemState ! Chemical state
+      TYPE(EmisStateType)    :: EmisState ! Chemical state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
@@ -84,9 +91,7 @@ CONTAINS
 
       ! LOCAL VARIABLES
       !----------------
-
-
-      ! Put any local variables here
+      INTEGER  :: c
 
       !=================================================================
       ! CCPR_DMS_Init begins here!
@@ -101,10 +106,50 @@ CONTAINS
          !------------------
          DMSState%Activate = .true.
 
-
          ! Set scheme option
          !------------------
          DMSState%SchemeOpt = config%DMS_Scheme
+
+         !Find DMS caterory index in EmisState for future use
+         !--------------------------------------------
+         do c = 1, EmisState%nCats
+            if (EmisState%Cats(c)%name == 'DMSO') then
+               DMSState%CatIndex = c
+               exit
+            endif
+         end do
+
+         ! Set number of species from EmisState
+         !----------------------
+         DMSState%nDMSSpecies = EmisState%Cats(DMSState%CatIndex)%nSpecies
+
+         !------------------------------------
+         ! Allocate emission species index
+         ALLOCATE( DMSState%DMSSpeciesIndex(DMSState%nDMSSpecies), STAT=RC )
+         CALL CC_CheckVar('DMSState%DMSSpeciesIndex', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+         DMSState%DMSSpeciesIndex = -1
+
+         ! Allocate emission speceis names
+         ALLOCATE( DMSState%DMSSpeciesName(DMSState%nDMSSpecies), STAT=RC )
+         CALL CC_CheckVar('DMSState%DMSSpeciesName', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+         DMSState%DMSSpeciesName = ''
+
+         ! Allocate CatChem species index
+         ALLOCATE( DMSState%SpcIDs(DMSState%nDMSSpecies), STAT=RC )
+         CALL CC_CheckVar('DMSState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+         DMSState%SpcIDs = -1
+
+         ! Allocate emission flux
+         ALLOCATE( DMSState%EmissionPerSpecies(DMSState%nDMSSpecies), STAT=RC )
+         CALL CC_CheckVar('DMSState%EmissionPerSpecies', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+         DMSState%EmissionPerSpecies = ZERO
+
+         !initialize total emissions
+         DMSState%TotalEmission = ZERO
 
       else
 
@@ -123,7 +168,7 @@ CONTAINS
    !! \param [INOUT] ChemState - The ChemState object
    !! \param [OUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_DMS_Run( MetState, DiagState, DMSState, ChemState, RC )
+   SUBROUTINE CCPr_DMS_Run( MetState, DMSState, EmisState, RC )
 
       ! USE
       USE constants, only : g0
@@ -134,15 +179,16 @@ CONTAINS
       TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(DiagStateType), INTENT(INOUT)   :: DiagState       ! DiagState Instance
+      !TYPE(DiagStateType), INTENT(INOUT)   :: DiagState       ! DiagState Instance
       TYPE(DMSStateType), INTENT(INOUT)    :: DMSState     ! DMSState Instance
-      TYPE(ChemStateType),  INTENT(INOUT)  :: ChemState       ! ChemState Instance
+      TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState       ! ChemState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT) :: RC                                 ! Return Code
 
 
       ! LOCAL VARIABLES
+      INTEGER :: s
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       INTEGER, parameter :: NDMS = 1
       !REAL, dimension(:,:), pointer   :: dmso_conc   ! concentration of DMS
@@ -159,25 +205,46 @@ CONTAINS
       if (DMSState%Activate) then
          ! Run the DMS Scheme
          !-------------------------
-         if (DMSState%SchemeOpt == 1) then
-            ! Run the DMS Scheme
-            !-------------------------
-            allocate(SU_emis(1,1, NDMS)); SU_emis = ZERO
+         do s = 1, DMSState%nDMSSpecies !only one
 
-            call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
-               MetState%TSTEP, &
-               g0, &
-               MetState%T, &
-               MetState%U10M, &
-               MetState%V10M, &
-               MetState%LWI, &
-               MetState%DELP, &
-               MetState%DMSO_CONC, &
-               SU_emis, &
-               ndms, &
-               RC)
+            if (DMSState%SchemeOpt == 1) then
+               ! Run the DMS Scheme
+               !-------------------------
+               allocate(SU_emis(1,1, NDMS)); SU_emis = ZERO
 
-         endif
+               call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
+                  MetState%TSTEP, &
+                  g0, &
+                  MetState%T, &
+                  MetState%U10M, &
+                  MetState%V10M, &
+                  MetState%LWI, &
+                  MetState%DELP, &
+                  MetState%DMSO_CONC, &
+                  SU_emis, &
+                  ndms, &
+                  RC)
+               
+               if (RC /= CC_SUCCESS) then
+                  errMsg = 'Error in CCPr_Scheme_GOCART_DMS'
+                  CALL CC_Error( errMsg, RC, thisLoc )
+               endif
+
+               !put it back to DMSState
+               DMSState%DMSSpeciesIndex(s)  = s
+               DMSState%DMSSpeciesName(s)   = EmisState%Cats(DMSState%CatIndex)%Species(s)%name
+               DMSState%EmissionPerSpecies(s) = SU_emis(1,1, NDMS)
+               DMSState%TotalEmission = DMSState%TotalEmission + DMSState%EmissionPerSpecies(s)
+               if (associated(SU_emis)) nullify(SU_emis)
+
+            else
+               errMsg =  'ERROR: Unknown DMS scheme option'
+               RC = CC_FAILURE
+               CALL CC_Error( errMsg, RC, thisLoc )
+               return
+            
+            endif !DMS scheme option
+         end do !for each species
 
       endif
 
@@ -212,6 +279,27 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DMS_Finalize (in process/DMSemissions/ccpr_DMS_mod.F90)'
 
+      !Deallocate DMSState
+         IF (ALLOCATED(DMSState%DMSSpeciesIndex)) THEN
+            DEALLOCATE(DMSState%DMSSpeciesIndex, STAT=RC)
+            CALL CC_CheckVar('DMSState%DMSSpeciesIndex', 0, RC)
+            IF (RC /= CC_SUCCESS) RETURN
+         ENDIF
+         IF (ALLOCATED(DMSState%DMSSpeciesName)) THEN
+            DEALLOCATE(DMSState%DMSSpeciesName, STAT=RC)
+            CALL CC_CheckVar('DMSState%DMSSpeciesName', 0, RC)
+            IF (RC /= CC_SUCCESS) RETURN
+         ENDIF
+         IF (ALLOCATED(DMSState%SpcIDs)) THEN
+            DEALLOCATE(DMSState%SpcIDs, STAT=RC)
+            CALL CC_CheckVar('DMSState%SpcIDs', 0, RC)
+            IF (RC /= CC_SUCCESS) RETURN
+         ENDIF
+         IF (ALLOCATED(DMSState%EmissionPerSpecies)) THEN
+            DEALLOCATE(DMSState%EmissionPerSpecies, STAT=RC)
+            CALL CC_CheckVar('DMSState%EmissionPerSpecies', 0, RC)
+            IF (RC /= CC_SUCCESS) RETURN
+         ENDIF
 
    end subroutine CCPr_DMS_Finalize
 

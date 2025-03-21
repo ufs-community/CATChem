@@ -99,6 +99,8 @@ contains
       if (associated(GOCART_U10)) nullify(GOCART_U10)
       if (associated(GOCART_V10)) nullify(GOCART_V10)
       if (associated(GOCART_LWI)) nullify(GOCART_LWI)
+      if (associated(GOCART_DMSO_CONC)) nullify(GOCART_DMSO_CONC)
+      if (allocated(DMS)) deallocate(DMS)
 
    end subroutine CCPr_Scheme_GOCART_DMS
 
