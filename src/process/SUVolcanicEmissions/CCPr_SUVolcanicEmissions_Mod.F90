@@ -346,26 +346,36 @@ CONTAINS
       &(in process/SUVolcanicEmissions/ccpr_SUVolcanicEmissions_mod.F90)'
 
       ! Deallocate any arrays here
-      DEALLOCATE( SUVolcanicState%SpcIDs, STAT=RC )
-      CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
+      IF (ALLOCATED(SUVolcanicState%SpcIDs)) THEN
+         DEALLOCATE( SUVolcanicState%SpcIDs, STAT=RC )
+         CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      END IF
 
-      DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex, STAT=RC )
-      CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
+      IF (ALLOCATED(SUVolcanicState%SUVolcanicSpeciesIndex)) THEN
+         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex, STAT=RC )
+         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      END IF
+      
+      IF (ALLOCATED(SUVolcanicState%SUVolcanicSpeciesName)) THEN
+         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesName, STAT=RC )
+         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      END IF
+      
+      IF (ALLOCATED(SUVolcanicState%EmissionPerSpecies)) THEN
+         DEALLOCATE( SUVolcanicState%EmissionPerSpecies, STAT=RC )
+         CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      END IF
 
-      DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesName, STAT=RC )
-      CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-
-      DEALLOCATE( SUVolcanicState%EmissionPerSpecies, STAT=RC )
-      CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-
-      DEALLOCATE( SUVolcanicState%TotalEmission, STAT=RC )
-      CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-
+      IF (ALLOCATED(SUVolcanicState%TotalEmission)) THEN
+         DEALLOCATE( SUVolcanicState%TotalEmission, STAT=RC )
+         CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      END IF
+   
    end subroutine CCPr_SUVolcanicEmissions_Finalize
 
 
