@@ -1159,14 +1159,8 @@ MODULE QFYAML_Mod
                      cspecies = TRIM(yml%vars(n)%category(ix+1:))
                      tmpString = TRIM(yml%vars(n)%category(ix+1:))
                      names = [names, tmpString]
+                     j = j + 1 ! increment species index
                   endif
-               endif
-
-               if ((n == yml%num_vars) .and. (TRIM(yml%vars(n)%category(1:ix-1)) == TRIM(current))) then
-                  cspecies = TRIM(yml%vars(n)%category(ix+1:))
-                  tmpString = TRIM(yml%vars(n)%category(ix+1:))
-                  names = [names, tmpString]
-                  j = j + 1
                endif
             enddo
 

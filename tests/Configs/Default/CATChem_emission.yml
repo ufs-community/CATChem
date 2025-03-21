@@ -27,4 +27,8 @@ SUVOLCANIC:
     long_name: "Sulfur Dioxide"
     scale: [1.0]
     map: ["SO2"]
-    plumerise_opt: 1
+DMSO:
+  DMS:
+    long_name: "Dimethyl Sulfide"
+    scale: [1.0]
+    map: ["DMS"]
