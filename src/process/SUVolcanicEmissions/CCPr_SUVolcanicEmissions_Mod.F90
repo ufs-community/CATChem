@@ -47,14 +47,14 @@ MODULE CCPR_SUVolcanicEmissions_mod
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
       integer                         :: nSUVolcanicSpecies           !< Number of SUVolcanic species
-      integer, pointer                :: SUVolcanicSpeciesIndex(:)    !< Index of SUVolcanic species
-      character(len=31), pointer      :: SUVolcanicSpeciesName(:)     !< name of SUVolcanic species
-      integer, pointer                :: SpcIDs(:)               !< CATChem species IDs
+      integer, allocatable            :: SUVolcanicSpeciesIndex(:)    !< Index of SUVolcanic species
+      character(len=31), allocatable  :: SUVolcanicSpeciesName(:)     !< name of SUVolcanic species
+      integer, allocatable            :: SpcIDs(:)               !< CATChem species IDs
       integer                         :: CatIndex                !< Index of emission category in EmisState
 
       ! Process Specific Parameters
-      real(fp), pointer               :: TotalEmission(:)          !< Total emission of all species at each level [kg/m^2/s]
-      real(fp), pointer               :: EmissionPerSpecies(:,:)   !< Emission per species at each level          [kg/m^2/s]
+      real(fp), allocatable           :: TotalEmission(:)          !< Total emission of all species at each level [kg/m^2/s]
+      real(fp), allocatable           :: EmissionPerSpecies(:,:)   !< Emission per species at each level          [kg/m^2/s]
       character(len=1055)             :: FileDir                  !< Input file directory for reading in emissions
 
 
@@ -346,35 +346,25 @@ CONTAINS
       &(in process/SUVolcanicEmissions/ccpr_SUVolcanicEmissions_mod.F90)'
 
       ! Deallocate any arrays here
-      IF ( ASSOCIATED( SUVolcanicState%SpcIDs ) ) THEN
-         DEALLOCATE( SUVolcanicState%SpcIDs, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( SUVolcanicState%SpcIDs, STAT=RC )
+      CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( SUVolcanicState%SUVolcanicSpeciesIndex ) ) THEN
-         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex, STAT=RC )
+      CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( SUVolcanicState%SUVolcanicSpeciesName ) ) THEN
-         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesName, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesName, STAT=RC )
+      CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( SUVolcanicState%EmissionPerSpecies ) ) THEN
-         DEALLOCATE( SUVolcanicState%EmissionPerSpecies, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( SUVolcanicState%EmissionPerSpecies, STAT=RC )
+      CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
-      IF ( ASSOCIATED( SUVolcanicState%TotalEmission ) ) THEN
-         DEALLOCATE( SUVolcanicState%TotalEmission, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      DEALLOCATE( SUVolcanicState%TotalEmission, STAT=RC )
+      CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
    end subroutine CCPr_SUVolcanicEmissions_Finalize
 

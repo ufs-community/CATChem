@@ -83,8 +83,8 @@ contains
       !INTEGER, intent(in)                  :: YMD
       INTEGER, intent(in)                   :: hms    ! current model time [sec]
       REAL, intent(in)                      :: g0
-      REAL, allocatable, DIMENSION(:) :: zbox  ! geopotential Height difference [m] for layer
-      REAL, allocatable, DIMENSION(:) :: delp   ! Pressure Thickness for layer [Pa]
+      REAL, intent(in), dimension(:) :: zbox  ! geopotential Height difference [m] for layer
+      REAL, intent(in), dimension(:) :: delp   ! Pressure Thickness for layer [Pa]
       REAL, intent(inout),dimension(:,:)    :: area     ! area of grid cell [m^2]
       REAL, intent(inout),dimension(:)      :: vSO2   ! volcanic emissions  [kg S/s]
       INTEGER, intent(in)                   :: nSO2     ! index of SO2 relative to other sulfate tracers
@@ -94,12 +94,12 @@ contains
       REAL, intent(inout),dimension(:)        :: vElev     ! bottom elevation of emissions [m]
       REAL, intent(inout),dimension(:)        :: vLat     ! latitude specified in file [degree]
       REAL, intent(inout),dimension(:)        :: VLon     ! longitude specified in file [degree]
-      INTEGER, intent(inout)                :: rc          ! error code
+      INTEGER, intent(inout)                  :: rc          ! error code
 
       !local variables
       REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions [kg/m2/s; not really allocated]
-      REAL, DIMENSION(:,:),pointer    :: SO2EMVN   ! non-explosive volcanic emissions [kg m-2 s-1; not really allocated]
-      REAL, DIMENSION(:,:),pointer    :: SO2EMVE   ! explosive volcanic emissions [kg m-2 s-1; not really allocated]
+      REAL, dimension(:,:),pointer    :: SO2EMVN   ! non-explosive volcanic emissions [kg m-2 s-1; not really allocated]
+      REAL, dimension(:,:),pointer    :: SO2EMVE   ! explosive volcanic emissions [kg m-2 s-1; not really allocated]
       REAL, parameter :: fMassSulfur = 32.  !  gram molecular weights of species
       REAL, parameter :: fMassSO2 = 64.     !  gram molecular weights of species
       real, pointer :: GOCART_ZBOX(:,:,:)
