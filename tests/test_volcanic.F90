@@ -1,4 +1,4 @@
-program test_suvolcanic
+program test_volcanic
    use CATChem, fp => cc_rk
    use testing_mod, only: assert
    use precision_mod, only: rae
@@ -8,7 +8,7 @@ program test_suvolcanic
    type(ChemStateType) :: ChemState
    type(MetStateType) :: MetState
    type(DiagStateType) :: DiagState
-   type(SUVolcanicStateType) :: SUVolcanicState
+   type(VolcanicStateType) :: VolcanicState
    type(GridStateType) :: GridState
    type(EmisStateType) :: EmisState
 
@@ -24,7 +24,7 @@ program test_suvolcanic
    CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Default/CATChem_config.yml'
 
 
-   thisLoc = 'test_suvolcanic -> at read CATChem_Config.yml'
+   thisLoc = 'test_volcanic -> at read CATChem_Config.yml'
    errMsg = ''
    rc = CC_SUCCESS
 
@@ -50,8 +50,8 @@ program test_suvolcanic
 
 
    title = 'Volcanic Test 1 | Read Config'
-   SUVolcanicState%Activate = .false.
-   call print_info(Config, SUVolcanicState, MetState, title)
+   VolcanicState%Activate = .false.
+   call print_info(Config, VolcanicState, MetState, title)
    write (*,*) '-- '
    write (*,*) 'Completed ', title
    write (*,*) '--'
@@ -75,8 +75,8 @@ program test_suvolcanic
    !----------------------------
    ! Set number of Volcanic species
 
-   !ChemState%nSpeciesSUVolcanic = 2
-   !SUVolcanicState%Activate = .true.
+   !ChemState%nSpeciesVolcanic = 2
+   !VolcanicState%Activate = .true.
 
    ! Meteorological State
    MetState%YMD = 20220101
@@ -91,7 +91,7 @@ program test_suvolcanic
    MetState%DELP(1:MetState%NLEVS)= (/25000, 20000, 15000, 110000, 10000, 9000,5000,4000/)! Need to change to something more reasonable and check units.
    MetState%BXHEIGHT(1:MetState%NLEVS) =(/10000, 8000, 7000, 5000, 3000, 1000, 100, 50/)  ! temporary, change to something more reasonable and check units
 
-   !SUVolcanicState%SchemeOpt = 1
+   !VolcanicState%SchemeOpt = 1
 
    ! Allocate DiagState
    call cc_allocate_diagstate(Config, DiagState, ChemState, RC)
@@ -100,44 +100,44 @@ program test_suvolcanic
       stop 1
    endif
 
-   title = "SUVolcanic Test 2 | Test GOCART SUVolcanic defaults"
-   Config%suvolcanic_activate = .TRUE.
-   Config%suvolcanic_scheme = 1
+   title = "Volcanic Test 2 | Test GOCART Volcanic defaults"
+   Config%volcanic_activate = .TRUE.
+   Config%volcanic_scheme = 1
 
-   call cc_suvolcanic_init(Config, SUVolcanicState, EmisState, rc)
+   call cc_volcanic_init(Config, VolcanicState, EmisState, rc)
    if (rc /= CC_SUCCESS) then
-      errMsg = 'Error in cc_suvolcanic_init'
+      errMsg = 'Error in cc_volcanic_init'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call cc_suvolcanic_run(MetState, SUVolcanicState, EmisState, rc)
+   call cc_volcanic_run(MetState, VolcanicState, EmisState, rc)
    if (rc /= CC_SUCCESS) then
-      errMsg = 'Error in _suvolcanicemissions_run'
+      errMsg = 'Error in _volcanicemissions_run'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    !TODO: This is specific to the inputs in this test only. Change it when inputs are changed.
-   call assert( sum(SUVolcanicState%TotalEmission) > 1.0e-2_fp, "Test non-zero Sulfur Volcanic Emissions")
-   call assert( rae(sum(SUVolcanicState%TotalEmission(1:3)), 0.0_fp) , "Test1 zero Sulfur Volcanic Emissions")
-   call assert( rae(sum(SUVolcanicState%TotalEmission(8:28)),  0.0_fp),  "Test2 zero Sulfur Volcanic Emissions")
-   call print_info(Config, SUVolcanicState, MetState, title)
+   call assert( sum(VolcanicState%TotalEmission) > 1.0e-2_fp, "Test non-zero Sulfur Volcanic Emissions")
+   call assert( rae(sum(VolcanicState%TotalEmission(1:3)), 0.0_fp) , "Test1 zero Sulfur Volcanic Emissions")
+   call assert( rae(sum(VolcanicState%TotalEmission(8:28)),  0.0_fp),  "Test2 zero Sulfur Volcanic Emissions")
+   call print_info(Config, VolcanicState, MetState, title)
 
-   call cc_suvolcanic_finalize( SUVolcanicState, rc)
+   call cc_volcanic_finalize( VolcanicState, rc)
    if (rc /= CC_SUCCESS) then
-      errMsg = 'Error in _suvolcanic_finalize'
+      errMsg = 'Error in _volcanic_finalize'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
 contains
 
-   subroutine print_info(Config_, SUVolcanicState_, MetState_, title_)
+   subroutine print_info(Config_, VolcanicState_, MetState_, title_)
 
       type(ConfigType), intent(in) :: Config_
       type(MetStateType), intent(in) :: MetState_
-      type(SUVolcanicStateType), intent(in) :: SUVolcanicState_
+      type(VolcanicStateType), intent(in) :: VolcanicState_
       character(len=*), intent(in) :: title_
 
       write(*,*) '======================================='
@@ -146,25 +146,25 @@ contains
       write(*,*) '*************'
       write(*,*) 'Configuration '
       write(*,*) '*************'
-      write(*,*) 'Config%suvolcanic_activate = ', Config_%suvolcanic_activate
-      write(*,*) 'Config%suvolcanic_scheme = ', Config_%suvolcanic_scheme
+      write(*,*) 'Config%volcanic_activate = ', Config_%volcanic_activate
+      write(*,*) 'Config%volcanic_scheme = ', Config_%volcanic_scheme
 
 
-      if (SUVolcanicState_%Activate) then
+      if (VolcanicState_%Activate) then
 
-         write(*,*) 'SUVolcanicState%Activate = ', SUVolcanicState_%Activate
-         write(*,*) 'SUVolcanicState%SchemeOpt = ', SUVolcanicState_%SchemeOpt
+         write(*,*) 'VolcanicState%Activate = ', VolcanicState_%Activate
+         write(*,*) 'VolcanicState%SchemeOpt = ', VolcanicState_%SchemeOpt
          write(*,*) 'MetState%DELP =', MetState_%DELP
          write(*,*) 'MetState%BXHEIGHT = ', MetState_%BXHEIGHT
-         write(*,*) 'SUVolcanicState%CatIndex = ', SUVolcanicState_%CatIndex
-         write(*,*) 'SUVolcanicState%nSUVolcanicSpecies = ', SUVolcanicState_%nSUVolcanicSpecies
-         write(*,*) 'SUVolcanicState%SUVolcanicSpeciesName = ', SUVolcanicState_%SUVolcanicSpeciesName
-         write(*,*) 'SUVolcanicState%EmissionPerSpecies = ', SUVolcanicState_%EmissionPerSpecies
-         write(*,*) 'SUVolcanicState%TotalEmission = ', SUVolcanicState_%TotalEmission
+         write(*,*) 'VolcanicState%CatIndex = ', VolcanicState_%CatIndex
+         write(*,*) 'VolcanicState%nVolcanicSpecies = ', VolcanicState_%nVolcanicSpecies
+         write(*,*) 'VolcanicState%VolcanicSpeciesName = ', VolcanicState_%VolcanicSpeciesName
+         write(*,*) 'VolcanicState%EmissionPerSpecies = ', VolcanicState_%EmissionPerSpecies
+         write(*,*) 'VolcanicState%TotalEmission = ', VolcanicState_%TotalEmission
 
       end if
 
    end subroutine print_info
 
 
-end program test_suvolcanic
+end program test_volcanic

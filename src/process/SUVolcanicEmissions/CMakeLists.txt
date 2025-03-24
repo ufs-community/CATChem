@@ -1,15 +1,14 @@
 set(
   _srcs
-  CCPr_SUVolcanicEmissions_Mod.F90
-  ccpr_scheme_GOCART_SUVolcanicEmissions_mod.F90
+  CCPr_Volcanic_Mod.F90
+  ccpr_scheme_Volcanic_GOCART_mod.F90
 )
 
-set(_lib CATChem_process_suvolcanic)
+set(_lib CATChem_process_volcanic)
 
 add_library(${_lib} ${_srcs})
 target_link_libraries(${_lib} PUBLIC CATChem_core)
 target_link_libraries(${_lib} PUBLIC GOCART2G)
-target_link_libraries(${_lib} PUBLIC utils)
 
 set_target_properties(
   ${_lib}

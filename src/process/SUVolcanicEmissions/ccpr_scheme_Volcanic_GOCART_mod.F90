@@ -12,13 +12,41 @@
 !! \author Lacey Holland and Wei Li
 !! \date 07/2024
 !!!>
-module CCPr_Scheme_GOCART_SUVolcanicEmissions_Mod
+module CCPr_Scheme_Volcanic_GOCART_Mod
 
    implicit none
 
    private
 
-   public :: CCPr_Scheme_GOCART_SUVolcanicEmissions
+   public :: CCPr_Scheme_Volcanic_GOCART
+   public :: VolcanicEmisData
+   public :: ReadASCIIPointEmis
+
+   !> \brief VolcanicEmissionData
+   !!
+   !! VolcanicEmissionData is to hold volcanic emission data.
+   !!
+   !! \param vlat Volcano latitude
+   !! \param vlon Volcano longitude
+   !! \param VEmis Volcanic emissions [kg S/s]
+   !! \param vbase Bottom elevation of emissions [m]
+   !! \param vtop Top elevation of emissions [m]
+   !! \param nPts Number of volcanic sources in the current file
+   !! \param emissfile Emissions file name
+   !! \param label Label for emissions
+   !!
+   !! \ingroup CCPr_Scheme_Volcanic_GOCART_Mod
+   !!!>
+   type :: VolcanicEmisData
+      real :: vlat                        !volcano latitude
+      real :: vlon                        !volcano longitude
+      real :: VEmis                       !volcanic emissions [kg S/s]
+      integer :: vbase                    !bottom elevation of emissions [m]
+      integer :: vtop                     !top elevation of emissions [m]
+      integer :: nPts                     !number of volcanic sources in the current file
+      character(len=255) :: emissfile     !emissions file name
+      character(len=255) :: label         !label for emissions
+   end type VolcanicEmisData
 
 contains
 
@@ -47,7 +75,7 @@ contains
    !! \param RC           Success or Failure
    !!
    !!!>
-   subroutine CCPr_Scheme_GOCART_SUVolcanicEmissions(km, &
+   subroutine CCPr_Scheme_Volcanic_GOCART(km, &
       cdt, &
       VStart, &
       VEnd, &
@@ -69,7 +97,6 @@ contains
       RC )
 
       USE GOCART2G_Process, only: SUVolcanicEmissions
-      USE PrepMetVars, only:  PrepMetVarsForGOCARTSUV
 
       IMPLICIT NONE
 
@@ -115,9 +142,9 @@ contains
 
       ! transform data for GOCART SUVolcanicEmissions call
       call PrepMetVarsForGOCARTSUV(km,  &
-         delp,            &
-         zbox,           &
-         GOCART_DELP,     &
+         delp,                          &
+         zbox,                          &
+         GOCART_DELP,                   &
          GOCART_ZBOX)
 
       !convert SO2 unit from Kg S to Kg SO2
@@ -148,6 +175,129 @@ contains
       if (associated(SO2EMVE)) nullify(SO2EMVE)
 
 
-   end subroutine CCPr_Scheme_GOCART_SUVolcanicEmissions
+   end subroutine CCPr_Scheme_Volcanic_GOCART
 
-end module CCPr_Scheme_GOCART_SUVolcanicEmissions_Mod
+
+   !> \brief Brief description of the subroutine
+   !!
+   !! \param filename           Emissions file name
+   !! \param label              Label for emissions
+   !! \param VolcanicEmissions  Volcanic emissions data
+   !! \param rc                 Success or Failure
+   !!
+   !!!>
+   subroutine ReadASCIIPointEmis (filename, label, VolcanicEmissions, rc )
+
+      implicit none
+
+      character(len=1055), intent(in) :: filename
+      character(len=7), intent(in) :: label
+      type(VolcanicEmisData), intent(inout), allocatable :: VolcanicEmissions(:)
+      integer, intent(inout) :: rc
+      !local variables
+      integer :: num_emiss_sources=0
+      integer :: num_lines=0
+      integer :: num_skip=0
+      integer :: i
+      character(1056) :: line
+      character(len=255) :: errmsg
+
+      ! Open the file
+      open(unit=10, file=filename, status='old', action='read', iostat=rc)
+
+      if (rc /= 0) then
+         print *, "Error opening file: ", filename, "  RC=", rc
+         return
+      end if
+
+      ! Count the number of lines in the file
+      readloop:  do while (rc >= 0)
+
+         read(10, '(A)', iostat=rc) line
+         num_lines = num_lines+1
+         line = trim(line)
+
+         if (rc /= 0) then
+            print *, "Error reading file:", filename, "  RC=", rc
+            return
+         end if
+
+         if (line(1:1)=="#") then
+            num_skip = num_skip + 1
+            continue
+         else if (trim(line)==trim(label)//"::") then
+            num_skip = num_skip + 1
+            continue
+         else if (line(1:2)=="::") then
+            exit
+         else
+            num_emiss_sources = num_emiss_sources + 1
+         end if
+
+      end do readloop
+
+      rewind(10)
+
+      ! Allocate the array to hold all entries
+      allocate( VolcanicEmissions(num_emiss_sources))
+
+      do i = 1, num_skip
+         read(10, '(A)', iostat=rc) line
+         if (rc /= 0) return
+      end do
+
+      do i = 1, num_emiss_sources
+         read(10, *, iostat=rc, iomsg=errmsg)  VolcanicEmissions(i)%vlat, &
+            VolcanicEmissions(i)%vlon, &
+            VolcanicEmissions(i)%vemis, &
+            VolcanicEmissions(i)%vbase, &
+            VolcanicEmissions(i)%vtop
+         if (rc /= 0) then
+            print *, "Error reading file:", trim(filename), "  RC=", rc
+            print *, "Error message:", trim(errmsg)
+            return
+         end if
+      end do
+
+      ! Close the file and transfer data to output array
+      close(10)
+
+      VolcanicEmissions%nPts = num_emiss_sources
+      VolcanicEmissions%emissfile = trim(filename)
+      VolcanicEmissions%label = trim(label)
+
+   end subroutine ReadASCIIPointEmis
+
+
+   !> \brief Brief description of the subroutine
+   !!
+   !! \param km                Number of vertical levels
+   !! \param delp              Pressure Thickness for layer [Pa]
+   !! \param zbox              Geopotential Height difference [m] for layer
+   !! \param GOCART_DELP       Pressure Thickness for layer in GOCART format [Pa]
+   !! \param GOCART_ZBOX       Geopotential Height difference in GOCART format [m] for layer
+   !!
+   !!!>
+   subroutine PrepMetVarsForGOCARTSUV(km, delp, zbox, GOCART_DELP, GOCART_ZBOX)
+
+      IMPLICIT NONE
+
+      ! INPUTS
+      INTEGER, intent(in)                     :: km     ! number of vertical levels
+      REAL,  intent(in), DIMENSION(:), target :: delp   ! Pressure Thickness for layer [Pa]
+      REAL,  intent(in), DIMENSION(:), target :: zbox  ! Geopotential Height difference [m] for layer
+
+      ! INPUT/OUTPUTS
+      REAL, intent(inout), pointer :: GOCART_DELP(:,:,:)   !< pressure thickness for layer in GOCART format [Pa]
+      REAL, intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_ZBOX  !< Geopotential Height difference in GOCART format [m] for layer
+
+      allocate(GOCART_DELP(1, 1, km))
+      allocate(GOCART_ZBOX(1, 1, km))
+
+      GOCART_DELP(1,1,:) = delp !  pressure  in middle of layer
+      GOCART_ZBOX(1,1,:) = zbox    ! mid layer geopotential height [m]
+
+   end subroutine PrepMetVarsForGOCARTSUV
+
+
+end module CCPr_Scheme_Volcanic_GOCART_Mod
