@@ -54,6 +54,5 @@ elseif(
   )
 endif()
 
-add_subdirectory(util)
 add_subdirectory(src)
 add_subdirectory(tests)

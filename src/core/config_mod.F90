@@ -172,7 +172,7 @@ CONTAINS
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       ENDIF
-
+   
       call Config_Process_DMS(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_DMS"!'
@@ -182,9 +182,9 @@ CONTAINS
          RETURN
       ENDIF
 
-      call Config_Process_SUVolcanicEmissions(ConfigInput, Config, RC)
+      call Config_Process_Volcanic(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error in "Config_Process_SUVolcanicEmissions"!'
+         errMsg = 'Error in "Config_Process_Volcanic"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
          CALL QFYAML_CleanUp( ConfigInput         )
          CALL QFYAML_CleanUp( ConfigAnchored )
@@ -1391,9 +1391,9 @@ CONTAINS
    END SUBROUTINE Config_Process_DryDep
 
 
-   !> \brief Process SUVolcanicEmissions configuration
+   !> \brief Process Volcanic configuration
    !!
-   !! This function processes the SUVolcanic configuration and performs the necessary actions based on the configuration.
+   !! This function processes the Volcanic configuration and performs the necessary actions based on the configuration.
    !!
    !! \param[in] ConfigInput The YAML configuration object
    !! \param[inout] Config The configuration object
@@ -1401,7 +1401,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Config_Process_SUVolcanicEmissions( ConfigInput, Config, RC )
+   SUBROUTINE Config_Process_Volcanic( ConfigInput, Config, RC )
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod
       USE Config_Opt_Mod,  ONLY : ConfigType
@@ -1427,16 +1427,16 @@ CONTAINS
       CHARACTER(LEN=QFYAML_StrLen) :: key
 
       !========================================================================
-      ! Config_Process_SUVolcanicEmissions begins here!
+      ! Config_Process_Volcanic begins here!
       !========================================================================
 
       ! Initialize
       RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Process_SUVolcanicEmissions (in CATChem/src/core/config_mod.F90)'
+      thisLoc = ' -> at Config_Process_Volcanic (in CATChem/src/core/config_mod.F90)'
       errMsg = ''
 
       ! TODO #105 Fix reading of config file
-      key   = "process%suvolcanic%activate"
+      key   = "process%volcanic%activate"
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1444,10 +1444,10 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%suvolcanic_activate = v_bool
+      Config%volcanic_activate = v_bool
 
 
-      key   = "process%suvolcanic%scheme_opt"
+      key   = "process%volcanic%scheme_opt"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1455,26 +1455,26 @@ CONTAINS
          v_int = 1 ! default is one
          RETURN
       ENDIF
-      Config%suvolcanic_scheme = v_int
+      Config%volcanic_scheme = v_int
 
-      key   = "process%suvolcanic%filedir"
+      key   = "process%volcanic%filedir"
       v_str = MISSING_STR
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error parsing ' // TRIM( key ) // '!'
          CALL CC_Warning( errMsg, RC, thisLoc )
       ENDIF
-      Config%suvolcanic_filedir = TRIM( v_str )
+      Config%volcanic_filedir = TRIM( v_str )
 
 
-      write(*,*) "SUVolcanic Configuration"
+      write(*,*) "Volcanic Configuration"
       write(*,*) '------------------------------------'
-      write(*,*) 'Config%suvolcanic_activate = ', Config%suvolcanic_activate
-      write(*,*) 'Config%suvolcanic_scheme = ', Config%suvolcanic_scheme
-      write(*,*) 'Config%suvolcanic_filedir = ', Config%suvolcanic_filedir
+      write(*,*) 'Config%volcanic_activate = ', Config%volcanic_activate
+      write(*,*) 'Config%volcanic_scheme = ', Config%volcanic_scheme
+      write(*,*) 'Config%volcanic_filedir = ', Config%volcanic_filedir
       write(*,*) '------------------------------------'
 
-   END SUBROUTINE Config_Process_SUVolcanicEmissions
+   END SUBROUTINE Config_Process_Volcanic
 
 
    !> \brief Process DMS configuration

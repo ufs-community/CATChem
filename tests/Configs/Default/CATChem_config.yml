@@ -47,7 +47,7 @@ process:
     activate: true
     scheme_opt: 1
     resuspension: false
-  suvolcanic:
+  volcanic:
     activate: true
     scheme_opt: 1
     filedir: ./Emissions/so2_volcanic_emissions_Carns

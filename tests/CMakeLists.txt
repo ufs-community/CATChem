@@ -94,19 +94,19 @@ add_test(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_executable(test_suvolcanic test_suvolcanic.F90)
-target_link_libraries(test_suvolcanic PRIVATE CATChem_core)
-target_link_libraries(test_suvolcanic PRIVATE CATChem)
-target_link_libraries(test_suvolcanic PRIVATE CATChem_process_suvolcanic)
-target_link_libraries(test_suvolcanic PRIVATE testing)
+add_executable(test_volcanic test_volcanic.F90)
+target_link_libraries(test_volcanic PRIVATE CATChem_core)
+target_link_libraries(test_volcanic PRIVATE CATChem)
+target_link_libraries(test_volcanic PRIVATE CATChem_process_volcanic)
+target_link_libraries(test_volcanic PRIVATE testing)
 set_target_properties(
-  test_suvolcanic
+  test_volcanic
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
 
 add_test(
-  NAME test_suvolcanic
-  COMMAND test_suvolcanic
+  NAME test_volcanic
+  COMMAND test_volcanic
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

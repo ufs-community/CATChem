@@ -1,11 +1,11 @@
-!> \brief CCPR suvolcanicemissions state types
+!> \brief CCPR Volcanice state types
 !!
-!! \defgroup catchem_suvolcanicemissions_process
+!! \defgroup catchem_Volcanic_process
 !!
 !! \author Lacey Holland and Wei Li
 !! \date 10/2024
 !!!>
-MODULE CCPR_SUVolcanicEmissions_mod
+MODULE CCPR_Volcanic_mod
    USE Precision_mod
    USE Error_Mod
    USE DiagState_Mod, Only : DiagStateType
@@ -18,47 +18,47 @@ MODULE CCPR_SUVolcanicEmissions_mod
 
    PRIVATE
 
-   PUBLIC :: CCPR_SUVolcanicEmissions_Init
-   PUBLIC :: CCPR_SUVolcanicEmissions_Run
-   PUBLIC :: CCPR_SUVolcanicEmissions_Finalize
-   PUBLIC :: SUVolcanicStateType
+   PUBLIC :: CCPR_Volcanic_Init
+   PUBLIC :: CCPR_Volcanic_Run
+   PUBLIC :: CCPR_Volcanic_Finalize
+   PUBLIC :: VolcanicStateType
 
 
-   !> \brief SUVolcanicStateType
+   !> \brief VolcanicStateType
    !!
-   !! SUVolcanicStateType is the process-specific derived type.
+   !! VolcanicStateType is the process-specific derived type.
    !!
    !! \param Activate Activate Process (True/False)
    !! \param Scheme Scheme Option
-   !! \param nSUVolcanicSpecies # of SUVolcanic species
-   !! \param SUVolcanicSpeciesIndex Index of SUVolcanic species
-   !! \param SUVolcanicSpeciesName Name of SUVolcanic species
+   !! \param nVolcanicSpecies # of Volcanic species
+   !! \param VolcanicSpeciesIndex Index of Volcanic species
+   !! \param VolcanicSpeciesName Name of Volcanic species
    !! \param SpcIDs CATChem species IDs
    !! \param CatIndex Index of emission category in EmisState
    !! \param TotalEmission Total emission of all species at each level [kg/m^2/s]
    !! \param EmissionPerSpecies Emission per species at each level [kg/m^2/s]
    !! \param FileDir Input file directory for reading in emissions
    !!
-   !! \ingroup core_modules
+   !! \ingroup catchem_Volcanic_process
    !!!>
-   TYPE :: SUVolcanicStateType
+   TYPE :: VolcanicStateType
 
       ! Generic Variables for Every Process
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
-      integer                         :: nSUVolcanicSpecies           !< Number of SUVolcanic species
-      integer, pointer                :: SUVolcanicSpeciesIndex(:)    !< Index of SUVolcanic species
-      character(len=31), pointer      :: SUVolcanicSpeciesName(:)     !< name of SUVolcanic species
-      integer, pointer                :: SpcIDs(:)               !< CATChem species IDs
+      integer                         :: nVolcanicSpecies           !< Number of Volcanic species
+      integer, allocatable            :: VolcanicSpeciesIndex(:)    !< Index of Volcanic species
+      character(len=31), allocatable  :: VolcanicSpeciesName(:)     !< name of Volcanic species
+      integer, allocatable            :: SpcIDs(:)               !< CATChem species IDs
       integer                         :: CatIndex                !< Index of emission category in EmisState
 
       ! Process Specific Parameters
-      real(fp), pointer               :: TotalEmission(:)          !< Total emission of all species at each level [kg/m^2/s]
-      real(fp), pointer               :: EmissionPerSpecies(:,:)   !< Emission per species at each level          [kg/m^2/s]
+      real(fp), allocatable           :: TotalEmission(:)          !< Total emission of all species at each level [kg/m^2/s]
+      real(fp), allocatable           :: EmissionPerSpecies(:,:)   !< Emission per species at each level          [kg/m^2/s]
       character(len=1055)             :: FileDir                  !< Input file directory for reading in emissions
 
 
-   END TYPE SUVolcanicStateType
+   END TYPE VolcanicStateType
 
 
 CONTAINS
@@ -67,14 +67,14 @@ CONTAINS
    !! \brief Initialize the CATChem Volcanic module
    !!
    !! \param Config       CATCHem configuration options
-   !! \param SUVolcanicState   CATCHem PROCESS state
+   !! \param VolcanicState   CATCHem PROCESS state
    !! \param EmisState         CATCHem emission state
    !! \param RC               Error return code
    !!
-   !! \ingroup catchem_suvolcanicemissions_process
+   !! \ingroup catchem_Volcanicemissions_process
    !!
    !!!>
-   SUBROUTINE CCPR_SUVolcanicEmissions_Init( Config, SUVolcanicState, EmisState, RC )
+   SUBROUTINE CCPR_Volcanic_Init( Config, VolcanicState, EmisState, RC )
       ! USE
 
 
@@ -86,7 +86,7 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(SUVolcanicStateType)    :: SUVolcanicState ! Volcanic state
+      TYPE(VolcanicStateType)    :: VolcanicState ! Volcanic state
       INTEGER,         INTENT(INOUT) :: RC       ! Success or failure
 
       ! Error handling
@@ -102,85 +102,89 @@ CONTAINS
       ! CCPR_DryDep_Init begins here!
       !=================================================================
       ErrMsg = ''
-      ThisLoc = ' -> at CCPR_SUVolcanicEmissions_INIT (in process/SUVolcanicEmissions/CCPr_SUVolcanicEmissions_mod.F90)'
+      ThisLoc = ' -> at CCPR_Volcanic_INIT (in process/Volcanic/CCPr_Volcanic_mod.F90)'
 
       ! First check if process is activated in config | if not don't allocate arrays or pointers
-      if (Config%suvolcanic_activate) then
+      if (Config%volcanic_activate) then
 
          ! Activate Process
          !------------------
-         SUVolcanicState%Activate = .true.
+         VolcanicState%Activate = .true.
 
          ! Set scheme option
          !------------------
          ! For now, the only option is SchemeOpt = 1
-         SUVolcanicState%SchemeOpt = Config%suvolcanic_scheme
+         VolcanicState%SchemeOpt = Config%volcanic_scheme
 
-         !Find SUVOLCANIC caterory index in EmisState for future use
+         !Find VOLCANIC caterory index in EmisState for future use
          !--------------------------------------------
          do c = 1, EmisState%nCats
-            if (EmisState%Cats(c)%name == 'SUVOLCANIC') then
-               SUVolcanicState%CatIndex = c
+            if (EmisState%Cats(c)%name == 'VOLCANIC') then
+               VolcanicState%CatIndex = c
                exit
             endif
          end do
 
          ! Set number of species from EmisState
          !----------------------
-         SUVolcanicState%nSUVolcanicSpecies = EmisState%Cats(SUVolcanicState%CatIndex)%nSpecies
+         VolcanicState%nVolcanicSpecies = EmisState%Cats(VolcanicState%CatIndex)%nSpecies
 
          !------------------------------------
          ! Allocate emission species index
-         ALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
+         ALLOCATE( VolcanicState%VolcanicSpeciesIndex(VolcanicState%nVolcanicSpecies), STAT=RC )
+         CALL CC_CheckVar('VolcanicState%VolcanicSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         VolcanicState%VolcanicSpeciesIndex = -1
 
          ! Allocate emission speceis names
-         ALLOCATE( SUVolcanicState%SUVolcanicSpeciesName(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
+         ALLOCATE( VolcanicState%VolcanicSpeciesName(VolcanicState%nVolcanicSpecies), STAT=RC )
+         CALL CC_CheckVar('VolcanicState%VolcanicSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         VolcanicState%VolcanicSpeciesName = ''
 
          ! Allocate CatChem species index
-         ALLOCATE( SUVolcanicState%SpcIDs(SUVolcanicState%nSUVolcanicSpecies), STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
+         ALLOCATE( VolcanicState%SpcIDs(VolcanicState%nVolcanicSpecies), STAT=RC )
+         CALL CC_CheckVar('VolcanicState%SpcIDs', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         VolcanicState%SpcIDs = -1
 
          ! Allocate emission flux
-         ALLOCATE( SUVolcanicState%EmissionPerSpecies(SUVolcanicState%nSUVolcanicSpecies, &
-            SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
+         ALLOCATE( VolcanicState%EmissionPerSpecies(VolcanicState%nVolcanicSpecies, &
+            SIZE(EmisState%Cats(VolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
+         CALL CC_CheckVar('VolcanicState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         VolcanicState%EmissionPerSpecies = ZERO
 
          ! Allocate total emissions
-         ALLOCATE( SUVolcanicState%TotalEmission(SIZE(EmisState%Cats(SUVolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
+         ALLOCATE( VolcanicState%TotalEmission(SIZE(EmisState%Cats(VolcanicState%CatIndex)%Species(1)%Flux)), STAT=RC )
+         CALL CC_CheckVar('VolcanicState%TotalEmission', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         VolcanicState%TotalEmission = ZERO
 
          ! Set the file directory
-         SUVolcanicState%FileDir = TRIM(Config%suvolcanic_filedir)
+         VolcanicState%FileDir = TRIM(Config%Volcanic_filedir)
 
       else
-         SUVolcanicState%Activate = .false.
+         VolcanicState%Activate = .false.
       end if
 
-   end subroutine CCPR_SUVolcanicEmissions_Init
+   end subroutine CCPR_Volcanic_Init
 
    !>
-   !! \brief Run the SUVolcanicEmissions
+   !! \brief Run the VolcanicEmissions
    !!
    !! \param [IN] MetState - The MetState object
-   !! \param [INOUT] SUVolcanicState - The SUVolcanicState object
+   !! \param [INOUT] VolcanicState - The VolcanicState object
    !! \param [INOUT] EmisState - The EmisState object
-   !! \param [OUT] RC Return code
+   !! \param [INOUT] RC Return code
    !!
-   !! \ingroup catchem_suvolcanicemissions_process
+   !! \ingroup catchem_Volcanicemissions_process
    !!!>
-   SUBROUTINE CCPr_SUVolcanicEmissions_Run( MetState, SUVolcanicState, EmisState, RC )
+   SUBROUTINE CCPr_Volcanic_Run( MetState, VolcanicState, EmisState, RC )
 
       ! USE
       USE constants, only : g0
-      USE ReadEmissions, only:  ReadASCIIPointEmissions, VolcanicEmissionData
-      use CCPr_Scheme_GOCART_SUVolcanicEmissions_Mod, only : CCPr_Scheme_GOCART_SUVolcanicEmissions
+      use CCPr_Scheme_Volcanic_GOCART_Mod, only : CCPr_Scheme_Volcanic_GOCART, VolcanicEmisData, ReadASCIIPointEmis
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -188,17 +192,17 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !TYPE(DiagStateType), INTENT(INOUT)      :: DiagState       !< DiagState Instance
-      TYPE(SUVolcanicStateType), INTENT(INOUT)  :: SUVolcanicState  !< SUVolcanicState Instance
+      TYPE(VolcanicStateType), INTENT(INOUT)  :: VolcanicState  !< VolcanicState Instance
       !TYPE(ChemStateType), INTENT(INOUT)     :: ChemState       !< ChemState Instance
       TYPE(EmisStateType), INTENT(INOUT)     :: EmisState       !< ChemState Instance
 
       ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                 ! Return Code
+      INTEGER, INTENT(INOUT) :: RC                                 ! Return Code
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       CHARACTER(LEN=1055) :: fname
-      type(VolcanicEmissionData), allocatable :: VolcanicEmis(:)
+      type(VolcanicEmisData), allocatable :: VolcanicEmis(:)
       CHARACTER(len=7), parameter :: label='volcano'
       INTEGER :: i                          ! loop index
       INTEGER :: hms                        ! Model time [secs] TODO: format is right?
@@ -223,24 +227,24 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_SUVolcanicEmissions_Run &
-      & (in process/SUVolcanicEmissions/ccpr_SUVolcanicEmissions_mod.F90)'
+      thisLoc = ' -> at CCPr_VolcanicEmissions_Run &
+      & (in process/VolcanicEmissions/ccpr_VolcanicEmissions_mod.F90)'
 
-      ! Run  SUVolcanic
+      ! Run  Volcanic
       !-------------------------
-      if (SUVolcanicState%Activate) then
-         ! Run the GOCART SUVolcanic Scheme
+      if (VolcanicState%Activate) then
+         ! Run the GOCART Volcanic Scheme
          !-------------------------
-         if (SUVolcanicState%SchemeOpt == 1) then
+         if (VolcanicState%SchemeOpt == 1) then
             ! Run the SU Volcanic GOCART Scheme
             !-------------------------
-            if (SUVolcanicState%nSUVolcanicSpecies  > 0) then
+            if (VolcanicState%nVolcanicSpecies  > 0) then
 
                !TODO: read file name from config file based on ymd?
                ymd = MetState%YMD; hms = MetState%HMS
                write(ymd_str, "(i0)") ymd ! converting integer to string
-               fname = TRIM(SUVolcanicState%FileDir) // '.' // TRIM(ymd_str) // '.rc'
-               call ReadASCIIPointEmissions (fname, label, VolcanicEmis, RC)
+               fname = TRIM(VolcanicState%FileDir) // '.' // TRIM(ymd_str) // '.rc'
+               call ReadASCIIPointEmis (fname, label, VolcanicEmis, RC)
                nVolc = VolcanicEmis(1)%nPts
                allocate(vSO2(nVolc), vCloud(nVolc), vElev(nVolc), vLat(nVolc), VLon(nVolc))
                vSO2 = VolcanicEmis(:)%VEmis
@@ -248,6 +252,7 @@ CONTAINS
                vElev = VolcanicEmis(:)%Vbase
                vLon = VolcanicEmis(:)%Vlon
                vLat = VolcanicEmis(:)%Vlat
+               if (allocated(VolcanicEmis)) deallocate(VolcanicEmis)
 
                !TODO: iPoint and jPoint needs to be determined; currently gives all one. In real run,
                !we could pre-select sources for the current grid cell so giving all ones can work fine.
@@ -261,13 +266,14 @@ CONTAINS
                !set area and SO2
                allocate(area(1,1), SO2(1,1, MetState%NLEVS))
                area(1,1) = MetState%AREA_M2
+               SO2 = ZERO
 
                ! loop through all species. Right now, GOCART only has SO2
-               do i = 1, SUVolcanicState%nSUVolcanicSpecies
+               do i = 1, VolcanicState%nVolcanicSpecies
 
                   !Need to look up which is the index for SO2 concentrations
                   !TODO: is level index reversed in the GOCART???
-                  call CCPr_Scheme_GOCART_SUVolcanicEmissions( MetState%NLEVS,   &
+                  call CCPr_Scheme_Volcanic_GOCART( MetState%NLEVS,   &
                      MetState%TSTEP, &
                      VStart, &
                      VEnd, &
@@ -282,7 +288,6 @@ CONTAINS
                      vSO2, &    !volcanic contribution to so2 emissions
                      nSO2, &    !tracer number for so2 within sulfur trace
                      SO2, &     !total so2 concentration intent(inout)
-                  !SU_emis, & !total emission rate for each sulfur species, !SU_emis(:,:,nSO2), nSO2=2, nDMS=1, nSO4=3, nMSA=4
                      vCloud, &
                      vElev, &
                      vLat, &
@@ -290,34 +295,34 @@ CONTAINS
                      RC)
                   !  nso2 is used to define SU_emis:  SU_emis(:,:,nSO2). We only use SO2 for now and assign nSO2=1
 
-                  !put it back to SUVolcanicState
-                  SUVolcanicState%SUVolcanicSpeciesIndex(i) = i
-                  SUVolcanicState%SUVolcanicSpeciesName(i) = EmisState%Cats(SUVolcanicState%CatIndex)%Species(i)%name
+                  !put it back to VolcanicState
+                  VolcanicState%VolcanicSpeciesIndex(i) = i
+                  VolcanicState%VolcanicSpeciesName(i) = EmisState%Cats(VolcanicState%CatIndex)%Species(i)%name
                   !TODO: convert unit from kg kg-1 to kg m-2 s-1;
                   !TODO: The test only has 8 levels and we give EmissionPerSpecies 28 levels from GridState. In real run,
                   ! "1:8" should be changed to ":" for all the vertical levels.
-                  SUVolcanicState%EmissionPerSpecies(i,1:8) = SO2(1, 1, :) * MetState%DELP / g0 / MetState%TSTEP
-                  SUVolcanicState%TotalEmission(:) = SUVolcanicState%TotalEmission(:) + SUVolcanicState%EmissionPerSpecies(i,:)
+                  VolcanicState%EmissionPerSpecies(i,1:8) = SO2(1, 1, :) * MetState%DELP / g0 / MetState%TSTEP
+                  VolcanicState%TotalEmission(:) = VolcanicState%TotalEmission(:) + VolcanicState%EmissionPerSpecies(i,:)
 
-               end do ! do i = 1, SUVolcanicState%nSUVolcanicSpecies
+               end do ! do i = 1, VolcanicState%nVolcanicSpecies
 
-            endif  ! if (SUVolcanicState%nSUVolcanicSpecies  > 0)
+            endif  ! if (VolcanicState%nVolcanicSpecies  > 0)
 
-         endif  ! if (SUVolcanicState%SchemeOpt == 1)
+         endif  ! if (VolcanicState%SchemeOpt == 1)
 
          write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
-      endif   !  if (SUVolcanicState%Activate)
+      endif   !  if (VolcanicState%Activate)
 
-   end subroutine CCPr_SUVolcanicEmissions_Run
+   end subroutine CCPr_Volcanic_Run
 
    !>
    !! \brief Finalize the DryDep
    !!
-   !! \param [INOUT] SUVolcanicState
-   !! \param [OUT] RC Return code
+   !! \param [INOUT] VolcanicState
+   !! \param [INOUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_SUVolcanicEmissions_Finalize( SUVolcanicState, RC )
+   SUBROUTINE CCPr_Volcanic_Finalize( VolcanicState, RC )
 
       ! USE
       !----
@@ -325,10 +330,10 @@ CONTAINS
       IMPLICIT NONE
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(SUVolcanicStateType), INTENT(INOUT) :: SUVolcanicState  ! SUVolcanicState Instance
+      TYPE(VolcanicStateType), INTENT(INOUT) :: VolcanicState  ! VolcanicState Instance
 
       ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+      INTEGER, INTENT(INOUT) :: RC                                  ! Return Code
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
@@ -336,41 +341,41 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_SUVolcanicEmissions_Finalize &
-      &(in process/SUVolcanicEmissions/ccpr_SUVolcanicEmissions_mod.F90)'
+      thisLoc = ' -> at CCPr_VolcanicEmissions_Finalize &
+      &(in process/VolcanicEmissions/ccpr_VolcanicEmissions_mod.F90)'
 
       ! Deallocate any arrays here
-      IF ( ASSOCIATED( SUVolcanicState%SpcIDs ) ) THEN
-         DEALLOCATE( SUVolcanicState%SpcIDs, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SpcIDs', 0, RC)
+      IF (ALLOCATED(VolcanicState%SpcIDs)) THEN
+         DEALLOCATE( VolcanicState%SpcIDs, STAT=RC )
+         CALL CC_CheckVar('VolcanicState%SpcIDs', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      END IF
 
-      IF ( ASSOCIATED( SUVolcanicState%SUVolcanicSpeciesIndex ) ) THEN
-         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesIndex, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesIndex', 0, RC)
+      IF (ALLOCATED(VolcanicState%VolcanicSpeciesIndex)) THEN
+         DEALLOCATE( VolcanicState%VolcanicSpeciesIndex, STAT=RC )
+         CALL CC_CheckVar('VolcanicState%VolcanicSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
-
-      IF ( ASSOCIATED( SUVolcanicState%SUVolcanicSpeciesName ) ) THEN
-         DEALLOCATE( SUVolcanicState%SUVolcanicSpeciesName, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%SUVolcanicSpeciesName', 0, RC)
+      END IF
+      
+      IF (ALLOCATED(VolcanicState%VolcanicSpeciesName)) THEN
+         DEALLOCATE( VolcanicState%VolcanicSpeciesName, STAT=RC )
+         CALL CC_CheckVar('VolcanicState%VolcanicSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
-
-      IF ( ASSOCIATED( SUVolcanicState%EmissionPerSpecies ) ) THEN
-         DEALLOCATE( SUVolcanicState%EmissionPerSpecies, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%EmissionPerSpecies', 0, RC)
+      END IF
+      
+      IF (ALLOCATED(VolcanicState%EmissionPerSpecies)) THEN
+         DEALLOCATE( VolcanicState%EmissionPerSpecies, STAT=RC )
+         CALL CC_CheckVar('VolcanicState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      END IF
 
-      IF ( ASSOCIATED( SUVolcanicState%TotalEmission ) ) THEN
-         DEALLOCATE( SUVolcanicState%TotalEmission, STAT=RC )
-         CALL CC_CheckVar('SUVolcanicState%TotalEmission', 0, RC)
+      IF (ALLOCATED(VolcanicState%TotalEmission)) THEN
+         DEALLOCATE( VolcanicState%TotalEmission, STAT=RC )
+         CALL CC_CheckVar('VolcanicState%TotalEmission', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
+      END IF
+   
+   end subroutine CCPr_Volcanic_Finalize
 
-   end subroutine CCPr_SUVolcanicEmissions_Finalize
 
-
-END MODULE CCPR_SUVolcanicEmissions_Mod
+END MODULE CCPR_Volcanic_Mod
