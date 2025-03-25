@@ -9,7 +9,7 @@
 !! Geosci. Model Development, 17, 14431468, 2024
 !! https://doi.org/10.5194/gmd-17-1443-2024
 !!
-!! \author Lacey Holland
+!! \author Lacey Holland and Wei Li
 !! \date 01/2025
 !!!>
 module CCPr_Scheme_GOCART_DMS_Mod
@@ -38,7 +38,6 @@ contains
 
       ! Uses
       USE GOCART2G_process, only: DMSemission
-      USE PrepMetVars_Mod
 
       IMPLICIT NONE
 
@@ -103,6 +102,52 @@ contains
       if (allocated(DMS)) deallocate(DMS)
 
    end subroutine CCPr_Scheme_GOCART_DMS
+
+
+   !> \brief some subroutines to convert MET data to GOCART format
+   !! TODO: these may be used by other GOCART processes too, 
+   !!       so they should be moved to a more general location 
+   !!
+   !! \param ARR     input met data
+   !! \param RESULT  output met data for GOCART format
+   !!
+   !!!>
+
+   SUBROUTINE INCR_REAL_RANK2(ARR, RESULT)
+      REAL, INTENT(IN), TARGET :: ARR
+      REAL, INTENT(INOUT), POINTER :: RESULT(:,:)
+
+      ALLOCATE(RESULT(1, 1))
+      RESULT(1,1)=ARR
+
+   END SUBROUTINE INCR_REAL_RANK2
+
+   SUBROUTINE INCR_REAL_RANK3(ARR, RESULT)
+      REAL, INTENT(IN), TARGET :: ARR(:)
+      REAL, INTENT(INOUT), POINTER :: RESULT(:,:,:)
+
+      ALLOCATE(RESULT(1, 1, SIZE(ARR, 1)))
+      RESULT(1,1,:)=ARR
+
+   END SUBROUTINE INCR_REAL_RANK3
+
+   ! SUBROUTINE INCR_INT_RANK2(ARR, RESULT)
+   !    INTEGER, INTENT(IN), TARGET :: ARR
+   !    INTEGER, INTENT(INOUT), POINTER :: RESULT(:,:)
+
+   !    ALLOCATE(RESULT(1, 1))
+   !    RESULT(1,1)=ARR
+
+   ! END SUBROUTINE INCR_INT_RANK2
+
+   ! SUBROUTINE INCR_INT_RANK3(ARR, RESULT)
+   !    INTEGER, INTENT(IN), TARGET :: ARR(:)
+   !    INTEGER, INTENT(INOUT), POINTER :: RESULT(:,:,:)
+
+   !    ALLOCATE(RESULT(1, 1, SIZE(ARR, 1)))
+   !    RESULT(1,1,:)=ARR
+
+   ! END SUBROUTINE INCR_INT_RANK3
 
 
 end module CCPr_Scheme_GOCART_DMS_Mod
