@@ -1,8 +1,9 @@
-!> \brief CCPR DMS state types
+!> \brief Driver for CATChem DMS process
+!! 
+!!\defgroup catchem_dms_process
+!! The CATChem DMS Process group holds all the CATCHem DMS processes.
 !!
-!!
-!!
-!! \author Lacey Holland
+!! \author Lacey Holland and Wei Li
 !! \date 01/2025
 !!!>
 MODULE CCPR_DMS_mod
@@ -26,8 +27,9 @@ MODULE CCPR_DMS_mod
 
    !> \brief DMSStateType
    !!
-   !! DMSStateType is the process-specific derived type. 
+   !! \details Contains all the information needed to run DMS Process
    !!
+   !! This type contains the following variables:
    !! \param Activate Activate Process (True/False)
    !! \param SchemeOpt Scheme Option
    !! \param nDMSSpecies Number of DMS species
@@ -38,7 +40,7 @@ MODULE CCPR_DMS_mod
    !! \param TotalEmission Total emission [kg/m^2/s]
    !! \param EmissionPerSpecies Emission per species [kg/m^2/s]
    !!
-   !! \ingroup core_modules
+   !! \ingroup catchem_dms_process
    !!!>
 
    TYPE :: DMSStateType
@@ -59,19 +61,16 @@ MODULE CCPR_DMS_mod
 CONTAINS
 
    !>
-   !! \brief Initialize the CATChem DMS module
+   !! \brief Initialize the CATChem DMS process
    !!
-   !! \param Config       CATCHem configuration options
-   !! \param DMSState   CATCHem PROCESS state
-   !! \param ChemState         CATCHem chemical state
-   !! \param RC               Error return code
+   !! \param Config     CATCHem configuration options
+   !! \param DMSState   CATCHem DMS state
+   !! \param ChemState  CATCHem chemical state
+   !! \param RC         Error return code
    !!
    !!!>
-
-
    SUBROUTINE CCPR_DMS_Init( Config, DMSState, EmisState, RC )
       ! USE
-
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -81,13 +80,13 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(DMSStateType)     :: DMSState ! DMS state
-      INTEGER,         INTENT(INOUT)    :: RC       ! Success or failure
+      TYPE(DMSStateType)     :: DMSState  ! DMS state
+      INTEGER, INTENT(INOUT) :: RC        ! Success or failure
 
       ! Error handling
       !---------------
-      CHARACTER(LEN=255)    :: ErrMsg
-      CHARACTER(LEN=255)    :: ThisLoc
+      CHARACTER(LEN=255)     :: ErrMsg
+      CHARACTER(LEN=255)     :: ThisLoc
 
       ! LOCAL VARIABLES
       !----------------
@@ -97,9 +96,9 @@ CONTAINS
       ! CCPR_DMS_Init begins here!
       !=================================================================
       ErrMsg = ''
-      ThisLoc = ' -> at CCPR_DMS_INIT (in process/DMSemissions/ccpr_dms_mod.F90)'
+      ThisLoc = ' -> at CCPR_DMS_INIT (in process/DMS/ccpr_dms_mod.F90)'
 
-      ! First check if process is activated in config | if not don't allocate arrays or pointers
+      ! First check if process is activated in config
       if (Config%DMS_activate) then
 
          ! Activate Process
@@ -163,9 +162,8 @@ CONTAINS
    !! \brief Run the DMS emission scheme
    !!
    !! \param [IN] MetState - The MetState object
-   !! \param [INOUT] DiagState - The DiagState object
    !! \param [INOUT] DMSState - The DMSState object
-   !! \param [INOUT] ChemState - The ChemState object
+   !! \param [INOUT] EmisState - The EmisState object
    !! \param [OUT] RC Return code
    !!!>
    SUBROUTINE CCPr_DMS_Run( MetState, DMSState, EmisState, RC )
@@ -175,42 +173,38 @@ CONTAINS
       USE CCPr_Scheme_GOCART_DMS_Mod, only : CCPR_Scheme_GOCART_DMS
 
       IMPLICIT NONE
+
       ! INPUT PARAMETERS
-      TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
+      TYPE(MetStateType),  INTENT(IN)      :: MetState     ! MetState Instance
 
       ! INPUT/OUTPUT PARAMETERS
-      !TYPE(DiagStateType), INTENT(INOUT)   :: DiagState       ! DiagState Instance
       TYPE(DMSStateType), INTENT(INOUT)    :: DMSState     ! DMSState Instance
-      TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState       ! ChemState Instance
+      TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState    ! ChemState Instance
 
       ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                 ! Return Code
-
+      INTEGER, INTENT(OUT)                 :: RC           ! Return Code
 
       ! LOCAL VARIABLES
       INTEGER :: s
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
-      INTEGER, parameter :: NDMS = 1
-      !REAL, dimension(:,:), pointer   :: dmso_conc   ! concentration of DMS
-      !REAL, dimension(:,:,:),pointer  :: DMS       ! DMS [kg kg-1]
       REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
 
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_DMS_Run (in process/DMSemissions/ccpr_DMS_mod.F90)'
+      thisLoc = ' -> at CCPr_DMS_Run (in process/DMS/ccpr_DMS_mod.F90)'
 
-      ! Run the DMS Scheme
+      ! If DMS is activated
       !-------------------------
       if (DMSState%Activate) then
          ! Run the DMS Scheme
          !-------------------------
-         do s = 1, DMSState%nDMSSpecies !only one
+         do s = 1, DMSState%nDMSSpecies !only one species for now
 
             if (DMSState%SchemeOpt == 1) then
-               ! Run the DMS Scheme
-               !-------------------------
-               allocate(SU_emis(1,1, NDMS)); SU_emis = ZERO
+               
+               !NDMS = 1 is moved to scheme module
+               allocate(SU_emis(1,1,1)); SU_emis = ZERO 
 
                call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
                   MetState%TSTEP, &
@@ -222,7 +216,6 @@ CONTAINS
                   MetState%DELP, &
                   MetState%DMSO_CONC, &
                   SU_emis, &
-                  ndms, &
                   RC)
                
                if (RC /= CC_SUCCESS) then
@@ -233,7 +226,7 @@ CONTAINS
                !put it back to DMSState
                DMSState%DMSSpeciesIndex(s)  = s
                DMSState%DMSSpeciesName(s)   = EmisState%Cats(DMSState%CatIndex)%Species(s)%name
-               DMSState%EmissionPerSpecies(s) = SU_emis(1,1, NDMS)
+               DMSState%EmissionPerSpecies(s) = SU_emis(1,1,1)
                DMSState%TotalEmission = DMSState%TotalEmission + DMSState%EmissionPerSpecies(s)
                if (associated(SU_emis)) nullify(SU_emis)
 
@@ -248,12 +241,11 @@ CONTAINS
 
       endif
 
-
    end subroutine CCPr_DMS_Run
 
 
    !>
-   !! \brief Finalize the DMSemissions
+   !! \brief Finalize the DMS emission scheme
    !!
    !! \param [INOUT] DMSState
    !! \param [OUT] RC Return code
@@ -269,7 +261,7 @@ CONTAINS
       TYPE(DMSStateType), INTENT(INOUT) :: DMSState  ! DMSState Instance
 
       ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+      INTEGER, INTENT(OUT)              :: RC        ! Return Code
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
@@ -277,7 +269,7 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_DMS_Finalize (in process/DMSemissions/ccpr_DMS_mod.F90)'
+      thisLoc = ' -> at CCPr_DMS_Finalize (in process/DMS/ccpr_DMS_mod.F90)'
 
       !Deallocate DMSState
          IF (ALLOCATED(DMSState%DMSSpeciesIndex)) THEN

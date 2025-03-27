@@ -83,7 +83,7 @@ program test_DMS
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
    MetState%LWI = 0   !gocart OCEAN=0.0, LAND = 1.0, SEA_ICE = 2.0
-   MetState%DMSO_CONC = 1.25e10_fp  !DMS ocean concentration [mol/L];TODO: may read from ChemState in the future
+   MetState%DMSO_CONC = 3.25_fp  !DMS ocean concentration [nmol/L];TODO: may read from ChemState in the future
 
    ! Allocate DiagState
    call cc_allocate_diagstate(Config, DiagState, ChemState, RC)

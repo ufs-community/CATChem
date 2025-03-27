@@ -2,7 +2,6 @@
 !! \file
 !! \brief CCPr Scheme for DMS
 !!
-!!
 !! Reference: Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS)
 !! Allison B. Collow, Peter R. Colarco, Arlindo M. da Silva, Virginie Buchard,
 !! Huisheng Bian, M Chin, Sampa Das, Ravi Govindaraju, Dongchul Kim, and Valentina Aquila,
@@ -11,6 +10,7 @@
 !!
 !! \author Lacey Holland and Wei Li
 !! \date 01/2025
+!! \ingroup catchem_dms_process
 !!!>
 module CCPr_Scheme_GOCART_DMS_Mod
    USE Precision_mod, only : ZERO
@@ -23,18 +23,26 @@ module CCPr_Scheme_GOCART_DMS_Mod
 
 contains
 
-   !> \brief Brief description of the subroutine
+   !> \brief GOCART DMS emission scheme
    !!
-   !! \param MetState     Meteorological Variables
-   !! \param DiagState    Diagnostic Variables
-   !! \param DMSState   DMS Variables
+   !! \param km           number of vertical levels
+   !! \param cdt          model timestep [sec]
+   !! \param g0           gravity [m/s2]
+   !! \param tmpu         Temperature [K]
+   !! \param u10m         10-m u-wind component [m/sec]
+   !! \param v10m         10-m v-wind component [m/sec]
+   !! \param lwi          orography flag; Land, ocean, ice mask
+   !! \param delp         Pressure Thickness for layer [Pa]
+   !! \param dmso_conc    DMS source concentration [nmol/L]
+   !! \param SU_emis      SU emissions, kg/m2/s
+   !! \param ndms         index of DMS relative to other sulfate tracers
    !! \param RC           Success or Failure
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
 
    subroutine CCPr_Scheme_GOCART_DMS(km, cdt, g0, tmpu, u10m, v10m, lwi, delp, &
-      dmso_conc, SU_emis, ndms, RC)
+      dmso_conc, SU_emis, RC)
 
       ! Uses
       USE GOCART2G_process, only: DMSemission
@@ -42,27 +50,21 @@ contains
       IMPLICIT NONE
 
       ! Arguments
-      INTEGER, intent(in) :: km            ! number of vertical levels
-      integer, intent(in) :: ndms      ! index of DMS relative to other sulfate tracers
-
-      REAL, intent(in)    :: g0
+      INTEGER, intent(in) :: km                ! number of vertical levels (only surface layer is used)
       REAL, intent(in)    :: cdt               ! model timestep [sec]
-      REAL, intent(in)    :: u10m                   ! 10-m u-wind component [m/sec]
-      REAL, intent(in)    :: v10m                   ! 10-m v-wind component [m/sec]
-
-      REAL, intent(in)  :: DMSO_CONC      ! DMS source concentration [mol/L]
+      REAL, intent(in)    :: g0                ! gravity [m/s2]
       REAL, dimension(:), intent(in) :: tmpu   ! Temperature [K]
+      REAL, intent(in)    :: u10m              ! 10-m u-wind component [m/sec]
+      REAL, intent(in)    :: v10m              ! 10-m v-wind component [m/sec]
+      INTEGER, intent(in) :: lwi               ! orography flag; Land, ocean, ice mask
       REAL, dimension(:), intent(in) :: delp   ! Pressure Thickness for layer [Pa]
-
-      INTEGER, intent(in)       :: lwi                   ! orography flag; Land, ocean, ice mask
-
-      !REAL, intent(inout),dimension(:,:,:),pointer  :: DMS      ! DMS [kg kg-1]
+      REAL, intent(in)  :: dmso_conc           ! DMS source concentration [nmol/L]
       REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
-      REAL, parameter :: fMassDMS=62.   ! g mol-1  -  should this go somewhere else in the future??
-
-      integer, intent(out) :: RC                      ! Success or Failure
+      integer, intent(out) :: RC               ! Success or Failure
 
       ! Local Variables
+      INTEGER, parameter :: NDMS = 1    ! index of DMS relative to other sulfate tracers
+      REAL, parameter :: fMassDMS=62.   ! DMS molecular weight [g/mol]
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
 
@@ -72,8 +74,7 @@ contains
       real, pointer :: GOCART_U10(:,:)
       real, pointer :: GOCART_V10(:,:)
       real, pointer :: GOCART_DMSO_CONC(:,:)
-      REAL, allocatable, dimension(:,:,:)  :: DMS      ! DMS [kg kg-1]
-
+      REAL, allocatable, dimension(:,:,:)  :: DMS  ! DMS [kg kg-1]
 
       ! Initialize
       errMsg = ''
@@ -106,13 +107,12 @@ contains
 
    !> \brief some subroutines to convert MET data to GOCART format
    !! TODO: these may be used by other GOCART processes too, 
-   !!       so they should be moved to a more general location 
+   !!       so they could be moved to a more general location 
    !!
    !! \param ARR     input met data
    !! \param RESULT  output met data for GOCART format
    !!
    !!!>
-
    SUBROUTINE INCR_REAL_RANK2(ARR, RESULT)
       REAL, INTENT(IN), TARGET :: ARR
       REAL, INTENT(INOUT), POINTER :: RESULT(:,:)
@@ -130,6 +130,9 @@ contains
       RESULT(1,1,:)=ARR
 
    END SUBROUTINE INCR_REAL_RANK3
+
+   !Not used for now but may be needed in the future; 
+   !comment out for now to avoid compiler warnings
 
    ! SUBROUTINE INCR_INT_RANK2(ARR, RESULT)
    !    INTEGER, INTENT(IN), TARGET :: ARR
