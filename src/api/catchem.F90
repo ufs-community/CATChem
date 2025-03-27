@@ -92,6 +92,8 @@ module CATChem
    use CCPr_DMS_mod, only: cc_dms_init => CCPr_DMS_Init         !< DMS Process Initialization Routine
    use CCPr_DMS_mod, only: cc_dms_run => CCPr_DMS_Run           !< DMS Process Run Routine
    use CCPr_DMS_mod, only: cc_dms_finalize => CCPr_DMS_Finalize !< DMS Process Finalization Routine
+   ! Chemical mechanism solver
+   use CCPr_Chem_mod, only: cc_get_micm_version => get_micm_version
 
    implicit none
 

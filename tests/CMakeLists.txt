@@ -17,13 +17,11 @@ set_target_properties(
   test_main
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
-
 add_test(
   NAME test_main
   COMMAND test_main
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
 add_test(
   NAME test_main_missing_config
   COMMAND test_main
@@ -40,7 +38,6 @@ set_target_properties(
   test_dust
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
-
 add_test(
   NAME test_ccpr_dust
   COMMAND test_dust
@@ -56,7 +53,6 @@ set_target_properties(
   test_seasalt
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
-
 add_test(
   NAME test_ccpr_seasalt
   COMMAND test_seasalt
@@ -71,7 +67,6 @@ set_target_properties(
   test_prise
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
-
 add_test(
   NAME test_plumerise
   COMMAND test_prise
@@ -87,7 +82,6 @@ set_target_properties(
   test_drydep
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
-
 add_test(
   NAME test_drydep
   COMMAND test_drydep
@@ -123,3 +117,12 @@ add_test(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 message(STATUS "Fortran module directory: ${CMAKE_BINARY_DIR}/include")
+
+add_executable(test_chem test_chem.f90)
+target_link_libraries(test_chem PRIVATE CATChem)
+target_link_libraries(test_chem PRIVATE testing)
+set_target_properties(
+  test_chem
+  PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+)
+add_test(NAME test_chem COMMAND test_chem)

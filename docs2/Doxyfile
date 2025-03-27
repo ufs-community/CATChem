@@ -15,7 +15,9 @@ BRIEF_MEMBER_DESC = YES
 
 INPUT = start.md
 INPUT += ../src/core
+INPUT += ../src/process/drydep
 INPUT += ../src/process/dust
+INPUT += ../src/process/plumerise
 INPUT += ../src/process/seasalt
 INPUT += ../src/api
 USE_MDFILE_AS_MAINPAGE = start.md

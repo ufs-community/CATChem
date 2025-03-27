@@ -5,7 +5,7 @@ Code Reviewers
 --------------
 
 ================= ========================================================
-Organization      Reviewers (github username)
+Organization      Reviewers (GitHub username)
 ================= ========================================================
 NOAA CSL          Colin Harkins (``colin-harkins``), Jian He (``jianheACM``), Quazi Rasool (``quaz115``), Becky Schwantes (``rschwant``)
 NOAA ARL          Zach Moon (``zmoon``), Barry Baker (``bbakernoaa``), Patrick Campbell (``drnimbusrain``)

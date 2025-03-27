@@ -1,0 +1,44 @@
+# https://www.doxygen.nl/manual/config.html
+PROJECT_NAME = CATChem
+PROJECT_BRIEF =
+
+OPTIMIZE_FOR_FORTRAN = YES
+
+INPUT = doxygen/index.md \
+        ../src/core \
+        ../src/process/drydep \
+        ../src/process/dust \
+        ../src/process/plumerise \
+        ../src/process/seasalt \
+        ../src/api
+USE_MDFILE_AS_MAINPAGE = index.md
+FILE_PATTERNS = *.F90
+RECURSIVE = YES
+
+# Doxygen Awesome
+HTML_EXTRA_STYLESHEET = ../docs2/static/doxygen-awesome.css \
+                        ../docs2/static/doxygen-awesome-sidebar-only.css \
+                        tweaks.css
+HTML_COLORSTYLE = LIGHT
+
+# Doxysphinx required
+GENERATE_TREEVIEW = NO
+DISABLE_INDEX = NO
+GENERATE_HTML = YES
+CREATE_SUBDIRS = NO
+OUTPUT_DIRECTORY = ./doxygen/
+GENERATE_LATEX = NO
+
+# Doxysphinx recommended
+SEARCHENGINE = NO
+GENERATE_TAGFILE = ./doxygen/html/tagfile.xml
+DOT_IMAGE_FORMAT = svg
+DOT_TRANSPARENT = YES
+INTERACTIVE_SVG = YES
+ALIASES = "rst=\verbatim embed:rst:leading-asterisk" \
+          endrst=\endverbatim
+
+# GraphViz Configuration
+INCLUDE_GRAPH = NO
+INCLUDED_BY_GRAPH = NO
+CALL_GRAPH = YES

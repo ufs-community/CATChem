@@ -1,7 +1,7 @@
 Developer's Guide
 =================
 
-Description of Branches
+Description of branches
 -----------------------
 
 main
@@ -18,7 +18,7 @@ when cloning the repository.
 .. _dev-install-instructions:
 
 How to incorporate updates to CATChem
---------------------------------------------
+-------------------------------------
 
 In order to contribute code to CATChem, you will need to fork the
 repository, make changes on your fork, and submit a pull request with your
@@ -74,3 +74,29 @@ changes.
    you can still clone the repositories via HTTPS, e.g. ::
 
        $ git clone https://github.com/ufs-community/CATChem.git
+
+How to add a new *process*
+--------------------------
+
+CATChem is developed to be able to be easily extensible with new processes.
+There are just a few steps that are required to be able to include a new process.
+
+- First create a new directory under src/process for your new process::
+
+    $ cd src/process
+    $ mkdir src/process/<new process>
+
+- Each process should include a process driver named ``CCPr_<new process>_Mod.F90``.
+  You can find a template under ``src/process/Process_driver_template.F90``.
+  In it, each process driver contains three phases:
+
+  * Init: Processes the config and initializes process defaults if activated
+  * Run: Runs the process and adds to ``DiagState`` and ``ChemState`` for any process
+  * Finalize: Deallocate any arrays that were allocated.
+
+- Each process should include a common module for any functions that may be used by schemes
+  (sub-parameterizations or common calculations between different schemes in that process family).
+  It also houses the process type and data information.
+
+- Each process then can have one or more schemes within them.
+  An example can be seen under ``src/process/dust`` and a template.

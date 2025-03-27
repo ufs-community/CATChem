@@ -4,11 +4,18 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - python=3.10
+  - python=3.11
+  - pip
   #
   # Docs
-  - sphinx=6.*
+  - doxygen=1.9.8
+  - graphviz
+  - sphinx=8.*
   - sphinx-autobuild
   - sphinx-design
+  - sphinx-book-theme
   - sphinx_rtd_theme
   - sphinx-togglebutton
+  #
+  - pip:
+    - doxysphinx
