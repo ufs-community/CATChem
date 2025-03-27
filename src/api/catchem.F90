@@ -87,6 +87,8 @@ module CATChem
    use CCPr_Volcanic_mod, only: cc_volcanic_init => CCPr_Volcanic_Init         !< SUVolcanicEmissions Process Initialization Routine
    use CCPr_Volcanic_mod, only: cc_volcanic_run => CCPr_Volcanic_Run           !< SUVolcanicEmissions Process Run Routine
    use CCPr_Volcanic_mod, only: cc_volcanic_finalize => CCPr_Volcanic_Finalize !< SUVolcanicEmissions Process Finalization Routine
+   ! Chemical mechanism solver
+   use CCPr_Chem_mod, only: cc_get_micm_version => get_micm_version
 
    implicit none
 
