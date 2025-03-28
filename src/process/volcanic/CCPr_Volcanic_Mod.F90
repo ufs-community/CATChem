@@ -356,13 +356,13 @@ CONTAINS
          CALL CC_CheckVar('VolcanicState%VolcanicSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       END IF
-      
+
       IF (ALLOCATED(VolcanicState%VolcanicSpeciesName)) THEN
          DEALLOCATE( VolcanicState%VolcanicSpeciesName, STAT=RC )
          CALL CC_CheckVar('VolcanicState%VolcanicSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       END IF
-      
+
       IF (ALLOCATED(VolcanicState%EmissionPerSpecies)) THEN
          DEALLOCATE( VolcanicState%EmissionPerSpecies, STAT=RC )
          CALL CC_CheckVar('VolcanicState%EmissionPerSpecies', 0, RC)
@@ -374,7 +374,7 @@ CONTAINS
          CALL CC_CheckVar('VolcanicState%TotalEmission', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       END IF
-   
+
    end subroutine CCPr_Volcanic_Finalize
 
 
