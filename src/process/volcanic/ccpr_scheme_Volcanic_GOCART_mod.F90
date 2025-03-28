@@ -107,7 +107,6 @@ contains
       INTEGER, intent(inout),dimension(:)   :: vEnd        ! Emissions end time [sec]
       INTEGER, intent(inout)                :: nVolc       ! number of volcanic sources
       INTEGER, intent(inout),dimension(:)   :: iPoint, jPoint ! grid cell index of each volcanic source
-      !INTEGER, intent(in)                  :: YMD
       INTEGER, intent(in)                   :: hms    ! current model time [sec]
       REAL, intent(in)                      :: g0
       REAL, intent(in), dimension(:) :: zbox  ! geopotential Height difference [m] for layer
@@ -116,7 +115,6 @@ contains
       REAL, intent(inout),dimension(:)      :: vSO2   ! volcanic emissions  [kg S/s]
       INTEGER, intent(in)                   :: nSO2     ! index of SO2 relative to other sulfate tracers
       REAL, intent(inout),dimension(:,:,:),pointer  :: SO2       ! SO2 emissions [kg kg-1]
-      !REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
       REAL, intent(inout),dimension(:)        :: vCloud    ! top elevation of emissions [m]
       REAL, intent(inout),dimension(:)        :: vElev     ! bottom elevation of emissions [m]
       REAL, intent(inout),dimension(:)        :: vLat     ! latitude specified in file [degree]
@@ -124,9 +122,8 @@ contains
       INTEGER, intent(inout)                  :: rc          ! error code
 
       !local variables
-      REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions [kg/m2/s; not really allocated]
-      REAL, dimension(:,:),pointer    :: SO2EMVN   ! non-explosive volcanic emissions [kg m-2 s-1; not really allocated]
-      REAL, dimension(:,:),pointer    :: SO2EMVE   ! explosive volcanic emissions [kg m-2 s-1; not really allocated]
+      REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions [kg/m2/s]
+      REAL, dimension(:,:),pointer    :: SO2EMVol  ! volcanic emissions [kg m-2 s-1]
       REAL, parameter :: fMassSulfur = 32.  !  gram molecular weights of species
       REAL, parameter :: fMassSO2 = 64.     !  gram molecular weights of species
       real, pointer :: GOCART_ZBOX(:,:,:)
@@ -157,12 +154,13 @@ contains
          !jPoint(1) = 0
 
          allocate(SU_emis(1,1,nSO2)) !TODO: nSO2 =1 for now
-         allocate(SO2EMVN, SO2EMVE, mold=area)
+         allocate(SO2EMVol, mold=area)
+         !allocate(SO2EMVN, SO2EMVE, mold=area)
 
          call SUvolcanicEmissions (nVolc, vStart, vEnd, vSO2, &
             vElev, vCloud, &
             iPoint, jPoint, &
-            hms, SO2EMVN, SO2EMVE, SO2, nSO2, &
+            hms, SO2EMVol, SO2, nSO2, &
             SU_emis, km, cdt, g0, gocart_ZBOX, gocart_DELP, area, &
             vLat, vLon, rc)
 
@@ -171,8 +169,7 @@ contains
       if (associated(GOCART_DELP)) nullify(GOCART_DELP)
       if (associated(GOCART_zbox)) nullify(GOCART_zbox)
       if (associated(SU_emis)) nullify(SU_emis)
-      if (associated(SO2EMVN)) nullify(SO2EMVN)
-      if (associated(SO2EMVE)) nullify(SO2EMVE)
+      if (associated(SO2EMVol)) nullify(SO2EMVol)
 
 
    end subroutine CCPr_Scheme_Volcanic_GOCART
