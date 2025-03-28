@@ -1,0 +1,218 @@
+# Get variables from GFS-Aerosols run
+#
+# atm: `atmf???.nc` outputs
+# sfc: `sfcf???.nc` outputs
+cases:
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_18z.csv"
+
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_12z.csv"
+
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_06z.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_18z.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_12z.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_06z.csv"
+
+  - lat: -5.0
+    lon: -65.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_12z.csv"
+
+  - lat: -5.0
+    lon: -65
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_18z.csv"
+
+  - lat: -5.0
+    lon: -65.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_06z.csv"
+
+variables:
+  # keys: MetState variables in lowercase
+
+  # Column coordinates
+  bxheight:  # layer thickness (m)
+    src: atm:delz
+  delp:  # pressure thickness (hPa)
+    src: atm:dpres
+    f: 100  # Pa -> hPa
+  pmid:
+    src: atm:pfull  # phalf are the interfaces
+  z:
+    src: atm  # combine hgtsfc (geopotential height at sfc) and delz (layer thickness; m)
+  zmid:
+    src: atm  # mid points of z
+
+  # Column State
+  cldf:  # cloud fraction
+    src: sfc:cldfra
+  ql:  # cloud liquid water mass fraction, but specifies units kg / kg dry air
+    src: atm:clwmr  # cloud liquid water mixing ratio
+  qv:  # specific humidity (kg/kg)
+    src: atm:spfh
+  sphu: # specific humidity (g/kg)
+    src: atm:spfh
+    f: 1000  # kg/kg -> g/kg
+  t:
+    src: atm:tmp
+  u:
+    src: atm:ugrd
+  v:
+    src: atm:vgrd
+
+  # Aerosol State
+  bc1:
+    src: atm:bc1
+    skip: true
+  bc2:
+    src: atm:bc2
+    skip: true
+  oc1:
+    src: atm:oc1
+    skip: true
+  oc2:
+    src: atm:oc2
+    skip: true
+  so4:
+    src: atm:so4
+    skip: true
+  so2:
+    src: atm:so2
+    skip: true
+  dust1:
+    src: atm:dust1
+    skip: true
+  dust2:
+    src: atm:dust2
+    skip: true
+  dust3:
+    src: atm:dust3
+    skip: true
+  dust4:
+    src: atm:dust4
+    skip: true
+  dust5:
+    src: atm:dust5
+    skip: true
+  seas1:
+    src: atm:seas1
+    skip: true
+  seas2:
+    src: atm:seas2
+    skip: true
+  seas3:
+    src: atm:seas3
+    skip: true
+  seas4:
+    src: atm:seas4
+    skip: true
+  seas5:
+    src: atm:seas5
+    skip: true
+  dms:
+    src: atm:dms
+    skip: true
+  msa:
+    src: atm:msa
+    skip: true
+
+  # Surface state
+  eflux:  # surface latent heat flux
+    src: sfc:lhtfl_ave
+  frsno:  # surface snow cover fraction
+    src: sfc:snowc_ave
+    f: 0.01  # % -> fraction
+  hflux:  # surface sensible heat flux
+    src: sfc:shtfl_ave
+  lwgdn:  # downward longwave at surface
+    src: sfc:dlwrf_ave
+    skip: true
+  pblh:  # PBL height
+    src: sfc:hpbl
+  ps:  # surface pressure
+    src: sfc:pressfc
+    f: 100  # Pa -> hPa
+  snodp:  # surface snow depth (m)
+    src: sfc:snod
+  snomas:  # snow mass (kg/m2)
+    src: sfc:weasd  # surface snow water equivalent (kg/m2)
+  swgdn:  # downward shortwave at surface
+    src: sfc:dswrf_ave
+  t2m:
+    src: sfc:tmp2m
+  ts:  # surface temperature
+    src: sfc:tmpsfc
+  u10m:
+    src: sfc:ugrd10m
+  ustar:
+    src: sfc:fricv  # note the model output has units "XXX"
+  v10m:
+    src: sfc:vgrd10m
+  wilt:  # wilting point
+    src: sfc:wilt
+  z0:  # roughness length
+    src: sfc:sfcr
+  # X:
+  #   src: sfc:pwat  # column precipitable water (kg/m2)
+
+  # Soil
+  gwetroot:  # volumetric soil moisture in root zone
+    src: sfc
+  gwettop:  # volumetric soil moisture near top
+    src: sfc
+  soilm:  # layered volumetric soil moisture
+    src: sfc
+
+  # Surface type
+  dluse:  # dominant land-use type
+    src: sfc:vtype  # Noah-MP extended IGBP, 20 categories, 0 = water
+  frveg:  # fraction of vegetation (not just green)
+    src: sfc:veg  # vegetation fraction
+  dsoiltype:  # dominant soil type (int)
+    src: sfc:sotyp
+  # gvf: # green vegetation fraction
+  #   src: sfc:gvf  # mean of shdmin and shdmax (max/min fractional coverage of green vegetation)?
+  lwi:  # sea-land-ice mask (0-sea, 1-land, 2-ice)
+    src: sfc:land
+  vtype:
+    src: sfc:vtype  # vegetation type (int)
+    skip: true
