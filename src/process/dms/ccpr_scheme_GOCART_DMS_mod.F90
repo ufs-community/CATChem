@@ -106,8 +106,8 @@ contains
 
 
    !> \brief some subroutines to convert MET data to GOCART format
-   !! TODO: these may be used by other GOCART processes too, 
-   !!       so they could be moved to a more general location 
+   !! TODO: these may be used by other GOCART processes too,
+   !!       so they could be moved to a more general location
    !!
    !! \param ARR     input met data
    !! \param RESULT  output met data for GOCART format
@@ -131,7 +131,7 @@ contains
 
    END SUBROUTINE INCR_REAL_RANK3
 
-   !Not used for now but may be needed in the future; 
+   !Not used for now but may be needed in the future;
    !comment out for now to avoid compiler warnings
 
    ! SUBROUTINE INCR_INT_RANK2(ARR, RESULT)

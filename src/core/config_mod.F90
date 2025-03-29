@@ -172,7 +172,7 @@ CONTAINS
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       ENDIF
-   
+
       call Config_Process_DMS(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_DMS"!'

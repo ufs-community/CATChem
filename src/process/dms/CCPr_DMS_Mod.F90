@@ -1,5 +1,5 @@
 !> \brief Driver for CATChem DMS process
-!! 
+!!
 !!\defgroup catchem_dms_process
 !! The CATChem DMS Process group holds all the CATCHem DMS processes.
 !!
@@ -202,9 +202,9 @@ CONTAINS
          do s = 1, DMSState%nDMSSpecies !only one species for now
 
             if (DMSState%SchemeOpt == 1) then
-               
+
                !NDMS = 1 is moved to scheme module
-               allocate(SU_emis(1,1,1)); SU_emis = ZERO 
+               allocate(SU_emis(1,1,1)); SU_emis = ZERO
 
                call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
                   MetState%TSTEP, &
@@ -217,7 +217,7 @@ CONTAINS
                   MetState%DMSO_CONC, &
                   SU_emis, &
                   RC)
-               
+
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in CCPr_Scheme_GOCART_DMS'
                   CALL CC_Error( errMsg, RC, thisLoc )
@@ -235,7 +235,7 @@ CONTAINS
                RC = CC_FAILURE
                CALL CC_Error( errMsg, RC, thisLoc )
                return
-            
+
             endif !DMS scheme option
          end do !for each species
 
@@ -272,26 +272,26 @@ CONTAINS
       thisLoc = ' -> at CCPr_DMS_Finalize (in process/DMS/ccpr_DMS_mod.F90)'
 
       !Deallocate DMSState
-         IF (ALLOCATED(DMSState%DMSSpeciesIndex)) THEN
-            DEALLOCATE(DMSState%DMSSpeciesIndex, STAT=RC)
-            CALL CC_CheckVar('DMSState%DMSSpeciesIndex', 0, RC)
-            IF (RC /= CC_SUCCESS) RETURN
-         ENDIF
-         IF (ALLOCATED(DMSState%DMSSpeciesName)) THEN
-            DEALLOCATE(DMSState%DMSSpeciesName, STAT=RC)
-            CALL CC_CheckVar('DMSState%DMSSpeciesName', 0, RC)
-            IF (RC /= CC_SUCCESS) RETURN
-         ENDIF
-         IF (ALLOCATED(DMSState%SpcIDs)) THEN
-            DEALLOCATE(DMSState%SpcIDs, STAT=RC)
-            CALL CC_CheckVar('DMSState%SpcIDs', 0, RC)
-            IF (RC /= CC_SUCCESS) RETURN
-         ENDIF
-         IF (ALLOCATED(DMSState%EmissionPerSpecies)) THEN
-            DEALLOCATE(DMSState%EmissionPerSpecies, STAT=RC)
-            CALL CC_CheckVar('DMSState%EmissionPerSpecies', 0, RC)
-            IF (RC /= CC_SUCCESS) RETURN
-         ENDIF
+      IF (ALLOCATED(DMSState%DMSSpeciesIndex)) THEN
+         DEALLOCATE(DMSState%DMSSpeciesIndex, STAT=RC)
+         CALL CC_CheckVar('DMSState%DMSSpeciesIndex', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+      IF (ALLOCATED(DMSState%DMSSpeciesName)) THEN
+         DEALLOCATE(DMSState%DMSSpeciesName, STAT=RC)
+         CALL CC_CheckVar('DMSState%DMSSpeciesName', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+      IF (ALLOCATED(DMSState%SpcIDs)) THEN
+         DEALLOCATE(DMSState%SpcIDs, STAT=RC)
+         CALL CC_CheckVar('DMSState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+      IF (ALLOCATED(DMSState%EmissionPerSpecies)) THEN
+         DEALLOCATE(DMSState%EmissionPerSpecies, STAT=RC)
+         CALL CC_CheckVar('DMSState%EmissionPerSpecies', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
 
    end subroutine CCPr_DMS_Finalize
 

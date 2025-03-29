@@ -113,7 +113,7 @@ program test_DMS
 
    call assert( DMSState%TotalEmission > 0.0_fp, "Test DMS Emissions")
    call print_info(Config, DMSState, MetState, title)
-   
+
    call cc_dms_finalize( DMSState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in _dms_finalize'
