@@ -59,15 +59,15 @@ module CCPr_BVOC_Common_Mod
       Logical                         :: Activate                !< Activate Process (True/False)
       INTEGER                         :: SchemeOpt               !< Scheme Option
       integer                         :: nBvocSpecies           !< Number of BVOC processes
-      integer, pointer                :: BvocSpeciesIndex(:)    !< Index of BVOC species
-      character(len=31), pointer      :: BvocSpeciesName(:)     !< name of BVOC species
-      integer, pointer                :: SpcIDs(:)               !< CATChem species IDs
+      integer, allocatable            :: BvocSpeciesIndex(:)    !< Index of BVOC species
+      character(len=31), allocatable  :: BvocSpeciesName(:)     !< name of BVOC species
+      integer, allocatable            :: SpcIDs(:)               !< CATChem species IDs
       integer                         :: CatIndex                !< Index of emission category in EmisState
 
       ! Process Specific Parameters
       real(fp)                        :: TotalEmission           !< Total emission          [kg/m^2/s]
-      real(fp), pointer               :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
-      real(fp), pointer               :: EmisNormFactor(:)       !< Emission normalized factor (onle one used for all now)
+      real(fp), allocatable           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
+      real(fp), allocatable           :: EmisNormFactor(:)       !< Emission normalized factor (onle one used for all now)
 
       ! Scheme Options (ISOP scaling is turned off at the moment)
       Logical                         :: CO2Inhib                !< CO2 inhibition for isoprene Option [True/False]

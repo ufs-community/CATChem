@@ -7,7 +7,7 @@
 !! \date 07/2024
 !!!>
 MODULE CCPR_BVOC_mod
-   USE Precision_mod, only : fp
+   USE Precision_mod, only : fp, ZERO
    USE Error_Mod,   Only : CC_Error, CC_SUCCESS, CC_FAILURE, CC_CheckVar
    USE constants, only : PI_180
    USE DiagState_Mod, Only : DiagStateType
@@ -130,16 +130,25 @@ CONTAINS
          ALLOCATE( BvocState%BvocSpeciesIndex(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         BvocState%BvocSpeciesIndex = -1
 
          ! Allocate emission speceis names
          ALLOCATE( BvocState%BvocSpeciesName(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         BvocState%BvocSpeciesName = ''
+
+         ! Allocate CatChem species index
+         ALLOCATE( BvocState%SpcIDs(BvocState%nBvocSpecies), STAT=RC )
+         CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+         BvocState%SpcIDs = -1
 
          ! Allocate emission flux
          ALLOCATE( BvocState%EmissionPerSpecies(BvocState%nBvocSpecies), STAT=RC )
          CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         BvocState%EmissionPerSpecies = ZERO
 
          ! Allocate normalized factor
          ! There should be a different normalization factor for each compound, but
@@ -147,6 +156,10 @@ CONTAINS
          ALLOCATE( BvocState%EmisNormFactor(1) , STAT=RC)
          CALL CC_CheckVar('BvocState%EmisNormFactor', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
+         BvocState%EmisNormFactor(1) = 1.0_fp
+
+         !initialize the total emission
+         BvocState%TotalEmission = ZERO
 
          !TODO: emission factor from 7 speceis are read from files and put in MetSate by now
          !      Others are calculated using 'PFT_16', which is also added in MetState
@@ -354,31 +367,31 @@ CONTAINS
       thisLoc = ' -> at CCPr_BVOC_Final (in process/bvoc/ccpr_BVOC_mod.F90)'
 
       ! Deallocate any arrays here
-      IF ( ASSOCIATED( BvocState%SpcIDs ) ) THEN
-         DEALLOCATE( BvocState%SpcIDs, STAT=RC )
-         CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-      ENDIF
-
-      IF ( ASSOCIATED( BvocState%BvocSpeciesIndex ) ) THEN
+      IF (ALLOCATED(BvocState%BvocSpeciesIndex)) THEN
          DEALLOCATE( BvocState%BvocSpeciesIndex, STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesIndex', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       ENDIF
 
-      IF ( ASSOCIATED( BvocState%BvocSpeciesName ) ) THEN
+      IF (ALLOCATED(BvocState%BvocSpeciesName)) THEN
          DEALLOCATE( BvocState%BvocSpeciesName, STAT=RC )
          CALL CC_CheckVar('BvocState%BvocSpeciesName', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       ENDIF
 
-      IF ( ASSOCIATED( BvocState%EmissionPerSpecies ) ) THEN
+      IF (ALLOCATED(BvocState%SpcIDs)) THEN
+         DEALLOCATE( BvocState%SpcIDs, STAT=RC )
+         CALL CC_CheckVar('BvocState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+
+      IF (ALLOCATED(BvocState%EmissionPerSpecies)) THEN
          DEALLOCATE( BvocState%EmissionPerSpecies, STAT=RC )
          CALL CC_CheckVar('BvocState%EmissionPerSpecies', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN
       ENDIF
 
-      IF ( ASSOCIATED( BvocState%EmisNormFactor ) ) THEN
+      IF (ALLOCATED(BvocState%EmisNormFactor)) THEN
          DEALLOCATE( BvocState%EmisNormFactor, STAT=RC )
          CALL CC_CheckVar('BvocState%EmisNormFactor', 0, RC)
          IF (RC /= CC_SUCCESS) RETURN

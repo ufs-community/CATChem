@@ -82,6 +82,8 @@ module CATChem
    use CCPr_DryDep_mod, only: cc_drydep_init => CCPr_DryDep_Init         !< DryDep Process Initialization Routine
    use CCPr_DryDep_mod, only: cc_drydep_run => CCPr_DryDep_Run           !< DryDep Process Run Routine
    use CCPr_DryDep_mod, only: cc_drydep_finalize => CCPr_DryDep_Finalize !< DryDep Process Finalization Routine
+   ! Chemical mechanism solver
+   use CCPr_Chem_mod, only: cc_get_micm_version => get_micm_version
 
    ! BVOC emissions
    use CCPr_Bvoc_Common_Mod, only: BvocStateType                             !< BVOC State
