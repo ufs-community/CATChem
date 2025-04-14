@@ -116,6 +116,10 @@ MODULE Config_Opt_Mod
       real(fp)                    :: drydep_co2_level
       real(fp)                    :: drydep_co2_reference
 
+      ! Wet Deposition Process
+      LOGICAL                     :: wetdep_activate
+      INTEGER                     :: wetdep_scheme
+
    END TYPE ConfigType
 
 CONTAINS
@@ -193,6 +197,10 @@ CONTAINS
       Config%drydep_co2_effect = .FALSE.
       Config%drydep_co2_level = 600.0_fp
       Config%drydep_co2_reference = 380.0_fp
+
+      !Wet Dep Process
+      Config%wetdep_activate = .FALSE.
+      Config%wetdep_scheme = 1
 
       !BVOC Process
       Config%bvoc_activate = .FALSE.

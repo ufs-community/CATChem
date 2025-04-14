@@ -217,6 +217,11 @@ MODULE MetState_Mod
       character(len=20)    :: LUCNAME    !< name of land use category
       logical              :: LNLPBL     !< non-local PBL scheme flag (TODO:where to put this )
 
+      !some met fields need for wet deposition but not included yet
+      !---------------------------------------
+      real(fp), ALLOCATABLE :: REEVAPLS(:)        !< Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
+
+
    END TYPE MetStateType
 
 CONTAINS

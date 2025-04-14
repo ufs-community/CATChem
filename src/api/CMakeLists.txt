@@ -10,6 +10,7 @@ target_link_libraries(${_lib} PUBLIC CATChem_process_plumerise)
 target_link_libraries(${_lib} PUBLIC CATChem_process_drydep)
 target_link_libraries(${_lib} PUBLIC CATChem_process_bvoc)
 target_link_libraries(${_lib} PUBLIC CATChem_process_chem)
+target_link_libraries(${_lib} PUBLIC CATChem_process_wetdep)
 set_target_properties(
   ${_lib}
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include

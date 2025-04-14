@@ -10,10 +10,15 @@ dust1:
   lower_radius: 0.1
   upper_radius: 1.0
   radius: .8
+  radius_wet: .8
   density: 2500.
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 dust2:
   name: dust2
   long_name: 'Dust Species Accumulation'
@@ -21,13 +26,20 @@ dust2:
   lower_radius: 0.1
   upper_radius: 5.0
   radius: 3.
+  radius_wet: 3.
   density: 2500.
   is_dust: true
   is_aerosol: true
   is_drydep: true
-#add more species for Wesely dry deposition test
-#viscosity is dummy value for gases to read in properly
-#upper_ and lower_radius are dummy values for aerosols to read in properly
+  is_wetdep: true
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
+#add more species for Wesely dry deposition test.
+#viscosity is dummy value for gases to read in properly.
+#upper_ and lower_radius are dummy values for aerosols to read in properly.
+#'radius_wet' is the default radius from GEOS-Chem and 'radius' is dry radius
+# adopted from its drydep module codes.This could affect wetdep whose mode is separated by 1um (e.g., SALC).
 O3:
   name: O3
   description: Ozone
@@ -37,6 +49,8 @@ O3:
   dd_hstar: 1.0e-2
   mw_g: 48.00
   viscosity: 0.0
+  henry_k0: 0.0101325e0
+  henry_cr: 2800.0
 NO2:
   name: NO2
   description: Nitrogen dioxide
@@ -51,6 +65,7 @@ NH3:
   description: Ammonia
   is_gas: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 2.0e+4
   mw_g: 17.04
@@ -58,11 +73,17 @@ NH3:
   dd_DvzMinVal_snow: 0.2
   dd_DvzMinVal_land: 0.3
   viscosity: 0.0
+  henry_k0: 3.3e+6
+  henry_cr: 4100.0
+  wd_retfactor: 5.0e-2
+  wd_LiqAndGas: true
+  wd_convfacI2G: 6.17395e-1
 SO2:
   name: SO2
   description: Sulfur dioxide
   is_gas: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 1.0e+5
   mw_g: 64.04
@@ -70,15 +91,28 @@ SO2:
   dd_DvzMinVal_snow: 0.2
   dd_DvzMinVal_land: 0.3
   viscosity: 0.0
+  #This is Luo's scheme for SO2 but adopted here
+  henry_k0: 1.22
+  henry_cr: 3100.0
+  wd_retfactor: 5.0e-2
+  wd_LiqAndGas: true
+  wd_convfacI2G: 6.17395e-1
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 CH2O:
   name: CH2O
   description: Formaldehyde
   is_gas: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 3.0e+3
   mw_g: 30.03
   viscosity: 0.0
+  henry_k0: 3.24e+3
+  henry_cr: 6800.0
+  wd_retfactor: 2.0e-2
 N2O5:
   name: N2O5
   description: Dinitrogen pentoxide
@@ -93,159 +127,235 @@ HNO3:
   description: Nitric acid
   is_gas: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 1.0e+14
   mw_g: 63.01
   viscosity: 0.0
+  henry_k0: 8.3e+4
+  henry_cr: 7400.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 1.0
+H2O2:
+  name: H2O2
+  description: Hydrogen peroxide
+  is_gas: true
+  is_drydep: true
+  is_wetdep: true
+  dd_f0: 1.0
+  dd_hstar: 5.0e+7
+  mw_g: 34.02
+  viscosity: 0.0
+  henry_k0: 8.3e+4
+  henry_cr: 7400.0
+  wd_retfactor: 5.0e-2
+  wd_LiqAndGas: true
+  wd_convfacI2G: 4.36564e-1
 NIT:
   name: NIT
   description: Inorganic nitrate
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 62.01
   radius: 8.7e-8
+  radius_wet: 8.7e-8
   density: 1500.0
   dd_DvzAerSnow: 0.03
   dd_DvzMinVal_snow: 0.01
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 SO4:
   name: SO4
   description: Sulfate
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 96.06
   radius: 8.7e-8
+  radius_wet: 8.7e-8
   density: 1500.0
   dd_DvzAerSnow: 0.03
   dd_DvzMinVal_snow: 0.01
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 NH4:
   name: NH4
   description: Ammonium
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 18.05
   radius: 8.7e-8
+  radius_wet: 8.7e-8
   density: 1500.0
   dd_DvzAerSnow: 0.03
   dd_DvzMinVal_snow: 0.01
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 BCPI:
   name: BCPI
   description: Hydrophilic black carbon aerosol
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
   radius: 8.7e-8
+  radius_wet: 8.7e-8
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 BCPO:
   name: BCPO
   description: Hydrophobic black carbon aerosol
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
   radius: 8.7e-8
+  radius_wet: 8.7e-8
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 SALA:
   name: SALA
   description: Fine (0.01-0.05 microns) sea salt aerosol
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
   radius: 1.14945e-7
+  radius_wet: 2.55e-7
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 SALC:
   name: SALC
   description: Coarse (0.5-8.0 microns) sea salt aerosol
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
   radius: 0.74025e-6
+  radius_wet: 4.25e-6
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 SO4S:
   name: SO4S
   description: Sulfate aerosol on surface of seasalt aerosol
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
   radius: 0.74025e-6
+  radius_wet: 4.25e-6
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 NITS:
   name: NITS
   description: Inorganic nitrate aerosol on surface of seasalt aerosol
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 31.40
   radius: 0.74025e-6
+  radius_wet: 4.25e-6
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 BRSALC:
   name: BRSALC
   description: Coarse sea salt bromine
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 79.90
   radius: 0.74025e-6
+  radius_wet: 4.25e-6
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 ISALC:
   name: ISALC
   description: Coarse sea salt iodine
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 126.90
   radius: 0.74025e-6
+  radius_wet: 4.25e-6
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 BRSALA:
   name: BRSALA
   description: Fine sea salt bromine
@@ -256,6 +366,7 @@ BRSALA:
   dd_hstar: 0.0
   mw_g: 79.90
   radius: 1.14945e-7
+  radius_wet: 2.55e-7
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
@@ -265,13 +376,18 @@ ISALA:
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 126.90
   radius: 1.14945e-7
+  radius_wet: 2.55e-7
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 0.0
+  wd_rainouteff3: 1.0
 #here we go with GEOS-Chem dust bins
 DST1:
   name: DST1
@@ -279,153 +395,213 @@ DST1:
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
   radius: 3.334475e-7
+  radius_wet: 7.3e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 DST2:
   name: DST2
   description: Dust aerosol, Reff = 1.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
   radius: 1.24535e-6
+  radius_wet: 1.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 DST3:
   name: DST3
   description: Dust aerosol, Reff = 2.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
   radius: 2.082e-6
+  radius_wet: 2.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 DST4:
   name: DST4
   description: Dust aerosol, Reff = 4.5 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.00
   radius: 3.3385e-6
+  radius_wet: 4.5e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 SO4D1:
   name: SO4D1
   description: Sulfate on dust, Reff = 0.7 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 3.334475e-7
+  radius_wet: 7.3e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 SO4D2:
   name: SO4D2
   description: Sulfate on dust, Reff = 1.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 1.24535e-6
+  radius_wet: 1.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 SO4D3:
   name: SO4D3
   description: Sulfate on dust, Reff = 2.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 2.082e-6
+  radius_wet: 2.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 SO4D4:
   name: SO4D4
   description: Sulfate on dust, Reff = 4.5 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 3.3385e-6
+  radius_wet: 4.5e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 NITD1:
   name: NITD1
   description: Nitrate on dust, Reff = 0.7 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 3.334475e-7
+  radius_wet: 7.3e-7
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 NITD2:
   name: NITD2
   description: Nitrate on dust, Reff = 1.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 1.24535e-6
+  radius_wet: 1.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 NITD3:
   name: NITD3
   description: Nitrate on dust, Reff = 2.4 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 2.082e-6
+  radius_wet: 2.4e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0
 NITD4:
   name: NITD4
   description: Nitrate on dust, Reff = 4.5 microns
   is_aerosol: true
   is_dust: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 29.0
   radius: 3.3385e-6
+  radius_wet: 4.5e-6
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff1: 1.0
+  wd_rainouteff2: 1.0
+  wd_rainouteff3: 0.0

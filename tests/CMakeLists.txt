@@ -111,3 +111,17 @@ set_target_properties(
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
 add_test(NAME test_chem COMMAND test_chem)
+
+add_executable(test_wetdep test_wetdep.f90)
+target_link_libraries(test_wetdep PRIVATE CATChem_core)
+target_link_libraries(test_wetdep PRIVATE CATChem)
+target_link_libraries(test_wetdep PRIVATE testing)
+set_target_properties(
+  test_wetdep
+  PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+)
+add_test(
+  NAME test_wetdep
+  COMMAND test_wetdep
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)

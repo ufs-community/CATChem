@@ -52,6 +52,9 @@ process:
     co2_effect: true
     co2_level: 600.0
     co2_reference: 380.0
+  wetdep:
+    activate: true
+    scheme_opt: 1
   bvoc:
     activate: true
     scheme_opt: 1

@@ -182,6 +182,15 @@ CONTAINS
          RETURN
       ENDIF
 
+      call Config_Process_WetDep(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_WetDep"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
 
       !========================================================================
       ! Config ChemState
@@ -245,7 +254,7 @@ CONTAINS
       real    :: v_real
       logical :: v_logical
 
-      Character(len=17) :: tags(22)
+      Character(len=17) :: tags(34)
 
       RC = CC_SUCCESS
 
@@ -257,12 +266,15 @@ CONTAINS
          'lower_radius     ', &
          'upper_radius     ', &
          'radius           ', &
+         'radius_wet       ', &
          'is_dust          ', &
          'is_sea_salt      ', &
          'is_tracer        ', &
          'is_aerosol       ', &
          'is_gas           ', &
          'is_advected      ', &
+         'is_drydep        ', &
+         'is_wetdep        ', &
          'is_photolysis    ', &
          'mw_g             ', &
          'viscosity        ', &
@@ -272,7 +284,16 @@ CONTAINS
          'dd_hstar         ', &
          'dd_DvzAerSnow    ', &
          'dd_DvzMinVal_snow', &
-         'dd_DvzMinVal_land'/)
+         'dd_DvzMinVal_land', &
+         'henry_k0         ', &
+         'henry_cr         ', &
+         'henry_pKa        ', &
+         'wd_retfactor     ', &
+         'wd_LiqAndGas     ', &
+         'wd_convfacI2G    ', &
+         'wd_rainouteff1   ', &
+         'wd_rainouteff2   ', &
+         'wd_rainouteff3   '/)
 
 
       !========================================================================
@@ -416,6 +437,16 @@ CONTAINS
          ENDIF
          ChemState%ChemSpecies(n)%is_drydep = v_logical
          write(*,*) '|  is_drydep: ', ChemState%ChemSpecies(n)%is_drydep
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'is_wetdep'
+         v_logical = MISSING_BOOL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_logical, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            ! assume that if is_wetdep isn't in the species.yaml file assume false
+            ChemState%ChemSpecies(n)%is_wetdep = MISSING_BOOL
+         ENDIF
+         ChemState%ChemSpecies(n)%is_wetdep = v_logical
+         write(*,*) '|  is_wetdep: ', ChemState%ChemSpecies(n)%is_wetdep
 
          key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'is_photolysis'
          v_logical = MISSING_BOOL
@@ -629,6 +660,150 @@ CONTAINS
          ChemState%ChemSpecies(n)%dd_DvzMinVal_land = v_real
          write(*,*) '|  dd_DvzMinVal_land: ', ChemState%ChemSpecies(n)%dd_DvzMinVal_land
 
+         !-------------------------------------------------
+         !  Initialize variables needed for wet deposition
+         !-------------------------------------------------
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'radius_wet'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
+               ! if is_aerosol radius_wet must be present
+               errMsg = 'radius_wet required for aerosol species ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%radius_wet = v_real
+         write(*,*) '|  radius_wet: ', ChemState%ChemSpecies(n)%radius_wet
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'henry_k0'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
+               ! issue a warning and give  it a missing value above
+               errMsg = 'Warning: henry_k0 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%henry_k0 = v_real
+         write(*,*) '|  henry_k0: ', ChemState%ChemSpecies(n)%henry_k0
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'henry_cr'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
+               ! issue a warning and give  it a missing value above
+               errMsg = 'Warning: henry_cr is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%henry_cr = v_real
+         write(*,*) '|  henry_cr: ', ChemState%ChemSpecies(n)%henry_cr
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'henry_pKa'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            ! assume that if henry_pKa isn't in the species.yaml file assume MISSING_REAL
+            ChemState%ChemSpecies(n)%henry_pKa = MISSING_REAL
+         ENDIF
+         ChemState%ChemSpecies(n)%henry_pKa = v_real
+         write(*,*) '|  henry_pKa: ', ChemState%ChemSpecies(n)%henry_pKa
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_retfactor'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
+               ! issue a warning and give  it a missing value above
+               errMsg = 'Warning: wd_retfactor is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_retfactor = v_real
+         write(*,*) '|  wd_retfactor: ', ChemState%ChemSpecies(n)%wd_retfactor
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_LiqAndGas'
+         v_logical = MISSING_BOOL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_logical, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            ! assume that if wd_LiqAndGas isn't in the species.yaml file assume false
+            ChemState%ChemSpecies(n)%wd_LiqAndGas = MISSING_BOOL
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_LiqAndGas = v_logical
+         write(*,*) '|  wd_LiqAndGas: ', ChemState%ChemSpecies(n)%wd_LiqAndGas
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_convfacI2G'
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%wd_LiqAndGas .eqv. .true.) then
+               ! if wd_LiqAndGas is true, then wd_convfacI2G must be present
+               errMsg = 'Warning: wd_convfacI2G is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_convfacI2G = v_real
+         write(*,*) '|  wd_convfacI2G: ', ChemState%ChemSpecies(n)%wd_convfacI2G
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff1'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: wd_rainouteff1 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_rainouteff1 = v_real
+         write(*,*) '|  wd_rainouteff1: ', ChemState%ChemSpecies(n)%wd_rainouteff1
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff2'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: wd_rainouteff2 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_rainouteff2 = v_real
+         write(*,*) '|  wd_rainouteff2: ', ChemState%ChemSpecies(n)%wd_rainouteff2
+
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff3'
+         !if missing set to zero or MISSING_REAL
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
+               ! issue a warning and give  it a zero value above
+               errMsg = 'Warning: wd_rainouteff3 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%wd_rainouteff3 = v_real
+         write(*,*) '|  wd_rainouteff3: ', ChemState%ChemSpecies(n)%wd_rainouteff3
+
 
          !---------------------------------------
          ! Allocate initial Species Concentration
@@ -665,6 +840,8 @@ CONTAINS
       write(*,*) '|  number_of_aerosols with dry dep: ', ChemState%nSpeciesAeroDryDep
       write(*,*) '|  number_of_gases:    ', ChemState%nSpeciesGas
       write(*,*) '|  number of tracers:  ', ChemState%nSpeciesTracer
+      write(*,*) '|  number of drydep:   ', ChemState%nSpeciesDryDep
+      write(*,*) '|  number of wetdep:   ', ChemState%nSpeciesWetDep
       write(*,*) '|  number of dust:     ', ChemState%nSpeciesDust
       write(*,*) '|  number of seasalt:  ', ChemState%nSpeciesSeaSalt
       write(*,*) '|  Sea Salt bin lower: ', ChemState%SeaSaltBinLower
@@ -1515,6 +1692,83 @@ CONTAINS
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_DryDep
+
+
+   !> \brief Process WetDep configuration
+   !!
+   !! This function processes the WetDep configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   SUBROUTINE Config_Process_WetDep( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
+
+      TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
+      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+
+      !
+      ! !OUTPUT PARAMETERS:
+      !
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+
+      ! !LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      !real(fp)                     :: v_real
+      INTEGER                      :: v_int
+
+      ! Strings
+      CHARACTER(LEN=255)           :: thisLoc
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+
+      !========================================================================
+      ! Config_Process_WetDep begins here!
+      !========================================================================
+
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_WetDep (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
+
+      ! TODO #105 Fix reading of config file
+      key   = "process%wetdep%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%wetdep_activate = v_bool
+
+
+      key   = "process%wetdep%scheme_opt"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         CALL CC_Warning( errMsg, RC, thisLoc )
+         v_int = 1 ! default is one
+         RETURN
+      ENDIF
+      Config%wetdep_scheme = v_int
+
+
+      write(*,*) "WetDeposition Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%wetdep_activate = ', Config%wetdep_activate
+      write(*,*) 'Config%wetdep_scheme = ', Config%wetdep_scheme
+      write(*,*) '------------------------------------'
+
+   END SUBROUTINE Config_Process_WetDep
 
 
    !> \brief Process BVOC configuration
