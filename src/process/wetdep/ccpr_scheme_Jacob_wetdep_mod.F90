@@ -2,11 +2,17 @@
 !! \file
 !! \brief CCPr Scheme for wet deposition
 !!
-!!
 !! Reference:
+!! (1) Jacob, D. J., Liu, H., Mari, C., and Yantosca, B. M., Harvard wet deposition scheme for GMI,
+!!     available at: http://acmg.seas.harvard.edu/geos/wiki_docs/deposition/wetdep.jacob_etal_2000.pdf
+!! (2) GEOS-Chem's source codes in the module file of wetscav_mod.F90 and reference therein.
+!!     (https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90)
+!! (3) The above scheme was also adopted in GOCART2G_process.F90 for aerosols, which is shorter and cleaner.
+!!     https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3525-L4115
 !!
 !! \author Wei Li
 !! \date 04/2025
+!! \ingroup catchem_wetdep_process
 !!!>
 module CCPr_Scheme_Jacob_WetDep_Mod
 
@@ -20,7 +26,33 @@ contains
 
    !> \brief Brief description of the subroutine
    !!
-   !! \param
+   !! \param km           total model levels
+   !! \param cdt          chemistry model time-step [sec]
+   !! \param spc          species name
+   !! \param is_aero      true for aerosol
+   !! \param wd_LiqAndGas ice-to-gas ratio is computed by co-condensation?
+   !! \param k0           Henry's solubility constant [M/atm]
+   !! \param cr           Henry's volatility constant [K]
+   !! \param pKa          Henry's pH correction factor [1]
+   !! \param retfac       Retention factor [-]
+   !! \param cvtI2G       Conversion factor from ice to gas ratio if wd_LidAndGas is true
+   !! \param grav         gravity [m/sec^2]
+   !! \param radius       Particle radius [um]
+   !! \param rainout_eff  temperature-dependent rainout efficiencies TODO: can we read in as a list from species yaml file?
+   !! \param wtune        Washout Tuning factor [-]; Note we add this, not from GC
+   !! \param radius_thr   Threshold particle radius for washout[um]
+   !! \param ple          pressure level thickness [Pa]
+   !! \param tmpu         temperature [K]
+   !! \param rhoa         moist air density [kg/m^3]
+   !! \param pfllsan      3D flux of liquid nonconvective precipitation [kg/(m^2 sec)]
+   !! \param pfilsan      3D flux of ice nonconvective precipitation [kg/(m^2 sec)]
+   !! \param qreevap      Evaporation of precip LS+anvil [kg/kg/s]
+   !! \param airden       dry air density [kg/m^3]
+   !! \param conc_in      concentrations [kg/kg]
+   !! \param H2O2         H2O2 concentration [kg/kg] used for SO2 washout
+   !! \param SO4_in       SO4 concentration [kg/kg] used for SO2 washout
+   !! \param fluxout      tracer loss flux [kg m-2 s-1]
+   !! \param rc           Error return code
    !!
    !! \ingroup catchem_wetdep_process
    !!!>
@@ -61,7 +93,7 @@ contains
       real(fp), dimension(:),  intent(inout) :: SO4_in       !< SO4 concentration [kg/kg] used for SO2 washout
       real(fp), dimension(:),  intent(inout) :: fluxout      !< tracer loss flux [kg m-2 s-1]
       ! !OUTPUT PARAMETERS:
-      integer,                intent(out)   :: rc           ! Error return code
+      integer,                intent(out)    :: rc           ! Error return code
 
       ! looping indexes
       integer  :: k, km1, ktop, kbot
@@ -77,16 +109,11 @@ contains
       real(fp)     :: f_rainout  ! rainout fraction [1]
       real(fp)     :: f_washout  ! washout fraction [1]
       real(fp)     :: k_rain     ! rainout rate [m^3/s]
-      logical  :: kin        ! kinetic process flag [kinetic or equilibrium]
+      logical      :: kin        ! kinetic process flag [kinetic or equilibrium]
       real(fp)     :: dt         ! chemistry model time-step [sec]
-      !real(fp)     :: totloss    ! total loss fraction
       real(fp)     :: lossfrac   ! loss fraction
-      !real(fp)     :: wetloss    ! wet loss fraction before evaporation
       real(fp)     :: qdwn       ! cm3 (h2o) / cm2 (air) / s
-      real(fp)     :: press       ! pressure [Pa]
-      !real(fp)     :: alpha      ! ratio of evap. to sublimation
-      !real(fp)     :: gain       ! gain fraction
-      !real(fp)     :: washed     ! concentration of washed out tracer
+      real(fp)     :: press      ! pressure [Pa]
       real(fp)     :: delz       ! thickness of layer [m]
       real(fp), dimension(:), allocatable :: qq      ! precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
       real(fp), dimension(:), allocatable :: pdwn    ! preciptation rate at top of grid cells [cm3 (h2o) / cm2 (air) / s]
@@ -126,7 +153,7 @@ contains
 
       ! -- compute column quantities
       do k = kbot, ktop
-         km1 = k + 1 !TODO: check if it works when k = ktop
+         km1 = k + 1
 
          ! -- initialize auxiliary arrays
          if (k == ktop) then
@@ -169,7 +196,7 @@ contains
             dconc(k) = zero
 
             ! -- compute mixing ratio of saturated water vapour over ice (from SETUP_WETSCAV)
-            press     = 0.5 * ( ple(km1) + ple(k) )
+            press     = 0.5 * ( ple(km1) + ple(k) ) !pressure in grid box
             c_h2o(k) = 10._fp ** (-2663.5_fp / tmpu(k) + 12.537_fp ) / press
 
             ! -- estimate cloud ice and liquid water content (from SETUP_WETSCAV)
@@ -293,3 +320,31 @@ contains
    end subroutine CCPr_Scheme_Jacob_WetDep
 
 end module CCPr_Scheme_Jacob_WetDep_Mod
+
+
+
+
+
+!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+!                                                                         some questions to be answered
+!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+! 1. It seems the properties of species in the species yaml file cannot be read in as an array. Only a single number or string or boolean can be read in ?
+! 2. The  Pka seems all zeros in GEOS-Chem, namely no pH correction is applied. How is pKa=9.25 coming from in the GOCART function?
+! 3. GEOS-Chem has rainout and washout deletion applied to afterchem SO2 and H2O2 (https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L1398).
+!    I comment out these for now since we may not have afterchem speceis in CatChem.
+! 4. Seems a bug in GOCART 'rainout' function here: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3884. I guess here we should
+!    call 'liq_to_gas_ratio', instead of 'washfrac_liq_gas', since we are calculating 'l2g'.
+! 5. I guess we added a tuning factor for washfraction of aerosol in GOCART. But there seems to be another factor of 0.5, which is not found in GEOS-Chem.
+!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L4004
+!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2461
+! 6. It seems GOCART is missing a factor of 'f' in the 'washout_frac_liq_gas' function.
+!    GOCART location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2461
+!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2945
+! 7. GOCART is not using the reevaporation rate 'REEVAPLS' as in GEOS-Chem. UFS may not have that variable??? But it seems not right that GOCART is using 'qq' as reevaporation rate (Q).
+!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3776
+!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L4547
+! 8. The calculation of 'qq' is the difference of precipiation flux between lower layer and upper layer (https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3671)
+!    I am wondering why GOCART does not have error when k = ktop (which is one) and km1 = k -1 would be zero. The pfllsan array has an index of zero???
+!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3662
+!    I consider the top layer as itself in my calculation. See Line #160-165 in this file. I hope that is fine.
+! 9. I am using 'PEDGE_DRY' as an input for 'ple'. I am not sure if that is the right variable.

@@ -1,5 +1,5 @@
 !> \file CCPr_WetDep_Mod.F90
-!! \brief Driver for the CCPR wet deposition process
+!! \brief Driver for the CCPR large scale wet deposition process
 !!
 !! \defgroup catchem_wetdep_process
 !! The CATChem WetDep_process group holds all the modules for wet deposition.
@@ -31,10 +31,10 @@ CONTAINS
    !>
    !! \brief Initialize the CATChem WetDep module
    !!
-   !! \param Config       CATCHem configuration options
+   !! \param Config        CATCHem configuration options
    !! \param WetDepState   CATCHem PROCESS state
-   !! \param ChemState         CATCHem chemical state
-   !! \param RC               Error return code
+   !! \param ChemState     CATCHem chemical state
+   !! \param RC            Error return code
    !!
    !! \ingroup catchem_wetdep_process
    !!
@@ -61,9 +61,6 @@ CONTAINS
 
       ! LOCAL VARIABLES
       !----------------
-
-
-      ! Put any local variables here
 
       !=================================================================
       ! CCPR_WetDep_Init begins here!
@@ -104,7 +101,6 @@ CONTAINS
    !! \brief Run the WetDep
    !!
    !! \param [IN] MetState - The MetState object
-   !! \param [INOUT] DiagState - The DiagState object
    !! \param [INOUT] WetDepState - The WetDepState object
    !! \param [INOUT] ChemState - The ChemState object
    !! \param [OUT] RC Return code
@@ -165,9 +161,6 @@ CONTAINS
                   if (ChemState%chemSpecies(ChemState%WetDepIndex(i))%short_name == 'SO2') then
                      call FindSpecByName(ChemState, 'H2O2', H2O2_id, RC)
                      call FindSpecByName(ChemState, 'SO4', SO4_id, RC)
-                     !TODO: test only
-                     write(*,*) 'H2O2_id = ', H2O2_id
-                     write(*,*) 'SO4_id = ', SO4_id
 
                      if (RC /= CC_SUCCESS) then
                         errMsg = 'Error in finding H2O2 or SO4 id'
@@ -189,8 +182,8 @@ CONTAINS
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_retfactor,    &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_convfacI2G,   &
                      g0,           &
-                     ChemState%chemSpecies(ChemState%WetDepIndex(i))%radius_wet,   &
-                     rainout_eff,  & !TODO
+                     ChemState%chemSpecies(ChemState%WetDepIndex(i))%radius_wet * 1.0e+6_fp,   & !Note radius is in m in the species yaml file
+                     rainout_eff,  &
                      1.0_fp,    &  !TODO: washout tuning factor; use 1.0 for now
                      1.0_fp,    &  !TODO: radius_thr; use 1.0 um to be consistent with GC
                      MetState%PEDGE_DRY, &  !TODO: is this the right variable for ple?
@@ -201,8 +194,8 @@ CONTAINS
                      MetState%REEVAPLS, &  !TODO: need to be added to MetSate
                      MetState%AIRDEN, &
                      ChemState%ChemSpecies(ChemState%WetDepIndex(i))%conc, & !make sure unit is kg/kg
-                     ChemState%ChemSpecies(H2O2_id)%conc, & !make sure unit is kg/kg TODO
-                     ChemState%ChemSpecies(SO4_id)%conc, & !make sure unit is kg/kg TODO
+                     ChemState%ChemSpecies(H2O2_id)%conc, & !make sure unit is kg/kg
+                     ChemState%ChemSpecies(SO4_id)%conc, & !make sure unit is kg/kg
                      fluxout, &
                      RC )
 

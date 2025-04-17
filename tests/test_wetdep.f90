@@ -17,6 +17,7 @@ program test_wetdep
 
    character(len=:), allocatable :: title
    integer :: n ! loop counter
+   character(len=30) :: speceis_name
    !integer :: H2O2_id=0, SO4_id=0
 
    ! Error handling
@@ -91,8 +92,6 @@ program test_wetdep
    do n = 1, ChemState%nSpecies
       ChemState%ChemSpecies(n)%conc(:) = 5.0e-7_fp ! kg/kg
    enddo
-   !ChemState%ChemSpecies(H2O2_id)%conc=  ! kg/kg
-   !ChemState%ChemSpecies(SO4_id)%conc    !kg/kg
 
    !----------------------------
    ! Test 2
@@ -124,7 +123,11 @@ program test_wetdep
    end if
 
    call print_info(Config, WetDepState, MetState, ChemState, title)
-   call assert(SUM(WetDepState%wetdep_flux(:,:)) > 0.0_fp, "Test Jacob WetDep Scheme")
+   !call assert(SUM(WetDepState%wetdep_flux(:,:)) > 0.0_fp, "Test Jacob WetDep Scheme")
+   do n = 1, ChemState%nSpeciesWetDep
+      speceis_name = ChemState%chemSpecies(ChemState%WetDepIndex(n))%short_name
+      call assert(SUM(WetDepState%wetdep_flux(n,:)) > 1.0e-9_fp, "Test Jacob WetDep Scheme for species "//speceis_name)
+   enddo
 
    !clean up the test above for a different scheme test if any
    call cc_wetdep_finalize( WetDepState, rc)
@@ -155,7 +158,6 @@ contains
       write(*,*) 'Config%wetdep_activate = ', Config_%wetdep_activate
       write(*,*) 'Config%wetdep_scheme = ', Config_%wetdep_scheme
 
-
       if (WetDepState_%Activate) then
 
          write(*,*) 'WetDepState%Activate = ', WetDepState_%Activate
@@ -164,7 +166,7 @@ contains
          write(*,*) 'MetState%MAIRDEN =', MetState_%MAIRDEN
          write(*,*) 'ChemState%nSpeciesWetdep = ', ChemState_%nSpeciesWetdep
          do i = 1, ChemState%nSpeciesWetDep
-            write(*,*) 'ChemState%chemSpecies%name =', ChemState_%chemSpecies(ChemState%WetDepIndex(i))%short_name
+            write(*,*) 'ChemState%chemSpecies%name =', ChemState_%chemSpecies(ChemState_%WetDepIndex(i))%short_name
             write(*,*) 'WetDepState_%wetdep_flux =', WetDepState_%wetdep_flux(i,:)
          enddo
 
