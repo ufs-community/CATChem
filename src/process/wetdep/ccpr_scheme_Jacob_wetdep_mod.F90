@@ -332,16 +332,16 @@ end module CCPr_Scheme_Jacob_WetDep_Mod
 ! 2. The  Pka seems all zeros in GEOS-Chem, namely no pH correction is applied. How is pKa=9.25 coming from in the GOCART function?
 ! 3. GEOS-Chem has rainout and washout deletion applied to afterchem SO2 and H2O2 (https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L1398).
 !    I comment out these for now since we may not have afterchem speceis in CatChem.
-! 4. Seems a bug in GOCART 'rainout' function here: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3884. I guess here we should
+! 4. Seems a bug in GOCART 'rainout' function here: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3886. I guess here we should
 !    call 'liq_to_gas_ratio', instead of 'washfrac_liq_gas', since we are calculating 'l2g'.
 ! 5. I guess we added a tuning factor for washfraction of aerosol in GOCART. But there seems to be another factor of 0.5, which is not found in GEOS-Chem.
-!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L4004
+!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L4006
 !    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2461
 ! 6. It seems GOCART is missing a factor of 'f' in the 'washout_frac_liq_gas' function.
-!    GOCART location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2461
+!    GOCART location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L4047
 !    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2945
 ! 7. GOCART is not using the reevaporation rate 'REEVAPLS' as in GEOS-Chem. UFS may not have that variable??? But it seems not right that GOCART is using 'qq' as reevaporation rate (Q).
-!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3776
+!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3778
 !    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L4547
 ! 8. The calculation of 'qq' is the difference of precipiation flux between lower layer and upper layer (https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3671)
 !    I am wondering why GOCART does not have error when k = ktop (which is one) and km1 = k -1 would be zero. The pfllsan array has an index of zero???
