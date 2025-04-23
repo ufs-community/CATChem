@@ -43,7 +43,7 @@ program test_wetdep
    !----------------------------
 
    ! Read input file and initialize grid
-   Metstate%NLEVS = 8
+   Metstate%NLEVS = 7 !Or 8 if do not consider an additional index as in GOCART
    GridState%number_of_levels = MetState%NLEVS
 
    call cc_read_config(Config, GridState, EmisState, ChemState, rc, configFile)
@@ -61,13 +61,18 @@ program test_wetdep
    write (*,*) 'Completed ', title
    write (*,*) '--'
 
-
    !dummy MET variables used for Jacob scheme
    MetState%TSTEP = 300
-   allocate(MetState%PEDGE_DRY(MetState%NLEVS), MetState%T(MetState%NLEVS), &
-      MetState%MAIRDEN(MetState%NLEVS), MetState%PFLLSAN(MetState%NLEVS), &
-      MetState%PFILSAN(MetState%NLEVS), MetState%REEVAPLS(MetState%NLEVS), &
-      MetState%AIRDEN(MetState%NLEVS))
+   ! allocate(MetState%PEDGE_DRY(MetState%NLEVS), MetState%T(MetState%NLEVS), &
+   !    MetState%MAIRDEN(MetState%NLEVS), MetState%PFLLSAN(MetState%NLEVS), &
+   !    MetState%PFILSAN(MetState%NLEVS), MetState%REEVAPLS(MetState%NLEVS), &
+   !    MetState%AIRDEN(MetState%NLEVS))
+
+   !Here we follow GOCART with an additional index; otherwise, use the commented allocation above
+   allocate(MetState%PEDGE_DRY(MetState%NLEVS+1), MetState%T(MetState%NLEVS+1), &
+      MetState%MAIRDEN(MetState%NLEVS+1), MetState%PFLLSAN(MetState%NLEVS+1), &
+      MetState%PFILSAN(MetState%NLEVS+1), MetState%REEVAPLS(MetState%NLEVS+1), &
+      MetState%AIRDEN(MetState%NLEVS+1))
 
    !TODO: is this the right variable for ple?
    MetState%PEDGE_DRY = (/101325, 80000, 70000, 50000, 30000, 10000, 1000, 500/)  !Pa
@@ -79,14 +84,6 @@ program test_wetdep
    MetState%REEVAPLS = (/0.0_fp, 2.0e-6_fp, 5.0e-6_fp, 7.0e-6_fp, 6.0e-6_fp, 4.0e-6_fp, 0.0_fp, 0.0_fp/) !kg/kg/s
    !TODO: this is related to REEVAPLS; not sure if MAIRDEN can be used here to replace AIRDEN
    MetState%AIRDEN =(/1.20, 1.10, 1.00, 0.80, 0.60, 0.40, 0.20, 0.10/)
-
-   ! do n = 1, ChemState%nSpecies
-   !    if ('H2O2' == TRIM(ChemState%SpeciesNames(n))) then
-   !       H2O2_id = n
-   !    else if ('SO4' == TRIM(ChemState%SpeciesNames(n))) then
-   !       SO4_id = n
-   !    endif
-   ! enddo
 
    !give all species concentration the same value, including H2O2 and SO4
    do n = 1, ChemState%nSpecies

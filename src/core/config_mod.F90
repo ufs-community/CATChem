@@ -253,8 +253,9 @@ CONTAINS
       CHARACTER(LEN=QFYAML_StrLen) :: v_str
       real    :: v_real
       logical :: v_logical
+      real, allocatable :: v_real_array(:)
 
-      Character(len=17) :: tags(34)
+      Character(len=17) :: tags(32)
 
       RC = CC_SUCCESS
 
@@ -291,9 +292,7 @@ CONTAINS
          'wd_retfactor     ', &
          'wd_LiqAndGas     ', &
          'wd_convfacI2G    ', &
-         'wd_rainouteff1   ', &
-         'wd_rainouteff2   ', &
-         'wd_rainouteff3   '/)
+         'wd_rainouteff    '/)
 
 
       !========================================================================
@@ -759,50 +758,22 @@ CONTAINS
          ChemState%ChemSpecies(n)%wd_convfacI2G = v_real
          write(*,*) '|  wd_convfacI2G: ', ChemState%ChemSpecies(n)%wd_convfacI2G
 
-         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff1'
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff'
          !if missing set to zero or MISSING_REAL
-         v_real = MISSING_REAL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         allocate(v_real_array(3))
+         v_real_array = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real_array, "", RC )
          IF (RC /= CC_SUCCESS) then
             if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
                ! issue a warning and give  it a zero value above
-               errMsg = 'Warning: wd_rainouteff1 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
+               errMsg = 'Warning: wd_rainouteff is not provided for ' // TRIM(ChemState%SpeciesNames(n))
                CALL CC_Error( errMsg, RC, thisLoc )
                RETURN
             endif
          ENDIF
-         ChemState%ChemSpecies(n)%wd_rainouteff1 = v_real
-         write(*,*) '|  wd_rainouteff1: ', ChemState%ChemSpecies(n)%wd_rainouteff1
-
-         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff2'
-         !if missing set to zero or MISSING_REAL
-         v_real = MISSING_REAL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
-         IF (RC /= CC_SUCCESS) then
-            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
-               ! issue a warning and give  it a zero value above
-               errMsg = 'Warning: wd_rainouteff2 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
-               CALL CC_Error( errMsg, RC, thisLoc )
-               RETURN
-            endif
-         ENDIF
-         ChemState%ChemSpecies(n)%wd_rainouteff2 = v_real
-         write(*,*) '|  wd_rainouteff2: ', ChemState%ChemSpecies(n)%wd_rainouteff2
-
-         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'wd_rainouteff3'
-         !if missing set to zero or MISSING_REAL
-         v_real = MISSING_REAL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
-         IF (RC /= CC_SUCCESS) then
-            if (ChemState%ChemSpecies(n)%is_wetdep .and. ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
-               ! issue a warning and give  it a zero value above
-               errMsg = 'Warning: wd_rainouteff3 is not provided for ' // TRIM(ChemState%SpeciesNames(n))
-               CALL CC_Error( errMsg, RC, thisLoc )
-               RETURN
-            endif
-         ENDIF
-         ChemState%ChemSpecies(n)%wd_rainouteff3 = v_real
-         write(*,*) '|  wd_rainouteff3: ', ChemState%ChemSpecies(n)%wd_rainouteff3
+         ChemState%ChemSpecies(n)%wd_rainouteff = v_real_array
+         deallocate(v_real_array)
+         write(*,*) '|  wd_rainouteff: ', ChemState%ChemSpecies(n)%wd_rainouteff
 
 
          !---------------------------------------

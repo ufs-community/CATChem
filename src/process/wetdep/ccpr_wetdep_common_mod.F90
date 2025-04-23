@@ -619,7 +619,6 @@ contains
       real(fp),  dimension(:), intent(inout) :: SO4     !< SO4 concentration [kg/m2]
       character(len = 20),  intent(in) :: spc           !< Species name
 
-
       ! -- local variables
       integer    :: km1      !< upper one layer index
       real(fp)   :: f        !< washout + rainout fraction [unitless]
@@ -649,9 +648,13 @@ contains
 
             ! Define ALPHA, the fraction of the raindrops that
             ! re-evaporate when falling from (I,J,L+1) to (I,J,L)
-            !TODO: is qq(k) right in here?
-            !alpha = abs( qq(k) ) * delz_cm(k) / pdwn(km1)
-            alpha = abs( reevap ) * delz_cm(k) / pdwn(km1)
+            if ( pdwn(km1) - ZERO > ZERO  ) then !avoid divide by zero
+               !TODO: is qq(k) right in here?
+               !alpha = abs( qq(k) ) * delz_cm(k) / pdwn(km1)
+               alpha = abs( reevap ) * delz_cm(k) / pdwn(km1)
+            else
+               alpha = one
+            end if
             ! Restrict ALPHA to be less than 1
             alpha = min( one, alpha )
             ! Assume 50% of the re-evaporated water rains out to aerosols

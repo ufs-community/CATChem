@@ -66,10 +66,7 @@ module species_mod
       real(kind=fp) :: wd_retfactor         !< retention efficiency of species in the liquid cloud condensate as it is converted to precipitation
       logical       :: wd_LiqAndGas         !< whether the ice-to-gas ratio can be computed for this species by co-condensation
       real(kind=fp) :: wd_convfacI2G        !< conversion factor for computing the ice-to-gas ratio by co-condensation when wd_LiqAndGas = .true.
-      real(kind=fp) :: wd_rainouteff1       !< temperature-dependent scale factor that is used to multiply the fraction of species scavenged by rainout.
-      real(kind=fp) :: wd_rainouteff2       !<  T < 237k for (1);  237 <= T < 258k for (2);  T >= 258k for (3)
-      real(kind=fp) :: wd_rainouteff3       !< TODO: maybe we can read it in as a list directly, instead of separating to 3 ??
-
+      real(kind=fp) :: wd_rainouteff(3)     !< temperature-dependent (T < 237k;  237 <= T < 258k;  T >= 258k) scale factor for the fraction of rainout.
 
       ! Default background concentration
       real(kind=fp) :: BackgroundVV        !< Background conc [v/v]

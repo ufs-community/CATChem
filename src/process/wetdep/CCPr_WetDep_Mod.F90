@@ -130,7 +130,6 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       INTEGER  :: i !< counter
       INTEGER  :: H2O2_id = 1, SO4_id = 1 !update these ids only for SO2
-      real(fp), dimension(3) :: rainout_eff
       real(fp), dimension(:), allocatable :: fluxout
 
       ! Initialize
@@ -153,10 +152,6 @@ CONTAINS
                   !-------------------------
                   !initialize the fluxout array
                   allocate(fluxout(1:MetState%NLEVS)); fluxout = ZERO
-                  ! read in rainout_efficiency
-                  rainout_eff(1) = ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_rainouteff1
-                  rainout_eff(2) = ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_rainouteff2
-                  rainout_eff(3) = ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_rainouteff3
                   !get H2O2 and SO4 id
                   if (ChemState%chemSpecies(ChemState%WetDepIndex(i))%short_name == 'SO2') then
                      call FindSpecByName(ChemState, 'H2O2', H2O2_id, RC)
@@ -178,20 +173,20 @@ CONTAINS
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_LiqAndGas,   &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%henry_k0,     &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%henry_cr,     &
-                     ChemState%chemSpecies(ChemState%WetDepIndex(i))%henry_pKa,    & !TODO: this seems to be all zeros from GC
+                     ChemState%chemSpecies(ChemState%WetDepIndex(i))%henry_pKa,    &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_retfactor,    &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_convfacI2G,   &
                      g0,           &
                      ChemState%chemSpecies(ChemState%WetDepIndex(i))%radius_wet * 1.0e+6_fp,   & !Note radius is in m in the species yaml file
-                     rainout_eff,  &
-                     1.0_fp,    &  !TODO: washout tuning factor; use 1.0 for now
-                     1.0_fp,    &  !TODO: radius_thr; use 1.0 um to be consistent with GC
+                     ChemState%chemSpecies(ChemState%WetDepIndex(i))%wd_rainouteff,  &
+                     1.0_fp,    &  ! washout tuning factor; use 1.0 for now
+                     1.0_fp,    &  ! radius_thr; use 1.0 um to be consistent with GC
                      MetState%PEDGE_DRY, &  !TODO: is this the right variable for ple?
                      MetState%T, &
                      MetState%MAIRDEN, &
                      MetState%PFLLSAN, &
                      MetState%PFILSAN, &
-                     MetState%REEVAPLS, &  !TODO: need to be added to MetSate
+                     MetState%REEVAPLS, &
                      MetState%AIRDEN, &
                      ChemState%ChemSpecies(ChemState%WetDepIndex(i))%conc, & !make sure unit is kg/kg
                      ChemState%ChemSpecies(H2O2_id)%conc, & !make sure unit is kg/kg

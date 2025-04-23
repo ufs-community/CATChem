@@ -38,7 +38,7 @@ contains
    !! \param cvtI2G       Conversion factor from ice to gas ratio if wd_LidAndGas is true
    !! \param grav         gravity [m/sec^2]
    !! \param radius       Particle radius [um]
-   !! \param rainout_eff  temperature-dependent rainout efficiencies TODO: can we read in as a list from species yaml file?
+   !! \param rainout_eff  temperature-dependent rainout efficiencies
    !! \param wtune        Washout Tuning factor [-]; Note we add this, not from GC
    !! \param radius_thr   Threshold particle radius for washout[um]
    !! \param ple          pressure level thickness [Pa]
@@ -78,7 +78,7 @@ contains
       real(fp),                intent(in)    :: cvtI2G       !< Conversion factor from ice to gas ratio if wd_LidAndGas is true
       real(fp),                intent(in)    :: grav         !< gravity [m/sec^2]
       real(fp),                intent(in)    :: radius       !< Particle radius [um]
-      real(fp), dimension(3),  intent(in)    :: rainout_eff  !< temperature-dependent rainout efficiencies TODO: can we read in as a list from species yaml file?
+      real(fp), dimension(3),  intent(in)    :: rainout_eff  !< temperature-dependent rainout efficiencies
       real(fp),                intent(in)    :: wtune        !< Washout Tuning factor [-]; Note we add this, not from GC
       real(fp),                intent(in)    :: radius_thr   !< Threshold particle radius for washout[um]
       real(fp), dimension(:),  intent(in)    :: ple          !< pressure level thickness [Pa]
@@ -156,59 +156,60 @@ contains
          km1 = k + 1
 
          ! -- initialize auxiliary arrays
-         if (k == ktop) then
-            !TODO: why GOCART does not have errors here?
-            delp = ple(k)
-            dqls = pfllsan(k)
-            dqis = pfilsan(k)
-            pdwn(k) = kg_to_cm3_liq * pfllsan(k) + kg_to_cm3_ice * pfilsan(k)
-            press     = 0.5 * ( ZERO + ple(k) )
+         ! if (k == ktop) then
+         !    !TODO: GOCART has an additional index on the model top edge;
+         !    delp = ple(k)
+         !    dqls = pfllsan(k)
+         !    dqis = pfilsan(k)
+         !    pdwn(k) = kg_to_cm3_liq * pfllsan(k) + kg_to_cm3_ice * pfilsan(k)
+         !    press     = 0.5 * ( ZERO + ple(k) )
+         ! else
+         !Here we follow GOCART with an additional index; otherwise, uncomment the if else statement above
+         delp = ple(k) - ple(km1)
+         dpog(k) = delp / grav
+         delz = dpog(k) / rhoa(k) ! thickness of layer [m]
+         delz_cm(k) = delz * m_to_cm  ! thickness of layer [cm]
+
+         ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
+         dqls = pfllsan(k) - pfllsan(km1)
+         dqis = pfilsan(k) - pfilsan(km1)
+
+         ! -- convert from kg/m2/s to kg (H2O) / m3(air) / s
+         dqls_kgm3s = dqls / delz
+         dqis_kgm3s = dqis / delz
+
+         ! -- total precipitation formation (convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) /s)
+         ! -- To convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) / s, divide by the density of
+         ! -- the precipitation (ice or liquid)
+         qq(k) =  dqls_kgm3s / density_liq +  dqis_kgm3s / density_ice
+         reevap(k) = qreevap(k) * (airden(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm2/s
+
+         ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
+         pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
+
+         ! -- initialize concentrations array, converting from kg/kg to kg/m2
+         !this seems for both gas and aerosol
+         SO2(k)  = conc_in(k) !SO2 is still in kg/kg; only used when spc == 'SO2' so using conc_in is fine
+         conc(k) = conc_in(k) * dpog(k)
+         SO4(k)  = SO4_in(k) * dpog(k)
+
+         ! -- initialize loss array
+         dconc(k) = zero
+
+         ! -- compute mixing ratio of saturated water vapour over ice (from SETUP_WETSCAV)
+         press     = 0.5 * ( ple(km1) + ple(k) ) !pressure in grid box
+         c_h2o(k) = 10._fp ** (-2663.5_fp / tmpu(k) + 12.537_fp ) / press
+
+         ! -- estimate cloud ice and liquid water content (from SETUP_WETSCAV)
+         if ( tmpu(k) >= 268.0_fp ) then
+            cldliq(k) = cwc
+         else if ( tmpu(k) > 248.0_fp ) then
+            cldliq(k) = cwc * ( tmpu(k) - 248.0_fp ) / 20.0_fp
          else
-            delp = ple(k) - ple(km1)
-            dpog(k) = delp / grav
-            delz = dpog(k) / rhoa(k) ! thickness of layer [m]
-            delz_cm(k) = delz * m_to_cm  ! thickness of layer [cm]
-
-            ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
-            dqls = pfllsan(k) - pfllsan(km1)
-            dqis = pfilsan(k) - pfilsan(km1)
-
-            ! -- convert from kg/m2/s to kg (H2O) / m3(air) / s
-            dqls_kgm3s = dqls / delz
-            dqis_kgm3s = dqis / delz
-
-            ! -- total precipitation formation (convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) /s)
-            ! -- To convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) / s, divide by the density of
-            ! -- the precipitation (ice or liquid)
-            qq(k) =  dqls_kgm3s / density_liq +  dqis_kgm3s / density_ice
-            reevap(k) = qreevap(k) * (airden(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm2/s
-
-            ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
-            pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
-
-            ! -- initialize concentrations array, converting from kg/kg to kg/m2
-            !this seems for both gas and aerosol
-            SO2(k)  = conc_in(k) !SO2 is still in kg/kg; only used when spc == 'SO2' so using conc_in is fine
-            conc(k) = conc_in(k) * dpog(k)
-            SO4(k)  = SO4_in(k) * dpog(k)
-
-            ! -- initialize loss array
-            dconc(k) = zero
-
-            ! -- compute mixing ratio of saturated water vapour over ice (from SETUP_WETSCAV)
-            press     = 0.5 * ( ple(km1) + ple(k) ) !pressure in grid box
-            c_h2o(k) = 10._fp ** (-2663.5_fp / tmpu(k) + 12.537_fp ) / press
-
-            ! -- estimate cloud ice and liquid water content (from SETUP_WETSCAV)
-            if ( tmpu(k) >= 268.0_fp ) then
-               cldliq(k) = cwc
-            else if ( tmpu(k) > 248.0_fp ) then
-               cldliq(k) = cwc * ( tmpu(k) - 248.0_fp ) / 20.0_fp
-            else
-               cldliq(k) = zero
-            end if
-            cldice(k) = MAX(cwc - cldliq(k), zero) ! ensure cldice >= 0
-         end if ! if (k == ktop)
+            cldliq(k) = zero
+         end if
+         cldice(k) = MAX(cwc - cldliq(k), zero) ! ensure cldice >= 0
+         !end if ! if (k == ktop)
       end do
 
       ! -- starts at the top
@@ -320,31 +321,3 @@ contains
    end subroutine CCPr_Scheme_Jacob_WetDep
 
 end module CCPr_Scheme_Jacob_WetDep_Mod
-
-
-
-
-
-!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-!                                                                         some questions to be answered
-!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-! 1. It seems the properties of species in the species yaml file cannot be read in as an array. Only a single number or string or boolean can be read in ?
-! 2. The  Pka seems all zeros in GEOS-Chem, namely no pH correction is applied. How is pKa=9.25 coming from in the GOCART function?
-! 3. GEOS-Chem has rainout and washout deletion applied to afterchem SO2 and H2O2 (https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L1398).
-!    I comment out these for now since we may not have afterchem speceis in CatChem.
-! 4. Seems a bug in GOCART 'rainout' function here: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3886. I guess here we should
-!    call 'liq_to_gas_ratio', instead of 'washfrac_liq_gas', since we are calculating 'l2g'.
-! 5. I guess we added a tuning factor for washfraction of aerosol in GOCART. But there seems to be another factor of 0.5, which is not found in GEOS-Chem.
-!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L4006
-!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2461
-! 6. It seems GOCART is missing a factor of 'f' in the 'washout_frac_liq_gas' function.
-!    GOCART location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L4047
-!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L2945
-! 7. GOCART is not using the reevaporation rate 'REEVAPLS' as in GEOS-Chem. UFS may not have that variable??? But it seems not right that GOCART is using 'qq' as reevaporation rate (Q).
-!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3778
-!    GEOS-Chem location: https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90#L4547
-! 8. The calculation of 'qq' is the difference of precipiation flux between lower layer and upper layer (https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3671)
-!    I am wondering why GOCART does not have error when k = ktop (which is one) and km1 = k -1 would be zero. The pfllsan array has an index of zero???
-!    GOCART location: https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3662
-!    I consider the top layer as itself in my calculation. See Line #160-165 in this file. I hope that is fine.
-! 9. I am using 'PEDGE_DRY' as an input for 'ple'. I am not sure if that is the right variable.

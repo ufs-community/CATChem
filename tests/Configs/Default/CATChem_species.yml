@@ -16,9 +16,7 @@ dust1:
   is_aerosol: true
   is_drydep: true
   is_wetdep: true
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 dust2:
   name: dust2
   long_name: 'Dust Species Accumulation'
@@ -32,9 +30,7 @@ dust2:
   is_aerosol: true
   is_drydep: true
   is_wetdep: true
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 #add more species for Wesely dry deposition test.
 #viscosity is dummy value for gases to read in properly.
 #upper_ and lower_radius are dummy values for aerosols to read in properly.
@@ -97,9 +93,7 @@ SO2:
   wd_retfactor: 5.0e-2
   wd_LiqAndGas: true
   wd_convfacI2G: 6.17395e-1
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 CH2O:
   name: CH2O
   description: Formaldehyde
@@ -134,9 +128,7 @@ HNO3:
   viscosity: 0.0
   henry_k0: 8.3e+4
   henry_cr: 7400.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 1.0, 1.0]
 H2O2:
   name: H2O2
   description: Hydrogen peroxide
@@ -169,9 +161,7 @@ NIT:
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 SO4:
   name: SO4
   description: Sulfate
@@ -189,9 +179,7 @@ SO4:
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 NH4:
   name: NH4
   description: Ammonium
@@ -209,9 +197,7 @@ NH4:
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 BCPI:
   name: BCPI
   description: Hydrophilic black carbon aerosol
@@ -227,9 +213,7 @@ BCPI:
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 BCPO:
   name: BCPO
   description: Hydrophobic black carbon aerosol
@@ -245,9 +229,7 @@ BCPO:
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 SALA:
   name: SALA
   description: Fine (0.01-0.05 microns) sea salt aerosol
@@ -263,9 +245,7 @@ SALA:
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 SALC:
   name: SALC
   description: Coarse (0.5-8.0 microns) sea salt aerosol
@@ -281,9 +261,7 @@ SALC:
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 SO4S:
   name: SO4S
   description: Sulfate aerosol on surface of seasalt aerosol
@@ -299,9 +277,7 @@ SO4S:
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 NITS:
   name: NITS
   description: Inorganic nitrate aerosol on surface of seasalt aerosol
@@ -317,9 +293,7 @@ NITS:
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 BRSALC:
   name: BRSALC
   description: Coarse sea salt bromine
@@ -335,9 +309,7 @@ BRSALC:
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 ISALC:
   name: ISALC
   description: Coarse sea salt iodine
@@ -353,15 +325,14 @@ ISALC:
   density: 2200.0
   lower_radius: 0.5
   upper_radius: 8.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 BRSALA:
   name: BRSALA
   description: Fine sea salt bromine
   is_aerosol: true
   is_seasalt: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 79.90
@@ -370,6 +341,7 @@ BRSALA:
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
+  wd_rainouteff: [1.0, 0.0, 1.0]
 ISALA:
   name: ISALA
   description: Fine sea salt iodine
@@ -385,9 +357,7 @@ ISALA:
   density: 2200.0
   lower_radius: 0.01
   upper_radius: 0.5
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 0.0
-  wd_rainouteff3: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 #here we go with GEOS-Chem dust bins
 DST1:
   name: DST1
@@ -404,9 +374,7 @@ DST1:
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 DST2:
   name: DST2
   description: Dust aerosol, Reff = 1.4 microns
@@ -422,9 +390,7 @@ DST2:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 DST3:
   name: DST3
   description: Dust aerosol, Reff = 2.4 microns
@@ -440,9 +406,7 @@ DST3:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 DST4:
   name: DST4
   description: Dust aerosol, Reff = 4.5 microns
@@ -458,9 +422,7 @@ DST4:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 SO4D1:
   name: SO4D1
   description: Sulfate on dust, Reff = 0.7 microns
@@ -476,9 +438,7 @@ SO4D1:
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 SO4D2:
   name: SO4D2
   description: Sulfate on dust, Reff = 1.4 microns
@@ -494,9 +454,7 @@ SO4D2:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 SO4D3:
   name: SO4D3
   description: Sulfate on dust, Reff = 2.4 microns
@@ -512,9 +470,7 @@ SO4D3:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 SO4D4:
   name: SO4D4
   description: Sulfate on dust, Reff = 4.5 microns
@@ -530,9 +486,7 @@ SO4D4:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 NITD1:
   name: NITD1
   description: Nitrate on dust, Reff = 0.7 microns
@@ -548,9 +502,7 @@ NITD1:
   density: 2500.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 NITD2:
   name: NITD2
   description: Nitrate on dust, Reff = 1.4 microns
@@ -566,9 +518,7 @@ NITD2:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 NITD3:
   name: NITD3
   description: Nitrate on dust, Reff = 2.4 microns
@@ -584,9 +534,7 @@ NITD3:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
 NITD4:
   name: NITD4
   description: Nitrate on dust, Reff = 4.5 microns
@@ -602,6 +550,4 @@ NITD4:
   density: 2650.0
   lower_radius: 0.1
   upper_radius: 1.0
-  wd_rainouteff1: 1.0
-  wd_rainouteff2: 1.0
-  wd_rainouteff3: 0.0
+  wd_rainouteff: [1.0, 1.0, 0.0]
