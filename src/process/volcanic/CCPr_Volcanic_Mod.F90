@@ -28,16 +28,16 @@ MODULE CCPR_Volcanic_mod
    !!
    !! VolcanicStateType is the process-specific derived type.
    !!
-   !! \param Activate Activate Process (True/False)
-   !! \param Scheme Scheme Option
-   !! \param nVolcanicSpecies # of Volcanic species
-   !! \param VolcanicSpeciesIndex Index of Volcanic species
-   !! \param VolcanicSpeciesName Name of Volcanic species
-   !! \param SpcIDs CATChem species IDs
-   !! \param CatIndex Index of emission category in EmisState
-   !! \param TotalEmission Total emission of all species at each level [kg/m^2/s]
-   !! \param EmissionPerSpecies Emission per species at each level [kg/m^2/s]
-   !! \param FileDir Input file directory for reading in emissions
+   !! \param   Activate              Activate Process (True/False)
+   !! \param   SchemeOpt             Scheme Option
+   !! \param   nVolcanicSpecies      # of Volcanic species
+   !! \param   VolcanicSpeciesIndex  Index of Volcanic species
+   !! \param   VolcanicSpeciesName   Name of Volcanic species
+   !! \param   SpcIDs                CATChem species IDs
+   !! \param   CatIndex              Index of emission category in EmisState
+   !! \param   TotalEmission         Total emission of all species at each level [kg/m^2/s]
+   !! \param   EmissionPerSpecies    Emission per species at each level [kg/m^2/s]
+   !! \param   FileDir               Input file directory for reading in emissions
    !!
    !! \ingroup catchem_Volcanic_process
    !!!>
@@ -82,7 +82,7 @@ CONTAINS
       ! INPUT PARAMETERS
       !-----------------
       TYPE(ConfigType)    :: Config    ! Module options
-      TYPE(EmisStateType) :: EmisState ! Chemical state
+      TYPE(EmisStateType) :: EmisState ! Emission state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
@@ -191,9 +191,7 @@ CONTAINS
       TYPE(MetStateType),  INTENT(IN) :: MetState       !< MetState Instance
 
       ! INPUT/OUTPUT PARAMETERS
-      !TYPE(DiagStateType), INTENT(INOUT)      :: DiagState       !< DiagState Instance
       TYPE(VolcanicStateType), INTENT(INOUT)  :: VolcanicState  !< VolcanicState Instance
-      !TYPE(ChemStateType), INTENT(INOUT)     :: ChemState       !< ChemState Instance
       TYPE(EmisStateType), INTENT(INOUT)     :: EmisState       !< ChemState Instance
 
       ! OUTPUT PARAMETERS
@@ -217,11 +215,10 @@ CONTAINS
 
       REAL, dimension(:), allocatable      :: vSO2   ! volcanic emissions  [kg]
       REAL, dimension(:,:,:),pointer  :: SO2       ! SO2 [kg kg-1]
-      !REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
       REAL, dimension(:), allocatable        :: vCloud    ! top elevation of emissions [m]
       REAL, dimension(:), allocatable        :: vElev     ! bottom elevation of emissions [m]
       REAL, dimension(:), allocatable        :: vLat     ! latitude specified in file [degree]
-      REAL, dimension(:), allocatable        :: VLon     ! longitude specified in file [degree]
+      REAL, dimension(:), allocatable        :: vLon     ! longitude specified in file [degree]
       REAL, dimension(:,:), allocatable      :: area     ! area of current grid cell [m^2]
 
       ! Initialize
@@ -259,6 +256,7 @@ CONTAINS
                allocate(iPoint(nVolc), jPoint(nVolc))
                iPoint = 1; jPoint = 1
                !TODO: Not sure how to get Vstart and VEnd format and values.
+               !Here I just start from 00:00:00 and end at 23:59:59
                allocate(vStart(nVolc), vEnd(nVolc))
                vStart = ymd  + 000000
                vEnd =   ymd  + 235959
