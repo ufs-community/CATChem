@@ -26,14 +26,14 @@ module CCPr_Scheme_Volcanic_GOCART_Mod
    !!
    !! VolcanicEmissionData is to hold volcanic emission data.
    !!
-   !! \param vlat Volcano latitude
-   !! \param vlon Volcano longitude
-   !! \param VEmis Volcanic emissions [kg S/s]
-   !! \param vbase Bottom elevation of emissions [m]
-   !! \param vtop Top elevation of emissions [m]
-   !! \param nPts Number of volcanic sources in the current file
-   !! \param emissfile Emissions file name
-   !! \param label Label for emissions
+   !! \param  vlat       Volcano latitude
+   !! \param  vlon       Volcano longitude
+   !! \param  VEmis      Volcanic emissions [kg S/s]
+   !! \param  vbase      Bottom elevation of emissions [m]
+   !! \param  vtop       Top elevation of emissions [m]
+   !! \param  nPts       Number of volcanic sources in the current file
+   !! \param  emissfile  Emissions file name
+   !! \param  label      Label for emissions
    !!
    !! \ingroup CCPr_Scheme_Volcanic_GOCART_Mod
    !!!>
@@ -67,7 +67,6 @@ contains
    !! \param vSO2        Volcanic emissions  [kg S/s]
    !! \param nSO2        Index of SO2 relative to other sulfate tracers
    !! \param SO2         SO2 emissions [kg kg-1]
-   !! \param SU_emis     SU emissions, kg/m2/s
    !! \param vCloud      Top elevation of emissions [m]
    !! \param vElev       Bottom elevation of emissions [m]
    !! \param vLat        Latitude specified in file [degree]
