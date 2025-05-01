@@ -45,7 +45,6 @@ module ChemState_Mod
    !! \param AeroIndex: An array containing the aerosol species index.
    !! \param GasIndex: An array containing the gas species index.
    !! \param DustIndex: An array containing the dust species index.
-   !! \param DryDepIndex: An array containing the dry deposition species index.
    !! \param SeaSaltIndex: An array containing the sea salt species index.
    !! \param DryDepIndex: An array containing the dry deposition species index.
    !! \param SpeciesNames: A character array containing the names of the species.

@@ -179,7 +179,7 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       TYPE(DMSStateType), INTENT(INOUT)    :: DMSState     ! DMSState Instance
-      TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState    ! ChemState Instance
+      TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState    ! EmisState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT)                 :: RC           ! Return Code
@@ -187,7 +187,7 @@ CONTAINS
       ! LOCAL VARIABLES
       INTEGER :: s
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
-      REAL, dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
+      REAL, dimension(:,:,:),pointer  :: SU_emis   ! DMS emissions in kg/m2/s
 
       ! Initialize
       RC = CC_SUCCESS
@@ -203,7 +203,8 @@ CONTAINS
 
             if (DMSState%SchemeOpt == 1) then
 
-               !NDMS = 1 is moved to scheme module
+               !Dimensions (lon,lat,nSpecies) to be consistent with GOCART;
+               !we all have one since it is a column model with only DMS emission
                allocate(SU_emis(1,1,1)); SU_emis = ZERO
 
                call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &

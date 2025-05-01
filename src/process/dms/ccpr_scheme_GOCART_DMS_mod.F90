@@ -35,7 +35,6 @@ contains
    !! \param delp         Pressure Thickness for layer [Pa]
    !! \param dmso_conc    DMS source concentration [nmol/L]
    !! \param SU_emis      SU emissions, kg/m2/s
-   !! \param ndms         index of DMS relative to other sulfate tracers
    !! \param RC           Success or Failure
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
@@ -59,7 +58,7 @@ contains
       INTEGER, intent(in) :: lwi               ! orography flag; Land, ocean, ice mask
       REAL, dimension(:), intent(in) :: delp   ! Pressure Thickness for layer [Pa]
       REAL, intent(in)  :: dmso_conc           ! DMS source concentration [nmol/L]
-      REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! SU emissions, kg/m2/s
+      REAL, intent(inout),dimension(:,:,:),pointer  :: SU_emis   ! DMS emissions in kg/m2/s
       integer, intent(out) :: RC               ! Success or Failure
 
       ! Local Variables
