@@ -131,9 +131,11 @@ program test_bvoc
    call print_info(Config, BvocState, MetState, DiagState, title)
    call assert(BvocState%TotalEmission > 1.0e-9_fp, "Test BVOC species")
    !add check to each species
-   do s = 1, size(BvocState%BvocSpeciesName)
-      call assert(BvocState%EmissionPerSpecies(s) > 1.0e-12_fp, "Test lower emission limit for species " // TRIM(BvocState%BvocSpeciesName(s)))
-      call assert(BvocState%EmissionPerSpecies(s) < 1.0e-9_fp, "Test upper emission limit for species " // TRIM(BvocState%BvocSpeciesName(s)))
+   do s = 1, BvocState%nBvocSpecies
+      call assert(BvocState%EmissionPerSpecies(s) > 1.0e-12_fp, &
+         "Test lower emission limit for species " // TRIM(BvocState%BvocSpeciesName(s)))
+      call assert(BvocState%EmissionPerSpecies(s) < 1.0e-9_fp, &
+         "Test upper emission limit for species " // TRIM(BvocState%BvocSpeciesName(s)))
    end do
 
 
