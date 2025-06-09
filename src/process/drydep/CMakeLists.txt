@@ -3,8 +3,8 @@ set(
   CCPr_DryDep_Mod.F90
   ccpr_scheme_GOCART_DryDep_mod.F90
   ccpr_drydep_common_mod.F90
-  ccpr_scheme_Wesely_mod.F90
-  ccpr_scheme_Zhang_aerosol_mod.F90
+  ccpr_scheme_wesely_mod.F90
+  ccpr_scheme_zhang_aerosol_mod.F90
 )
 
 set(_lib CATChem_process_drydep)
