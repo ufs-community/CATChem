@@ -219,10 +219,10 @@ CONTAINS
       ! e-folding time to be applied to short-term past conditions (in hours)
       REAL(fp), PARAMETER  :: TAU_HOURS = 12.0_fp
       REAL(fp)           :: TS_EMIS  !emission time step
-      REAL(fp)           :: DNEWFRAC
-      REAL(fp)           :: DOLDFRAC
-      REAL(fp)           :: HNEWFRAC
-      REAL(fp)           :: HOLDFRAC
+      REAL(fp)           :: DNEWFRAC  ! Weight for new value in running mean (Days)
+      REAL(fp)           :: DOLDFRAC  ! Weight for old value in running mean (Days)
+      REAL(fp)           :: HNEWFRAC  ! Weight for new value in running mean (24H)
+      REAL(fp)           :: HOLDFRAC  ! Weight for old value in running mean (24H)
       logical, save      :: FIRST = .TRUE.
 
       ! Initialize
