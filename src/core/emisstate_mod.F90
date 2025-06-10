@@ -358,7 +358,6 @@ CONTAINS
                   return
                endif
                EmisState%Cats(c)%Species(s)%EmisMapIndex(n) = index
-               EmisState%Cats(c)%Species(s)%EmisMapIndex(n) = index
             enddo
          enddo
       enddo

@@ -363,6 +363,11 @@ CONTAINS
             exit
          endif
       enddo
+      if (index == 0) then
+         RC = CC_FAILURE
+         ErrMsg = 'Species not found: ' // TRIM(name)
+         call CC_Warning(ErrMsg, RC, thisLoc)
+      endif
 
    end subroutine FindSpecByName
 

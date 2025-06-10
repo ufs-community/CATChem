@@ -166,7 +166,7 @@ CONTAINS
    !! \param [INOUT] EmisState - The EmisState object
    !! \param [OUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_DMS_Run( MetState, DMSState, EmisState, RC )
+   SUBROUTINE CCPr_DMS_Run( MetState, DMSState, EmisState, ChemState, RC )
 
       ! USE
       USE constants, only : g0
@@ -180,12 +180,14 @@ CONTAINS
       ! INPUT/OUTPUT PARAMETERS
       TYPE(DMSStateType), INTENT(INOUT)    :: DMSState     ! DMSState Instance
       TYPE(EmisStateType),  INTENT(INOUT)  :: EmisState    ! EmisState Instance
+      TYPE(ChemStateType),  INTENT(INOUT)  :: ChemState    ! ChemState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT)                 :: RC           ! Return Code
 
       ! LOCAL VARIABLES
-      INTEGER :: s
+      INTEGER :: s, chem_ind
+      REAL(fp) :: fMassDMS ! Molecular weight of DMS in g/mol
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       REAL, dimension(:,:,:),pointer  :: SU_emis   ! DMS emissions in kg/m2/s
 
@@ -207,9 +209,14 @@ CONTAINS
                !we all have one since it is a column model with only DMS emission
                allocate(SU_emis(1,1,1)); SU_emis = ZERO
 
+               !get the index of DMS species in the ChemState array (TODO: this assumes one-to-one mapping only)
+               chem_ind = EmisState%Cats(DMSState%CatIndex)%Species(s)%EmisMapIndex(1)
+               fMassDMS = ChemState%ChemSpecies(chem_ind)%mw_g !get the molecular weight of DMS
+
                call CCPr_Scheme_GOCART_DMS(MetState%NLEVS, &
                   MetState%TSTEP, &
                   g0, &
+                  fMassDMS, &
                   MetState%T, &
                   MetState%U10M, &
                   MetState%V10M, &

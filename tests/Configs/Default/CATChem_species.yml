@@ -25,3 +25,46 @@ dust2:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+dms:
+  name: dms
+  long_name: 'Dimethyl Sulfide'
+  description: dms
+  is_gas: true
+  is_drydep: true
+  mw_g: 62.0
+NO:
+  name: NO
+  long_name: 'Nitrogen Oxide'
+  description: NO
+  is_gas: true
+  is_drydep: true
+  mw_g: 30.0
+CO:
+  name: CO
+  long_name: 'Carbon Monoxide'
+  description: CO
+  is_gas: true
+  is_drydep: true
+  mw_g: 28.0
+ISOP:
+  name: ISOP
+  long_name: 'Isoprene'
+  description: ISOP
+  is_gas: true
+  is_drydep: true
+  mw_g: 68.0
+#dummy species for testing
+TEST:
+  name: TEST
+  long_name: 'Test Species'
+  description: TEST
+  is_gas: true
+  is_drydep: true
+  mw_g: 100.0
+SO2:
+  name: SO2
+  long_name: 'Sulfur Dioxide'
+  description: SO2
+  is_gas: true
+  is_drydep: true
+  mw_g: 64.0

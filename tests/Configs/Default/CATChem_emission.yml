@@ -31,4 +31,4 @@ DMSO:
   DMS:
     long_name: "Dimethyl Sulfide"
     scale: [1.0]
-    map: ["DMS"]
+    map: ["dms"]

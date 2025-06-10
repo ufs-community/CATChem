@@ -15,7 +15,7 @@ program test_DMS
    ! Integers
    INTEGER:: rc          ! Success or failure
    character(len=:), allocatable :: title
-   integer :: c ,s  ! Loop counter for emission state
+   !integer :: c ,s  ! Loop counter for emission state
 
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
@@ -56,17 +56,33 @@ program test_DMS
    write (*,*) '--'
 
    !allocate emission state
-   if (EmisState%nCats > 0) then
-      do c = 1, EmisState%nCats
-         do s = 1, EmisState%Cats(c)%nSpecies
-            ALLOCATE(EmisState%Cats(c)%Species(s)%Flux(GridState%number_of_levels), STAT=RC)
-            if (RC /= CC_SUCCESS) then
-               ErrMsg = 'Error allocating "EmisState%Cats%Species%Flux"!'
-               call cc_emit_error(ErrMsg, RC, ThisLoc)
-               stop 1  !!Note here is not 'return'
-            endif
-         end do
-      end do
+   ! if (EmisState%nCats > 0) then
+   !    do c = 1, EmisState%nCats
+   !       do s = 1, EmisState%Cats(c)%nSpecies
+   !          ALLOCATE(EmisState%Cats(c)%Species(s)%Flux(GridState%number_of_levels), STAT=RC)
+   !          if (RC /= CC_SUCCESS) then
+   !             ErrMsg = 'Error allocating "EmisState%Cats%Species%Flux"!'
+   !             call cc_emit_error(ErrMsg, RC, ThisLoc)
+   !             stop 1  !!Note here is not 'return'
+   !          endif
+   !       end do
+   !    end do
+   ! end if
+
+   !use Emis_Allocate subroutines directly
+   call cc_allocate_emisstate(GridState, EmisState, rc)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_allocate_emisstate'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   end if
+
+   ! map emission to chemistry state (This is needed because we need DMS MW from ChemState)
+   call cc_emis_to_chem_map(EmisState, ChemState, rc)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_map_emis_to_chem'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
    end if
 
    !----------------------------
@@ -104,7 +120,7 @@ program test_DMS
       stop 1
    end if
 
-   call cc_dms_run(MetState, DMSState, EmisState, rc)
+   call cc_dms_run(MetState, DMSState, EmisState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in _dms_run'
       call cc_emit_error(errMsg, rc, thisLoc)

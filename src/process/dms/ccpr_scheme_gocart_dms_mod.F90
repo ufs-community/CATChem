@@ -40,7 +40,7 @@ contains
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
 
-   subroutine CCPr_Scheme_GOCART_DMS(km, cdt, g0, tmpu, u10m, v10m, lwi, delp, &
+   subroutine CCPr_Scheme_GOCART_DMS(km, cdt, g0, fMassDMS, tmpu, u10m, v10m, lwi, delp, &
       dmso_conc, SU_emis, RC)
 
       ! Uses
@@ -52,6 +52,7 @@ contains
       INTEGER, intent(in) :: km                ! number of vertical levels (only surface layer is used)
       REAL, intent(in)    :: cdt               ! model timestep [sec]
       REAL, intent(in)    :: g0                ! gravity [m/s2]
+      REAL, intent(in)    :: fMassDMS          ! DMS molecular weight [g/mol]
       REAL, dimension(:), intent(in) :: tmpu   ! Temperature [K]
       REAL, intent(in)    :: u10m              ! 10-m u-wind component [m/sec]
       REAL, intent(in)    :: v10m              ! 10-m v-wind component [m/sec]
@@ -62,8 +63,8 @@ contains
       integer, intent(out) :: RC               ! Success or Failure
 
       ! Local Variables
-      INTEGER, parameter :: NDMS = 1    ! index of DMS relative to other sulfate tracers
-      REAL, parameter :: fMassDMS=62.   ! DMS molecular weight [g/mol]
+      INTEGER, parameter :: NDMS = 1    ! index of DMS relative to other sulfate tracers in GOCART
+      !REAL, parameter :: fMassDMS=62.   ! DMS molecular weight [g/mol]
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
 
