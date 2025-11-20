@@ -7,7 +7,7 @@ author: "Wei Li"
 # Explicit process behavior configuration with species filtering
 process_behavior:
   type: "sink" #is not doing anything now
-  tendency_mode: "additive" #is not doing anything now
+  tendency_mode: "multiplicative" #additive or multiplicative or replacement;
   species_filter:
     #type: "all_species"
     type: "by_metadata"
@@ -26,9 +26,7 @@ process_behavior:
   parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))  
   memory_requirements: "low" #is not doing anything now
 
-required_met_fields: #needed for other purposes, such as unit conversion
-  - USTAR
-  - TSTEP     #Note TSTEP is not from met_state but we put it here anyways
+#required_met_fields: [] #used for other purpose, such as unit conversion 
 
 schemes:
   wesely:
@@ -42,6 +40,8 @@ schemes:
     author: "Wei Li"
 
     required_met_fields: #needed for scheme calculations
+      - USTAR
+      - TSTEP
       - TS
       - SWGDN
       - SUNCOSmid 
@@ -62,6 +62,7 @@ schemes:
       - IsSnow
       - IsIce
       - IsLand
+      
 
     required_species_properties:
       - mw_g         
@@ -100,10 +101,12 @@ schemes:
     author: "Wei Li & Lacey Holland"
 
     required_met_fields:
-      - NLEVS
+      #- NLEVS
+      - USTAR
+      - TSTEP
       - T 
       - AIRDEN
-      - ZMID
+      - Z
       - LWI
       - PBLH
       - HFLUX
@@ -116,6 +119,7 @@ schemes:
     required_species_properties:         
       - density              
       - radius               
+      - is_seasalt
 
     parameters:
       scale_factor:
@@ -138,6 +142,8 @@ schemes:
     author: "Wei Li"
 
     required_met_fields:
+      - USTAR
+      - TSTEP
       - TS
       - OBK 
       - BXHEIGHT

@@ -51,8 +51,8 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
    !! @param[in]  n_species_mapping Number of chemical species per emission species (num_species)
 {% endif %}
-{% set all_met_fields = scheme | all_required_met_fields %}
-{% for field in all_met_fields %}
+{% set scheme_met_fields = scheme|scheme_only_met_fields %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% if field_classifier.get_field_type(field) == 'special_timestep' %}
    !! @param[in]  {{ field | lower | replace('-', '_') | replace('.', '_') }}    Time step [s] - retrieved from process interface
@@ -63,8 +63,60 @@ contains
    !! @param[in]  {{ field.variable_name }}    {{ field.description }} [{{ field.units }}]
 {% endif %}
 {% endfor %}
+{% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
+{% for prop in scheme.required_species_properties %}
+   !! @param[in]  species_{{ prop }}    Species {{ prop }} property
+{% endfor %}
+{% endif %}
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+{% if config.diagnostics %}
+{% for diag in config.diagnostics %}
+{% set diag_name = diag['name'] if diag is mapping else diag %}
+{% set diag_desc = diag.get('description', 'Diagnostic field') if diag is mapping else 'Diagnostic field' %}
+{% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
+{% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
+{% if diag_dims == 'auto' %}
+{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
+{% else %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
+{% endif %}
+{% elif diag_dims == 'scalar' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
+{% elif diag_dims == '1d' or diag_dims == 'num_species' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
+{% elif diag_dims == 'num_layers' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
+{% else %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] ({{ diag_dims }})
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if scheme.scheme_diagnostics %}
+{% for diag in scheme.scheme_diagnostics %}
+{% set diag_name = diag['name'] if diag is mapping else diag %}
+{% set diag_desc = diag.get('description', 'Diagnostic field') if diag is mapping else 'Diagnostic field' %}
+{% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
+{% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
+{% if diag_dims == 'auto' %}
+{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
+{% else %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
+{% endif %}
+{% elif diag_dims == 'scalar' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
+{% elif diag_dims == '1d' or diag_dims == 'num_species' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
+{% elif diag_dims == 'num_layers' %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
+{% else %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] ({{ diag_dims }})
+{% endif %}
+{% endfor %}
+{% endif %}
+{% set scheme_met_fields = scheme | scheme_only_met_fields %}
 {% if config.diagnostics %}
 {% for diag in config.diagnostics %}
 {% set diag_name = diag['name'] if diag is mapping else diag %}
@@ -118,8 +170,8 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
       n_species_mapping, &
 {% endif %}
-      params{% if all_met_fields and all_met_fields|length > 0 %}, &
-{% for field in all_met_fields %}
+      params{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+{% for field in scheme_met_fields %}
 {% if field is string %}
       {{ field | lower | replace('-', '_') | replace('.', '_') }}{% if not loop.last %}, &
 {% endif %}
@@ -148,8 +200,8 @@ contains
       integer, intent(in) :: n_species_mapping(num_species)  ! Number of chem species per emission species
 {% endif %}
       type({{ config.class_name }}Scheme{{ scheme.class_name }}Config), intent(in) :: params
-{% if all_met_fields and all_met_fields|length > 0 %}
-{% for field in all_met_fields %}
+{% if scheme_met_fields and scheme_met_fields|length > 0 %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -282,9 +334,9 @@ contains
          environmental_factor = 1.0_fp
 
          ! Apply scheme-specific environmental responses based on meteorological fields
-{% set all_met_fields = scheme|all_required_met_fields %}
-{% if all_met_fields and all_met_fields|length > 0 %}
-{% for field in all_met_fields %}
+{% set scheme_met_fields = scheme|scheme_only_met_fields %}
+{% if scheme_met_fields and scheme_met_fields|length > 0 %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% if field == "temperature_2m" %}
          ! Temperature response (customize for your scheme)

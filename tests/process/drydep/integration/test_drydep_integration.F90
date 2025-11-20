@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the drydep process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-11-14T22:58:26.726097
+!! Generated on: 2025-11-17T18:50:12.656479
 
 program test_drydep_integration
    use precision_mod, only: fp
@@ -256,7 +256,7 @@ contains
                met_state%RH(i,j,k) = 0.90_fp * exp(-altitude_km / 5.0_fp)       ! Relative humidity [fraction]
                met_state%AIRDEN(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Air density [kg/m3]
                met_state%BXHEIGHT(i,j,k) = 1000.0_fp                            ! Grid box height [m]
-               met_state%ZMID(i,j,k) = altitude_km * 1000.0_fp * 9.81_fp        ! Mid-level geopotential [m2/s2]
+               met_state%Z(i,j,k) = altitude_km * 1000.0_fp * 9.81_fp           ! Geopotential height [m2/s2]
             end do
          end do
       end do

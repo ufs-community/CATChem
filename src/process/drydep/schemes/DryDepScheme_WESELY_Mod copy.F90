@@ -133,6 +133,13 @@ contains
    !! @param[in]  tstep    Time step [s] - retrieved from process interface
    !! @param[in]  ustar    USTAR field [appropriate units]
    !! @param[in]  z0    Z0 field [appropriate units]
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_dd_f0    Species dd_f0 property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_dd_hstar    Species dd_hstar property
+   !! @param[in]  species_dd_DvzAerSnow    Species dd_DvzAerSnow property
+   !! @param[in]  species_dd_DvzMinVal_snow    Species dd_DvzMinVal_snow property
+   !! @param[in]  species_dd_DvzMinVal_land    Species dd_DvzMinVal_land property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)

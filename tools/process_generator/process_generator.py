@@ -472,7 +472,23 @@ class ProcessGenerator:
             # Return sorted list for consistent ordering
             return sorted(list(all_fields))
             
+        # Add filter for scheme-only met fields (excludes process-level fields)
+        def get_scheme_only_met_fields_filter(scheme, context=None):
+            """Filter for scheme-only meteorological fields (excludes process-level fields)."""
+            scheme_fields = set()
+            
+            # Add only scheme-specific fields - handle both dict and object
+            if isinstance(scheme, dict):
+                if 'required_met_fields' in scheme and scheme['required_met_fields']:
+                    scheme_fields.update(scheme['required_met_fields'])
+            elif hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
+                scheme_fields.update(scheme.required_met_fields)
+            
+            # Return sorted list for consistent ordering
+            return sorted(list(scheme_fields))
+            
         self.env.filters['all_required_met_fields'] = get_all_met_fields_filter
+        self.env.filters['scheme_only_met_fields'] = get_scheme_only_met_fields_filter
 
     @staticmethod
     def _upper_snake_case(s: str) -> str:

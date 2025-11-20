@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the seasalt process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-11-14T23:01:21.917777
+!! Generated on: 2025-11-17T18:47:19.779115
 
 program test_seasalt_integration
    use precision_mod, only: fp

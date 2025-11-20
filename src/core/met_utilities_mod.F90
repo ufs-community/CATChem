@@ -119,6 +119,8 @@ contains
       e = qv * p / (0.622_fp + 0.378_fp * qv)
       es = saturation_vapor_pressure(T)
       rh = e / es
+      ! Clip to physical limits
+      rh = max(0.0_fp, min(1.0_fp, rh))
    end function relative_humidity
 
    !> \brief Calculate saturation vapor pressure (Clausius-Clapeyron)
@@ -184,7 +186,7 @@ contains
       if (ustar > 0.0_fp .and. abs(H) > 0.0_fp) then
          L = - (ustar**3 * rho * Cp * T0) / (VON_KARMAN * g0 * H)
       else
-         L = 1.0e6_fp  ! Neutral/very stable default
+         L = 1.0e5_fp  ! Neutral/very stable default
       endif
    end function monin_obukhov_length
 

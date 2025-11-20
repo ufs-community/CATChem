@@ -67,64 +67,75 @@ program test_StateManager
    write(*,*) 'Test 4 passed!'
    write(*,*) ''
 
-   ! Test 5: Get error manager
-   write(*,*) 'Test 5: Get error manager'
-   error_mgr_ptr => state_mgr%get_error_manager()
-   call assert(associated(error_mgr_ptr), "Should be able to get error manager")
+   ! Test 5: Get time state pointer  
+   write(*,*) 'Test 5: Get time state pointer'
+   block
+      use TimeState_Mod, only: TimeStateType
+      type(TimeStateType), pointer :: time_ptr
+      
+      time_ptr => state_mgr%get_time_state_ptr()
+      call assert(associated(time_ptr), "Should be able to get time state pointer")
+   end block
 
    write(*,*) 'Test 5 passed!'
    write(*,*) ''
 
-   ! Test 6: Get grid manager
-   write(*,*) 'Test 6: Get grid manager'
+   ! Test 6: Get error manager
+   write(*,*) 'Test 6: Get error manager'
+   error_mgr_ptr => state_mgr%get_error_manager()
+   call assert(associated(error_mgr_ptr), "Should be able to get error manager")
+
+   write(*,*) 'Test 6 passed!'
+   write(*,*) ''
+
+   ! Test 7: Get grid manager
+   write(*,*) 'Test 7: Get grid manager'
    grid_mgr_ptr => state_mgr%get_grid_manager()
    ! Grid manager might not be associated initially
    call assert(.not. associated(grid_mgr_ptr) .or. associated(grid_mgr_ptr), &
               "Grid manager pointer should be valid (null or associated)")
 
-   write(*,*) 'Test 6 passed!'
+   write(*,*) 'Test 7 passed!'
    write(*,*) ''
 
-   ! Test 7: Get diagnostic manager
-   write(*,*) 'Test 7: Get diagnostic manager'
+   ! Test 8: Get diagnostic manager
+   write(*,*) 'Test 8: Get diagnostic manager'
    diag_mgr_ptr => state_mgr%get_diagnostic_manager()
    ! Diagnostic manager might not be associated initially
    call assert(.not. associated(diag_mgr_ptr) .or. associated(diag_mgr_ptr), &
               "Diagnostic manager pointer should be valid (null or associated)")
 
-   write(*,*) 'Test 7 passed!'
-   write(*,*) ''
-
-   ! Test 8: Set name
-   write(*,*) 'Test 8: Set name'
-   call state_mgr%set_name('NewName')
-   ! Note: There's no direct way to verify the name was set in the current API
-   ! This test just ensures the method doesn't crash
-
    write(*,*) 'Test 8 passed!'
    write(*,*) ''
 
-   ! Test 9: Print info
-   write(*,*) 'Test 9: Print info'
-   call state_mgr%print_info()
-   ! Should complete without error
+      ! Test 9: Set name
+   write(*,*) 'Test 9: Set name'
+   call state_mgr%set_name('NewName')
+   ! (No direct way to test this other than with print_info)
 
    write(*,*) 'Test 9 passed!'
    write(*,*) ''
 
-   ! Test 10: Get memory usage
-   write(*,*) 'Test 10: Get memory usage'
+   ! Test 10: Print info
+   write(*,*) 'Test 10: Print info'
+   call state_mgr%print_info()
+
+   write(*,*) 'Test 10 passed!'
+   write(*,*) ''
+
+   ! Test 11: Get memory usage
+   write(*,*) 'Test 11: Get memory usage'
    block
       integer(kind=8) :: memory_usage
       memory_usage = state_mgr%get_memory_usage()
       call assert(memory_usage >= 0, "Memory usage should be non-negative")
    end block
 
-   write(*,*) 'Test 10 passed!'
+   write(*,*) 'Test 11 passed!'
    write(*,*) ''
 
-   ! Test 11: Cleanup
-   write(*,*) 'Test 11: Cleanup'
+   ! Test 12: Cleanup
+   write(*,*) 'Test 12: Cleanup'
    call state_mgr%cleanup(rc)
    call assert(rc == CC_SUCCESS, "StateManager cleanup should succeed")
    
@@ -132,7 +143,7 @@ program test_StateManager
    is_ready = state_mgr%is_ready()
    call assert(.not. is_ready, "StateManager should not be ready after cleanup")
 
-   write(*,*) 'Test 11 passed!'
+   write(*,*) 'Test 12 passed!'
    write(*,*) ''
 
    write(*,*) 'All StateManager tests passed!'

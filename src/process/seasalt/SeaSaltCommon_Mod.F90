@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! seasalt process and its schemes.
 !!
-!! Generated on: 2025-11-14T23:01:21.563867
+!! Generated on: 2025-11-17T18:47:19.322703
 !! Author: Barry Baker & Wei Li
 !! Version: 1.0.0
 

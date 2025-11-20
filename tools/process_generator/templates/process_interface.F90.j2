@@ -469,11 +469,11 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables for scheme calculation
-{% set all_met_fields = scheme | all_required_met_fields %}
-{% if all_met_fields %}
+{% set scheme_met_fields = scheme | scheme_only_met_fields %}
+{% if scheme_met_fields %}
       type(VirtualMetType), pointer :: met => null()  ! Pointer to meteorological data
       ! Meteorological fields
-{% for field in all_met_fields %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
       {{ field_classifier.get_data_type(field) }}, allocatable :: {{ field | lower | replace('-', '_') | replace('.', '_') }}(:)
 {% else %}
@@ -594,9 +594,9 @@ contains
       allocate(species_tendencies(1, n_species))
       {% endif %}
 {% endif %}
-{% if all_met_fields %}
+{% if scheme_met_fields %}
       ! Allocate meteorological field arrays based on field type and process configuration
-{% for field in all_met_fields %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -609,17 +609,9 @@ contains
 {% elif field_classifier.get_field_type(field_name) == '2d_surface' %}
       allocate({{ var_name }}(1))  ! Surface field - always scalar
 {% elif field_classifier.get_field_type(field_name) == '3d_atmospheric' %}
-{% if scheme.affects_full_column %}
-      allocate({{ var_name }}(n_levels))  ! Full column atmospheric field
-{% else %}
-      allocate({{ var_name }}(1))  ! Surface level only
-{% endif %}
+      allocate({{ var_name }}(n_levels))  ! Atmospheric field - always n_levels
 {% elif field_classifier.get_field_type(field_name) == '3d_edge' %}
-{% if scheme.affects_full_column %}
-      allocate({{ var_name }}(n_levels+1))  ! Full column edge field - requires nz+1 dimensions
-{% else %}
-      allocate({{ var_name }}(2))  ! Surface edge field - surface and first edge level
-{% endif %}
+      allocate({{ var_name }}(n_levels+1))  ! Edge field - always n_levels+1
 {% elif field_classifier.get_field_type(field_name) == 'categorical' %}
       
 {% else %}
@@ -636,12 +628,12 @@ contains
 {% endif %}
       species_tendencies = 0.0_fp
 
-{% if all_met_fields %}
+{% if scheme_met_fields %}
       ! Get meteorological data pointer from virtual column (VirtualMet pattern)
       met => column%get_met()
 
       ! Now allocate categorical fields using the met pointer dimensions
-{% for field in all_met_fields %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -655,7 +647,7 @@ contains
 {% endfor %}
 
       ! Extract required fields from met pointer based on field type and processing mode
-{% for field in all_met_fields %}
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -668,17 +660,9 @@ contains
 {% elif field_classifier.get_field_type(field_name) == '2d_surface' %}
       {{ var_name }}(1) = met%{{ field_name }}  ! Surface field - scalar access
 {% elif field_classifier.get_field_type(field_name) == '3d_atmospheric' %}
-{% if scheme.affects_full_column %}
-      {{ var_name }}(1:n_levels) = met%{{ field_name }}(1:n_levels)  ! Full column atmospheric field
-{% else %}
-      {{ var_name }}(1) = met%{{ field_name }}(1)  ! Surface level only
-{% endif %}
+      {{ var_name }}(1:n_levels) = met%{{ field_name }}(1:n_levels)  ! Atmospheric field - always n_levels
 {% elif field_classifier.get_field_type(field_name) == '3d_edge' %}
-{% if scheme.affects_full_column %}
-      {{ var_name }}(1:n_levels+1) = met%{{ field_name }}(1:n_levels+1)  ! Full column edge field - includes all edge levels
-{% else %}
-      {{ var_name }}(1:2) = met%{{ field_name }}(1:2)  ! Surface edge field - surface and first edge level
-{% endif %}
+      {{ var_name }}(1:n_levels+1) = met%{{ field_name }}(1:n_levels+1)  ! Edge field - always n_levels+1
 {% elif field_classifier.get_field_type(field_name) == 'categorical' %}
       {{ var_name }}(:) = met%{{ field_name }}(:)  ! Categorical field - full dimension
 {% else %}
@@ -742,8 +726,8 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
             n_species_mapping, &
 {% endif %}
-            this%process_config%{{ scheme.name }}_config{% if all_met_fields and all_met_fields|length > 0 %}, &
-{% for field in all_met_fields %}
+            this%process_config%{{ scheme.name }}_config{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -803,8 +787,8 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
             n_species_mapping, &
 {% endif %}
-            this%process_config%{{ scheme.name }}_config{% if all_met_fields and all_met_fields|length > 0 %}, &
-{% for field in all_met_fields %}
+            this%process_config%{{ scheme.name }}_config{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+{% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
 {% set var_name = field | lower | replace('-', '_') | replace('.', '_') %}
@@ -863,7 +847,7 @@ contains
 {% if config.process_behavior and config.process_behavior.tendency_mode == "multiplicative" %}
                ! Multiplicative tendency: new_conc = conc * (1 - loss_fraction)
                ! where loss_fraction = 1 - exp(-tendency * dt)
-               loss_fraction = 1.0_fp - exp(-species_tendencies(k, i) * this%get_timestep())
+               loss_fraction = MAX(1.0_fp - exp(-species_tendencies(k, i) * this%get_timestep()), 0.0_fp)
                call column%set_chem_field(k, chem_species_indices(chem_idx), &
                                          species_conc(k, chem_idx) * (1.0_fp - loss_fraction))
 {% elif config.process_behavior and config.process_behavior.tendency_mode == "replacement" %}
@@ -872,13 +856,8 @@ contains
                                          species_tendencies(k, i))
 {% else %}
                ! Additive tendency (default): new_conc = conc + dqa
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-               ! Dry deposition specific calculation: dqa = MAX(0.0, conc * (1 - exp(-tendency * dt)))
-               dqa = MAX(0.0_fp, species_conc(k, chem_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, i) * this%get_timestep())))
-{% else %}
                ! where dqa = tendency * dt * g0 / DELP(k)
                dqa = species_tendencies(k, i) * this%get_timestep() * g0 / met%DELP(k)
-{% if config.process_behavior and config.process_behavior.type == "source" %}
                ! Apply unit conversion for emission processes
                ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
                ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
@@ -890,15 +869,9 @@ contains
                end if
                converter = converter * this%process_config%{{ config.name }}_config%emission_mapping%species_mappings(i)%scale(j)
                dqa = dqa * converter
-{% endif %}
-{% endif %}
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-               call column%set_chem_field(k, chem_species_indices(chem_idx), &
-                                         species_conc(k, chem_idx) - dqa)
-{% else %}
                call column%set_chem_field(k, chem_species_indices(chem_idx), &
                                          species_conc(k, chem_idx) + dqa)
-{% endif %}
+
 {% endif %}
                chem_idx = chem_idx + 1
             end do
@@ -913,7 +886,7 @@ contains
 {% if config.process_behavior and config.process_behavior.tendency_mode == "multiplicative" %}
             ! Multiplicative tendency: new_conc = conc * (1 - loss_fraction)
             ! where loss_fraction = 1 - exp(-tendency * dt)
-            loss_fraction = 1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep())
+            loss_fraction = MAX(1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep()), 0.0_fp)
             call column%set_chem_field(1, chem_species_indices(chem_idx), &
                                       species_conc(1, chem_idx) * (1.0_fp - loss_fraction))
 {% elif config.process_behavior and config.process_behavior.tendency_mode == "replacement" %}
@@ -922,13 +895,8 @@ contains
                                       species_tendencies(1, i))
 {% else %}
             ! Additive tendency (default): new_conc = conc + dqa
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-            ! Dry deposition specific calculation: dqa = MAX(0.0, conc * (1 - exp(-tendency * dt)))
-            dqa = MAX(0.0_fp, species_conc(1, chem_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(1, i) * this%get_timestep())))
-{% else %}
             ! where dqa = tendency * dt * g0 / DELP(1) for surface
             dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-{% if config.process_behavior and config.process_behavior.type == "source" %}
             ! Apply unit conversion for emission processes
             ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
             ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
@@ -940,15 +908,9 @@ contains
             end if
             converter = converter * this%process_config%{{ config.name }}_config%emission_mapping%species_mappings(i)%scale(j)
             dqa = dqa * converter
-{% endif %}
-{% endif %}
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-            call column%set_chem_field(1, chem_species_indices(chem_idx), &
-                                      species_conc(1, chem_idx) - dqa)
-{% else %}
             call column%set_chem_field(1, chem_species_indices(chem_idx), &
                                       species_conc(1, chem_idx) + dqa)
-{% endif %}
+
 {% endif %}
             chem_idx = chem_idx + 1
          end do
@@ -970,7 +932,7 @@ contains
 {% if config.process_behavior and config.process_behavior.tendency_mode == "multiplicative" %}
             ! Multiplicative tendency: new_conc = conc * (1 - loss_fraction)
             ! where loss_fraction = 1 - exp(-tendency * dt)
-            loss_fraction = 1.0_fp - exp(-species_tendencies(k, i) * this%get_timestep())
+            loss_fraction = MAX(1.0_fp - exp(-species_tendencies(k, i) * this%get_timestep()), 0.0_fp)
             call column%set_chem_field(k, species_indices(i), &
                                       species_conc(k, i) * (1.0_fp - loss_fraction))
 {% elif config.process_behavior and config.process_behavior.tendency_mode == "replacement" %}
@@ -979,13 +941,8 @@ contains
                                       species_tendencies(k, i))
 {% else %}
             ! Additive tendency (default): new_conc = conc + dqa
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-            ! Dry deposition specific calculation: dqa = MAX(0.0, conc * (1 - exp(-tendency * dt)))
-            dqa = MAX(0.0_fp, species_conc(k, i) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, i) * this%get_timestep())))
-{% else %}
             ! where dqa = tendency * dt * g0 / DELP(k)
             dqa = species_tendencies(k, i) * this%get_timestep() * g0 / met%DELP(k)
-{% if config.process_behavior and config.process_behavior.type == "source" %}
             ! Apply unit conversion for emission processes
             ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
             ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
@@ -995,15 +952,9 @@ contains
                converter = 1.0e9_fp
             end if
             dqa = dqa * converter
-{% endif %}
-{% endif %}
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-            call column%set_chem_field(k, species_indices(i), &
-                                      species_conc(k, i) - dqa)
-{% else %}
             call column%set_chem_field(k, species_indices(i), &
                                       species_conc(k, i) + dqa)
-{% endif %}
+
 {% endif %}
          end do
       end do
@@ -1021,7 +972,7 @@ contains
 {% if config.process_behavior and config.process_behavior.tendency_mode == "multiplicative" %}
          ! Multiplicative tendency: new_conc = conc * (1 - loss_fraction)
          ! where loss_fraction = 1 - exp(-tendency * dt)
-         loss_fraction = 1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep())
+         loss_fraction = MAX(1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep()), 0.0_fp)
          call column%set_chem_field(1, species_indices(i), &
                                    species_conc(1, i) * (1.0_fp - loss_fraction))
 {% elif config.process_behavior and config.process_behavior.tendency_mode == "replacement" %}
@@ -1030,13 +981,8 @@ contains
                                    species_tendencies(1, i))
 {% else %}
          ! Additive tendency (default): new_conc = conc + dqa
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-         ! Dry deposition specific calculation: dqa = MAX(0.0, conc * (1 - exp(-tendency * dt)))
-         dqa = MAX(0.0_fp, species_conc(1, i) * (1.0_fp - exp(-1.0_fp * species_tendencies(1, i) * this%get_timestep())))
-{% else %}
          ! where dqa = tendency * dt * g0 / DELP(1) for surface
          dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-{% if config.process_behavior and config.process_behavior.type == "source" %}
          ! Apply unit conversion for emission processes
          ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
          ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
@@ -1046,15 +992,9 @@ contains
             converter = 1.0e9_fp
          end if
          dqa = dqa * converter
-{% endif %}
-{% endif %}
-{% if config.process_behavior and config.process_behavior.type == "sink" %}
-         call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) - dqa)
-{% else %}
          call column%set_chem_field(1, species_indices(i), &
                                    species_conc(1, i) + dqa)
-{% endif %}
+
 {% endif %}
       end do
       {% endif %}

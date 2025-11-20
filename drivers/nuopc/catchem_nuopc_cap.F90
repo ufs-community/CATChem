@@ -484,7 +484,7 @@ contains
       line=__LINE__,  file=__FILE__))  return  ! bail out
     
     ! Import meteorological data from other components
-    call transform_nuopc_to_catchem(is%wrap, importState, rc)
+    call transform_nuopc_to_catchem(is%wrap, importState, currTime, rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
       line=__LINE__, file=__FILE__)) return
 

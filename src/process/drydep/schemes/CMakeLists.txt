@@ -1,5 +1,5 @@
 # DryDep Schemes CMakeLists.txt
-# Generated on: 2025-11-14T22:58:26.616033
+# Generated on: 2025-11-17T18:50:12.561294
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -13,6 +13,8 @@
 
 # WESELY scheme configuration
 # Required meteorological fields for WESELY:
+#   - USTAR
+#   - TSTEP
 #   - TS
 #   - SWGDN
 #   - SUNCOSmid
@@ -35,10 +37,11 @@
 
 # GOCART scheme configuration
 # Required meteorological fields for GOCART:
-#   - NLEVS
+#   - USTAR
+#   - TSTEP
 #   - T
 #   - AIRDEN
-#   - ZMID
+#   - Z
 #   - LWI
 #   - PBLH
 #   - HFLUX
@@ -50,6 +53,8 @@
 
 # ZHANG scheme configuration
 # Required meteorological fields for ZHANG:
+#   - USTAR
+#   - TSTEP
 #   - TS
 #   - OBK
 #   - BXHEIGHT

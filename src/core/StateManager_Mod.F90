@@ -19,6 +19,7 @@ module StateManager_Mod
    use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
    use ConfigManager_Mod, only: ConfigManagerType
    use MetState_Mod, only: MetStateType
+   use TimeState_Mod, only: TimeStateType
    use ChemState_Mod, only: ChemStateType
    use GridManager_Mod, only: GridManagerType
    use DiagnosticManager_Mod, only: DiagnosticManagerType
@@ -70,6 +71,7 @@ module StateManager_Mod
 
       ! Core state objects
       type(MetStateType),   allocatable :: met_state   !< Meteorological fields
+      type(TimeStateType),  allocatable :: time_state  !< Time state and solar calculations
       type(ChemStateType),  allocatable :: chem_state  !< Chemical species concentrations
       type(ErrorManagerType)            :: error_mgr   !< Error manager
 
@@ -95,6 +97,7 @@ module StateManager_Mod
       procedure :: get_config_ptr => manager_get_config_ptr
       procedure :: set_config => manager_set_config
       procedure :: get_met_state_ptr => manager_get_met_state_ptr
+      procedure :: get_time_state_ptr => manager_get_time_state_ptr
       procedure :: get_chem_state_ptr => manager_get_chem_state_ptr
       procedure :: get_error_manager => manager_get_error_manager
       procedure :: get_grid_manager => manager_get_grid_manager
@@ -154,6 +157,8 @@ contains
       
       if (.not. allocated(this%met_state)) allocate(this%met_state)
       
+      if (.not. allocated(this%time_state)) allocate(this%time_state)
+      
       if (.not. allocated(this%chem_state)) allocate(this%chem_state)
 
       this%is_initialized = .true.
@@ -163,18 +168,28 @@ contains
 
    !> \brief Clean up the state manager
    subroutine manager_cleanup(this, rc)
-      class(StateManagerType), intent(inout) :: this
+      class(StateManagerType), intent(inout), target :: this
       integer, intent(out) :: rc
 
-      integer :: config_rc, met_rc, chem_rc
+      integer :: config_rc, met_rc, time_rc, chem_rc
+      type(ErrorManagerType), pointer :: error_mgr_ptr
 
       rc = CC_SUCCESS
+
+      ! Get pointer to error manager for cleanup calls
+      error_mgr_ptr => this%get_error_manager()
 
       ! Clean up and deallocate state objects - call their cleanup procedures first!
       if (allocated(this%met_state)) then
          call this%met_state%cleanup('ALL', met_rc)
          if (met_rc /= CC_SUCCESS) rc = met_rc  ! Don't stop cleanup on error
          deallocate(this%met_state)
+      end if
+      
+      if (allocated(this%time_state)) then
+         call this%time_state%cleanup(error_mgr_ptr, time_rc)
+         if (time_rc /= CC_SUCCESS) rc = time_rc  ! Don't stop cleanup on error
+         deallocate(this%time_state)
       end if
       
       if (allocated(this%chem_state)) then
@@ -204,6 +219,7 @@ contains
       ready = this%is_initialized .and. this%is_configured .and. &
               associated(this%config) .and. &
               allocated(this%met_state) .and. &
+              allocated(this%time_state) .and. &
               allocated(this%chem_state)
    end function manager_is_ready
 
@@ -249,6 +265,18 @@ contains
          nullify(met_ptr)
       endif
    end function manager_get_met_state_ptr
+
+   !> \brief Get pointer to time state for modification
+   function manager_get_time_state_ptr(this) result(time_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(TimeStateType), pointer :: time_ptr
+
+      if (allocated(this%time_state)) then
+         time_ptr => this%time_state
+      else
+         nullify(time_ptr)
+      endif
+   end function manager_get_time_state_ptr
 
    !> \brief Get pointer to chem state for modification
    function manager_get_chem_state_ptr(this) result(chem_ptr)
@@ -490,6 +518,7 @@ contains
       write(*,'(A,L1)') 'Initialized: ', this%is_initialized
       write(*,'(A,L1)') 'Config manager associated: ', associated(this%config)
       write(*,'(A,L1)') 'Met state allocated: ', allocated(this%met_state)
+      write(*,'(A,L1)') 'Time state allocated: ', allocated(this%time_state)
       write(*,'(A,L1)') 'Chem state allocated: ', allocated(this%chem_state)
       write(*,'(A)') '================================='
 
@@ -513,6 +542,7 @@ contains
 
       if (associated(this%config)) memory_bytes = memory_bytes + 1024_8
       if (allocated(this%met_state)) memory_bytes = memory_bytes + 102400_8
+      if (allocated(this%time_state)) memory_bytes = memory_bytes + 32_8
       if (allocated(this%chem_state)) memory_bytes = memory_bytes + 1048576_8
    end function manager_get_memory_usage
 

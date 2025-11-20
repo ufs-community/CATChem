@@ -30,7 +30,7 @@ import_fields:
     units: "m/s"
     optional: false
   - standard_name: "inst_merid_wind_levels"
-    catchem_var: "U"
+    catchem_var: "V"
     dimensions: 3
     units: "m/s"
     optional: false
@@ -55,7 +55,7 @@ import_fields:
     units: "m/s"
     optional: false
   - standard_name: "inst_aerodynamic_conductance"
-    catchem_var: "Z0H"
+    catchem_var: "CMM"
     dimensions: 2
     units: "s/m"
     optional: false
@@ -115,17 +115,17 @@ import_fields:
     units: "m"
     optional: false
   - standard_name: "height"
-    catchem_var: "OBK"
+    catchem_var: "ORO"
     dimensions: 2
     units: "m"
     optional: true
   - standard_name: "canopy_moisture_storage"
-    catchem_var: "OBK"
+    catchem_var: "WCA"
     dimensions: 2
     units: "m3"
     optional: true
   - standard_name: "inst_canopy_resistance"
-    catchem_var: "OBK"
+    catchem_var: "RCA"
     dimensions: 2
     units: "s/m"
     optional: true
@@ -164,6 +164,16 @@ import_fields:
     dimensions: 2
     units: "1"
     optional: false
+  - standard_name: "lake_fraction"  ###need to add to UFSATM
+    catchem_var: "FRLAKE"
+    dimensions: 2
+    units: "1"
+    optional: false
+  - standard_name: "inst_surface_soil_wetness"  ###need to add to UFSATM
+    catchem_var: "GWETTOP"
+    dimensions: 2
+    units: "1"
+    optional: false
   - standard_name: "soil_type"
     catchem_var: "DSOILTYPE"
     dimensions: 2
@@ -180,7 +190,7 @@ import_fields:
     units: "m3/m3"
     optional: false
   - standard_name: "temperature_of_soil_layer"
-    catchem_var: "SOILM"
+    catchem_var: "SOILT"
     dimensions: 3
     units: "K"
     optional: true

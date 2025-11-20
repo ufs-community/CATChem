@@ -174,6 +174,18 @@ contains
    !! @param[in]  ustar    USTAR field [appropriate units]
    !! @param[in]  v10m    V10M field [appropriate units]
    !! @param[in]  z0    Z0 field [appropriate units]
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_dd_hstar    Species dd_hstar property
+   !! @param[in]  species_dd_DvzAerSnow    Species dd_DvzAerSnow property
+   !! @param[in]  species_dd_DvzMinVal_snow    Species dd_DvzMinVal_snow property
+   !! @param[in]  species_dd_DvzMinVal_land    Species dd_DvzMinVal_land property
+   !! @param[in]  species_lower_radius    Species lower_radius property
+   !! @param[in]  species_upper_radius    Species upper_radius property
+   !! @param[in]  species_is_dust    Species is_dust property
+   !! @param[in]  species_is_seasalt    Species is_seasalt property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)

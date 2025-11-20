@@ -1,5 +1,5 @@
 # Example configuration for drydep process
-# Generated on: 2025-11-14T22:58:26.818412
+# Generated on: 2025-11-17T18:50:12.724620
 # Author: Wei Li
 
 process:
@@ -32,6 +32,8 @@ schemes:
 
     # Required meteorological fields for this scheme
     required_met_fields:
+      - "USTAR"
+      - "TSTEP"
       - "TS"
       - "SWGDN"
       - "SUNCOSmid"
@@ -67,10 +69,11 @@ schemes:
 
     # Required meteorological fields for this scheme
     required_met_fields:
-      - "NLEVS"
+      - "USTAR"
+      - "TSTEP"
       - "T"
       - "AIRDEN"
-      - "ZMID"
+      - "Z"
       - "LWI"
       - "PBLH"
       - "HFLUX"
@@ -94,6 +97,8 @@ schemes:
 
     # Required meteorological fields for this scheme
     required_met_fields:
+      - "USTAR"
+      - "TSTEP"
       - "TS"
       - "OBK"
       - "BXHEIGHT"

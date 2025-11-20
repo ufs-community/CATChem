@@ -4,7 +4,7 @@
 !! This program demonstrates how to use the drydep process
 !! in a standalone application or host model integration.
 !!
-!! Generated on: 2025-11-14T22:58:26.798112
+!! Generated on: 2025-11-17T18:50:12.698408
 !! Author: Wei Li
 
 program drydep_example
@@ -195,10 +195,6 @@ contains
       type(ErrorHandler), intent(inout) :: error_handler
 
       ! Add required meteorological fields
-      call state_manager%add_met_field('USTAR', error_handler)
-      if (error_handler%has_error()) return
-      call state_manager%add_met_field('TSTEP', error_handler)
-      if (error_handler%has_error()) return
 
       ! Add optional meteorological fields
 
@@ -223,12 +219,6 @@ contains
             latitude = 45.0_fp + real(i_col - 1, fp) * 1.0_fp  ! Latitude
             longitude = -120.0_fp + real(i_col - 1, fp) * 1.0_fp  ! Longitude
 
-            call state_manager%set_met_field('USTAR', i_col, i_lev, &
-               1.0_fp, error_handler)  ! Default value
-            if (error_handler%has_error()) return
-            call state_manager%set_met_field('TSTEP', i_col, i_lev, &
-               1.0_fp, error_handler)  ! Default value
-            if (error_handler%has_error()) return
 
          end do
       end do

@@ -52,6 +52,11 @@ target_compile_options(CATChem_core PRIVATE ${_catchem_compiler_options})
 
 target_link_libraries(CATChem_core PRIVATE yaml_interface catchem_utilities)
 
+# Link GOCART2G library for external process dependencies
+if(TARGET GOCART2G)
+    target_link_libraries(CATChem_core PUBLIC GOCART2G)
+endif()
+
 set(METSTATE_MOD_F90 ${CMAKE_CURRENT_SOURCE_DIR}/metstate_mod.F90)
 set(METSTATE_ACCESSOR_INC ${CMAKE_CURRENT_BINARY_DIR}/metstate_column_accessor.inc)
 set(METSTATE_ACCESSOR_INT_INC ${CMAKE_CURRENT_BINARY_DIR}/metstate_column_accessor_int.inc)

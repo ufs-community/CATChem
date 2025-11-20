@@ -52,6 +52,10 @@ contains
    !! @param[in]  sst    SST field [appropriate units]
    !! @param[in]  u10m    U10M field [appropriate units]
    !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_lower_radius    Species lower_radius property
+   !! @param[in]  species_upper_radius    Species upper_radius property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] seasalt_mass_emission_total    Total mass emission diagnostic [ug/m2/s]
