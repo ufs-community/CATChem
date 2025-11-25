@@ -1,0 +1,55 @@
+/* Additional styling for CATChem documentation */
+
+/* Custom admonition styles */
+.md-typeset .admonition.performance {
+  border-color: var(--noaa-teal);
+}
+
+.md-typeset .admonition.performance > .admonition-title {
+  background-color: rgba(0, 139, 139, 0.1);
+  border-color: var(--noaa-teal);
+}
+
+.md-typeset .admonition.performance > .admonition-title::before {
+  background-color: var(--noaa-teal);
+  -webkit-mask-image: var(--md-admonition-icon--performance);
+  mask-image: var(--md-admonition-icon--performance);
+}
+
+/* Code block enhancements */
+.md-typeset pre > code {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Navigation enhancements */
+.md-nav__item--active > .md-nav__link {
+  color: var(--noaa-blue);
+  font-weight: 600;
+}
+
+/* Table styling */
+.md-typeset table:not([class]) th {
+  background-color: var(--noaa-gray-light);
+  color: var(--noaa-navy);
+  font-weight: 600;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+/* Print styles */
+@media print {
+  .md-header,
+  .md-sidebar,
+  .md-footer {
+    display: none;
+  }
+
+  .md-main__inner {
+    margin: 0;
+  }
+}

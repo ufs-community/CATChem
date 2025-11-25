@@ -1,0 +1,396 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacestate__interface__mod" kind="namespace" language="Fortran">
+    <compoundname>state_interface_mod</compoundname>
+    <innerclass refid="structstate__interface__mod_1_1statevalidatorutilstype" prot="public">state_interface_mod::statevalidatorutilstype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacestate__interface__mod_1ac9f3e4c2601437fe7b96ae46de951742" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_type_met</definition>
+        <argsstring></argsstring>
+        <name>state_type_met</name>
+        <qualifiedname>state_interface_mod::state_type_met</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>State type enumeration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="33" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1ae8785b5e3f42576c2c4185e7b68625ce" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_type_chem</definition>
+        <argsstring></argsstring>
+        <name>state_type_chem</name>
+        <qualifiedname>state_interface_mod::state_type_chem</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="34" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a9cbe80b6670f2dccbddee02b6c447c68" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_type_emis</definition>
+        <argsstring></argsstring>
+        <name>state_type_emis</name>
+        <qualifiedname>state_interface_mod::state_type_emis</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="35" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1aedbf858c73fca742036f7dc937b7ffd4" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_type_diag</definition>
+        <argsstring></argsstring>
+        <name>state_type_diag</name>
+        <qualifiedname>state_interface_mod::state_type_diag</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="36" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a193d46d95f937c42b485e217d51e0b4f" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter state_interface_mod::state_type_config</definition>
+        <argsstring></argsstring>
+        <name>state_type_config</name>
+        <qualifiedname>state_interface_mod::state_type_config</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="37" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a69850294198916f6f8dad14e595dc224" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter state_interface_mod::state_type_grid</definition>
+        <argsstring></argsstring>
+        <name>state_type_grid</name>
+        <qualifiedname>state_interface_mod::state_type_grid</qualifiedname>
+        <initializer>= 6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="38" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a61b37e51bca360c4a2ad23865a4b5bc9" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_status_uninitialized</definition>
+        <argsstring></argsstring>
+        <name>state_status_uninitialized</name>
+        <qualifiedname>state_interface_mod::state_status_uninitialized</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>State status enumeration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="41" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a5d99907ccf4ce2e6c4e8324c4ef76d7d" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_status_initialized</definition>
+        <argsstring></argsstring>
+        <name>state_status_initialized</name>
+        <qualifiedname>state_interface_mod::state_status_initialized</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="42" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a775a168709d80beed49ec6d36269f8e1" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_status_valid</definition>
+        <argsstring></argsstring>
+        <name>state_status_valid</name>
+        <qualifiedname>state_interface_mod::state_status_valid</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="43" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacestate__interface__mod_1a7982fbab7eb0b88e865be88126d39a3f" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public state_interface_mod::state_status_error</definition>
+        <argsstring></argsstring>
+        <name>state_status_error</name>
+        <qualifiedname>state_interface_mod::state_status_error</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="44" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacestate__interface__mod_1a162b86b0d98e0cca599bc6e6a2031f47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine state_interface_mod::validator_validate_dimensions</definition>
+        <argsstring>(this, array_shape, expected_shape, rc)</argsstring>
+        <name>validator_validate_dimensions</name>
+        <qualifiedname>state_interface_mod::validator_validate_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>array_shape</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>expected_shape</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate array dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="73" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="74" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1a64469fff4fc1c2a809d6a4ca046a236f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine state_interface_mod::validator_validate_bounds</definition>
+        <argsstring>(this, values, min_val, max_val, rc)</argsstring>
+        <name>validator_validate_bounds</name>
+        <qualifiedname>state_interface_mod::validator_validate_bounds</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>min_val</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>max_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate value bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="98" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="99" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1a66bb9e015d4a288210bba76d165b44af" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine state_interface_mod::validator_validate_consistency</definition>
+        <argsstring>(this, array1, array2, tolerance, rc)</argsstring>
+        <name>validator_validate_consistency</name>
+        <qualifiedname>state_interface_mod::validator_validate_consistency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>array1</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>array2</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>tolerance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate consistency between related arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="118" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="119" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1a5a4ec3e1029fa7f8f2155d7e7cfa9b8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine state_interface_mod::validator_check_nan_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>validator_check_nan_values</name>
+        <qualifiedname>state_interface_mod::validator_check_nan_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for NaN values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="143" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="144" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1a88914f174c6d10c88380e2c326d926d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine state_interface_mod::validator_check_negative_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>validator_check_negative_values</name>
+        <qualifiedname>state_interface_mod::validator_check_negative_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for negative values where they shouldn&apos;t exist. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="162" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="163" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1ac3f558f6fa7767388b554f7554f7a52c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=32) function, public</type>
+        <definition>character(len=32) function, public state_interface_mod::get_state_type_name</definition>
+        <argsstring>(state_type)</argsstring>
+        <name>get_state_type_name</name>
+        <qualifiedname>state_interface_mod::get_state_type_name</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>state_type</defname>
+        </param>
+        <briefdescription>
+<para>Get state type name from enumeration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="185" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="186" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacestate__interface__mod_1afb9162c63679bc7acd9e05b9fdab2539" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public state_interface_mod::allocate_met_field</definition>
+        <argsstring>(met_state, field_name, rc)</argsstring>
+        <name>allocate_met_field</name>
+        <qualifiedname>state_interface_mod::allocate_met_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>met_state</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Allocate a specific field in a MetStateType object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Direct utility function for field allocation in MetStateType. For more complex state management, use CATChemCore_Mod.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">met_state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field to allocate (or &apos;ALL&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="216" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="217" bodyend="222"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/state_interface_mod.F90" line="12" column="1"/>
+  </compounddef>
+</doxygen>

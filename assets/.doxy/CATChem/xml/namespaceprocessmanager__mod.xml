@@ -1,0 +1,552 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceprocessmanager__mod" kind="namespace" language="Fortran">
+    <compoundname>processmanager_mod</compoundname>
+    <innerclass refid="structprocessmanager__mod_1_1processmanagertype" prot="public">processmanager_mod::processmanagertype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1aa003b0eaa3d455d39cab4bbd58854725" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_init</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>manager_init</name>
+        <qualifiedname>processmanager_mod::manager_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="59" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1af161b80d6cd96de971d55b9e8e2ae5e4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_add_process</definition>
+        <argsstring>(this, process_name, container, rc)</argsstring>
+        <name>manager_add_process</name>
+        <qualifiedname>processmanager_mod::manager_add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to the manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="80" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="81" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a2f6bc4d594e46589d9fdd6398aecf712" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_all</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>manager_run_all</name>
+        <qualifiedname>processmanager_mod::manager_run_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all processes using appropriate method (3D or column) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="132" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="133" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a540d6bcd856959963e882fbe40e880fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_column_processes</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>manager_run_column_processes</name>
+        <qualifiedname>processmanager_mod::manager_run_column_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run column processes using column virtualization. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="176" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="177" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a51ab528a3740f3d805ec5c79ec93e40a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_process_on_columns</definition>
+        <argsstring>(this, process_index, container, rc)</argsstring>
+        <name>manager_run_process_on_columns</name>
+        <qualifiedname>processmanager_mod::manager_run_process_on_columns</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>process_index</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a specific process on all columns. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="231" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="232" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1abb1b376d6864f7b490b28e924ab5e45b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_process</definition>
+        <argsstring>(this, process_name, container, rc)</argsstring>
+        <name>manager_run_process</name>
+        <qualifiedname>processmanager_mod::manager_run_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a specific process by name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="284" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="285" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a193b6f0dc93f25c81aa5739f9d08a6da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_get_column_processes</definition>
+        <argsstring>(this, column_indices, count)</argsstring>
+        <name>manager_get_column_processes</name>
+        <qualifiedname>processmanager_mod::manager_get_column_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>column_indices</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>count</defname>
+        </param>
+        <briefdescription>
+<para>Get list of column processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="308" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="309" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a93136b94389081c467efba1298b0e13d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_phase</definition>
+        <argsstring>(this, phase_name, config_data, container, rc)</argsstring>
+        <name>manager_run_phase</name>
+        <qualifiedname>processmanager_mod::manager_run_phase</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>phase_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configdatatype" kindref="compound">configdatatype</ref>), intent(in)</type>
+          <defname>config_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a specific run phase using ConfigManager run phases configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="330" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="331" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a691c11fab36f77b851cb8835a59aea26" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_all_phases</definition>
+        <argsstring>(this, config_data, container, rc)</argsstring>
+        <name>manager_run_all_phases</name>
+        <qualifiedname>processmanager_mod::manager_run_all_phases</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configdatatype" kindref="compound">configdatatype</ref>), intent(in)</type>
+          <defname>config_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all run phases in sequence using ConfigManager run phases configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="414" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="415" bodyend="457"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a84323ed81fecebcdbe94ce942db2e1a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_run_all_processes</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>manager_run_all_processes</name>
+        <qualifiedname>processmanager_mod::manager_run_all_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all processes (compatibility method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="461" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="462" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a7862fcb966ea2f6bc11e012fc8d16d27" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_set_max_processes</definition>
+        <argsstring>(this, max_processes, rc)</argsstring>
+        <name>manager_set_max_processes</name>
+        <qualifiedname>processmanager_mod::manager_set_max_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>max_processes</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set maximum number of processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="471" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="472" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1af1dfe64f8d1cee4404b76eed6070c9d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_enable_column_batching</definition>
+        <argsstring>(this, enable, rc)</argsstring>
+        <name>manager_enable_column_batching</name>
+        <qualifiedname>processmanager_mod::manager_enable_column_batching</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>enable</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Enable or disable column batching. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="483" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="484" bodyend="490"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1a8f609c4bed6adb4a4d967afeae878876" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>manager_finalize</name>
+        <qualifiedname>processmanager_mod::manager_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="494" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="495" bodyend="513"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1af370d3b1dfa0567c00d1f4a444483888" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_list_processes</definition>
+        <argsstring>(this, process_names, count)</argsstring>
+        <name>manager_list_processes</name>
+        <qualifiedname>processmanager_mod::manager_list_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out)</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>count</defname>
+        </param>
+        <briefdescription>
+<para>List all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="517" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="518" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1ab7bb3c94f13ac980a055eb83c1215769" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_register_process</definition>
+        <argsstring>(this, name, category, description, creator, rc)</argsstring>
+        <name>manager_register_process</name>
+        <qualifiedname>processmanager_mod::manager_register_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>procedure(<ref refid="interfaceprocessregistry__mod_1_1processcreatorinterface" kindref="compound">processcreatorinterface</ref>)</type>
+          <defname>creator</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register a process with the ProcessManager&apos;s factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method allows external modules to register processes with this ProcessManager&apos;s factory, which is needed for integration tests.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessManager instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process category </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process description </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">creator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process creator function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="542" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="543" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessmanager__mod_1af6bf0aa526e0010a1456de99c42c0fc8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processmanager_mod::manager_add_met_fields_from_process</definition>
+        <argsstring>(this, process, rc)</argsstring>
+        <name>manager_add_met_fields_from_process</name>
+        <qualifiedname>processmanager_mod::manager_add_met_fields_from_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add required met fields from a process, ensuring no duplicates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This private helper function collects the required meteorological fields from a newly added process and merges them with the existing list, ensuring no duplicate field names.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessManager instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process to get required fields from </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessManager_Mod.F90" line="562" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="563" bodyend="627"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessManager_Mod.F90" line="12" column="1"/>
+  </compounddef>
+</doxygen>

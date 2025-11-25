@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdrydepcommon__mod_1_1drydepschemegocartconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>drydepcommon_mod::drydepschemegocartconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa47abf51d689faed5e0568156d6f3486" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemegocartconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="114" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ab1d07af8982a8a2f626437f7f35cff63" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) drydepcommon_mod::drydepschemegocartconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::description</qualifiedname>
+        <initializer>= &apos;GOCART-2G aerosol dry deposition scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="115" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a38e01ec796f19940b29c3535fe7158aa" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemegocartconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li &amp; Lacey Holland&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="116" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a17703ce0a6e55ac3f7290e5a3fd217a1" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) drydepcommon_mod::drydepschemegocartconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="117" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a8e9051ad8ad37e08077b6ccc5ca30cf2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemegocartconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::affects_full_column</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="120" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a6420dc089c246985a2f94abe5c5c2d1a" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepschemegocartconfig::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="123" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa327a00316f47dbafd0b6487708c9aa8" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemegocartconfig::resuspension</definition>
+        <argsstring></argsstring>
+        <name>resuspension</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::resuspension</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="124" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer drydepcommon_mod::drydepschemegocartconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="127" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a7cea08537430552dc0ef1ddaaf4a975a" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(12)</type>
+        <definition>character(len=32), dimension(12) drydepcommon_mod::drydepschemegocartconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="128" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="128" bodyend="128"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0ac83d08c0b217811533103d232f3625" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemegocartconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="131" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ae5a580d73cae7c80a51dc0e5a8f36fe1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemegocartconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="132" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="132" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for gocart scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="111" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="111" bodyend="133"/>
+    <listofallmembers>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a8e9051ad8ad37e08077b6ccc5ca30cf2" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>affects_full_column</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a17703ce0a6e55ac3f7290e5a3fd217a1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>algorithm_type</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a38e01ec796f19940b29c3535fe7158aa" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>author</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ab1d07af8982a8a2f626437f7f35cff63" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>description</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ae5a580d73cae7c80a51dc0e5a8f36fe1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>finalize</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a7cea08537430552dc0ef1ddaaf4a975a" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa327a00316f47dbafd0b6487708c9aa8" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>resuspension</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a6420dc089c246985a2f94abe5c5c2d1a" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>scale_factor</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa47abf51d689faed5e0568156d6f3486" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>scheme_name</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0ac83d08c0b217811533103d232f3625" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

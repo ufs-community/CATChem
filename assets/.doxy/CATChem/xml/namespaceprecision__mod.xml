@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceprecision__mod" kind="namespace" language="Fortran">
+    <compoundname>precision_mod</compoundname>
+    <innerclass refid="interfaceprecision__mod_1_1rae" prot="public">precision_mod::rae</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public precision_mod::f4</definition>
+        <argsstring></argsstring>
+        <name>f4</name>
+        <qualifiedname>precision_mod::f4</qualifiedname>
+        <initializer>= KIND( 0.0_4 )</initializer>
+        <briefdescription>
+<para>KIND parameter for 4-byte precision. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="13" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="13" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public precision_mod::f8</definition>
+        <argsstring></argsstring>
+        <name>f8</name>
+        <qualifiedname>precision_mod::f8</qualifiedname>
+        <initializer>= KIND( 0.0_8 )</initializer>
+        <briefdescription>
+<para>KIND parameter for 8-byte precision. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="16" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public precision_mod::fp</definition>
+        <argsstring></argsstring>
+        <name>fp</name>
+        <qualifiedname>precision_mod::fp</qualifiedname>
+        <initializer>= <ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref></initializer>
+        <briefdescription>
+<para>KIND parameter for 4-byte precision. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="23" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a428fe5ff6062fb0968aeb911a29dd0f2" prot="public" static="no" mutable="no">
+        <type>logical, parameter, public</type>
+        <definition>logical, parameter, public precision_mod::missing_bool</definition>
+        <argsstring></argsstring>
+        <name>missing_bool</name>
+        <qualifiedname>precision_mod::missing_bool</qualifiedname>
+        <initializer>= .FALSE.</initializer>
+        <briefdescription>
+<para>Missing boolean value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="29" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a6be8910f90398de28b6d748348cee7cb" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public precision_mod::missing_int</definition>
+        <argsstring></argsstring>
+        <name>missing_int</name>
+        <qualifiedname>precision_mod::missing_int</qualifiedname>
+        <initializer>= -999</initializer>
+        <briefdescription>
+<para>Missing integer value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="30" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1aa89e00e6083ad36c3da668e216568b41" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public precision_mod::missing</definition>
+        <argsstring></argsstring>
+        <name>missing</name>
+        <qualifiedname>precision_mod::missing</qualifiedname>
+        <initializer>= -999.0_fp</initializer>
+        <briefdescription>
+<para>Missing real value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="31" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a30d2cc0832c594dd9f3082bd75fc6cc2" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public precision_mod::missing_real</definition>
+        <argsstring></argsstring>
+        <name>missing_real</name>
+        <qualifiedname>precision_mod::missing_real</qualifiedname>
+        <initializer>= -999.0_f4</initializer>
+        <briefdescription>
+<para>Missing real value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="32" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a5e071435c7c179b8cea75d1fcfeacd1d" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public precision_mod::missing_dble</definition>
+        <argsstring></argsstring>
+        <name>missing_dble</name>
+        <qualifiedname>precision_mod::missing_dble</qualifiedname>
+        <initializer>= -999.0_f8</initializer>
+        <briefdescription>
+<para>Missing real value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="33" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1aa81e34c5f02f3e82a059d94b4e689dd9" prot="public" static="no" mutable="no">
+        <type>character(len=7), parameter, public</type>
+        <definition>character(len=7), parameter, public precision_mod::missing_str</definition>
+        <argsstring></argsstring>
+        <name>missing_str</name>
+        <qualifiedname>precision_mod::missing_str</qualifiedname>
+        <initializer>= &quot;UNKNOWN&quot;</initializer>
+        <briefdescription>
+<para>Missing string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="34" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a92b7c0737fafb5cee960840bbdaf51c4" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public precision_mod::zero</definition>
+        <argsstring></argsstring>
+        <name>zero</name>
+        <qualifiedname>precision_mod::zero</qualifiedname>
+        <initializer>=  0.0_fp</initializer>
+        <briefdescription>
+<para>Zero value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="39" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1aadd949aea8d281a9fe093ca784e3303c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public precision_mod::zero_real</definition>
+        <argsstring></argsstring>
+        <name>zero_real</name>
+        <qualifiedname>precision_mod::zero_real</qualifiedname>
+        <initializer>=  0.0_f4</initializer>
+        <briefdescription>
+<para>Zero value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="40" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1af64fba0ea4b5a65015a9c2b5de2cee60" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public precision_mod::zero_dble</definition>
+        <argsstring></argsstring>
+        <name>zero_dble</name>
+        <qualifiedname>precision_mod::zero_dble</qualifiedname>
+        <initializer>=  0.0_f8</initializer>
+        <briefdescription>
+<para>Zero value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="41" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a5bcd4814a238bde64e33dd58523efa61" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public precision_mod::tiny_real</definition>
+        <argsstring></argsstring>
+        <name>tiny_real</name>
+        <qualifiedname>precision_mod::tiny_real</qualifiedname>
+        <initializer>=  1.0e-16_f4</initializer>
+        <briefdescription>
+<para>A small value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="46" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1ae27c86fd122002e4d83430dd5bde7786" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public precision_mod::tiny_dble</definition>
+        <argsstring></argsstring>
+        <name>tiny_dble</name>
+        <qualifiedname>precision_mod::tiny_dble</qualifiedname>
+        <initializer>=  1.0e-31_f8</initializer>
+        <briefdescription>
+<para>A small value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="47" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a9ebc117ace5b18bbbe130d245f418ef6" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public precision_mod::tiny_</definition>
+        <argsstring></argsstring>
+        <name>tiny_</name>
+        <qualifiedname>precision_mod::tiny_</qualifiedname>
+        <initializer>= TINY_REAL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="51" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a3f1a9f1a799cb775a2c3dd7eff346f47" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public precision_mod::one</definition>
+        <argsstring></argsstring>
+        <name>one</name>
+        <qualifiedname>precision_mod::one</qualifiedname>
+        <initializer>=  1.0_fp</initializer>
+        <briefdescription>
+<para>One value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="57" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a9bd36a6b08bd0cd304292df56a45936e" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public precision_mod::one_real</definition>
+        <argsstring></argsstring>
+        <name>one_real</name>
+        <qualifiedname>precision_mod::one_real</qualifiedname>
+        <initializer>=  1.0_f4</initializer>
+        <briefdescription>
+<para>One value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="58" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceprecision__mod_1a057a131daa7b465088ff54c99326e545" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public precision_mod::one_dble</definition>
+        <argsstring></argsstring>
+        <name>one_dble</name>
+        <qualifiedname>precision_mod::one_dble</qualifiedname>
+        <initializer>=  1.0_f8</initializer>
+        <briefdescription>
+<para>One value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="59" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceprecision__mod_1a41ddf075a27b283984f59b2a0e6de7d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function precision_mod::rae_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f4</name>
+        <qualifiedname>precision_mod::rae_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="68" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="69" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprecision__mod_1a3dad4cff4c4d1384e1cbf3158ace195f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function precision_mod::rae_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f8</name>
+        <qualifiedname>precision_mod::rae_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="77" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="78" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/Precision_Mod.F90" line="9" column="1"/>
+  </compounddef>
+</doxygen>

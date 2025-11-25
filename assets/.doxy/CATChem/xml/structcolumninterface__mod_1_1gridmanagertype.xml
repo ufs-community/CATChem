@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcolumninterface__mod_1_1gridmanagertype" kind="type" language="Fortran" prot="private">
+    <compoundname>columninterface_mod::gridmanagertype</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ColumnInterface_Mod.F90" line="39" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="39" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

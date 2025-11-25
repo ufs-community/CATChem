@@ -1,0 +1,497 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdrydepcommon__mod_1_1drydepconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>drydepcommon_mod::drydepconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a83a3f34e49c9ddb211a82589e4efddcc" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) drydepcommon_mod::drydepconfig::gas_scheme</definition>
+        <argsstring></argsstring>
+        <name>gas_scheme</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::gas_scheme</qualifiedname>
+        <initializer>= &apos;wesely&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="37" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1aa18b4977487f6fa12c6a54ba0c6e4bc3" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) drydepcommon_mod::drydepconfig::aero_scheme</definition>
+        <argsstring></argsstring>
+        <name>aero_scheme</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::aero_scheme</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="38" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1aaefc9a525d7437195e694658c5132362" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="39" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1ab753020647a303b55eded62407d2d229" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepconfig::diagnostics</definition>
+        <argsstring></argsstring>
+        <name>diagnostics</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::diagnostics</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="40" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a9285fa21d931de68fe2840b81e55ee33" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer drydepcommon_mod::drydepconfig::n_diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>n_diagnostic_species</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::n_diagnostic_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="43" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a88184e77beff8d042df65076e58d84c8" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable drydepcommon_mod::drydepconfig::diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::diagnostic_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="44" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1ac41ff91be9586785672eee0cae23e1de" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable drydepcommon_mod::drydepconfig::diagnostic_species_id</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species_id</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::diagnostic_species_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="45" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a1a6640e1e01277e4cda1efa771b73dc5" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepconfig::dt_min</definition>
+        <argsstring></argsstring>
+        <name>dt_min</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::dt_min</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="46" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1affb575cbc55366e7753914e288b564c2" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepconfig::dt_max</definition>
+        <argsstring></argsstring>
+        <name>dt_max</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::dt_max</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="47" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a5e618cd23ce1776eb0e49c145d421a1a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer drydepcommon_mod::drydepconfig::n_species</definition>
+        <argsstring></argsstring>
+        <name>n_species</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::n_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="50" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a5d8afeb0fb23cd96c0badd5bb6389014" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_names</definition>
+        <argsstring></argsstring>
+        <name>species_names</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="51" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1aed7176e779c3fbdfff29edfb65fb06ca" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable drydepcommon_mod::drydepconfig::species_indices</definition>
+        <argsstring></argsstring>
+        <name>species_indices</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="52" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1aa0715b8e8d785285c7b90e32275e6b29" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:), allocatable</type>
+        <definition>logical, dimension(:), allocatable drydepcommon_mod::drydepconfig::is_gas</definition>
+        <argsstring></argsstring>
+        <name>is_gas</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::is_gas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="53" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a779d472eb4d8be612ed813364a89289f" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_dd_dvzaersnow</definition>
+        <argsstring></argsstring>
+        <name>species_dd_dvzaersnow</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_dd_dvzaersnow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="58" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1aab25a9bbc56f9a42d773110c774713fb" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_dd_dvzminval_land</definition>
+        <argsstring></argsstring>
+        <name>species_dd_dvzminval_land</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_dd_dvzminval_land</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="59" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a5b872f3d616a3b2b3ce9e99170c95630" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_dd_dvzminval_snow</definition>
+        <argsstring></argsstring>
+        <name>species_dd_dvzminval_snow</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_dd_dvzminval_snow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="60" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a33a0071e5e7e2994b0883aa79c4a8e64" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_dd_f0</definition>
+        <argsstring></argsstring>
+        <name>species_dd_f0</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_dd_f0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="61" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a4eb1b02574f9100f79d0bd29540081d8" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_dd_hstar</definition>
+        <argsstring></argsstring>
+        <name>species_dd_hstar</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_dd_hstar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="62" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1ae0896e441755f6ea5b4cd79a971a2206" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_density</definition>
+        <argsstring></argsstring>
+        <name>species_density</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="63" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a7df96488d4f186026c0a2a403f953c09" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:), allocatable</type>
+        <definition>logical, dimension(:), allocatable drydepcommon_mod::drydepconfig::species_is_dust</definition>
+        <argsstring></argsstring>
+        <name>species_is_dust</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_is_dust</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="64" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a51c9bc9096387ea82d9e5162202b908b" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:), allocatable</type>
+        <definition>logical, dimension(:), allocatable drydepcommon_mod::drydepconfig::species_is_seasalt</definition>
+        <argsstring></argsstring>
+        <name>species_is_seasalt</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_is_seasalt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="65" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a1c0e030d5d9e621e3f431d806f3add11" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_lower_radius</definition>
+        <argsstring></argsstring>
+        <name>species_lower_radius</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_lower_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="66" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a3fdf32649ffd61bdd2445230bbd4be18" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_mw_g</definition>
+        <argsstring></argsstring>
+        <name>species_mw_g</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_mw_g</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="67" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1affad322596bf0d9e26dd750ed61caa3e" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_radius</definition>
+        <argsstring></argsstring>
+        <name>species_radius</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="68" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1af0c18f048ad54fd8567f106020cb9fa1" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable drydepcommon_mod::drydepconfig::species_upper_radius</definition>
+        <argsstring></argsstring>
+        <name>species_upper_radius</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::species_upper_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="69" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1a6263b7ba793bb477222ff1224848221e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepconfig::output_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>output_diagnostics</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::output_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="72" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepconfig_1adca58be6a944f3c9c75e2a07460d2214" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepconfig::diagnostic_frequency</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_frequency</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::diagnostic_frequency</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="73" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepconfig_1a2dae37e470f5e5588e30de849c96b8e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate drydep configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="76" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepconfig_1a49192b0a00db58b4bbbfdef084ef7e42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize drydep configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="77" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepconfig_1a99034fcc362217336313bd1b8e1b7ba1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepconfig::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>drydepcommon_mod::drydepconfig::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="78" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="78" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main configuration type for drydep process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="34" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="34" bodyend="79"/>
+    <listofallmembers>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1aa18b4977487f6fa12c6a54ba0c6e4bc3" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>aero_scheme</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1adca58be6a944f3c9c75e2a07460d2214" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>diagnostic_frequency</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a88184e77beff8d042df65076e58d84c8" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>diagnostic_species</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1ac41ff91be9586785672eee0cae23e1de" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>diagnostic_species_id</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1ab753020647a303b55eded62407d2d229" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>diagnostics</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1affb575cbc55366e7753914e288b564c2" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>dt_max</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a1a6640e1e01277e4cda1efa771b73dc5" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>dt_min</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a49192b0a00db58b4bbbfdef084ef7e42" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>finalize</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a83a3f34e49c9ddb211a82589e4efddcc" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>gas_scheme</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1aaefc9a525d7437195e694658c5132362" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>is_active</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1aa0715b8e8d785285c7b90e32275e6b29" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>is_gas</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a9285fa21d931de68fe2840b81e55ee33" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>n_diagnostic_species</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a5e618cd23ce1776eb0e49c145d421a1a" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>n_species</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a6263b7ba793bb477222ff1224848221e" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>output_diagnostics</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a99034fcc362217336313bd1b8e1b7ba1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>print_summary</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a779d472eb4d8be612ed813364a89289f" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_dd_dvzaersnow</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1aab25a9bbc56f9a42d773110c774713fb" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_dd_dvzminval_land</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a5b872f3d616a3b2b3ce9e99170c95630" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_dd_dvzminval_snow</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a33a0071e5e7e2994b0883aa79c4a8e64" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_dd_f0</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a4eb1b02574f9100f79d0bd29540081d8" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_dd_hstar</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1ae0896e441755f6ea5b4cd79a971a2206" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_density</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1aed7176e779c3fbdfff29edfb65fb06ca" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_indices</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a7df96488d4f186026c0a2a403f953c09" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_is_dust</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a51c9bc9096387ea82d9e5162202b908b" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_is_seasalt</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a1c0e030d5d9e621e3f431d806f3add11" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_lower_radius</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a3fdf32649ffd61bdd2445230bbd4be18" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_mw_g</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a5d8afeb0fb23cd96c0badd5bb6389014" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_names</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1affad322596bf0d9e26dd750ed61caa3e" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_radius</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1af0c18f048ad54fd8567f106020cb9fa1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>species_upper_radius</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepconfig_1a2dae37e470f5e5588e30de849c96b8e1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

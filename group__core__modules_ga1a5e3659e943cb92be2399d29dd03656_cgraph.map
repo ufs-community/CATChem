@@ -1,9 +1,0 @@
-<map id="charpak_mod::strsplit" name="charpak_mod::strsplit">
-<area shape="rect" id="Node000001" title="Split a string into substrings." alt="" coords="5,31,168,56"/>
-<area shape="rect" id="Node000002" href="$group__core__modules.html#ga1849bf292b78e7b221ebb9da47db21bb" title="Extract text from a string." alt="" coords="216,31,373,56"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,41,202,41,202,46,169,46"/>
-<area shape="rect" id="Node000003" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="423,5,587,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="373,31,408,27,409,32,374,36"/>
-<area shape="rect" id="Node000004" href="$group__core__modules.html#gab3380e435c78f855e451be2b17e7cd9e" title="Copy characters from one string to another." alt="" coords="421,55,588,80"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="374,50,408,54,408,59,373,55"/>
-</map>

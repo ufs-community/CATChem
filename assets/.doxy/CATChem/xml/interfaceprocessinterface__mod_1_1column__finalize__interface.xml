@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprocessinterface__mod_1_1column__finalize__interface" kind="interface" language="Fortran" prot="private">
+    <compoundname>processinterface_mod::column_finalize_interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprocessinterface__mod_1_1column__finalize__interface_1a3faca216f0b734a33b80f168f4933eda" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine processinterface_mod::column_finalize_interface::column_finalize_interface</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>column_finalize_interface</name>
+        <qualifiedname>processinterface_mod::column_finalize_interface::column_finalize_interface</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="166" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="167" bodyend="169"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Finalize column processing. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessInterface_Mod.F90" line="166" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="166" bodyend="169"/>
+    <listofallmembers>
+      <member refid="interfaceprocessinterface__mod_1_1column__finalize__interface_1a3faca216f0b734a33b80f168f4933eda" prot="public" virt="virtual"><scope>processinterface_mod::column_finalize_interface</scope><name>column_finalize_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

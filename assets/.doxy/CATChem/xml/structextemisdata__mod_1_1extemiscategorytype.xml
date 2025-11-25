@@ -1,0 +1,638 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structextemisdata__mod_1_1extemiscategorytype" kind="type" language="Fortran" prot="public">
+    <compoundname>extemisdata_mod::extemiscategorytype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1af7b95f8b0bec8bf4d1b4ea984ac6b4c2" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) extemisdata_mod::extemiscategorytype::category_name</definition>
+        <argsstring></argsstring>
+        <name>category_name</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::category_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Category name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="100" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ab70c443eeabfd4617b351e0669104ffc" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) extemisdata_mod::extemiscategorytype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Category description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="101" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ad8942396d97d652d93011ee1804d6b71" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemiscategorytype::n_fields</definition>
+        <argsstring></argsstring>
+        <name>n_fields</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::n_fields</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of emission fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="102" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a4d13d45872da40362d5cf5d70672691f" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemiscategorytype::irec</definition>
+        <argsstring></argsstring>
+        <name>irec</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::irec</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>time slice index </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="103" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a0a9b0e11b32789e959b6eb3fa2e7847d" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), dimension(:), allocatable</type>
+        <definition>type(extemisfieldtype), dimension(:), allocatable extemisdata_mod::extemiscategorytype::fields</definition>
+        <argsstring></argsstring>
+        <name>fields</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::fields</qualifiedname>
+        <briefdescription>
+<para>Emission fields array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="104" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a5090e517d421453560679fb61bd0c1ef" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemiscategorytype::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Category enabled/disabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="105" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a9f1555075caf1972d29c0fc423bda75f" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemiscategorytype::gridded</definition>
+        <argsstring></argsstring>
+        <name>gridded</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::gridded</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Is this a gridded emission category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="106" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a8abe8f8332b23a202a2bf1ca0bd98c5a" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) extemisdata_mod::extemiscategorytype::global_scale</definition>
+        <argsstring></argsstring>
+        <name>global_scale</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::global_scale</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+<para>Global scaling factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="107" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1af7fc28920b5fa2e189d83d4c41338672" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) extemisdata_mod::extemiscategorytype::topfraction</definition>
+        <argsstring></argsstring>
+        <name>topfraction</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::topfraction</qualifiedname>
+        <initializer>= -1.0_fp</initializer>
+        <briefdescription>
+<para>Top fraction for plumerise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="108" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1adb068646c28681b5cfaaa091ac09ccd6" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::source_file</definition>
+        <argsstring></argsstring>
+        <name>source_file</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::source_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Source file path and name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="109" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="109" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a32630b59c559b2c8dd389f861545d8c0" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::format</definition>
+        <argsstring></argsstring>
+        <name>format</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::format</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Format of file (only netcdf for now) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="110" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a8b027ac1c63ab3a3a5982647bf8791db" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::frequency</definition>
+        <argsstring></argsstring>
+        <name>frequency</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::frequency</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Frequency of file (e.g., hourly, daily, weekly, monthly,static) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="111" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a90a4db5678f0fc544d1a9d2f0dff3f14" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::latname</definition>
+        <argsstring></argsstring>
+        <name>latname</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::latname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Latitude variable name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="112" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a1bd768e1193128232f71fa82550eed5e" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::lonname</definition>
+        <argsstring></argsstring>
+        <name>lonname</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::lonname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Longitude variable name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="113" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ad75eff292086a37a5308519e24ed2143" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::stkdmname</definition>
+        <argsstring></argsstring>
+        <name>stkdmname</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::stkdmname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Stack dimension name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="114" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ae906f40fb1bf6e4319313ff70c3b772d" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::stkhtname</definition>
+        <argsstring></argsstring>
+        <name>stkhtname</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::stkhtname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Stack height variable name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="115" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a550d0ff0f4c194d9784c8f2d7e182174" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::stktkname</definition>
+        <argsstring></argsstring>
+        <name>stktkname</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::stktkname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Stack temperature variable name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="116" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a5fc90313efb09d50f1f5bbbf343f314a" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::stkvename</definition>
+        <argsstring></argsstring>
+        <name>stkvename</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::stkvename</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Stack velocity variable name in the file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="117" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1abd8b72b860723af290e2a95c3fecf25e" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemiscategorytype::plumerise</definition>
+        <argsstring></argsstring>
+        <name>plumerise</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::plumerise</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>plumerise scheme </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="118" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a45767146b911877f11baa230bc2c34d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemiscategorytype::init</definition>
+        <argsstring>(this, category_name, n_fields, description, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>n_fields</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize emission category with metadata. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialize an emission category.  </para>
+<para>Sets up category metadata and allocates field arrays</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Category name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_fields</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of emission fields (optional, default=0) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Category description (optional) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="124" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a9377637c7707bf844557e977009a9ea2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemiscategorytype::cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up resources and deallocate arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Clean up resources and deallocate arrays.  </para>
+<para>Deallocates all fields and resets category to default values</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="127" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a5dde2a6e5628898f7cc93411328238f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemiscategorytype::validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>validate</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate emission category data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Validate all fields in the category.  </para>
+<para>Checks that all emission fields are properly loaded and valid</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="130" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a9971b07454f2de07995b2204a67c6c1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemiscategorytype::add_field</definition>
+        <argsstring>(this, field, rc)</argsstring>
+        <name>add_field</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::add_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in)</type>
+          <defname>field</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a new field to the category. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Add a new field to the category.  </para>
+<para>Expands the fields array and adds a new emission field</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ExtEmisFieldType to add </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="133" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1afb40f01c5d9a1d1f68ad09b31ed2043c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemiscategorytype::find_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>find_field</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::find_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Find a field by name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Find a field by name.  </para>
+<para>Searches for a field with the given name in this category. Returns the index if found, or 0 if not found.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission field to find </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Field index (1-based) or 0 if not found   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="136" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Derived type for external emission categories. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Groups related emission fields by source category (e.g., anthropogenic, biogenic, fires, etc.)</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>extemisdata_mod::extemiscategorytype</label>
+        <link refid="structextemisdata__mod_1_1extemiscategorytype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>fields</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>extemisdata_mod::extemisfieldtype</label>
+        <link refid="structextemisdata__mod_1_1extemisfieldtype"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ExtEmisData_Mod.F90" line="99" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="99" bodyend="137"/>
+    <listofallmembers>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9971b07454f2de07995b2204a67c6c1d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>add_field</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1af7b95f8b0bec8bf4d1b4ea984ac6b4c2" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>category_name</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9377637c7707bf844557e977009a9ea2" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>cleanup</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1ab70c443eeabfd4617b351e0669104ffc" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>description</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a0a9b0e11b32789e959b6eb3fa2e7847d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>fields</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1afb40f01c5d9a1d1f68ad09b31ed2043c" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>find_field</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a32630b59c559b2c8dd389f861545d8c0" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>format</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a8b027ac1c63ab3a3a5982647bf8791db" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>frequency</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a8abe8f8332b23a202a2bf1ca0bd98c5a" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>global_scale</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9f1555075caf1972d29c0fc423bda75f" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>gridded</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a45767146b911877f11baa230bc2c34d9" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>init</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a4d13d45872da40362d5cf5d70672691f" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>irec</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5090e517d421453560679fb61bd0c1ef" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>is_active</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a90a4db5678f0fc544d1a9d2f0dff3f14" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>latname</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a1bd768e1193128232f71fa82550eed5e" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>lonname</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1ad8942396d97d652d93011ee1804d6b71" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>n_fields</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1abd8b72b860723af290e2a95c3fecf25e" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>plumerise</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1adb068646c28681b5cfaaa091ac09ccd6" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>source_file</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1ad75eff292086a37a5308519e24ed2143" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>stkdmname</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1ae906f40fb1bf6e4319313ff70c3b772d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>stkhtname</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a550d0ff0f4c194d9784c8f2d7e182174" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>stktkname</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5fc90313efb09d50f1f5bbbf343f314a" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>stkvename</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1af7fc28920b5fa2e189d83d4c41338672" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>topfraction</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5dde2a6e5628898f7cc93411328238f7" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,560 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdiagnosticinterface__mod_1_1diagnosticdatatype" kind="type" language="Fortran" prot="public">
+    <compoundname>diagnosticinterface_mod::diagnosticdatatype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1c1dd581b78fb07719d6895038e3535c" prot="private" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer diagnosticinterface_mod::diagnosticdatatype::data_type</definition>
+        <argsstring></argsstring>
+        <name>data_type</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::data_type</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Data type identifier. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="76" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2260b9460ecc9dcc4e181f3a844d179a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical diagnosticinterface_mod::diagnosticdatatype::is_allocated</definition>
+        <argsstring></argsstring>
+        <name>is_allocated</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::is_allocated</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Allocation status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="77" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a142793a13118e0ae931d4a77a099a75c" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) diagnosticinterface_mod::diagnosticdatatype::real_scalar</definition>
+        <argsstring></argsstring>
+        <name>real_scalar</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::real_scalar</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="80" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a86c5b5e48b5e352a9143d6da4064ddb4" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable diagnosticinterface_mod::diagnosticdatatype::real_1d</definition>
+        <argsstring></argsstring>
+        <name>real_1d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::real_1d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="81" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a46157500a70792de33a58e4c00758097" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::real_2d</definition>
+        <argsstring></argsstring>
+        <name>real_2d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::real_2d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="82" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a993eec304dbe2ab32d38c86fb576eceb" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::real_3d</definition>
+        <argsstring></argsstring>
+        <name>real_3d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::real_3d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="83" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1abea73c1132da2179d0ec6b917c46565f" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer diagnosticinterface_mod::diagnosticdatatype::int_scalar</definition>
+        <argsstring></argsstring>
+        <name>int_scalar</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::int_scalar</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="86" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1aef2d4a695030cdd48505d22d0090316f" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable diagnosticinterface_mod::diagnosticdatatype::int_1d</definition>
+        <argsstring></argsstring>
+        <name>int_1d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::int_1d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="87" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a117f5dedc55913c15bbfce2dc8de4dd3" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:,:), allocatable</type>
+        <definition>integer, dimension(:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::int_2d</definition>
+        <argsstring></argsstring>
+        <name>int_2d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::int_2d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="88" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a50c054fc7774c4e5eb92c8c6bd29246c" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:,:,:), allocatable</type>
+        <definition>integer, dimension(:,:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::int_3d</definition>
+        <argsstring></argsstring>
+        <name>int_3d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::int_3d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="89" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1c177e553997d457fcc17b2391f88cb1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical diagnosticinterface_mod::diagnosticdatatype::logical_scalar</definition>
+        <argsstring></argsstring>
+        <name>logical_scalar</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::logical_scalar</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="92" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a19c15ff8a60c179487413f6257db85a7" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:), allocatable</type>
+        <definition>logical, dimension(:), allocatable diagnosticinterface_mod::diagnosticdatatype::logical_1d</definition>
+        <argsstring></argsstring>
+        <name>logical_1d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::logical_1d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="93" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2bfec4045bf9dba6c4d855cb76a49e26" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:,:), allocatable</type>
+        <definition>logical, dimension(:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::logical_2d</definition>
+        <argsstring></argsstring>
+        <name>logical_2d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::logical_2d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="94" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a3226881de90098c5cf76063dcb413cb9" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:,:,:), allocatable</type>
+        <definition>logical, dimension(:,:,:), allocatable diagnosticinterface_mod::diagnosticdatatype::logical_3d</definition>
+        <argsstring></argsstring>
+        <name>logical_3d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::logical_3d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="95" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a213a1f1b214b157af6473c485200958e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::allocate_data</definition>
+        <argsstring>(this, data_type, dims, rc)</argsstring>
+        <name>allocate_data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::allocate_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>data_type</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>dims</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Allocate diagnostic data storage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticDataType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of data to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions for multi-dimensional arrays </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="98" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a66b50a9608e4c1086570cca93f8c729a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::deallocate_data</definition>
+        <argsstring>(this)</argsstring>
+        <name>deallocate_data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::deallocate_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Deallocate diagnostic data storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="99" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a7ac3916691d35cf156f65574c4bc239f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::get_data_type</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_data_type</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::get_data_type</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get data type identifier. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="100" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a95b19abcde50cb16433a05d0a7938f95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::is_data_allocated</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_data_allocated</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::is_data_allocated</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if data is allocated. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="101" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1a89ad76e6ffae1d98a13e6e9eb71e32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::set_real_scalar</definition>
+        <argsstring>(this, value)</argsstring>
+        <name>set_real_scalar</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::set_real_scalar</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <briefdescription>
+<para>Set real scalar value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="102" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2ef750ea0efaec11a22d0deeaaa33c56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::get_real_scalar</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_real_scalar</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::get_real_scalar</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get real scalar value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="103" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1adcaf92182dbf107c866f471e88f69e9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::set_real_1d</definition>
+        <argsstring>(this, values)</argsstring>
+        <name>set_real_1d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::set_real_1d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <briefdescription>
+<para>Set real 1D array values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="104" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1aca705d097a4f44d38552ffbc6d7c5a4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::get_real_1d_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_real_1d_ptr</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::get_real_1d_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to real 1D array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="105" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a35fe7633fbc0ca7df76af67b9c92858e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::set_real_2d</definition>
+        <argsstring>(this, values)</argsstring>
+        <name>set_real_2d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::set_real_2d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <briefdescription>
+<para>Set real 2D array values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="106" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2f0ed5c8839a785998a72297cd58241f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::get_real_2d_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_real_2d_ptr</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::get_real_2d_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to real 2D array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="107" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1ae1138d05643b69a42a107ee65123f3fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::set_real_3d</definition>
+        <argsstring>(this, values)</argsstring>
+        <name>set_real_3d</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::set_real_3d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <briefdescription>
+<para>Set real 3D array values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="108" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a330c91bc25d5c78dc714419c0ba57cfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticdatatype::get_real_3d_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_real_3d_ptr</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::get_real_3d_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to real 3D array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="109" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a21adf20397893a6a368b4a459c861499" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
+        <type>final</type>
+        <definition>final diagnosticinterface_mod::diagnosticdatatype::diag_data_finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>diag_data_finalize</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::diag_data_finalize</qualifiedname>
+        <param>
+          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalizer for DiagnosticDataType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="110" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Type for diagnostic data storage. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Union-like type that can hold different data types and dimensions. Only one component should be allocated at a time. </para>
+    </detaileddescription>
+    <location file="src/core/DiagnosticInterface_Mod.F90" line="74" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="74" bodyend="111"/>
+    <listofallmembers>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a213a1f1b214b157af6473c485200958e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>allocate_data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1c1dd581b78fb07719d6895038e3535c" prot="private" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>data_type</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a66b50a9608e4c1086570cca93f8c729a" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>deallocate_data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a21adf20397893a6a368b4a459c861499" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>diag_data_finalize</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a7ac3916691d35cf156f65574c4bc239f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_data_type</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1aca705d097a4f44d38552ffbc6d7c5a4e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_1d_ptr</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2f0ed5c8839a785998a72297cd58241f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_2d_ptr</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a330c91bc25d5c78dc714419c0ba57cfd" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_3d_ptr</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2ef750ea0efaec11a22d0deeaaa33c56" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_scalar</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1aef2d4a695030cdd48505d22d0090316f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>int_1d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a117f5dedc55913c15bbfce2dc8de4dd3" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>int_2d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a50c054fc7774c4e5eb92c8c6bd29246c" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>int_3d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1abea73c1132da2179d0ec6b917c46565f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>int_scalar</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2260b9460ecc9dcc4e181f3a844d179a" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>is_allocated</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a95b19abcde50cb16433a05d0a7938f95" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>is_data_allocated</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a19c15ff8a60c179487413f6257db85a7" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>logical_1d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2bfec4045bf9dba6c4d855cb76a49e26" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>logical_2d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a3226881de90098c5cf76063dcb413cb9" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>logical_3d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1c177e553997d457fcc17b2391f88cb1" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>logical_scalar</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a86c5b5e48b5e352a9143d6da4064ddb4" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>real_1d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a46157500a70792de33a58e4c00758097" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>real_2d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a993eec304dbe2ab32d38c86fb576eceb" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>real_3d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a142793a13118e0ae931d4a77a099a75c" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>real_scalar</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1adcaf92182dbf107c866f471e88f69e9c" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>set_real_1d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a35fe7633fbc0ca7df76af67b9c92858e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>set_real_2d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1ae1138d05643b69a42a107ee65123f3fd" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>set_real_3d</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1a89ad76e6ffae1d98a13e6e9eb71e32" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>set_real_scalar</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

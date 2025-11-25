@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_5a3c86e36f17958630366ebc2b7ca21b" kind="dir">
+    <compoundname>src/process/drydep/schemes</compoundname>
+    <innerfile refid="_dry_dep_scheme___g_o_c_a_r_t___mod_8_f90">DryDepScheme_GOCART_Mod.F90</innerfile>
+    <innerfile refid="_dry_dep_scheme___w_e_s_e_l_y___mod_01copy_8_f90">DryDepScheme_WESELY_Mod copy.F90</innerfile>
+    <innerfile refid="_dry_dep_scheme___w_e_s_e_l_y___mod_8_f90">DryDepScheme_WESELY_Mod.F90</innerfile>
+    <innerfile refid="_dry_dep_scheme___z_h_a_n_g___mod_01copy_8_f90">DryDepScheme_ZHANG_Mod copy.F90</innerfile>
+    <innerfile refid="_dry_dep_scheme___z_h_a_n_g___mod_8_f90">DryDepScheme_ZHANG_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/schemes/"/>
+  </compounddef>
+</doxygen>

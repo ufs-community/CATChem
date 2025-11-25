@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structprocessregistry__mod_1_1processregistryentry" kind="type" language="Fortran" prot="private">
+    <compoundname>processregistry_mod::processregistryentry</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistryentry_1a0dc9a4c456b1d30726d35112d23feb77" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) processregistry_mod::processregistryentry::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>processregistry_mod::processregistryentry::name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="55" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistryentry_1a611b29e5e9a30ba8783df3f964dfc5a8" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) processregistry_mod::processregistryentry::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <qualifiedname>processregistry_mod::processregistryentry::category</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="56" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistryentry_1aac17984de3ad233f71c6fae5af93293d" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) processregistry_mod::processregistryentry::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>processregistry_mod::processregistryentry::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="57" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistryentry_1aadef403e3626f9824c2b49fbefb1f13e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical processregistry_mod::processregistryentry::is_available</definition>
+        <argsstring></argsstring>
+        <name>is_available</name>
+        <qualifiedname>processregistry_mod::processregistryentry::is_available</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Availability status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="59" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistryentry_1a4ed1cd751e0b37255628b2fc641b601e" prot="public" static="yes" mutable="no">
+        <type>procedure(<ref refid="interfaceprocessregistry__mod_1_1processcreatorinterface" kindref="compound">processcreatorinterface</ref>), pointer, nopass</type>
+        <definition>procedure(processcreatorinterface), pointer, nopass processregistry_mod::processregistryentry::creator</definition>
+        <argsstring></argsstring>
+        <name>creator</name>
+        <qualifiedname>processregistry_mod::processregistryentry::creator</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Creator function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Registry entry for a single process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessRegistry_Mod.F90" line="54" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="54" bodyend="60"/>
+    <listofallmembers>
+      <member refid="structprocessregistry__mod_1_1processregistryentry_1a611b29e5e9a30ba8783df3f964dfc5a8" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistryentry</scope><name>category</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistryentry_1a4ed1cd751e0b37255628b2fc641b601e" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistryentry</scope><name>creator</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistryentry_1aac17984de3ad233f71c6fae5af93293d" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistryentry</scope><name>description</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistryentry_1aadef403e3626f9824c2b49fbefb1f13e" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistryentry</scope><name>is_available</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistryentry_1a0dc9a4c456b1d30726d35112d23feb77" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistryentry</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

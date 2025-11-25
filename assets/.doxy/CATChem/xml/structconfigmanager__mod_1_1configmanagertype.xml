@@ -1,0 +1,1266 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1configmanagertype" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::configmanagertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1aed86db5c331ddf9980c6b804f18f6f3a" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>)</type>
+        <definition>type(yaml_node_t) configmanager_mod::configmanagertype::yaml_data</definition>
+        <argsstring></argsstring>
+        <name>yaml_data</name>
+        <qualifiedname>configmanager_mod::configmanagertype::yaml_data</qualifiedname>
+        <briefdescription>
+<para>Loaded YAML configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="277" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="277" bodyend="277"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1a04f15270a51302be2fef67539f218613" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configdatatype" kindref="compound">configdatatype</ref>), public</type>
+        <definition>type(configdatatype), public configmanager_mod::configmanagertype::config_data</definition>
+        <argsstring></argsstring>
+        <name>config_data</name>
+        <qualifiedname>configmanager_mod::configmanagertype::config_data</qualifiedname>
+        <briefdescription>
+<para>Structured configuration data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="278" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="278" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1abe6ae000ed5a4952001f421f0edc1a07" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::configmanagertype::is_loaded</definition>
+        <argsstring></argsstring>
+        <name>is_loaded</name>
+        <qualifiedname>configmanager_mod::configmanagertype::is_loaded</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Configuration loaded flag. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="279" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="279" bodyend="279"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1a9b4aab550837b94999aa772a1e3d7112" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) configmanager_mod::configmanagertype::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>configmanager_mod::configmanagertype::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Current config file path. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="282" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="282" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1ab35cb853027165b96a96b5445a2b7ebe" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::configmanagertype::config_version</definition>
+        <argsstring></argsstring>
+        <name>config_version</name>
+        <qualifiedname>configmanager_mod::configmanagertype::config_version</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Configuration version. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="283" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="283" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1a1bafced394512bed262fc2e3b5a54c90" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::configmanagertype::load_strategy</definition>
+        <argsstring></argsstring>
+        <name>load_strategy</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_strategy</qualifiedname>
+        <initializer>= CONFIG_STRATEGY_STRICT</initializer>
+        <briefdescription>
+<para>Loading strategy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="284" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="284" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1a6277cbb930ca3a8e373e6adcacb7a68f" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>)</type>
+        <definition>type(configschematype) configmanager_mod::configmanagertype::schema</definition>
+        <argsstring></argsstring>
+        <name>schema</name>
+        <qualifiedname>configmanager_mod::configmanagertype::schema</qualifiedname>
+        <briefdescription>
+<para>Configuration schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="287" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="287" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1ae01637dd4a9221b8ea77f49b4d6b3c51" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::configmanagertype::schema_loaded</definition>
+        <argsstring></argsstring>
+        <name>schema_loaded</name>
+        <qualifiedname>configmanager_mod::configmanagertype::schema_loaded</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Schema loaded flag. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="288" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="288" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1affc04f4b2bca281b3725cee5641483c6" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable configmanager_mod::configmanagertype::env_overrides</definition>
+        <argsstring></argsstring>
+        <name>env_overrides</name>
+        <qualifiedname>configmanager_mod::configmanagertype::env_overrides</qualifiedname>
+        <briefdescription>
+<para>Environment variable overrides. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="291" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="291" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configmanagertype_1aba231258e7f8f9ebc1660b136abb3516" prot="public" static="no" mutable="no">
+        <type>character(len=512), dimension(:), allocatable</type>
+        <definition>character(len=512), dimension(:), allocatable configmanager_mod::configmanagertype::cli_overrides</definition>
+        <argsstring></argsstring>
+        <name>cli_overrides</name>
+        <qualifiedname>configmanager_mod::configmanagertype::cli_overrides</qualifiedname>
+        <briefdescription>
+<para>Command line overrides. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="292" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="292" bodyend="292"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a4d2a8e9f49ebba1bad62237f63bb7a94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::init</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>configmanager_mod::configmanagertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize configuration manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="296" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="296" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1afea88ca72cb89b09fce6247c74dfa919" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>configmanager_mod::configmanagertype::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize configuration manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="297" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="297" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a58c17ff1ac7ccfd2895b2ca82da03c2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_from_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>load_from_file</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_from_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load configuration from file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="300" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="300" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1aed5c4d0afaf7c05fd69e88ce98553f24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_from_string</definition>
+        <argsstring>(this, yaml_string, rc)</argsstring>
+        <name>load_from_string</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_from_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>yaml_string</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load configuration from string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="301" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a695976c47c1a161a167641d0ae8bfac1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::reload</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>reload</name>
+        <qualifiedname>configmanager_mod::configmanagertype::reload</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reload configuration from current file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="302" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="302" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a5d89259bf51ffad19f91775476f61ddf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_preset</definition>
+        <argsstring>(this, preset, rc)</argsstring>
+        <name>load_preset</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_preset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configpresettype" kindref="compound">configpresettype</ref>), intent(in)</type>
+          <defname>preset</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load a predefined configuration preset. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="303" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="303" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a60a50eef554b8ca9c364a364031d79b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_schema</definition>
+        <argsstring>(this, schema_file, rc)</argsstring>
+        <name>load_schema</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_schema</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>schema_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load configuration schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="306" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="306" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a11d922ded540f32839d72719727048de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::validate</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>validate</name>
+        <qualifiedname>configmanager_mod::configmanagertype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate loaded configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="307" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="307" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a90d32214897feaa23c3bb0d403d59576" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_string</definition>
+        <argsstring>(this, key, value, rc, default_value)</argsstring>
+        <name>get_string</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Get string value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="310" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1ae0fe67747e844917f1d26dd01dcdb1b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_integer</definition>
+        <argsstring>(this, key, value, rc, default_value)</argsstring>
+        <name>get_integer</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_integer</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Get integer value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="311" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1acafbf5b260b6b1b005e36d636aa9266a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_real</definition>
+        <argsstring>(this, key, value, rc, default_value)</argsstring>
+        <name>get_real</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Get real value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="312" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1aae519bb1f561d0218f471fa648e15677" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_logical</definition>
+        <argsstring>(this, key, value, rc, default_value)</argsstring>
+        <name>get_logical</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Get logical value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="313" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a3b97ef77f550c7b22d4cfac4b1312bbc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_array</definition>
+        <argsstring>(this, key, values, rc, default_values)</argsstring>
+        <name>get_array</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_array</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in), optional</type>
+          <defname>default_values</defname>
+        </param>
+        <briefdescription>
+<para>Get array value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="314" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a84a2c5900ebdd1cb4205f458565bf150" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_real_array</definition>
+        <argsstring>(this, key, values, rc)</argsstring>
+        <name>get_real_array</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_real_array</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get real array value from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="315" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1acbf5af82f0098eb5fe5990fbbe0cff77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_nspecies</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nspecies</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_nspecies</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of species from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="316" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="316" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a1ac2dbf9d54d72847664483a7d190e08" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_max_species</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_max_species</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_max_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get maximum number of species from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="317" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="317" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a8bf56795f33cfbc613114bf5bb383d36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_nemission_categories</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nemission_categories</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_nemission_categories</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of emission categories from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="318" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="318" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a733b0543fc63cd6977e24a8213e0e70a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_nemission_species</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nemission_species</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_nemission_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of emission species from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="319" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="319" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1ada3a0f15fc23f857319b4e532b6cd0f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_species_file</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_species_file</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_species_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get species filename from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="320" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="320" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a06d8dbed890907347aee0bb289e381bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_emission_file</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_emission_file</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_emission_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get emission filename from configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="321" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="321" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a59f6154b72bbbaf53f462ea19aef49aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_and_init_species</definition>
+        <argsstring>(this, filename, chem_state, error_mgr, grid, rc, num_species)</argsstring>
+        <name>load_and_init_species</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_and_init_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in), pointer</type>
+          <defname>grid</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>num_species</defname>
+        </param>
+        <briefdescription>
+<para>Load complete species data with all properties from YAML file and initialize ChemState. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This enhanced method loads species configuration including all properties such as molecular weight, type flags, background concentrations, etc., and initializes the provided ChemState with the loaded species data. Based on the YAML structure in test_species.yml.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">filename</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species configuration file path </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chem_state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemState to initialize with species data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">grid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid geometry for concentration array initialization </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of species loaded </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="328" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="328" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a6e563d7fa8e459823f37a49ccaca0cd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_emission_config</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>load_emission_config</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_emission_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load emission configuration from file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="329" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="329" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a86c7a1d57b630b98d9bae288ca830792" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_emission_mapping</definition>
+        <argsstring>(this, filename, rc, chem_state)</argsstring>
+        <name>load_emission_mapping</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_emission_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), optional</type>
+          <defname>chem_state</defname>
+        </param>
+        <briefdescription>
+<para>Load emission-to-species mapping configuration from file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">chem_state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional ChemState for immediate index resolution </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="330" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="330" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1aebe1d96d06134a2dd247c5f5abeff9ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::find_category_mapping</definition>
+        <argsstring>(this, category_name, category_mapping, rc)</argsstring>
+        <name>find_category_mapping</name>
+        <qualifiedname>configmanager_mod::configmanagertype::find_category_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1emissioncategorymapping" kindref="compound">emissioncategorymapping</ref>), intent(out)</type>
+          <defname>category_mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Find category mapping for a specific category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="333" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="333" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1afbcac1b29395668c793645ddab29f7f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::apply_emission_mapping</definition>
+        <argsstring>(this, category_name, emission_field, chemical_species, scaling_factors, rc)</argsstring>
+        <name>apply_emission_mapping</name>
+        <qualifiedname>configmanager_mod::configmanagertype::apply_emission_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>emission_field</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>chemical_species</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>scaling_factors</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Apply emission mapping to map emission field to chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="334" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a306c938811836ef470cab3c4767998f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::get_emission_mapping_for_category</definition>
+        <argsstring>(this, category_name)</argsstring>
+        <name>get_emission_mapping_for_category</name>
+        <qualifiedname>configmanager_mod::configmanagertype::get_emission_mapping_for_category</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <briefdescription>
+<para>Get emission mapping configuration for specific category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="335" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="335" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a5919b1384717dadfb9fdf61d458fd3d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::update_runtime_from_configs</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>update_runtime_from_configs</name>
+        <qualifiedname>configmanager_mod::configmanagertype::update_runtime_from_configs</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update runtime configuration from loaded configs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="338" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a961a3edede993e920bcf3d7bef426cf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::parse_config_data</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>parse_config_data</name>
+        <qualifiedname>configmanager_mod::configmanagertype::parse_config_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Parse YAML data into structured configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="339" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="339" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a678739f747f813e4b606a5fe78d49e3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::load_run_phases</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>load_run_phases</name>
+        <qualifiedname>configmanager_mod::configmanagertype::load_run_phases</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load run phases configuration from YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Parses the run_phases section from the loaded YAML configuration and populates the ConfigDataTyperun_phases and ConfigDataTyperun_phase_processes arrays.</para>
+<para>Expected YAML format: run_phases: phase_name: process1 process2 process3</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS/CC_FAILURE) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="340" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="340" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a77c9922bf59949c21e9d6af91ad3aa07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>configmanager_mod::configmanagertype::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="343" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="343" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a7724f7fc11331ef5714777119a27c38c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::save_to_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>save_to_file</name>
+        <qualifiedname>configmanager_mod::configmanagertype::save_to_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Save current configuration to file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="344" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="344" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a18cb32b5a114b7bf9da84ba3256115a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::set_loading_strategy</definition>
+        <argsstring>(this, strategy)</argsstring>
+        <name>set_loading_strategy</name>
+        <qualifiedname>configmanager_mod::configmanagertype::set_loading_strategy</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>strategy</defname>
+        </param>
+        <briefdescription>
+<para>Set configuration loading strategy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="345" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="345" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a1a711a6474c2bf1ddac9279dded9c4b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::add_env_override</definition>
+        <argsstring>(this, env_var, rc)</argsstring>
+        <name>add_env_override</name>
+        <qualifiedname>configmanager_mod::configmanagertype::add_env_override</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>env_var</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add environment variable override. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="346" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="346" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configmanagertype_1a1dcf4c4301b7080f4e0e4e858d8a4f7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configmanagertype::add_cli_override</definition>
+        <argsstring>(this, cli_arg, rc)</argsstring>
+        <name>add_cli_override</name>
+        <qualifiedname>configmanager_mod::configmanagertype::add_cli_override</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>cli_arg</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add command line override. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="347" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="347" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main configuration manager. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Central configuration management with validation, loading, and state application. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>configmanager_mod::configdatatype</label>
+        <link refid="structconfigmanager__mod_1_1configdatatype"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>runtime</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>file_paths</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>external_emissions</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>emission_mapping</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>run_phase_processes</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>run_phases</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>configmanager_mod::configmanagertype</label>
+        <link refid="structconfigmanager__mod_1_1configmanagertype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config_data</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>schema</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>configmanager_mod::configschematype</label>
+        <link refid="structconfigmanager__mod_1_1configschematype"/>
+      </node>
+      <node id="7">
+        <label>configmanager_mod::emissioncategorymapping</label>
+        <link refid="structconfigmanager__mod_1_1emissioncategorymapping"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>species_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>configmanager_mod::emissionmappingconfig</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>categories</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>configmanager_mod::emisspeciesmappingentry</label>
+        <link refid="structconfigmanager__mod_1_1emisspeciesmappingentry"/>
+      </node>
+      <node id="5">
+        <label>configmanager_mod::externalemisconfig</label>
+      </node>
+      <node id="4">
+        <label>configmanager_mod::filepathconfig</label>
+      </node>
+      <node id="9">
+        <label>configmanager_mod::processconfigtype</label>
+        <link refid="structconfigmanager__mod_1_1processconfigtype"/>
+      </node>
+      <node id="10">
+        <label>configmanager_mod::runphasetype</label>
+        <link refid="structconfigmanager__mod_1_1runphasetype"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>processes</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>configmanager_mod::runtimeconfig</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ConfigManager_Mod.F90" line="273" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="273" bodyend="349"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a1dcf4c4301b7080f4e0e4e858d8a4f7f" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>add_cli_override</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a1a711a6474c2bf1ddac9279dded9c4b4" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>add_env_override</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1afbcac1b29395668c793645ddab29f7f9" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>apply_emission_mapping</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1aba231258e7f8f9ebc1660b136abb3516" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>cli_overrides</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a04f15270a51302be2fef67539f218613" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>config_data</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a9b4aab550837b94999aa772a1e3d7112" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>config_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1ab35cb853027165b96a96b5445a2b7ebe" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>config_version</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1affc04f4b2bca281b3725cee5641483c6" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>env_overrides</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1afea88ca72cb89b09fce6247c74dfa919" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>finalize</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1aebe1d96d06134a2dd247c5f5abeff9ba" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>find_category_mapping</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a3b97ef77f550c7b22d4cfac4b1312bbc" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_array</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a06d8dbed890907347aee0bb289e381bc" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_emission_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a306c938811836ef470cab3c4767998f4" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_emission_mapping_for_category</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1ae0fe67747e844917f1d26dd01dcdb1b0" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_integer</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1aae519bb1f561d0218f471fa648e15677" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_logical</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a1ac2dbf9d54d72847664483a7d190e08" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_max_species</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a8bf56795f33cfbc613114bf5bb383d36" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_nemission_categories</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a733b0543fc63cd6977e24a8213e0e70a" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_nemission_species</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1acbf5af82f0098eb5fe5990fbbe0cff77" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_nspecies</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1acafbf5b260b6b1b005e36d636aa9266a" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_real</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a84a2c5900ebdd1cb4205f458565bf150" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_real_array</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1ada3a0f15fc23f857319b4e532b6cd0f7" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_species_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a90d32214897feaa23c3bb0d403d59576" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>get_string</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a4d2a8e9f49ebba1bad62237f63bb7a94" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>init</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1abe6ae000ed5a4952001f421f0edc1a07" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>is_loaded</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a59f6154b72bbbaf53f462ea19aef49aa" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_and_init_species</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a6e563d7fa8e459823f37a49ccaca0cd8" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_emission_config</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a86c7a1d57b630b98d9bae288ca830792" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_emission_mapping</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a58c17ff1ac7ccfd2895b2ca82da03c2e" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_from_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1aed5c4d0afaf7c05fd69e88ce98553f24" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_from_string</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a5d89259bf51ffad19f91775476f61ddf" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_preset</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a678739f747f813e4b606a5fe78d49e3c" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_run_phases</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a60a50eef554b8ca9c364a364031d79b6" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_schema</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a1bafced394512bed262fc2e3b5a54c90" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>load_strategy</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a961a3edede993e920bcf3d7bef426cf3" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>parse_config_data</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a77c9922bf59949c21e9d6af91ad3aa07" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>print_summary</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a695976c47c1a161a167641d0ae8bfac1" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>reload</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a7724f7fc11331ef5714777119a27c38c" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>save_to_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a6277cbb930ca3a8e373e6adcacb7a68f" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>schema</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1ae01637dd4a9221b8ea77f49b4d6b3c51" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>schema_loaded</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a18cb32b5a114b7bf9da84ba3256115a5" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>set_loading_strategy</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a5919b1384717dadfb9fdf61d458fd3d8" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>update_runtime_from_configs</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1a11d922ded540f32839d72719727048de" prot="public" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>validate</name></member>
+      <member refid="structconfigmanager__mod_1_1configmanagertype_1aed86db5c331ddf9980c6b804f18f6f3a" prot="private" virt="non-virtual"><scope>configmanager_mod::configmanagertype</scope><name>yaml_data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

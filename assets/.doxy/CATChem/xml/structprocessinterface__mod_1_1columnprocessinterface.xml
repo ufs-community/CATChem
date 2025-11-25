@@ -1,0 +1,931 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structprocessinterface__mod_1_1columnprocessinterface" kind="type" language="Fortran" prot="public" abstract="yes">
+    <compoundname>processinterface_mod::columnprocessinterface</compoundname>
+    <basecompoundref refid="structprocessinterface__mod_1_1processinterface" prot="public" virt="non-virtual">processinterface_mod::processinterface</basecompoundref>
+    <derivedcompoundref refid="structprocessdrydepinterface__mod_1_1processdrydepinterface" prot="public" virt="non-virtual">processdrydepinterface_mod::processdrydepinterface</derivedcompoundref>
+    <derivedcompoundref refid="structprocessseasaltinterface__mod_1_1processseasaltinterface" prot="public" virt="non-virtual">processseasaltinterface_mod::processseasaltinterface</derivedcompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1columnprocessinterface_1a27d3f5b7f289346768942c5b7b1f0aa8" prot="private" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical processinterface_mod::columnprocessinterface::column_processing_enabled</definition>
+        <argsstring></argsstring>
+        <name>column_processing_enabled</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::column_processing_enabled</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable column processing mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="95" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1columnprocessinterface_1a6f1fc6a3a8378d13363b690c13cc1d65" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer processinterface_mod::columnprocessinterface::column_batch_size</definition>
+        <argsstring></argsstring>
+        <name>column_batch_size</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::column_batch_size</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+<para>Number of columns to process in batch. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="96" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a6536f84b09e537bb2bf64d006fb85a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(column_init_interface), deferred</type>
+        <definition>procedure(column_init_interface), deferred processinterface_mod::columnprocessinterface::init_column_processing</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>init_column_processing</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::init_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="100" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a1d4326a7c6f7f53476ae1f522cca2976" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(column_run_interface), deferred</type>
+        <definition>procedure(column_run_interface), deferred processinterface_mod::columnprocessinterface::run_column</definition>
+        <argsstring>(this, column, container, rc)</argsstring>
+        <name>run_column</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::run_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="101" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a380c53ab546514c345075f9b219e0405" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(column_finalize_interface), deferred</type>
+        <definition>procedure(column_finalize_interface), deferred processinterface_mod::columnprocessinterface::finalize_column_processing</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize_column_processing</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::finalize_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="102" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1ae1bcaf8d46ea1edc26d5bcc089638339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::set_column_batch_size</definition>
+        <argsstring>(this, batch_size)</argsstring>
+        <name>set_column_batch_size</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::set_column_batch_size</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>batch_size</defname>
+        </param>
+        <briefdescription>
+<para>Set column batch size. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="105" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1adfdf795ec9e0f405e388940a349cbe59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::get_column_batch_size</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_column_batch_size</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::get_column_batch_size</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get column batch size. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="106" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a5d1a6fe011017c901abea2b4028d7fca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::enable_column_processing</definition>
+        <argsstring>(this)</argsstring>
+        <name>enable_column_processing</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::enable_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Enable column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="107" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a4fd168b0e470e14d71726a007e91b4fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::disable_column_processing</definition>
+        <argsstring>(this)</argsstring>
+        <name>disable_column_processing</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::disable_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Disable column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="108" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a24841d91911cc51474f7ebe320809e4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::is_column_processing_enabled</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_column_processing_enabled</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::is_column_processing_enabled</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if column processing is enabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="109" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1aba30f438634301617133f7d7e9206ca5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic processinterface_mod::columnprocessinterface::update_column_diagnostics</definition>
+        <argsstring>(this, field_name, scalar_value, i_col, j_col, container, rc)</argsstring>
+        <name>update_column_diagnostics</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_column_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalar_value</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a scalar diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating scalar diagnostic values from column processing to the global diagnostic storage managed by DiagnosticManager.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar_value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scalar value to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="112" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a855429c48ec202574c360acc957fa179" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic processinterface_mod::columnprocessinterface::update_column_diagnostics</definition>
+        <argsstring>(this, field_name, array_1d, i_col, j_col, container, rc)</argsstring>
+        <name>update_column_diagnostics</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_column_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>array_1d</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a 1D diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating 1D diagnostic arrays (e.g., vertical profiles) from column processing to the global diagnostic storage.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_1d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 1D array data to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="112" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a19ace2f1f76af8e32d47e5167a9597da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic processinterface_mod::columnprocessinterface::update_column_diagnostics</definition>
+        <argsstring>(this, field_name, array_2d, i_col, j_col, container, rc)</argsstring>
+        <name>update_column_diagnostics</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_column_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>array_2d</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a 2D diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating 2D diagnostic arrays (e.g., level-species matrices) from column processing to the global diagnostic storage. Since DiagnosticInterface currently supports up to 3D arrays, 2D column data is stored using flattened indexing.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_2d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 2D array data to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="112" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a0547b7e33883ccd9fe1b1049e8441cd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::update_scalar_diagnostic_column</definition>
+        <argsstring>(this, field_name, scalar_value, i_col, j_col, container, rc)</argsstring>
+        <name>update_scalar_diagnostic_column</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_scalar_diagnostic_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalar_value</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a scalar diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating scalar diagnostic values from column processing to the global diagnostic storage managed by DiagnosticManager.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar_value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scalar value to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="115" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1ac92b486fe04e944cc790cc4fc0a6772c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::update_1d_diagnostic_column</definition>
+        <argsstring>(this, field_name, array_1d, i_col, j_col, container, rc)</argsstring>
+        <name>update_1d_diagnostic_column</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_1d_diagnostic_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>array_1d</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a 1D diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating 1D diagnostic arrays (e.g., vertical profiles) from column processing to the global diagnostic storage.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_1d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 1D array data to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="116" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1columnprocessinterface_1a950098f6ace2e3244c043408d5ca90cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::columnprocessinterface::update_2d_diagnostic_column</definition>
+        <argsstring>(this, field_name, array_2d, i_col, j_col, container, rc)</argsstring>
+        <name>update_2d_diagnostic_column</name>
+        <qualifiedname>processinterface_mod::columnprocessinterface::update_2d_diagnostic_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>array_2d</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j_col</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update a 2D diagnostic field for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method handles updating 2D diagnostic arrays (e.g., level-species matrices) from column processing to the global diagnostic storage. Since DiagnosticInterface currently supports up to 3D arrays, 2D column data is stored using flattened indexing.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ColumnProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field to update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_2d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 2D array data to store </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column i-index (x-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column j-index (y-direction) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="117" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="117" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Enhanced process interface specifically for column-based processing. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This interface extends ProcessInterface to provide column virtualization capabilities, allowing processes to work with virtual columns while maintaining awareness of 3D spatial relationships. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>processdrydepinterface_mod::processdrydepinterface</label>
+        <link refid="structprocessdrydepinterface__mod_1_1processdrydepinterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>processinterface_mod::columnprocessinterface</label>
+        <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>processinterface_mod::processinterface</label>
+        <link refid="structprocessinterface__mod_1_1processinterface"/>
+      </node>
+      <node id="4">
+        <label>processseasaltinterface_mod::processseasaltinterface</label>
+        <link refid="structprocessseasaltinterface__mod_1_1processseasaltinterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>processinterface_mod::columnprocessinterface</label>
+        <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>processinterface_mod::processinterface</label>
+        <link refid="structprocessinterface__mod_1_1processinterface"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ProcessInterface_Mod.F90" line="92" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="92" bodyend="118"/>
+    <listofallmembers>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>accumulate_emissions</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>activate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a03de1e9dbb9ac11422314e2f5a35898a" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>apply_emission_scaling</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa7d419cc2e40ae2fdf8873cb0663979f" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>apply_tendency</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7074b14a820348304ce2f175c61f3c32" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>calculate_column_integrals</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0073988041bd832da3aed2c70a0ba094" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>check_mass_conservation</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a6f1fc6a3a8378d13363b690c13cc1d65" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>column_batch_size</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a27d3f5b7f289346768942c5b7b1f0aa8" prot="private" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>column_processing_enabled</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>convert_concentration_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>convert_flux_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>deactivate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>description</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a4fd168b0e470e14d71726a007e91b4fc" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>disable_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>dt</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a5d1a6fe011017c901abea2b4028d7fca" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>enable_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>finalize</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a380c53ab546514c345075f9b219e0405" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>finalize_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1adfdf795ec9e0f405e388940a349cbe59" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_column_batch_size</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_required_diagnostic_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>get_version</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a07fa2dd16cefbff358d53d6f5caa6d21" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>init</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a6536f84b09e537bb2bf64d006fb85a7d" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>init_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>is_active</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a24841d91911cc51474f7ebe320809e4c" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>is_column_processing_enabled</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>is_initialized</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>is_ready</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>process_column</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>register_diagnostic_field</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>register_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ad9f91407f116f0132f911f86ad79b617" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>run</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a1d4326a7c6f7f53476ae1f522cca2976" prot="public" virt="pure-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>run_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1ae1bcaf8d46ea1edc26d5bcc089638339" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>set_column_batch_size</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac8b2e542df97a721b4f588934be5e3f1" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>set_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ab2371a427fb673428cae8910dbdc5ccc" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>supports_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1ac92b486fe04e944cc790cc4fc0a6772c" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_1d_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a950098f6ace2e3244c043408d5ca90cb" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_2d_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1aba30f438634301617133f7d7e9206ca5" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a855429c48ec202574c360acc957fa179" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a19ace2f1f76af8e32d47e5167a9597da" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0128b392b36390b94ef7714337f2d972" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a0547b7e33883ccd9fe1b1049e8441cd4" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>update_scalar_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>validate_config</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>validate_physical_ranges</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>validate_species_availability</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" virt="non-virtual"><scope>processinterface_mod::columnprocessinterface</scope><name>version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

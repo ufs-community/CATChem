@@ -1,0 +1,623 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__catchem__seasalt__process" kind="group">
+    <compoundname>catchem_seasalt_process</compoundname>
+    <title>CATChem Sea Salt Process</title>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine</type>
+        <definition>pure subroutine seasaltscheme_geos12_mod::jeaglesstcorrection</definition>
+        <argsstring>(fsstemis, sst, sstflag, rc)</argsstring>
+        <name>jeaglesstcorrection</name>
+        <qualifiedname>seasaltscheme_geos12_mod::jeaglesstcorrection</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>fsstemis</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>sst</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>sstflag</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Jeagle et al. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>2012 SST correction</para>
+<para>Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157, <ulink url="https://doi.org/10.5194/acp-11-3137-2011">https://doi.org/10.5194/acp-11-3137-2011</ulink>, 2011.</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="302" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="303" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function seasaltscheme_geos12_mod::seasaltemissiongong</definition>
+        <argsstring>(r, dr, w, scalefac, afac, bfac, rpow, exppow, wpow)</argsstring>
+        <name>seasaltemissiongong</name>
+        <qualifiedname>seasaltscheme_geos12_mod::seasaltemissiongong</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>r</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>w</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalefac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>afac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>bfac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rpow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>exppow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wpow</defname>
+        </param>
+        <briefdescription>
+<para>Function to compute sea salt emissions following the Gong style parameterization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Functional form is from Gong 2003: <formula id="0">$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))$</formula> where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle radius [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle bin width [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid box mean wind speed [m s-1] (10-m or ustar wind) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalefac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>scale factor </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="351" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="352" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga47b81e2f8cc2a605f8beb8c6368f66dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine seasaltscheme_gong03_mod::jeaglesstcorrection</definition>
+        <argsstring>(fsstemis, sst, sstflag, rc)</argsstring>
+        <name>jeaglesstcorrection</name>
+        <qualifiedname>seasaltscheme_gong03_mod::jeaglesstcorrection</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>fsstemis</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>sst</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>sstflag</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Jeagle et al. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>2012 SST correction</para>
+<para>Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157, <ulink url="https://doi.org/10.5194/acp-11-3137-2011">https://doi.org/10.5194/acp-11-3137-2011</ulink>, 2011.</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" line="284" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" bodystart="285" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga55b0406d4268801b93ab5661d70c9678" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function seasaltscheme_gong03_mod::seasaltemissiongong</definition>
+        <argsstring>(r, dr, w, scalefac, afac, bfac, rpow, exppow, wpow)</argsstring>
+        <name>seasaltemissiongong</name>
+        <qualifiedname>seasaltscheme_gong03_mod::seasaltemissiongong</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>r</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>w</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalefac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>afac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>bfac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rpow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>exppow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wpow</defname>
+        </param>
+        <briefdescription>
+<para>Function to compute sea salt emissions following the Gong style parameterization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Functional form is from Gong 2003: <formula id="0">$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))$</formula> where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle radius [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle bin width [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid box mean wind speed [m s-1] (10-m or ustar wind) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalefac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>scale factor </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" line="333" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" bodystart="334" bodyend="354"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1gafc8b2b984c59ea821ef30355745b6160" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine seasaltscheme_gong03_mod::weibulldistribution</definition>
+        <argsstring>(gweibull, weibullflag, wm, rc)</argsstring>
+        <name>weibulldistribution</name>
+        <qualifiedname>seasaltscheme_gong03_mod::weibulldistribution</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>gweibull</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>weibullflag</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the weibull distribution for 10m wind speed (u10, v10) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Weibull distribution correction ends up being a multiplicative constant (g) times our present source function (see Eq. 12 in Fan &amp; Toon, 2011 and notes for (9/22/11). This constant is derived from the incomplete and complete forms of the gamma function, hence the utilities pasted below. The Weibull function and shape parameters (k, c) assumed are from Justus 1978.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">gweibull</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Multiplicative constant </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">weibullFlag</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Flag for weibull correction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return Code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" line="373" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" bodystart="374" bodyend="413"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga8a90e72660415d70d1f254a9d877c684" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function seasaltscheme_gong03_mod::igamma</definition>
+        <argsstring>(a, x, rc)</argsstring>
+        <name>igamma</name>
+        <qualifiedname>seasaltscheme_gong03_mod::igamma</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the incomplete Gamma function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The incomplete Gamma function is defined as \int_x^\infty t^{A-1}\exp(-t) dt</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">X</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" line="428" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod copy.F90" bodystart="429" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1gad2a381db0330f3833d43caac0f17e7d6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine seasaltscheme_gong97_mod::jeaglesstcorrection</definition>
+        <argsstring>(fsstemis, sst, sstflag, rc)</argsstring>
+        <name>jeaglesstcorrection</name>
+        <qualifiedname>seasaltscheme_gong97_mod::jeaglesstcorrection</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>fsstemis</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>sst</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>sstflag</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Jeagle et al. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>2012 SST correction</para>
+<para>Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157, <ulink url="https://doi.org/10.5194/acp-11-3137-2011">https://doi.org/10.5194/acp-11-3137-2011</ulink>, 2011.</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" line="286" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" bodystart="287" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga629c594ab4c0dc374f9799f34e758a34" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function seasaltscheme_gong97_mod::seasaltemissiongong</definition>
+        <argsstring>(r, dr, w, scalefac, afac, bfac, rpow, exppow, wpow)</argsstring>
+        <name>seasaltemissiongong</name>
+        <qualifiedname>seasaltscheme_gong97_mod::seasaltemissiongong</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>r</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>w</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalefac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>afac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>bfac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rpow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>exppow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wpow</defname>
+        </param>
+        <briefdescription>
+<para>Function to compute sea salt emissions following the Gong style parameterization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Functional form is from Gong 2003: <formula id="0">$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))$</formula> where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle radius [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle bin width [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid box mean wind speed [m s-1] (10-m or ustar wind) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalefac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>scale factor </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" line="335" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" bodystart="336" bodyend="356"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1ga41b7c404993f8068fa1c4d37786a3262" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine seasaltscheme_gong97_mod::weibulldistribution</definition>
+        <argsstring>(gweibull, weibullflag, wm, rc)</argsstring>
+        <name>weibulldistribution</name>
+        <qualifiedname>seasaltscheme_gong97_mod::weibulldistribution</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>gweibull</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>weibullflag</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the weibull distribution for 10m wind speed (u10, v10) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Weibull distribution correction ends up being a multiplicative constant (g) times our present source function (see Eq. 12 in Fan &amp; Toon, 2011 and notes for (9/22/11). This constant is derived from the incomplete and complete forms of the gamma function, hence the utilities pasted below. The Weibull function and shape parameters (k, c) assumed are from Justus 1978.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">gweibull</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Multiplicative constant </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">weibullFlag</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Flag for weibull correction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return Code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" line="375" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" bodystart="376" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__seasalt__process_1gab334b8771060f7410897538e6ce9faa7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function seasaltscheme_gong97_mod::igamma</definition>
+        <argsstring>(a, x, rc)</argsstring>
+        <name>igamma</name>
+        <qualifiedname>seasaltscheme_gong97_mod::igamma</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the incomplete Gamma function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The incomplete Gamma function is defined as \int_x^\infty t^{A-1}\exp(-t) dt</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">X</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" line="430" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod copy.F90" bodystart="431" bodyend="475"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Sea salt emission and transport processes. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This group contains all modules, functions, and data types related to sea salt emission calculations in the CATChem atmospheric chemistry model. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

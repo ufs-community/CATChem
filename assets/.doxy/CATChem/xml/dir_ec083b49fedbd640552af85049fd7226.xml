@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_ec083b49fedbd640552af85049fd7226" kind="dir">
+    <compoundname>src/process/seasalt/schemes</compoundname>
+    <innerfile refid="_sea_salt_scheme___g_e_o_s12___mod_01copy_8_f90">SeaSaltScheme_GEOS12_Mod copy.F90</innerfile>
+    <innerfile refid="_sea_salt_scheme___g_e_o_s12___mod_8_f90">SeaSaltScheme_GEOS12_Mod.F90</innerfile>
+    <innerfile refid="_sea_salt_scheme___g_o_n_g03___mod_01copy_8_f90">SeaSaltScheme_GONG03_Mod copy.F90</innerfile>
+    <innerfile refid="_sea_salt_scheme___g_o_n_g03___mod_8_f90">SeaSaltScheme_GONG03_Mod.F90</innerfile>
+    <innerfile refid="_sea_salt_scheme___g_o_n_g97___mod_01copy_8_f90">SeaSaltScheme_GONG97_Mod copy.F90</innerfile>
+    <innerfile refid="_sea_salt_scheme___g_o_n_g97___mod_8_f90">SeaSaltScheme_GONG97_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/schemes/"/>
+  </compounddef>
+</doxygen>

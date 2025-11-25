@@ -1,9 +1,0 @@
-<map id="emisstate_mod::emis_allocate" name="emisstate_mod::emis_allocate">
-<area shape="rect" id="Node000001" title="Allocate the emission state." alt="" coords="5,5,168,45"/>
-<area shape="rect" id="Node000002" href="$group__core__modules.html#gadf8890c67762a792dcff25da9d3e10f7" title="CC_Error." alt="" coords="216,13,365,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
-<area shape="rect" id="Node000003" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="413,13,625,38"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="365,23,399,23,399,28,365,28"/>
-<area shape="rect" id="Node000004" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="673,13,837,38"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="625,23,660,23,660,28,625,28"/>
-</map>

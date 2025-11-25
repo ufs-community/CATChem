@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1configpresettype" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::configpresettype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configpresettype_1a4cfb98a67887617ebb95a9074a1b8e1f" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::configpresettype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>configmanager_mod::configpresettype::name</qualifiedname>
+        <briefdescription>
+<para>Preset name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="262" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="262" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configpresettype_1a35f4ed87a04b2c7bc6909cd6af03915d" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) configmanager_mod::configpresettype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>configmanager_mod::configpresettype::description</qualifiedname>
+        <briefdescription>
+<para>Preset description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="263" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="263" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configpresettype_1a83e32a310c5a1005f7eb74cbe7783bca" prot="public" static="no" mutable="no">
+        <type>character(len=1024)</type>
+        <definition>character(len=1024) configmanager_mod::configpresettype::yaml_content</definition>
+        <argsstring></argsstring>
+        <name>yaml_content</name>
+        <qualifiedname>configmanager_mod::configpresettype::yaml_content</qualifiedname>
+        <briefdescription>
+<para>YAML configuration content. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="264" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="264" bodyend="264"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configpresettype_1aaae45793b26481bf18243e17f5c1ddd9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configpresettype::load_from_string</definition>
+        <argsstring>(this, yaml_string)</argsstring>
+        <name>load_from_string</name>
+        <qualifiedname>configmanager_mod::configpresettype::load_from_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configpresettype" kindref="compound">configpresettype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>yaml_string</defname>
+        </param>
+        <briefdescription>
+<para>Load preset from string content. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="266" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configpresettype_1ab0c786f67ed06babe28913e4fff393e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configpresettype::save_to_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>save_to_file</name>
+        <qualifiedname>configmanager_mod::configpresettype::save_to_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configpresettype" kindref="compound">configpresettype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Save preset to file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="267" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="267" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration preset for common use cases. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Provides predefined configuration templates for common modeling scenarios. </para>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="261" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="261" bodyend="268"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1configpresettype_1a35f4ed87a04b2c7bc6909cd6af03915d" prot="public" virt="non-virtual"><scope>configmanager_mod::configpresettype</scope><name>description</name></member>
+      <member refid="structconfigmanager__mod_1_1configpresettype_1aaae45793b26481bf18243e17f5c1ddd9" prot="public" virt="non-virtual"><scope>configmanager_mod::configpresettype</scope><name>load_from_string</name></member>
+      <member refid="structconfigmanager__mod_1_1configpresettype_1a4cfb98a67887617ebb95a9074a1b8e1f" prot="public" virt="non-virtual"><scope>configmanager_mod::configpresettype</scope><name>name</name></member>
+      <member refid="structconfigmanager__mod_1_1configpresettype_1ab0c786f67ed06babe28913e4fff393e2" prot="public" virt="non-virtual"><scope>configmanager_mod::configpresettype</scope><name>save_to_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configpresettype_1a83e32a310c5a1005f7eb74cbe7783bca" prot="public" virt="non-virtual"><scope>configmanager_mod::configpresettype</scope><name>yaml_content</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

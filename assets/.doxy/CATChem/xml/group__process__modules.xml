@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__process__modules" kind="group">
+    <compoundname>process_modules</compoundname>
+    <title>CATChem Process Modules</title>
+    <innerfile refid="_emission_config_validator___mod_8_f90">EmissionConfigValidator_Mod.F90</innerfile>
+    <innerfile refid="_process_factory___mod_8_f90">ProcessFactory_Mod.F90</innerfile>
+    <innerfile refid="_process_interface___mod_8_f90">ProcessInterface_Mod.F90</innerfile>
+    <innerfile refid="_process_manager___mod_8_f90">ProcessManager_Mod.F90</innerfile>
+    <innerfile refid="_process_registry___mod_8_f90">ProcessRegistry_Mod.F90</innerfile>
+    <innergroup refid="group__catchem__seasalt__process">CATChem Sea Salt Process</innergroup>
+    <innergroup refid="group__catchem__plumerise__process">CATChem Plume Rise Process</innergroup>
+    <innergroup refid="group__catchem__drydep__process">CATChem Dry Deposition Process</innergroup>
+    <briefdescription>
+<para>All atmospheric chemistry process modules. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This group contains all process modules in the CATChem system, including dust, sea salt, dry deposition, and plume rise processes. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

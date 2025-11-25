@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1processconfigtype" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::processconfigtype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1a7c94b9b3afaab1c5e70e4930a5f53f29" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::processconfigtype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>configmanager_mod::processconfigtype::name</qualifiedname>
+        <briefdescription>
+<para>Process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="215" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="215" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1aad820d197c0271e326f1283fa3e93839" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::processconfigtype::process_type</definition>
+        <argsstring></argsstring>
+        <name>process_type</name>
+        <qualifiedname>configmanager_mod::processconfigtype::process_type</qualifiedname>
+        <briefdescription>
+<para>Process type (e.g., &apos;verticaltransport&apos;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="216" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="216" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1a4e4d89affc06f4a6cc72b9ab2f78e2f8" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::processconfigtype::scheme</definition>
+        <argsstring></argsstring>
+        <name>scheme</name>
+        <qualifiedname>configmanager_mod::processconfigtype::scheme</qualifiedname>
+        <briefdescription>
+<para>Scheme name (e.g., &apos;YSU&apos;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="217" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="217" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1af3fe94cb07df344cbdffc49cebf81733" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::processconfigtype::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>configmanager_mod::processconfigtype::enabled</qualifiedname>
+        <briefdescription>
+<para>Whether process is enabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="218" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="218" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1ae00bd3bddf98a2dc9e479ab6c4a4aa7f" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::processconfigtype::priority</definition>
+        <argsstring></argsstring>
+        <name>priority</name>
+        <qualifiedname>configmanager_mod::processconfigtype::priority</qualifiedname>
+        <briefdescription>
+<para>Execution priority (lower = earlier) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="219" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="219" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1a8a3bceaa6e933c84167b428ee4df5f11" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::processconfigtype::process_index</definition>
+        <argsstring></argsstring>
+        <name>process_index</name>
+        <qualifiedname>configmanager_mod::processconfigtype::process_index</qualifiedname>
+        <briefdescription>
+<para>Index mapping to global process numbers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="220" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="220" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1a976ba772ec3cd1c5d96b37667ebddf53" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) configmanager_mod::processconfigtype::timing</definition>
+        <argsstring></argsstring>
+        <name>timing</name>
+        <qualifiedname>configmanager_mod::processconfigtype::timing</qualifiedname>
+        <briefdescription>
+<para>Timing type (&apos;explicit&apos;, &apos;implicit&apos;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="221" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="221" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1processconfigtype_1abbe112b0686a7d8946e9322575fa8bc3" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::processconfigtype::subcycling</definition>
+        <argsstring></argsstring>
+        <name>subcycling</name>
+        <qualifiedname>configmanager_mod::processconfigtype::subcycling</qualifiedname>
+        <briefdescription>
+<para>Number of subcycles. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="222" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="222" bodyend="222"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Process configuration for dynamic run phases This type allows for flexible, phase-based process configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="214" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="214" bodyend="224"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1af3fe94cb07df344cbdffc49cebf81733" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>enabled</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1a7c94b9b3afaab1c5e70e4930a5f53f29" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>name</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1ae00bd3bddf98a2dc9e479ab6c4a4aa7f" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>priority</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1a8a3bceaa6e933c84167b428ee4df5f11" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>process_index</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1aad820d197c0271e326f1283fa3e93839" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>process_type</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1a4e4d89affc06f4a6cc72b9ab2f78e2f8" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>scheme</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1abbe112b0686a7d8946e9322575fa8bc3" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>subcycling</name></member>
+      <member refid="structconfigmanager__mod_1_1processconfigtype_1a976ba772ec3cd1c5d96b37667ebddf53" prot="public" virt="non-virtual"><scope>configmanager_mod::processconfigtype</scope><name>timing</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

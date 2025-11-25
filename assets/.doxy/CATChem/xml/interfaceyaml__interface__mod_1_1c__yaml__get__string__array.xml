@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__get__string__array" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_get_string_array</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__get__string__array_1a105c9e5edd3b14c82a72aa27fe3377b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical(c_bool) function</type>
+        <definition>logical(c_bool) function yaml_interface_mod::c_yaml_get_string_array::c_yaml_get_string_array</definition>
+        <argsstring>(node, key, values, max_strings, max_len, actual_size)</argsstring>
+        <name>c_yaml_get_string_array</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_get_string_array::c_yaml_get_string_array</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>max_strings</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>max_len</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>actual_size</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="145" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="146" bodyend="153"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="145" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="145" bodyend="153"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__get__string__array_1a105c9e5edd3b14c82a72aa27fe3377b5" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_get_string_array</scope><name>c_yaml_get_string_array</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

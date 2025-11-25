@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1externalemisconfig" kind="type" language="Fortran" prot="private">
+    <compoundname>configmanager_mod::externalemisconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1a78bff6233b1329e7bc0ecc50994e4bfa" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::externalemisconfig::activate</definition>
+        <argsstring></argsstring>
+        <name>activate</name>
+        <qualifiedname>configmanager_mod::externalemisconfig::activate</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable external emissions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="117" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::externalemisconfig::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>configmanager_mod::externalemisconfig::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>External emissions configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="118" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1af6775f95edc0bd048ce06865fd7696aa" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::externalemisconfig::temporal_profile</definition>
+        <argsstring></argsstring>
+        <name>temporal_profile</name>
+        <qualifiedname>configmanager_mod::externalemisconfig::temporal_profile</qualifiedname>
+        <initializer>= &apos;constant&apos;</initializer>
+        <briefdescription>
+<para>Temporal profile type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="119" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1aa2b8ac78c3c9eab77f0eaf65b46202f2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::externalemisconfig::dynamic_mapping</definition>
+        <argsstring></argsstring>
+        <name>dynamic_mapping</name>
+        <qualifiedname>configmanager_mod::externalemisconfig::dynamic_mapping</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable dynamic species mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="120" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1ac2eefe3fe493285697f334a86c40174c" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) configmanager_mod::externalemisconfig::global_scale_factor</definition>
+        <argsstring></argsstring>
+        <name>global_scale_factor</name>
+        <qualifiedname>configmanager_mod::externalemisconfig::global_scale_factor</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+<para>Global scaling factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="121" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="121" bodyend="121"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>External emissions configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="116" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="116" bodyend="122"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1a78bff6233b1329e7bc0ecc50994e4bfa" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>activate</name></member>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>config_file</name></member>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1aa2b8ac78c3c9eab77f0eaf65b46202f2" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>dynamic_mapping</name></member>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1ac2eefe3fe493285697f334a86c40174c" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>global_scale_factor</name></member>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1af6775f95edc0bd048ce06865fd7696aa" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>temporal_profile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

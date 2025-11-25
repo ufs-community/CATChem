@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprocessregistry__mod_1_1processcreatorinterface" kind="interface" language="Fortran" prot="public">
+    <compoundname>processregistry_mod::processcreatorinterface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprocessregistry__mod_1_1processcreatorinterface_1a9531f2e50f7977bd26051e3af7b734d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine processregistry_mod::processcreatorinterface::processcreatorinterface</definition>
+        <argsstring>(process, rc)</argsstring>
+        <name>processcreatorinterface</name>
+        <qualifiedname>processregistry_mod::processcreatorinterface::processcreatorinterface</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="47" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Function pointer interface for process creators. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessRegistry_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="46" bodyend="49"/>
+    <listofallmembers>
+      <member refid="interfaceprocessregistry__mod_1_1processcreatorinterface_1a9531f2e50f7977bd26051e3af7b734d4" prot="public" virt="virtual"><scope>processregistry_mod::processcreatorinterface</scope><name>processcreatorinterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

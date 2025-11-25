@@ -1,0 +1,677 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchemcore__mod" kind="namespace" language="Fortran">
+    <compoundname>catchemcore_mod</compoundname>
+    <innerclass refid="structcatchemcore__mod_1_1catchembuildertype" prot="public">catchemcore_mod::catchembuildertype</innerclass>
+    <innerclass refid="structcatchemcore__mod_1_1catchemcoretype" prot="public">catchemcore_mod::catchemcoretype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchemcore__mod_1abc519b626b9ac3ef4d304b8d0d9837bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_init</definition>
+        <argsstring>(this, name, rc)</argsstring>
+        <name>core_init</name>
+        <qualifiedname>catchemcore_mod::core_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the CATChem core. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets up the core framework and initializes the error manager. Components are initialized later during configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="159" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="160" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a964b5b85265e9a20a71438c9fcf7b6a1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_configure</definition>
+        <argsstring>(this, config_file, nx, ny, nz, nsoil, nsoiltype, nsurftype, rc)</argsstring>
+        <name>core_configure</name>
+        <qualifiedname>catchemcore_mod::core_configure</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Configure the CATChem core with a configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Loads configuration and initializes all components in the correct order. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="192" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="193" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a5c6893f6ac9c7b340624f660a4d3ebf5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_setup_grid</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_setup_grid</name>
+        <qualifiedname>catchemcore_mod::core_setup_grid</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="282" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="283" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1aab18b3696fe2c3e4527e59787ca20c82" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_setup_state</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_setup_state</name>
+        <qualifiedname>catchemcore_mod::core_setup_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up state manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="308" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="309" bodyend="445"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1ae0e65d5bb614783ff2bf268b6be5c01f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_setup_diagnostics</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_setup_diagnostics</name>
+        <qualifiedname>catchemcore_mod::core_setup_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="449" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="450" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1aa58b552fd8cb41f7e10524109e8a700d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_setup_processes</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_setup_processes</name>
+        <qualifiedname>catchemcore_mod::core_setup_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Setup process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="478" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="479" bodyend="502"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a3dfcf1b2e61fabde948bb911f7ed0599" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_add_process</definition>
+        <argsstring>(this, process_name, rc)</argsstring>
+        <name>core_add_process</name>
+        <qualifiedname>catchemcore_mod::core_add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to the process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="506" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="507" bodyend="522"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a09927d2935e40d9caa1ded898b6df706" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_run_processes</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_run_processes</name>
+        <qualifiedname>catchemcore_mod::core_run_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="526" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="527" bodyend="541"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a4c4cb2dcdf606a0dbfa51b15e14ce74a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_run_timestep</definition>
+        <argsstring>(this, timestep, dt, rc)</argsstring>
+        <name>core_run_timestep</name>
+        <qualifiedname>catchemcore_mod::core_run_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>timestep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="545" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="546" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a74b3da26c7cad9627072d0ec751fe5a2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>core_finalize</name>
+        <qualifiedname>catchemcore_mod::core_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize and clean up the core. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="586" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="587" bodyend="623"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a898927045e0fd72535c4f86d2e97f976" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchemcore_mod::core_validate</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_validate</name>
+        <qualifiedname>catchemcore_mod::core_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Validate core state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="627" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="628" bodyend="635"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a36eeb98657c8c5e70f8ebbea9b8207cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>) function, pointer</type>
+        <definition>type(statemanagertype) function, pointer catchemcore_mod::core_get_state_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_state_manager</name>
+        <qualifiedname>catchemcore_mod::core_get_state_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get state manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="639" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="640" bodyend="644"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1abd128aead3081d436f113c426fc9639b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>) function, pointer</type>
+        <definition>type(gridmanagertype) function, pointer catchemcore_mod::core_get_grid_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_grid_manager</name>
+        <qualifiedname>catchemcore_mod::core_get_grid_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="648" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="649" bodyend="653"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a32f428a0106258e200fdd9db956d2611" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>) function, pointer</type>
+        <definition>type(diagnosticmanagertype) function, pointer catchemcore_mod::core_get_diagnostic_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_diagnostic_manager</name>
+        <qualifiedname>catchemcore_mod::core_get_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="657" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="658" bodyend="662"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1ad8cf97b60c99f6e21e5773f2d31799ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>) function, pointer</type>
+        <definition>type(processmanagertype) function, pointer catchemcore_mod::core_get_process_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_process_manager</name>
+        <qualifiedname>catchemcore_mod::core_get_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="666" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="667" bodyend="671"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a2727dfb51bcd855aab922487d64f3861" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configdatatype" kindref="compound">configdatatype</ref>) function, pointer</type>
+        <definition>type(configdatatype) function, pointer catchemcore_mod::core_get_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_config</name>
+        <qualifiedname>catchemcore_mod::core_get_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get configuration (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="675" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="676" bodyend="681"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a60d715385f0cce09f451c235fdde4ee6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>) function, pointer</type>
+        <definition>type(errormanagertype) function, pointer catchemcore_mod::core_get_error_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_error_manager</name>
+        <qualifiedname>catchemcore_mod::core_get_error_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get error manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="685" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="686" bodyend="690"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a3b5a2256ac064d7935877b2d7f563fd4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchemcore_mod::core_is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_is_ready</name>
+        <qualifiedname>catchemcore_mod::core_is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if core is ready for operations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="694" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="695" bodyend="699"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1add23b6335767235c39595b88b919e7ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_set_name</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>core_set_name</name>
+        <qualifiedname>catchemcore_mod::core_set_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Set core name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="703" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="704" bodyend="708"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a4fc6b8a63bd9f34df90185f19a55a102" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(kind=8) function</type>
+        <definition>integer(kind=8) function catchemcore_mod::core_get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_get_memory_usage</name>
+        <qualifiedname>catchemcore_mod::core_get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get approximate memory usage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="712" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="713" bodyend="722"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a874f9d81f9ae07ca96744e35af62576d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::core_print_info</definition>
+        <argsstring>(this)</argsstring>
+        <name>core_print_info</name>
+        <qualifiedname>catchemcore_mod::core_print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print core information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="726" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="727" bodyend="746"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a9c616f521558d1cc5caac23ef24d8d13" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::builder_init</definition>
+        <argsstring>(this)</argsstring>
+        <name>builder_init</name>
+        <qualifiedname>catchemcore_mod::builder_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Initialize builder. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="754" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="755" bodyend="765"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a85c22c2bbe14bc5d44b7fb03111888a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>) function</type>
+        <definition>type(catchembuildertype) function catchemcore_mod::builder_with_config</definition>
+        <argsstring>(this, config_file)</argsstring>
+        <name>builder_with_config</name>
+        <qualifiedname>catchemcore_mod::builder_with_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <briefdescription>
+<para>Set configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="769" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="770" bodyend="776"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1af24dd6c8539ae34e63a53ec1a26ffec7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>) function</type>
+        <definition>type(catchembuildertype) function catchemcore_mod::builder_with_name</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>builder_with_name</name>
+        <qualifiedname>catchemcore_mod::builder_with_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Set core name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="780" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="781" bodyend="787"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a98401b9a6b774c7b39f0952e76fd8988" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>) function</type>
+        <definition>type(catchembuildertype) function catchemcore_mod::builder_with_grid</definition>
+        <argsstring>(this, nx, ny, nz, nsoil, nsoiltype, nsurftype)</argsstring>
+        <name>builder_with_grid</name>
+        <qualifiedname>catchemcore_mod::builder_with_grid</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <briefdescription>
+<para>Set grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="791" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="792" bodyend="805"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a223638c3da7a848d1421083a0da4be54" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>) function</type>
+        <definition>type(catchembuildertype) function catchemcore_mod::builder_with_verbose</definition>
+        <argsstring>(this)</argsstring>
+        <name>builder_with_verbose</name>
+        <qualifiedname>catchemcore_mod::builder_with_verbose</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Enable verbose output. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="809" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="810" bodyend="815"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a9613e787e3819eee319edc47cc1274be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>) function</type>
+        <definition>type(catchembuildertype) function catchemcore_mod::builder_skip_validation</definition>
+        <argsstring>(this)</argsstring>
+        <name>builder_skip_validation</name>
+        <qualifiedname>catchemcore_mod::builder_skip_validation</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Skip configuration validation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="819" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="820" bodyend="825"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemcore__mod_1a53bb7119279e8289237b9359504cbb0c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemcore_mod::builder_build</definition>
+        <argsstring>(this, core, rc)</argsstring>
+        <name>builder_build</name>
+        <qualifiedname>catchemcore_mod::builder_build</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(out)</type>
+          <defname>core</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Build the CATChem core. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="829" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="830" bodyend="886"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/CATChemCore_Mod.F90" line="39" column="1"/>
+  </compounddef>
+</doxygen>

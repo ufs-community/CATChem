@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="_virtual_column___mod_8_f90" kind="file" language="Fortran">
+    <compoundname>VirtualColumn_Mod.F90</compoundname>
+    <includes local="yes">virtualmet_type.inc</includes>
+    <includes local="yes">virtualmet_cleanup.inc</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>src/core/VirtualColumn_Mod.F90</label>
+        <link refid="_virtual_column___mod_8_f90"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>virtualmet_cleanup.inc</label>
+      </node>
+      <node id="2">
+        <label>virtualmet_type.inc</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structvirtualcolumn__mod_1_1virtualcolumntype" prot="public">virtualcolumn_mod::virtualcolumntype</innerclass>
+    <innernamespace refid="namespacevirtualcolumn__mod">virtualcolumn_mod</innernamespace>
+    <briefdescription>
+<para>Virtual column data container for CATChem processes with macro-generated meteorological fields. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>CATChem Development Team </para>
+</simplesect>
+<simplesect kind="date"><para>2025 </para>
+</simplesect>
+<simplesect kind="version"><para>3.0</para>
+</simplesect>
+This module provides a column-based data container that allows processes to work with vertical column data extracted from 3D grid fields. The VirtualColumn contains a VirtualMetType with direct pointers to meteorological fields, eliminating data copying overhead. The VirtualMetType definition is now generated automatically from MetState field definitions using macros. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"></codeline>
+<codeline lineno="16" refid="namespacevirtualcolumn__mod" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacevirtualcolumn__mod" kindref="compound">virtualcolumn_mod</ref></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceprecision__mod" kindref="compound">precision_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceerror__mod" kindref="compound">error_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>,<sp/><ref refid="namespaceerror__mod_1aed94460bd2b16e1ce0c046a0a57ede7a" kindref="member">cc_failure</ref></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">implicit<sp/>none</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">private</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">public</highlight><highlight class="normal"><sp/>::<sp/><ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>,<sp/>virtualmettype</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="preprocessor">#include<sp/>&quot;virtualmet_type.inc&quot;</highlight></codeline>
+<codeline lineno="28"><highlight class="preprocessor"></highlight></codeline>
+<codeline lineno="31" refid="structvirtualcolumn__mod_1_1virtualcolumntype" refkind="compound"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">type</highlight><highlight class="normal"><sp/>::<sp/><ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Meteorological<sp/>data<sp/>(pointers<sp/>managed<sp/>by<sp/>VirtualMetType)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(VirtualMetType)<sp/>::<sp/>met</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Chemical<sp/>and<sp/>emission<sp/>data<sp/>(still<sp/>use<sp/>arrays<sp/>for<sp/>modification)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>chem_data(:,:)</highlight></codeline>
+<codeline lineno="37"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>emis_data(:,:)</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Grid<sp/>position<sp/>and<sp/>metadata</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>grid_i<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>grid_j<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="42"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>lat<sp/>=<sp/>0.0_fp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="43"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>lon<sp/>=<sp/>0.0_fp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>area<sp/>=<sp/>0.0_fp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Dimensions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>nlev<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>nspec_chem<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>nspec_emis<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Status</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>is_valid<sp/>=<sp/>.false.<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>init<sp/>=&gt;<sp/>virtual_column_init</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_met<sp/>=&gt;<sp/>virtual_column_get_met</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_chem_field<sp/>=&gt;<sp/>virtual_column_get_chem_field</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_emis_field<sp/>=&gt;<sp/>virtual_column_get_emis_field</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>set_chem_field<sp/>=&gt;<sp/>virtual_column_set_chem_field</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>set_emis_field<sp/>=&gt;<sp/>virtual_column_set_emis_field</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_position<sp/>=&gt;<sp/>virtual_column_get_position</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_metadata<sp/>=&gt;<sp/>virtual_column_get_metadata</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>get_dimensions<sp/>=&gt;<sp/>virtual_column_get_dimensions</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>is_initialized<sp/>=&gt;<sp/>virtual_column_is_initialized</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">procedure</highlight><highlight class="normal"><sp/>::<sp/>cleanup<sp/>=&gt;<sp/>virtual_column_cleanup</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>type<sp/></highlight><highlight class="normal"><ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!=========================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>VirtualMetType<sp/>Implementation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!=========================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacevirtualcolumn__mod_1aceaf438323a4c3d635aeb72cdded85a5" kindref="member">virtual_met_cleanup</ref>(this)</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualMetType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Entering<sp/>virtual_met_cleanup&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">associated</highlight><highlight class="normal">(this%T))<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Cleaning<sp/>up<sp/>T,<sp/>associated<sp/>before<sp/>nullify&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>T<sp/>not<sp/>associated&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Generated<sp/>cleanup<sp/>code<sp/>from<sp/>MetState<sp/>field<sp/>definitions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;virtualmet_cleanup.inc&quot;</highlight></codeline>
+<codeline lineno="89"><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Exiting<sp/>virtual_met_cleanup&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacevirtualcolumn__mod_1aceaf438323a4c3d635aeb72cdded85a5" kindref="member">virtual_met_cleanup</ref></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!=========================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>VirtualColumnType<sp/>Implementation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!=========================================================================</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_init(this,<sp/>nlev,<sp/>nspec_chem,<sp/>nspec_emis,<sp/>grid_i,<sp/>grid_j,<sp/>lat,<sp/>lon,<sp/>area,<sp/>rc)</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>nlev,<sp/>nspec_chem,<sp/>nspec_emis</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>grid_i,<sp/>grid_j</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>lat,<sp/>lon,<sp/>area</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>rc</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>rc<sp/>=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Store<sp/>dimensions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nlev<sp/>=<sp/>nlev</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nspec_chem<sp/>=<sp/>nspec_chem</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nspec_emis<sp/>=<sp/>nspec_emis</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Store<sp/>position/metadata</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%grid_i<sp/>=<sp/>grid_i</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%grid_j<sp/>=<sp/>grid_j</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%lat<sp/>=<sp/>lat</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%lon<sp/>=<sp/>lon</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%area<sp/>=<sp/>area</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Allocate<sp/>meteorological<sp/>field<sp/>arrays<sp/>for<sp/>testing</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(nlev<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(.not.<sp/></highlight><highlight class="keyword">associated</highlight><highlight class="normal">(this%met%T))<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">allocate</highlight><highlight class="normal">(this%met%T(nlev))</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this%met%T<sp/>=<sp/>288.15_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>Initialize<sp/>with<sp/>default<sp/>temperature<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Allocate<sp/>chemical<sp/>and<sp/>emission<sp/>data<sp/>arrays</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(nlev<sp/>&gt;<sp/>0<sp/>.and.<sp/>nspec_chem<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">allocate</highlight><highlight class="normal">(this%chem_data(nlev,<sp/>nspec_chem),<sp/>stat=rc)</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rc<sp/>=<sp/><ref refid="namespaceerror__mod_1aed94460bd2b16e1ce0c046a0a57ede7a" kindref="member">cc_failure</ref></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this%chem_data<sp/>=<sp/>0.0_fp</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(nlev<sp/>&gt;<sp/>0<sp/>.and.<sp/>nspec_emis<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">allocate</highlight><highlight class="normal">(this%emis_data(nlev,<sp/>nspec_emis),<sp/>stat=rc)</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rc<sp/>=<sp/><ref refid="namespaceerror__mod_1aed94460bd2b16e1ce0c046a0a57ede7a" kindref="member">cc_failure</ref></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this%emis_data<sp/>=<sp/>0.0_fp</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%is_valid<sp/>=<sp/>.true.</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>rc<sp/>=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_init</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">virtual_column_get_met(this)<sp/></highlight><highlight class="keyword">result</highlight><highlight class="normal">(met_ptr)</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">target</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(VirtualMetType),<sp/></highlight><highlight class="keywordtype">pointer</highlight><highlight class="normal"><sp/>::<sp/>met_ptr</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>met_ptr<sp/>=&gt;<sp/>this%met</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">virtual_column_get_met</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">virtual_column_get_chem_field(this,<sp/>ispec,<sp/>k)<sp/></highlight><highlight class="keyword">result</highlight><highlight class="normal">(value)</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>ispec,<sp/>k</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>value</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%chem_data)<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>k<sp/>&gt;=<sp/>1<sp/>.and.<sp/>k<sp/>&lt;=<sp/>this%nlev<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ispec<sp/>&gt;=<sp/>1<sp/>.and.<sp/>ispec<sp/>&lt;=<sp/>this%nspec_chem)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"><sp/>=<sp/>this%chem_data(k,<sp/>ispec)</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"><sp/>=<sp/>0.0_fp</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">virtual_column_get_chem_field</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">virtual_column_get_emis_field(this,<sp/>ispec,<sp/>k)<sp/></highlight><highlight class="keyword">result</highlight><highlight class="normal">(value)</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>ispec,<sp/>k</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>value</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%emis_data)<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>k<sp/>&gt;=<sp/>1<sp/>.and.<sp/>k<sp/>&lt;=<sp/>this%nlev<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ispec<sp/>&gt;=<sp/>1<sp/>.and.<sp/>ispec<sp/>&lt;=<sp/>this%nspec_emis)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"><sp/>=<sp/>this%emis_data(k,<sp/>ispec)</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"><sp/>=<sp/>0.0_fp</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">virtual_column_get_emis_field</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_set_chem_field(this,<sp/>k,<sp/>ispec,<sp/>value)</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>k,<sp/>ispec</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>value</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%chem_data)<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>k<sp/>&gt;=<sp/>1<sp/>.and.<sp/>k<sp/>&lt;=<sp/>this%nlev<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ispec<sp/>&gt;=<sp/>1<sp/>.and.<sp/>ispec<sp/>&lt;=<sp/>this%nspec_chem)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this%chem_data(k,<sp/>ispec)<sp/>=<sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_set_chem_field</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_set_emis_field(this,<sp/>k,<sp/>ispec,<sp/>value)</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>k,<sp/>ispec</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>value</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%emis_data)<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>k<sp/>&gt;=<sp/>1<sp/>.and.<sp/>k<sp/>&lt;=<sp/>this%nlev<sp/>.and.<sp/>&amp;</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ispec<sp/>&gt;=<sp/>1<sp/>.and.<sp/>ispec<sp/>&lt;=<sp/>this%nspec_emis)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this%emis_data(k,<sp/>ispec)<sp/>=<sp/></highlight><highlight class="keywordtype">value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_set_emis_field</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_get_position(this,<sp/>grid_i,<sp/>grid_j)</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>grid_i,<sp/>grid_j</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>grid_i<sp/>=<sp/>this%grid_i</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>grid_j<sp/>=<sp/>this%grid_j</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_get_position</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_get_metadata(this,<sp/>lat,<sp/>lon,<sp/>area)</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>lat,<sp/>lon,<sp/>area</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>lat<sp/>=<sp/>this%lat</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>lon<sp/>=<sp/>this%lon</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>area<sp/>=<sp/>this%area</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_get_metadata</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_get_dimensions(this,<sp/>nlev,<sp/>nspec_chem,<sp/>nspec_emis)</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>nlev,<sp/>nspec_chem,<sp/>nspec_emis</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nlev<sp/>=<sp/>this%nlev</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nspec_chem<sp/>=<sp/>this%nspec_chem</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nspec_emis<sp/>=<sp/>this%nspec_emis</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_get_dimensions</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">virtual_column_is_initialized(this)<sp/></highlight><highlight class="keyword">result</highlight><highlight class="normal">(initialized)</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>initialized</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>initialized<sp/>=<sp/>this%is_valid</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">virtual_column_is_initialized</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">virtual_column_cleanup(this)</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(VirtualColumnType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"></highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Entering<sp/>virtual_column_cleanup&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Clean<sp/>up<sp/>meteorological<sp/>pointers</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">this%met%cleanup()</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Deallocate<sp/>chemical<sp/>and<sp/>emission<sp/>data</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%chem_data))<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Deallocating<sp/>chem_data&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">deallocate</highlight><highlight class="normal">(this%chem_data)</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">allocated</highlight><highlight class="normal">(this%emis_data))<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Deallocating<sp/>emis_data&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">deallocate</highlight><highlight class="normal">(this%emis_data)</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="269"><highlight class="normal"></highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nlev<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nspec_chem<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%nspec_emis<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>this%is_valid<sp/>=<sp/>.false.</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>print<sp/>*,<sp/></highlight><highlight class="stringliteral">&apos;[DEBUG]<sp/>Exiting<sp/>virtual_column_cleanup&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">virtual_column_cleanup</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>module<sp/></highlight><highlight class="normal"><ref refid="namespacevirtualcolumn__mod" kindref="compound">virtualcolumn_mod</ref></highlight></codeline>
+    </programlisting>
+    <location file="src/core/VirtualColumn_Mod.F90"/>
+  </compounddef>
+</doxygen>

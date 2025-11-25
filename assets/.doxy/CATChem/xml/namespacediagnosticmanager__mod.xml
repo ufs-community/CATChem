@@ -1,0 +1,1023 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacediagnosticmanager__mod" kind="namespace" language="Fortran">
+    <compoundname>diagnosticmanager_mod</compoundname>
+    <innerclass refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" prot="public">diagnosticmanager_mod::diagnosticmanagertype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1ad517318fe5a72254de438f792c54e45c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_init</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>diagnostic_manager_init</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), target</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ErrorManager for error handling </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="120" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="121" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a5d2ebac77242e1d61b6c13e0ec7ab4de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_finalize</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="169" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="170" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1ac6613b3620b2f2c8d096ae63437d6b5e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_reset</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_reset</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reset diagnostic manager state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="202" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="203" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1ad74e58e41c4ffc32a1f7074e5c160aa7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_register_process</definition>
+        <argsstring>(this, process_name, rc)</argsstring>
+        <name>diagnostic_manager_register_process</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_register_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register a process with the diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process to register </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="227" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="228" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a231133b64be151edb44f9a7cbba0b3c4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_get_process_registry</definition>
+        <argsstring>(this, process_name, registry, rc)</argsstring>
+        <name>diagnostic_manager_get_process_registry</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_get_process_registry</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticregistrytype" kindref="compound">diagnosticregistrytype</ref>), intent(out), pointer</type>
+          <defname>registry</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic registry for a specific process (returns pointer to internal registry) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">registry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the diagnostic registry </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="267" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="268" bodyend="286"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1acb0f930a6d8031b86be290bf2793780e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_remove_process</definition>
+        <argsstring>(this, process_name, rc)</argsstring>
+        <name>diagnostic_manager_remove_process</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_remove_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Remove a process from the diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process to remove </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="294" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="295" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1aeb88f340b17b931d6f5f303172546080" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_list_processes</definition>
+        <argsstring>(this, process_list, num_processes, rc)</argsstring>
+        <name>diagnostic_manager_list_processes</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_list_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>process_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>num_processes</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>List all registered processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">process_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of process names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">num_processes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of processes </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="329" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="330" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a81799009494f044204faf5b96259974d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_configure_output</definition>
+        <argsstring>(this, rc, output_prefix, output_directory, output_frequency)</argsstring>
+        <name>diagnostic_manager_configure_output</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_configure_output</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>output_prefix</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>output_directory</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>output_frequency</defname>
+        </param>
+        <briefdescription>
+<para>Configure diagnostic output settings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">output_prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional output file prefix </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">output_directory</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional output directory </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">output_frequency</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional output frequency in timesteps </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="357" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="359" bodyend="378"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a41b04a33ff06944a82156e8cae818ca0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_set_output_frequency</definition>
+        <argsstring>(this, frequency, rc)</argsstring>
+        <name>diagnostic_manager_set_output_frequency</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_set_output_frequency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>frequency</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set output frequency. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frequency</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output frequency in timesteps </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="386" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="387" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2568ff7921cac4d5be773f672470d699" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_enable_collection</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_enable_collection</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_enable_collection</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Enable diagnostic collection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="405" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="406" bodyend="411"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2ffa04e57fd5b046ad0e5495730de461" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_disable_collection</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_disable_collection</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_disable_collection</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Disable diagnostic collection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="418" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="419" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a0647fc4a45aa26516ffd09ac3e947e8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_collect_all</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_collect_all</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_collect_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Collect diagnostics from all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="431" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="432" bodyend="472"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a802513d0b4b7ae42058dfb5d2603f063" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_collect_process</definition>
+        <argsstring>(this, process_name, rc)</argsstring>
+        <name>diagnostic_manager_collect_process</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_collect_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Collect diagnostics from a specific process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="480" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="481" bodyend="557"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2ab758850306ca02d59c1e979a810e6e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_get_field_value</definition>
+        <argsstring>(this, process_name, field_name, scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, data_type, description, units, rc)</argsstring>
+        <name>diagnostic_manager_get_field_value</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_get_field_value</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out), optional</type>
+          <defname>scalar_value</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), optional, pointer</type>
+          <defname>array_1d_ptr</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(out), optional, pointer</type>
+          <defname>array_2d_ptr</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, pointer</type>
+          <defname>array_3d_ptr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>data_type</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out), optional</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic field value for validation purposes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">scalar_value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scalar value (for scalar diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">array_1d_ptr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to 1D array (for 1D diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">array_2d_ptr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to 2D array (for 2D diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">array_3d_ptr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to 3D array (for 3D diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">data_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of the diagnostic data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional field description for NetCDF metadata </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional field units for NetCDF metadata </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="573" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="576" bodyend="671"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a508ec86e43fa870068ee0a09e5c1391c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_write_output</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_write_output</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_write_output</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Write diagnostic output. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="678" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="679" bodyend="697"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a6ca1dcc880693a1cbeea867422ae0b11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_advance_timestep</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_advance_timestep</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_advance_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Advance timestep counter. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="704" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="705" bodyend="710"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a3340d2a4adc201a77788ae51576b9ef9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function diagnosticmanager_mod::diagnostic_manager_get_total_diagnostics</definition>
+        <argsstring>(this)</argsstring>
+        <name>diagnostic_manager_get_total_diagnostics</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_get_total_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get total number of diagnostics across all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>total_diagnostics Total number of registered diagnostics </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="717" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="718" bodyend="728"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a33bae4a47818981b5588d1e6cc68b9a2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>diagnostic_manager_print_summary</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print diagnostic manager summary. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="734" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="735" bodyend="754"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacediagnosticmanager__mod_1a72e9a48c6a36c72ad66e42c38e73a838" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine diagnosticmanager_mod::diagnostic_manager_validate_state</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>diagnostic_manager_validate_state</name>
+        <qualifiedname>diagnosticmanager_mod::diagnostic_manager_validate_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate diagnostic manager state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticManagerType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="761" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="762" bodyend="779"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/DiagnosticManager_Mod.F90" line="40" column="1"/>
+  </compounddef>
+</doxygen>

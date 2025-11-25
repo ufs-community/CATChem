@@ -1,0 +1,99 @@
+
+# Modules
+
+
+Here is a list of all modules:
+
+
+* [**CATChem Main Group**](group__catchem.md) _Main CATChem atmospheric chemistry modeling system._ 
+    
+
+    * [**CATChem API**](group__catchem__api.md) _Core CATChem API functions and data types._ 
+        
+
+
+
+
+
+
+
+    * [**CATChem Core Modules**](group__core__modules.md) _Core modules and data types for CATChem._ 
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    * [**CATChem Process Modules**](group__process__modules.md) _All atmospheric chemistry process modules._ 
+        
+
+
+
+
+
+
+        * [**CATChem Dry Deposition Process**](group__catchem__drydep__process.md) _Atmospheric dry deposition calculations._ 
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        * [**CATChem Plume Rise Process**](group__catchem__plumerise__process.md) _Point source emission vertical distribution._ 
+
+
+
+        * [**CATChem Sea Salt Process**](group__catchem__seasalt__process.md) _Sea salt emission and transport processes._ 
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

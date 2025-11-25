@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structseasaltcommon__mod_1_1seasaltschemegong03config" kind="type" language="Fortran" prot="public">
+    <compoundname>seasaltcommon_mod::seasaltschemegong03config</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a7d8cae5fe40f69f6ac1e57997a655b83" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) seasaltcommon_mod::seasaltschemegong03config::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::scheme_name</qualifiedname>
+        <initializer>= &apos;gong03&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="102" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a9a6193c01d8b09d0f2ee826bc4319f5e" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) seasaltcommon_mod::seasaltschemegong03config::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::description</qualifiedname>
+        <initializer>= &apos;Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="103" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1ae4ae60f826abd6ae95c5a2c8f4ac2e08" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) seasaltcommon_mod::seasaltschemegong03config::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::author</qualifiedname>
+        <initializer>= &apos;Barry Baker&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="104" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a13e0e8a46a605885a3538044f8f8e5ff" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) seasaltcommon_mod::seasaltschemegong03config::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="105" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1ad47dc11b6192f96e35f798437c89c283" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical seasaltcommon_mod::seasaltschemegong03config::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::affects_full_column</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="108" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1ac74e6b87778927b33333aa6503f69f66" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) seasaltcommon_mod::seasaltschemegong03config::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="111" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4af6e289347ef8b4701e94f640c385ff" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical seasaltcommon_mod::seasaltschemegong03config::weibull_flag</definition>
+        <argsstring></argsstring>
+        <name>weibull_flag</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::weibull_flag</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="112" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1abd6eb6a1992211a21e33ac99e6b63389" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer seasaltcommon_mod::seasaltschemegong03config::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::n_required_met_fields</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="115" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4658ad90b9fab212faacb8f292ec0672" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(5)</type>
+        <definition>character(len=32), dimension(5) seasaltcommon_mod::seasaltschemegong03config::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="116" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1a69068c5439345867e813f7e11a0b19b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public seasaltcommon_mod::seasaltschemegong03config::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong03config" kindref="compound">seasaltschemegong03config</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gong03 scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="119" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegong03config_1aeb6e73b52c40be00525a18abe45e8709" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public seasaltcommon_mod::seasaltschemegong03config::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegong03config::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong03config" kindref="compound">seasaltschemegong03config</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gong03 scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="120" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for gong03 scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="99" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="99" bodyend="121"/>
+    <listofallmembers>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1ad47dc11b6192f96e35f798437c89c283" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>affects_full_column</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a13e0e8a46a605885a3538044f8f8e5ff" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>algorithm_type</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1ae4ae60f826abd6ae95c5a2c8f4ac2e08" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>author</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a9a6193c01d8b09d0f2ee826bc4319f5e" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>description</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1aeb6e73b52c40be00525a18abe45e8709" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>finalize</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1abd6eb6a1992211a21e33ac99e6b63389" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>n_required_met_fields</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4658ad90b9fab212faacb8f292ec0672" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>required_met_fields</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1ac74e6b87778927b33333aa6503f69f66" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>scale_factor</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a7d8cae5fe40f69f6ac1e57997a655b83" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>scheme_name</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a69068c5439345867e813f7e11a0b19b8" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>validate</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4af6e289347ef8b4701e94f640c385ff" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong03config</scope><name>weibull_flag</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

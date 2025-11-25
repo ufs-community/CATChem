@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1runphasetype" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::runphasetype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1a2585f15c5003d2a667e9aebf983faec8" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::runphasetype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>configmanager_mod::runphasetype::name</qualifiedname>
+        <briefdescription>
+<para>Phase name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="229" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="229" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1abdb851b9eee45120bc086f3007f4dfb9" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::runphasetype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>configmanager_mod::runphasetype::description</qualifiedname>
+        <briefdescription>
+<para>Phase description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="230" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="230" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1ad5cba80744d6fa417d83b95c03578e77" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) configmanager_mod::runphasetype::frequency</definition>
+        <argsstring></argsstring>
+        <name>frequency</name>
+        <qualifiedname>configmanager_mod::runphasetype::frequency</qualifiedname>
+        <briefdescription>
+<para>Run frequency (e.g., &apos;every timestep&apos;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="231" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="231" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1a3880eb57d6998b31ce8ad688307dc6fd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runphasetype::subcycling</definition>
+        <argsstring></argsstring>
+        <name>subcycling</name>
+        <qualifiedname>configmanager_mod::runphasetype::subcycling</qualifiedname>
+        <briefdescription>
+<para>Number of subcycles for the phase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="232" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="232" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1aa5cf157a1fc0546a673189db06c03350" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runphasetype::num_processes</definition>
+        <argsstring></argsstring>
+        <name>num_processes</name>
+        <qualifiedname>configmanager_mod::runphasetype::num_processes</qualifiedname>
+        <briefdescription>
+<para>Number of processes in this phase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="233" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="233" bodyend="233"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1aea635807f0bc4363c7fed6c8986c2818" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1processconfigtype" kindref="compound">processconfigtype</ref>), dimension(:), allocatable</type>
+        <definition>type(processconfigtype), dimension(:), allocatable configmanager_mod::runphasetype::processes</definition>
+        <argsstring></argsstring>
+        <name>processes</name>
+        <qualifiedname>configmanager_mod::runphasetype::processes</qualifiedname>
+        <briefdescription>
+<para>Array of process configurations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="234" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="234" bodyend="234"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Run phase configuration for phase-based execution Contains the phase name, description, frequency, and the list of processes in the phase. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>configmanager_mod::processconfigtype</label>
+        <link refid="structconfigmanager__mod_1_1processconfigtype"/>
+      </node>
+      <node id="1">
+        <label>configmanager_mod::runphasetype</label>
+        <link refid="structconfigmanager__mod_1_1runphasetype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>processes</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ConfigManager_Mod.F90" line="228" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="228" bodyend="235"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1abdb851b9eee45120bc086f3007f4dfb9" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>description</name></member>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1ad5cba80744d6fa417d83b95c03578e77" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>frequency</name></member>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1a2585f15c5003d2a667e9aebf983faec8" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>name</name></member>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1aa5cf157a1fc0546a673189db06c03350" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>num_processes</name></member>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1aea635807f0bc4363c7fed6c8986c2818" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>processes</name></member>
+      <member refid="structconfigmanager__mod_1_1runphasetype_1a3880eb57d6998b31ce8ad688307dc6fd" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>subcycling</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdrydepcommon__mod_1_1drydepschemezhangconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>drydepcommon_mod::drydepschemezhangconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a375bde861bb5fdf540ab364717f04413" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemezhangconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;zhang&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="141" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a44293be5b1b9c497189011835d4098df" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) drydepcommon_mod::drydepschemezhangconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::description</qualifiedname>
+        <initializer>= &apos;Zhang et al. [2001] scheme with Emerson et al. [2020] updates&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="142" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a4bd533fb4d93d17e3d2f8d136cc651ef" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemezhangconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="143" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a61e06a54fcc0defa2cecfecf51ebe1cc" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) drydepcommon_mod::drydepschemezhangconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="144" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="144" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ad8a912a205cfa5897b1136a1b1301219" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemezhangconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::affects_full_column</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="147" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="147" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1afb384a741e6dfb3083377d865548d398" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepschemezhangconfig::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="150" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="150" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2bbff822beb6c562eaa514320885c906" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer drydepcommon_mod::drydepschemezhangconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 13</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="153" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="153" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ac35dc3e1a8363a8fe2595da98dc87250" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(13)</type>
+        <definition>character(len=32), dimension(13) drydepcommon_mod::drydepschemezhangconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="154" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="154" bodyend="154"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2cf11dcdb5b76147a6a348c40d723220" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemezhangconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" kindref="compound">drydepschemezhangconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate zhang scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="157" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a7c750a1149c53487e7540a5370102a96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemezhangconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" kindref="compound">drydepschemezhangconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize zhang scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="158" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for zhang scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="138" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="138" bodyend="159"/>
+    <listofallmembers>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ad8a912a205cfa5897b1136a1b1301219" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>affects_full_column</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a61e06a54fcc0defa2cecfecf51ebe1cc" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>algorithm_type</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a4bd533fb4d93d17e3d2f8d136cc651ef" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>author</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a44293be5b1b9c497189011835d4098df" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>description</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a7c750a1149c53487e7540a5370102a96" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>finalize</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2bbff822beb6c562eaa514320885c906" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ac35dc3e1a8363a8fe2595da98dc87250" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1afb384a741e6dfb3083377d865548d398" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>scale_factor</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a375bde861bb5fdf540ab364717f04413" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>scheme_name</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2cf11dcdb5b76147a6a348c40d723220" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

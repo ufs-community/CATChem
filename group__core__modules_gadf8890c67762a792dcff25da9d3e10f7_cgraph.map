@@ -1,7 +1,0 @@
-<map id="error_mod::cc_error" name="error_mod::cc_error">
-<area shape="rect" id="Node000001" title="CC_Error." alt="" coords="5,5,155,31"/>
-<area shape="rect" id="Node000002" href="$group__core__modules.html#ga7a783f53ce55847f0bb02d73fdcf7bef" title="Print a string in multiple lines." alt="" coords="203,5,415,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,15,189,15,189,21,155,21"/>
-<area shape="rect" id="Node000003" href="$group__core__modules.html#ga475a6d195c345c6aae7087b6f83520cf" title="Count the number of times a character appears in a string." alt="" coords="463,5,627,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="415,15,449,15,449,21,415,21"/>
-</map>

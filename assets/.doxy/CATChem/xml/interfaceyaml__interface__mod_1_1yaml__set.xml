@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1yaml__set" kind="interface" language="Fortran" prot="public">
+    <compoundname>yaml_interface_mod::yaml_set</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__set_1a1ec524c7876055a69878564082db5b67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_set::yaml_set_string_generic</definition>
+        <argsstring>(node, key, value, rc)</argsstring>
+        <name>yaml_set_string_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_set::yaml_set_string_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Generic string setter with return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="620" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="621" bodyend="632"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__set_1ad1ff7ffbbe691c4036b301f7ca84ca6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_set::yaml_set_integer_generic</definition>
+        <argsstring>(node, key, value, rc)</argsstring>
+        <name>yaml_set_integer_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_set::yaml_set_integer_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Generic integer setter with return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="636" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="637" bodyend="648"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__set_1af2cb59c4496e7c454b3f2c04724e5965" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_set::yaml_set_logical_generic</definition>
+        <argsstring>(node, key, value, rc)</argsstring>
+        <name>yaml_set_logical_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_set::yaml_set_logical_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Generic logical setter with return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="668" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="669" bodyend="680"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__set_1afb0a5f38dd494071ed74d124b32fb1b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_set::yaml_set_real_dp_generic</definition>
+        <argsstring>(node, key, value, rc)</argsstring>
+        <name>yaml_set_real_dp_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_set::yaml_set_real_dp_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(kind=fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Generic double precision real setter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="652" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="653" bodyend="664"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Generic interface for setting values in YAML This allows uniform syntax: call yaml_set(node, key, value, rc) for any supported data type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="54" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="54" bodyend="58"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__set_1ad1ff7ffbbe691c4036b301f7ca84ca6c" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_set</scope><name>yaml_set_integer_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__set_1af2cb59c4496e7c454b3f2c04724e5965" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_set</scope><name>yaml_set_logical_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__set_1afb0a5f38dd494071ed74d124b32fb1b7" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_set</scope><name>yaml_set_real_dp_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__set_1a1ec524c7876055a69878564082db5b67" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_set</scope><name>yaml_set_string_generic</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

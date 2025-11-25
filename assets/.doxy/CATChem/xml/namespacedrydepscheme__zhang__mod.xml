@@ -1,0 +1,615 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedrydepscheme__zhang__mod" kind="namespace" language="Fortran">
+    <compoundname>drydepscheme_zhang_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a7e7f43f1ae931e69bd2aa36fbcccc79c" prot="private" static="no" mutable="no">
+        <type>integer, dimension(11)</type>
+        <definition>integer, dimension(11) drydepscheme_zhang_mod::lucindex_gc</definition>
+        <argsstring></argsstring>
+        <name>lucindex_gc</name>
+        <qualifiedname>drydepscheme_zhang_mod::lucindex_gc</qualifiedname>
+        <initializer>= (/12, 4, 1, 7,10, 2, 9, 8,11,15,14/)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="68" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a061702d766dff5ccd6571cee4db29d61" prot="private" static="no" mutable="no">
+        <type>integer, dimension(20)</type>
+        <definition>integer, dimension(20) drydepscheme_zhang_mod::lucindex_noah</definition>
+        <argsstring></argsstring>
+        <name>lucindex_noah</name>
+        <qualifiedname>drydepscheme_zhang_mod::lucindex_noah</qualifiedname>
+        <initializer>= (/ 1, 2, 3, 4, 5, 10, 10, 10, 10, 6, 11, 7, 15, 7, 12, 8, 14, 9, 9, 9 /)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="70" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a9c27d6dbf486238c1201dc772e9a2b32" prot="private" static="no" mutable="no">
+        <type>integer, dimension(17)</type>
+        <definition>integer, dimension(17) drydepscheme_zhang_mod::lucindex_igbp</definition>
+        <argsstring></argsstring>
+        <name>lucindex_igbp</name>
+        <qualifiedname>drydepscheme_zhang_mod::lucindex_igbp</qualifiedname>
+        <initializer>= (/ 1, 2, 3, 4, 5, 10, 10, 10, 10, 6, 11, 7, 15, 7, 12, 8, 14 /)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="72" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a1f0bc94b2b5203760d3a0d9e31e781e0" prot="private" static="no" mutable="no">
+        <type>integer, dimension(74)</type>
+        <definition>integer, dimension(74) drydepscheme_zhang_mod::idep_iolson</definition>
+        <argsstring></argsstring>
+        <name>idep_iolson</name>
+        <qualifiedname>drydepscheme_zhang_mod::idep_iolson</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="75" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1aa8effaace19506cce394e6ed7b8075d8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter drydepscheme_zhang_mod::two_thirds</definition>
+        <argsstring></argsstring>
+        <name>two_thirds</name>
+        <qualifiedname>drydepscheme_zhang_mod::two_thirds</qualifiedname>
+        <initializer>= 2.0_fp / 3.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="79" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a89a9dc14a781593ab408eb28ed16ed98" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(15)</type>
+        <definition>real(fp), dimension(15) drydepscheme_zhang_mod::alpha</definition>
+        <argsstring></argsstring>
+        <name>alpha</name>
+        <qualifiedname>drydepscheme_zhang_mod::alpha</qualifiedname>
+        <initializer>= (/   1.0e+0_fp,   0.6e+0_fp,  1.1e+0_fp,       0.8e+0_fp,   0.8e+0_fp,  1.2e+0_fp,       1.2e+0_fp,  50.0e+0_fp, 50.0e+0_fp,       1.3e+0_fp,   2.0e+0_fp, 50.0e+0_fp,       100.0e+0_fp, 100.0e+0_fp,  1.5e+0_fp  /)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="90" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="90" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1ac865c6454d84d74ab2b83b6c6abdaef7" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(15, 5)</type>
+        <definition>real(fp), dimension(15,5) drydepscheme_zhang_mod::a</definition>
+        <argsstring></argsstring>
+        <name>a</name>
+        <qualifiedname>drydepscheme_zhang_mod::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="116" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1ac5211a7bf190aaf4d1519f76e0fb229b" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable, save</type>
+        <definition>real(fp), dimension(:), allocatable, save drydepscheme_zhang_mod::seasalt_lower_bin</definition>
+        <argsstring></argsstring>
+        <name>seasalt_lower_bin</name>
+        <qualifiedname>drydepscheme_zhang_mod::seasalt_lower_bin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a3be5336c702550fbc0b4957cb9566202" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable, save</type>
+        <definition>real(fp), dimension(:), allocatable, save drydepscheme_zhang_mod::seasalt_upper_bin</definition>
+        <argsstring></argsstring>
+        <name>seasalt_upper_bin</name>
+        <qualifiedname>drydepscheme_zhang_mod::seasalt_upper_bin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1af373efa5ca25af4f5b359c5e2db6b2c0" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable, save</type>
+        <definition>real(fp), dimension    (:    ), allocatable, save drydepscheme_zhang_mod::dmid</definition>
+        <argsstring></argsstring>
+        <name>dmid</name>
+        <qualifiedname>drydepscheme_zhang_mod::dmid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="145" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="145" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a460c3ae5c7840eabc28fcd9e321f5d25" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable, save</type>
+        <definition>real(fp), dimension  (:    ), allocatable, save drydepscheme_zhang_mod::salt_v</definition>
+        <argsstring></argsstring>
+        <name>salt_v</name>
+        <qualifiedname>drydepscheme_zhang_mod::salt_v</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="146" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="146" bodyend="146"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedrydepscheme__zhang__mod_1a8e394283c65463b81d368143ff13796b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine public drydepscheme_zhang_mod::compute_zhang</definition>
+        <argsstring>(num_layers, num_species, params, bxheight, frlanduse, iland, isice, issnow, lucname, obk, ps, rh, ts, tstep, u10m, ustar, v10m, z0, species_mw_g, species_radius, species_density, species_short_name, species_dd_hstar, species_dd_dvzaersnow, species_dd_dvzminval_snow, species_dd_dvzminval_land, species_lower_radius, species_upper_radius, species_is_dust, species_is_seasalt, species_conc, species_tendencies, is_gas, drydep_con_per_species, drydep_velocity_per_species, diagnostic_species_id)</argsstring>
+        <name>compute_zhang</name>
+        <qualifiedname>drydepscheme_zhang_mod::compute_zhang</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" kindref="compound">drydepschemezhangconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>bxheight</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>frlanduse</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>iland</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>isice</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>issnow</defname>
+        </param>
+        <param>
+          <type>character(len=255), intent(in)</type>
+          <defname>lucname</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>obk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ps</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>rh</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ts</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>z0</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>character(len=255), dimension(num_species), intent(in)</type>
+          <defname>species_short_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_hstar</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzaersnow</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzminval_snow</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzminval_land</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_lower_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_upper_radius</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>species_is_dust</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>species_is_seasalt</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>is_gas</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_con_per_species</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_velocity_per_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for zhang scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing Zhang et al. [2001] scheme with Emerson et al. [2020] updates. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bxheight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>BXHEIGHT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frlanduse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRLANDUSE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">iland</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ILAND field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>IsIce field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">issnow</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>IsSnow field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lucname</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LUCNAME field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">obk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>OBK field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>RH field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>TS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>U10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>V10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z0 field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_con_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition concentration per species [ug/kg or ppm] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_velocity_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition velocity [m/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="182" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="220" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepscheme__zhang__mod_1a0eccc87f49cc807efdb55b39078336ca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_zhang_mod::get_seasalt_bin_boundaries</definition>
+        <argsstring>(num_species, is_seasalt, lower_radius, upper_radius, lower_bin, upper_bin)</argsstring>
+        <name>get_seasalt_bin_boundaries</name>
+        <qualifiedname>drydepscheme_zhang_mod::get_seasalt_bin_boundaries</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>is_seasalt</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>lower_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>upper_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>lower_bin</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>upper_bin</defname>
+        </param>
+        <briefdescription>
+<para>Extract and sort seasalt bin boundaries from species properties. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine identifies seasalt species and extracts their lower and upper radius boundaries, then sorts them in ascending order using the same approach as Find_SeaSalt_Bin in ChemState_Mod.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">is_seasalt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical array indicating which species are seasalt </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lower_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Lower radius bounds for each species [μm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">upper_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Upper radius bounds for each species [μm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lower_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sorted lower bin boundaries [μm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">upper_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sorted upper bin boundaries [μm] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="495" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="497" bodyend="580"/>
+      </memberdef>
+      <member refid="group__catchem__drydep__process_1ga309028e0827b2371d5bbdae3ca9fca4b" kind="function"><name>aero_sfcrsii</name></member>
+      <member refid="group__catchem__drydep__process_1gaa78bfe87f992c4ec644049efc0b3ee94" kind="function"><name>new_diam_den</name></member>
+      <member refid="group__catchem__drydep__process_1ga31f90ce328557eb96b3975cd67d96399" kind="function"><name>init_weightss</name></member>
+      <member refid="group__catchem__drydep__process_1ga6f1331fa961eb4ad5ee1e37d4150933d" kind="function"><name>diffg</name></member>
+      <member refid="group__catchem__drydep__process_1ga7aa56e85f6ccbecfde9bfd243e48ac75" kind="function"><name>wesely_ra_rb</name></member>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="33" column="1"/>
+  </compounddef>
+</doxygen>

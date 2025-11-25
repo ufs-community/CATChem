@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structseasaltcommon__mod_1_1seasaltschemegeos12config" kind="type" language="Fortran" prot="public">
+    <compoundname>seasaltcommon_mod::seasaltschemegeos12config</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1aca3dc97f8d9cd369b386a3dda479df71" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) seasaltcommon_mod::seasaltschemegeos12config::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::scheme_name</qualifiedname>
+        <initializer>= &apos;geos12&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="129" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a690e1d2313e847cf86b9c02caac0b00d" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) seasaltcommon_mod::seasaltschemegeos12config::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::description</qualifiedname>
+        <initializer>= &apos;GEOS-Chem 2012 sea salt emission scheme with observational constraints&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="130" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a005fe6c5ab4c7c4bf9e705150169b279" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) seasaltcommon_mod::seasaltschemegeos12config::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::author</qualifiedname>
+        <initializer>= &apos;Barry Baker&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="131" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a4d039e1695eb1d5b5d40c6ac5e8437a2" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) seasaltcommon_mod::seasaltschemegeos12config::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="132" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a9e4f5ad560529413159827f445ff1530" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical seasaltcommon_mod::seasaltschemegeos12config::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::affects_full_column</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="135" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="135" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a2a1a63ec35c4edb2eb1bde0926409b5e" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) seasaltcommon_mod::seasaltschemegeos12config::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="138" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a73c4862c7d9407d008c301dc8a0a4c07" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer seasaltcommon_mod::seasaltschemegeos12config::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::n_required_met_fields</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="141" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a727e73e134c8d7bdc5835e7d91dad415" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(4)</type>
+        <definition>character(len=32), dimension(4) seasaltcommon_mod::seasaltschemegeos12config::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="142" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="142" bodyend="142"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a77a4e2aefa9805da1fc53273a7fcce57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public seasaltcommon_mod::seasaltschemegeos12config::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate geos12 scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="145" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a459bf5d9825a6c3f8e68df5b3f90d2b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public seasaltcommon_mod::seasaltschemegeos12config::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>seasaltcommon_mod::seasaltschemegeos12config::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize geos12 scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="146" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="146" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for geos12 scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="126" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="126" bodyend="147"/>
+    <listofallmembers>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a9e4f5ad560529413159827f445ff1530" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>affects_full_column</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a4d039e1695eb1d5b5d40c6ac5e8437a2" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>algorithm_type</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a005fe6c5ab4c7c4bf9e705150169b279" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>author</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a690e1d2313e847cf86b9c02caac0b00d" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>description</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a459bf5d9825a6c3f8e68df5b3f90d2b2" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>finalize</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a73c4862c7d9407d008c301dc8a0a4c07" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>n_required_met_fields</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a727e73e134c8d7bdc5835e7d91dad415" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>required_met_fields</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a2a1a63ec35c4edb2eb1bde0926409b5e" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>scale_factor</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1aca3dc97f8d9cd369b386a3dda479df71" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>scheme_name</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a77a4e2aefa9805da1fc53273a7fcce57" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegeos12config</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

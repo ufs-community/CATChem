@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1yaml__get" kind="interface" language="Fortran" prot="public">
+    <compoundname>yaml_interface_mod::yaml_get</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get_1ae98727d5435ffbbb01d783913af86a72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get::yaml_get_string_generic</definition>
+        <argsstring>(node, key, value, rc, default_value)</argsstring>
+        <name>yaml_get_string_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get::yaml_get_string_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Generic string getter with optional default and return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="484" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="485" bodyend="506"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get_1ab5ab1bdb2a1c86125c7b6fecc769e353" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get::yaml_get_integer_generic</definition>
+        <argsstring>(node, key, value, rc, default_value)</argsstring>
+        <name>yaml_get_integer_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get::yaml_get_integer_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Generic integer getter with optional default and return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="510" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="511" bodyend="532"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get_1a6bc7b6c5c9d549c5987eb3cdc2067290" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get::yaml_get_logical_generic</definition>
+        <argsstring>(node, key, value, rc, default_value)</argsstring>
+        <name>yaml_get_logical_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get::yaml_get_logical_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Generic logical getter with optional default and return code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="594" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="595" bodyend="616"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get_1a172dc9dca5643c9cd7ff3001e81d5c2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get::yaml_get_real_sp_generic</definition>
+        <argsstring>(node, key, value, rc, default_value)</argsstring>
+        <name>yaml_get_real_sp_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get::yaml_get_real_sp_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(kind=real32), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>real(kind=real32), intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Generic single precision real getter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="536" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="537" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get_1a71abd9bf203bc79eb61d9398a098622f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get::yaml_get_real_dp_generic</definition>
+        <argsstring>(node, key, value, rc, default_value)</argsstring>
+        <name>yaml_get_real_dp_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get::yaml_get_real_dp_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(kind=real64), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>real(kind=real64), intent(in), optional</type>
+          <defname>default_value</defname>
+        </param>
+        <briefdescription>
+<para>Generic double precision real getter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="565" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="566" bodyend="590"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Generic interface for getting values from YAML This allows uniform syntax: call yaml_get(node, key, value, rc) for any supported data type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="43" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="43" bodyend="48"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get_1ab5ab1bdb2a1c86125c7b6fecc769e353" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get</scope><name>yaml_get_integer_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get_1a6bc7b6c5c9d549c5987eb3cdc2067290" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get</scope><name>yaml_get_logical_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get_1a71abd9bf203bc79eb61d9398a098622f" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get</scope><name>yaml_get_real_dp_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get_1a172dc9dca5643c9cd7ff3001e81d5c2c" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get</scope><name>yaml_get_real_sp_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get_1ae98727d5435ffbbb01d783913af86a72" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get</scope><name>yaml_get_string_generic</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

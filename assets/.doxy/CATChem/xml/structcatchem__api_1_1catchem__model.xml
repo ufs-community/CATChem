@@ -1,0 +1,924 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__api_1_1catchem__model" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_api::catchem_model</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a34e972969b838c6c55a507ffc608f933" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>)</type>
+        <definition>type(catchemcoretype) catchem_api::catchem_model::core</definition>
+        <argsstring></argsstring>
+        <name>core</name>
+        <qualifiedname>catchem_api::catchem_model::core</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="61" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1af4b07afe2c6263b36c1a16b3b90927f3" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_api::catchem_model::initialized</definition>
+        <argsstring></argsstring>
+        <name>initialized</name>
+        <qualifiedname>catchem_api::catchem_model::initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="64" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a0a568a3aa6c1feab8f4f7bf4f5983591" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_api::catchem_model::grid_setup</definition>
+        <argsstring></argsstring>
+        <name>grid_setup</name>
+        <qualifiedname>catchem_api::catchem_model::grid_setup</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="65" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a18b01464d1e21d419b25cee357dbbc42" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_api::catchem_model::enable_run_phase</definition>
+        <argsstring></argsstring>
+        <name>enable_run_phase</name>
+        <qualifiedname>catchem_api::catchem_model::enable_run_phase</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="66" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a0755893e05d0e3bc9e04d30c8c42e2c1" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) catchem_api::catchem_model::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>catchem_api::catchem_model::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="67" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a1297a07b431248097315b2c9edb6bee4" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable, public</type>
+        <definition>character(len=64), dimension(:), allocatable, public catchem_api::catchem_model::required_fields</definition>
+        <argsstring></argsstring>
+        <name>required_fields</name>
+        <qualifiedname>catchem_api::catchem_model::required_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="68" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1aa6a136ea7a888c77ba9fad803dcfc825" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>)</type>
+        <definition>type(errormanagertype) catchem_api::catchem_model::error_manager</definition>
+        <argsstring></argsstring>
+        <name>error_manager</name>
+        <qualifiedname>catchem_api::catchem_model::error_manager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="69" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1a37b0b50bc5de44b12a0d1a20d2066798" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchem_api::catchem_model::nx</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="72" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1ac240103b200045c7ceb274f0a87bada5" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchem_api::catchem_model::ny</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="72" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1ac6cd412ce54adf39239bb2150943b651" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchem_api::catchem_model::nz</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="72" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1ab9c341ca549b99d81b67ada2ce530ea4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::nsoil</definition>
+        <argsstring></argsstring>
+        <name>nsoil</name>
+        <qualifiedname>catchem_api::catchem_model::nsoil</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="73" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1ac20f377ac1ca7ed708de47045d63baf8" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::nsoiltype</definition>
+        <argsstring></argsstring>
+        <name>nsoiltype</name>
+        <qualifiedname>catchem_api::catchem_model::nsoiltype</qualifiedname>
+        <initializer>= 19</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="73" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__api_1_1catchem__model_1af78220dc343f9469ae774a25252de562" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_api::catchem_model::nsurftype</definition>
+        <argsstring></argsstring>
+        <name>nsurftype</name>
+        <qualifiedname>catchem_api::catchem_model::nsurftype</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="73" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="73" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a7d7f4e12d3b8e136843412bba5f976d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::initialize</definition>
+        <argsstring>(this, config_file, nx, ny, nz, nsoil, nsoiltype, nsurftype, rc)</argsstring>
+        <name>initialize</name>
+        <qualifiedname>catchem_api::catchem_model::initialize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the CATChem model with configuration file and grid dimensions This method sets up the core CATChem infrastructure using the builder pattern, loads configuration from the specified file, and sets up the grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="77" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a44237c4057a018bf9597b81ef32272f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>catchem_api::catchem_model::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize the CATChem model and clean up resources. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="78" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ab15e4dbb00c395eb8a95a37c1838e82f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_grid_dimensions</definition>
+        <argsstring>(this, nx, ny, nz, nsoil, nsoiltype, nsurftype)</argsstring>
+        <name>get_grid_dimensions</name>
+        <qualifiedname>catchem_api::catchem_model::get_grid_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <briefdescription>
+<para>Get current grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="81" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a2094efcec5093a1a2f72f0a357f77230" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::add_process</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>add_process</name>
+        <qualifiedname>catchem_api::catchem_model::add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add all enabled processes from configuration This method reads the ConfigManager data and adds all processes where enabled = true It automatically registers and adds each enabled process to the core. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="84" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a93378c8736625e5b15a35d4c7b77a3db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_process_names</definition>
+        <argsstring>(this, process_names, rc)</argsstring>
+        <name>get_process_names</name>
+        <qualifiedname>catchem_api::catchem_model::get_process_names</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get names of all configured processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="85" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a277cb54224838a29cf0a41c9a1537e9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_num_processes</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_num_processes</name>
+        <qualifiedname>catchem_api::catchem_model::get_num_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of configured processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="86" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a82b09b662908e0b5fdf254dcd45ce98c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::run_timestep</definition>
+        <argsstring>(this, timestep, dt, rc)</argsstring>
+        <name>run_timestep</name>
+        <qualifiedname>catchem_api::catchem_model::run_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>timestep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single timestep This method executes one timestep of the CATChem simulation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="90" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ae0ca3cf7cd295fa2fa21392a89c50a36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::run_phase</definition>
+        <argsstring>(this, phase_name, rc)</argsstring>
+        <name>run_phase</name>
+        <qualifiedname>catchem_api::catchem_model::run_phase</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>phase_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a specific phase This method executes a named phase of the simulation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="91" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1aa0bfc58194bbdcd3d82c59ac0b082136" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::run_all_phases</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>run_all_phases</name>
+        <qualifiedname>catchem_api::catchem_model::run_all_phases</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all configured phases in sequence This method executes all phases in the order they were configured using ConfigManager data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="92" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a306f5228c254ef4c05d69e635c49e697" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_phase_names</definition>
+        <argsstring>(this, phase_names, rc)</argsstring>
+        <name>get_phase_names</name>
+        <qualifiedname>catchem_api::catchem_model::get_phase_names</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>phase_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get names of configured run phases Note: This now gets phase information from ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="93" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ab6d38528fb23910f4c6cac026673d830" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::set_chemistry</definition>
+        <argsstring>(this, species_names, concentrations, rc)</argsstring>
+        <name>set_chemistry</name>
+        <qualifiedname>catchem_api::catchem_model::set_chemistry</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set chemical concentrations from host model This method transfers chemical species data from the host model to CATChem. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="96" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ab0a0c65346373dc20b77cfecb0a7503a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_chemistry</definition>
+        <argsstring>(this, species_names, concentrations, rc)</argsstring>
+        <name>get_chemistry</name>
+        <qualifiedname>catchem_api::catchem_model::get_chemistry</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get chemical concentrations to host model This method transfers chemical species data from CATChem to the host model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="97" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a4a5528166c7b8d0c768f16a761a960a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_diagnostic_names</definition>
+        <argsstring>(this, diagnostic_names, diagnostic_fields, rc)</argsstring>
+        <name>get_diagnostic_names</name>
+        <qualifiedname>catchem_api::catchem_model::get_diagnostic_names</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>diagnostic_names</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), optional, allocatable</type>
+          <defname>diagnostic_fields</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get names of available diagnostics This method retrieves the names of all available diagnostic fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="100" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a4c9dfc6a4a292c9d1ece1d18f7436e03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_diagnostic</definition>
+        <argsstring>(this, diagnostic_name, diagnostic_data, rc)</argsstring>
+        <name>get_diagnostic</name>
+        <qualifiedname>catchem_api::catchem_model::get_diagnostic</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>diagnostic_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>diagnostic_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get a specific diagnostic field This method retrieves data for a named diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="101" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1af9c6ebddcc4be60bffacbe0b69e135ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_all_diagnostics</definition>
+        <argsstring>(this, diagnostic_names, diagnostic_data, rc)</argsstring>
+        <name>get_all_diagnostics</name>
+        <qualifiedname>catchem_api::catchem_model::get_all_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), allocatable</type>
+          <defname>diagnostic_names</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>diagnostic_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get all diagnostic data This method retrieves all available diagnostic data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="102" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1aa1c0de03b70875afe82498603586cc56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>catchem_api::catchem_model::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if model is ready to run This method checks if all necessary components are initialized and configured. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="105" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a39cb6c4a67c2eab0b92ad1a03e9b825a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::is_initialized</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>catchem_api::catchem_model::is_initialized</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if model is initialized. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="106" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a3462663a26b6679f8134efa95d75cd33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_required_met_index</definition>
+        <argsstring>(this, var_name)</argsstring>
+        <name>get_required_met_index</name>
+        <qualifiedname>catchem_api::catchem_model::get_required_met_index</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <briefdescription>
+<para>get required met index for all the required met variables registered in process manager </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="107" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a14255a674d05b5b2370b831b13b1471d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_diag_index_from_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>get_diag_index_from_field</name>
+        <qualifiedname>catchem_api::catchem_model::get_diag_index_from_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic index based on field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="108" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a253a974a6e19f58a9ab3c03e6423389e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_state_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_state_manager</name>
+        <qualifiedname>catchem_api::catchem_model::get_state_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get direct access to the state manager (advanced usage) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="111" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a87efcbcc74ca4ec2c0755ceff683e4cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_process_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_process_manager</name>
+        <qualifiedname>catchem_api::catchem_model::get_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get direct access to the process manager (advanced usage) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="112" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1a408838f25bf7d963f8a7be944fa64f87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_error_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_error_manager</name>
+        <qualifiedname>catchem_api::catchem_model::get_error_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get direct access to the error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="113" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1afb6bd450404143b0ec5d54c2b8ed7c44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_grid_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_grid_manager</name>
+        <qualifiedname>catchem_api::catchem_model::get_grid_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get direct access to the grid manager (advanced usage) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="114" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ac20e12c5999969d3d42c3d43dd13a4c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_api::catchem_model::get_diagnostic_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_diagnostic_manager</name>
+        <qualifiedname>catchem_api::catchem_model::get_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get direct access to the diagnostic manager (advanced usage) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="115" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="structcatchem__api_1_1catchem__model_1ab678ad7fc5b2eb7856fda567a73ec758" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private catchem_api::catchem_model::model_register_process</definition>
+        <argsstring>(this, process_name, process_mgr, rc)</argsstring>
+        <name>model_register_process</name>
+        <qualifiedname>catchem_api::catchem_model::model_register_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__api_1_1catchem__model" kindref="compound">catchem_model</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>process_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Automatically register a process based on its name This is a private helper method that calls the appropriate registration function based on the process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="87" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main CATChem API interface type This type provides a simplified interface to the CATChem core functionality while maintaining access to all necessary components for host model integration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>catchem_api::catchem_model</label>
+        <link refid="structcatchem__api_1_1catchem__model"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>error_manager</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>error_mod::errormanagertype</label>
+        <link refid="structerror__mod_1_1errormanagertype"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/api/CATChem_API.F90" line="58" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="58" bodyend="116"/>
+    <listofallmembers>
+      <member refid="structcatchem__api_1_1catchem__model_1a2094efcec5093a1a2f72f0a357f77230" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>add_process</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a0755893e05d0e3bc9e04d30c8c42e2c1" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>config_file</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a34e972969b838c6c55a507ffc608f933" prot="private" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>core</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a18b01464d1e21d419b25cee357dbbc42" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>enable_run_phase</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1aa6a136ea7a888c77ba9fad803dcfc825" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>error_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a44237c4057a018bf9597b81ef32272f5" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>finalize</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1af9c6ebddcc4be60bffacbe0b69e135ae" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_all_diagnostics</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ab0a0c65346373dc20b77cfecb0a7503a" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_chemistry</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a14255a674d05b5b2370b831b13b1471d" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_diag_index_from_field</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a4c9dfc6a4a292c9d1ece1d18f7436e03" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_diagnostic</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ac20e12c5999969d3d42c3d43dd13a4c7" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_diagnostic_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a4a5528166c7b8d0c768f16a761a960a4" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_diagnostic_names</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a408838f25bf7d963f8a7be944fa64f87" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_error_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ab15e4dbb00c395eb8a95a37c1838e82f" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_grid_dimensions</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1afb6bd450404143b0ec5d54c2b8ed7c44" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_grid_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a277cb54224838a29cf0a41c9a1537e9a" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_num_processes</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a306f5228c254ef4c05d69e635c49e697" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_phase_names</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a87efcbcc74ca4ec2c0755ceff683e4cc" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_process_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a93378c8736625e5b15a35d4c7b77a3db" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_process_names</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a3462663a26b6679f8134efa95d75cd33" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_required_met_index</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a253a974a6e19f58a9ab3c03e6423389e" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>get_state_manager</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a0a568a3aa6c1feab8f4f7bf4f5983591" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>grid_setup</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a7d7f4e12d3b8e136843412bba5f976d9" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>initialize</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1af4b07afe2c6263b36c1a16b3b90927f3" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>initialized</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a39cb6c4a67c2eab0b92ad1a03e9b825a" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>is_initialized</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1aa1c0de03b70875afe82498603586cc56" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>is_ready</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ab678ad7fc5b2eb7856fda567a73ec758" prot="private" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>model_register_process</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ab9c341ca549b99d81b67ada2ce530ea4" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>nsoil</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ac20f377ac1ca7ed708de47045d63baf8" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>nsoiltype</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1af78220dc343f9469ae774a25252de562" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>nsurftype</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a37b0b50bc5de44b12a0d1a20d2066798" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>nx</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ac240103b200045c7ceb274f0a87bada5" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>ny</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ac6cd412ce54adf39239bb2150943b651" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>nz</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a1297a07b431248097315b2c9edb6bee4" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>required_fields</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1aa0bfc58194bbdcd3d82c59ac0b082136" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>run_all_phases</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ae0ca3cf7cd295fa2fa21392a89c50a36" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>run_phase</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1a82b09b662908e0b5fdf254dcd45ce98c" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>run_timestep</name></member>
+      <member refid="structcatchem__api_1_1catchem__model_1ab6d38528fb23910f4c6cac026673d830" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>set_chemistry</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

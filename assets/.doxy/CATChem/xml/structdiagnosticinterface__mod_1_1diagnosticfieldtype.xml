@@ -1,0 +1,840 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kind="type" language="Fortran" prot="public">
+    <compoundname>diagnosticinterface_mod::diagnosticfieldtype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd53781518b2d7d99bd37ffaf92b6dce" prot="private" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) diagnosticinterface_mod::diagnosticfieldtype::field_name</definition>
+        <argsstring></argsstring>
+        <name>field_name</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::field_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Diagnostic field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="118" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a360af7486cce259ff4c73d72b0a10292" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) diagnosticinterface_mod::diagnosticfieldtype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="119" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acc38ddbb92dc4beece9e6e7b164a08bd" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) diagnosticinterface_mod::diagnosticfieldtype::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Physical units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="120" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad3b6b46a96d7cdea9edfb5a3e4bf6ebf" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) diagnosticinterface_mod::diagnosticfieldtype::process_name</definition>
+        <argsstring></argsstring>
+        <name>process_name</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::process_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process that owns this diagnostic. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="121" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2875bbe5430ed37cb50aa486d989becc" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer diagnosticinterface_mod::diagnosticfieldtype::data_type</definition>
+        <argsstring></argsstring>
+        <name>data_type</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::data_type</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Data type identifier. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="122" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a91b8f4efb5eb7d4e8f36ef80e015906e" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer diagnosticinterface_mod::diagnosticfieldtype::output_frequency</definition>
+        <argsstring></argsstring>
+        <name>output_frequency</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::output_frequency</qualifiedname>
+        <initializer>= DIAG_FREQ_NEVER</initializer>
+        <briefdescription>
+<para>Output frequency. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="123" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a5657757efbd077f181a4c4e70aca090e" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) diagnosticinterface_mod::diagnosticfieldtype::custom_frequency</definition>
+        <argsstring></argsstring>
+        <name>custom_frequency</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::custom_frequency</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Custom output frequency (seconds) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="124" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a86143305d212fe7fba5a73c97683578a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical diagnosticinterface_mod::diagnosticfieldtype::is_enabled</definition>
+        <argsstring></argsstring>
+        <name>is_enabled</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::is_enabled</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Whether diagnostic is enabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="125" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c51cb01fae7f1f4d3cd37c8e6aa5d9" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical diagnosticinterface_mod::diagnosticfieldtype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="126" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd519a4f951ea17fe10de549f99d4c39" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>)</type>
+        <definition>type(diagnosticdatatype) diagnosticinterface_mod::diagnosticfieldtype::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::data</qualifiedname>
+        <briefdescription>
+<para>Actual data storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="127" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a02eb2d84746c173b9ddea4c606ad5419" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable diagnosticinterface_mod::diagnosticfieldtype::diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::diagnostic_species</qualifiedname>
+        <briefdescription>
+<para>User-defined species for diagnostics. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="130" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac5bb6ac2d63ef1700fe82dcf1200b926" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable diagnosticinterface_mod::diagnosticfieldtype::diagnostic_species_id</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species_id</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::diagnostic_species_id</qualifiedname>
+        <briefdescription>
+<para>Indices mapping diagnostic_species to species names. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="131" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="131" bodyend="131"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a8a44cf93aeb2b3ce98407fdfea175fad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::create</definition>
+        <argsstring>(this, field_name, description, units, data_type, process_name, diagnostic_species, diagnostic_species_id, rc)</argsstring>
+        <name>create</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::create</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>data_type</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create and configure a diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticFieldType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Human-readable description </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Physical units </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of data (scalar, 1D, 2D, 3D) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process owning this diagnostic </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional array of species names for diagnostics </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional array of species indices for diagnostics </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="134" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ae8c8d00327b53c5796256fdeef10dde2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::initialize_data</definition>
+        <argsstring>(this, dims, rc)</argsstring>
+        <name>initialize_data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::initialize_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>dims</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize data storage for diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticFieldType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions for array data types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="135" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a64943ae046c3f133da52aa7008032630" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="136" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2e055b18549ad54c640c23cbf8c6548d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if diagnostic field is ready for use. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="137" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac13bbf58b8f1b3cec1b4614448cec9c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_name</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_name</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="138" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a3cc393bfe5467ef0686f42146cde08e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_description</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_description</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_description</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get field description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="139" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad7076242603c6a183165082fea120a34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_units</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_units</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get field units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="140" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1afae96b89fc3843fd7004de3ee9d6a840" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_process_name</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_process_name</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_process_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="141" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a80c7ad43bbe2149e3c538b3a209694c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_data_type</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_data_type</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_data_type</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get data type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="142" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ab910d5b3de3d731bf35620fc2c9a4b04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_data_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_data_ptr</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_data_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to data storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="143" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a611c5c201b281d678ea72c879c707a3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::set_enabled</definition>
+        <argsstring>(this, enabled)</argsstring>
+        <name>set_enabled</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::set_enabled</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>enabled</defname>
+        </param>
+        <briefdescription>
+<para>Enable/disable diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="144" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a9a52c989e602e2ca95822c394b756399" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_is_enabled</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_is_enabled</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_is_enabled</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if field is enabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="145" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a36a8a57ad2898995eaabcbfa271300bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::should_output</definition>
+        <argsstring>(this, current_time, dt)</argsstring>
+        <name>should_output</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::should_output</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>current_time</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+<para>Check if field should be output at current time. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="146" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a6e86e2878dff3cc89c1b9d4dfffc315a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::update_data</definition>
+        <argsstring>(this, scalar_val, array_1d, array_2d, array_3d)</argsstring>
+        <name>update_data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::update_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>scalar_val</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), optional</type>
+          <defname>array_1d</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in), optional</type>
+          <defname>array_2d</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in), optional</type>
+          <defname>array_3d</defname>
+        </param>
+        <briefdescription>
+<para>Update diagnostic field data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a generic interface that processes can use to update their diagnostics </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="147" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1aef754c88431c671f501772ffc5dd9eb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::reset_data</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>reset_data</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::reset_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reset diagnostic field data to zero/default values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticFieldType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="148" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a28be360f729b2ca7e07541c488162fa2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::validate_field</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>validate_field</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::validate_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate diagnostic field. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DiagnosticFieldType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="149" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c9fef551fd5298b98e12516e0f5a96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_diagnostic_species</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_diagnostic_species</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_diagnostic_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic species array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="150" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a260a7497ed0e4ef6ef7ebd525f9bdb22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure diagnosticinterface_mod::diagnosticfieldtype::get_diagnostic_species_id</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_diagnostic_species_id</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::get_diagnostic_species_id</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic species ID array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="151" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac690920777dd3d3d92f738304749abe0" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
+        <type>final</type>
+        <definition>final diagnosticinterface_mod::diagnosticfieldtype::diag_field_finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>diag_field_finalize</name>
+        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::diag_field_finalize</qualifiedname>
+        <param>
+          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalizer for DiagnosticFieldType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="152" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="152" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Individual diagnostic field specification. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Contains metadata and data storage for a single diagnostic field. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>diagnosticinterface_mod::diagnosticdatatype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticdatatype"/>
+      </node>
+      <node id="1">
+        <label>diagnosticinterface_mod::diagnosticfieldtype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/DiagnosticInterface_Mod.F90" line="116" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="116" bodyend="153"/>
+    <listofallmembers>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a64943ae046c3f133da52aa7008032630" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>cleanup</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a8a44cf93aeb2b3ce98407fdfea175fad" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>create</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a5657757efbd077f181a4c4e70aca090e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>custom_frequency</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd519a4f951ea17fe10de549f99d4c39" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2875bbe5430ed37cb50aa486d989becc" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>data_type</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a360af7486cce259ff4c73d72b0a10292" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>description</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac690920777dd3d3d92f738304749abe0" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diag_field_finalize</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a02eb2d84746c173b9ddea4c606ad5419" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diagnostic_species</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac5bb6ac2d63ef1700fe82dcf1200b926" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diagnostic_species_id</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd53781518b2d7d99bd37ffaf92b6dce" prot="private" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>field_name</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ab910d5b3de3d731bf35620fc2c9a4b04" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_data_ptr</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a80c7ad43bbe2149e3c538b3a209694c5" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_data_type</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a3cc393bfe5467ef0686f42146cde08e2" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_description</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c9fef551fd5298b98e12516e0f5a96" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_diagnostic_species</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a260a7497ed0e4ef6ef7ebd525f9bdb22" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_diagnostic_species_id</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a9a52c989e602e2ca95822c394b756399" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_is_enabled</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac13bbf58b8f1b3cec1b4614448cec9c8" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_name</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1afae96b89fc3843fd7004de3ee9d6a840" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_process_name</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad7076242603c6a183165082fea120a34" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>get_units</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ae8c8d00327b53c5796256fdeef10dde2" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>initialize_data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a86143305d212fe7fba5a73c97683578a" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>is_enabled</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c51cb01fae7f1f4d3cd37c8e6aa5d9" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>is_initialized</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2e055b18549ad54c640c23cbf8c6548d" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>is_ready</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a91b8f4efb5eb7d4e8f36ef80e015906e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>output_frequency</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad3b6b46a96d7cdea9edfb5a3e4bf6ebf" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>process_name</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1aef754c88431c671f501772ffc5dd9eb9" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>reset_data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a611c5c201b281d678ea72c879c707a3e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>set_enabled</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a36a8a57ad2898995eaabcbfa271300bd" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>should_output</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acc38ddbb92dc4beece9e6e7b164a08bd" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>units</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a6e86e2878dff3cc89c1b9d4dfffc315a" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>update_data</name></member>
+      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a28be360f729b2ca7e07541c488162fa2" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>validate_field</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

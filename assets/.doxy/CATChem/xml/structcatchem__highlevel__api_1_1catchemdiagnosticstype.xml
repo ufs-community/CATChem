@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__highlevel__api_1_1catchemdiagnosticstype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_highlevel_api::catchemdiagnosticstype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a6b1dd0573d3afd5fe6e0a4b44dfc17a9" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::dust_emissions</definition>
+        <argsstring></argsstring>
+        <name>dust_emissions</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::dust_emissions</qualifiedname>
+        <briefdescription>
+<para>Dust emissions [kg/m2/s] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="114" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a3bf1cf3ee76df2112bbea9ec6132b01a" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::seasalt_emissions</definition>
+        <argsstring></argsstring>
+        <name>seasalt_emissions</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::seasalt_emissions</qualifiedname>
+        <briefdescription>
+<para>Sea salt emissions [kg/m2/s] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="115" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a0eb798e2ab90e15677628f72918b01e8" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::dry_deposition</definition>
+        <argsstring></argsstring>
+        <name>dry_deposition</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::dry_deposition</qualifiedname>
+        <briefdescription>
+<para>Dry deposition [mol/m2/s] (nx,ny,nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="116" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a40dfa8097dfb4c6f84f2af297873197b" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::wet_deposition</definition>
+        <argsstring></argsstring>
+        <name>wet_deposition</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::wet_deposition</qualifiedname>
+        <briefdescription>
+<para>Wet deposition [mol/m2/s] (nx,ny,nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="117" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a146e3685f10e23bd07b46bb31ca67f46" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::reaction_rates</definition>
+        <argsstring></argsstring>
+        <name>reaction_rates</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::reaction_rates</qualifiedname>
+        <briefdescription>
+<para>Reaction rates [mol/mol/s] (nx,ny,nz,nreact) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="120" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a470c9e12523880a874e174fd1fb82969" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchem_highlevel_api::catchemdiagnosticstype::photolysis_rates</definition>
+        <argsstring></argsstring>
+        <name>photolysis_rates</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::photolysis_rates</qualifiedname>
+        <briefdescription>
+<para>J-values [1/s] (nx,ny,nz,nphoto) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="121" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a4da5421f5c39dcf1a6ed094e93fc1b39" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemdiagnosticstype::total_runtime</definition>
+        <argsstring></argsstring>
+        <name>total_runtime</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::total_runtime</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Total runtime [seconds]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="124" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1aa8c6a77491367385e282e5e84fd67cfe" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemdiagnosticstype::chemistry_time</definition>
+        <argsstring></argsstring>
+        <name>chemistry_time</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::chemistry_time</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Chemistry time [seconds]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="125" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1aff00e1adb4d0e95b4cca8852e2255766" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemdiagnosticstype::emission_time</definition>
+        <argsstring></argsstring>
+        <name>emission_time</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::emission_time</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Emission time [seconds]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="126" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a88d4f2674964f498eda5a0fdadd8d2e8" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemdiagnosticstype::transport_time</definition>
+        <argsstring></argsstring>
+        <name>transport_time</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::transport_time</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Transport time [seconds]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="127" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1ac5b997c91209e064922c1f6604aad103" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemdiagnosticstype::is_allocated</definition>
+        <argsstring></argsstring>
+        <name>is_allocated</name>
+        <qualifiedname>catchem_highlevel_api::catchemdiagnosticstype::is_allocated</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Allocation status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="129" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Diagnostic output container. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_HighLevel_API.F90" line="112" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="112" bodyend="130"/>
+    <listofallmembers>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1aa8c6a77491367385e282e5e84fd67cfe" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>chemistry_time</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a0eb798e2ab90e15677628f72918b01e8" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>dry_deposition</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a6b1dd0573d3afd5fe6e0a4b44dfc17a9" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>dust_emissions</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1aff00e1adb4d0e95b4cca8852e2255766" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>emission_time</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1ac5b997c91209e064922c1f6604aad103" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>is_allocated</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a470c9e12523880a874e174fd1fb82969" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>photolysis_rates</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a146e3685f10e23bd07b46bb31ca67f46" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>reaction_rates</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a3bf1cf3ee76df2112bbea9ec6132b01a" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>seasalt_emissions</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a4da5421f5c39dcf1a6ed094e93fc1b39" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>total_runtime</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a88d4f2674964f498eda5a0fdadd8d2e8" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>transport_time</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype_1a40dfa8097dfb4c6f84f2af297873197b" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdiagnosticstype</scope><name>wet_deposition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

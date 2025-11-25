@@ -1,0 +1,539 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structprocessregistry__mod_1_1processregistrytype" kind="type" language="Fortran" prot="public">
+    <compoundname>processregistry_mod::processregistrytype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1a0c900b2afd24df0f27f6e29faa6ffeec" prot="private" static="no" mutable="no">
+        <type>type(processregistryentry), dimension(:), allocatable</type>
+        <definition>type(processregistryentry), dimension(:), allocatable processregistry_mod::processregistrytype::entries</definition>
+        <argsstring></argsstring>
+        <name>entries</name>
+        <qualifiedname>processregistry_mod::processregistrytype::entries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="72" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1a77e4143ea047b26b5554e494a864cbd6" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer processregistry_mod::processregistrytype::num_entries</definition>
+        <argsstring></argsstring>
+        <name>num_entries</name>
+        <qualifiedname>processregistry_mod::processregistrytype::num_entries</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="73" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1aa7bf4a457aade7e73f7161161b76a41a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer processregistry_mod::processregistrytype::max_entries</definition>
+        <argsstring></argsstring>
+        <name>max_entries</name>
+        <qualifiedname>processregistry_mod::processregistrytype::max_entries</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+<para>Maximum registry entries. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="74" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1a234339803ffa0e78ceba07ed56be4322" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) processregistry_mod::processregistrytype::registry_name</definition>
+        <argsstring></argsstring>
+        <name>registry_name</name>
+        <qualifiedname>processregistry_mod::processregistrytype::registry_name</qualifiedname>
+        <initializer>= &apos;CATChem Process Registry&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="77" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1aff1d71b38e5608c92cbfe887fd971994" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) processregistry_mod::processregistrytype::version</definition>
+        <argsstring></argsstring>
+        <name>version</name>
+        <qualifiedname>processregistry_mod::processregistrytype::version</qualifiedname>
+        <initializer>= &apos;2.0&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="78" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessregistry__mod_1_1processregistrytype_1a1db9bb3526b1bf60f68436d7f0cef1eb" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical processregistry_mod::processregistrytype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>processregistry_mod::processregistrytype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="79" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a75ebf70ea6f45848f85f45fae1bccc4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::init</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>processregistry_mod::processregistrytype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the process registry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="83" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1aae304e0acc1d738b576e1f0a339809e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>processregistry_mod::processregistrytype::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize and cleanup the registry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="84" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a67e42ac51752c45721e7e99f48df72bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::register_process</definition>
+        <argsstring>(this, name, category, description, creator, rc)</argsstring>
+        <name>register_process</name>
+        <qualifiedname>processregistry_mod::processregistrytype::register_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>procedure(<ref refid="interfaceprocessregistry__mod_1_1processcreatorinterface" kindref="compound">processcreatorinterface</ref>)</type>
+          <defname>creator</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register a new process in the registry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="85" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1ae284365cd0956f5b7dd9e4d8fc3fd989" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::unregister_process</definition>
+        <argsstring>(this, name, rc)</argsstring>
+        <name>unregister_process</name>
+        <qualifiedname>processregistry_mod::processregistrytype::unregister_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Unregister a process from the registry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="86" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a41122d448c930373ace9dd61207f136f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::create_process</definition>
+        <argsstring>(this, name, process, rc)</argsstring>
+        <name>create_process</name>
+        <qualifiedname>processregistry_mod::processregistrytype::create_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a process instance by name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="87" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a63f84ed18b6d4c67ffdb1130c03d2160" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::is_process_available</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>is_process_available</name>
+        <qualifiedname>processregistry_mod::processregistrytype::is_process_available</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Check if a process is available. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="90" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1ab5afdffb956e640a351071aae7322f1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::get_process_description</definition>
+        <argsstring>(this, name, rc)</argsstring>
+        <name>get_process_description</name>
+        <qualifiedname>processregistry_mod::processregistrytype::get_process_description</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get description for a registered process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="91" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a23f7cdf36aa5b5b50eb35eadf3bc491f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::list_processes</definition>
+        <argsstring>(this, process_names, rc)</argsstring>
+        <name>list_processes</name>
+        <qualifiedname>processregistry_mod::processregistrytype::list_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>List all registered process names. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="92" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1af76e8b1f7799549c53213d53322e7666" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::list_categories</definition>
+        <argsstring>(this, categories, rc)</argsstring>
+        <name>list_categories</name>
+        <qualifiedname>processregistry_mod::processregistrytype::list_categories</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>categories</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>List all process categories. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="93" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1acdf79d482c759ee5df366edbd5654a05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::get_processes_by_category</definition>
+        <argsstring>(this, category, process_names, rc)</argsstring>
+        <name>get_processes_by_category</name>
+        <qualifiedname>processregistry_mod::processregistrytype::get_processes_by_category</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get processes in a specific category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="94" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a9396d3015d5e50d767c6df96fcedc37c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::get_registry_info</definition>
+        <argsstring>(this, name, version, num_processes, rc)</argsstring>
+        <name>get_registry_info</name>
+        <qualifiedname>processregistry_mod::processregistrytype::get_registry_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out), optional</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out), optional</type>
+          <defname>version</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>num_processes</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get registry information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="97" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a6b0d748eeca4b6aa2d01d0d8c5fdb145" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>processregistry_mod::processregistrytype::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print registry summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="98" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a5a5350157c9c26e1e8be1ab51dd251b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processregistry_mod::processregistrytype::validate_registry</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>validate_registry</name>
+        <qualifiedname>processregistry_mod::processregistrytype::validate_registry</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate registry consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="99" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1a3e4f073dd4e74515fbaaee38261936e6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processregistry_mod::processregistrytype::find_process_index</definition>
+        <argsstring>(this, name, index)</argsstring>
+        <name>find_process_index</name>
+        <qualifiedname>processregistry_mod::processregistrytype::find_process_index</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>index</defname>
+        </param>
+        <briefdescription>
+<para>Find index of process by name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="102" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessregistry__mod_1_1processregistrytype_1ab101e516e32d49d85a5e3ae720247fc5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processregistry_mod::processregistrytype::ensure_capacity</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>ensure_capacity</name>
+        <qualifiedname>processregistry_mod::processregistrytype::ensure_capacity</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessregistry__mod_1_1processregistrytype" kindref="compound">processregistrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Ensure registry has capacity for new entries. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="103" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main process registry for managing available processes. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type provides centralized management of all available atmospheric processes in the system. It supports dynamic registration, discovery, and instantiation following the factory pattern. </para>
+    </detaileddescription>
+    <location file="src/core/ProcessRegistry_Mod.F90" line="68" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="68" bodyend="104"/>
+    <listofallmembers>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a41122d448c930373ace9dd61207f136f" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>create_process</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1ab101e516e32d49d85a5e3ae720247fc5" prot="private" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>ensure_capacity</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a0c900b2afd24df0f27f6e29faa6ffeec" prot="private" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>entries</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1aae304e0acc1d738b576e1f0a339809e5" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>finalize</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a3e4f073dd4e74515fbaaee38261936e6" prot="private" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>find_process_index</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1ab5afdffb956e640a351071aae7322f1a" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>get_process_description</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1acdf79d482c759ee5df366edbd5654a05" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>get_processes_by_category</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a9396d3015d5e50d767c6df96fcedc37c" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>get_registry_info</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a75ebf70ea6f45848f85f45fae1bccc4c" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>init</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a1db9bb3526b1bf60f68436d7f0cef1eb" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>is_initialized</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a63f84ed18b6d4c67ffdb1130c03d2160" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>is_process_available</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1af76e8b1f7799549c53213d53322e7666" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>list_categories</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a23f7cdf36aa5b5b50eb35eadf3bc491f" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>list_processes</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1aa7bf4a457aade7e73f7161161b76a41a" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>max_entries</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a77e4143ea047b26b5554e494a864cbd6" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>num_entries</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a6b0d748eeca4b6aa2d01d0d8c5fdb145" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>print_summary</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a67e42ac51752c45721e7e99f48df72bc" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>register_process</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a234339803ffa0e78ceba07ed56be4322" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>registry_name</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1ae284365cd0956f5b7dd9e4d8fc3fd989" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>unregister_process</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1a5a5350157c9c26e1e8be1ab51dd251b6" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>validate_registry</name></member>
+      <member refid="structprocessregistry__mod_1_1processregistrytype_1aff1d71b38e5608c92cbfe887fd971994" prot="public" virt="non-virtual"><scope>processregistry_mod::processregistrytype</scope><name>version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

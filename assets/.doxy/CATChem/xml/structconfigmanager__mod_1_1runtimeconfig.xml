@@ -1,0 +1,339 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1runtimeconfig" kind="type" language="Fortran" prot="private">
+    <compoundname>configmanager_mod::runtimeconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1ac892155ef2c29b192d8ccaefa47d3cba" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::numcpus</definition>
+        <argsstring></argsstring>
+        <name>numcpus</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::numcpus</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of MPI processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="83" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a3019204dcd280b621762f655ac21368c" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::thiscpu</definition>
+        <argsstring></argsstring>
+        <name>thiscpu</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::thiscpu</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Local MPI process handle. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="84" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1adeb01d9c1caea6f6b486b2744ecfeb7e" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::mpicomm</definition>
+        <argsstring></argsstring>
+        <name>mpicomm</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::mpicomm</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+<para>MPI Communicator Handle. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="85" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1ad04ade4a51bb15f1e3c7b9a0f9414f67" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::ismpi</definition>
+        <argsstring></argsstring>
+        <name>ismpi</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::ismpi</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Is this an MPI simulation? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="86" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1ae23d92c719aa71dacc1bad7a5840fba7" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::amiroot</definition>
+        <argsstring></argsstring>
+        <name>amiroot</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::amiroot</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Is this the root cpu? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="87" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a15f6d4dec3cce344313877f60c3f0910" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::dryrun</definition>
+        <argsstring></argsstring>
+        <name>dryrun</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::dryrun</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Is this a dry run? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="88" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1ae1ec4c303598cfaf8b567b4f555f571a" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::runtimeconfig::simulationname</definition>
+        <argsstring></argsstring>
+        <name>simulationname</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::simulationname</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Name of the simulation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="89" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1ad43abbd040a324346b17b1729b30be44" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::diagenabled</definition>
+        <argsstring></argsstring>
+        <name>diagenabled</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::diagenabled</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Was diagnostic output requested? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="90" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a9df7a321b6c61872a5160dc635a6f21c" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::verboserequested</definition>
+        <argsstring></argsstring>
+        <name>verboserequested</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::verboserequested</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Was verbose output requested? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="91" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1aee696fa583c7f8bfc1570d8190e9a213" prot="public" static="no" mutable="no">
+        <type>character(len=10)</type>
+        <definition>character(len=10) configmanager_mod::runtimeconfig::verboseoncores</definition>
+        <argsstring></argsstring>
+        <name>verboseoncores</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::verboseoncores</qualifiedname>
+        <initializer>= &apos;root&apos;</initializer>
+        <briefdescription>
+<para>Which cores should produce verbose output. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="92" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4c10332440a75cd8d2405a6329300354" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::verbose</definition>
+        <argsstring></argsstring>
+        <name>verbose</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::verbose</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Should verbose output be produced? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="93" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4a6ab31eff01004c83ea3b21b6835704" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nlevs</definition>
+        <argsstring></argsstring>
+        <name>nlevs</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nlevs</qualifiedname>
+        <initializer>= 127</initializer>
+        <briefdescription>
+<para>Number of vertical levels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="96" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a076599744ec00584fd6b90502b020812" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nx</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of grid points in x-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="97" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4737c05962db7056d7944ce18fdcd492" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::ny</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of grid points in y-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="98" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a795f9c768333bd25aeed308403be21d7" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nspecies</definition>
+        <argsstring></argsstring>
+        <name>nspecies</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nspecies</qualifiedname>
+        <initializer>= 50</initializer>
+        <briefdescription>
+<para>Total number of chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="99" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a91b1e059cf347b085b8391bfc4bf3fcd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::maxspecies</definition>
+        <argsstring></argsstring>
+        <name>maxspecies</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::maxspecies</qualifiedname>
+        <initializer>= 500</initializer>
+        <briefdescription>
+<para>Maximum number of chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="100" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1abaf80178cefaf0c279803ea7406c1153" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nspecies_drydep</definition>
+        <argsstring></argsstring>
+        <name>nspecies_drydep</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nspecies_drydep</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+<para>Number of species with dry deposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="101" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a0dce6d78f091e2494d38039cf4bc3f3b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nemissioncategories</definition>
+        <argsstring></argsstring>
+        <name>nemissioncategories</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nemissioncategories</qualifiedname>
+        <initializer>= 10</initializer>
+        <briefdescription>
+<para>Number of emission categories. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="102" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a62536e7f4edc64127ec6a7637dcc6f26" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::nemissionspecies</definition>
+        <argsstring></argsstring>
+        <name>nemissionspecies</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::nemissionspecies</qualifiedname>
+        <initializer>= 50</initializer>
+        <briefdescription>
+<para>Number of emission species per category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="103" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Runtime and MPI configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="82" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="82" bodyend="104"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1ae23d92c719aa71dacc1bad7a5840fba7" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>amiroot</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad43abbd040a324346b17b1729b30be44" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>diagenabled</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a15f6d4dec3cce344313877f60c3f0910" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>dryrun</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad04ade4a51bb15f1e3c7b9a0f9414f67" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>ismpi</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a91b1e059cf347b085b8391bfc4bf3fcd" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>maxspecies</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1adeb01d9c1caea6f6b486b2744ecfeb7e" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>mpicomm</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a0dce6d78f091e2494d38039cf4bc3f3b" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nemissioncategories</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a62536e7f4edc64127ec6a7637dcc6f26" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nemissionspecies</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4a6ab31eff01004c83ea3b21b6835704" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nlevs</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a795f9c768333bd25aeed308403be21d7" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nspecies</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1abaf80178cefaf0c279803ea7406c1153" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nspecies_drydep</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1ac892155ef2c29b192d8ccaefa47d3cba" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>numcpus</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a076599744ec00584fd6b90502b020812" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nx</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4737c05962db7056d7944ce18fdcd492" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>ny</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1ae1ec4c303598cfaf8b567b4f555f571a" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>simulationname</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a3019204dcd280b621762f655ac21368c" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>thiscpu</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4c10332440a75cd8d2405a6329300354" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>verbose</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1aee696fa583c7f8bfc1570d8190e9a213" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>verboseoncores</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a9df7a321b6c61872a5160dc635a6f21c" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>verboserequested</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1272 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceextemisdata__mod" kind="namespace" language="Fortran">
+    <compoundname>extemisdata_mod</compoundname>
+    <innerclass refid="structextemisdata__mod_1_1extemiscategorytype" prot="public">extemisdata_mod::extemiscategorytype</innerclass>
+    <innerclass refid="structextemisdata__mod_1_1extemisdatatype" prot="public">extemisdata_mod::extemisdatatype</innerclass>
+    <innerclass refid="structextemisdata__mod_1_1extemisfieldtype" prot="public">extemisdata_mod::extemisfieldtype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a9ac1d5f2d7474c21e5dc6628dfec39bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemifield_init</definition>
+        <argsstring>(this, field_name, nx, ny, nz, n_times, units, rc)</argsstring>
+        <name>extemifield_init</name>
+        <qualifiedname>extemisdata_mod::extemifield_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>n_times</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize an emission field with metadata. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets up field metadata including dimensions and coordinates</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Field name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of longitude points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ny</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of latitude points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical levels (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_times</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of time steps (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Units string (optional, default=&apos;kg/m2/s&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="213" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="214" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1aaed1b44102f4c4dc7347c600f73d3ded" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemifield_cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>extemifield_cleanup</name>
+        <qualifiedname>extemisdata_mod::extemifield_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up resources and deallocate arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deallocates all arrays and resets fields to default values</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="264" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="265" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a2f619ef2b9e4cf8478a0b23cc60de00a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemifield_validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>extemifield_validate</name>
+        <qualifiedname>extemisdata_mod::extemifield_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate emission field data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks that the emission field data is properly loaded and valid</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="306" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="307" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a8129bae4eacfa9fef06d45b136dbe9bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function extemisdata_mod::extemifield_get_emission_at_point</definition>
+        <argsstring>(this, i, j, k, time_idx)</argsstring>
+        <name>extemifield_get_emission_at_point</name>
+        <qualifiedname>extemisdata_mod::extemifield_get_emission_at_point</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>time_idx</defname>
+        </param>
+        <briefdescription>
+<para>Get emission rate at a specific grid point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the emission rate for the specified grid point</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vertical index (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">time_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time index (optional, uses current_time_idx if not specified) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Emission rate [kg/m2/s] at the specified point </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="347" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="348" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1abf2c343161ece233e0dcda49f9548a34" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemifield_load_from_file</definition>
+        <argsstring>(this, filename, error_mgr, rc)</argsstring>
+        <name>extemifield_load_from_file</name>
+        <qualifiedname>extemisdata_mod::extemifield_load_from_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load emission data from file (placeholder) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Placeholder implementation for loading field data from a file. Actual file I/O would be handled by the driver.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">filename</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File path to load data from </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="384" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="385" bodyend="401"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a61b3db1cc4fe2e3bce9b950ebd8e4915" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:,:), pointer</type>
+        <definition>real(fp) function, dimension(:,:), pointer extemisdata_mod::extemifield_get_column_ptr</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>extemifield_get_column_ptr</name>
+        <qualifiedname>extemisdata_mod::extemifield_get_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get a pointer to the (k, t) slab for a given (i, j) column in emission_data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a pointer to emission_data(i, j, :, :) for the specified (i, j) column.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Pointer to emission_data(i, j, :, :) (vertical x time), or null if not found </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="412" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="413" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1acb245f932090fc17b6bd6a8c99f4d760" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemicat_init</definition>
+        <argsstring>(this, category_name, n_fields, description, rc)</argsstring>
+        <name>extemicat_init</name>
+        <qualifiedname>extemisdata_mod::extemicat_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>n_fields</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize an emission category. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets up category metadata and allocates field arrays</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Category name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_fields</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of emission fields (optional, default=0) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Category description (optional) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="442" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="443" bodyend="477"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a8efbfa9f22441b341432df7c11a922f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemicat_cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>extemicat_cleanup</name>
+        <qualifiedname>extemisdata_mod::extemicat_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up resources and deallocate arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deallocates all fields and resets category to default values</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="486" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="487" bodyend="521"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1aaec81e4953c9586941192612dd18bbbc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemicat_validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>extemicat_validate</name>
+        <qualifiedname>extemisdata_mod::extemicat_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate all fields in the category. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks that all emission fields are properly loaded and valid</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="531" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="532" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a17ecdc8f1dc217bd336cd8d69c8162a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemicat_add_field</definition>
+        <argsstring>(this, field, rc)</argsstring>
+        <name>extemicat_add_field</name>
+        <qualifiedname>extemisdata_mod::extemicat_add_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in)</type>
+          <defname>field</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a new field to the category. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Expands the fields array and adds a new emission field</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ExtEmisFieldType to add </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="560" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="561" bodyend="604"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a4dc60cb4a95baba252d5dac2dcca0d6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function extemisdata_mod::extemicat_find_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>extemicat_find_field</name>
+        <qualifiedname>extemisdata_mod::extemicat_find_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Find a field by name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Searches for a field with the given name in this category. Returns the index if found, or 0 if not found.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisCategoryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission field to find </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Field index (1-based) or 0 if not found </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="615" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="616" bodyend="633"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a31ca3ab69f87972fba9bb1965522b087" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_init</definition>
+        <argsstring>(this, n_categories, data_source, rc)</argsstring>
+        <name>extemidata_init</name>
+        <qualifiedname>extemisdata_mod::extemidata_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>n_categories</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>data_source</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize emission data container. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets up container metadata and allocates category arrays</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_categories</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of emission categories (optional, default=0) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data_source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source information (optional) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="648" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="649" bodyend="681"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a45448ece2aa69678340616302c93d052" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>extemidata_cleanup</name>
+        <qualifiedname>extemisdata_mod::extemidata_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up resources and deallocate arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deallocates all categories and fields and resets container to default values</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="690" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="691" bodyend="712"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a080c1cebd75fc0f83a5fbad8d64febb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>extemidata_validate</name>
+        <qualifiedname>extemisdata_mod::extemidata_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate all emission data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks that all categories and fields are properly loaded and valid</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="722" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="723" bodyend="741"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a9a82e58c82df36052bdcf9c0c888e6cc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_add_category</definition>
+        <argsstring>(this, category, rc)</argsstring>
+        <name>extemidata_add_category</name>
+        <qualifiedname>extemisdata_mod::extemidata_add_category</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structextemisdata__mod_1_1extemiscategorytype" kindref="compound">extemiscategorytype</ref>), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a new category to the container. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Expands the categories array and adds a new emission category</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ExtEmisCategoryType to add </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="751" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="752" bodyend="796"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a87bd99596a9506c5d4e12dcbaa01db7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_load_files</definition>
+        <argsstring>(this, file_list, error_mgr, rc)</argsstring>
+        <name>extemidata_load_files</name>
+        <qualifiedname>extemisdata_mod::extemidata_load_files</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>file_list</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load emission files (placeholder) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Placeholder implementation for loading all emission data from files. Actual file I/O would be handled by the driver.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of files to load </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="808" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="809" bodyend="822"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a9775cdc271c394af8dd950bbc5e18e9c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>) function, pointer</type>
+        <definition>type(extemisfieldtype) function, pointer extemisdata_mod::extemidata_find_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>extemidata_find_field</name>
+        <qualifiedname>extemisdata_mod::extemidata_find_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Find emission field across all categories. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a pointer to the emission field with the given name, searching all categories.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission field </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Pointer to the emission field (or null) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="832" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="833" bodyend="851"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1a3feae91e6fb5ea04b38ca0de54f3ed5d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function extemisdata_mod::extemidata_get_emission_rate</definition>
+        <argsstring>(this, field_name, i, j, k)</argsstring>
+        <name>extemidata_get_emission_rate</name>
+        <qualifiedname>extemisdata_mod::extemidata_get_emission_rate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>k</defname>
+        </param>
+        <briefdescription>
+<para>Get emission rate for a specific field and location. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the emission rate for a given field at the specified grid point.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vertical index (optional) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Emission rate [kg/m2/s] at the specified location </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="864" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="865" bodyend="880"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1ae2726da0a842e3515a4bd3ee258aa6fa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine extemisdata_mod::extemidata_update_time</definition>
+        <argsstring>(this, time_idx, rc)</argsstring>
+        <name>extemidata_update_time</name>
+        <qualifiedname>extemisdata_mod::extemidata_update_time</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>time_idx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update current time for interpolation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the current time index for all fields for time interpolation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">time_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New time index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="890" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="891" bodyend="908"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1aeb03056b01e8991096cba87904244943" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(kind=8) function</type>
+        <definition>integer(kind=8) function extemisdata_mod::extemidata_get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>extemidata_get_memory_usage</name>
+        <qualifiedname>extemisdata_mod::extemidata_get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get memory usage estimate. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the estimated memory usage in bytes for all emission data.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Memory usage in bytes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="917" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="918" bodyend="938"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceextemisdata__mod_1ad234fb09afaa477a51a553d6f5000d00" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:,:), pointer</type>
+        <definition>real(fp) function, dimension(:,:), pointer extemisdata_mod::extemidata_get_column_ptr</definition>
+        <argsstring>(this, category_name, field_name, i, j)</argsstring>
+        <name>extemidata_get_column_ptr</name>
+        <qualifiedname>extemisdata_mod::extemidata_get_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisdatatype" kindref="compound">extemisdatatype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get a pointer to the (k, t) slab for a given (i, j) column in a named field. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a pointer to the emission_data(i, j, :, :) for the specified field and column.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisDataType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission category </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the emission field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Pointer to emission_data(i, j, :, :) (vertical x time), or null if not found </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="951" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="952" bodyend="981"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ExtEmisData_Mod.F90" line="13" column="1"/>
+  </compounddef>
+</doxygen>

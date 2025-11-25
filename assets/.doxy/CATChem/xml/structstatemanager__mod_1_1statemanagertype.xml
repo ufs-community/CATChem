@@ -1,0 +1,801 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structstatemanager__mod_1_1statemanagertype" kind="type" language="Fortran" prot="public">
+    <compoundname>statemanager_mod::statemanagertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1aad90e54d5fbb4667c8bc9a9ca59af3ea" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), allocatable</type>
+        <definition>type(metstatetype), allocatable statemanager_mod::statemanagertype::met_state</definition>
+        <argsstring></argsstring>
+        <name>met_state</name>
+        <qualifiedname>statemanager_mod::statemanagertype::met_state</qualifiedname>
+        <briefdescription>
+<para>Meteorological fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="72" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), allocatable</type>
+        <definition>type(chemstatetype), allocatable statemanager_mod::statemanagertype::chem_state</definition>
+        <argsstring></argsstring>
+        <name>chem_state</name>
+        <qualifiedname>statemanager_mod::statemanagertype::chem_state</qualifiedname>
+        <briefdescription>
+<para>Chemical species concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="73" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1aaffd4fbf9810e6b4d646fc5d1e60ac2f" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>)</type>
+        <definition>type(errormanagertype) statemanager_mod::statemanagertype::error_mgr</definition>
+        <argsstring></argsstring>
+        <name>error_mgr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::error_mgr</qualifiedname>
+        <briefdescription>
+<para>Error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="74" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a5145521a12957b0a49bc2ddba5a56e86" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), pointer</type>
+        <definition>type(configmanagertype), pointer statemanager_mod::statemanagertype::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>statemanager_mod::statemanagertype::config</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Configuration manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="77" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ab01fb7040449be363c596e2b3e91d187" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), pointer</type>
+        <definition>type(gridmanagertype), pointer statemanager_mod::statemanagertype::grid_mgr</definition>
+        <argsstring></argsstring>
+        <name>grid_mgr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::grid_mgr</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="78" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ad0572ae14175ddcd785ebc4f97e29e61" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), pointer</type>
+        <definition>type(diagnosticmanagertype), pointer statemanager_mod::statemanagertype::diag_mgr</definition>
+        <argsstring></argsstring>
+        <name>diag_mgr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::diag_mgr</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="79" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a01d344cd536e313362f34832655b8f0b" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical statemanager_mod::statemanagertype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>statemanager_mod::statemanagertype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="82" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ab9ad4fe2de3021f23089139a54a0fe9a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical statemanager_mod::statemanagertype::is_configured</definition>
+        <argsstring></argsstring>
+        <name>is_configured</name>
+        <qualifiedname>statemanager_mod::statemanagertype::is_configured</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Configuration status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="83" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a14e13916158558d793b84263d9457fae" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) statemanager_mod::statemanagertype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>statemanager_mod::statemanagertype::name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Container name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="84" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a2d6cb04c3f430b99686febfc8ce6be80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::init</definition>
+        <argsstring>(this, name, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>statemanager_mod::statemanagertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the state manager (called by CATChemCore) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="88" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ae450427d0b8912d93928e4902c6b3700" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>statemanager_mod::statemanagertype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up the state manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="89" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a5e1e322876a5893ba2b3ddf3b86a467b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>statemanager_mod::statemanagertype::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize the state manager (alias for cleanup) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="90" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa3214b20d24ad3fbd6f88f617ab5aa13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>statemanager_mod::statemanagertype::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if manager is ready. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="91" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac558bf9278efec2a68c318004b495cf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::set_configured</definition>
+        <argsstring>(this)</argsstring>
+        <name>set_configured</name>
+        <qualifiedname>statemanager_mod::statemanagertype::set_configured</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Mark the state manager as configured. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="92" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aba1a5c21b957052228b41a867f949cbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_config_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_config_ptr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_config_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to config manager for modification. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="95" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a97f855b77c342965ab3f38750066ece7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::set_config</definition>
+        <argsstring>(this, external_config, rc)</argsstring>
+        <name>set_config</name>
+        <qualifiedname>statemanager_mod::statemanagertype::set_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in), target</type>
+          <defname>external_config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set the config manager to use an external instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="96" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a90211c01235b1f81225da9e0ee320690" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_met_state_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_met_state_ptr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_met_state_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to met state for modification. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="97" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a6e9028cd5b0601e872a4d7ec603346ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_chem_state_ptr</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_chem_state_ptr</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_chem_state_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to chem state for modification. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="98" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a2878cb419f6a06394196f8c7755c6a1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_error_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_error_manager</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_error_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="99" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aaaced62385697b1be8bdd460bbf37d43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_grid_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_grid_manager</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_grid_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="100" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa333e1314dc567c00a376c0ebdf8af02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::set_grid_manager</definition>
+        <argsstring>(this, grid_mgr_ptr, rc)</argsstring>
+        <name>set_grid_manager</name>
+        <qualifiedname>statemanager_mod::statemanagertype::set_grid_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in), pointer</type>
+          <defname>grid_mgr_ptr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set grid manager pointer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="101" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac4758e37797dfa2d0a31b94f3631408b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_diagnostic_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_diagnostic_manager</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get pointer to diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="102" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a4457e561b3f7a645e66506d6d191d1a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::set_diagnostic_manager</definition>
+        <argsstring>(this, diag_mgr_ptr)</argsstring>
+        <name>set_diagnostic_manager</name>
+        <qualifiedname>statemanager_mod::statemanagertype::set_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), intent(in), target</type>
+          <defname>diag_mgr_ptr</defname>
+        </param>
+        <briefdescription>
+<para>Set pointer to diagnostic manager (called by CATChemCore) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="103" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac72dd85c9901f89977b5459e4af525a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::create_virtual_column</definition>
+        <argsstring>(this, i, j, virtual_col, rc)</argsstring>
+        <name>create_virtual_column</name>
+        <qualifiedname>statemanager_mod::statemanagertype::create_virtual_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(out)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create virtual column for grid position (i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a virtual column data container and populates it with data from the 3D grid at position (i,j) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="104" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1acf5e89b6d5954cc7f82e2eb6e7bc17fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::apply_virtual_column</definition>
+        <argsstring>(this, virtual_col, rc)</argsstring>
+        <name>apply_virtual_column</name>
+        <qualifiedname>statemanager_mod::statemanagertype::apply_virtual_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Apply virtual column changes back to 3D state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates 3D state arrays with modified virtual column data </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="105" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a59822ebb98f4049a37615bfad957db73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::populate_virtual_column</definition>
+        <argsstring>(this, virtual_col, rc)</argsstring>
+        <name>populate_virtual_column</name>
+        <qualifiedname>statemanager_mod::statemanagertype::populate_virtual_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Populate virtual column from 3D state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Uses VirtualMetType with direct pointers to MetState fields </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="106" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa1bb6355b40163973f8d5615bac667b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::set_name</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>set_name</name>
+        <qualifiedname>statemanager_mod::statemanagertype::set_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Set manager name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="109" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a7a1ebea13f4c9c301c73635965485ca1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::print_info</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_info</name>
+        <qualifiedname>statemanager_mod::statemanagertype::print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print manager information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="110" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a17ca0e1b48732c62c778f59251265dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statemanagertype::get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_memory_usage</name>
+        <qualifiedname>statemanager_mod::statemanagertype::get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get approximate memory usage in bytes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="111" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="111" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Simplified state container managed by CATChemCore. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type provides basic state object management. Complex lifecycle operations are handled by CATChemCore_Mod. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>chemstate_mod::chemstatetype</label>
+        <link refid="structchemstate__mod_1_1chemstatetype"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>grid</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>configmanager_mod::configdatatype</label>
+        <link refid="structconfigmanager__mod_1_1configdatatype"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>runtime</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>file_paths</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>external_emissions</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>emission_mapping</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>run_phase_processes</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>run_phases</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>configmanager_mod::configmanagertype</label>
+        <link refid="structconfigmanager__mod_1_1configmanagertype"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>config_data</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>schema</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>configmanager_mod::configschematype</label>
+        <link refid="structconfigmanager__mod_1_1configschematype"/>
+      </node>
+      <node id="12">
+        <label>configmanager_mod::emissioncategorymapping</label>
+        <link refid="structconfigmanager__mod_1_1emissioncategorymapping"/>
+        <childnode refid="13" relation="usage">
+          <edgelabel>species_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>configmanager_mod::emissionmappingconfig</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>categories</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>configmanager_mod::emisspeciesmappingentry</label>
+        <link refid="structconfigmanager__mod_1_1emisspeciesmappingentry"/>
+      </node>
+      <node id="10">
+        <label>configmanager_mod::externalemisconfig</label>
+      </node>
+      <node id="9">
+        <label>configmanager_mod::filepathconfig</label>
+      </node>
+      <node id="14">
+        <label>configmanager_mod::processconfigtype</label>
+        <link refid="structconfigmanager__mod_1_1processconfigtype"/>
+      </node>
+      <node id="15">
+        <label>configmanager_mod::runphasetype</label>
+        <link refid="structconfigmanager__mod_1_1runphasetype"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>processes</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>configmanager_mod::runtimeconfig</label>
+      </node>
+      <node id="22">
+        <label>diagnosticinterface_mod::diagnosticdatatype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticdatatype"/>
+      </node>
+      <node id="21">
+        <label>diagnosticinterface_mod::diagnosticfieldtype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype"/>
+        <childnode refid="22" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>diagnosticinterface_mod::diagnosticregistrytype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticregistrytype"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>fields</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>diagnosticmanager_mod::diagnosticmanagertype</label>
+        <link refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype"/>
+        <childnode refid="20" relation="usage">
+          <edgelabel>process_registries</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>error_mod::errormanagertype</label>
+        <link refid="structerror__mod_1_1errormanagertype"/>
+      </node>
+      <node id="4">
+        <label>gridgeometry_mod::gridgeometrytype</label>
+        <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
+      </node>
+      <node id="18">
+        <label>gridmanager_mod::griddecompositiontype</label>
+        <link refid="structgridmanager__mod_1_1griddecompositiontype"/>
+      </node>
+      <node id="17">
+        <label>gridmanager_mod::gridmanagertype</label>
+        <link refid="structgridmanager__mod_1_1gridmanagertype"/>
+        <childnode refid="18" relation="usage">
+          <edgelabel>decomp</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>error_mgr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>species_mod::speciestype</label>
+        <link refid="structspecies__mod_1_1speciestype"/>
+      </node>
+      <node id="1">
+        <label>statemanager_mod::statemanagertype</label>
+        <link refid="structstatemanager__mod_1_1statemanagertype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>chem_state</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>error_mgr</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>grid_mgr</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>diag_mgr</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/StateManager_Mod.F90" line="68" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="68" bodyend="113"/>
+    <listofallmembers>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1acf5e89b6d5954cc7f82e2eb6e7bc17fb" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>apply_virtual_column</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>chem_state</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ae450427d0b8912d93928e4902c6b3700" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>cleanup</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a5145521a12957b0a49bc2ddba5a56e86" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>config</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ac72dd85c9901f89977b5459e4af525a3" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>create_virtual_column</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ad0572ae14175ddcd785ebc4f97e29e61" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>diag_mgr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aaffd4fbf9810e6b4d646fc5d1e60ac2f" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>error_mgr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a5e1e322876a5893ba2b3ddf3b86a467b" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>finalize</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a6e9028cd5b0601e872a4d7ec603346ff" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_chem_state_ptr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aba1a5c21b957052228b41a867f949cbf" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_config_ptr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ac4758e37797dfa2d0a31b94f3631408b" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_diagnostic_manager</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a2878cb419f6a06394196f8c7755c6a1e" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_error_manager</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aaaced62385697b1be8bdd460bbf37d43" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_grid_manager</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a17ca0e1b48732c62c778f59251265dbf" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_memory_usage</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a90211c01235b1f81225da9e0ee320690" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>get_met_state_ptr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ab01fb7040449be363c596e2b3e91d187" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>grid_mgr</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a2d6cb04c3f430b99686febfc8ce6be80" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>init</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ab9ad4fe2de3021f23089139a54a0fe9a" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>is_configured</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a01d344cd536e313362f34832655b8f0b" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>is_initialized</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aa3214b20d24ad3fbd6f88f617ab5aa13" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>is_ready</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aad90e54d5fbb4667c8bc9a9ca59af3ea" prot="private" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>met_state</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a14e13916158558d793b84263d9457fae" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>name</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a59822ebb98f4049a37615bfad957db73" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>populate_virtual_column</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a7a1ebea13f4c9c301c73635965485ca1" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>print_info</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a97f855b77c342965ab3f38750066ece7" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>set_config</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1ac558bf9278efec2a68c318004b495cf0" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>set_configured</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a4457e561b3f7a645e66506d6d191d1a1" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>set_diagnostic_manager</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aa333e1314dc567c00a376c0ebdf8af02" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>set_grid_manager</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1aa1bb6355b40163973f8d5615bac667b3" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>set_name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1403 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacemet__utilities__mod" kind="namespace" language="Fortran">
+    <compoundname>met_utilities_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacemet__utilities__mod_1adf0894b049764ae99dc1a4bfe58b1415" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::potential_temperature</definition>
+        <argsstring>(t, p, p0)</argsstring>
+        <name>potential_temperature</name>
+        <qualifiedname>met_utilities_mod::potential_temperature</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p0</defname>
+        </param>
+        <briefdescription>
+<para>Calculate potential temperature (theta) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Potential temperature [K] WallaceHobbs2006 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="78" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="79" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a6c1ac31abf725616b871a49a1cfe72ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::virtual_temperature</definition>
+        <argsstring>(t, qv)</argsstring>
+        <name>virtual_temperature</name>
+        <qualifiedname>met_utilities_mod::virtual_temperature</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>qv</defname>
+        </param>
+        <briefdescription>
+<para>Calculate virtual temperature. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">qv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Water vapor mixing ratio [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Virtual temperature [K] WallaceHobbs2006 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="89" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="90" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1ac34ec408d4b60a54584972035de59593" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::dew_point</definition>
+        <argsstring>(t, rh)</argsstring>
+        <name>dew_point</name>
+        <qualifiedname>met_utilities_mod::dew_point</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rh</defname>
+        </param>
+        <briefdescription>
+<para>Calculate dew point temperature. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative humidity [0-1] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Dew point temperature [K] Bolton1980 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="100" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="101" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a3f5abcb93d42be74a7de879132a49bcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::relative_humidity</definition>
+        <argsstring>(t, qv, p)</argsstring>
+        <name>relative_humidity</name>
+        <qualifiedname>met_utilities_mod::relative_humidity</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>qv</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>Calculate relative humidity. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">qv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Water vapor mixing ratio [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Relative humidity [0-1] WallaceHobbs2006 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="115" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="116" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a6dccadc38394ff70bbba7f30a2b1788a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::saturation_vapor_pressure</definition>
+        <argsstring>(t)</argsstring>
+        <name>saturation_vapor_pressure</name>
+        <qualifiedname>met_utilities_mod::saturation_vapor_pressure</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+<para>Calculate saturation vapor pressure (Clausius-Clapeyron) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Saturation vapor pressure [Pa] Bolton1980 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="128" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="129" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a63ee14f426910209013d4838cdca9e4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::mixing_ratio</definition>
+        <argsstring>(q)</argsstring>
+        <name>mixing_ratio</name>
+        <qualifiedname>met_utilities_mod::mixing_ratio</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>q</defname>
+        </param>
+        <briefdescription>
+<para>Calculate mixing ratio from specific humidity. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">q</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Specific humidity [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Mixing ratio [kg/kg] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="137" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="138" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1acb60d649dad9396e41565561eab8c1ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::specific_humidity</definition>
+        <argsstring>(r)</argsstring>
+        <name>specific_humidity</name>
+        <qualifiedname>met_utilities_mod::specific_humidity</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>r</defname>
+        </param>
+        <briefdescription>
+<para>Calculate specific humidity from mixing ratio. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mixing ratio [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Specific humidity [kg/kg] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="146" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="147" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a3f43c4e19d8a250df9f4612fbce91c11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::dry_adiabatic_lapse_rate</definition>
+        <argsstring>()</argsstring>
+        <name>dry_adiabatic_lapse_rate</name>
+        <qualifiedname>met_utilities_mod::dry_adiabatic_lapse_rate</qualifiedname>
+        <briefdescription>
+<para>Calculate dry adiabatic lapse rate. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Dry adiabatic lapse rate [K/m] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="154" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="155" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a4543b06184565f68ec2f61a2ee294324" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::bulk_richardson_number</definition>
+        <argsstring>(t0, tz, u, z)</argsstring>
+        <name>bulk_richardson_number</name>
+        <qualifiedname>met_utilities_mod::bulk_richardson_number</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>tz</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>u</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>z</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the bulk Richardson number. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Tz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature at height z [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">u</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wind speed at height z [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height above ground [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Bulk Richardson number (dimensionless) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="165" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="166" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1ad5298d69360d52cc9d1cb7ec7e8984a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::monin_obukhov_length</definition>
+        <argsstring>(ustar, t0, h, rho)</argsstring>
+        <name>monin_obukhov_length</name>
+        <qualifiedname>met_utilities_mod::monin_obukhov_length</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>h</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rho</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the Monin-Obukhov length. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">H</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sensible heat flux [W/m^2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rho</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Air density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Monin-Obukhov length [m] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="181" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="182" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a0bea4ab5831eb7518203ba689c161f9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::friction_velocity</definition>
+        <argsstring>(tau, rho)</argsstring>
+        <name>friction_velocity</name>
+        <qualifiedname>met_utilities_mod::friction_velocity</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>tau</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rho</defname>
+        </param>
+        <briefdescription>
+<para>Calculate friction velocity (u*) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tau</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface shear stress [N/m^2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rho</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Air density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Friction velocity [m/s] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="195" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="196" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1aeab7a0768c91a73f622cf47daab0ff58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function, public</type>
+        <definition>integer function, public met_utilities_mod::stability_classification</definition>
+        <argsstring>(l)</argsstring>
+        <name>stability_classification</name>
+        <qualifiedname>met_utilities_mod::stability_classification</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>l</defname>
+        </param>
+        <briefdescription>
+<para>Classify atmospheric stability based on Monin-Obukhov length. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">L</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monin-Obukhov length [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Stability class: -1 (unstable), 0 (neutral), 1 (stable) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="208" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="209" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1af3afbff7b7f0ea9c6dbd63638a50e217" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::saturation_mixing_ratio</definition>
+        <argsstring>(p, t)</argsstring>
+        <name>saturation_mixing_ratio</name>
+        <qualifiedname>met_utilities_mod::saturation_mixing_ratio</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+<para>Calculate saturation mixing ratio. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Saturation mixing ratio [kg/kg] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="224" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="225" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1aac3dac8f002b921acddac21a98d8ae52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::latent_heat_vaporization</definition>
+        <argsstring>(t)</argsstring>
+        <name>latent_heat_vaporization</name>
+        <qualifiedname>met_utilities_mod::latent_heat_vaporization</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+<para>Calculate latent heat of vaporization (temperature dependent) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Latent heat of vaporization [J/kg] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="235" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="236" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1aeebf30076eb3b2022724a8ffc27a9ebb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::psychrometric_constant</definition>
+        <argsstring>(p, lv)</argsstring>
+        <name>psychrometric_constant</name>
+        <qualifiedname>met_utilities_mod::psychrometric_constant</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>lv</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the psychrometric constant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Lv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latent heat of vaporization [J/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Psychrometric constant [Pa/K] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="245" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="246" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a3ca3136c2b998f6bc8e9da2313e644b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::wind_profile_loglaw</definition>
+        <argsstring>(ustar, z, z0)</argsstring>
+        <name>wind_profile_loglaw</name>
+        <qualifiedname>met_utilities_mod::wind_profile_loglaw</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>z</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>z0</defname>
+        </param>
+        <briefdescription>
+<para>Calculate wind speed at height z using the log-law. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height above ground [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface roughness length [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Wind speed at height z [m/s] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="256" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="257" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a34e0818acb85fd19d8c06826345e9f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::brunt_vaisala_frequency</definition>
+        <argsstring>(t0, dtdz)</argsstring>
+        <name>brunt_vaisala_frequency</name>
+        <qualifiedname>met_utilities_mod::brunt_vaisala_frequency</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>dtdz</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Brunt–Väisälä frequency squared (N^2) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reference temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dTdz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vertical temperature gradient [K/m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Brunt–Väisälä frequency squared [1/s^2] WallaceHobbs2006 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="271" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="272" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a2f308f9baff58fbfe863697bad4c453c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::psi_m_businger</definition>
+        <argsstring>(zeta)</argsstring>
+        <name>psi_m_businger</name>
+        <qualifiedname>met_utilities_mod::psi_m_businger</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>zeta</defname>
+        </param>
+        <briefdescription>
+<para>Businger-Dyer stability correction for momentum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">zeta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>z/L (dimensionless stability parameter) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Psi_m (stability correction for momentum) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="280" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="281" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a9dd08effc73bd158055346a4573fbd36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::psi_h_businger</definition>
+        <argsstring>(zeta)</argsstring>
+        <name>psi_h_businger</name>
+        <qualifiedname>met_utilities_mod::psi_h_businger</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>zeta</defname>
+        </param>
+        <briefdescription>
+<para>Businger-Dyer stability correction for heat. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">zeta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>z/L (dimensionless stability parameter) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Psi_h (stability correction for heat) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="293" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="294" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1af69e46819854b0a24aac904714fad9c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::arrhenius_rate</definition>
+        <argsstring>(a, ea, t)</argsstring>
+        <name>arrhenius_rate</name>
+        <qualifiedname>met_utilities_mod::arrhenius_rate</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>ea</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Arrhenius rate constant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pre-exponential factor [units vary] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Ea</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Activation energy [J/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Rate constant [units of A] SeinfeldPandis2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="309" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="310" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a0cba4b3ae93ac11cfbabf9f43227eb67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::henrys_law_constant</definition>
+        <argsstring>(h0, dh, t, t0)</argsstring>
+        <name>henrys_law_constant</name>
+        <qualifiedname>met_utilities_mod::henrys_law_constant</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>h0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>dh</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t0</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Henry&apos;s Law constant (temperature dependent) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">H0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reference Henry&apos;s constant [mol/(m^3*Pa)] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dH</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Enthalpy of solution [J/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reference temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Henry&apos;s Law constant at T [mol/(m^3*Pa)] Sander2015 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="323" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="324" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a757d9f44a967bd3406d50567b4eb6223" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::photolysis_rate_scaling</definition>
+        <argsstring>(j0, sza)</argsstring>
+        <name>photolysis_rate_scaling</name>
+        <qualifiedname>met_utilities_mod::photolysis_rate_scaling</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>j0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>sza</defname>
+        </param>
+        <briefdescription>
+<para>Scale photolysis rate for solar zenith angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">J0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Base photolysis rate [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sza</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Solar zenith angle [degrees] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scaled photolysis rate [1/s] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="334" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="335" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1acd5969ebe2634d7aa54388a3e0d9c938" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::ppm_to_ugm3</definition>
+        <argsstring>(ppm, m, t, p)</argsstring>
+        <name>ppm_to_ugm3</name>
+        <qualifiedname>met_utilities_mod::ppm_to_ugm3</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>ppm</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>m</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppm to ug/m3. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ppm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Concentration [ppm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">M</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molar mass [g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Concentration [ug/m3] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="346" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="347" bodyend="349"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a0daaa32d29631f17ef236af1ce893bb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::ugm3_to_ppm</definition>
+        <argsstring>(ugm3, m, t, p)</argsstring>
+        <name>ugm3_to_ppm</name>
+        <qualifiedname>met_utilities_mod::ugm3_to_ppm</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>ugm3</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>m</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>Convert ug/m3 to ppm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ugm3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Concentration [ug/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">M</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molar mass [g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Concentration [ppm] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="358" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="359" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a00427bdb71513d4bbdefe2a64aa53d69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::stokes_settling_velocity</definition>
+        <argsstring>(dp, rho_p, rho_a, mu, cc)</argsstring>
+        <name>stokes_settling_velocity</name>
+        <qualifiedname>met_utilities_mod::stokes_settling_velocity</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>dp</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rho_p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rho_a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>mu</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>cc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Stokes settling velocity for a particle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">dp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle diameter [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rho_p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle density [kg/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rho_a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Air density [kg/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Air dynamic viscosity [kg/m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Cc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cunningham correction factor </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Settling velocity [m/s] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="371" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="372" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a9920d37bcccca8ddf5df9b987684dcb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::cunningham_correction_factor</definition>
+        <argsstring>(dp, lambda)</argsstring>
+        <name>cunningham_correction_factor</name>
+        <qualifiedname>met_utilities_mod::cunningham_correction_factor</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>dp</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>lambda</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Cunningham correction factor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">dp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle diameter [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lambda</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mean free path of air [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Cunningham correction factor (dimensionless) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="381" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="382" bodyend="388"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1aad21ca5868aaeb8dd0e653dfdc8ce68a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::nuclear_decay</definition>
+        <argsstring>(n0, lambda, t)</argsstring>
+        <name>nuclear_decay</name>
+        <qualifiedname>met_utilities_mod::nuclear_decay</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>n0</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>lambda</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+<para>Calculate nuclear decay (first-order) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">N0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial quantity </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lambda</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Decay constant [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time [s] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Remaining quantity after time t </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="396" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="397" bodyend="399"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1a823da7e7a42e7863929688e49ed1b440" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::stokes_number</definition>
+        <argsstring>(rho_p, d_p, u, mu, l)</argsstring>
+        <name>stokes_number</name>
+        <qualifiedname>met_utilities_mod::stokes_number</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>rho_p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>d_p</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>u</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>mu</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>l</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Stokes number from base state variables. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rho_p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">d_p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle diameter [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">U</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Characteristic velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dynamic viscosity [kg/m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">L</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Characteristic length scale [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Stokes number (dimensionless) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="410" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="411" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemet__utilities__mod_1aa17d66e45313657afb2d8d45010babc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public met_utilities_mod::mean_free_path_air</definition>
+        <argsstring>(t, p)</argsstring>
+        <name>mean_free_path_air</name>
+        <qualifiedname>met_utilities_mod::mean_free_path_air</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the mean free path of air molecules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Mean free path [m] SeinfeldPandis2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/met_utilities_mod.F90" line="425" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="426" bodyend="429"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/met_utilities_mod.F90" line="34" column="1"/>
+  </compounddef>
+</doxygen>

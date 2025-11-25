@@ -1,0 +1,843 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structextemisdata__mod_1_1extemisfieldtype" kind="type" language="Fortran" prot="public">
+    <compoundname>extemisdata_mod::extemisfieldtype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1af3ae9054eaeed613b99821dce4ea1dfd" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) extemisdata_mod::extemisfieldtype::field_name</definition>
+        <argsstring></argsstring>
+        <name>field_name</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::field_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field name (e.g., &quot;EMIS_NO&quot;, &quot;EMIS_SO2&quot;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="42" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1af9602692d8bcf6fd4e3ff840706a04e2" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) extemisdata_mod::extemisfieldtype::long_name</definition>
+        <argsstring></argsstring>
+        <name>long_name</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::long_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Descriptive name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="43" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ad6f84405bd4adde91ae44e7e4232bc3d" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) extemisdata_mod::extemisfieldtype::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Units (typically kg/m2/s) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="44" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1adc1747d2b284620a51763a1f8db89a47" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemisfieldtype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::nx</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of longitude points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="46" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a52207a25dd279085cf91ed4d3da14190" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemisfieldtype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::ny</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of latitude points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="47" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ab972433c0f59f6af5f4108a701cab0ee" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemisfieldtype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::nz</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of vertical levels (usually 1 for surface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="48" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a932faa9c1b54bfbb74af995dc2f54d53" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) extemisdata_mod::extemisfieldtype::factors</definition>
+        <argsstring></argsstring>
+        <name>factors</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::factors</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+<para>Scaling factors for non-chemical variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="49" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a445a0f64e0fe8b83c2ab129540452412" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::lat</definition>
+        <argsstring></argsstring>
+        <name>lat</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::lat</qualifiedname>
+        <briefdescription>
+<para>Latitude coordinates [degrees]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="50" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ac2133da3f62af72718e084c5b7a16a1b" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::lon</definition>
+        <argsstring></argsstring>
+        <name>lon</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::lon</qualifiedname>
+        <briefdescription>
+<para>Longitude coordinates [degrees]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="51" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a8baa030335c32f5351e21d52f8486308" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::stkdm</definition>
+        <argsstring></argsstring>
+        <name>stkdm</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::stkdm</qualifiedname>
+        <briefdescription>
+<para>Stack diameter [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="52" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a18869c91b111762fa47f123d5cdd8114" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::stkht</definition>
+        <argsstring></argsstring>
+        <name>stkht</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::stkht</qualifiedname>
+        <briefdescription>
+<para>Stack height [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="53" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a7136948423e38602e0ec4223509e92b9" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::stktk</definition>
+        <argsstring></argsstring>
+        <name>stktk</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::stktk</qualifiedname>
+        <briefdescription>
+<para>Stack temperature [K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="54" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a4714cd932aec9481a59dd3e065b6938a" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable extemisdata_mod::extemisfieldtype::stkve</definition>
+        <argsstring></argsstring>
+        <name>stkve</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::stkve</qualifiedname>
+        <briefdescription>
+<para>Stack velocity [m/s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="55" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a03831a5a1b378ab80aa9e5eccf8a7bef" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable extemisdata_mod::extemisfieldtype::ip</definition>
+        <argsstring></argsstring>
+        <name>ip</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::ip</qualifiedname>
+        <briefdescription>
+<para>i-indices for point sources </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="56" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a4b0e79418178d361779f457632b29b2b" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable extemisdata_mod::extemisfieldtype::jp</definition>
+        <argsstring></argsstring>
+        <name>jp</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::jp</qualifiedname>
+        <briefdescription>
+<para>j-indices for point sources </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="57" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ac4b37b6b9244fd1e9b5be24201f73607" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable extemisdata_mod::extemisfieldtype::ijmap</definition>
+        <argsstring></argsstring>
+        <name>ijmap</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::ijmap</qualifiedname>
+        <briefdescription>
+<para>Number of point sources within the model domain. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="58" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a8ab819d746b83553f1b097d64e69beba" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemisfieldtype::n_times</definition>
+        <argsstring></argsstring>
+        <name>n_times</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::n_times</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of time steps in file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="59" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a2b9599df2fee915b7787f819d01a5a8b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer extemisdata_mod::extemisfieldtype::current_time_idx</definition>
+        <argsstring></argsstring>
+        <name>current_time_idx</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::current_time_idx</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Current time index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="60" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a3b48c04582a4aef3dc49d692b9dceadf" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemisfieldtype::time_interpolate</definition>
+        <argsstring></argsstring>
+        <name>time_interpolate</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::time_interpolate</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable time interpolation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="61" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ad2fe5254c21191ace1ec9689bde23c71" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemisfieldtype::diagnostic</definition>
+        <argsstring></argsstring>
+        <name>diagnostic</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::diagnostic</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable diagnostic output of this field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="62" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1ae18bde912b23d1377cbb1f6c937d009c" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable extemisdata_mod::extemisfieldtype::emission_data</definition>
+        <argsstring></argsstring>
+        <name>emission_data</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::emission_data</qualifiedname>
+        <briefdescription>
+<para>Emission flux [kg/m2/s] (nx,ny,nz,n_times) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="63" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1afdeb15943e6fd994d52bcd5c91508d36" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemisfieldtype::is_loaded</definition>
+        <argsstring></argsstring>
+        <name>is_loaded</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::is_loaded</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Data loading status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="68" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1a7a43f4cdc8454331f511d5aaba294246" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemisfieldtype::is_valid</definition>
+        <argsstring></argsstring>
+        <name>is_valid</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::is_valid</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Data validation status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="69" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemisfieldtype_1af68519cb467a3a322bb052f34dd2e312" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) extemisdata_mod::extemisfieldtype::interpolation_method</definition>
+        <argsstring></argsstring>
+        <name>interpolation_method</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::interpolation_method</qualifiedname>
+        <initializer>= &apos;bilinear&apos;</initializer>
+        <briefdescription>
+<para>Spatial interpolation method. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="70" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1ac288ce27dd3b06519cf579a715d5a8ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::init</definition>
+        <argsstring>(this, field_name, nx, ny, nz, n_times, units, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>n_times</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize emission field with metadata. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialize an emission field with metadata.  </para>
+<para>Sets up field metadata including dimensions and coordinates</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Field name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of longitude points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ny</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of latitude points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical levels (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_times</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of time steps (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Units string (optional, default=&apos;kg/m2/s&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="74" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1a634688421670daf554ac9ab1cfe73c8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up resources and deallocate arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Clean up resources and deallocate arrays.  </para>
+<para>Deallocates all arrays and resets fields to default values</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="77" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1a037e57173781da9f3a71d9b1bcf62459" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>validate</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate emission field data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Validate emission field data.  </para>
+<para>Checks that the emission field data is properly loaded and valid</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="80" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1a839e9b97cc82d2d1da9125c376de6809" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::get_emission_at_point</definition>
+        <argsstring>(this, i, j, k, time_idx)</argsstring>
+        <name>get_emission_at_point</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::get_emission_at_point</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>time_idx</defname>
+        </param>
+        <briefdescription>
+<para>Get emission rate at a specific grid point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get emission rate at a specific grid point.  </para>
+<para>Returns the emission rate for the specified grid point</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vertical index (optional, default=1) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">time_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time index (optional, uses current_time_idx if not specified) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Emission rate [kg/m2/s] at the specified point   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="83" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1a284fe86cd58c43a6ee568ec8fd0bbcae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::load_from_file</definition>
+        <argsstring>(this, filename, error_mgr, rc)</argsstring>
+        <name>load_from_file</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::load_from_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load emission field from file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Load emission data from file (placeholder)  </para>
+<para>Placeholder implementation for loading field data from a file. Actual file I/O would be handled by the driver.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">filename</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File path to load data from </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="86" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structextemisdata__mod_1_1extemisfieldtype_1a11d80e9f16741ddbb64808d8993eddcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure extemisdata_mod::extemisfieldtype::get_column_ptr</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>get_column_ptr</name>
+        <qualifiedname>extemisdata_mod::extemisfieldtype::get_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get a column slice of emission data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get a pointer to the (k, t) slab for a given (i, j) column in emission_data.  </para>
+<para>Returns a pointer to <ref refid="structextemisdata__mod_1_1extemisfieldtype_1ae18bde912b23d1377cbb1f6c937d009c" kindref="member">emission_data(i, j, :, :)</ref> for the specified (i, j) column.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ExtEmisFieldType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Pointer to <ref refid="structextemisdata__mod_1_1extemisfieldtype_1ae18bde912b23d1377cbb1f6c937d009c" kindref="member">emission_data(i, j, :, :)</ref> (vertical x time), or null if not found   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="89" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Derived type for individual external emission field. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Contains data for a single emission field from external files, including spatial and temporal information.</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
+    </detaileddescription>
+    <location file="src/core/ExtEmisData_Mod.F90" line="41" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="41" bodyend="90"/>
+    <listofallmembers>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a634688421670daf554ac9ab1cfe73c8e" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>cleanup</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a2b9599df2fee915b7787f819d01a5a8b" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>current_time_idx</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ad2fe5254c21191ace1ec9689bde23c71" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>diagnostic</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ae18bde912b23d1377cbb1f6c937d009c" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>emission_data</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a932faa9c1b54bfbb74af995dc2f54d53" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>factors</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1af3ae9054eaeed613b99821dce4ea1dfd" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>field_name</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a11d80e9f16741ddbb64808d8993eddcb" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>get_column_ptr</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a839e9b97cc82d2d1da9125c376de6809" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>get_emission_at_point</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ac4b37b6b9244fd1e9b5be24201f73607" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>ijmap</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ac288ce27dd3b06519cf579a715d5a8ee" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>init</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1af68519cb467a3a322bb052f34dd2e312" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>interpolation_method</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a03831a5a1b378ab80aa9e5eccf8a7bef" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>ip</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1afdeb15943e6fd994d52bcd5c91508d36" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>is_loaded</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a7a43f4cdc8454331f511d5aaba294246" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>is_valid</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a4b0e79418178d361779f457632b29b2b" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>jp</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a445a0f64e0fe8b83c2ab129540452412" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>lat</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a284fe86cd58c43a6ee568ec8fd0bbcae" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>load_from_file</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ac2133da3f62af72718e084c5b7a16a1b" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>lon</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1af9602692d8bcf6fd4e3ff840706a04e2" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>long_name</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a8ab819d746b83553f1b097d64e69beba" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>n_times</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1adc1747d2b284620a51763a1f8db89a47" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>nx</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a52207a25dd279085cf91ed4d3da14190" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>ny</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ab972433c0f59f6af5f4108a701cab0ee" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>nz</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a8baa030335c32f5351e21d52f8486308" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>stkdm</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a18869c91b111762fa47f123d5cdd8114" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>stkht</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a7136948423e38602e0ec4223509e92b9" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>stktk</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a4714cd932aec9481a59dd3e065b6938a" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>stkve</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a3b48c04582a4aef3dc49d692b9dceadf" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>time_interpolate</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1ad6f84405bd4adde91ae44e7e4232bc3d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>units</name></member>
+      <member refid="structextemisdata__mod_1_1extemisfieldtype_1a037e57173781da9f3a71d9b1bcf62459" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemisfieldtype</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

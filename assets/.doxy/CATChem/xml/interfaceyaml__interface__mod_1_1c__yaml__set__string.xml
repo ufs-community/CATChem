@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__set__string" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_set_string</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__set__string_1a100c8906690cc1599f2c0b6a277243a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical(c_bool) function</type>
+        <definition>logical(c_bool) function yaml_interface_mod::c_yaml_set_string::c_yaml_set_string</definition>
+        <argsstring>(node, key, value)</argsstring>
+        <name>c_yaml_set_string</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_set_string::c_yaml_set_string</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="183" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="184" bodyend="188"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="183" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="183" bodyend="188"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__set__string_1a100c8906690cc1599f2c0b6a277243a3" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_set_string</scope><name>c_yaml_set_string</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

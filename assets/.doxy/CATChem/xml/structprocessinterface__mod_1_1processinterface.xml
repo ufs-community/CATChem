@@ -1,0 +1,1581 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structprocessinterface__mod_1_1processinterface" kind="type" language="Fortran" prot="public" abstract="yes">
+    <compoundname>processinterface_mod::processinterface</compoundname>
+    <derivedcompoundref refid="structprocessinterface__mod_1_1columnprocessinterface" prot="public" virt="non-virtual">processinterface_mod::columnprocessinterface</derivedcompoundref>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" static="no" mutable="no">
+        <type>character(len=64), public</type>
+        <definition>character(len=64), public processinterface_mod::processinterface::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>processinterface_mod::processinterface::name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="35" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" static="no" mutable="no">
+        <type>character(len=64), public</type>
+        <definition>character(len=64), public processinterface_mod::processinterface::version</definition>
+        <argsstring></argsstring>
+        <name>version</name>
+        <qualifiedname>processinterface_mod::processinterface::version</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Version string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="36" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" static="no" mutable="no">
+        <type>character(len=256), public</type>
+        <definition>character(len=256), public processinterface_mod::processinterface::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>processinterface_mod::processinterface::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Process description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="37" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical processinterface_mod::processinterface::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>processinterface_mod::processinterface::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical processinterface_mod::processinterface::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>processinterface_mod::processinterface::is_active</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Active status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="39" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) processinterface_mod::processinterface::dt</definition>
+        <argsstring></argsstring>
+        <name>dt</name>
+        <qualifiedname>processinterface_mod::processinterface::dt</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Process timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="40" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a07fa2dd16cefbff358d53d6f5caa6d21" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(<ref refid="interfaceprocessinterface__mod_1_1init__interface" kindref="compound">init_interface</ref>), deferred</type>
+        <definition>procedure(init_interface), deferred processinterface_mod::processinterface::init</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>processinterface_mod::processinterface::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="44" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ad9f91407f116f0132f911f86ad79b617" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(run_interface), deferred</type>
+        <definition>procedure(run_interface), deferred processinterface_mod::processinterface::run</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>run</name>
+        <qualifiedname>processinterface_mod::processinterface::run</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="45" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>procedure(finalize_interface), deferred</type>
+        <definition>procedure(finalize_interface), deferred processinterface_mod::processinterface::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>processinterface_mod::processinterface::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_required_met_fields</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_required_met_fields</name>
+        <qualifiedname>processinterface_mod::processinterface::get_required_met_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Set species names that this process handles. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get required meteorological fields for this process</para>
+<para>Override this method in concrete processes to specify which met fields are needed. The framework will only allocate the fields that are required. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="49" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_required_diagnostic_fields</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_required_diagnostic_fields</name>
+        <qualifiedname>processinterface_mod::processinterface::get_required_diagnostic_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get required diagnostic fields for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Override this method in concrete processes to specify which diagnostic fields should be created and made available. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="50" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_name</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_name</name>
+        <qualifiedname>processinterface_mod::processinterface::get_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="53" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_version</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_version</name>
+        <qualifiedname>processinterface_mod::processinterface::get_version</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process version. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="54" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_description</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_description</name>
+        <qualifiedname>processinterface_mod::processinterface::get_description</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="55" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>processinterface_mod::processinterface::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if process is ready to run. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="56" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::activate</definition>
+        <argsstring>(this)</argsstring>
+        <name>activate</name>
+        <qualifiedname>processinterface_mod::processinterface::activate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Activate the process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="57" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::deactivate</definition>
+        <argsstring>(this)</argsstring>
+        <name>deactivate</name>
+        <qualifiedname>processinterface_mod::processinterface::deactivate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Deactivate the process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac8b2e542df97a721b4f588934be5e3f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::set_timestep</definition>
+        <argsstring>(this, dt)</argsstring>
+        <name>set_timestep</name>
+        <qualifiedname>processinterface_mod::processinterface::set_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+<para>Set process timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="59" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::get_timestep</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_timestep</name>
+        <qualifiedname>processinterface_mod::processinterface::get_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="60" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::validate_config</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>validate_config</name>
+        <qualifiedname>processinterface_mod::processinterface::validate_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Default configuration validation (always valid) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="61" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::register_diagnostics</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>register_diagnostics</name>
+        <qualifiedname>processinterface_mod::processinterface::register_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register diagnostics for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method should be called during process initialization to register all diagnostics that the process will produce.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer for accessing diagnostic manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="64" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a0128b392b36390b94ef7714337f2d972" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::update_diagnostics</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>update_diagnostics</name>
+        <qualifiedname>processinterface_mod::processinterface::update_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Update diagnostic values for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method should be called during process execution to update diagnostic field values with current data from the process.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="65" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::register_diagnostic_field</definition>
+        <argsstring>(this, registry, field_name, description, units, field_type, process_name, dimensions, diagnostic_species, diagnostic_species_id, rc)</argsstring>
+        <name>register_diagnostic_field</name>
+        <qualifiedname>processinterface_mod::processinterface::register_diagnostic_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticregistrytype" kindref="compound">diagnosticregistrytype</ref>), intent(inout)</type>
+          <defname>registry</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>field_type</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>dimensions</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Utility to register a single diagnostic field with create, initialize, and register steps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility method encapsulates the common pattern of creating a diagnostic field, initializing its data storage, and registering it with the diagnostic registry. This eliminates code duplication in process-specific diagnostic registration routines.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">registry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Diagnostic registry to register the field with </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the diagnostic field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Human-readable description of the field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Physical units of the field (e.g., &apos;kg/m2/s&apos;, &apos;ppbv&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Field data type (DIAG_REAL_2D, DIAG_REAL_3D, etc.) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the process registering the field </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dimensions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array dimensions for data storage [nx, ny] or [nx, ny, nz] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional array of species names for diagnostics </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional array of species indices for diagnostics </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="66" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a03de1e9dbb9ac11422314e2f5a35898a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::apply_emission_scaling</definition>
+        <argsstring>(this, container, scaling_factors, species_indices, rc)</argsstring>
+        <name>apply_emission_scaling</name>
+        <qualifiedname>processinterface_mod::processinterface::apply_emission_scaling</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>scaling_factors</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>species_indices</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Apply emission scaling factors to emission arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility method applies scaling factors to emission fluxes for sensitivity studies or emission inventory adjustments.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+Apply emission scaling factors (deprecated - placeholder implementation)</para>
+<para>This method is deprecated as EmisState_Mod has been removed in favor of the new DiagnosticManager system. Processes should handle emissions through their own state management or direct chemical state modification.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling_factors</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scaling factors per species [dimensionless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_indices</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices of species to scale </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="69" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::accumulate_emissions</definition>
+        <argsstring>(this, container, process_emissions, species_mapping, rc)</argsstring>
+        <name>accumulate_emissions</name>
+        <qualifiedname>processinterface_mod::processinterface::accumulate_emissions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>process_emissions</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>species_mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Accumulate emissions from process calculations (deprecated - placeholder implementation) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method is deprecated as EmisState_Mod has been removed in favor of the new DiagnosticManager system. Processes should handle emissions through direct chemical state modification.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_emissions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process emission fluxes [kg/m²/s or molecules/cm²/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mapping from process species to global species indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_emissions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process emission fluxes </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species index mapping </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="70" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa7d419cc2e40ae2fdf8873cb0663979f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::apply_tendency</definition>
+        <argsstring>(this, container, tendencies, dt, rc)</argsstring>
+        <name>apply_tendency</name>
+        <qualifiedname>processinterface_mod::processinterface::apply_tendency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(in)</type>
+          <defname>tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Apply tendencies to chemical species concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility method applies calculated tendencies (rates of change) to chemical species concentrations using a specified integration method.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tendency array [species/time] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tendencies [conc/time] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="71" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a0073988041bd832da3aed2c70a0ba094" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::check_mass_conservation</definition>
+        <argsstring>(this, container, initial_mass, final_mass, tolerance, rc)</argsstring>
+        <name>check_mass_conservation</name>
+        <qualifiedname>processinterface_mod::processinterface::check_mass_conservation</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>initial_mass</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>final_mass</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tolerance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check mass conservation for process calculations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility method checks whether mass is conserved during process calculations, useful for debugging and validation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initial_mass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial mass before process [kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">final_mass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Final mass after process [kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tolerance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative tolerance for mass conservation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initial_mass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial mass per species [kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">final_mass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Final mass per species [kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tolerance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative tolerance </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="72" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::validate_species_availability</definition>
+        <argsstring>(this, container, required_species, available_species, rc)</argsstring>
+        <name>validate_species_availability</name>
+        <qualifiedname>processinterface_mod::processinterface::validate_species_availability</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>required_species</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), intent(out)</type>
+          <defname>available_species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate that required chemical species are available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility method checks whether all species required by a process are available in the chemical mechanism.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">required_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of required species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">available_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical array indicating availability </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="73" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::validate_physical_ranges</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>validate_physical_ranges</name>
+        <qualifiedname>processinterface_mod::processinterface::validate_physical_ranges</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate physical ranges of variables. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method validates that physical variables are within reasonable ranges to catch numerical errors, unphysical values, or model instabilities. Uses StateManager&apos;s internal validation capabilities.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS if all values valid, CC_FAILURE if errors found) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="74" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::convert_concentration_units</definition>
+        <argsstring>(this, values, from_units, to_units, molecular_weight, temperature, pressure, rc)</argsstring>
+        <name>convert_concentration_units</name>
+        <qualifiedname>processinterface_mod::processinterface::convert_concentration_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>from_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>to_units</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert concentration units between different unit systems. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility converts concentration values between common atmospheric chemistry units such as molec/cm³, ppbv, ppmv, µg/m³, etc.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of concentration values to convert </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">from_units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source units (e.g., &apos;ppbv&apos;, &apos;molec/cm3&apos;, &apos;ug/m3&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">to_units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target units </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [g/mol] (needed for mass/volume conversions) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] (needed for some conversions) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] (needed for some conversions) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="77" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::convert_flux_units</definition>
+        <argsstring>(this, flux_values, from_units, to_units, molecular_weight, rc)</argsstring>
+        <name>convert_flux_units</name>
+        <qualifiedname>processinterface_mod::processinterface::convert_flux_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>flux_values</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>from_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>to_units</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert flux units between different unit systems. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility converts emission flux values between common units such as kg/m²/s, molec/cm²/s, molecules/m²/s, etc.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">flux_values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of flux values to convert </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">from_units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source flux units </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">to_units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target flux units </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="78" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a7074b14a820348304ce2f175c61f3c32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::calculate_column_integrals</definition>
+        <argsstring>(this, container, species_name, column_integrals, rc)</argsstring>
+        <name>calculate_column_integrals</name>
+        <qualifiedname>processinterface_mod::processinterface::calculate_column_integrals</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(out), allocatable</type>
+          <defname>column_integrals</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate column integrals of species concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This utility calculates vertical column integrals (e.g., column density) from 3D concentration fields.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ProcessInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager for accessing state data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of species to integrate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">column_integrals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2D array of column integrals [molecules/cm²] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="79" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ab2371a427fb673428cae8910dbdc5ccc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::supports_column_processing</definition>
+        <argsstring>(this)</argsstring>
+        <name>supports_column_processing</name>
+        <qualifiedname>processinterface_mod::processinterface::supports_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if process supports column-based processing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="83" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processinterface_mod::processinterface::process_column</definition>
+        <argsstring>(this, column, rc)</argsstring>
+        <name>process_column</name>
+        <qualifiedname>processinterface_mod::processinterface::process_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Process a single column (default implementation) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="84" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="84" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Abstract base class for all atmospheric processes. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This abstract type defines the interface that all atmospheric processes must implement, following the exact structure from PROCESS_ARCHITECTURE_GUIDE.md </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>processdrydepinterface_mod::processdrydepinterface</label>
+        <link refid="structprocessdrydepinterface__mod_1_1processdrydepinterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>processinterface_mod::columnprocessinterface</label>
+        <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>processinterface_mod::processinterface</label>
+        <link refid="structprocessinterface__mod_1_1processinterface"/>
+      </node>
+      <node id="4">
+        <label>processseasaltinterface_mod::processseasaltinterface</label>
+        <link refid="structprocessseasaltinterface__mod_1_1processseasaltinterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="src/core/ProcessInterface_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="33" bodyend="85"/>
+    <listofallmembers>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>accumulate_emissions</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>activate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a03de1e9dbb9ac11422314e2f5a35898a" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>apply_emission_scaling</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa7d419cc2e40ae2fdf8873cb0663979f" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>apply_tendency</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7074b14a820348304ce2f175c61f3c32" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>calculate_column_integrals</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0073988041bd832da3aed2c70a0ba094" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>check_mass_conservation</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>convert_concentration_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>convert_flux_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>deactivate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>dt</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" virt="pure-virtual"><scope>processinterface_mod::processinterface</scope><name>finalize</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_required_diagnostic_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_version</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a07fa2dd16cefbff358d53d6f5caa6d21" prot="public" virt="pure-virtual"><scope>processinterface_mod::processinterface</scope><name>init</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_active</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_initialized</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_ready</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>process_column</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>register_diagnostic_field</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>register_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ad9f91407f116f0132f911f86ad79b617" prot="public" virt="pure-virtual"><scope>processinterface_mod::processinterface</scope><name>run</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac8b2e542df97a721b4f588934be5e3f1" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>set_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ab2371a427fb673428cae8910dbdc5ccc" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>supports_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0128b392b36390b94ef7714337f2d972" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>update_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_config</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_physical_ranges</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_species_availability</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

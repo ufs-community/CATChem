@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1yaml__get__array" kind="interface" language="Fortran" prot="public">
+    <compoundname>yaml_interface_mod::yaml_get_array</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get__array_1aefc74fbd0fa4e2ff6e0185e422ae9341" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get_array::yaml_get_string_array_generic</definition>
+        <argsstring>(node, key, values, rc, actual_size)</argsstring>
+        <name>yaml_get_string_array_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get_array::yaml_get_string_array_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>actual_size</defname>
+        </param>
+        <briefdescription>
+<para>Generic string array getter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="684" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="685" bodyend="698"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get__array_1a7d01ef18385b0727abdebb14c9064853" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get_array::yaml_get_integer_array_generic</definition>
+        <argsstring>(node, key, values, rc, actual_size)</argsstring>
+        <name>yaml_get_integer_array_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get_array::yaml_get_integer_array_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>actual_size</defname>
+        </param>
+        <briefdescription>
+<para>Generic integer array getter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="702" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="703" bodyend="716"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1yaml__get__array_1a4fae7bd886f9e9bf77bd9abf9701e0a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::yaml_get_array::yaml_get_real_dp_array_generic</definition>
+        <argsstring>(node, key, values, rc, actual_size)</argsstring>
+        <name>yaml_get_real_dp_array_generic</name>
+        <qualifiedname>yaml_interface_mod::yaml_get_array::yaml_get_real_dp_array_generic</qualifiedname>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <param>
+          <type>real(kind=fp), dimension(:), intent(out)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>actual_size</defname>
+        </param>
+        <briefdescription>
+<para>Generic double precision real array getter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="720" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="721" bodyend="734"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Generic interface for getting arrays from YAML This allows uniform syntax: call yaml_get_array(node, key, values, rc) for any supported array type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="64" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="64" bodyend="67"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get__array_1a7d01ef18385b0727abdebb14c9064853" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get_array</scope><name>yaml_get_integer_array_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get__array_1a4fae7bd886f9e9bf77bd9abf9701e0a2" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get_array</scope><name>yaml_get_real_dp_array_generic</name></member>
+      <member refid="interfaceyaml__interface__mod_1_1yaml__get__array_1aefc74fbd0fa4e2ff6e0185e422ae9341" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_get_array</scope><name>yaml_get_string_array_generic</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

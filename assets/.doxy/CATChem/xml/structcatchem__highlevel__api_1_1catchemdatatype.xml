@@ -1,0 +1,289 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__highlevel__api_1_1catchemdatatype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_highlevel_api::catchemdatatype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a4024fdf9c25c32044d86441115232e29" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::temperature</qualifiedname>
+        <briefdescription>
+<para>Temperature [K] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="85" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a13908d1220ece79c4915f5ac5433ff9c" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::pressure</qualifiedname>
+        <briefdescription>
+<para>Pressure [Pa] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="86" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1acb86e792e38bf37be579a97735db181e" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::humidity</definition>
+        <argsstring></argsstring>
+        <name>humidity</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::humidity</qualifiedname>
+        <briefdescription>
+<para>Specific humidity [kg/kg] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="87" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a14273b6b0ae8a20eb51b0cf39ff0c625" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::wind_u</definition>
+        <argsstring></argsstring>
+        <name>wind_u</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::wind_u</qualifiedname>
+        <briefdescription>
+<para>U wind [m/s] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="88" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a562238290d210cf970e78f5a60281b0b" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::wind_v</definition>
+        <argsstring></argsstring>
+        <name>wind_v</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::wind_v</qualifiedname>
+        <briefdescription>
+<para>V wind [m/s] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="89" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a29c3b68079665a8d9e7e85b6a01d0558" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::wind_w</definition>
+        <argsstring></argsstring>
+        <name>wind_w</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::wind_w</qualifiedname>
+        <briefdescription>
+<para>W wind [m/s] (nx,ny,nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="90" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a3992311b4947a896d823a5bc5b4485a5" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdatatype::surface_pressure</definition>
+        <argsstring></argsstring>
+        <name>surface_pressure</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::surface_pressure</qualifiedname>
+        <briefdescription>
+<para>Surface pressure [Pa] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="91" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1ac0f23e663123d48d0c4b74b472f54bf6" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdatatype::surface_temperature</definition>
+        <argsstring></argsstring>
+        <name>surface_temperature</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::surface_temperature</qualifiedname>
+        <briefdescription>
+<para>Surface temperature [K] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="92" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a8ae8296a86adfc9cfcb15bc456919ec6" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchem_highlevel_api::catchemdatatype::concentrations</definition>
+        <argsstring></argsstring>
+        <name>concentrations</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::concentrations</qualifiedname>
+        <briefdescription>
+<para>Species concentrations [mixing ratio] (nx,ny,nz,nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="95" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a2b796f4a8f47ce2177c1cf3590c17d95" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable catchem_highlevel_api::catchemdatatype::species_names</definition>
+        <argsstring></argsstring>
+        <name>species_names</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::species_names</qualifiedname>
+        <briefdescription>
+<para>Species names (nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="96" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1ae99cd303d1f468c095ea1f8591722ad2" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchem_highlevel_api::catchemdatatype::surface_emissions</definition>
+        <argsstring></argsstring>
+        <name>surface_emissions</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::surface_emissions</qualifiedname>
+        <briefdescription>
+<para>Surface emissions [mol/m2/s] (nx,ny,nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="99" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a1dcf6f1bfc858b2dd96e0d7d88e241a5" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchem_highlevel_api::catchemdatatype::volume_emissions</definition>
+        <argsstring></argsstring>
+        <name>volume_emissions</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::volume_emissions</qualifiedname>
+        <briefdescription>
+<para>Volume emissions [mol/m3/s] (nx,ny,nz,nspec) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="100" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1aee833feb60476ab1ed99dc2f4d9f62d1" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdatatype::latitude</definition>
+        <argsstring></argsstring>
+        <name>latitude</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::latitude</qualifiedname>
+        <briefdescription>
+<para>Latitude [degrees] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="103" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1ac2aeeb0ee2c5866849c61767206ed1f2" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdatatype::longitude</definition>
+        <argsstring></argsstring>
+        <name>longitude</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::longitude</qualifiedname>
+        <briefdescription>
+<para>Longitude [degrees] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="104" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a639b2cfda9b8681cc504ac19238e0762" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchem_highlevel_api::catchemdatatype::grid_area</definition>
+        <argsstring></argsstring>
+        <name>grid_area</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::grid_area</qualifiedname>
+        <briefdescription>
+<para>Grid cell area [m2] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="105" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1a4b6d4d7f57aad43c53a576f215b8aa7a" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable catchem_highlevel_api::catchemdatatype::level_heights</definition>
+        <argsstring></argsstring>
+        <name>level_heights</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::level_heights</qualifiedname>
+        <briefdescription>
+<para>Level heights [m] (nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="106" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemdatatype_1ac825d4e7624f7b07ef82651e2223384c" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemdatatype::is_allocated</definition>
+        <argsstring></argsstring>
+        <name>is_allocated</name>
+        <qualifiedname>catchem_highlevel_api::catchemdatatype::is_allocated</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Allocation status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="108" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Data container for easy input/output. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_HighLevel_API.F90" line="83" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="83" bodyend="109"/>
+    <listofallmembers>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a8ae8296a86adfc9cfcb15bc456919ec6" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>concentrations</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a639b2cfda9b8681cc504ac19238e0762" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>grid_area</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1acb86e792e38bf37be579a97735db181e" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>humidity</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1ac825d4e7624f7b07ef82651e2223384c" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>is_allocated</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1aee833feb60476ab1ed99dc2f4d9f62d1" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>latitude</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a4b6d4d7f57aad43c53a576f215b8aa7a" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>level_heights</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1ac2aeeb0ee2c5866849c61767206ed1f2" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>longitude</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a13908d1220ece79c4915f5ac5433ff9c" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>pressure</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a2b796f4a8f47ce2177c1cf3590c17d95" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>species_names</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1ae99cd303d1f468c095ea1f8591722ad2" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>surface_emissions</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a3992311b4947a896d823a5bc5b4485a5" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>surface_pressure</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1ac0f23e663123d48d0c4b74b472f54bf6" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>surface_temperature</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a4024fdf9c25c32044d86441115232e29" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>temperature</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a1dcf6f1bfc858b2dd96e0d7d88e241a5" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>volume_emissions</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a14273b6b0ae8a20eb51b0cf39ff0c625" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>wind_u</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a562238290d210cf970e78f5a60281b0b" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>wind_v</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemdatatype_1a29c3b68079665a8d9e7e85b6a01d0558" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemdatatype</scope><name>wind_w</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

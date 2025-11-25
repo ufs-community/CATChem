@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceinit__mod" kind="namespace" language="Fortran">
+    <compoundname>init_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceinit__mod_1aa3afd2b83db3abbc8ed21997f1fbb43d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public init_mod::initialize_catchem</definition>
+        <argsstring>(container, config_file, rc, container_name)</argsstring>
+        <name>initialize_catchem</name>
+        <qualifiedname>init_mod::initialize_catchem</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(out)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>container_name</defname>
+        </param>
+        <briefdescription>
+<para>Main CATChem initialization routine. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the primary initialization routine that sets up a complete CATChem instance using the StateContainer pattern with comprehensive error handling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initialized StateContainer with all components </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config_file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Path to configuration file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional name for the container </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="52" column="1" bodyfile="src/core/init_mod.F90" bodystart="53" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceinit__mod_1a0fbc0ef2e96e5db3d653bc7baeecd975" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public init_mod::initialize_core_states</definition>
+        <argsstring>(container, rc)</argsstring>
+        <name>initialize_core_states</name>
+        <qualifiedname>init_mod::initialize_core_states</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize core state objects. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This routine initializes all core state objects (Met, Chem, Emis, Diag) within the StateContainer.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="133" column="1" bodyfile="src/core/init_mod.F90" bodystart="134" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceinit__mod_1a390a4328a8e6404b5a488c4a3b293171" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine init_mod::load_configuration</definition>
+        <argsstring>(container, config_file, rc)</argsstring>
+        <name>load_configuration</name>
+        <qualifiedname>init_mod::load_configuration</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load configuration from file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This routine loads the configuration file and applies settings to the StateContainer using the enhanced configuration system.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer to configure </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config_file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Path to configuration file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="217" column="1" bodyfile="src/core/init_mod.F90" bodystart="218" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceinit__mod_1a2389674375d17f7bd9ce98e6d240c318" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public init_mod::initialize_processes</definition>
+        <argsstring>(container, rc)</argsstring>
+        <name>initialize_processes</name>
+        <qualifiedname>init_mod::initialize_processes</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize atmospheric chemistry processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This routine initializes all atmospheric chemistry processes (dust, seasalt, dry deposition, etc.) based on the loaded configuration.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer with processes to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="283" column="1" bodyfile="src/core/init_mod.F90" bodystart="284" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceinit__mod_1a716f4b984805c438106425141eca791b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public init_mod::validate_initialization</definition>
+        <argsstring>(container, rc)</argsstring>
+        <name>validate_initialization</name>
+        <qualifiedname>init_mod::validate_initialization</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate complete initialization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This routine performs comprehensive validation of the initialized StateContainer to ensure all components are properly set up and consistent.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer to validate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="349" column="1" bodyfile="src/core/init_mod.F90" bodystart="350" bodyend="386"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceinit__mod_1a0afc760cd981a566c2dce8e20e4763c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public init_mod::finalize_catchem</definition>
+        <argsstring>(container, rc)</argsstring>
+        <name>finalize_catchem</name>
+        <qualifiedname>init_mod::finalize_catchem</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize CATChem and cleanup resources. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This routine performs cleanup of all CATChem components and resources.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateContainer to finalize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/init_mod.F90" line="395" column="1" bodyfile="src/core/init_mod.F90" bodystart="396" bodyend="423"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/init_mod.F90" line="21" column="1"/>
+  </compounddef>
+</doxygen>

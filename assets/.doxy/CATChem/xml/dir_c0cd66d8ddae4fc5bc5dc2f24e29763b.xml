@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_c0cd66d8ddae4fc5bc5dc2f24e29763b" kind="dir">
+    <compoundname>src/process</compoundname>
+    <innerdir refid="dir_57fb5aa14ddb2cd518a6d90b65ffd000">src/process/drydep</innerdir>
+    <innerdir refid="dir_3e6fd2e121e43ca7d4114b6c0b4e05b6">src/process/seasalt</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/"/>
+  </compounddef>
+</doxygen>

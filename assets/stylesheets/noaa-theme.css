@@ -1,0 +1,176 @@
+/* NOAA Color Palette for CATChem Documentation */
+
+:root {
+  /* NOAA Primary Colors */
+  --noaa-blue: #003366;
+  --noaa-light-blue: #0066CC;
+  --noaa-navy: #1E3A5F;
+  --noaa-teal: #008B8B;
+  --noaa-cyan: #00CED1;
+
+  /* NOAA Secondary Colors */
+  --noaa-orange: #FF8C00;
+  --noaa-yellow: #FFD700;
+  --noaa-green: #228B22;
+  --noaa-red: #DC143C;
+
+  /* NOAA Neutral Colors */
+  --noaa-gray-light: #F5F5F5;
+  --noaa-gray-medium: #CCCCCC;
+  --noaa-gray-dark: #666666;
+  --noaa-white: #FFFFFF;
+}
+
+/* Material theme overrides with NOAA colors */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--noaa-blue);
+  --md-primary-fg-color--light: var(--noaa-light-blue);
+  --md-primary-fg-color--dark: var(--noaa-navy);
+  --md-accent-fg-color: var(--noaa-teal);
+  --md-accent-fg-color--transparent: rgba(0, 139, 139, 0.1);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--noaa-light-blue);
+  --md-primary-fg-color--light: var(--noaa-cyan);
+  --md-primary-fg-color--dark: var(--noaa-navy);
+  --md-accent-fg-color: var(--noaa-cyan);
+  --md-accent-fg-color--transparent: rgba(0, 206, 209, 0.1);
+}
+
+/* Custom NOAA styling */
+.noaa-header {
+  background: linear-gradient(135deg, var(--noaa-blue) 0%, var(--noaa-light-blue) 100%);
+  color: var(--noaa-white);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.noaa-badge {
+  background-color: var(--noaa-teal);
+  color: var(--noaa-white);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.noaa-card {
+  border: 1px solid var(--noaa-gray-medium);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background: var(--noaa-white);
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.1);
+}
+
+/* Process type badges */
+.process-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.process-badge--transport {
+  background-color: var(--noaa-blue);
+  color: var(--noaa-white);
+}
+
+.process-badge--chemistry {
+  background-color: var(--noaa-green);
+  color: var(--noaa-white);
+}
+
+.process-badge--emission {
+  background-color: var(--noaa-orange);
+  color: var(--noaa-white);
+}
+
+.process-badge--loss {
+  background-color: var(--noaa-red);
+  color: var(--noaa-white);
+}
+
+/* Code highlighting with NOAA colors */
+.highlight .c { color: var(--noaa-gray-dark); } /* Comment */
+.highlight .k { color: var(--noaa-blue); font-weight: bold; } /* Keyword */
+.highlight .s { color: var(--noaa-green); } /* String */
+.highlight .n { color: var(--noaa-navy); } /* Name */
+
+/* Fortran-specific highlighting */
+.highlight .language-fortran .kt { color: var(--noaa-teal); } /* Type */
+.highlight .language-fortran .nf { color: var(--noaa-blue); } /* Function */
+
+/* Architecture diagrams */
+.architecture-diagram {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.architecture-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Performance metrics styling */
+.performance-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  background: var(--noaa-gray-light);
+  border-radius: 0.25rem;
+  border-left: 4px solid var(--noaa-teal);
+}
+
+.performance-metric__value {
+  font-weight: 600;
+  color: var(--noaa-blue);
+}
+
+/* API documentation styling */
+.api-section {
+  border-left: 4px solid var(--noaa-light-blue);
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+.api-function {
+  background: var(--noaa-gray-light);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.api-parameter {
+  background: rgba(0, 139, 139, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin: 0.125rem;
+  display: inline-block;
+  font-size: 0.875rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .noaa-header {
+    padding: 1rem 0;
+  }
+
+  .noaa-card {
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .performance-metric {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}

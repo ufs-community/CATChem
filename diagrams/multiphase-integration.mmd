@@ -1,0 +1,19 @@
+graph TB
+    A[Host Model<br/>FV3/UFS/WRF] --> B[CATChem Interface]
+    B --> C[StateContainer]
+    C --> D[Multi-Phase Processes]
+
+    D --> E[Gas Chemistry<br/>CB6/RACM2]
+    D --> F[Aqueous Chemistry<br/>Cloud/Fog]
+    D --> G[Heterogeneous<br/>Surface Reactions]
+
+    E --> H[Unified Diagnostics]
+    F --> H
+    G --> H
+
+    H --> I[Back to Host Model]
+
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style H fill:#fff3e0

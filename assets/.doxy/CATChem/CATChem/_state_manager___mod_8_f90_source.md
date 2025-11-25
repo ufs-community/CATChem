@@ -1,0 +1,623 @@
+
+
+# File StateManager\_Mod.F90
+
+[**File List**](files.md) **>** [**core**](dir_aebb8dcc11953d78e620bbef0b9e2183.md) **>** [**StateManager\_Mod.F90**](_state_manager___mod_8_f90.md)
+
+[Go to the documentation of this file](_state_manager___mod_8_f90.md)
+
+
+```Fortran
+
+module statemanager_mod
+   use precision_mod, only: fp
+   use error_mod, only: cc_success, cc_failure, errormanagertype
+   use configmanager_mod, only: configmanagertype
+   use metstate_mod, only: metstatetype
+   use chemstate_mod, only: chemstatetype
+   use gridmanager_mod, only: gridmanagertype
+   use diagnosticmanager_mod, only: diagnosticmanagertype
+   use virtualcolumn_mod, only: virtualcolumntype
+
+   implicit none
+   private
+
+   ! Public types
+   public :: statemanagertype
+   public :: statevalidatorutilstype
+
+   ! Public enumerations and constants
+   public :: state_type_met, state_type_chem, state_type_emis, state_type_diag
+   public :: state_status_uninitialized, state_status_initialized, state_status_valid, state_status_error
+
+   ! Public utility procedures
+   public :: get_state_type_name, allocate_met_field
+
+   !=========================================================================
+   ! Constants and Enumerations
+   !=========================================================================
+
+   integer, parameter :: STATE_TYPE_MET = 1
+   integer, parameter :: STATE_TYPE_CHEM = 2
+   integer, parameter :: STATE_TYPE_EMIS = 3
+   integer, parameter :: STATE_TYPE_DIAG = 4
+   integer, parameter :: STATE_TYPE_CONFIG = 5
+   integer, parameter :: STATE_TYPE_GRID = 6
+
+   integer, parameter :: STATE_STATUS_UNINITIALIZED = 0
+   integer, parameter :: STATE_STATUS_INITIALIZED = 1
+   integer, parameter :: STATE_STATUS_VALID = 2
+   integer, parameter :: STATE_STATUS_ERROR = -1
+
+   !=========================================================================
+   ! Types
+   !=========================================================================
+
+   type :: statemanagertype
+      private
+
+      ! Core state objects
+      type(MetStateType),   allocatable :: met_state
+      type(ChemStateType),  allocatable :: chem_state
+      type(ErrorManagerType)            :: error_mgr
+
+      ! Manager pointers (owned by CATChemCore)
+      type(ConfigManagerType), pointer :: config => null()  
+      type(GridManagerType), pointer :: grid_mgr => null()  
+      type(DiagnosticManagerType), pointer :: diag_mgr => null()  
+
+      ! Simple metadata
+      logical :: is_initialized = .false.              
+      logical :: is_configured = .false.               
+      character(len=256) :: name = ''
+
+   contains
+      ! Basic lifecycle (called by CATChemCore)
+      procedure :: init => manager_init
+      procedure :: cleanup => manager_cleanup
+      procedure :: finalize => manager_finalize
+      procedure :: is_ready => manager_is_ready
+      procedure :: set_configured => manager_set_configured
+
+      ! State object accessors
+      procedure :: get_config_ptr => manager_get_config_ptr
+      procedure :: set_config => manager_set_config
+      procedure :: get_met_state_ptr => manager_get_met_state_ptr
+      procedure :: get_chem_state_ptr => manager_get_chem_state_ptr
+      procedure :: get_error_manager => manager_get_error_manager
+      procedure :: get_grid_manager => manager_get_grid_manager
+      procedure :: set_grid_manager => manager_set_grid_manager
+      procedure :: get_diagnostic_manager => manager_get_diagnostic_manager
+      procedure :: set_diagnostic_manager => manager_set_diagnostic_manager
+      procedure :: create_virtual_column => manager_create_virtual_column
+      procedure :: apply_virtual_column => manager_apply_virtual_column
+      procedure :: populate_virtual_column => populate_virtual_column
+
+      ! Utilities
+      procedure :: set_name => manager_set_name
+      procedure :: print_info => manager_print_info
+      procedure :: get_memory_usage => manager_get_memory_usage
+
+   end type statemanagertype
+
+   type :: statevalidatorutilstype
+
+   contains
+      procedure :: validate_dimensions => validator_validate_dimensions
+      procedure :: validate_bounds => validator_validate_bounds
+      procedure :: validate_consistency => validator_validate_consistency
+      procedure :: check_nan_values => validator_check_nan_values
+      procedure :: check_negative_values => validator_check_negative_values
+
+   end type statevalidatorutilstype
+
+contains
+
+   !=========================================================================
+   ! StateManagerType Implementation
+   !=========================================================================
+
+   subroutine manager_init(this, name, rc)
+      class(StateManagerType), intent(inout) :: this
+      character(len=*), optional, intent(in) :: name
+      integer, intent(out) :: rc
+
+      rc = cc_success
+
+      ! Set manager name
+      if (present(name)) then
+         this%name = trim(name)
+      else
+         this%name = 'StateManager'
+      endif
+
+      ! Allocate and initialize state objects
+      ! Note: config will be set by external call if needed
+
+      if (.not. allocated(this%met_state)) allocate(this%met_state)
+
+      if (.not. allocated(this%chem_state)) allocate(this%chem_state)
+
+      this%is_initialized = .true.
+      this%is_configured = .false.
+
+   end subroutine manager_init
+
+   subroutine manager_cleanup(this, rc)
+      class(StateManagerType), intent(inout) :: this
+      integer, intent(out) :: rc
+
+      integer :: config_rc, met_rc, chem_rc
+
+      rc = cc_success
+
+      ! Clean up and deallocate state objects - call their cleanup procedures first!
+      if (allocated(this%met_state)) then
+         call this%met_state%cleanup('ALL', met_rc)
+         if (met_rc /= cc_success) rc = met_rc  ! Don't stop cleanup on error
+         deallocate(this%met_state)
+      end if
+
+      if (allocated(this%chem_state)) then
+         call this%chem_state%cleanup(chem_rc)
+         if (chem_rc /= cc_success) rc = chem_rc  ! Don't stop cleanup on error
+         deallocate(this%chem_state)
+      end if
+
+      ! Finalize and deallocate state objects
+      if (associated(this%config)) then
+         call this%config%finalize(config_rc)
+         if (config_rc /= cc_success) rc = config_rc  ! Don't stop cleanup on error
+         nullify(this%config)  ! Just nullify pointer, don't deallocate (owned by CATChemCore)
+      end if
+
+      this%is_initialized = .false.
+      this%is_configured = .false.
+      this%name = ''
+
+   end subroutine manager_cleanup
+
+   function manager_is_ready(this) result(ready)
+      class(StateManagerType), intent(in) :: this
+      logical :: ready
+
+      ready = this%is_initialized .and. this%is_configured .and. &
+         associated(this%config) .and. &
+         allocated(this%met_state) .and. &
+         allocated(this%chem_state)
+   end function manager_is_ready
+
+   subroutine manager_set_configured(this)
+      class(StateManagerType), intent(inout) :: this
+
+      this%is_configured = .true.
+   end subroutine manager_set_configured
+
+   function manager_get_config_ptr(this) result(config_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(ConfigManagerType), pointer :: config_ptr
+
+      if (associated(this%config)) then
+         config_ptr => this%config
+      else
+         nullify(config_ptr)
+      endif
+   end function manager_get_config_ptr
+
+   subroutine manager_set_config(this, external_config, rc)
+      class(StateManagerType), intent(inout) :: this
+      type(ConfigManagerType), intent(in), target :: external_config
+      integer, intent(out) :: rc
+
+      rc = cc_success
+
+      ! Point to the external config (share the same instance)
+      this%config => external_config
+   end subroutine manager_set_config
+
+   function manager_get_met_state_ptr(this) result(met_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(MetStateType), pointer :: met_ptr
+
+      if (allocated(this%met_state)) then
+         met_ptr => this%met_state
+      else
+         nullify(met_ptr)
+      endif
+   end function manager_get_met_state_ptr
+
+   function manager_get_chem_state_ptr(this) result(chem_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(ChemStateType), pointer :: chem_ptr
+
+      if (allocated(this%chem_state)) then
+         chem_ptr => this%chem_state
+      else
+         nullify(chem_ptr)
+      endif
+   end function manager_get_chem_state_ptr
+
+   function manager_get_error_manager(this) result(error_mgr_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(ErrorManagerType), pointer :: error_mgr_ptr
+
+      error_mgr_ptr => this%error_mgr
+   end function manager_get_error_manager
+
+   function manager_get_grid_manager(this) result(grid_mgr_ptr)
+      class(StateManagerType), intent(in), target :: this
+      type(GridManagerType), pointer :: grid_mgr_ptr
+
+      if (associated(this%grid_mgr)) then
+         grid_mgr_ptr => this%grid_mgr
+      else
+         nullify(grid_mgr_ptr)
+      endif
+   end function manager_get_grid_manager
+
+   subroutine manager_set_grid_manager(this, grid_mgr_ptr, rc)
+      class(StateManagerType), intent(inout) :: this
+      type(GridManagerType), pointer, intent(in) :: grid_mgr_ptr
+      integer, intent(out) :: rc
+
+      rc = cc_success
+
+      if (associated(grid_mgr_ptr)) then
+         this%grid_mgr => grid_mgr_ptr
+      else
+         rc = cc_failure
+      endif
+   end subroutine manager_set_grid_manager
+
+   function manager_get_diagnostic_manager(this) result(diag_mgr_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(DiagnosticManagerType), pointer :: diag_mgr_ptr
+
+      if (associated(this%diag_mgr)) then
+         diag_mgr_ptr => this%diag_mgr
+      else
+         nullify(diag_mgr_ptr)
+      endif
+   end function manager_get_diagnostic_manager
+
+   subroutine manager_set_diagnostic_manager(this, diag_mgr_ptr)
+      class(StateManagerType), intent(inout) :: this
+      type(DiagnosticManagerType), intent(in), target :: diag_mgr_ptr
+
+      this%diag_mgr => diag_mgr_ptr
+   end subroutine manager_set_diagnostic_manager
+
+   subroutine manager_create_virtual_column(this, i, j, virtual_col, rc)
+      class(StateManagerType), intent(inout), target :: this
+      integer, intent(in) :: i, j
+      type(VirtualColumnType), intent(out) :: virtual_col
+      integer, intent(out) :: rc
+
+      integer :: nlev, nspec_chem, nspec_emis
+      real(fp) :: lat, lon, area
+      integer :: nx, ny, temp_nlev
+
+      rc = cc_success
+
+      ! Get dimensions from MetState if available
+      if (allocated(this%met_state)) then
+         call this%met_state%get_dimensions(nx, ny, temp_nlev)
+         nlev = temp_nlev
+      else
+         nlev = 50  ! Default fallback
+      endif
+
+      ! Get number of chemical species
+      if (allocated(this%chem_state) .and. allocated(this%chem_state%ChemSpecies)) then
+         nspec_chem = size(this%chem_state%ChemSpecies)
+      else
+         nspec_chem = 20  ! Default fallback
+      endif
+
+      ! For now, set emissions species to 0 (would come from EmissionState)
+      nspec_emis = 0
+
+      ! Get position metadata from MetState if available
+      if (allocated(this%met_state)) then
+         if (allocated(this%met_state%LAT) .and. allocated(this%met_state%LON)) then
+            lat = this%met_state%LAT(i, j)
+            lon = this%met_state%LON(i, j)
+         else
+            lat = 0.0_fp
+            lon = 0.0_fp
+         endif
+
+         if (allocated(this%met_state%AREA_M2)) then
+            area = this%met_state%AREA_M2(i, j)
+         else
+            area = 1.0_fp
+         endif
+      else
+         lat = 0.0_fp
+         lon = 0.0_fp
+         area = 1.0_fp
+      endif
+
+      ! Initialize the virtual column data container
+      call virtual_col%init(nlev, nspec_chem, nspec_emis, i, j, lat, lon, area, rc)
+      if (rc /= cc_success) return
+
+      ! Populate with data from 3D grid
+      call this%populate_virtual_column(virtual_col, rc)
+
+   end subroutine manager_create_virtual_column
+
+   subroutine manager_apply_virtual_column(this, virtual_col, rc)
+      class(StateManagerType), intent(inout) :: this
+      type(VirtualColumnType), intent(in) :: virtual_col
+      integer, intent(out) :: rc
+
+      integer :: grid_i, grid_j, k, ispec
+      integer :: nlev, nspec_chem, nspec_emis
+      real(fp) :: met_value, chem_value
+
+      rc = cc_success
+
+      ! Check if states are allocated
+      if (.not. allocated(this%met_state) .or. .not. allocated(this%chem_state)) then
+         rc = cc_failure
+         return
+      endif
+
+      ! Get column position and dimensions
+      call virtual_col%get_position(grid_i, grid_j)
+      call virtual_col%get_dimensions(nlev, nspec_chem, nspec_emis)
+
+      ! NOTE: Meteorological data copy-back is not needed because VirtualMetType
+      ! uses pointers directly to the 3D arrays. Changes are automatically reflected.
+
+      ! Apply chemical species data back to 3D arrays
+      if (allocated(this%chem_state%ChemSpecies) .and. nspec_chem > 0) then
+         do ispec = 1, min(nspec_chem, size(this%chem_state%ChemSpecies))
+            if (associated(this%chem_state%ChemSpecies(ispec)%conc)) then
+               do k = 1, nlev
+                  ! Get modified concentration from virtual column
+                  chem_value = virtual_col%get_chem_field(k, ispec)
+                  ! Apply back to the 3D concentration array
+                  this%chem_state%ChemSpecies(ispec)%conc(grid_i, grid_j, k) = chem_value
+               end do
+            endif
+         end do
+      endif
+
+   end subroutine manager_apply_virtual_column
+
+   subroutine populate_virtual_column(this, virtual_col, rc)
+      class(StateManagerType), intent(inout) :: this
+      type(VirtualColumnType), intent(inout) :: virtual_col
+      integer, intent(out) :: rc
+
+      integer :: grid_i, grid_j, k, ispec
+      integer :: nlev, nspec_chem, nspec_emis
+      real(fp), pointer :: column_ptr(:)
+      integer, pointer :: column_ptr_int(:)
+      logical, pointer :: column_ptr_logical(:)
+      real(fp) :: scalar_val
+      integer :: scalar_val_int
+      logical :: scalar_val_logical
+      real(fp) :: chem_value
+      integer :: field_rc
+
+      rc = cc_success
+
+      ! Check if states are allocated
+      if (.not. allocated(this%met_state) .or. .not. allocated(this%chem_state)) then
+         rc = cc_failure
+         return
+      endif
+
+      ! Get column position and dimensions
+      call virtual_col%get_position(grid_i, grid_j)
+      call virtual_col%get_dimensions(nlev, nspec_chem, nspec_emis)
+
+      ! Populate VirtualMetType using generated macro
+#include "virtualmet_populate.inc"
+
+      ! Extract chemical species data (unchanged)
+      if (allocated(this%chem_state%ChemSpecies) .and. nspec_chem > 0) then
+         do ispec = 1, min(nspec_chem, size(this%chem_state%ChemSpecies))
+            if (associated(this%chem_state%ChemSpecies(ispec)%conc)) then
+               do k = 1, nlev
+                  chem_value = this%chem_state%ChemSpecies(ispec)%conc(grid_i, grid_j, k)
+                  call virtual_col%set_chem_field(k, ispec, chem_value)
+               end do
+            else
+               do k = 1, nlev
+                  call virtual_col%set_chem_field(k, ispec, 0.0_fp)
+               end do
+            endif
+         end do
+      endif
+
+   end subroutine populate_virtual_column
+
+   subroutine manager_set_name(this, name)
+      class(StateManagerType), intent(inout) :: this
+      character(len=*), intent(in) :: name
+
+      this%name = trim(name)
+   end subroutine manager_set_name
+
+   subroutine manager_print_info(this)
+      class(StateManagerType), intent(in) :: this
+
+      write(*,'(A)') '=== StateManager Information ==='
+      write(*,'(A,A)') 'Name: ', trim(this%name)
+      write(*,'(A,L1)') 'Initialized: ', this%is_initialized
+      write(*,'(A,L1)') 'Config manager associated: ', associated(this%config)
+      write(*,'(A,L1)') 'Met state allocated: ', allocated(this%met_state)
+      write(*,'(A,L1)') 'Chem state allocated: ', allocated(this%chem_state)
+      write(*,'(A)') '================================='
+
+   end subroutine manager_print_info
+
+   subroutine manager_finalize(this, rc)
+      class(StateManagerType), intent(inout) :: this
+      integer, intent(out) :: rc
+
+      call this%cleanup(rc)
+   end subroutine manager_finalize
+
+   function manager_get_memory_usage(this) result(memory_bytes)
+      class(StateManagerType), intent(in) :: this
+      integer(8) :: memory_bytes
+
+      ! Simplified calculation - real implementation would query each state object
+      memory_bytes = 0_8
+
+      if (associated(this%config)) memory_bytes = memory_bytes + 1024_8
+      if (allocated(this%met_state)) memory_bytes = memory_bytes + 102400_8
+      if (allocated(this%chem_state)) memory_bytes = memory_bytes + 1048576_8
+   end function manager_get_memory_usage
+
+   !=========================================================================
+   ! StateValidatorUtilsType Implementation
+   !=========================================================================
+
+   subroutine validator_validate_dimensions(this, array_shape, expected_shape, rc)
+      class(StateValidatorUtilsType), intent(in) :: this
+      integer, intent(in) :: array_shape(:)
+      integer, intent(in) :: expected_shape(:)
+      integer, intent(out) :: rc
+
+      integer :: i
+
+      rc = cc_success
+
+      if (size(array_shape) /= size(expected_shape)) then
+         rc = cc_failure
+         return
+      endif
+
+      do i = 1, size(array_shape)
+         if (array_shape(i) /= expected_shape(i)) then
+            rc = cc_failure
+            return
+         endif
+      enddo
+
+   end subroutine validator_validate_dimensions
+
+   subroutine validator_validate_bounds(this, values, min_val, max_val, rc)
+      class(StateValidatorUtilsType), intent(in) :: this
+      real(fp), intent(in) :: values(:)
+      real(fp), intent(in) :: min_val, max_val
+      integer, intent(out) :: rc
+
+      integer :: i
+
+      rc = cc_success
+
+      do i = 1, size(values)
+         if (values(i) < min_val .or. values(i) > max_val) then
+            rc = cc_failure
+            return
+         endif
+      enddo
+
+   end subroutine validator_validate_bounds
+
+   subroutine validator_validate_consistency(this, array1, array2, tolerance, rc)
+      class(StateValidatorUtilsType), intent(in) :: this
+      real(fp), intent(in) :: array1(:), array2(:)
+      real(fp), intent(in) :: tolerance
+      integer, intent(out) :: rc
+
+      integer :: i
+
+      rc = cc_success
+
+      if (size(array1) /= size(array2)) then
+         rc = cc_failure
+         return
+      endif
+
+      do i = 1, size(array1)
+         if (abs(array1(i) - array2(i)) > tolerance) then
+            rc = cc_failure
+            return
+         endif
+      enddo
+
+   end subroutine validator_validate_consistency
+
+   subroutine validator_check_nan_values(this, values, rc)
+      class(StateValidatorUtilsType), intent(in) :: this
+      real(fp), intent(in) :: values(:)
+      integer, intent(out) :: rc
+
+      integer :: i
+
+      rc = cc_success
+
+      do i = 1, size(values)
+         if (values(i) /= values(i)) then  ! NaN check
+            rc = cc_failure
+            return
+         endif
+      enddo
+
+   end subroutine validator_check_nan_values
+
+   subroutine validator_check_negative_values(this, values, rc)
+      class(StateValidatorUtilsType), intent(in) :: this
+      real(fp), intent(in) :: values(:)
+      integer, intent(out) :: rc
+
+      integer :: i
+
+      rc = cc_success
+
+      do i = 1, size(values)
+         if (values(i) < 0.0_fp) then
+            rc = cc_failure
+            return
+         endif
+      enddo
+
+   end subroutine validator_check_negative_values
+
+   !=========================================================================
+   ! Utility Functions
+   !=========================================================================
+
+   function get_state_type_name(state_type) result(name)
+      integer, intent(in) :: state_type
+      character(len=32) :: name
+
+      select case (state_type)
+       case (state_type_met)
+         name = 'Meteorology'
+       case (state_type_chem)
+         name = 'Chemistry'
+       case (state_type_emis)
+         name = 'Emissions'
+       case (state_type_diag)
+         name = 'Diagnostics'
+       case (state_type_config)
+         name = 'Configuration'
+       case (state_type_grid)
+         name = 'Grid'
+       case default
+         name = 'Unknown'
+      end select
+
+   end function get_state_type_name
+
+   subroutine allocate_met_field(met_state, field_name, rc)
+      class(MetStateType), intent(inout) :: met_state
+      character(len=*), intent(in) :: field_name
+      integer, intent(out) :: rc
+
+      call met_state%allocate_field(field_name, rc)
+   end subroutine allocate_met_field
+
+end module statemanager_mod
+```
+
+

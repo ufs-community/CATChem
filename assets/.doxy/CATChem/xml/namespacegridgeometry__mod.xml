@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacegridgeometry__mod" kind="namespace" language="Fortran">
+    <compoundname>gridgeometry_mod</compoundname>
+    <innerclass refid="structgridgeometry__mod_1_1gridgeometrytype" prot="public">gridgeometry_mod::gridgeometrytype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacegridgeometry__mod_1a82bf539a5200fa8ed88bd748ef0413eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridgeometry_mod::get_nx</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nx</name>
+        <qualifiedname>gridgeometry_mod::get_nx</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridGeometry_Mod.F90" line="20" column="1" bodyfile="src/core/GridGeometry_Mod.F90" bodystart="21" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridgeometry__mod_1a104df3f213f1c9147becad4aa338448a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridgeometry_mod::get_ny</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_ny</name>
+        <qualifiedname>gridgeometry_mod::get_ny</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridGeometry_Mod.F90" line="26" column="1" bodyfile="src/core/GridGeometry_Mod.F90" bodystart="27" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridgeometry__mod_1af18092f2ed8a7a243956978efa561e21" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridgeometry_mod::get_nz</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nz</name>
+        <qualifiedname>gridgeometry_mod::get_nz</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridGeometry_Mod.F90" line="32" column="1" bodyfile="src/core/GridGeometry_Mod.F90" bodystart="33" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridgeometry__mod_1ab0c7ed97ebd200380e6dba3bbd96d163" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridgeometry_mod::get_dimensions</definition>
+        <argsstring>(this, nx, ny, nz)</argsstring>
+        <name>get_dimensions</name>
+        <qualifiedname>gridgeometry_mod::get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nz</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridGeometry_Mod.F90" line="38" column="1" bodyfile="src/core/GridGeometry_Mod.F90" bodystart="39" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridgeometry__mod_1ab578dd9301e3518844a133927eff61ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridgeometry_mod::set</definition>
+        <argsstring>(this, nx, ny, nz)</argsstring>
+        <name>set</name>
+        <qualifiedname>gridgeometry_mod::set</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <briefdescription>
+<para>Set the grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GridGeometryType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ny</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in z-direction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridGeometry_Mod.F90" line="52" column="1" bodyfile="src/core/GridGeometry_Mod.F90" bodystart="53" bodyend="57"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/GridGeometry_Mod.F90" line="1" column="1"/>
+  </compounddef>
+</doxygen>

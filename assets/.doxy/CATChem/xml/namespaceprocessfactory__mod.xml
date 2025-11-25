@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceprocessfactory__mod" kind="namespace" language="Fortran">
+    <compoundname>processfactory_mod</compoundname>
+    <innerclass refid="structprocessfactory__mod_1_1processfactorytype" prot="public">processfactory_mod::processfactorytype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1afd1079e0741e933d58f3c96c19763e24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processfactory_mod::factory_init</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>factory_init</name>
+        <qualifiedname>processfactory_mod::factory_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="39" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1a030135b924017c2d066a65d3c956e879" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processfactory_mod::factory_create_process</definition>
+        <argsstring>(this, process_name, container, process, rc)</argsstring>
+        <name>factory_create_process</name>
+        <qualifiedname>processfactory_mod::factory_create_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="49" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="50" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1a3aea9dc1bf322197890c7d9a2d29dd07" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processfactory_mod::factory_list_available</definition>
+        <argsstring>(this, process_names, rc)</argsstring>
+        <name>factory_list_available</name>
+        <qualifiedname>processfactory_mod::factory_list_available</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="89" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="90" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1a2c0702a75de7f38bdc264ad42d6154a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processfactory_mod::factory_register_process</definition>
+        <argsstring>(this, name, category, description, creator, rc)</argsstring>
+        <name>factory_register_process</name>
+        <qualifiedname>processfactory_mod::factory_register_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>procedure(<ref refid="interfaceprocessregistry__mod_1_1processcreatorinterface" kindref="compound">processcreatorinterface</ref>)</type>
+          <defname>creator</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="97" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="98" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1ac0d25458d62c7b1cf0c03071378f02d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processfactory_mod::register_builtin_processes</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>register_builtin_processes</name>
+        <qualifiedname>processfactory_mod::register_builtin_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register all built-in processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method is called during factory initialization to register core processes. Process modules should register themselves through the public register_process method during their initialization. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="111" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="112" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceprocessfactory__mod_1a2010f166a03f6d272fb5aca7432fb3ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>) function, allocatable, public</type>
+        <definition>class(processinterface) function, allocatable, public processfactory_mod::create_process</definition>
+        <argsstring>(process_name, container, rc)</argsstring>
+        <name>create_process</name>
+        <qualifiedname>processfactory_mod::create_process</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Module-level convenience function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessFactory_Mod.F90" line="129" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="130" bodyend="140"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessFactory_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

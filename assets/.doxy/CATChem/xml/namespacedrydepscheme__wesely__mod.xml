@@ -1,0 +1,685 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedrydepscheme__wesely__mod" kind="namespace" language="Fortran">
+    <compoundname>drydepscheme_wesely_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a5ef53f48834fb6008ab0d0b950743261" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer parameter drydepscheme_wesely_mod::ndrydtype</definition>
+        <argsstring></argsstring>
+        <name>ndrydtype</name>
+        <qualifiedname>drydepscheme_wesely_mod::ndrydtype</qualifiedname>
+        <initializer>= 11</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<sect1 id="namespacedrydepscheme__wesely__mod_1autotoc_md3">
+<title>of drydep land types following GEOS-Chem</title>
+</sect1>
+<sect1 id="namespacedrydepscheme__wesely__mod_1autotoc_md4">
+<title>of drydep land types following GEOS-Chem</title>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="37" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a3b6af5344df09fbc441008ef5849cfa0" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter drydepscheme_wesely_mod::two_thirds</definition>
+        <argsstring></argsstring>
+        <name>two_thirds</name>
+        <qualifiedname>drydepscheme_wesely_mod::two_thirds</qualifiedname>
+        <initializer>= 2.0_fp / 3.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="38" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a90cf72577940e38bf062eae0f49e90da" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter drydepscheme_wesely_mod::small</definition>
+        <argsstring></argsstring>
+        <name>small</name>
+        <qualifiedname>drydepscheme_wesely_mod::small</qualifiedname>
+        <initializer>= 1.0e-10_fp</initializer>
+        <briefdescription>
+<para>Small number. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="40" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1ae41eeb52f113a110b83c2a3933fd3931" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer parameter drydepscheme_wesely_mod::iwater</definition>
+        <argsstring></argsstring>
+        <name>iwater</name>
+        <qualifiedname>drydepscheme_wesely_mod::iwater</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Index for water in Olson land use. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="41" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1aa0aafa8e3c9c0f5687a0a1e580a1c071" prot="private" static="no" mutable="no">
+        <type>integer, dimension(ndrydtype)</type>
+        <definition>integer, dimension(ndrydtype) drydepscheme_wesely_mod::idrydtype</definition>
+        <argsstring></argsstring>
+        <name>idrydtype</name>
+        <qualifiedname>drydepscheme_wesely_mod::idrydtype</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="43" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1ac7529544a42f4a0a4ea8fac7831bca3f" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::irac</definition>
+        <argsstring></argsstring>
+        <name>irac</name>
+        <qualifiedname>drydepscheme_wesely_mod::irac</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="44" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1acae9a380afb725728e79d378b27ad395" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::irclo</definition>
+        <argsstring></argsstring>
+        <name>irclo</name>
+        <qualifiedname>drydepscheme_wesely_mod::irclo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="44" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1acb3f6ea93a31f66d6dfcc137fb607390" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::ircls</definition>
+        <argsstring></argsstring>
+        <name>ircls</name>
+        <qualifiedname>drydepscheme_wesely_mod::ircls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="44" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a4a27933350fd66a84bafbe0d330a409c" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::irgss</definition>
+        <argsstring></argsstring>
+        <name>irgss</name>
+        <qualifiedname>drydepscheme_wesely_mod::irgss</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="45" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a8491efd44c30d1c786f3f40ee2c34fbe" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::irgso</definition>
+        <argsstring></argsstring>
+        <name>irgso</name>
+        <qualifiedname>drydepscheme_wesely_mod::irgso</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="45" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1aa8676e033ec6856341519f84dbd27124" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::irlu</definition>
+        <argsstring></argsstring>
+        <name>irlu</name>
+        <qualifiedname>drydepscheme_wesely_mod::irlu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="45" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a28804dab68e6eb3ce23e2f99c2cb7676" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::iri</definition>
+        <argsstring></argsstring>
+        <name>iri</name>
+        <qualifiedname>drydepscheme_wesely_mod::iri</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="46" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1abbeadb6fa889b79bab16fa820ce51264" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(ndrydtype)</type>
+        <definition>real(fp), dimension(ndrydtype) drydepscheme_wesely_mod::ivsmax</definition>
+        <argsstring></argsstring>
+        <name>ivsmax</name>
+        <qualifiedname>drydepscheme_wesely_mod::ivsmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="46" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1aeb13d0ad483b1e122b43360b51cdcde9" prot="private" static="no" mutable="no">
+        <type>real(fp), dimension(20)</type>
+        <definition>real(fp), dimension(20) drydepscheme_wesely_mod::drycoeff</definition>
+        <argsstring></argsstring>
+        <name>drycoeff</name>
+        <qualifiedname>drydepscheme_wesely_mod::drycoeff</qualifiedname>
+        <briefdescription>
+<para>DRYCOEFF : Baldocchi polynomial coeffs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="48" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a15fd999a81cf70f0a128a14fbba78831" prot="private" static="no" mutable="no">
+        <type>integer, dimension(74)</type>
+        <definition>integer, dimension (74) drydepscheme_wesely_mod::iolson</definition>
+        <argsstring></argsstring>
+        <name>iolson</name>
+        <qualifiedname>drydepscheme_wesely_mod::iolson</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="49" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a726f87d6475f42e4fd43e8a90994839e" prot="private" static="no" mutable="no">
+        <type>integer, dimension(74)</type>
+        <definition>integer, dimension(74) drydepscheme_wesely_mod::idep_iolson</definition>
+        <argsstring></argsstring>
+        <name>idep_iolson</name>
+        <qualifiedname>drydepscheme_wesely_mod::idep_iolson</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="49" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1a9919e626d89a1a362881f7e6071ba9dc" prot="private" static="no" mutable="no">
+        <type>integer, dimension(20)</type>
+        <definition>integer, dimension(20) drydepscheme_wesely_mod::idep_noah</definition>
+        <argsstring></argsstring>
+        <name>idep_noah</name>
+        <qualifiedname>drydepscheme_wesely_mod::idep_noah</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="50" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__wesely__mod_1af697503e84e719ad1c894de5cd4f1547" prot="private" static="no" mutable="no">
+        <type>integer, dimension(17)</type>
+        <definition>integer, dimension(17) drydepscheme_wesely_mod::idep_igbp</definition>
+        <argsstring></argsstring>
+        <name>idep_igbp</name>
+        <qualifiedname>drydepscheme_wesely_mod::idep_igbp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="50" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedrydepscheme__wesely__mod_1ac7e948c0721c7b669342663879bbbc2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine public drydepscheme_wesely_mod::compute_wesely</definition>
+        <argsstring>(num_layers, num_species, params, bxheight, cldfrc, frlai, frlanduse, iland, isice, island, issnow, lat, lon, lucname, obk, ps, salinity, suncosmid, swgdn, ts, tskin, tstep, ustar, z0, species_mw_g, species_dd_f0, species_short_name, species_dd_hstar, species_dd_dvzaersnow, species_dd_dvzminval_snow, species_dd_dvzminval_land, species_conc, species_tendencies, is_gas, drydep_con_per_species, drydep_velocity_per_species, diagnostic_species_id)</argsstring>
+        <name>compute_wesely</name>
+        <qualifiedname>drydepscheme_wesely_mod::compute_wesely</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kindref="compound">drydepschemeweselyconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>bxheight</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cldfrc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>frlai</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>frlanduse</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>iland</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>isice</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>island</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>issnow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>character(len=255), intent(in)</type>
+          <defname>lucname</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>obk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ps</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>salinity</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>suncosmid</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>swgdn</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ts</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tskin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>z0</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_f0</defname>
+        </param>
+        <param>
+          <type>character(len=255), dimension(num_species), intent(in)</type>
+          <defname>species_short_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_hstar</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzaersnow</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzminval_snow</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_dd_dvzminval_land</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>is_gas</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_con_per_species</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_velocity_per_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for wesely scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing Wesely 1989 gas dry deposition scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bxheight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>BXHEIGHT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cldfrc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CLDFRC field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frlai</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRLAI field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frlanduse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRLANDUSE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">iland</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ILAND field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>IsIce field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">island</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>IsLand field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">issnow</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>IsSnow field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LAT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lon</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LON field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lucname</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LUCNAME field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">obk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>OBK field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">salinity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SALINITY field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">suncosmid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SUNCOSmid field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">swgdn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SWGDN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>TS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tskin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>TSKIN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z0 field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_con_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition concentration per species [ug/kg or ppm] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_velocity_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition velocity [m/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="141" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="180" bodyend="485"/>
+      </memberdef>
+      <member refid="group__catchem__drydep__process_1ga6380a3370497f140feea8ff34401b70e" kind="function"><name>wesely_rc_gas</name></member>
+      <member refid="group__catchem__drydep__process_1gaa3d5face8db3f60cb03a315fcb2622ee" kind="function"><name>oceano3</name></member>
+      <member refid="group__catchem__drydep__process_1gac7ba09a2e67a21b80280220bf8fb5375" kind="function"><name>k0k1_aprox</name></member>
+      <member refid="group__catchem__drydep__process_1gac97269855e83c787928047d5dfc931f8" kind="function"><name>poly_fit</name></member>
+      <member refid="group__catchem__drydep__process_1gadb8554c0b3760522298fe6368e5724ad" kind="function"><name>diffg</name></member>
+      <member refid="group__catchem__drydep__process_1gad42ad255061f15469d9be3dea36e879c" kind="function"><name>biofit</name></member>
+      <member refid="group__catchem__drydep__process_1gae3e6b066369f4a4d01e51987e57deb06" kind="function"><name>wesely_ra_rb</name></member>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

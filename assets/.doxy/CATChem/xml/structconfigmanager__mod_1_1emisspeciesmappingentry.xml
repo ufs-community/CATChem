@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1emisspeciesmappingentry" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::emisspeciesmappingentry</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1af0bc944670e4cada4f1767c670f9f753" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::emisspeciesmappingentry::emission_field</definition>
+        <argsstring></argsstring>
+        <name>emission_field</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::emission_field</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Emission field name (e.g., &quot;SeaS1&quot;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="129" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1aefe5efb97d3b7879023efe815e6c80b5" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::emisspeciesmappingentry::long_name</definition>
+        <argsstring></argsstring>
+        <name>long_name</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::long_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Human-readable description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="130" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a16e9d4a114ce21f4b63cad9400265674" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::emisspeciesmappingentry::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>units </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="131" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1abdce8475c5e9e1eef3591a4b274ea380" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::emisspeciesmappingentry::n_mappings</definition>
+        <argsstring></argsstring>
+        <name>n_mappings</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::n_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="132" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1ad53a391487fbf63aadc1948b74b32ef8" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable configmanager_mod::emisspeciesmappingentry::map</definition>
+        <argsstring></argsstring>
+        <name>map</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::map</qualifiedname>
+        <briefdescription>
+<para>Target chemical species names. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="133" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a22d1062de0c4529aa33869f534664990" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable configmanager_mod::emisspeciesmappingentry::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::scale</qualifiedname>
+        <briefdescription>
+<para>Scaling factors for each mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="134" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="134" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a88086a9c2de499c62b72a3b97afd9d37" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable configmanager_mod::emisspeciesmappingentry::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::index</qualifiedname>
+        <briefdescription>
+<para>Chemical species indices in ChemState. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="135" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="135" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a9a746c9144a5b6cf3d1563859cb0d301" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::emisspeciesmappingentry::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Mapping enabled/disabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="136" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="136" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a2a6bf6ecdf4857e463b054e50cdd7fb4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emisspeciesmappingentry::init</definition>
+        <argsstring>(this)</argsstring>
+        <name>init</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Initialize EmisSpeciesMappingEntry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="138" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a117b0a1c1f7c228ca333e5767d55df40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emisspeciesmappingentry::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Cleanup EmisSpeciesMappingEntry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="139" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emisspeciesmappingentry_1a1d1899f91f432d5cfe3b8d1a930c596c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emisspeciesmappingentry::copy</definition>
+        <argsstring>(this, other)</argsstring>
+        <name>copy</name>
+        <qualifiedname>configmanager_mod::emisspeciesmappingentry::copy</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), intent(in)</type>
+          <defname>other</defname>
+        </param>
+        <briefdescription>
+<para>Copy EmisSpeciesMappingEntry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="140" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Emission species mapping entry. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Defines how an emission field maps to one or more chemical species with associated scaling factors </para>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="128" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="128" bodyend="141"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a117b0a1c1f7c228ca333e5767d55df40" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>cleanup</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a1d1899f91f432d5cfe3b8d1a930c596c" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>copy</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1af0bc944670e4cada4f1767c670f9f753" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>emission_field</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a88086a9c2de499c62b72a3b97afd9d37" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>index</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a2a6bf6ecdf4857e463b054e50cdd7fb4" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>init</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a9a746c9144a5b6cf3d1563859cb0d301" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>is_active</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1aefe5efb97d3b7879023efe815e6c80b5" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>long_name</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1ad53a391487fbf63aadc1948b74b32ef8" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>map</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1abdce8475c5e9e1eef3591a4b274ea380" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>n_mappings</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a22d1062de0c4529aa33869f534664990" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>scale</name></member>
+      <member refid="structconfigmanager__mod_1_1emisspeciesmappingentry_1a16e9d4a114ce21f4b63cad9400265674" prot="public" virt="non-virtual"><scope>configmanager_mod::emisspeciesmappingentry</scope><name>units</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

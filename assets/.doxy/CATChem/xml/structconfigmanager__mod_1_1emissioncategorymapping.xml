@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1emissioncategorymapping" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::emissioncategorymapping</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1a9c3174bf8e77df46d4118ec525a79a4c" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) configmanager_mod::emissioncategorymapping::category_name</definition>
+        <argsstring></argsstring>
+        <name>category_name</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::category_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Category/process name (e.g., &quot;seasalt&quot;) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="147" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="147" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1adc2dc027ce9800532e35344cb7b7cf5f" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::emissioncategorymapping::n_emission_species</definition>
+        <argsstring></argsstring>
+        <name>n_emission_species</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::n_emission_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of emission species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="148" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="148" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1a3d9b631806d7448feb815acf6006478a" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), dimension(:), allocatable</type>
+        <definition>type(emisspeciesmappingentry), dimension(:), allocatable configmanager_mod::emissioncategorymapping::species_mappings</definition>
+        <argsstring></argsstring>
+        <name>species_mappings</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::species_mappings</qualifiedname>
+        <briefdescription>
+<para>Per-species mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="149" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="149" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1acfeee0e4a5ed00e89593902dbb44fd39" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::emissioncategorymapping::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Category enabled/disabled. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="150" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="150" bodyend="150"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emissioncategorymapping_1a676e8f02834e7944a1587dbc72ccb32c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emissioncategorymapping::init</definition>
+        <argsstring>(this)</argsstring>
+        <name>init</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emissioncategorymapping" kindref="compound">emissioncategorymapping</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Initialize EmissionCategoryMapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="152" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emissioncategorymapping_1a242466fcb8d3cbbb968ce6c9eacea9fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emissioncategorymapping::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emissioncategorymapping" kindref="compound">emissioncategorymapping</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Cleanup EmissionCategoryMapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="153" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1emissioncategorymapping_1aa572ccbd8b27142163de4cca1904b8b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::emissioncategorymapping::copy</definition>
+        <argsstring>(this, other)</argsstring>
+        <name>copy</name>
+        <qualifiedname>configmanager_mod::emissioncategorymapping::copy</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emissioncategorymapping" kindref="compound">emissioncategorymapping</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1emissioncategorymapping" kindref="compound">emissioncategorymapping</ref>), intent(in)</type>
+          <defname>other</defname>
+        </param>
+        <briefdescription>
+<para>Copy EmissionCategoryMapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="154" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="154" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Emission category/process mapping. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Contains all emission-to-species mappings for a specific category or process </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>configmanager_mod::emissioncategorymapping</label>
+        <link refid="structconfigmanager__mod_1_1emissioncategorymapping"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>species_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>configmanager_mod::emisspeciesmappingentry</label>
+        <link refid="structconfigmanager__mod_1_1emisspeciesmappingentry"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ConfigManager_Mod.F90" line="146" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="146" bodyend="155"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a9c3174bf8e77df46d4118ec525a79a4c" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>category_name</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a242466fcb8d3cbbb968ce6c9eacea9fe" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>cleanup</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1aa572ccbd8b27142163de4cca1904b8b1" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>copy</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a676e8f02834e7944a1587dbc72ccb32c" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>init</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1acfeee0e4a5ed00e89593902dbb44fd39" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>is_active</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1adc2dc027ce9800532e35344cb7b7cf5f" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>n_emission_species</name></member>
+      <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a3d9b631806d7448feb815acf6006478a" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>species_mappings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

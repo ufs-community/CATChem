@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecolumninterface__mod_1_1column__process__interface" kind="interface" language="Fortran" prot="public">
+    <compoundname>columninterface_mod::column_process_interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecolumninterface__mod_1_1column__process__interface_1a6463ee81bcb353608da56bcc5459bb63" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::column_process_interface::column_process_interface</definition>
+        <argsstring>(column, rc)</argsstring>
+        <name>column_process_interface</name>
+        <qualifiedname>columninterface_mod::column_process_interface::column_process_interface</qualifiedname>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="132" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="133" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Abstract interface for column processing procedures. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ColumnInterface_Mod.F90" line="132" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="132" bodyend="135"/>
+    <listofallmembers>
+      <member refid="interfacecolumninterface__mod_1_1column__process__interface_1a6463ee81bcb353608da56bcc5459bb63" prot="public" virt="virtual"><scope>columninterface_mod::column_process_interface</scope><name>column_process_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

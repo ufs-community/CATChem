@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__has__key" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_has_key</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__has__key_1a3205123a6f8947b45656805252686996" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical(c_bool) function</type>
+        <definition>logical(c_bool) function yaml_interface_mod::c_yaml_has_key::c_yaml_has_key</definition>
+        <argsstring>(node, key)</argsstring>
+        <name>c_yaml_has_key</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_has_key::c_yaml_has_key</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>key</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="157" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="158" bodyend="161"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="157" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="157" bodyend="161"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__has__key_1a3205123a6f8947b45656805252686996" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_has_key</scope><name>c_yaml_has_key</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

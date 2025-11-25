@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structtimestate__mod_1_1timestatetype" kind="type" language="Fortran" prot="public">
+    <compoundname>timestate_mod::timestatetype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1a5b8dab824a110574da76af0dc82d8632" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::year</definition>
+        <argsstring></argsstring>
+        <name>year</name>
+        <qualifiedname>timestate_mod::timestatetype::year</qualifiedname>
+        <initializer>= 2000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="16" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1af99200a536ede65367ae3a18da81751c" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::month</definition>
+        <argsstring></argsstring>
+        <name>month</name>
+        <qualifiedname>timestate_mod::timestatetype::month</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="17" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="17" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1ac34085170af91f5fb36a845c5f06b349" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::day</definition>
+        <argsstring></argsstring>
+        <name>day</name>
+        <qualifiedname>timestate_mod::timestatetype::day</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="18" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="18" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1abffd136b46389e7f0cc7d0013dc8034a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::hour</definition>
+        <argsstring></argsstring>
+        <name>hour</name>
+        <qualifiedname>timestate_mod::timestatetype::hour</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="19" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="19" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1ac3a88f312937ee15d9fd7f447da57b00" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::minute</definition>
+        <argsstring></argsstring>
+        <name>minute</name>
+        <qualifiedname>timestate_mod::timestatetype::minute</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="20" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1af0c4d900e62630c87e9782de3fbdb07b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::second</definition>
+        <argsstring></argsstring>
+        <name>second</name>
+        <qualifiedname>timestate_mod::timestatetype::second</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="21" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1ac41cdc538496b1df7e0fe3e8f756bcb6" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real timestate_mod::timestatetype::timestep</definition>
+        <argsstring></argsstring>
+        <name>timestep</name>
+        <qualifiedname>timestate_mod::timestatetype::timestep</qualifiedname>
+        <initializer>= 3600.0</initializer>
+        <briefdescription>
+<para>seconds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="22" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1a51b7a74db1dc506281938f433a8533e1" prot="public" static="no" mutable="no">
+        <type>real</type>
+        <definition>real timestate_mod::timestatetype::julian_date</definition>
+        <argsstring></argsstring>
+        <name>julian_date</name>
+        <qualifiedname>timestate_mod::timestatetype::julian_date</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="23" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtimestate__mod_1_1timestatetype_1afb51ab63bd9c15e7b10bc934a1cef50e" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer timestate_mod::timestatetype::doy</definition>
+        <argsstring></argsstring>
+        <name>doy</name>
+        <qualifiedname>timestate_mod::timestatetype::doy</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="24" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="24" bodyend="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1af0040ffba7d2ec326c8ad01032c511d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_sza</definition>
+        <argsstring>(this, lat, lon)</argsstring>
+        <name>get_sza</name>
+        <qualifiedname>timestate_mod::timestatetype::get_sza</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real, intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real, intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <briefdescription>
+<para>Compute solar zenith angle (degrees) using latitude, longitude, and time of day. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="26" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a100fa5db046d5546a40935c57c58a48d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_cos_sza</definition>
+        <argsstring>(this, lat, lon)</argsstring>
+        <name>get_cos_sza</name>
+        <qualifiedname>timestate_mod::timestatetype::get_cos_sza</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real, intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real, intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <briefdescription>
+<para>Compute cosine of solar zenith angle. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="27" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a9c353cf614d902a6d016809a7b414e6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_timestep</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_timestep</name>
+        <qualifiedname>timestate_mod::timestatetype::get_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get model timestep (seconds) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="28" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a9a23f042865cde930066c9c9b792bc2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_current_date</definition>
+        <argsstring>(this, year, month, day)</argsstring>
+        <name>get_current_date</name>
+        <qualifiedname>timestate_mod::timestatetype::get_current_date</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>day</defname>
+        </param>
+        <briefdescription>
+<para>Get current date as (year, month, day) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="29" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a236ec9b0d6e25d9b7efe3f8b36e6345d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_julian_date</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_julian_date</name>
+        <qualifiedname>timestate_mod::timestatetype::get_julian_date</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get Julian date. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="30" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a370002a530b0f09d6d692e305d9f115f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_doy</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_doy</name>
+        <qualifiedname>timestate_mod::timestatetype::get_doy</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get day of year. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="31" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a5cd03a396934ac679a688b21652cc30c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::init</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>timestate_mod::timestatetype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="32" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a984fbcd39441582fbfce8f73cefb0a3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>validate</name>
+        <qualifiedname>timestate_mod::timestatetype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="33" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1ac5ee4d5e210d9b9333ab7bbe88d69012" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::cleanup</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>timestate_mod::timestatetype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Cleanup TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="34" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a29826126023be093caefbedd046b5906" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::reset</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>reset</name>
+        <qualifiedname>timestate_mod::timestatetype::reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reset TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="35" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a4c330c8ee428c6ea25ae8e23ba5e5a41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_status</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_status</name>
+        <qualifiedname>timestate_mod::timestatetype::get_status</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get status of TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="36" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a63490a217aa7f51a8836fc11b35d7aa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_memory_usage</name>
+        <qualifiedname>timestate_mod::timestatetype::get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get memory usage of TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="37" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a19f04b4b90dff60a218fb9cef4fa9ae9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::print_info</definition>
+        <argsstring>(this, unit)</argsstring>
+        <name>print_info</name>
+        <qualifiedname>timestate_mod::timestatetype::print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>unit</defname>
+        </param>
+        <briefdescription>
+<para>Print info for TimeStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="38" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a8e49d93b12d8e21326e08b582ff53c7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>timestate_mod::timestatetype::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Is TimeStateType ready? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="39" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1ae0db7ee8b9c9bdaf5c02c05fcc060343" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_time_iso8601</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_time_iso8601</name>
+        <qualifiedname>timestate_mod::timestatetype::get_time_iso8601</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current simulation time as ISO 8601 string (YYYY-MM-DDTHH:MM:SS) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="40" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a5d77c9bbee0fa03fcb0819cf45a47d2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_time_human</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_time_human</name>
+        <qualifiedname>timestate_mod::timestatetype::get_time_human</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current simulation time as a human-readable string (e.g., 2025-06-25 14:30:00) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="41" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1ac8eaa1d0d50ac12c3d8490814f8399ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_time_compact</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_time_compact</name>
+        <qualifiedname>timestate_mod::timestatetype::get_time_compact</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current simulation time as a compact string (YYYYMMDD_HHMMSS) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="42" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structtimestate__mod_1_1timestatetype_1a6a3cd3c061a87936b75e6d736749509f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure timestate_mod::timestatetype::get_timezone_offset</definition>
+        <argsstring>(this, lon)</argsstring>
+        <name>get_timezone_offset</name>
+        <qualifiedname>timestate_mod::timestatetype::get_timezone_offset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real, intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <briefdescription>
+<para>Calculate local timezone offset (hours) from longitude (robust, clamped) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="43" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Time state for model. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/TimeState_Mod.F90" line="15" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="15" bodyend="44"/>
+    <listofallmembers>
+      <member refid="structtimestate__mod_1_1timestatetype_1ac5ee4d5e210d9b9333ab7bbe88d69012" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>cleanup</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1ac34085170af91f5fb36a845c5f06b349" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>day</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1afb51ab63bd9c15e7b10bc934a1cef50e" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>doy</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a100fa5db046d5546a40935c57c58a48d" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_cos_sza</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a9a23f042865cde930066c9c9b792bc2f" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_current_date</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a370002a530b0f09d6d692e305d9f115f" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_doy</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a236ec9b0d6e25d9b7efe3f8b36e6345d" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_julian_date</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a63490a217aa7f51a8836fc11b35d7aa0" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_memory_usage</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a4c330c8ee428c6ea25ae8e23ba5e5a41" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_status</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1af0040ffba7d2ec326c8ad01032c511d6" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_sza</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1ac8eaa1d0d50ac12c3d8490814f8399ee" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_time_compact</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a5d77c9bbee0fa03fcb0819cf45a47d2d" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_time_human</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1ae0db7ee8b9c9bdaf5c02c05fcc060343" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_time_iso8601</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a9c353cf614d902a6d016809a7b414e6b" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_timestep</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a6a3cd3c061a87936b75e6d736749509f" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>get_timezone_offset</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1abffd136b46389e7f0cc7d0013dc8034a" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>hour</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a5cd03a396934ac679a688b21652cc30c" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>init</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a8e49d93b12d8e21326e08b582ff53c7d" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>is_ready</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a51b7a74db1dc506281938f433a8533e1" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>julian_date</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1ac3a88f312937ee15d9fd7f447da57b00" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>minute</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1af99200a536ede65367ae3a18da81751c" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>month</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a19f04b4b90dff60a218fb9cef4fa9ae9" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>print_info</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a29826126023be093caefbedd046b5906" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>reset</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1af0c4d900e62630c87e9782de3fbdb07b" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>second</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1ac41cdc538496b1df7e0fe3e8f756bcb6" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>timestep</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a984fbcd39441582fbfce8f73cefb0a3c" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>validate</name></member>
+      <member refid="structtimestate__mod_1_1timestatetype_1a5b8dab824a110574da76af0dc82d8632" prot="public" virt="non-virtual"><scope>timestate_mod::timestatetype</scope><name>year</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

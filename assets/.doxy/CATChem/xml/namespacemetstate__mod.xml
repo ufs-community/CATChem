@@ -1,0 +1,1462 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacemetstate__mod" kind="namespace" language="Fortran">
+    <compoundname>metstate_mod</compoundname>
+    <innerclass refid="structmetstate__mod_1_1metstatetype" prot="public">metstate_mod::metstatetype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacemetstate__mod_1a34c09bab0116e192f36c8ad30437fad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_init</definition>
+        <argsstring>(this, nx, ny, nlevs, nsoil, nsoiltype, nsurftype, error_mgr, rc)</argsstring>
+        <name>metstate_init</name>
+        <qualifiedname>metstate_mod::metstate_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nlevs</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize a MetStateType object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Initializes the meteorological state object, sets default values, and allocates required arrays.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in x direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ny</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in y direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nlevs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical levels </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nsoil</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of soil layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nsoiltype</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of soil types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nsurftype</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of surface types </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and error reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="252" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="253" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a3a12d6060918ef21dfc07ef0ede20164" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::allocate_metstate_arrays</definition>
+        <argsstring>(this, field_name, error_mgr, rc)</argsstring>
+        <name>allocate_metstate_arrays</name>
+        <qualifiedname>metstate_mod::allocate_metstate_arrays</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Allocate all arrays for MetStateType (optionally, only a specific field) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Helper procedure to allocate and initialize arrays in the meteorological state.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field to allocate (or &apos;ALL&apos; for all fields) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and error reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="309" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="310" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1af94d53b43a9666cfe96ee571e1f97732" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_cleanup</definition>
+        <argsstring>(this, field_name, rc)</argsstring>
+        <name>metstate_cleanup</name>
+        <qualifiedname>metstate_mod::metstate_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Deallocate and clean up all arrays in MetStateType (field-by-field) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deallocates the specified allocatable array and resets scalar values in the meteorological state.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field to deallocate (or &apos;ALL&apos; for all fields) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="357" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="358" bodyend="373"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ac7c3f50ccce2187d9c34728dd429d27b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>metstate_validate</name>
+        <qualifiedname>metstate_mod::metstate_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate the MetStateType object for consistency and physical reasonableness. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks that the number of levels is positive, temperatures and pressures are within physical ranges, and that required arrays are allocated.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and error reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="384" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="385" bodyend="460"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1adbc13fc61c54392327c0e6fbd62320c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_reset</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>metstate_reset</name>
+        <qualifiedname>metstate_mod::metstate_reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reset MetStateType to initial values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Resets time, surface fields, and arrays to standard atmosphere values.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="469" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="470" bodyend="490"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a2d44b6cc481ac9f55be189b0a6c75721" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function metstate_mod::metstate_is_allocated</definition>
+        <argsstring>(this)</argsstring>
+        <name>metstate_is_allocated</name>
+        <qualifiedname>metstate_mod::metstate_is_allocated</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if required arrays are allocated in MetStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns .true. if all required arrays are allocated, .false. otherwise.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Logical flag indicating allocation status </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="499" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="500" bodyend="505"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1aa249f491982f52da48ab64f3ab5a89a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(kind=8) function</type>
+        <definition>integer(kind=8) function metstate_mod::metstate_get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>metstate_get_memory_usage</name>
+        <qualifiedname>metstate_mod::metstate_get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get approximate memory usage of MetStateType in bytes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Estimates the memory usage of all arrays in the meteorological state object.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Estimated memory usage in bytes (integer(kind=8)) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="514" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="515" bodyend="531"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1affef03e2ba622b5299671b3f9bcf8495" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>metstate_print_summary</name>
+        <qualifiedname>metstate_mod::metstate_print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print a summary of the MetStateType object to standard output. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints key fields, allocation status, and memory usage for diagnostics.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="539" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="540" bodyend="557"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ab5ad342034bc1ea249f9b2a0fbbf2c4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_dimensions</definition>
+        <argsstring>(this, nx, ny, nlev)</argsstring>
+        <name>metstate_get_dimensions</name>
+        <qualifiedname>metstate_mod::metstate_get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nlev</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="563" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="564" bodyend="569"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a4ed3fa273728c68fd4c27ec0e4a6428f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_allocate_field</definition>
+        <argsstring>(this, field_name, rc)</argsstring>
+        <name>metstate_allocate_field</name>
+        <qualifiedname>metstate_mod::metstate_allocate_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Allocate a specific field in MetStateType by name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls the generated select-case macro to allocate only the requested field.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="603" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="604" bodyend="617"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a9659d0508e4c3f52282c956b3c47585f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_deallocate_field</definition>
+        <argsstring>(this, field_name, rc)</argsstring>
+        <name>metstate_deallocate_field</name>
+        <qualifiedname>metstate_mod::metstate_deallocate_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Deallocate a specific field in MetStateType by name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls the generated select-case macro to deallocate only the requested field.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field to deallocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="627" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="628" bodyend="635"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a658afca560b8ad6be244edee083ccf8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_3dto1d_ptr</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, rc)</argsstring>
+        <name>metstate_get_3dto1d_ptr</name>
+        <qualifiedname>metstate_mod::metstate_get_3dto1d_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get a pointer to a vertical column for a given field name and (i,j) indices (type-safe) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Calls the type-safe function version to obtain a real(fp) pointer, then assigns it to a polymorphic pointer for generic access. If the field is not found or not allocated, col_ptr is set to null and rc is set to CC_FAILURE.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field (e.g., &apos;T&apos;, &apos;temperature&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid column index (1-based) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid row index (1-based) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">col_ptr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the vertical column data (polymorphic pointer) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS if found, CC_FAILURE otherwise) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="649" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="650" bodyend="660"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a98280533eb98683db313c47cdc5b1457" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:), pointer</type>
+        <definition>real(fp) function, dimension(:), pointer metstate_mod::metstate_get_column_ptr_func</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_column_ptr_func</name>
+        <qualifiedname>metstate_mod::metstate_get_column_ptr_func</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="672" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="673" bodyend="686"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a358f3f0f8716e365efdbf7ffee034a91" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function metstate_mod::metstate_get_2dto0d_value</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_2dto0d_value</name>
+        <qualifiedname>metstate_mod::metstate_get_2dto0d_value</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get a scalar value from a 2D field at (i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="690" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="691" bodyend="700"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ab9a9ecb7d836311f167d53f827b3e989" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function metstate_mod::metstate_get_scalar_value</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>metstate_get_scalar_value</name>
+        <qualifiedname>metstate_mod::metstate_get_scalar_value</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Get a scalar value from a scalar field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="704" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="705" bodyend="710"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a9c4778c7cb67b8e15cc152024fd6577c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function, dimension(:), pointer</type>
+        <definition>integer function, dimension(:), pointer metstate_mod::metstate_get_column_ptr_func_int</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_column_ptr_func_int</name>
+        <qualifiedname>metstate_mod::metstate_get_column_ptr_func_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>INTEGER versions of accessor functions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="714" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="715" bodyend="728"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ae089bc822de8928f89dc95b7a3e6c4eb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function metstate_mod::metstate_get_2dto0d_value_int</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_2dto0d_value_int</name>
+        <qualifiedname>metstate_mod::metstate_get_2dto0d_value_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="731" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="732" bodyend="741"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a8b68c0d9b56708f019c5618916ab50bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function metstate_mod::metstate_get_scalar_value_int</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>metstate_get_scalar_value_int</name>
+        <qualifiedname>metstate_mod::metstate_get_scalar_value_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="744" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="745" bodyend="750"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a4d7396ce5f1adae28b946ea7af08d594" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function, dimension(:), pointer</type>
+        <definition>logical function, dimension(:), pointer metstate_mod::metstate_get_column_ptr_func_logical</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_column_ptr_func_logical</name>
+        <qualifiedname>metstate_mod::metstate_get_column_ptr_func_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>LOGICAL versions of accessor functions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="754" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="755" bodyend="768"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a399692286817bd0791831e70c83794bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function metstate_mod::metstate_get_2dto0d_value_logical</definition>
+        <argsstring>(this, field_name, i, j)</argsstring>
+        <name>metstate_get_2dto0d_value_logical</name>
+        <qualifiedname>metstate_mod::metstate_get_2dto0d_value_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="771" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="772" bodyend="781"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1acaa960c66ff9ab47dd186a6e0b8a3a31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function metstate_mod::metstate_get_scalar_value_logical</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>metstate_get_scalar_value_logical</name>
+        <qualifiedname>metstate_mod::metstate_get_scalar_value_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="784" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="785" bodyend="790"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ab0292186d71f57e2109faf0407dcf40f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_field_ptr</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, scalar_val, rc)</argsstring>
+        <name>metstate_get_field_ptr</name>
+        <qualifiedname>metstate_mod::metstate_get_field_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), optional, pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>real(fp), optional</type>
+          <defname>scalar_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>High-level interface: get any field (column, 2D, or scalar) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="794" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="795" bodyend="821"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a3aba2e7d8f2d8499cb0c54037907b60d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_field_ptr_int</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, scalar_val, rc)</argsstring>
+        <name>metstate_get_field_ptr_int</name>
+        <qualifiedname>metstate_mod::metstate_get_field_ptr_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), optional, pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>integer, optional</type>
+          <defname>scalar_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Integer version of get_field_ptr. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="825" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="826" bodyend="852"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1acc7965adf4aaa746f0b8765feb88cd15" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_field_ptr_logical</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, scalar_val, rc)</argsstring>
+        <name>metstate_get_field_ptr_logical</name>
+        <qualifiedname>metstate_mod::metstate_get_field_ptr_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), optional, pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>logical, optional</type>
+          <defname>scalar_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Logical version of get_field_ptr. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="856" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="857" bodyend="883"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a4040a9fe78ca6c7e15d6d5e03e415902" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_get_column_ptr_subroutine</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, rc)</argsstring>
+        <name>metstate_get_column_ptr_subroutine</name>
+        <qualifiedname>metstate_mod::metstate_get_column_ptr_subroutine</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get a pointer to a vertical column for a given field name and (i,j) indices (subroutine version) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine version provides the interface expected by StateManager_Mod. It handles different variable types (2D fields, 3D fields, scalar values) and returns a 1D pointer to the appropriate data.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the field (e.g., &apos;T&apos;, &apos;temperature&apos;, &apos;PS&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid column index (1-based) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid row index (1-based) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">col_ptr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the vertical column data (1D array) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS if found, CC_FAILURE otherwise) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="898" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="899" bodyend="953"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a84b9b1e6c89a8ef61aed17b4e985c6fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_scalar_real</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_scalar_real</name>
+        <qualifiedname>metstate_mod::metstate_set_field_scalar_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a scalar REAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="962" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="963" bodyend="990"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a7bcddc0bf136d8774b2d445bd045bde6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_scalar_int</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_scalar_int</name>
+        <qualifiedname>metstate_mod::metstate_set_field_scalar_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a scalar INTEGER field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="994" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="995" bodyend="1022"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1aa729834ac04eb2278cae7e684113d67c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_scalar_logical</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_scalar_logical</name>
+        <qualifiedname>metstate_mod::metstate_set_field_scalar_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a scalar LOGICAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1026" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1027" bodyend="1054"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a01c15263bb0b19488b4e970db9f2af99" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_2d_real</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_2d_real</name>
+        <qualifiedname>metstate_mod::metstate_set_field_2d_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 2D REAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1058" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1059" bodyend="1075"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a47e668d31b1678d2b8fc60e3212aa29f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_2d_int</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_2d_int</name>
+        <qualifiedname>metstate_mod::metstate_set_field_2d_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 2D INTEGER field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1079" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1080" bodyend="1096"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a138cb770d9da73b895045f4b30274b84" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_2d_logical</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_2d_logical</name>
+        <qualifiedname>metstate_mod::metstate_set_field_2d_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 2D LOGICAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1100" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1101" bodyend="1117"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ab6c5e919099bf802c1509d9b8a4e0508" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_3d_real</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_3d_real</name>
+        <qualifiedname>metstate_mod::metstate_set_field_3d_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 3D REAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1121" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1122" bodyend="1138"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ad8c86b1fe5313cd2277c33c4bf6a9e96" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_3d_int</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_3d_int</name>
+        <qualifiedname>metstate_mod::metstate_set_field_3d_int</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:,:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 3D INTEGER field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1142" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1143" bodyend="1159"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a038177c77cc9989fa44ae3be6a914684" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_field_3d_logical</definition>
+        <argsstring>(this, field_name, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_field_3d_logical</name>
+        <qualifiedname>metstate_mod::metstate_set_field_3d_logical</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:,:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a 3D LOGICAL field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1163" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1164" bodyend="1180"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/metstate_mod.F90" line="9" column="1"/>
+  </compounddef>
+</doxygen>

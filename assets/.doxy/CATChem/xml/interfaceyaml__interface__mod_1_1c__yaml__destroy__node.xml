@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__destroy__node" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_destroy_node</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__destroy__node_1abd8d6f4df03fa0eea2f2840f48a22a0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine yaml_interface_mod::c_yaml_destroy_node::c_yaml_destroy_node</definition>
+        <argsstring>(node)</argsstring>
+        <name>c_yaml_destroy_node</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_destroy_node::c_yaml_destroy_node</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="85" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="86" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="85" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="85" bodyend="87"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__destroy__node_1abd8d6f4df03fa0eea2f2840f48a22a0c" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_destroy_node</scope><name>c_yaml_destroy_node</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

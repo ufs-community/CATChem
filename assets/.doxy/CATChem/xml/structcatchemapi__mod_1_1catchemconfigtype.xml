@@ -1,0 +1,304 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemapi__mod_1_1catchemconfigtype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchemapi_mod::catchemconfigtype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a21fb84ccb32db8dec978d0ddcd99dd93" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::catchemconfigtype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::nx</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in x. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="55" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a45069800e990bbb9baaa693d8b9ec489" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::catchemconfigtype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::ny</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in y. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="56" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1afa5d18bcef0cb2958acbddebb6a7a664" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::catchemconfigtype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::nz</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in z. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="57" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1af7a1a9b9ad91a9d4bc98a96a67862b89" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchemapi_mod::catchemconfigtype::dt</definition>
+        <argsstring></argsstring>
+        <name>dt</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::dt</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+<para>Time step [s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="61" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a3a7019c9293a1b4c4410a53146d64ffd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::catchemconfigtype::nsteps</definition>
+        <argsstring></argsstring>
+        <name>nsteps</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::nsteps</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of time steps. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="62" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a03f19f96be9a4d6cfcc659497fc2fb66" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_dust</definition>
+        <argsstring></argsstring>
+        <name>enable_dust</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_dust</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable dust emissions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="65" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1af537b80d9573ab55f1b68019988b8737" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_seasalt</definition>
+        <argsstring></argsstring>
+        <name>enable_seasalt</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_seasalt</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable sea salt emissions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="66" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a28b4ff50bbd4ef0fac323c9f8dd5a443" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_drydep</definition>
+        <argsstring></argsstring>
+        <name>enable_drydep</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_drydep</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable dry deposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="67" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a74d696c109cd4f3589030604d470c59d" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_chemistry</definition>
+        <argsstring></argsstring>
+        <name>enable_chemistry</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_chemistry</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable chemistry (future) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="68" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1ab054ae66e8e00bd4ce44f9797518e6e7" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_external_emis</definition>
+        <argsstring></argsstring>
+        <name>enable_external_emis</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_external_emis</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable external emissions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="69" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1ac43f718ac623bcef44e365a53454447e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_run_phases</definition>
+        <argsstring></argsstring>
+        <name>enable_run_phases</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_run_phases</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable multi-phase execution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="72" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a509ad60a217317453f944ba65919eed0" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable catchemapi_mod::catchemconfigtype::run_phase_names</definition>
+        <argsstring></argsstring>
+        <name>run_phase_names</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::run_phase_names</qualifiedname>
+        <briefdescription>
+<para>Names of run phases to execute. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="73" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a33cbaf30c77f60e42b0c8161402718a3" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::use_column_processing</definition>
+        <argsstring></argsstring>
+        <name>use_column_processing</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::use_column_processing</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Use column virtualization. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="76" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1aae7a0a248a3d73d3ac09951277634b7c" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemconfigtype::enable_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>enable_diagnostics</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::enable_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable diagnostic output. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="77" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1a68fb5d8ef3d1090446a1f9a02de8d94a" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchemapi_mod::catchemconfigtype::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Main config file path (read first) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="80" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1ae01a0590c8f5330237d286f630a215a7" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchemapi_mod::catchemconfigtype::species_file</definition>
+        <argsstring></argsstring>
+        <name>species_file</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::species_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Species definition file (read second) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="81" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemconfigtype_1afbde1d588c94cab0eb56ec8edd15d47a" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchemapi_mod::catchemconfigtype::emission_file</definition>
+        <argsstring></argsstring>
+        <name>emission_file</name>
+        <qualifiedname>catchemapi_mod::catchemconfigtype::emission_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Emission config file (read third) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="82" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Simple configuration type for basic CATChem setup. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChemAPI_Mod.F90" line="53" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="53" bodyend="83"/>
+    <listofallmembers>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a68fb5d8ef3d1090446a1f9a02de8d94a" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>config_file</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1af7a1a9b9ad91a9d4bc98a96a67862b89" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>dt</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1afbde1d588c94cab0eb56ec8edd15d47a" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>emission_file</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a74d696c109cd4f3589030604d470c59d" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_chemistry</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1aae7a0a248a3d73d3ac09951277634b7c" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_diagnostics</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a28b4ff50bbd4ef0fac323c9f8dd5a443" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_drydep</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a03f19f96be9a4d6cfcc659497fc2fb66" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_dust</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1ab054ae66e8e00bd4ce44f9797518e6e7" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_external_emis</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1ac43f718ac623bcef44e365a53454447e" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_run_phases</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1af537b80d9573ab55f1b68019988b8737" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>enable_seasalt</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a3a7019c9293a1b4c4410a53146d64ffd" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>nsteps</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a21fb84ccb32db8dec978d0ddcd99dd93" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>nx</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a45069800e990bbb9baaa693d8b9ec489" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>ny</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1afa5d18bcef0cb2958acbddebb6a7a664" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>nz</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a509ad60a217317453f944ba65919eed0" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>run_phase_names</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1ae01a0590c8f5330237d286f630a215a7" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>species_file</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemconfigtype_1a33cbaf30c77f60e42b0c8161402718a3" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemconfigtype</scope><name>use_column_processing</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

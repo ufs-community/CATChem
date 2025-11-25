@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__is__map" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_is_map</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__is__map_1a5251baf1232c5e722eb9ba2f6ba48212" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical(c_bool) function</type>
+        <definition>logical(c_bool) function yaml_interface_mod::c_yaml_is_map::c_yaml_is_map</definition>
+        <argsstring>(node)</argsstring>
+        <name>c_yaml_is_map</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_is_map::c_yaml_is_map</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="176" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="177" bodyend="179"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="176" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="176" bodyend="179"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__is__map_1a5251baf1232c5e722eb9ba2f6ba48212" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_is_map</scope><name>c_yaml_is_map</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

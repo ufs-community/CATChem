@@ -1,0 +1,449 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structspecies__mod_1_1speciesmanagertype" kind="type" language="Fortran" prot="public">
+    <compoundname>species_mod::speciesmanagertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structspecies__mod_1_1speciesmanagertype_1a6de464619facfdfe70759f1619a1459a" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), dimension(:), allocatable</type>
+        <definition>type(speciestype), dimension(:), allocatable species_mod::speciesmanagertype::species_db</definition>
+        <argsstring></argsstring>
+        <name>species_db</name>
+        <qualifiedname>species_mod::speciesmanagertype::species_db</qualifiedname>
+        <briefdescription>
+<para>Species database. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="132" column="1" bodyfile="src/core/species_mod.F90" bodystart="132" bodyend="132"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structspecies__mod_1_1speciesmanagertype_1a5f47fc9935584f097ac460488249e989" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer species_mod::speciesmanagertype::num_species</definition>
+        <argsstring></argsstring>
+        <name>num_species</name>
+        <qualifiedname>species_mod::speciesmanagertype::num_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="133" column="1" bodyfile="src/core/species_mod.F90" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciesmanagertype_1a37cc1f6b883865c8071e912d74b933ad" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>)</type>
+        <definition>type(errormanagertype) species_mod::speciesmanagertype::error_mgr</definition>
+        <argsstring></argsstring>
+        <name>error_mgr</name>
+        <qualifiedname>species_mod::speciesmanagertype::error_mgr</qualifiedname>
+        <briefdescription>
+<para>Integrated error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="134" column="1" bodyfile="src/core/species_mod.F90" bodystart="134" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciesmanagertype_1a5a65403bac746a4a467bfd27fbaa6f9e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciesmanagertype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>species_mod::speciesmanagertype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="135" column="1" bodyfile="src/core/species_mod.F90" bodystart="135" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a5016ed076768a54e5974b308d38119b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::init</definition>
+        <argsstring>(this, max_species, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>species_mod::speciesmanagertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>max_species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize species manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine initializes the species management system.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum number of species to support </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="138" column="1" bodyfile="src/core/species_mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a13249b6cbfefbae7f197e108a8c3b50b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::add_species</definition>
+        <argsstring>(this, species, rc)</argsstring>
+        <name>add_species</name>
+        <qualifiedname>species_mod::speciesmanagertype::add_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a species to the manager database. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine adds a new species to the species manager database with validation and error checking.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species to add </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="139" column="1" bodyfile="src/core/species_mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a066504ffa5c38a9e6ab8fead14daa21d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::find_species</definition>
+        <argsstring>(this, species_name, species_index, rc)</argsstring>
+        <name>find_species</name>
+        <qualifiedname>species_mod::speciesmanagertype::find_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>species_index</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Find species by name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function finds a species in the database by name.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name to search for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index of found species (-1 if not found) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="140" column="1" bodyfile="src/core/species_mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a14bd6bd56c84e9d0560a3b2645c237fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::validate_database</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>validate_database</name>
+        <qualifiedname>species_mod::speciesmanagertype::validate_database</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate the entire species database. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine validates all species in the database for consistency and physical reasonableness.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="141" column="1" bodyfile="src/core/species_mod.F90" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a0ce0b308a2e7bd3ef59e858385a22d5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::load_from_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>load_from_file</name>
+        <qualifiedname>species_mod::speciesmanagertype::load_from_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load species database from configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine loads species definitions from a configuration file. Currently a placeholder implementation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">filename</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Configuration file name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="142" column="1" bodyfile="src/core/species_mod.F90" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1ad13147b9bb616836a17c753443b3f0c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>species_mod::speciesmanagertype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up species manager resources. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine deallocates all resources used by the species manager.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="143" column="1" bodyfile="src/core/species_mod.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciesmanagertype_1a3823e2cd4cbfda4f31f80604d8dc50cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciesmanagertype::print_database</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_database</name>
+        <qualifiedname>species_mod::speciesmanagertype::print_database</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciesmanagertype" kindref="compound">speciesmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print species database information. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine prints summary information about all species in the database.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species manager </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="144" column="1" bodyfile="src/core/species_mod.F90" bodystart="144" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Species management system. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type provides comprehensive species database management with enhanced error handling and validation capabilities. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>error_mod::errormanagertype</label>
+        <link refid="structerror__mod_1_1errormanagertype"/>
+      </node>
+      <node id="1">
+        <label>species_mod::speciesmanagertype</label>
+        <link refid="structspecies__mod_1_1speciesmanagertype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>error_mgr</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/species_mod.F90" line="129" column="1" bodyfile="src/core/species_mod.F90" bodystart="129" bodyend="146"/>
+    <listofallmembers>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a13249b6cbfefbae7f197e108a8c3b50b" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>add_species</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1ad13147b9bb616836a17c753443b3f0c9" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>cleanup</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a37cc1f6b883865c8071e912d74b933ad" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>error_mgr</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a066504ffa5c38a9e6ab8fead14daa21d" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>find_species</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a5016ed076768a54e5974b308d38119b4" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>init</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a5a65403bac746a4a467bfd27fbaa6f9e" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>is_initialized</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a0ce0b308a2e7bd3ef59e858385a22d5b" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>load_from_file</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a5f47fc9935584f097ac460488249e989" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>num_species</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a3823e2cd4cbfda4f31f80604d8dc50cf" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>print_database</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a6de464619facfdfe70759f1619a1459a" prot="private" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>species_db</name></member>
+      <member refid="structspecies__mod_1_1speciesmanagertype_1a14bd6bd56c84e9d0560a3b2645c237fd" prot="public" virt="non-virtual"><scope>species_mod::speciesmanagertype</scope><name>validate_database</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

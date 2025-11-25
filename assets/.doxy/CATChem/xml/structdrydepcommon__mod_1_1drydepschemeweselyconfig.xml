@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>drydepcommon_mod::drydepschemeweselyconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a8905a2c3278cc2fe3ea5bf974d84bd05" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemeweselyconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;wesely&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="85" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1afd0e40f8b12ebb4c68822f44406b9f52" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) drydepcommon_mod::drydepschemeweselyconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::description</qualifiedname>
+        <initializer>= &apos;Wesely 1989 gas dry deposition scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="86" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a7f68edffcc76741c57131b2fcae5d436" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) drydepcommon_mod::drydepschemeweselyconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="87" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a052c513c897b7ccb93a9480e1b4d21b7" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) drydepcommon_mod::drydepschemeweselyconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="88" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae449ddbcd91616f8304d3b149f105730" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemeweselyconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::affects_full_column</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="91" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a2ccd3bcd6752a9dee6e97f7419c1516d" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepschemeweselyconfig::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="94" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a974cb516e1ccf67f67a46e99f6f53d94" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemeweselyconfig::co2_effect</definition>
+        <argsstring></argsstring>
+        <name>co2_effect</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::co2_effect</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="95" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a6c746e27be78bd6d1ff0a18c5d1457c5" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepschemeweselyconfig::co2_level</definition>
+        <argsstring></argsstring>
+        <name>co2_level</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::co2_level</qualifiedname>
+        <initializer>= 600.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="96" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a5b63cd989d517b9c925b2ba766c63f65" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) drydepcommon_mod::drydepschemeweselyconfig::co2_reference</definition>
+        <argsstring></argsstring>
+        <name>co2_reference</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::co2_reference</qualifiedname>
+        <initializer>= 380.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="97" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa70c4edc9a7b646974fc709635596e19" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer drydepcommon_mod::drydepschemeweselyconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 19</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="100" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae613700fc88dc379036747a60de3f77a" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(19)</type>
+        <definition>character(len=32), dimension(19) drydepcommon_mod::drydepschemeweselyconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="101" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="101" bodyend="101"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa0a1bee6a1c2e0e0ecc726a4c933e875" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemeweselyconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kindref="compound">drydepschemeweselyconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate wesely scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="104" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a0f079d6e62e4900166a7f2cd6d7782bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public drydepcommon_mod::drydepschemeweselyconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kindref="compound">drydepschemeweselyconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize wesely scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="105" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for wesely scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="82" bodyend="106"/>
+    <listofallmembers>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae449ddbcd91616f8304d3b149f105730" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>affects_full_column</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a052c513c897b7ccb93a9480e1b4d21b7" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>algorithm_type</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a7f68edffcc76741c57131b2fcae5d436" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>author</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a974cb516e1ccf67f67a46e99f6f53d94" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>co2_effect</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a6c746e27be78bd6d1ff0a18c5d1457c5" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>co2_level</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a5b63cd989d517b9c925b2ba766c63f65" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>co2_reference</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1afd0e40f8b12ebb4c68822f44406b9f52" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>description</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a0f079d6e62e4900166a7f2cd6d7782bf" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>finalize</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa70c4edc9a7b646974fc709635596e19" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae613700fc88dc379036747a60de3f77a" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a2ccd3bcd6752a9dee6e97f7419c1516d" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>scale_factor</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a8905a2c3278cc2fe3ea5bf974d84bd05" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>scheme_name</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa0a1bee6a1c2e0e0ecc726a4c933e875" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

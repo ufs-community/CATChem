@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structstate__interface__mod_1_1statevalidatorutilstype" kind="type" language="Fortran" prot="public">
+    <compoundname>state_interface_mod::statevalidatorutilstype</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structstate__interface__mod_1_1statevalidatorutilstype_1a5b43124247cf5dd0e759e86b83db280d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure state_interface_mod::statevalidatorutilstype::validate_dimensions</definition>
+        <argsstring>(this, array_shape, expected_shape, rc)</argsstring>
+        <name>validate_dimensions</name>
+        <qualifiedname>state_interface_mod::statevalidatorutilstype::validate_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>array_shape</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>expected_shape</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate array dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="58" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstate__interface__mod_1_1statevalidatorutilstype_1add0bf59dd14e01ba89180f32c338fd84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure state_interface_mod::statevalidatorutilstype::validate_bounds</definition>
+        <argsstring>(this, values, min_val, max_val, rc)</argsstring>
+        <name>validate_bounds</name>
+        <qualifiedname>state_interface_mod::statevalidatorutilstype::validate_bounds</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>min_val</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>max_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate value bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="59" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstate__interface__mod_1_1statevalidatorutilstype_1a72385d6cfef1226bdefab2d3ed0492c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure state_interface_mod::statevalidatorutilstype::validate_consistency</definition>
+        <argsstring>(this, array1, array2, tolerance, rc)</argsstring>
+        <name>validate_consistency</name>
+        <qualifiedname>state_interface_mod::statevalidatorutilstype::validate_consistency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>array1</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>array2</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>tolerance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate consistency between related arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="60" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstate__interface__mod_1_1statevalidatorutilstype_1ac20413709f82fc302e9de5aaae7f08e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure state_interface_mod::statevalidatorutilstype::check_nan_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>check_nan_values</name>
+        <qualifiedname>state_interface_mod::statevalidatorutilstype::check_nan_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for NaN values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="61" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstate__interface__mod_1_1statevalidatorutilstype_1a58c416ee70282b9f81f93b26a1f29096" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure state_interface_mod::statevalidatorutilstype::check_negative_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>check_negative_values</name>
+        <qualifiedname>state_interface_mod::statevalidatorutilstype::check_negative_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstate__interface__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for negative values where they shouldn&apos;t exist. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/state_interface_mod.F90" line="62" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>State validation utilities. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type provides common validation routines that can be used across different state types. </para>
+    </detaileddescription>
+    <location file="src/core/state_interface_mod.F90" line="55" column="1" bodyfile="src/core/state_interface_mod.F90" bodystart="55" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structstate__interface__mod_1_1statevalidatorutilstype_1ac20413709f82fc302e9de5aaae7f08e3" prot="public" virt="non-virtual"><scope>state_interface_mod::statevalidatorutilstype</scope><name>check_nan_values</name></member>
+      <member refid="structstate__interface__mod_1_1statevalidatorutilstype_1a58c416ee70282b9f81f93b26a1f29096" prot="public" virt="non-virtual"><scope>state_interface_mod::statevalidatorutilstype</scope><name>check_negative_values</name></member>
+      <member refid="structstate__interface__mod_1_1statevalidatorutilstype_1add0bf59dd14e01ba89180f32c338fd84" prot="public" virt="non-virtual"><scope>state_interface_mod::statevalidatorutilstype</scope><name>validate_bounds</name></member>
+      <member refid="structstate__interface__mod_1_1statevalidatorutilstype_1a72385d6cfef1226bdefab2d3ed0492c4" prot="public" virt="non-virtual"><scope>state_interface_mod::statevalidatorutilstype</scope><name>validate_consistency</name></member>
+      <member refid="structstate__interface__mod_1_1statevalidatorutilstype_1a5b43124247cf5dd0e759e86b83db280d" prot="public" virt="non-virtual"><scope>state_interface_mod::statevalidatorutilstype</scope><name>validate_dimensions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

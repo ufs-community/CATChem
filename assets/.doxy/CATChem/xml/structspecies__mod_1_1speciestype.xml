@@ -1,0 +1,1069 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structspecies__mod_1_1speciestype" kind="type" language="Fortran" prot="public">
+    <compoundname>species_mod::speciestype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a55584edc5847084b80f577b04f597800" prot="public" static="no" mutable="no">
+        <type>character(len=30)</type>
+        <definition>character(len=30) species_mod::speciestype::long_name</definition>
+        <argsstring></argsstring>
+        <name>long_name</name>
+        <qualifiedname>species_mod::speciestype::long_name</qualifiedname>
+        <briefdescription>
+<para>Long name for species used for NetCDF attribute &quot;long_name&quot;. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="68" column="1" bodyfile="src/core/species_mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a8c03e81003e08595119e64a907dbc641" prot="public" static="no" mutable="no">
+        <type>character(len=30)</type>
+        <definition>character(len=30) species_mod::speciestype::short_name</definition>
+        <argsstring></argsstring>
+        <name>short_name</name>
+        <qualifiedname>species_mod::speciestype::short_name</qualifiedname>
+        <briefdescription>
+<para>Short name for species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="69" column="1" bodyfile="src/core/species_mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a6b9798a5fa6b3bd00b44a0e31b637815" prot="public" static="no" mutable="no">
+        <type>character(len=50)</type>
+        <definition>character(len=50) species_mod::speciestype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>species_mod::speciestype::description</qualifiedname>
+        <briefdescription>
+<para>Description of species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="70" column="1" bodyfile="src/core/species_mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a728138de4da1fb293961e310685693fd" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_gas</definition>
+        <argsstring></argsstring>
+        <name>is_gas</name>
+        <qualifiedname>species_mod::speciestype::is_gas</qualifiedname>
+        <briefdescription>
+<para>If true, species is a gas and not an aerosol. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="73" column="1" bodyfile="src/core/species_mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a2c56671282c7f957e7b5dcff34324f71" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_aerosol</definition>
+        <argsstring></argsstring>
+        <name>is_aerosol</name>
+        <qualifiedname>species_mod::speciestype::is_aerosol</qualifiedname>
+        <briefdescription>
+<para>If true, species is aerosol and not a gas. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="74" column="1" bodyfile="src/core/species_mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a8c264cce53699ffcb46853be0a694c80" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_tracer</definition>
+        <argsstring></argsstring>
+        <name>is_tracer</name>
+        <qualifiedname>species_mod::speciestype::is_tracer</qualifiedname>
+        <briefdescription>
+<para>If true, species is a tracer and not an aerosol or gas that undergoes chemistry or photolysis. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="75" column="1" bodyfile="src/core/species_mod.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a72c40d0d2c88b0428beb1fdeeb1abb67" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_advected</definition>
+        <argsstring></argsstring>
+        <name>is_advected</name>
+        <qualifiedname>species_mod::speciestype::is_advected</qualifiedname>
+        <briefdescription>
+<para>If true, species is advected. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="76" column="1" bodyfile="src/core/species_mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a6ff2c00d11dd1460cd8ebab2e32b4dd2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_drydep</definition>
+        <argsstring></argsstring>
+        <name>is_drydep</name>
+        <qualifiedname>species_mod::speciestype::is_drydep</qualifiedname>
+        <briefdescription>
+<para>If true, species undergoes dry deposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="77" column="1" bodyfile="src/core/species_mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ae28816681721c043e7f270fed18f0a6a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_photolysis</definition>
+        <argsstring></argsstring>
+        <name>is_photolysis</name>
+        <qualifiedname>species_mod::speciestype::is_photolysis</qualifiedname>
+        <briefdescription>
+<para>If true, species undergoes photolysis. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="78" column="1" bodyfile="src/core/species_mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a636a8576a7dde76ea25036b02462ce86" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_gocart_aero</definition>
+        <argsstring></argsstring>
+        <name>is_gocart_aero</name>
+        <qualifiedname>species_mod::speciestype::is_gocart_aero</qualifiedname>
+        <briefdescription>
+<para>If true, species is a GOCART aerosol species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="79" column="1" bodyfile="src/core/species_mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a02b97732eb95721b67677a2898a7f23b" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_dust</definition>
+        <argsstring></argsstring>
+        <name>is_dust</name>
+        <qualifiedname>species_mod::speciestype::is_dust</qualifiedname>
+        <briefdescription>
+<para>If true, species is dust. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="80" column="1" bodyfile="src/core/species_mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a82042cf6efc36712de5bbbdff11d3d76" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_seasalt</definition>
+        <argsstring></argsstring>
+        <name>is_seasalt</name>
+        <qualifiedname>species_mod::speciestype::is_seasalt</qualifiedname>
+        <briefdescription>
+<para>If true, species is sea salt. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="81" column="1" bodyfile="src/core/species_mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a3988cdb23df31be6ca5aca1cba8fa56e" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::mw_g</definition>
+        <argsstring></argsstring>
+        <name>mw_g</name>
+        <qualifiedname>species_mod::speciestype::mw_g</qualifiedname>
+        <briefdescription>
+<para>Gaseous molecular weight [g/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="84" column="1" bodyfile="src/core/species_mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a6bd27b4d15e6bd4a26662aafdad5f37b" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::density</definition>
+        <argsstring></argsstring>
+        <name>density</name>
+        <qualifiedname>species_mod::speciestype::density</qualifiedname>
+        <briefdescription>
+<para>Particle density [kg/m³]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="85" column="1" bodyfile="src/core/species_mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a76060a3b6a4135b0d47bd78fa882cfb3" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <qualifiedname>species_mod::speciestype::radius</qualifiedname>
+        <briefdescription>
+<para>Mean molecular diameter [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="86" column="1" bodyfile="src/core/species_mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a5353cfcdd48835941a81b11af3f40bf3" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::lower_radius</definition>
+        <argsstring></argsstring>
+        <name>lower_radius</name>
+        <qualifiedname>species_mod::speciestype::lower_radius</qualifiedname>
+        <briefdescription>
+<para>Lower radius [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="87" column="1" bodyfile="src/core/species_mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a227d789a5af5d81de61980ebbc0ee6d1" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::upper_radius</definition>
+        <argsstring></argsstring>
+        <name>upper_radius</name>
+        <qualifiedname>species_mod::speciestype::upper_radius</qualifiedname>
+        <briefdescription>
+<para>Upper radius [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="88" column="1" bodyfile="src/core/species_mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1aa555636a977d758de798ebb6cc98da43" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::viscosity</definition>
+        <argsstring></argsstring>
+        <name>viscosity</name>
+        <qualifiedname>species_mod::speciestype::viscosity</qualifiedname>
+        <briefdescription>
+<para>Kinematic viscosity [m²/s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="89" column="1" bodyfile="src/core/species_mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a0e9d7b01f4e54c681be477f4e4054b15" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::dd_f0</definition>
+        <argsstring></argsstring>
+        <name>dd_f0</name>
+        <qualifiedname>species_mod::speciestype::dd_f0</qualifiedname>
+        <briefdescription>
+<para>reactivity factor for oxidation of biological substances </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="92" column="1" bodyfile="src/core/species_mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ad8e9c5a49de380ca59f1080bbf77a0cc" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::dd_hstar</definition>
+        <argsstring></argsstring>
+        <name>dd_hstar</name>
+        <qualifiedname>species_mod::speciestype::dd_hstar</qualifiedname>
+        <briefdescription>
+<para>Henry’s law constant. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="93" column="1" bodyfile="src/core/species_mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a518e468c35d1b584a9526a04345aa657" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::dd_dvzaersnow</definition>
+        <argsstring></argsstring>
+        <name>dd_dvzaersnow</name>
+        <qualifiedname>species_mod::speciestype::dd_dvzaersnow</qualifiedname>
+        <briefdescription>
+<para>fix dry deposition velocity (cm/s) over ice and snow for certain aerosol species </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="94" column="1" bodyfile="src/core/species_mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a9f4a74e6be9c7cddd70723f8efb0987b" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::dd_dvzminval_snow</definition>
+        <argsstring></argsstring>
+        <name>dd_dvzminval_snow</name>
+        <qualifiedname>species_mod::speciestype::dd_dvzminval_snow</qualifiedname>
+        <briefdescription>
+<para>minimum dry deposition velocity (cm/s) over snow and ice </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="95" column="1" bodyfile="src/core/species_mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a92cdeb0e9ff5ca7a213dc85fd48794c5" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::dd_dvzminval_land</definition>
+        <argsstring></argsstring>
+        <name>dd_dvzminval_land</name>
+        <qualifiedname>species_mod::speciestype::dd_dvzminval_land</qualifiedname>
+        <briefdescription>
+<para>minimum dry deposition velocity (cm/s) over land </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="96" column="1" bodyfile="src/core/species_mod.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::backgroundvv</definition>
+        <argsstring></argsstring>
+        <name>backgroundvv</name>
+        <qualifiedname>species_mod::speciestype::backgroundvv</qualifiedname>
+        <briefdescription>
+<para>Background concentration [v/v]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="99" column="1" bodyfile="src/core/species_mod.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a9133ba1e9bc04616dff46121b41d4221" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer species_mod::speciestype::species_index</definition>
+        <argsstring></argsstring>
+        <name>species_index</name>
+        <qualifiedname>species_mod::speciestype::species_index</qualifiedname>
+        <briefdescription>
+<para>Species index in species array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="102" column="1" bodyfile="src/core/species_mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a255661e560792422d0021da2175384b9" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer species_mod::speciestype::drydep_index</definition>
+        <argsstring></argsstring>
+        <name>drydep_index</name>
+        <qualifiedname>species_mod::speciestype::drydep_index</qualifiedname>
+        <briefdescription>
+<para>Dry deposition index in drydep array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="103" column="1" bodyfile="src/core/species_mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a6e93043ffd787faeeb908828e47844aa" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer species_mod::speciestype::photolysis_index</definition>
+        <argsstring></argsstring>
+        <name>photolysis_index</name>
+        <qualifiedname>species_mod::speciestype::photolysis_index</qualifiedname>
+        <briefdescription>
+<para>Photolysis index in photolysis array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="104" column="1" bodyfile="src/core/species_mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ac9649a3440d9eacc57a45a592d749670" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer species_mod::speciestype::gocart_aero_index</definition>
+        <argsstring></argsstring>
+        <name>gocart_aero_index</name>
+        <qualifiedname>species_mod::speciestype::gocart_aero_index</qualifiedname>
+        <briefdescription>
+<para>GOCART aerosol index in gocart_aero array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="105" column="1" bodyfile="src/core/species_mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a32c8023d47107d602be305c0a9eb2b09" prot="public" static="no" mutable="no">
+        <type>real(kind=fp), dimension(:,:,:), pointer</type>
+        <definition>real(kind=fp), dimension(:,:,:), pointer species_mod::speciestype::conc</definition>
+        <argsstring></argsstring>
+        <name>conc</name>
+        <qualifiedname>species_mod::speciestype::conc</qualifiedname>
+        <briefdescription>
+<para>Species concentration [v/v] or [kg/kg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="108" column="1" bodyfile="src/core/species_mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1afaba774ce775aecd8907eabf24f94fc9" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical species_mod::speciestype::is_valid</definition>
+        <argsstring></argsstring>
+        <name>is_valid</name>
+        <qualifiedname>species_mod::speciestype::is_valid</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Validation status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="111" column="1" bodyfile="src/core/species_mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1ae40f798b9c6a572fa8e42d4fee7387b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::init</definition>
+        <argsstring>(this, species_name, long_name, molecular_weight, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>species_mod::speciestype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>long_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize a species with enhanced validation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine initializes a SpeciesType object with comprehensive error checking and validation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Short name identifier for the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">long_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Descriptive long name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="115" column="1" bodyfile="src/core/species_mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1ae419adf67067c55651d83f3ad326a47f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::validate</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>validate</name>
+        <qualifiedname>species_mod::speciestype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate species properties. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function validates all species properties for consistency and physical validity.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object to validate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="116" column="1" bodyfile="src/core/species_mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a80e31ff7f30b2e1fdce6fea3b4866e4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>species_mod::speciestype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Cleanup species resources. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine deallocates all allocated arrays and resets the species.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object to cleanup </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="117" column="1" bodyfile="src/core/species_mod.F90" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a0d3bbcb962b585998fb9ee3fd31751eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::set_concentration</definition>
+        <argsstring>(this, concentration, grid_index, rc)</argsstring>
+        <name>set_concentration</name>
+        <qualifiedname>species_mod::speciestype::set_concentration</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>concentration</defname>
+        </param>
+        <param>
+          <type>integer, dimension(3), intent(in)</type>
+          <defname>grid_index</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set species concentration with bounds checking. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine sets the species concentration with validation.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">concentration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New concentration value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">grid_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid index for concentration </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="118" column="1" bodyfile="src/core/species_mod.F90" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a38ad7242574bd24d91e9ed7d0c5e2119" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::get_concentration</definition>
+        <argsstring>(this, grid_index, rc)</argsstring>
+        <name>get_concentration</name>
+        <qualifiedname>species_mod::speciestype::get_concentration</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(3), intent(in)</type>
+          <defname>grid_index</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get species concentration at grid point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function returns the concentration of the species at a specified grid point with bounds checking.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">grid_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid point index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Species concentration [v/v] or [kg/kg] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="119" column="1" bodyfile="src/core/species_mod.F90" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1af20cb6abaa42c4875d52a57dcd6f117f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::copy</definition>
+        <argsstring>(this, source, rc)</argsstring>
+        <name>copy</name>
+        <qualifiedname>species_mod::speciestype::copy</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>source</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Copy species properties from another species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine creates a deep copy of another species object.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination species object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source species object to copy from </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="120" column="1" bodyfile="src/core/species_mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structspecies__mod_1_1speciestype_1ad382920d60edbdd8cf83c5c98802a1ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure species_mod::speciestype::print_info</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_info</name>
+        <qualifiedname>species_mod::speciestype::print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print species information. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine prints detailed information about the species to standard output for debugging and diagnostics.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The species object </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="121" column="1" bodyfile="src/core/species_mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Derived type for chemical species. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type contains all properties and data for a chemical species in the CATChem atmospheric chemistry model, including physical properties, classification flags, and concentration data.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>long_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Long descriptive name for species (NetCDF attribute) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>short_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Short identifier name for species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Detailed description of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_gas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is gaseous </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_aerosol</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is an aerosol </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_tracer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is a passive tracer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_advected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species undergoes advection </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_drydep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species undergoes dry deposition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_photolysis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species undergoes photolysis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_gocart_aero</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is a GOCART aerosol </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_dust</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is dust </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_seasalt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Logical flag: true if species is sea salt </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mw_g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Gaseous molecular weight [g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle density [kg/m³] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mean molecular diameter [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lower_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Lower radius bound [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>upper_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Upper radius bound [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>viscosity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Kinematic viscosity [m²/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>BackgroundVV</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Background concentration [v/v] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>species_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index in species array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>drydep_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index in dry deposition array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>photolysis_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index in photolysis array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>gocart_aero_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index in GOCART aerosol array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentration [v/v] or [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="src/core/species_mod.F90" line="65" column="1" bodyfile="src/core/species_mod.F90" bodystart="65" bodyend="123"/>
+    <listofallmembers>
+      <member refid="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>backgroundvv</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a80e31ff7f30b2e1fdce6fea3b4866e4d" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>cleanup</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a32c8023d47107d602be305c0a9eb2b09" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>conc</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1af20cb6abaa42c4875d52a57dcd6f117f" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>copy</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a518e468c35d1b584a9526a04345aa657" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>dd_dvzaersnow</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a92cdeb0e9ff5ca7a213dc85fd48794c5" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>dd_dvzminval_land</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a9f4a74e6be9c7cddd70723f8efb0987b" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>dd_dvzminval_snow</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a0e9d7b01f4e54c681be477f4e4054b15" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>dd_f0</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ad8e9c5a49de380ca59f1080bbf77a0cc" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>dd_hstar</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a6bd27b4d15e6bd4a26662aafdad5f37b" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>density</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a6b9798a5fa6b3bd00b44a0e31b637815" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>description</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a255661e560792422d0021da2175384b9" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>drydep_index</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a38ad7242574bd24d91e9ed7d0c5e2119" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>get_concentration</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ac9649a3440d9eacc57a45a592d749670" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>gocart_aero_index</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ae40f798b9c6a572fa8e42d4fee7387b2" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>init</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a72c40d0d2c88b0428beb1fdeeb1abb67" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_advected</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a2c56671282c7f957e7b5dcff34324f71" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_aerosol</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a6ff2c00d11dd1460cd8ebab2e32b4dd2" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_drydep</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a02b97732eb95721b67677a2898a7f23b" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_dust</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a728138de4da1fb293961e310685693fd" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_gas</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a636a8576a7dde76ea25036b02462ce86" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_gocart_aero</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ae28816681721c043e7f270fed18f0a6a" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_photolysis</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a82042cf6efc36712de5bbbdff11d3d76" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_seasalt</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a8c264cce53699ffcb46853be0a694c80" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_tracer</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1afaba774ce775aecd8907eabf24f94fc9" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>is_valid</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a55584edc5847084b80f577b04f597800" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>long_name</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a5353cfcdd48835941a81b11af3f40bf3" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>lower_radius</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a3988cdb23df31be6ca5aca1cba8fa56e" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>mw_g</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a6e93043ffd787faeeb908828e47844aa" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>photolysis_index</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ad382920d60edbdd8cf83c5c98802a1ff" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>print_info</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a76060a3b6a4135b0d47bd78fa882cfb3" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>radius</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a0d3bbcb962b585998fb9ee3fd31751eb" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>set_concentration</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a8c03e81003e08595119e64a907dbc641" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>short_name</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a9133ba1e9bc04616dff46121b41d4221" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>species_index</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1a227d789a5af5d81de61980ebbc0ee6d1" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>upper_radius</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1ae419adf67067c55651d83f3ad326a47f" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>validate</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1aa555636a977d758de798ebb6cc98da43" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>viscosity</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

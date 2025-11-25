@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__get__size" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_get_size</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__get__size_1a0bbe47af69df1778822d9dd7ead9be9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function yaml_interface_mod::c_yaml_get_size::c_yaml_get_size</definition>
+        <argsstring>(node)</argsstring>
+        <name>c_yaml_get_size</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_get_size::c_yaml_get_size</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>node</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="164" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="165" bodyend="167"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="164" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="164" bodyend="167"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__get__size_1a0bbe47af69df1778822d9dd7ead9be9b" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_get_size</scope><name>c_yaml_get_size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

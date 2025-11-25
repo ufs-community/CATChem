@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_5a4ade9a2f1be2d214cab82786bd5e96" kind="dir">
+    <compoundname>src/process/seasalt/examples</compoundname>
+    <innerfile refid="seasalt__example_8_f90">seasalt_example.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/examples/"/>
+  </compounddef>
+</doxygen>

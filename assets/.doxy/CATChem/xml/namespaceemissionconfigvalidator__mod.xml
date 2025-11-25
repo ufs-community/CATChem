@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceemissionconfigvalidator__mod" kind="namespace" language="Fortran">
+    <compoundname>emissionconfigvalidator_mod</compoundname>
+    <innerclass refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" prot="public">emissionconfigvalidator_mod::emissionconfigvalidatortype</innerclass>
+    <innerclass refid="structemissionconfigvalidator__mod_1_1validationresulttype" prot="public">emissionconfigvalidator_mod::validationresulttype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceemissionconfigvalidator__mod_1af50c701b91cec7b8f03b66af95c09b5f" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public emissionconfigvalidator_mod::validation_success</definition>
+        <argsstring></argsstring>
+        <name>validation_success</name>
+        <qualifiedname>emissionconfigvalidator_mod::validation_success</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="27" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceemissionconfigvalidator__mod_1a2355cea4fd75f3b8cff7636b36070600" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public emissionconfigvalidator_mod::validation_warning</definition>
+        <argsstring></argsstring>
+        <name>validation_warning</name>
+        <qualifiedname>emissionconfigvalidator_mod::validation_warning</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="28" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceemissionconfigvalidator__mod_1a7db4b88f6f66fa075045c499965d6cf4" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public emissionconfigvalidator_mod::validation_error</definition>
+        <argsstring></argsstring>
+        <name>validation_error</name>
+        <qualifiedname>emissionconfigvalidator_mod::validation_error</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="29" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="29" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a3e15bbd38552878f2feddb96ca0abb9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_emission_config</definition>
+        <argsstring>(this, config_file, container, results, rc)</argsstring>
+        <name>validate_emission_config</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_emission_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate complete emission configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="88" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="89" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1aca4fa9afcb53d0c1e9b7e7a247c6db4e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_species_mapping</definition>
+        <argsstring>(this, container, results, n_results, rc)</argsstring>
+        <name>validate_species_mapping</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_species_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate species mapping configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="142" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="143" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a2cf327c9c34fb31d738a0d13bede3fcb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_single_species</definition>
+        <argsstring>(this, species_name, container, results, n_results, rc)</argsstring>
+        <name>validate_single_species</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_single_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate single species mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="165" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="167" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a676d6b46dd5789b9936aa0ee27e77dda" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::check_species_in_mechanism</definition>
+        <argsstring>(this, species_name, container, species_exists, rc)</argsstring>
+        <name>check_species_in_mechanism</name>
+        <qualifiedname>emissionconfigvalidator_mod::check_species_in_mechanism</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>species_exists</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species exists in chemical mechanism. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="209" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="211" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a565220ad705312bd91497a47ef021445" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_scale_factors</definition>
+        <argsstring>(this, scale_factors, n_factors, species_name, results, n_results, rc)</argsstring>
+        <name>validate_scale_factors</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_scale_factors</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>scale_factors</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_factors</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate scale factors for mass conservation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="239" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="241" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a52b38d2d6148c3f0c5dea39d5d54aa24" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_emission_sources</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_emission_sources</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_emission_sources</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate emission sources. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="293" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="294" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1ad53c4ece06c4af774b25281e58f7aa71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_vertical_distributions</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_vertical_distributions</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_vertical_distributions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate vertical distribution configurations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="305" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="306" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a0b57ea6fa5d01576a6dbb6c96b5c441c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::validate_mass_conservation</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_mass_conservation</name>
+        <qualifiedname>emissionconfigvalidator_mod::validate_mass_conservation</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate mass conservation for all species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="317" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="318" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a69054da9e31f1d407f6916d8ad36619a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::reset_counters</definition>
+        <argsstring>(this)</argsstring>
+        <name>reset_counters</name>
+        <qualifiedname>emissionconfigvalidator_mod::reset_counters</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset validation counters. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="329" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="330" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a67f1fa7e7f416b6c80e636f9ff9a8d10" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::get_validation_summary</definition>
+        <argsstring>(this, summary)</argsstring>
+        <name>get_validation_summary</name>
+        <qualifiedname>emissionconfigvalidator_mod::get_validation_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>summary</defname>
+        </param>
+        <briefdescription>
+<para>Get validation summary message. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="339" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="340" bodyend="348"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceemissionconfigvalidator__mod_1a4a8e68c55e5ea0e60f34cbd23b2329c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine emissionconfigvalidator_mod::set_validation_mode</definition>
+        <argsstring>(this, strict_mode, require_mass_conservation, check_species_existence)</argsstring>
+        <name>set_validation_mode</name>
+        <qualifiedname>emissionconfigvalidator_mod::set_validation_mode</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>strict_mode</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>require_mass_conservation</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>check_species_existence</defname>
+        </param>
+        <briefdescription>
+<para>Set validation mode (strict or permissive) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="352" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="354" bodyend="364"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/EmissionConfigValidator_Mod.F90" line="12" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structyaml__interface__mod_1_1yaml__node__t" kind="type" language="Fortran" prot="public">
+    <compoundname>yaml_interface_mod::yaml_node_t</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structyaml__interface__mod_1_1yaml__node__t_1a761062b88e3a8b1971bf7d554aa4f43b" prot="public" static="no" mutable="no">
+        <type>type(c_ptr)</type>
+        <definition>type(c_ptr) yaml_interface_mod::yaml_node_t::ptr</definition>
+        <argsstring></argsstring>
+        <name>ptr</name>
+        <qualifiedname>yaml_interface_mod::yaml_node_t::ptr</qualifiedname>
+        <initializer>= c_null_ptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="37" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Opaque handle for YAML node. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="36" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="36" bodyend="38"/>
+    <listofallmembers>
+      <member refid="structyaml__interface__mod_1_1yaml__node__t_1a761062b88e3a8b1971bf7d554aa4f43b" prot="public" virt="non-virtual"><scope>yaml_interface_mod::yaml_node_t</scope><name>ptr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

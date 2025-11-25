@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemapi__mod_1_1fieldmappingtype" kind="type" language="Fortran" prot="private">
+    <compoundname>catchemapi_mod::fieldmappingtype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1af72b8a8466bd3f20bc3b131895b01a19" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) catchemapi_mod::fieldmappingtype::host_field_name</definition>
+        <argsstring></argsstring>
+        <name>host_field_name</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::host_field_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Host model field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="87" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1ad8453d93441d7945abf8396aa3ccaa68" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) catchemapi_mod::fieldmappingtype::catchem_field_name</definition>
+        <argsstring></argsstring>
+        <name>catchem_field_name</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::catchem_field_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>CATChem internal field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="88" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1a82b3d914bf7ccab01659757a001c325a" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) catchemapi_mod::fieldmappingtype::field_type</definition>
+        <argsstring></argsstring>
+        <name>field_type</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::field_type</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>&apos;met&apos;, &apos;chem&apos;, &apos;emis&apos;, &apos;diag&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="89" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1a7cfbd05cdac92772bad904d179bdba93" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) catchemapi_mod::fieldmappingtype::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="90" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1a14944f3e9db700192cf5d9aaccb6b8a2" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchemapi_mod::fieldmappingtype::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::scale_factor</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+<para>Unit conversion factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="91" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1a1fa1e2cb860067af7997f62e0f696161" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchemapi_mod::fieldmappingtype::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::offset</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Unit conversion offset. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="92" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1a6c507637f889a8f69a434ee320b74d1e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::fieldmappingtype::is_required</definition>
+        <argsstring></argsstring>
+        <name>is_required</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::is_required</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Whether field is required. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="93" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingtype_1af7230f5f71dc4ea778b2e27a50779d17" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::fieldmappingtype::is_3d</definition>
+        <argsstring></argsstring>
+        <name>is_3d</name>
+        <qualifiedname>catchemapi_mod::fieldmappingtype::is_3d</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Whether field is 3D (false = 2D) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="94" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Field mapping type for flexible data exchange. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChemAPI_Mod.F90" line="86" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="86" bodyend="95"/>
+    <listofallmembers>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1ad8453d93441d7945abf8396aa3ccaa68" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>catchem_field_name</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1a82b3d914bf7ccab01659757a001c325a" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>field_type</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1af72b8a8466bd3f20bc3b131895b01a19" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>host_field_name</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1af7230f5f71dc4ea778b2e27a50779d17" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>is_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1a6c507637f889a8f69a434ee320b74d1e" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>is_required</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1a1fa1e2cb860067af7997f62e0f696161" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>offset</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1a14944f3e9db700192cf5d9aaccb6b8a2" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>scale_factor</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingtype_1a7cfbd05cdac92772bad904d179bdba93" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingtype</scope><name>units</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

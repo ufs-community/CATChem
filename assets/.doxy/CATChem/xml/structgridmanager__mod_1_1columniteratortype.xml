@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structgridmanager__mod_1_1columniteratortype" kind="type" language="Fortran" prot="public">
+    <compoundname>gridmanager_mod::columniteratortype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1columniteratortype_1a54ca478c71b7c75f21dcc850e3258a04" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), pointer</type>
+        <definition>type(gridmanagertype), pointer gridmanager_mod::columniteratortype::grid_mgr</definition>
+        <argsstring></argsstring>
+        <name>grid_mgr</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::grid_mgr</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="126" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="126" bodyend="126"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1columniteratortype_1abb4274aaf965b512fc3e7242b32df657" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::columniteratortype::current_i</definition>
+        <argsstring></argsstring>
+        <name>current_i</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::current_i</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Current column i-index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="127" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1columniteratortype_1a30bf1cdb7fbff2db3a5a801cecc98e0c" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::columniteratortype::current_j</definition>
+        <argsstring></argsstring>
+        <name>current_j</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::current_j</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Current column j-index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="128" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1columniteratortype_1a7162378db7e223392ab8153b85d18316" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::columniteratortype::total_columns</definition>
+        <argsstring></argsstring>
+        <name>total_columns</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::total_columns</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Total number of columns. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="129" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1columniteratortype_1af31d163b67884354b3305295522bbad2" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::columniteratortype::current_column</definition>
+        <argsstring></argsstring>
+        <name>current_column</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::current_column</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Current column number (0-based) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="130" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1abda361e4d2ddca522c36f13b5bc2bb3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::init</definition>
+        <argsstring>(this, grid_mgr, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in), target</type>
+          <defname>grid_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize column iterator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="133" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1ac4db5e74745978cea59070bfb772e60c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::has_next</definition>
+        <argsstring>(this)</argsstring>
+        <name>has_next</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::has_next</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if there are more columns to process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="134" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1a8246c4964edac11487c91d3558cd69ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::next</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>next</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::next</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Move to next column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="135" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1a90297a3fca88004bc5fefc9f3e103332" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::get_current_column</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_current_column</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::get_current_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current column view. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="136" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1a92f324ed078eae5ab002bad307744da7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::get_current_indices</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>get_current_indices</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::get_current_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get current column indices. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="137" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1columniteratortype_1a2c913e33a93275cf78dc7d85828e241e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::columniteratortype::reset</definition>
+        <argsstring>(this)</argsstring>
+        <name>reset</name>
+        <qualifiedname>gridmanager_mod::columniteratortype::reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset iterator to beginning. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="138" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Column iterator for processing all columns in the grid. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Provides an iterator interface for processing all columns in the grid while hiding the underlying 2D/3D structure from processes. </para>
+    </detaileddescription>
+    <location file="src/core/GridManager_Mod.F90" line="123" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="123" bodyend="139"/>
+    <listofallmembers>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1af31d163b67884354b3305295522bbad2" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>current_column</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1abb4274aaf965b512fc3e7242b32df657" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>current_i</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a30bf1cdb7fbff2db3a5a801cecc98e0c" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>current_j</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a90297a3fca88004bc5fefc9f3e103332" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>get_current_column</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a92f324ed078eae5ab002bad307744da7" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>get_current_indices</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a54ca478c71b7c75f21dcc850e3258a04" prot="private" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>grid_mgr</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1ac4db5e74745978cea59070bfb772e60c" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>has_next</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1abda361e4d2ddca522c36f13b5bc2bb3c" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>init</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a8246c4964edac11487c91d3558cd69ea" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>next</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a2c913e33a93275cf78dc7d85828e241e" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>reset</name></member>
+      <member refid="structgridmanager__mod_1_1columniteratortype_1a7162378db7e223392ab8153b85d18316" prot="public" virt="non-virtual"><scope>gridmanager_mod::columniteratortype</scope><name>total_columns</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

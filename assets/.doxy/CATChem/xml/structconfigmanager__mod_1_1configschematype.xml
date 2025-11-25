@@ -1,0 +1,298 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1configschematype" kind="type" language="Fortran" prot="public">
+    <compoundname>configmanager_mod::configschematype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1a211b57dc4cb2f416a0d8fc210923ab62" prot="private" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) configmanager_mod::configschematype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>configmanager_mod::configschematype::name</qualifiedname>
+        <briefdescription>
+<para>Schema name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="242" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="242" bodyend="242"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1a74d8e3e6040e5de64746d95e17af05e2" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) configmanager_mod::configschematype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>configmanager_mod::configschematype::description</qualifiedname>
+        <briefdescription>
+<para>Schema description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="243" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="243" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1afcb8c33c7d961e30fed743a1457bb4df" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable configmanager_mod::configschematype::required_fields</definition>
+        <argsstring></argsstring>
+        <name>required_fields</name>
+        <qualifiedname>configmanager_mod::configschematype::required_fields</qualifiedname>
+        <briefdescription>
+<para>Required configuration fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="244" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="244" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1ab7e881ac5ca1054124828afe99965a44" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable configmanager_mod::configschematype::optional_fields</definition>
+        <argsstring></argsstring>
+        <name>optional_fields</name>
+        <qualifiedname>configmanager_mod::configschematype::optional_fields</qualifiedname>
+        <briefdescription>
+<para>Optional configuration fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="245" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="245" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1a4dc68437d79224cf1dbaa33690135756" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::configschematype::strict_validation</definition>
+        <argsstring></argsstring>
+        <name>strict_validation</name>
+        <qualifiedname>configmanager_mod::configschematype::strict_validation</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Strict validation mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="246" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="246" bodyend="246"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1a98d86e7b7de8a5a494931f57654e2d4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::init</definition>
+        <argsstring>(this, name, description, strict)</argsstring>
+        <name>init</name>
+        <qualifiedname>configmanager_mod::configschematype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>strict</defname>
+        </param>
+        <briefdescription>
+<para>Initialize configuration schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="248" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="248" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1af24542c5fb5b200901bcb174aee715a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::add_required_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>add_required_field</name>
+        <qualifiedname>configmanager_mod::configschematype::add_required_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Add required field to schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="249" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1aeb4737f7e9811dbbfbb05184369ef171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::add_optional_field</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>add_optional_field</name>
+        <qualifiedname>configmanager_mod::configschematype::add_optional_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Add optional field to schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="250" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1ab08db9a4dbd18a8990e01f7299715c4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::validate_config</definition>
+        <argsstring>(this, yaml_data, rc)</argsstring>
+        <name>validate_config</name>
+        <qualifiedname>configmanager_mod::configschematype::validate_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>yaml_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate configuration against schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="251" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1a3146b923408e4c53d67c4a7b26e38208" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::validate_emission_config</definition>
+        <argsstring>(this, yaml_data, config_file, rc)</argsstring>
+        <name>validate_emission_config</name>
+        <qualifiedname>configmanager_mod::configschematype::validate_emission_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structyaml__interface__mod_1_1yaml__node__t" kindref="compound">yaml_node_t</ref>), intent(in)</type>
+          <defname>yaml_data</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate emission configuration against schema. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="253" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1ae8cc7126819a744d51efe35b81a321e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::validate_species_mapping</definition>
+        <argsstring>(this, species_mappings, rc)</argsstring>
+        <name>validate_species_mapping</name>
+        <qualifiedname>configmanager_mod::configschematype::validate_species_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>species_mappings</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate species mapping consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="254" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1a4320b31da6ef8c77b4be9505f162d9c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure configmanager_mod::configschematype::validate_scaling_factors</definition>
+        <argsstring>(this, scale_factors, rc)</argsstring>
+        <name>validate_scaling_factors</name>
+        <qualifiedname>configmanager_mod::configschematype::validate_scaling_factors</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configschematype" kindref="compound">configschematype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>scale_factors</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate scaling factors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="255" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="255" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration schema definition. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Defines the expected structure and validation rules for configuration files. </para>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="240" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="240" bodyend="256"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1configschematype_1aeb4737f7e9811dbbfbb05184369ef171" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>add_optional_field</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1af24542c5fb5b200901bcb174aee715a3" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>add_required_field</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a74d8e3e6040e5de64746d95e17af05e2" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>description</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a98d86e7b7de8a5a494931f57654e2d4b" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>init</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a211b57dc4cb2f416a0d8fc210923ab62" prot="private" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>name</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1ab7e881ac5ca1054124828afe99965a44" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>optional_fields</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1afcb8c33c7d961e30fed743a1457bb4df" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>required_fields</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a4dc68437d79224cf1dbaa33690135756" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>strict_validation</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1ab08db9a4dbd18a8990e01f7299715c4e" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>validate_config</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a3146b923408e4c53d67c4a7b26e38208" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>validate_emission_config</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1a4320b31da6ef8c77b4be9505f162d9c8" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>validate_scaling_factors</name></member>
+      <member refid="structconfigmanager__mod_1_1configschematype_1ae8cc7126819a744d51efe35b81a321e2" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>validate_species_mapping</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

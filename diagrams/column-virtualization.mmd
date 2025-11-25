@@ -1,0 +1,12 @@
+graph TD
+    A[3D Grid<br/>100×100×50] --> B[Column Processor]
+    B --> C[Column 1<br/>1×1×50]
+    B --> D[Column 2<br/>1×1×50]
+    B --> E[Column N<br/>1×1×50]
+
+    C --> F[Process Physics]
+    D --> F
+    E --> F
+
+    F --> G[Optimized<br/>1D Calculations]
+    G --> H[Automatic<br/>Parallelization]

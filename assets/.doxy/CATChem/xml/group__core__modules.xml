@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__core__modules" kind="group">
+    <compoundname>core_modules</compoundname>
+    <title>CATChem Core Modules</title>
+    <innerfile refid="run__mod_8_f90">run_mod.F90</innerfile>
+    <innerfile refid="_c_a_t_chem_core___mod_8_f90">CATChemCore_Mod.F90</innerfile>
+    <innerfile refid="_chem_species_utils___mod_8_f90">ChemSpeciesUtils_Mod.F90</innerfile>
+    <innerfile refid="chemstate__mod_8_f90">chemstate_mod.F90</innerfile>
+    <innerfile refid="_config_manager___mod_8_f90">ConfigManager_Mod.F90</innerfile>
+    <innerfile refid="constants_8_f90">constants.F90</innerfile>
+    <innerfile refid="_diagnostic_interface___mod_8_f90">DiagnosticInterface_Mod.F90</innerfile>
+    <innerfile refid="_diagnostic_manager___mod_8_f90">DiagnosticManager_Mod.F90</innerfile>
+    <innerfile refid="_ext_emis_data___mod_8_f90">ExtEmisData_Mod.F90</innerfile>
+    <innerfile refid="_grid_manager___mod_8_f90">GridManager_Mod.F90</innerfile>
+    <innerfile refid="met__utilities__mod_8_f90">met_utilities_mod.F90</innerfile>
+    <innerfile refid="_precision___mod_8_f90">Precision_Mod.F90</innerfile>
+    <innerfile refid="species__mod_8_f90">species_mod.F90</innerfile>
+    <innerfile refid="state__interface__mod_8_f90">state_interface_mod.F90</innerfile>
+    <innerfile refid="_state_manager___mod_8_f90">StateManager_Mod.F90</innerfile>
+    <innerfile refid="_unit_conversion___mod_8_f90">UnitConversion_Mod.F90</innerfile>
+    <innerfile refid="utilities__mod_8_f90">utilities_mod.F90</innerfile>
+    <innerfile refid="_virtual_column___mod_8_f90">VirtualColumn_Mod.F90</innerfile>
+    <innerclass refid="structchemstate__mod_1_1chemstatetype" prot="public">chemstate_mod::chemstatetype</innerclass>
+    <innerclass refid="structextemisdata__mod_1_1extemisfieldtype" prot="public">extemisdata_mod::extemisfieldtype</innerclass>
+    <innerclass refid="structextemisdata__mod_1_1extemiscategorytype" prot="public">extemisdata_mod::extemiscategorytype</innerclass>
+    <innerclass refid="structextemisdata__mod_1_1extemisdatatype" prot="public">extemisdata_mod::extemisdatatype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__core__modules_1ga6b42a6366c0a4d5e74a526f6661ec3db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemstate_mod::find_number_of_species</definition>
+        <argsstring>(chemstate, rc)</argsstring>
+        <name>find_number_of_species</name>
+        <qualifiedname>chemstate_mod::find_number_of_species</qualifiedname>
+        <param>
+          <type>type(chemstatetype), intent(inout)</type>
+          <defname>chemstate</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Find the number of species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine finds the number of species</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="140" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="141" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="group__core__modules_1ga0f4bed4ec5273e84346e57d9d2c0cb92" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_init</definition>
+        <argsstring>(this, max_species, error_mgr, rc, grid)</argsstring>
+        <name>chemstate_init</name>
+        <qualifiedname>chemstate_mod::chemstate_init</qualifiedname>
+        <param>
+          <type>class(chemstatetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>max_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in), optional, pointer</type>
+          <defname>grid</defname>
+        </param>
+        <briefdescription>
+<para>Find the indices of species (LEGACY - COMMENTED OUT) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+<para>Find the species by name (LEGACY - COMMENTED OUT)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+<para>Get the concentration of a species (LEGACY - COMMENTED OUT)</para>
+<para>get the concentration of a species given either the index or the name of the species</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>concentration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The concentration of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the species - Optional </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the species - Optional</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+<para>Get the concentration of a species by index (LEGACY - COMMENTED OUT)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>concentration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The concentration of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the species</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+<para>Get the concentration of a species by name (LEGACY - COMMENTED OUT)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemState object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>concentration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The concentration of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the species</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+<para>Modern initialization procedure for ChemStateType</para>
+<para>This procedure initializes a ChemStateType object with proper error handling and validation. It replaces the old allocation patterns with a cleaner approach.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ChemStateType object to initialize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum number of species to allocate for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager for context and error reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="530" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="531" bodyend="689"/>
+      </memberdef>
+      <memberdef kind="function" id="group__core__modules_1ga87ab277c6a17ccfee5e2831aba7895cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public error_mod::cc_warning</definition>
+        <argsstring>(warnmsg, rc, thisloc, instr)</argsstring>
+        <name>cc_warning</name>
+        <qualifiedname>error_mod::cc_warning</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>warnmsg</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>thisloc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>instr</defname>
+        </param>
+        <briefdescription>
+<para>CC_Warning. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine prints a warning message and sets RC to CC_SUCCESS.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>WarnMsg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The warning message </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ThisLoc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the warning </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Instr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Other instructions <blockquote><para><zwj/> </para>
+</blockquote></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="262" column="1" bodyfile="src/core/error_mod.F90" bodystart="263" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="group__core__modules_1ga07c7634132d8b5cc9561f69d070df2ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public error_mod::cc_checkvar</definition>
+        <argsstring>(variable, operation, rc)</argsstring>
+        <name>cc_checkvar</name>
+        <qualifiedname>error_mod::cc_checkvar</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>variable</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>operation</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>CC_CheckVar. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine checks if a variable is allocated.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>Variable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable to check </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Operation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0=Allocate 1=Register 2=Deallocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="321" column="1" bodyfile="src/core/error_mod.F90" bodystart="322" bodyend="362"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Core modules and data types for CATChem. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This group contains all core modules, state definitions, and fundamental data types used throughout the CATChem system. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

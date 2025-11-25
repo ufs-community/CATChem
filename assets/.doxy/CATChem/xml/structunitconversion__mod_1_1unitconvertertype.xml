@@ -1,0 +1,707 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structunitconversion__mod_1_1unitconvertertype" kind="type" language="Fortran" prot="public">
+    <compoundname>unitconversion_mod::unitconvertertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structunitconversion__mod_1_1unitconvertertype_1a24f39959e7aba91a4b81bdef73c3e266" prot="private" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) unitconversion_mod::unitconvertertype::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::temperature</qualifiedname>
+        <initializer>= STANDARD_TEMP</initializer>
+        <briefdescription>
+<para>Reference temperature [K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="89" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structunitconversion__mod_1_1unitconvertertype_1a2c4c155d6f5392ce5e793e0ca239d2bf" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) unitconversion_mod::unitconvertertype::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::pressure</qualifiedname>
+        <initializer>= STANDARD_PRESS</initializer>
+        <briefdescription>
+<para>Reference pressure [Pa]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="90" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structunitconversion__mod_1_1unitconvertertype_1aa4c120f62dc7aaf4ce42198dfbf7ce4a" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) unitconversion_mod::unitconvertertype::air_density</definition>
+        <argsstring></argsstring>
+        <name>air_density</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::air_density</qualifiedname>
+        <initializer>= 1.225_fp</initializer>
+        <briefdescription>
+<para>Air density [kg/m³]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="91" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structunitconversion__mod_1_1unitconvertertype_1a57b4975360598cd2cb486deec818d2c4" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical unitconversion_mod::unitconvertertype::use_standard_conditions</definition>
+        <argsstring></argsstring>
+        <name>use_standard_conditions</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::use_standard_conditions</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Use STP conditions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="92" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a9e42a99521987e556a75eff4684cdc84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::init</definition>
+        <argsstring>(this, temperature, pressure)</argsstring>
+        <name>init</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Initialize unit converter. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="95" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a50d9aa460f23d736a137adad91a29bfe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::set_conditions</definition>
+        <argsstring>(this, temperature, pressure, humidity)</argsstring>
+        <name>set_conditions</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::set_conditions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>humidity</defname>
+        </param>
+        <briefdescription>
+<para>Set atmospheric conditions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">humidity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>relative humidity [0-1] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="96" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a7e0a6b80f297f8fcd3435e90dd51a82a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::get_air_density</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_air_density</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::get_air_density</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get air density. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="97" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a3aa6b0e808ef2d9f612d218b283b3e61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::calculate_number_density</definition>
+        <argsstring>(this)</argsstring>
+        <name>calculate_number_density</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::calculate_number_density</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Calculate number density. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>[molecules/cm³] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="98" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1ab39d9eee2b6542778abb299f787559ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::ppbv_to_ugm3</definition>
+        <argsstring>(this, ppbv, molecular_weight)</argsstring>
+        <name>ppbv_to_ugm3</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::ppbv_to_ugm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppbv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppbv to μg/m³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="101" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1ac8420b69b667ca0f6a6cc52486d9e45a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::ugm3_to_ppbv</definition>
+        <argsstring>(this, ugm3, molecular_weight)</argsstring>
+        <name>ugm3_to_ppbv</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::ugm3_to_ppbv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ugm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert μg/m³ to ppbv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="102" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a3b85dd679da7140fd98aba7b0d1d53fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::molcm3_to_ppbv</definition>
+        <argsstring>(this, molcm3, temperature, pressure)</argsstring>
+        <name>molcm3_to_ppbv</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::molcm3_to_ppbv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molcm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Convert molecules/cm³ to ppbv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="103" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1addb7841e318c7b8bad9e41f156fe4d64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::ppbv_to_molcm3</definition>
+        <argsstring>(this, ppbv, temperature, pressure)</argsstring>
+        <name>ppbv_to_molcm3</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::ppbv_to_molcm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppbv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppbv to molecules/cm³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="104" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a350a00b5db23ba97714c3562ceb1ff2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::ppmv_to_mgm3</definition>
+        <argsstring>(this, ppmv, molecular_weight)</argsstring>
+        <name>ppmv_to_mgm3</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::ppmv_to_mgm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppmv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppmv to mg/m³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="105" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a146d192cf4089c8a0d40b175337cf199" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::mgm3_to_ppmv</definition>
+        <argsstring>(this, mgm3, molecular_weight)</argsstring>
+        <name>mgm3_to_ppmv</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::mgm3_to_ppmv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>mgm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert mg/m³ to ppmv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="106" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a17f24dbde19a5261397af3fc7610c2ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::calculate_column_mass</definition>
+        <argsstring>(this, concentrations, layer_heights, molecular_weight)</argsstring>
+        <name>calculate_column_mass</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::calculate_column_mass</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>layer_heights</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Calculate column mass [kg/m²]. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[ppbv] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layer_heights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>[kg/m²] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="109" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1ada16d7a9bbb3baa1b602819cd09e57e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::calculate_dobson_units</definition>
+        <argsstring>(this, concentrations, layer_heights)</argsstring>
+        <name>calculate_dobson_units</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::calculate_dobson_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>layer_heights</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Dobson Units for gas columns. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[ppbv] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layer_heights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>[DU] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="110" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a2649c047529fc44d106bd89184a207d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::molcm2s_to_kgm2s</definition>
+        <argsstring>(this, molcm2s, molecular_weight)</argsstring>
+        <name>molcm2s_to_kgm2s</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::molcm2s_to_kgm2s</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molcm2s</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert mol/cm²/s to kg/m²/s. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="113" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1a847ec16fb364f50edb09386095be1bc5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::kgm2s_to_molcm2s</definition>
+        <argsstring>(this, kgm2s, molecular_weight)</argsstring>
+        <name>kgm2s_to_molcm2s</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::kgm2s_to_molcm2s</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>kgm2s</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert kg/m²/s to mol/cm²/s. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="114" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structunitconversion__mod_1_1unitconvertertype_1af1ae4b9a3219a31114b30e68ee6bdca4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure unitconversion_mod::unitconvertertype::convert_rate_units</definition>
+        <argsstring>(this, rate_in, input_units, output_units, rc)</argsstring>
+        <name>convert_rate_units</name>
+        <qualifiedname>unitconversion_mod::unitconvertertype::convert_rate_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rate_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert rate constant units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="117" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="117" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Unit converter type for managing conversions. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/UnitConversion_Mod.F90" line="87" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="87" bodyend="118"/>
+    <listofallmembers>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1aa4c120f62dc7aaf4ce42198dfbf7ce4a" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>air_density</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a17f24dbde19a5261397af3fc7610c2ab" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>calculate_column_mass</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1ada16d7a9bbb3baa1b602819cd09e57e3" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>calculate_dobson_units</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a3aa6b0e808ef2d9f612d218b283b3e61" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>calculate_number_density</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1af1ae4b9a3219a31114b30e68ee6bdca4" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>convert_rate_units</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a7e0a6b80f297f8fcd3435e90dd51a82a" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>get_air_density</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a9e42a99521987e556a75eff4684cdc84" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>init</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a847ec16fb364f50edb09386095be1bc5" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>kgm2s_to_molcm2s</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a146d192cf4089c8a0d40b175337cf199" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>mgm3_to_ppmv</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a2649c047529fc44d106bd89184a207d5" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>molcm2s_to_kgm2s</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a3b85dd679da7140fd98aba7b0d1d53fe" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>molcm3_to_ppbv</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1addb7841e318c7b8bad9e41f156fe4d64" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>ppbv_to_molcm3</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1ab39d9eee2b6542778abb299f787559ad" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>ppbv_to_ugm3</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a350a00b5db23ba97714c3562ceb1ff2e" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>ppmv_to_mgm3</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a2c4c155d6f5392ce5e793e0ca239d2bf" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>pressure</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a50d9aa460f23d736a137adad91a29bfe" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>set_conditions</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a24f39959e7aba91a4b81bdef73c3e266" prot="private" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>temperature</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1ac8420b69b667ca0f6a6cc52486d9e45a" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>ugm3_to_ppbv</name></member>
+      <member refid="structunitconversion__mod_1_1unitconvertertype_1a57b4975360598cd2cb486deec818d2c4" prot="public" virt="non-virtual"><scope>unitconversion_mod::unitconvertertype</scope><name>use_standard_conditions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__catchem" kind="group">
+    <compoundname>catchem</compoundname>
+    <title>CATChem Main Group</title>
+    <innergroup refid="group__catchem__api">CATChem API</innergroup>
+    <innergroup refid="group__core__modules">CATChem Core Modules</innergroup>
+    <innergroup refid="group__process__modules">CATChem Process Modules</innergroup>
+    <briefdescription>
+<para>Main CATChem atmospheric chemistry modeling system. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This is the top-level group for the CATChem (Configurable ATmospheric CHEMistry) modeling system, encompassing all processes, drivers, and core functionality. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

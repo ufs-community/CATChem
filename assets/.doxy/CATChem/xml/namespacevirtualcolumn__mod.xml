@@ -1,0 +1,351 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacevirtualcolumn__mod" kind="namespace" language="Fortran">
+    <compoundname>virtualcolumn_mod</compoundname>
+    <innerclass refid="structvirtualcolumn__mod_1_1virtualcolumntype" prot="public">virtualcolumn_mod::virtualcolumntype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1aceaf438323a4c3d635aeb72cdded85a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_met_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>virtual_met_cleanup</name>
+        <qualifiedname>virtualcolumn_mod::virtual_met_cleanup</qualifiedname>
+        <param>
+          <type>class(virtualmettype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up virtual met pointers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Nullifies all pointers - does not deallocate since pointers point to MetState data which is managed elsewhere </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="77" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="78" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a123840889818adeed0e31d6779e4eb7b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_init</definition>
+        <argsstring>(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, lat, lon, area, rc)</argsstring>
+        <name>virtual_column_init</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nlev</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nspec_chem</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nspec_emis</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>grid_i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>grid_j</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>area</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize virtual column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="98" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="99" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a18108fdb8b66d10f87943999dc86186a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(virtualmettype) function, pointer</type>
+        <definition>type(virtualmettype) function, pointer virtualcolumn_mod::virtual_column_get_met</definition>
+        <argsstring>(this)</argsstring>
+        <name>virtual_column_get_met</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_met</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get meteorological data container. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="151" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1aca33542b6b59cdbb7bded34a153910b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function virtualcolumn_mod::virtual_column_get_chem_field</definition>
+        <argsstring>(this, ispec, k)</argsstring>
+        <name>virtual_column_get_chem_field</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_chem_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ispec</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <briefdescription>
+<para>Get chemical species concentration at level k. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="159" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="160" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a25eecdb0988b70ec079ccde1ed2b1f45" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function virtualcolumn_mod::virtual_column_get_emis_field</definition>
+        <argsstring>(this, ispec, k)</argsstring>
+        <name>virtual_column_get_emis_field</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_emis_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ispec</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <briefdescription>
+<para>Get emission flux at level k. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="174" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="175" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a0e0ed0e1a5e1a9c3bec9dd79d699b78a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_set_chem_field</definition>
+        <argsstring>(this, k, ispec, value)</argsstring>
+        <name>virtual_column_set_chem_field</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_set_chem_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ispec</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <briefdescription>
+<para>Set chemical species concentration at level k. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="189" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="190" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a89b4802f60c96d27e2a5a067c7cc6412" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_set_emis_field</definition>
+        <argsstring>(this, k, ispec, value)</argsstring>
+        <name>virtual_column_set_emis_field</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_set_emis_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ispec</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <briefdescription>
+<para>Set emission flux at level k. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="202" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="203" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a54819723803aec6e96e34bffd48cc6dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_get_position</definition>
+        <argsstring>(this, grid_i, grid_j)</argsstring>
+        <name>virtual_column_get_position</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_position</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>grid_i</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>grid_j</defname>
+        </param>
+        <briefdescription>
+<para>Get grid position. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="215" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="216" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1adde2b1b132cb75c2b0ab912791b82a01" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_get_metadata</definition>
+        <argsstring>(this, lat, lon, area)</argsstring>
+        <name>virtual_column_get_metadata</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_metadata</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>area</defname>
+        </param>
+        <briefdescription>
+<para>Get column metadata. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="224" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="225" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1ac185b850773c7dc466aded78a7d06f88" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_get_dimensions</definition>
+        <argsstring>(this, nlev, nspec_chem, nspec_emis)</argsstring>
+        <name>virtual_column_get_dimensions</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nlev</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nspec_chem</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nspec_emis</defname>
+        </param>
+        <briefdescription>
+<para>Get dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="234" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="235" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a9b7448b585773382e2011b12920952b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function virtualcolumn_mod::virtual_column_is_initialized</definition>
+        <argsstring>(this)</argsstring>
+        <name>virtual_column_is_initialized</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_is_initialized</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if column is initialized. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="244" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="245" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a80859351a555a20df7ae9100de80b010" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine virtualcolumn_mod::virtual_column_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>virtual_column_cleanup</name>
+        <qualifiedname>virtualcolumn_mod::virtual_column_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up virtual column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="252" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="253" bodyend="275"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/VirtualColumn_Mod.F90" line="16" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,385 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedrydepscheme__gocart__mod" kind="namespace" language="Fortran">
+    <compoundname>drydepscheme_gocart_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacedrydepscheme__gocart__mod_1aaa6cc1f377d5ebc7c287d153b2d0fda8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter drydepscheme_gocart_mod::t_standard</definition>
+        <argsstring></argsstring>
+        <name>t_standard</name>
+        <qualifiedname>drydepscheme_gocart_mod::t_standard</qualifiedname>
+        <initializer>= 303.15_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="36" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacedrydepscheme__gocart__mod_1a13322735f6129243ea09e6eb66b174b9" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter drydepscheme_gocart_mod::default_scaling</definition>
+        <argsstring></argsstring>
+        <name>default_scaling</name>
+        <qualifiedname>drydepscheme_gocart_mod::default_scaling</qualifiedname>
+        <initializer>= 1.0e-9_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="37" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedrydepscheme__gocart__mod_1a0e612ebeaeb0b1745e0b6596b011a896" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine, public</type>
+        <definition>pure subroutine, public drydepscheme_gocart_mod::compute_gocart</definition>
+        <argsstring>(num_layers, num_species, params, airden, frlake, gwettop, hflux, lwi, nlevs, pblh, t, tstep, u10m, ustar, v10m, z0h, zmid, species_density, species_radius, species_conc, species_tendencies, is_gas, drydep_con_per_species, drydep_velocity_per_species, diagnostic_species_id)</argsstring>
+        <name>compute_gocart</name>
+        <qualifiedname>drydepscheme_gocart_mod::compute_gocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frlake</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>gwettop</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>hflux</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>lwi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>nlevs</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pblh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>z0h</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>zmid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>logical, dimension(num_species), intent(in)</type>
+          <defname>is_gas</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_con_per_species</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>drydep_velocity_per_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for gocart scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing GOCART-2G aerosol dry deposition scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">airden</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>AIRDEN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frlake</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRLAKE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gwettop</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GWETTOP field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hflux</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>HFLUX field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lwi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LWI field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nlevs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>NLEVS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pblh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PBLH field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>T field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>U10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>V10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z0h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z0H field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zmid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ZMID field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_con_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition concentration per species [ug/kg or ppm] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">drydep_velocity_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry deposition velocity [m/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="69" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="96" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepscheme__gocart__mod_1a5d4ecee956d099d25c78cef5929501e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function drydepscheme_gocart_mod::compute_environmental_response_gocart</definition>
+        <argsstring>(met_value, reference_value)</argsstring>
+        <name>compute_environmental_response_gocart</name>
+        <qualifiedname>drydepscheme_gocart_mod::compute_environmental_response_gocart</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>met_value</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>reference_value</defname>
+        </param>
+        <briefdescription>
+<para>Example helper function for environmental response. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="246" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="247" bodyend="253"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepscheme__gocart__mod_1a003b01bbc4e05d4e0091a4687632ac46" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function drydepscheme_gocart_mod::compute_species_scaling_gocart</definition>
+        <argsstring>(species_idx, params)</argsstring>
+        <name>compute_species_scaling_gocart</name>
+        <qualifiedname>drydepscheme_gocart_mod::compute_species_scaling_gocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>species_idx</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <briefdescription>
+<para>Example helper function for species-specific scaling. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="257" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="258" bodyend="271"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

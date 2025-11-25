@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecolumninterface__mod" kind="namespace" language="Fortran">
+    <compoundname>columninterface_mod</compoundname>
+    <innerclass refid="interfacecolumninterface__mod_1_1column__process__interface" prot="public">columninterface_mod::column_process_interface</innerclass>
+    <innerclass refid="structcolumninterface__mod_1_1columnprocessortype" prot="public">columninterface_mod::columnprocessortype</innerclass>
+    <innerclass refid="structcolumninterface__mod_1_1columnviewtype" prot="public">columninterface_mod::columnviewtype</innerclass>
+    <innerclass refid="structcolumninterface__mod_1_1gridmanagertype" prot="private">columninterface_mod::gridmanagertype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecolumninterface__mod_1aa52872c6f82c163eb574b24a86df907f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::column_view_init</definition>
+        <argsstring>(this, met_state, chem_state, rc)</argsstring>
+        <name>column_view_init</name>
+        <qualifiedname>columninterface_mod::column_view_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), optional, target</type>
+          <defname>met_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), optional, target</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="144" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="145" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a4590191031af9c9a81a98f40c6255f7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::column_view_set_position</definition>
+        <argsstring>(this, i, j, rc)</argsstring>
+        <name>column_view_set_position</name>
+        <qualifiedname>columninterface_mod::column_view_set_position</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="186" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="187" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a9df772aad302d8185c237925324a6670" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:), pointer</type>
+        <definition>real(fp) function, dimension(:), pointer columninterface_mod::column_view_get_met_ptr</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>column_view_get_met_ptr</name>
+        <qualifiedname>columninterface_mod::column_view_get_met_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="211" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="212" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1af2b643c73409e8aa7fc287f56a9bef83" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:), pointer</type>
+        <definition>real(fp) function, dimension(:), pointer columninterface_mod::column_view_get_chem_ptr</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>column_view_get_chem_ptr</name>
+        <qualifiedname>columninterface_mod::column_view_get_chem_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="229" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="230" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1ad140f571f7894978c1c1a2f40fc8d435" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:), pointer</type>
+        <definition>real(fp) function, dimension(:), pointer columninterface_mod::column_view_get_emis_ptr</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>column_view_get_emis_ptr</name>
+        <qualifiedname>columninterface_mod::column_view_get_emis_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="247" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="248" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a4e4588e26a571af7e9b6b1399ee9adf7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::column_view_apply_tendency</definition>
+        <argsstring>(this, species_name, tendency_column, dt, layer_height, rc)</argsstring>
+        <name>column_view_apply_tendency</name>
+        <qualifiedname>columninterface_mod::column_view_apply_tendency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>tendency_column</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>layer_height</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="260" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="262" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a450858cfbae726cff96bff4442ff4bd3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::column_view_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>column_view_cleanup</name>
+        <qualifiedname>columninterface_mod::column_view_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="307" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="308" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1aefb1fe426e1911014192817dfa3d1a23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>) function, public</type>
+        <definition>type(columnviewtype) function, public columninterface_mod::create_column_view</definition>
+        <argsstring>(met_state, chem_state)</argsstring>
+        <name>create_column_view</name>
+        <qualifiedname>columninterface_mod::create_column_view</qualifiedname>
+        <param>
+          <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), optional, target</type>
+          <defname>met_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), optional, target</type>
+          <defname>chem_state</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="322" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="323" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a3d923cfd0dd9c07280cb819708553c1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_init</definition>
+        <argsstring>(this, max_columns, rc)</argsstring>
+        <name>processor_init</name>
+        <qualifiedname>columninterface_mod::processor_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>max_columns</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize column processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="341" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="342" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a9f550961bab70442a0e799ebf71c8d78" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_add_column</definition>
+        <argsstring>(this, virtual_col, rc)</argsstring>
+        <name>processor_add_column</name>
+        <qualifiedname>columninterface_mod::processor_add_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a column to the processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="355" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="356" bodyend="369"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1ae8d0b7485541ffa972a130ca42e3cbba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_process_all</definition>
+        <argsstring>(this, process_proc, rc)</argsstring>
+        <name>processor_process_all</name>
+        <qualifiedname>columninterface_mod::processor_process_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>procedure(<ref refid="interfacecolumninterface__mod_1_1column__process__interface" kindref="compound">column_process_interface</ref>)</type>
+          <defname>process_proc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Process all columns with a given procedure. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="373" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="374" bodyend="389"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a4caf6881d38d2b0c5f5c261673f43317" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>) function</type>
+        <definition>type(virtualcolumntype) function columninterface_mod::processor_get_column</definition>
+        <argsstring>(this, index)</argsstring>
+        <name>processor_get_column</name>
+        <qualifiedname>columninterface_mod::processor_get_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>index</defname>
+        </param>
+        <briefdescription>
+<para>Get specific column by index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="393" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="394" bodyend="401"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1ab64282f7dcfa380c8d74c4b2db4e5b72" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>) function</type>
+        <definition>type(virtualcolumntype) function columninterface_mod::processor_get_current_column</definition>
+        <argsstring>(this)</argsstring>
+        <name>processor_get_current_column</name>
+        <qualifiedname>columninterface_mod::processor_get_current_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="405" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="406" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a7b610d194d25eca5dd0f2b0d7e2cea7f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_next_column</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>processor_next_column</name>
+        <qualifiedname>columninterface_mod::processor_next_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Move to next column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="414" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="415" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1a83dd4930bbe807eff2bca634be89cca7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_reset</definition>
+        <argsstring>(this)</argsstring>
+        <name>processor_reset</name>
+        <qualifiedname>columninterface_mod::processor_reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset to first column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="429" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="430" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecolumninterface__mod_1aba9f4c75121a6e70334c7d0d67de0b39" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine columninterface_mod::processor_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>processor_cleanup</name>
+        <qualifiedname>columninterface_mod::processor_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up column processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="437" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="438" bodyend="450"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ColumnInterface_Mod.F90" line="26" column="1"/>
+  </compounddef>
+</doxygen>

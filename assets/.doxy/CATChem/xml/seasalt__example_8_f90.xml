@@ -1,0 +1,508 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="seasalt__example_8_f90" kind="file" language="Fortran">
+    <compoundname>seasalt_example.F90</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="seasalt__example_8_f90_1ad3d9cf3455f2de365bb509dabf2908e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>program</type>
+        <definition>program seasalt_example</definition>
+        <argsstring></argsstring>
+        <name>seasalt_example</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="10" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a99faa20152fdbf5c826c86ba4dbf7ef7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>program</type>
+        <definition>program __seasalt_example_f90__</definition>
+        <argsstring></argsstring>
+        <name>__seasalt_example_f90__</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="99" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a27d9c1ceb8490976576bdea23843ff22" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::setup_chemical_species</definition>
+        <argsstring>(state_manager, error_handler)</argsstring>
+        <name>setup_chemical_species</name>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(errorhandler), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Set up chemical species in state manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="180" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="181" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1ab922b8198216e172f7149b67932524f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::setup_meteorological_fields</definition>
+        <argsstring>(state_manager, error_handler)</argsstring>
+        <name>setup_meteorological_fields</name>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(errorhandler), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Set up meteorological fields. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="193" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="194" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a8e2b54b686d0ca23a52fb698207c29b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::initialize_test_meteorology</definition>
+        <argsstring>(state_manager, error_handler)</argsstring>
+        <name>initialize_test_meteorology</name>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(errorhandler), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Initialize test meteorological data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="209" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="210" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a29caacf9872a980b0543f1553f4effb2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::load_configuration</definition>
+        <argsstring>(config_data, error_handler)</argsstring>
+        <name>load_configuration</name>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>config_data</defname>
+        </param>
+        <param>
+          <type>type(errorhandler), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="234" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="235" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a3061ad45d595d6b0dc9a616fe22f0820" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::setup_initial_conditions</definition>
+        <argsstring>(state_manager, error_handler)</argsstring>
+        <name>setup_initial_conditions</name>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(errorhandler), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Set up initial conditions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="253" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="254" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a7445ef49dd3a2309beca85a219bd191d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::print_process_info</definition>
+        <argsstring>(process)</argsstring>
+        <name>print_process_info</name>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
+          <defname>process</defname>
+        </param>
+        <briefdescription>
+<para>Print process information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="265" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="266" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="function" id="seasalt__example_8_f90_1a591c737572b1d0f0740fa9b1b3547992" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine __seasalt_example_f90__::print_diagnostic_summary</definition>
+        <argsstring>(diag_mgr)</argsstring>
+        <name>print_diagnostic_summary</name>
+        <param>
+          <type>type(diagnosticmanager), intent(in)</type>
+          <defname>diag_mgr</defname>
+        </param>
+        <briefdescription>
+<para>Print diagnostic summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/examples/seasalt_example.F90" line="303" column="1" bodyfile="src/process/seasalt/examples/seasalt_example.F90" bodystart="304" bodyend="329"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Example usage of seasalt process. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This program demonstrates how to use the seasalt process in a standalone application or host model integration.</para>
+<para>Generated on: 2025-11-14T23:01:21.967591 Author: Barry Baker &amp; Wei Li </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">program</highlight><highlight class="normal"><sp/><ref refid="seasalt__example_8_f90_1ad3d9cf3455f2de365bb509dabf2908e2" kindref="member">seasalt_example</ref></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceprecision__mod" kindref="compound">precision_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal">iso_fortran_env,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/>output_unit,<sp/>error_unit</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceprecision__mod" kindref="compound">precision_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceerror__mod" kindref="compound">error_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>,<sp/><ref refid="namespaceerror__mod_1aed94460bd2b16e1ce0c046a0a57ede7a" kindref="member">cc_failure</ref></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceprocessinterface__mod" kindref="compound">processinterface_mod</ref></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceprocessseasaltinterface__mod" kindref="compound">processseasaltinterface_mod</ref></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceseasaltcommon__mod" kindref="compound">seasaltcommon_mod</ref></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceseasaltprocesscreator__mod" kindref="compound">seasaltprocesscreator_mod</ref></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacestatemanager__mod" kindref="compound">statemanager_mod</ref></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">implicit<sp/>none</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Process<sp/>and<sp/>state<sp/>management</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(ProcessInterface),<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>process</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(StateManagerType)<sp/>::<sp/>state_manager</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>rc</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Configuration</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">character(len=256)</highlight><highlight class="normal"><sp/>::<sp/>config_file<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;seasalt_config.yaml&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Simulation<sp/>parameters</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>n_columns<sp/>=<sp/>10</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>n_levels<sp/>=<sp/>50</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>n_time_steps<sp/>=<sp/>24</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>dt<sp/>=<sp/>3600.0_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>1<sp/>hour<sp/>time<sp/>step</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Working<sp/>variables</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>i_time,<sp/>i_col</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>total_time</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;===<sp/>SeaSalt<sp/>Process<sp/>Example<sp/>===&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Process<sp/>for<sp/>computing<sp/>sea<sp/>salt<sp/>aerosol<sp/>emissions<sp/>over<sp/>ocean<sp/>surfaces&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Author:<sp/>Barry<sp/>Baker<sp/>&amp;<sp/>Wei<sp/>Li&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>1:<sp/>Initialize<sp/>state<sp/>manager</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%init(n_levels,<sp/>n_columns,<sp/>1,<sp/>rc)</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/>*)<sp/></highlight><highlight class="stringliteral">&apos;ERROR:<sp/>Failed<sp/>to<sp/>initialize<sp/>state<sp/>manager&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>2:<sp/>Create<sp/>process<sp/>instance</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">create_process(process,<sp/>rc)</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/>*)<sp/></highlight><highlight class="stringliteral">&apos;ERROR:<sp/>Failed<sp/>to<sp/>create<sp/>process&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>3:<sp/>Initialize<sp/>process</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%init(state_manager,<sp/>rc)</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/>*)<sp/></highlight><highlight class="stringliteral">&apos;ERROR:<sp/>Process<sp/>initialization<sp/>failed&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Process<sp/>initialized<sp/>successfully&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>4:<sp/>Time<sp/>loop<sp/>simulation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Starting<sp/>&quot;</highlight><highlight class="normal">,<sp/>n_time_steps,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>time<sp/>step<sp/>simulation&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i_time<sp/>=<sp/>1,<sp/>n_time_steps</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>total_time<sp/>=<sp/>real(i_time<sp/>-<sp/>1,<sp/>fp)<sp/>*<sp/>dt</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0,A,F8.1,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Time<sp/>step<sp/>&quot;</highlight><highlight class="normal">,<sp/>i_time,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>(t=&quot;</highlight><highlight class="normal">,<sp/>total_time/3600.0_fp,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>hours)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Run<sp/>process<sp/>for<sp/>this<sp/>time<sp/>step</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%run(state_manager,<sp/>rc)</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/>*)<sp/></highlight><highlight class="stringliteral">&apos;ERROR:<sp/>Process<sp/>execution<sp/>failed<sp/>at<sp/>time<sp/>step<sp/>&apos;</highlight><highlight class="normal">,<sp/>i_time</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Simulation<sp/>completed<sp/>successfully&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>5:<sp/>Finalize<sp/>process</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%finalize(rc)</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rc<sp/>/=<sp/><ref refid="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" kindref="member">cc_success</ref>)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/>*)<sp/></highlight><highlight class="stringliteral">&apos;ERROR:<sp/>Process<sp/>finalization<sp/>failed&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Process<sp/>finalized<sp/>successfully&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Example<sp/>completed!&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>program<sp/></highlight><highlight class="normal"><ref refid="seasalt__example_8_f90_1ad3d9cf3455f2de365bb509dabf2908e2" kindref="member">seasalt_example</ref></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Error<sp/>creating<sp/>seasalt<sp/>process&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">error_handler%print_errors()</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">stop<sp/>1</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;5.<sp/>SeaSalt<sp/>process<sp/>created&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>6:<sp/>Load<sp/>configuration</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">load_configuration(config_data,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Error<sp/>loading<sp/>configuration&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">error_handler%print_errors()</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;6.<sp/>Configuration<sp/>loaded&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>7:<sp/>Initialize<sp/>process</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%init(state_manager,<sp/>config_data,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Error<sp/>initializing<sp/>seasalt<sp/>process&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">error_handler%print_errors()</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;7.<sp/>SeaSalt<sp/>process<sp/>initialized&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>8:<sp/>Print<sp/>process<sp/>information</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">print_process_info(process)</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>9:<sp/>Set<sp/>up<sp/>initial<sp/>conditions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">setup_initial_conditions(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Error<sp/>setting<sp/>up<sp/>initial<sp/>conditions&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">error_handler%print_errors()</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/>stop<sp/>1</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;8.<sp/>Initial<sp/>conditions<sp/>set&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>10:<sp/>Time<sp/>integration<sp/>loop</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;9.<sp/>Starting<sp/>time<sp/>integration...&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0,A,F0.1,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/>Running<sp/>&quot;</highlight><highlight class="normal">,<sp/>n_time_steps,<sp/>&amp;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/>time<sp/>steps<sp/>with<sp/>dt<sp/>=<sp/>&quot;</highlight><highlight class="normal">,<sp/>dt,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>seconds&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal">total_time<sp/>=<sp/>0.0_fp</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i_time<sp/>=<sp/>1,<sp/>n_time_steps</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Run<sp/>process<sp/>for<sp/>one<sp/>time<sp/>step</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%run(state_manager,<sp/>dt,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(error_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Error<sp/>during<sp/>time<sp/>step<sp/>&quot;</highlight><highlight class="normal">,<sp/>i_time</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">error_handler%print_errors()</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">exit</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/>total_time<sp/>=<sp/>total_time<sp/>+<sp/>dt</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Print<sp/>progress</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(mod(i_time,<sp/>max(n_time_steps/10,<sp/>1))<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0,A,I0,A,F0.1,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/>Step<sp/>&quot;</highlight><highlight class="normal">,<sp/>i_time,<sp/>&amp;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;/&quot;</highlight><highlight class="normal">,<sp/>n_time_steps,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>(t<sp/>=<sp/>&quot;</highlight><highlight class="normal">,<sp/>total_time/3600.0_fp,<sp/></highlight><highlight class="stringliteral">&quot;<sp/>hours)&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(.not.<sp/>error_handler%has_error())<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;10.<sp/>Time<sp/>integration<sp/>completed<sp/>successfully&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight><highlight class="keywordflow">end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>11:<sp/>Print<sp/>diagnostic<sp/>summary</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal">diag_mgr<sp/>=&gt;<sp/>state_manager%get_diagnostic_manager()</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">print_diagnostic_summary(diag_mgr)</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>Step<sp/>12:<sp/>Clean<sp/>up</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">process%finalize(error_handler)</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%finalize(error_handler)</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;11.<sp/>Cleanup<sp/>completed&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;===<sp/>Example<sp/>completed<sp/>successfully<sp/>===&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">setup_chemical_species(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(StateManagerType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>state_manager</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(ErrorHandler),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>error_handler</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Add<sp/>generic<sp/>species</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%add_species(</highlight><highlight class="stringliteral">&apos;GENERIC_SPECIES&apos;</highlight><highlight class="normal">,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Initialize<sp/>species<sp/>concentrations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%allocate_species_arrays(error_handler)</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">setup_chemical_species</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">setup_meteorological_fields(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(StateManagerType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>state_manager</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(ErrorHandler),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>error_handler</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Add<sp/>required<sp/>meteorological<sp/>fields</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%add_met_field(</highlight><highlight class="stringliteral">&apos;DELP&apos;</highlight><highlight class="normal">,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Add<sp/>optional<sp/>meteorological<sp/>fields</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Initialize<sp/>meteorological<sp/>data<sp/>with<sp/>test<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">initialize_test_meteorology(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">setup_meteorological_fields</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">initialize_test_meteorology(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(StateManagerType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>state_manager</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(ErrorHandler),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>error_handler</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>i_col,<sp/>i_lev</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>height,<sp/>latitude,<sp/>longitude</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Set<sp/>test<sp/>meteorological<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i_col<sp/>=<sp/>1,<sp/>n_columns</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i_lev<sp/>=<sp/>1,<sp/>n_levels</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>height<sp/>=<sp/>real(i_lev<sp/>-<sp/>1,<sp/>fp)<sp/>*<sp/>1000.0_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>Height<sp/>in<sp/>meters</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latitude<sp/>=<sp/>45.0_fp<sp/>+<sp/>real(i_col<sp/>-<sp/>1,<sp/>fp)<sp/>*<sp/>1.0_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>Latitude</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>longitude<sp/>=<sp/>-120.0_fp<sp/>+<sp/>real(i_col<sp/>-<sp/>1,<sp/>fp)<sp/>*<sp/>1.0_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>Longitude</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">state_manager%set_met_field(</highlight><highlight class="stringliteral">&apos;DELP&apos;</highlight><highlight class="normal">,<sp/>i_col,<sp/>i_lev,<sp/>&amp;</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>1.0_fp,<sp/>error_handler)<sp/><sp/></highlight><highlight class="comment">!<sp/>Default<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(error_handler%has_error())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">initialize_test_meteorology</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">load_configuration(config_data,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">character(len=*)</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>config_data</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(ErrorHandler),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>error_handler</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>For<sp/>this<sp/>example,<sp/>use<sp/>inline<sp/>configuration</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>In<sp/>practice,<sp/>this<sp/>would<sp/>be<sp/>loaded<sp/>from<sp/>a<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/>config_data<sp/>=<sp/>&amp;</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;process:&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>name:<sp/>&quot;seasalt&quot;&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>version:<sp/>&quot;1.0.0&quot;&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>active_scheme:<sp/>&quot;&quot;&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>is_active:<sp/>true&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;diagnostics:&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>output_frequency:<sp/>3600.0&apos;</highlight><highlight class="normal"><sp/>//<sp/>new_line(</highlight><highlight class="stringliteral">&apos;A&apos;</highlight><highlight class="normal">)<sp/>//<sp/>&amp;</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&apos;<sp/><sp/>output_diagnostics:<sp/>true&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"></highlight></codeline>
+<codeline lineno="250"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">load_configuration</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">setup_initial_conditions(state_manager,<sp/>error_handler)</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(StateManagerType),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>state_manager</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(ErrorHandler),<sp/></highlight><highlight class="keywordtype">intent(inout)</highlight><highlight class="normal"><sp/>::<sp/>error_handler</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>i_col,<sp/>i_lev,<sp/>i_spec</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>initial_concentration</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Set<sp/>initial<sp/>chemical<sp/>concentrations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"></highlight></codeline>
+<codeline lineno="262"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">setup_initial_conditions</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"></highlight></codeline>
+<codeline lineno="265"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">print_process_info(process)</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(ProcessInterface),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>process</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"></highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">character(len=32)</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>species_list(:)</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">character(len=32)</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>required_fields(:)</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>i</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"></highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Process<sp/>Information:&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Name:<sp/>&quot;</highlight><highlight class="normal">,<sp/>trim(process%get_name())</highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Version:<sp/>&quot;</highlight><highlight class="normal">,<sp/>trim(process%get_version())</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Description:<sp/>&quot;</highlight><highlight class="normal">,<sp/>trim(process%get_description())</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Print<sp/>species<sp/>list</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/>species_list<sp/>=<sp/>process%get_species_list()</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Number<sp/>of<sp/>species:<sp/>&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">size</highlight><highlight class="normal">(species_list)</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">size</highlight><highlight class="normal">(species_list)<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">,<sp/>advance=</highlight><highlight class="stringliteral">&apos;no&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Species:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1,<sp/></highlight><highlight class="keyword">size</highlight><highlight class="normal">(species_list)</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">,<sp/>advance=</highlight><highlight class="stringliteral">&apos;no&apos;</highlight><highlight class="normal">)<sp/>trim(species_list(i))</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(i<sp/>&lt;<sp/></highlight><highlight class="keyword">size</highlight><highlight class="normal">(species_list))<sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">,<sp/>advance=</highlight><highlight class="stringliteral">&apos;no&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="286"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="288"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="289"><highlight class="normal"></highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Print<sp/>required<sp/>fields</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/>required_fields<sp/>=<sp/>process%get_required_met_fields()</highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Required<sp/>met<sp/>fields:<sp/>&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">size</highlight><highlight class="normal">(required_fields)</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">size</highlight><highlight class="normal">(required_fields)<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1,<sp/></highlight><highlight class="keyword">size</highlight><highlight class="normal">(required_fields)</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>-<sp/>&quot;</highlight><highlight class="normal">,<sp/>trim(required_fields(i))</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="297"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">print_process_info</highlight></codeline>
+<codeline lineno="301"><highlight class="normal"></highlight></codeline>
+<codeline lineno="303"><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">print_diagnostic_summary(diag_mgr)</highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">type</highlight><highlight class="normal">(DiagnosticManager),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>diag_mgr</highlight></codeline>
+<codeline lineno="305"><highlight class="normal"></highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>n_diagnostics,<sp/>i</highlight></codeline>
+<codeline lineno="307"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">character(len=64)</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>diag_names(:)</highlight></codeline>
+<codeline lineno="308"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">allocatable</highlight><highlight class="normal"><sp/>::<sp/>diag_values(:)</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"></highlight></codeline>
+<codeline lineno="310"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="311"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;Diagnostic<sp/>Summary:&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="312"><highlight class="normal"></highlight></codeline>
+<codeline lineno="313"><highlight class="normal"><sp/><sp/><sp/>n_diagnostics<sp/>=<sp/>diag_mgr%get_n_diagnostics()</highlight></codeline>
+<codeline lineno="314"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,I0)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/>Number<sp/>of<sp/>diagnostics:<sp/>&quot;</highlight><highlight class="normal">,<sp/>n_diagnostics</highlight></codeline>
+<codeline lineno="315"><highlight class="normal"></highlight></codeline>
+<codeline lineno="316"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(n_diagnostics<sp/>&gt;<sp/>0)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="317"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">allocate</highlight><highlight class="normal">(diag_names(n_diagnostics))</highlight></codeline>
+<codeline lineno="318"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">allocate</highlight><highlight class="normal">(diag_values(n_diagnostics))</highlight></codeline>
+<codeline lineno="319"><highlight class="normal"></highlight></codeline>
+<codeline lineno="320"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">diag_mgr%get_diagnostic_names(diag_names)</highlight></codeline>
+<codeline lineno="321"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">call<sp/></highlight><highlight class="normal">diag_mgr%get_diagnostic_values(diag_values)</highlight></codeline>
+<codeline lineno="322"><highlight class="normal"></highlight></codeline>
+<codeline lineno="323"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">do</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1,<sp/>n_diagnostics</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A,A,A,ES12.4)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>&quot;</highlight><highlight class="normal">,<sp/>&amp;</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>trim(diag_names(i)),<sp/></highlight><highlight class="stringliteral">&quot;:<sp/>&quot;</highlight><highlight class="normal">,<sp/>diag_values(i)</highlight></codeline>
+<codeline lineno="326"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="327"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="328"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">write</highlight><highlight class="normal">(output_unit,<sp/></highlight><highlight class="stringliteral">&apos;(A)&apos;</highlight><highlight class="normal">)<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="329"><highlight class="normal"></highlight></codeline>
+<codeline lineno="330"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">print_diagnostic_summary</highlight></codeline>
+<codeline lineno="331"><highlight class="normal"></highlight></codeline>
+<codeline lineno="332"><highlight class="normal"></highlight><highlight class="keyword">end<sp/>program<sp/></highlight><highlight class="normal"><ref refid="seasalt__example_8_f90_1ad3d9cf3455f2de365bb509dabf2908e2" kindref="member">seasalt_example</ref></highlight></codeline>
+    </programlisting>
+    <location file="src/process/seasalt/examples/seasalt_example.F90"/>
+  </compounddef>
+</doxygen>

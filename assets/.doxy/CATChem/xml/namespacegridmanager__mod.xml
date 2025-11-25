@@ -1,0 +1,1047 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacegridmanager__mod" kind="namespace" language="Fortran">
+    <compoundname>gridmanager_mod</compoundname>
+    <innerclass refid="structgridmanager__mod_1_1columniteratortype" prot="public">gridmanager_mod::columniteratortype</innerclass>
+    <innerclass refid="structgridmanager__mod_1_1griddecompositiontype" prot="public">gridmanager_mod::griddecompositiontype</innerclass>
+    <innerclass refid="structgridmanager__mod_1_1gridgeometrytype" prot="public">gridmanager_mod::gridgeometrytype</innerclass>
+    <innerclass refid="structgridmanager__mod_1_1gridmanagertype" prot="public">gridmanager_mod::gridmanagertype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacegridmanager__mod_1af1c5b2d6a6d0b5f33270fa02944e40e5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::grid_type_column</definition>
+        <argsstring></argsstring>
+        <name>grid_type_column</name>
+        <qualifiedname>gridmanager_mod::grid_type_column</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Pure column model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="39" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacegridmanager__mod_1aebb6f8f4d051da919ef3ab4e6b31d479" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::grid_type_2d</definition>
+        <argsstring></argsstring>
+        <name>grid_type_2d</name>
+        <qualifiedname>gridmanager_mod::grid_type_2d</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+<para>2D (x-z) model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="40" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacegridmanager__mod_1abcabe104007ba1ef40abda167cfdb59b" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::grid_type_3d</definition>
+        <argsstring></argsstring>
+        <name>grid_type_3d</name>
+        <qualifiedname>gridmanager_mod::grid_type_3d</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+<para>3D (x-y-z) model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="41" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacegridmanager__mod_1ad443dd31b58c3655eca631c4384d058c" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::coord_cartesian</definition>
+        <argsstring></argsstring>
+        <name>coord_cartesian</name>
+        <qualifiedname>gridmanager_mod::coord_cartesian</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Cartesian coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="44" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacegridmanager__mod_1a0484a29585311ff3df5067615e6ff732" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::coord_lonlat</definition>
+        <argsstring></argsstring>
+        <name>coord_lonlat</name>
+        <qualifiedname>gridmanager_mod::coord_lonlat</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+<para>Lon/lat coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="45" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacegridmanager__mod_1a2a076cb1b494635a60248815a3849ddc" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public gridmanager_mod::coord_projected</definition>
+        <argsstring></argsstring>
+        <name>coord_projected</name>
+        <qualifiedname>gridmanager_mod::coord_projected</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+<para>Projected coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="46" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacegridmanager__mod_1a3422e9ee33520cfc892f4616766107a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::geometry_init</definition>
+        <argsstring>(this, nx, ny, nz, grid_type, coord_system, rc)</argsstring>
+        <name>geometry_init</name>
+        <qualifiedname>gridmanager_mod::geometry_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>grid_type</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>coord_system</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="195" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="196" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a6802fda2a76b2e5e5ae8c8bece9c39c4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::geometry_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>geometry_cleanup</name>
+        <qualifiedname>gridmanager_mod::geometry_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="260" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="261" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a87372543ff107fa86a9737d43c50fad8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::geometry_get_nx</definition>
+        <argsstring>(this)</argsstring>
+        <name>geometry_get_nx</name>
+        <qualifiedname>gridmanager_mod::geometry_get_nx</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of x grid points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="274" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="275" bodyend="277"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ae1b407ae39f0c3406188f2438d284ae2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::geometry_get_ny</definition>
+        <argsstring>(this)</argsstring>
+        <name>geometry_get_ny</name>
+        <qualifiedname>gridmanager_mod::geometry_get_ny</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of y grid points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="281" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="282" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a1ca4324ff9c01d78ba5d0ebe648f379f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::geometry_get_nz</definition>
+        <argsstring>(this)</argsstring>
+        <name>geometry_get_nz</name>
+        <qualifiedname>gridmanager_mod::geometry_get_nz</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of vertical levels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="288" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="289" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a9502b9a5084714f61382041e1cb436d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::geometry_get_grid_type</definition>
+        <argsstring>(this)</argsstring>
+        <name>geometry_get_grid_type</name>
+        <qualifiedname>gridmanager_mod::geometry_get_grid_type</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="295" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="296" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a7c71af1b43945c53118bcd897b97db8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::geometry_get_dimensions</definition>
+        <argsstring>(this, nx, ny, nz)</argsstring>
+        <name>geometry_get_dimensions</name>
+        <qualifiedname>gridmanager_mod::geometry_get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nz</defname>
+        </param>
+        <briefdescription>
+<para>Get all grid dimensions at once. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="302" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="303" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a8d3b4ccac69784c67e3d7c5bde8cc5d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function gridmanager_mod::geometry_get_cell_area</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>geometry_get_cell_area</name>
+        <qualifiedname>gridmanager_mod::geometry_get_cell_area</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get grid cell area at position (i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="312" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="313" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a2a7757a4ebc24207c1dadaf025074031" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function gridmanager_mod::geometry_get_cell_volume</definition>
+        <argsstring>(this, i, j, k)</argsstring>
+        <name>geometry_get_cell_volume</name>
+        <qualifiedname>gridmanager_mod::geometry_get_cell_volume</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <briefdescription>
+<para>Get grid cell volume at position (i,j,k) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="325" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="326" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ad54e9b85840fa60a0aa9ae827361c976" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function gridmanager_mod::geometry_is_valid_position</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>geometry_is_valid_position</name>
+        <qualifiedname>gridmanager_mod::geometry_is_valid_position</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Check if position (i,j) is valid. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="337" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="338" bodyend="342"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a6cc5de89a1921728286224d825c999dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::decomp_init</definition>
+        <argsstring>(this, geometry, n_procs, my_rank, rc)</argsstring>
+        <name>decomp_init</name>
+        <qualifiedname>gridmanager_mod::decomp_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>geometry</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_procs</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>my_rank</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid decomposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="350" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="351" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a22262b420ba5066df1f7eff74ae9f941" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::decomp_get_local_bounds</definition>
+        <argsstring>(this, i_start, i_end, j_start, j_end)</argsstring>
+        <name>decomp_get_local_bounds</name>
+        <qualifiedname>gridmanager_mod::decomp_get_local_bounds</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i_start</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i_end</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j_start</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j_end</defname>
+        </param>
+        <briefdescription>
+<para>Get local domain bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="380" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="381" bodyend="387"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a4c210bf373c55ffe4252a422f3f0518d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function gridmanager_mod::decomp_is_local_column</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>decomp_is_local_column</name>
+        <qualifiedname>gridmanager_mod::decomp_is_local_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Check if column (i,j) is local to this processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="391" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="392" bodyend="397"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a5cbd745e7d911ad727da9bba53de4867" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::iterator_init</definition>
+        <argsstring>(this, grid_mgr, rc)</argsstring>
+        <name>iterator_init</name>
+        <qualifiedname>gridmanager_mod::iterator_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in), target</type>
+          <defname>grid_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize column iterator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="405" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="406" bodyend="414"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a3f6070da21e2d43efe0f49259e3e7255" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function gridmanager_mod::iterator_has_next</definition>
+        <argsstring>(this)</argsstring>
+        <name>iterator_has_next</name>
+        <qualifiedname>gridmanager_mod::iterator_has_next</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if there are more columns to process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="418" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="419" bodyend="422"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a65368f88ba130a5b7988328ddddfdad1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::iterator_next</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>iterator_next</name>
+        <qualifiedname>gridmanager_mod::iterator_next</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Move to next column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="426" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="427" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1af453e54b86d041f4b2fdac712c7e695b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>) function</type>
+        <definition>type(columnviewtype) function gridmanager_mod::iterator_get_current_column</definition>
+        <argsstring>(this)</argsstring>
+        <name>iterator_get_current_column</name>
+        <qualifiedname>gridmanager_mod::iterator_get_current_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current column view. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="448" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="449" bodyend="452"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ac52ba473d68590ee2b519701e422b08f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::iterator_get_current_indices</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>iterator_get_current_indices</name>
+        <qualifiedname>gridmanager_mod::iterator_get_current_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get current column indices. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="456" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="457" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ab50a2e73170954f233a52c754845bb92" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::iterator_reset</definition>
+        <argsstring>(this)</argsstring>
+        <name>iterator_reset</name>
+        <qualifiedname>gridmanager_mod::iterator_reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset iterator to beginning. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="465" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="466" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a791b9d1eae789986bc13e9dea66b951e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_init</definition>
+        <argsstring>(this, nx, ny, nz, error_mgr, grid_type, coord_system, rc)</argsstring>
+        <name>grid_manager_init</name>
+        <qualifiedname>gridmanager_mod::grid_manager_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), target</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>grid_type</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>coord_system</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="478" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="479" bodyend="514"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a3ea4944d18c1e433ea26dbeacc386306" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_cleanup</name>
+        <qualifiedname>gridmanager_mod::grid_manager_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="518" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="519" bodyend="524"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a91f55e49bfe0f08022bbb472ad0721ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function gridmanager_mod::grid_manager_validate</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_validate</name>
+        <qualifiedname>gridmanager_mod::grid_manager_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Validate grid manager state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="528" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="529" bodyend="534"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a32ae80603319fbf655e0990aea89375c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>) function</type>
+        <definition>type(gridgeometrytype) function gridmanager_mod::grid_manager_get_geometry</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_get_geometry</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_geometry</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="538" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="539" bodyend="542"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1abcb7e6936ccc9750e29a55f0570e468a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>) function</type>
+        <definition>type(griddecompositiontype) function gridmanager_mod::grid_manager_get_decomposition</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_get_decomposition</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_decomposition</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid decomposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="546" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="547" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a39f2f2abc2b6cc5ba6a1ef6c447e8267" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::grid_manager_get_total_columns</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_get_total_columns</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_total_columns</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get total number of columns in the grid. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="554" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="555" bodyend="558"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1afc462bba484542d6bbb3aceebb263741" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function gridmanager_mod::grid_manager_get_local_columns</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_get_local_columns</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_local_columns</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of local columns on this processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="562" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="563" bodyend="566"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1aa28a4a0fc6a755eb2d29121d9c499fa2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_get_shape</definition>
+        <argsstring>(this, nx, ny, nz)</argsstring>
+        <name>grid_manager_get_shape</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_shape</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nz</defname>
+        </param>
+        <briefdescription>
+<para>Get grid shape (nx, ny, nz) as a convenience. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="570" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="571" bodyend="573"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ad829f0636b629569c84cfba81583d728" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>) function</type>
+        <definition>type(columnviewtype) function gridmanager_mod::grid_manager_get_column_by_indices</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>grid_manager_get_column_by_indices</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_column_by_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get column view for specific indices. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="577" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="578" bodyend="592"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a1074960da2c3453c638400ced08b59f7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>) function</type>
+        <definition>type(columnviewtype) function gridmanager_mod::grid_manager_get_column_by_location</definition>
+        <argsstring>(this, lon, lat)</argsstring>
+        <name>grid_manager_get_column_by_location</name>
+        <qualifiedname>gridmanager_mod::grid_manager_get_column_by_location</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <briefdescription>
+<para>Get column view by geographic location. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="596" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="597" bodyend="603"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ad4b0a53159ef2803c421b306ee0f8e4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structgridmanager__mod_1_1columniteratortype" kindref="compound">columniteratortype</ref>) function</type>
+        <definition>type(columniteratortype) function gridmanager_mod::grid_manager_create_column_iterator</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_create_column_iterator</name>
+        <qualifiedname>gridmanager_mod::grid_manager_create_column_iterator</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Create column iterator for processing all columns. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="607" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="608" bodyend="612"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1affb2d93e54d29f54b00727d45c1a46ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_compute_distances</definition>
+        <argsstring>(this, i1, j1, i2, j2, distance, rc)</argsstring>
+        <name>grid_manager_compute_distances</name>
+        <qualifiedname>gridmanager_mod::grid_manager_compute_distances</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i1</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j1</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i2</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j2</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>distance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Compute distances between grid points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="616" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="617" bodyend="631"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a461def75097829400cd2acc02286af04" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_interpolate_to_column</definition>
+        <argsstring>(this, source_data, target_i, target_j, interpolated_data, rc)</argsstring>
+        <name>grid_manager_interpolate_to_column</name>
+        <qualifiedname>gridmanager_mod::grid_manager_interpolate_to_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>source_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>target_i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>target_j</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>interpolated_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Interpolate data to specific column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="635" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="637" bodyend="650"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a3b6d1084991d4c2b418b991b236ba67c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_exchange_halo_data</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>grid_manager_exchange_halo_data</name>
+        <qualifiedname>gridmanager_mod::grid_manager_exchange_halo_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Exchange halo data between processors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="654" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="655" bodyend="660"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1a29e0e80fdcab6eff2605b4b2080eca81" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_print_info</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_print_info</name>
+        <qualifiedname>gridmanager_mod::grid_manager_print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print grid manager information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="664" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="665" bodyend="680"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ae9532cd8f6ccb8c00148ba738d25ccac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function gridmanager_mod::grid_manager_is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>grid_manager_is_ready</name>
+        <qualifiedname>gridmanager_mod::grid_manager_is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if grid manager is ready for use. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="684" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="685" bodyend="688"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacegridmanager__mod_1ad298cf74c486c17c91f64f67f2ceef96" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine gridmanager_mod::grid_manager_create_virtual_column</definition>
+        <argsstring>(this, i, j, virtual_col, rc)</argsstring>
+        <name>grid_manager_create_virtual_column</name>
+        <qualifiedname>gridmanager_mod::grid_manager_create_virtual_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(out)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a virtual column for the given (i, j) indices. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="692" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="693" bodyend="699"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/GridManager_Mod.F90" line="24" column="1"/>
+  </compounddef>
+</doxygen>

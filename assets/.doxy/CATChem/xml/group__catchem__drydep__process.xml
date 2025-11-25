@@ -1,0 +1,1687 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__catchem__drydep__process" kind="group">
+    <compoundname>catchem_drydep_process</compoundname>
+    <title>CATChem Dry Deposition Process</title>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__catchem__drydep__process_1ga6380a3370497f140feea8ff34401b70e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_wesely_mod::wesely_rc_gas</definition>
+        <argsstring>(radiat, temp, suncos, f0, hstar, xmw, ustar, cfrac, pressu, xlai, ii, spc, salinity, tskin, iodide, xlon, ylat, co2_effect, co2_level, co2_ref, rsurfc, rc)</argsstring>
+        <name>wesely_rc_gas</name>
+        <qualifiedname>drydepscheme_wesely_mod::wesely_rc_gas</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radiat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>suncos</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>f0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>hstar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xmw</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cfrac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressu</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xlai</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ii</defname>
+        </param>
+        <param>
+          <type>character(len=20), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>salinity</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tskin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>iodide</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xlon</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ylat</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>co2_effect</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>co2_level</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>co2_ref</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>rsurfc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Computes the bulk surface resistance (Rc) for the gas species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Wesely, M. L. &quot;Parameterization of surface resistances to gaseous dry deposition in
+ regional-scale numerical models.&quot; Atmospheric environment 41 (2007): 52-63. <ulink url="https://doi.org/10.1016/0004-6981(89)90153-4">https://doi.org/10.1016/0004-6981(89)90153-4</ulink></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>RADIAT</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Solar radiation [W/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TEMP</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SUNCOS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cosine of solar zenith angle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>F0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>React. factor for oxidation depends on species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>HSTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s law constant depends on species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XMW</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>USTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CFRAC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface cloud fraction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESSU</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XLAI</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Leaf area index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>II</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index of the drydep land type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SPC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SALINITY</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Salinity of the ocean </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TSKIN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Skin temperature </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IODIDE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iodide concentration </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XLON</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>YLAT</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CO2_EFFECT</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 effect on RS </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CO2_LEVEL</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 level </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CO2_REF</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 reference level </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RSURFC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Bulk Surface resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure?</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radiat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Solar radiation [W/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">temp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">suncos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cosine of solar zenith angle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">f0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>React. factor for oxidation depends on species (inout because it is changed in the function) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hstar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s law constant depends on species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xmw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface cloud fraction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xlai</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Leaf area index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ii</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index of the drydep land type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">salinity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Salinity of the ocean </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tskin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Skin temperature </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">iodide</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Iodide concentration </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xlon</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ylat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">co2_effect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 effect on RS </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">co2_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 level </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">co2_ref</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CO2 reference level </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rsurfc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Bulk Surface resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure? </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="526" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="529" bodyend="789"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gaa3d5face8db3f60cb03a315fcb2622ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_wesely_mod::oceano3</definition>
+        <argsstring>(tempk, ustar, iodide_in, depv)</argsstring>
+        <name>oceano3</name>
+        <qualifiedname>drydepscheme_wesely_mod::oceano3</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tempk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>iodide_in</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>depv</defname>
+        </param>
+        <briefdescription>
+<para>calculates the dry deposition velocity of O3 to ocean </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Pound, R. J., Sherwen, T., Helmig, D., Carpenter, L. J., and Evans, M. J.: Influence of oceanic ozone deposition on tropospheric photochemistry, Atmos. Chem. Phys., <ulink url="https://doi.org/10.5194/acp-20-4227-2020">https://doi.org/10.5194/acp-20-4227-2020</ulink>, 2020.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>TEMPK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperatue [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>USTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fictional Velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IODIDE_IN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface iodide concentration [nM] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DEPV</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of the new deposition vel [cm/s]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="808" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="809" bodyend="845"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gac7ba09a2e67a21b80280220bf8fb5375" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_wesely_mod::k0k1_aprox</definition>
+        <argsstring>(input_arg, k0, k1)</argsstring>
+        <name>k0k1_aprox</name>
+        <qualifiedname>drydepscheme_wesely_mod::k0k1_aprox</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>input_arg</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>k0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>k1</defname>
+        </param>
+        <briefdescription>
+<para>estimate the modified Bessel functions of the second order zero (K0) and one (K1). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Approach initially described in Numerical Recipes in Fortran 90 second edition (1996). This implementation is designed to be specific to the use case required for calculating oceanic deposition velocity. Uses a polynomial fit of each type of modified bessel function to estimate the value of the function for each input.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>input_arg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>!the value we want the soln for </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>K0</parametername>
+<parametername>K1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of the modified bessel functions</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="863" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="864" bodyend="906"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gac97269855e83c787928047d5dfc931f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function drydepscheme_wesely_mod::poly_fit</definition>
+        <argsstring>(input, coeffs)</argsstring>
+        <name>poly_fit</name>
+        <qualifiedname>drydepscheme_wesely_mod::poly_fit</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>input</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>coeffs</defname>
+        </param>
+        <briefdescription>
+<para>calculate the value of a polynomial fit used in the K0K1_APPROX function in estimating the values of a modified bessel function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References:</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>input</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="921" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="922" bodyend="935"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gadb8554c0b3760522298fe6368e5724ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function drydepscheme_wesely_mod::diffg</definition>
+        <argsstring>(tk, press, xm)</argsstring>
+        <name>diffg</name>
+        <qualifiedname>drydepscheme_wesely_mod::diffg</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>press</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xm</defname>
+        </param>
+        <briefdescription>
+<para>calculates the molecular diffusivity [m2/s] in air for a gas X of molecular weight XM [kg] at temperature TK [K] and pressure PRESS [Pa]. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References:</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>TK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperatue [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XM</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight of gas [kg]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="951" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="952" bodyend="995"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gad42ad255061f15469d9be3dea36e879c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function drydepscheme_wesely_mod::biofit</definition>
+        <argsstring>(coeff1, xlai1, suncos1, cfrac1, npoly)</argsstring>
+        <name>biofit</name>
+        <qualifiedname>drydepscheme_wesely_mod::biofit</qualifiedname>
+        <param>
+          <type>real(fp), dimension(npoly), intent(in)</type>
+          <defname>coeff1</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xlai1</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>suncos1</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cfrac1</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>npoly</defname>
+        </param>
+        <briefdescription>
+<para>computes the light correction used in the dry deposition and canopy NOx modules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>It was part of the old Harvard-GISS CTM and was ported into GEOS-Chem</para>
+<para>References: Wang, Y., D.J. Jacob, and J.A. Logan, &quot;Global simulation of tropospheric
+ O3-NOx-hydrocarbon chemistry, 1. Model formulation&quot;, J. Geophys. Res., 103/D9, 10,713-10,726, 1998.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>COEFF1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Baldocchi drydep coefficients </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XLAI1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Leaf area index [cm2/cm2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SUNCOS1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cosine( Solar Zenith Angle ) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CFRAC1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cloud fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>NPOLY</parametername>
+</parameternamelist>
+<parameterdescription>
+<para># of drydep coefficients</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="1015" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="1016" bodyend="1074"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gae3e6b066369f4a4d01e51987e57deb06" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_wesely_mod::wesely_ra_rb</definition>
+        <argsstring>(temp, pressu, xmw, ustar, obk, zo, thik, is_gas, ra, rb, rc)</argsstring>
+        <name>wesely_ra_rb</name>
+        <qualifiedname>drydepscheme_wesely_mod::wesely_ra_rb</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressu</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xmw</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>obk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>zo</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>thik</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_gas</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>ra</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>rb</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>calculates the Ra and Rb term in the Wesely scheme </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Wesely, M. L. &quot;Parameterization of surface resistances to gaseous dry deposition in
+ regional-scale numerical models.&quot; Atmospheric environment 41 (2007): 52-63. <ulink url="https://doi.org/10.1016/0004-6981(89)90153-4">https://doi.org/10.1016/0004-6981(89)90153-4</ulink></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>TEMPK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperatue [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESSU</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XMW</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>USTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fictional Velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>OBK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monin-Obhukov length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ZO</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Roughness length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>THIK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>height of first model layer [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IS_GAS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>flag for gas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ra</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of aerodynamic resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of quasi-laminar boundary layer resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure?</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xmw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">obk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monin-Obhukov length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Roughness length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">thik</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>height of first model layer [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">is_gas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>flag for gas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">ra</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerodynamic resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>quasi-laminar boundary layer resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure? </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" line="1099" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90" bodystart="1100" bodyend="1384"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1ga309028e0827b2371d5bbdae3ca9fca4b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function drydepscheme_zhang_mod::aero_sfcrsii</definition>
+        <argsstring>(spc, is_dust, is_seasalt, lucindex, a_radi, a_den, press, temp, ustar, rhb, w10, lowerbin, upperbin, vtsout, rc)</argsstring>
+        <name>aero_sfcrsii</name>
+        <qualifiedname>drydepscheme_zhang_mod::aero_sfcrsii</qualifiedname>
+        <param>
+          <type>character(len=255), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_dust</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_seasalt</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>lucindex</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>a_radi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>a_den</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>press</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rhb</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>w10</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>lowerbin</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>upperbin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>vtsout</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>computes the aerodynamic resistance of aerosols. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Zhang, L., Gong, S., Padro, J., &amp; Barrie, L. (2001). A size-segregated particle dry deposition scheme for an atmospheric aerosol module. Atmospheric environment., <ulink url="https://doi.org/10.1016/S1352-2310(00)00326-5">https://doi.org/10.1016/S1352-2310(00)00326-5</ulink></para>
+<para>Emerson, E. W., et al. (2020). Revisiting particle dry deposition and its role in radiative effect estimates. PNAS, 117(42), 26076-26082. <ulink url="https://doi.org/10.1073/pnas.2014761117">https://doi.org/10.1073/pnas.2014761117</ulink></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>SPC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>II</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Surface type index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IS_DUST</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Is dust species? </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IS_SEASALT</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Is seasalt species? </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>LUCINDEX</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mapping above II to the 15 drydep land use categories </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>A_RADI</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Aerosol radius [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>A_DEN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Aerosol density [kg/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [KPa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TEMP</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>USTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fictional Velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RHB</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative humidity [fraction] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>W10</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>LOWERBIN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>lower bound of sea-salt bins </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>UPPERBIN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>upper bound of sea-salt bins </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>VTSout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of setttling velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>success flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>return value of surface resistance [s/m]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="616" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="618" bodyend="948"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1gaa78bfe87f992c4ec644049efc0b3ee94" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_zhang_mod::new_diam_den</definition>
+        <argsstring>(spc, is_seasalt, rhbl, rdry, rwet, diam, den, rc)</argsstring>
+        <name>new_diam_den</name>
+        <qualifiedname>drydepscheme_zhang_mod::new_diam_den</qualifiedname>
+        <param>
+          <type>character(len=255), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_seasalt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rhbl</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>rdry</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>rwet</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>diam</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>den</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>updates the diameter and density of non-dust aerosols </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90) ADUST_SFCRSII and AERO_SFCRSII functions</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>SPC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IS_SEASALT</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Is seasalt species? </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RHBL</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative humidity [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RDRY</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dry radius of particle [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RWET</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet radius of particle [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DIAM</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>diameter of wet particle [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DEN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>density of particle [kg/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="969" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="970" bodyend="1139"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1ga31f90ce328557eb96b3975cd67d96399" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_zhang_mod::init_weightss</definition>
+        <argsstring>(salt_rlow_um, salt_rup_um, rc)</argsstring>
+        <name>init_weightss</name>
+        <qualifiedname>drydepscheme_zhang_mod::init_weightss</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>salt_rlow_um</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>salt_rup_um</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>calculates the volume size distribution of sea-salt. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This only has to be done once. We assume that sea-salt is the combination of a coarse mode and accumulation model log-normal distribution functions. The resulting arrays are: DMID = diameter of bin and SALT_V = dV/dln(D) [in um3].</para>
+<para>References: Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90) INIT_WEIGHTSS function</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>SALT_RLOW_um</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>lowest edge of sea salt radius [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SALT_RUP_um</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>uppest edge of sea sakt radius [um]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="1160" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="1161" bodyend="1248"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1ga6f1331fa961eb4ad5ee1e37d4150933d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function drydepscheme_zhang_mod::diffg</definition>
+        <argsstring>(tk, press, xm)</argsstring>
+        <name>diffg</name>
+        <qualifiedname>drydepscheme_zhang_mod::diffg</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>press</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xm</defname>
+        </param>
+        <briefdescription>
+<para>calculates the molecular diffusivity [m2/s] in air for a gas X of molecular weight XM [kg] at temperature TK [K] and pressure PRESS [Pa]. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References:</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>TK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperatue [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XM</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight of gas [kg]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="1264" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="1265" bodyend="1308"/>
+      </memberdef>
+      <memberdef kind="function" id="group__catchem__drydep__process_1ga7aa56e85f6ccbecfde9bfd243e48ac75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepscheme_zhang_mod::wesely_ra_rb</definition>
+        <argsstring>(temp, pressu, xmw, ustar, obk, zo, thik, is_gas, ra, rb, rc)</argsstring>
+        <name>wesely_ra_rb</name>
+        <qualifiedname>drydepscheme_zhang_mod::wesely_ra_rb</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressu</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>xmw</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>obk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>zo</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>thik</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_gas</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>ra</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>rb</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>calculates the Ra and Rb term in the Wesely scheme </para>
+        </briefdescription>
+        <detaileddescription>
+<para>References: Wesely, M. L. &quot;Parameterization of surface resistances to gaseous dry deposition in
+ regional-scale numerical models.&quot; Atmospheric environment 41 (2007): 52-63. <ulink url="https://doi.org/10.1016/0004-6981(89)90153-4">https://doi.org/10.1016/0004-6981(89)90153-4</ulink></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>TEMPK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperatue [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>PRESSU</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XMW</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>USTAR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fictional Velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>OBK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monin-Obhukov length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ZO</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Roughness length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>THIK</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>height of first model layer [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>IS_GAS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>flag for gas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ra</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of aerodynamic resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Rb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output of quasi-laminar boundary layer resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure?</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xmw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Friction velocity [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">obk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monin-Obhukov length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Roughness length [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">thik</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>height of first model layer [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">is_gas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>flag for gas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">ra</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerodynamic resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>quasi-laminar boundary layer resistance [s/m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Success or failure? </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="1333" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="1334" bodyend="1618"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Atmospheric dry deposition calculations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This group contains modules and functions for calculating dry deposition of atmospheric species in the CATChem system.</para>
+<para>CATChem core data types and routines. <blockquote><para><zwj/> </para>
+</blockquote></para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

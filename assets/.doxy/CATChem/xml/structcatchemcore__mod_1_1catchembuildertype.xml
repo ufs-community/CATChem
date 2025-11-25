@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemcore__mod_1_1catchembuildertype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchemcore_mod::catchembuildertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a520fcbac53278c3f5a9a0361373c8d73" prot="private" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) catchemcore_mod::catchembuildertype::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="128" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="128" bodyend="128"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1ae4c54b8ec669e8761c3fb55ac7c1c63f" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchemcore_mod::catchembuildertype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::name</qualifiedname>
+        <initializer>= &apos;CATChem_Core&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="129" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1ad361647534c768fbcf38331d45d3c2be" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nx</qualifiedname>
+        <initializer>= 64</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="130" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a4f72dfb489ad66432d538b7f7b1f31c1" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::ny</qualifiedname>
+        <initializer>= 64</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="130" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a36d98de5ba1b052f5b27f12a21dcb1a6" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nz</qualifiedname>
+        <initializer>= 72</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="130" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a71a81b3d6ac1f357d438e15db41a95b4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::nsoil</definition>
+        <argsstring></argsstring>
+        <name>nsoil</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nsoil</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+<para>Number of soil layers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="131" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1ad37ff238af5f86d07658e48b0a1aeb7c" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::nsoiltype</definition>
+        <argsstring></argsstring>
+        <name>nsoiltype</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nsoiltype</qualifiedname>
+        <initializer>= 19</initializer>
+        <briefdescription>
+<para>Number of soil types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="132" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1afa107e4b28275cd19cdc9a0ab605fc1a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchembuildertype::nsurftype</definition>
+        <argsstring></argsstring>
+        <name>nsurftype</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nsurftype</qualifiedname>
+        <initializer>= 13</initializer>
+        <briefdescription>
+<para>Number of surface types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="133" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a5a0b74631b3c395336283a1f2c3cedc2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchembuildertype::nsoil_surftype_provided</definition>
+        <argsstring></argsstring>
+        <name>nsoil_surftype_provided</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::nsoil_surftype_provided</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>true when nsoil, nsurftype and nsoiltype are provided at initialization </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="134" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="134" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a4f927c903b5cf854d32b3ac36c09b62a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchembuildertype::verbose</definition>
+        <argsstring></argsstring>
+        <name>verbose</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::verbose</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="135" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="135" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchembuildertype_1a4f6602979a6d8af7629d2c86ac1fff90" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchembuildertype::validate_config</definition>
+        <argsstring></argsstring>
+        <name>validate_config</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::validate_config</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="136" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="136" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1a5cb8e37f90ad74993cf2979ae95a609b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::init</definition>
+        <argsstring>(this)</argsstring>
+        <name>init</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Initialize builder. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="139" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1aa93d289dd3069cba38a6298fd76b3f41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::with_config</definition>
+        <argsstring>(this, config_file)</argsstring>
+        <name>with_config</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::with_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <briefdescription>
+<para>Set configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="140" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1a00d6ce9cbf2fadbe9056cbff3df8db30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::with_name</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>with_name</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::with_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Set core name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="141" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1aee2c7729ac6aee01bb6f8dea793a44f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::with_grid</definition>
+        <argsstring>(this, nx, ny, nz, nsoil, nsoiltype, nsurftype)</argsstring>
+        <name>with_grid</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::with_grid</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <briefdescription>
+<para>Set grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="142" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1a4620e27c39c06a1bd908b62928edc295" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::with_verbose</definition>
+        <argsstring>(this)</argsstring>
+        <name>with_verbose</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::with_verbose</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Enable verbose output. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="143" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1a22f04cd168116df9e9dd7e03fa046528" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::skip_validation</definition>
+        <argsstring>(this)</argsstring>
+        <name>skip_validation</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::skip_validation</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Skip configuration validation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="144" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchembuildertype_1a44b04bccb8b0dbb5510c9e2e1958b39f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchembuildertype::build</definition>
+        <argsstring>(this, core, rc)</argsstring>
+        <name>build</name>
+        <qualifiedname>catchemcore_mod::catchembuildertype::build</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchembuildertype" kindref="compound">catchembuildertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(out)</type>
+          <defname>core</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Build the CATChem core. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="145" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="145" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Builder pattern for constructing CATChem core. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Provides a flexible way to configure and build the CATChem core with various options and settings. </para>
+    </detaileddescription>
+    <location file="src/core/CATChemCore_Mod.F90" line="125" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="125" bodyend="147"/>
+    <listofallmembers>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a44b04bccb8b0dbb5510c9e2e1958b39f" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>build</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a520fcbac53278c3f5a9a0361373c8d73" prot="private" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>config_file</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a5cb8e37f90ad74993cf2979ae95a609b" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>init</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1ae4c54b8ec669e8761c3fb55ac7c1c63f" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>name</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a71a81b3d6ac1f357d438e15db41a95b4" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nsoil</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a5a0b74631b3c395336283a1f2c3cedc2" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nsoil_surftype_provided</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1ad37ff238af5f86d07658e48b0a1aeb7c" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nsoiltype</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1afa107e4b28275cd19cdc9a0ab605fc1a" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nsurftype</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1ad361647534c768fbcf38331d45d3c2be" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nx</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a4f72dfb489ad66432d538b7f7b1f31c1" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>ny</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a36d98de5ba1b052f5b27f12a21dcb1a6" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>nz</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a22f04cd168116df9e9dd7e03fa046528" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>skip_validation</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a4f6602979a6d8af7629d2c86ac1fff90" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>validate_config</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a4f927c903b5cf854d32b3ac36c09b62a" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>verbose</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1aa93d289dd3069cba38a6298fd76b3f41" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>with_config</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1aee2c7729ac6aee01bb6f8dea793a44f4" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>with_grid</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a00d6ce9cbf2fadbe9056cbff3df8db30" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>with_name</name></member>
+      <member refid="structcatchemcore__mod_1_1catchembuildertype_1a4620e27c39c06a1bd908b62928edc295" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchembuildertype</scope><name>with_verbose</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

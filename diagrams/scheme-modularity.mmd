@@ -1,0 +1,17 @@
+graph LR
+    A[Settling Process] --> B[Stokes Scheme]
+    A --> C[Intermediate Reynolds<br/>Scheme]
+
+    E[Dust Process] --> F[FENGSHA Scheme]
+    E --> G[GOCART Scheme]
+    E --> H[Kok11 Scheme]
+
+    I[SeaSalt Process] --> J[Gong03]
+    I --> K[Gong97 Scheme]
+    I --> L[GEOS12 Scheme]
+
+    M[ExtEmission Process] --> N[Default]
+
+    O[PlumeRise Process] --> P[Grell Scheme]
+    O --> Q[Briggs Scheme]
+    O --> R[Sofiev Scheme]

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprocessinterface__mod_1_1init__interface" kind="interface" language="Fortran" prot="public">
+    <compoundname>processinterface_mod::init_interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprocessinterface__mod_1_1init__interface_1a7856327719d5bacad9bc74c4d0158d86" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine processinterface_mod::init_interface::init_interface</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>init_interface</name>
+        <qualifiedname>processinterface_mod::init_interface::init_interface</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="123" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="124" bodyend="127"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Initialize the process with given container. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessInterface_Mod.F90" line="123" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="123" bodyend="127"/>
+    <listofallmembers>
+      <member refid="interfaceprocessinterface__mod_1_1init__interface_1a7856327719d5bacad9bc74c4d0158d86" prot="public" virt="virtual"><scope>processinterface_mod::init_interface</scope><name>init_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

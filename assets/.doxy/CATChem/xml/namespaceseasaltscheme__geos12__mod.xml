@@ -1,0 +1,509 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceseasaltscheme__geos12__mod" kind="namespace" language="Fortran">
+    <compoundname>seasaltscheme_geos12_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceseasaltscheme__geos12__mod_1a9b1f987ae1c8dfdd6143797e7bbcc518" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter seasaltscheme_geos12_mod::t_standard</definition>
+        <argsstring></argsstring>
+        <name>t_standard</name>
+        <qualifiedname>seasaltscheme_geos12_mod::t_standard</qualifiedname>
+        <initializer>= 303.15_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="36" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceseasaltscheme__geos12__mod_1a5bb0b187ae9c751ced85713589d91e81" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter seasaltscheme_geos12_mod::default_scaling</definition>
+        <argsstring></argsstring>
+        <name>default_scaling</name>
+        <qualifiedname>seasaltscheme_geos12_mod::default_scaling</qualifiedname>
+        <initializer>= 1.0e-9_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="37" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ae2b692e020f519d6d5d0092868b9d575" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine, public</type>
+        <definition>pure subroutine, public seasaltscheme_geos12_mod::compute_geos12</definition>
+        <argsstring>(num_layers, num_species, params, frocean, frseaice, sst, ustar, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
+        <name>compute_geos12</name>
+        <qualifiedname>seasaltscheme_geos12_mod::compute_geos12</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frocean</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frseaice</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>sst</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_lower_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_upper_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>seasalt_mass_emission_total</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>seasalt_number_emission_total</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>seasalt_mass_emission_per_bin</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>seasalt_number_emission_per_bin</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for geos12 scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing GEOS-Chem 2012 sea salt emission scheme with observational constraints. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frocean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FROCEAN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frseaice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRSEAICE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SST field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_mass_emission_total</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total mass emission diagnostic [ug/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_number_emission_total</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total number emission diagnostic [#/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_mass_emission_per_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mass emission per bin diagnostic [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_number_emission_per_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number emission per bin diagnostic [#/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="61" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="81" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ac09cc3e8dab33327e43ca0c559f9418a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function seasaltscheme_geos12_mod::compute_environmental_response_geos12</definition>
+        <argsstring>(met_value, reference_value)</argsstring>
+        <name>compute_environmental_response_geos12</name>
+        <qualifiedname>seasaltscheme_geos12_mod::compute_environmental_response_geos12</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>met_value</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>reference_value</defname>
+        </param>
+        <briefdescription>
+<para>Example helper function for environmental response. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="264" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="265" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function seasaltscheme_geos12_mod::compute_species_scaling_geos12</definition>
+        <argsstring>(species_idx, params)</argsstring>
+        <name>compute_species_scaling_geos12</name>
+        <qualifiedname>seasaltscheme_geos12_mod::compute_species_scaling_geos12</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>species_idx</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <briefdescription>
+<para>Example helper function for species-specific scaling. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="275" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" bodystart="276" bodyend="289"/>
+      </memberdef>
+      <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
+      <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1aee6cc9d9a3d06cfc290520aa75c69714" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine, public</type>
+        <definition>pure subroutine, public seasaltscheme_geos12_mod::compute_geos12</definition>
+        <argsstring>(num_layers, num_species, params, delp, frocean, frseaice, sst, ustar, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
+        <name>compute_geos12</name>
+        <qualifiedname>seasaltscheme_geos12_mod::compute_geos12</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frocean</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frseaice</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>sst</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_lower_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_species), intent(in)</type>
+          <defname>species_upper_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>seasalt_mass_emission_total</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>seasalt_number_emission_total</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>seasalt_mass_emission_per_bin</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>seasalt_number_emission_per_bin</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for geos12 scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing GEOS-Chem 2012 sea salt emission scheme with observational constraints. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DELP field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frocean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FROCEAN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frseaice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRSEAICE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SST field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_mass_emission_total</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sea salt mass emission flux total [kg/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_number_emission_total</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sea salt number emission flux total [kg/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_mass_emission_per_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sea salt mass emission flux per bin [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">seasalt_number_emission_per_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sea salt number emission flux per bin [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="62" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="83" bodyend="200"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod copy.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

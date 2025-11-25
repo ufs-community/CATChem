@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_3e6fd2e121e43ca7d4114b6c0b4e05b6" kind="dir">
+    <compoundname>src/process/seasalt</compoundname>
+    <innerdir refid="dir_5a4ade9a2f1be2d214cab82786bd5e96">src/process/seasalt/examples</innerdir>
+    <innerdir refid="dir_ec083b49fedbd640552af85049fd7226">src/process/seasalt/schemes</innerdir>
+    <innerfile refid="_process_sea_salt_interface___mod_8_f90">ProcessSeaSaltInterface_Mod.F90</innerfile>
+    <innerfile refid="_sea_salt_common___mod_8_f90">SeaSaltCommon_Mod.F90</innerfile>
+    <innerfile refid="_sea_salt_process_creator___mod_8_f90">SeaSaltProcessCreator_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/"/>
+  </compounddef>
+</doxygen>

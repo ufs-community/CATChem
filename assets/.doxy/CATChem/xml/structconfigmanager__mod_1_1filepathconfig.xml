@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structconfigmanager__mod_1_1filepathconfig" kind="type" language="Fortran" prot="private">
+    <compoundname>configmanager_mod::filepathconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a43da7e6c61f7224155303bb3fc2d2582" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::filepathconfig::emission_file</definition>
+        <argsstring></argsstring>
+        <name>emission_file</name>
+        <qualifiedname>configmanager_mod::filepathconfig::emission_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Path to emission mapping file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="108" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a791e716911da21e73915332dbfd7ba0f" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::filepathconfig::species_file</definition>
+        <argsstring></argsstring>
+        <name>species_file</name>
+        <qualifiedname>configmanager_mod::filepathconfig::species_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Path to species configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="109" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="109" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a7d1218a26746d4a706de2e192ed86fd8" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::filepathconfig::input_directory</definition>
+        <argsstring></argsstring>
+        <name>input_directory</name>
+        <qualifiedname>configmanager_mod::filepathconfig::input_directory</qualifiedname>
+        <initializer>= &apos;./&apos;</initializer>
+        <briefdescription>
+<para>Input data directory. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="110" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1aa66cdbf21e9bc072abe4faf314850550" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::filepathconfig::output_directory</definition>
+        <argsstring></argsstring>
+        <name>output_directory</name>
+        <qualifiedname>configmanager_mod::filepathconfig::output_directory</qualifiedname>
+        <initializer>= &apos;./&apos;</initializer>
+        <briefdescription>
+<para>Output data directory. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="111" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>File paths and data sources. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ConfigManager_Mod.F90" line="107" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="107" bodyend="112"/>
+    <listofallmembers>
+      <member refid="structconfigmanager__mod_1_1filepathconfig_1a43da7e6c61f7224155303bb3fc2d2582" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>emission_file</name></member>
+      <member refid="structconfigmanager__mod_1_1filepathconfig_1a7d1218a26746d4a706de2e192ed86fd8" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>input_directory</name></member>
+      <member refid="structconfigmanager__mod_1_1filepathconfig_1aa66cdbf21e9bc072abe4faf314850550" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>output_directory</name></member>
+      <member refid="structconfigmanager__mod_1_1filepathconfig_1a791e716911da21e73915332dbfd7ba0f" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>species_file</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

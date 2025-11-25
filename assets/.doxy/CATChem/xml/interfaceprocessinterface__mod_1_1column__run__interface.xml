@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprocessinterface__mod_1_1column__run__interface" kind="interface" language="Fortran" prot="private">
+    <compoundname>processinterface_mod::column_run_interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprocessinterface__mod_1_1column__run__interface_1af256571374ef0ed85454ced9b9f4171e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine processinterface_mod::column_run_interface::column_run_interface</definition>
+        <argsstring>(this, column, container, rc)</argsstring>
+        <name>column_run_interface</name>
+        <qualifiedname>processinterface_mod::column_run_interface::column_run_interface</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1columnprocessinterface" kindref="compound">columnprocessinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="157" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="158" bodyend="162"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Process a single virtual column. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessInterface_Mod.F90" line="157" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="157" bodyend="162"/>
+    <listofallmembers>
+      <member refid="interfaceprocessinterface__mod_1_1column__run__interface_1af256571374ef0ed85454ced9b9f4171e" prot="public" virt="virtual"><scope>processinterface_mod::column_run_interface</scope><name>column_run_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

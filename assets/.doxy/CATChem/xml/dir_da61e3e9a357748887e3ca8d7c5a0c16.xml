@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_da61e3e9a357748887e3ca8d7c5a0c16" kind="dir">
+    <compoundname>src/api</compoundname>
+    <innerfile refid="catchem_8_f90">catchem.F90</innerfile>
+    <innerfile refid="_c_a_t_chem___a_p_i_8_f90">CATChem_API.F90</innerfile>
+    <innerfile refid="_c_a_t_chem___high_level___a_p_i_8_f90">CATChem_HighLevel_API.F90</innerfile>
+    <innerfile refid="_c_a_t_chem_a_p_i___mod_8_f90">CATChemAPI_Mod.F90</innerfile>
+    <innerfile refid="_c_a_t_chem_net_c_d_f___mod_8_f90">CATChemNetCDF_Mod.F90</innerfile>
+    <innerfile refid="_field_mapping___mod_8_f90">FieldMapping_Mod.F90</innerfile>
+    <innerfile refid="run__mod_8_f90">run_mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/"/>
+  </compounddef>
+</doxygen>

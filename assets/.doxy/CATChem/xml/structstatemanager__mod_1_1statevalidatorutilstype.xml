@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structstatemanager__mod_1_1statevalidatorutilstype" kind="type" language="Fortran" prot="public">
+    <compoundname>statemanager_mod::statevalidatorutilstype</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structstatemanager__mod_1_1statevalidatorutilstype_1a7da69fb799ebf4129c7dca1319cbc0c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statevalidatorutilstype::validate_dimensions</definition>
+        <argsstring>(this, array_shape, expected_shape, rc)</argsstring>
+        <name>validate_dimensions</name>
+        <qualifiedname>statemanager_mod::statevalidatorutilstype::validate_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>array_shape</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>expected_shape</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate array dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="123" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statevalidatorutilstype_1a7392dd5d3e99f541074afa921121ec87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statevalidatorutilstype::validate_bounds</definition>
+        <argsstring>(this, values, min_val, max_val, rc)</argsstring>
+        <name>validate_bounds</name>
+        <qualifiedname>statemanager_mod::statevalidatorutilstype::validate_bounds</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>min_val</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>max_val</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate value bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="124" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statevalidatorutilstype_1a8a869504d65d27b39812c0a700adf368" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statevalidatorutilstype::validate_consistency</definition>
+        <argsstring>(this, array1, array2, tolerance, rc)</argsstring>
+        <name>validate_consistency</name>
+        <qualifiedname>statemanager_mod::statevalidatorutilstype::validate_consistency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>array1</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>array2</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tolerance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate consistency between related arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="125" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statevalidatorutilstype_1abf2df89521c003647087fb5e7b3b98a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statevalidatorutilstype::check_nan_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>check_nan_values</name>
+        <qualifiedname>statemanager_mod::statevalidatorutilstype::check_nan_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for NaN values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="126" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structstatemanager__mod_1_1statevalidatorutilstype_1a80faae5853fddcc32ba9992ada34724d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure statemanager_mod::statevalidatorutilstype::check_negative_values</definition>
+        <argsstring>(this, values, rc)</argsstring>
+        <name>check_negative_values</name>
+        <qualifiedname>statemanager_mod::statevalidatorutilstype::check_negative_values</qualifiedname>
+        <param>
+          <type>class(<ref refid="structstatemanager__mod_1_1statevalidatorutilstype" kindref="compound">statevalidatorutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>values</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check for negative values where they shouldn&apos;t exist. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/StateManager_Mod.F90" line="127" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="127" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>State validation utilities. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type provides common validation routines that can be used across different state types. </para>
+    </detaileddescription>
+    <location file="src/core/StateManager_Mod.F90" line="120" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="120" bodyend="129"/>
+    <listofallmembers>
+      <member refid="structstatemanager__mod_1_1statevalidatorutilstype_1abf2df89521c003647087fb5e7b3b98a5" prot="public" virt="non-virtual"><scope>statemanager_mod::statevalidatorutilstype</scope><name>check_nan_values</name></member>
+      <member refid="structstatemanager__mod_1_1statevalidatorutilstype_1a80faae5853fddcc32ba9992ada34724d" prot="public" virt="non-virtual"><scope>statemanager_mod::statevalidatorutilstype</scope><name>check_negative_values</name></member>
+      <member refid="structstatemanager__mod_1_1statevalidatorutilstype_1a7392dd5d3e99f541074afa921121ec87" prot="public" virt="non-virtual"><scope>statemanager_mod::statevalidatorutilstype</scope><name>validate_bounds</name></member>
+      <member refid="structstatemanager__mod_1_1statevalidatorutilstype_1a8a869504d65d27b39812c0a700adf368" prot="public" virt="non-virtual"><scope>statemanager_mod::statevalidatorutilstype</scope><name>validate_consistency</name></member>
+      <member refid="structstatemanager__mod_1_1statevalidatorutilstype_1a7da69fb799ebf4129c7dca1319cbc0c7" prot="public" virt="non-virtual"><scope>statemanager_mod::statevalidatorutilstype</scope><name>validate_dimensions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

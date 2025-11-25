@@ -1,0 +1,451 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedrydepcommon__mod" kind="namespace" language="Fortran">
+    <compoundname>drydepcommon_mod</compoundname>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepconfig" prot="public">drydepcommon_mod::drydepconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepprocessconfig" prot="public">drydepcommon_mod::drydepprocessconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" prot="public">drydepcommon_mod::drydepschemegocartconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" prot="public">drydepcommon_mod::drydepschemeweselyconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" prot="public">drydepcommon_mod::drydepschemezhangconfig</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a4b25295bf9b201af78d7413e5dbae611" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::validate_drydep_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_drydep_config</name>
+        <qualifiedname>drydepcommon_mod::validate_drydep_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate drydep configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="197" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="198" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a9eeac0a2d39cf3568d49f4f1dffae4de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::print_drydep_config_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_drydep_config_summary</name>
+        <qualifiedname>drydepcommon_mod::print_drydep_config_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="238" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="239" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1aca26c7760b9848aafcba499b37797e58" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::finalize_drydep_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_drydep_config</name>
+        <qualifiedname>drydepcommon_mod::finalize_drydep_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepconfig" kindref="compound">drydepconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize drydep configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="253" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="254" bodyend="318"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a2cb13bb71db0b2ebed9a1592105854d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::validate_wesely_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_wesely_config</name>
+        <qualifiedname>drydepcommon_mod::validate_wesely_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kindref="compound">drydepschemeweselyconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate wesely scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="322" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="323" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1adbb5d2ddac155d346bec8374709603b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::finalize_wesely_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_wesely_config</name>
+        <qualifiedname>drydepcommon_mod::finalize_wesely_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" kindref="compound">drydepschemeweselyconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize wesely scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="331" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="332" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a89a2e3f398f9f40b7ec74ec20aa08f40" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::validate_gocart_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_gocart_config</name>
+        <qualifiedname>drydepcommon_mod::validate_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="340" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="341" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1afc05aea09cb59e213350787a914c0b30" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::finalize_gocart_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_gocart_config</name>
+        <qualifiedname>drydepcommon_mod::finalize_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" kindref="compound">drydepschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="349" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="350" bodyend="353"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1af34bf2ed3eea8afec7c57368c98215a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::validate_zhang_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_zhang_config</name>
+        <qualifiedname>drydepcommon_mod::validate_zhang_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" kindref="compound">drydepschemezhangconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate zhang scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="358" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="359" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a3a37b253f91f1a1312b3db02abba4548" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::finalize_zhang_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_zhang_config</name>
+        <qualifiedname>drydepcommon_mod::finalize_zhang_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" kindref="compound">drydepschemezhangconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize zhang scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="367" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="368" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1ac6a36f780b5a01c15132583ba8bc62df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=32) function, public</type>
+        <definition>character(len=32) function, public drydepcommon_mod::int_to_string</definition>
+        <argsstring>(int_val)</argsstring>
+        <name>int_to_string</name>
+        <qualifiedname>drydepcommon_mod::int_to_string</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>int_val</defname>
+        </param>
+        <briefdescription>
+<para>Convert integer to string (utility function) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="377" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="378" bodyend="383"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a8d4195990724c51b4ecadee3c57ad194" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::drydep_process_load_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>drydep_process_load_config</name>
+        <qualifiedname>drydepcommon_mod::drydep_process_load_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="389" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="390" bodyend="475"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a067ad1766ecdf3512616e06a00de959c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::load_species_from_chem_state</definition>
+        <argsstring>(this, chem_state, error_handler)</argsstring>
+        <name>load_species_from_chem_state</name>
+        <qualifiedname>drydepcommon_mod::load_species_from_chem_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load species from ChemState This function is used for dynamic species discovery (by_metadata or all_species) For &apos;all_species&apos; mode: loads all species using nSpecies and SpeciesIndex For &apos;by_metadata&apos; mode: loads species by type using nSpeciesDryDep and DryDepIndex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="483" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="484" bodyend="584"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a0948629f13d6497c2f7e79919e5e83bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::load_wesely_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_wesely_config</name>
+        <qualifiedname>drydepcommon_mod::load_wesely_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load wesely scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="589" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="590" bodyend="610"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1ac8ca107ad82f9d93126f5a7fac71ef16" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::load_gocart_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_gocart_config</name>
+        <qualifiedname>drydepcommon_mod::load_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load gocart scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="614" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="615" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1acc813e7159443bbb6f3f5c8b922e168f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::load_zhang_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_zhang_config</name>
+        <qualifiedname>drydepcommon_mod::load_zhang_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load zhang scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="633" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="634" bodyend="645"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a6ada60cba38adb992743a3af5929a346" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::drydep_process_validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>drydep_process_validate</name>
+        <qualifiedname>drydepcommon_mod::drydep_process_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="650" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="651" bodyend="672"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a5ba7740a9bd40e906cf148ec1cb4bed8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::drydep_process_finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>drydep_process_finalize</name>
+        <qualifiedname>drydepcommon_mod::drydep_process_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="676" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="677" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a78c3a4a11a8d63787269261c73984652" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class(*) function, allocatable</type>
+        <definition>class(*) function, allocatable drydepcommon_mod::get_active_scheme_config</definition>
+        <argsstring>(this, gas_scheme)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>drydepcommon_mod::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>gas_scheme</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="687" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="688" bodyend="712"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedrydepcommon__mod_1a023ae778c0e2ebb864f98cea4c1cd22a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepcommon_mod::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>drydepcommon_mod::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdrydepcommon__mod_1_1drydepprocessconfig" kindref="compound">drydepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="718" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="719" bodyend="773"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_d0b1a67acd809cff502adc02c61e9ebd" kind="dir">
+    <compoundname>src/external/yaml_interface</compoundname>
+    <innerfile refid="yaml__interface__mod_8_f90">yaml_interface_mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/"/>
+  </compounddef>
+</doxygen>

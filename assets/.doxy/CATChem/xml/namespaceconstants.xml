@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceconstants" kind="namespace" language="Fortran">
+    <compoundname>constants</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceconstants_1a18f7e37fdf18918e1c6a9661217fb85f" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::avo</definition>
+        <argsstring></argsstring>
+        <name>avo</name>
+        <qualifiedname>constants::avo</qualifiedname>
+        <initializer>= 6.022140857<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+23_fp</initializer>
+        <briefdescription>
+<para>Avogadro&apos;s number [particles/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="33" column="1" bodyfile="src/core/constants.F90" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a074092ab73ec9281e641beff423daa70" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::g0</definition>
+        <argsstring></argsstring>
+        <name>g0</name>
+        <qualifiedname>constants::g0</qualifiedname>
+        <initializer>= 9.80665<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+0_fp</initializer>
+        <briefdescription>
+<para>Standard gravity acceleration [m/s^2]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="34" column="1" bodyfile="src/core/constants.F90" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a269dbf11cf3069be7e2beee82306051c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::g0_100</definition>
+        <argsstring></argsstring>
+        <name>g0_100</name>
+        <qualifiedname>constants::g0_100</qualifiedname>
+        <initializer>= 100.0_fp / <ref refid="namespaceconstants_1a074092ab73ec9281e641beff423daa70" kindref="member">g0</ref></initializer>
+        <briefdescription>
+<para>100 divided by standard gravity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="35" column="1" bodyfile="src/core/constants.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1ad2ac057a5c7ff577570baea737438766" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::re</definition>
+        <argsstring></argsstring>
+        <name>re</name>
+        <qualifiedname>constants::re</qualifiedname>
+        <initializer>= 6.3710072<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+6_fp</initializer>
+        <briefdescription>
+<para>Earth&apos;s radius [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="36" column="1" bodyfile="src/core/constants.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1abba5f8eec112044bde24c14022262451" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::rstarg</definition>
+        <argsstring></argsstring>
+        <name>rstarg</name>
+        <qualifiedname>constants::rstarg</qualifiedname>
+        <initializer>= 8.3144598_fp</initializer>
+        <briefdescription>
+<para>Universal gas constant [J/K/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="37" column="1" bodyfile="src/core/constants.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1ae8c007e61706f28a39fd9c45597f3fb2" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::boltz</definition>
+        <argsstring></argsstring>
+        <name>boltz</name>
+        <qualifiedname>constants::boltz</qualifiedname>
+        <initializer>= 1.38064852<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>-23_fp</initializer>
+        <briefdescription>
+<para>Boltzmann&apos;s constant [J/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="38" column="1" bodyfile="src/core/constants.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a4a3fbe661e8a443e4f9a90caf8c467fe" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::planck</definition>
+        <argsstring></argsstring>
+        <name>planck</name>
+        <qualifiedname>constants::planck</qualifiedname>
+        <initializer>= 6.62606957<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>-34_fp</initializer>
+        <briefdescription>
+<para>Planck&apos;s constant [J⋅s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="39" column="1" bodyfile="src/core/constants.F90" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a925be28f2777311b47a81bbbebf33e92" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::cconst</definition>
+        <argsstring></argsstring>
+        <name>cconst</name>
+        <qualifiedname>constants::cconst</qualifiedname>
+        <initializer>= 2.99792458<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+8_fp</initializer>
+        <briefdescription>
+<para>Speed of light in vacuum [m/s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="40" column="1" bodyfile="src/core/constants.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a26386f994a9c7484a740665d03710a9d" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::cp</definition>
+        <argsstring></argsstring>
+        <name>cp</name>
+        <qualifiedname>constants::cp</qualifiedname>
+        <initializer>= 1.0046<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="46" column="1" bodyfile="src/core/constants.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1af89dfe26743309e7f478c7b094cade50" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::cv</definition>
+        <argsstring></argsstring>
+        <name>cv</name>
+        <qualifiedname>constants::cv</qualifiedname>
+        <initializer>= 7.1760e+2_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant volume [J/kg/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="47" column="1" bodyfile="src/core/constants.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a87f7b874f3c65fe9bc2ec909417c09ab" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::airmw</definition>
+        <argsstring></argsstring>
+        <name>airmw</name>
+        <qualifiedname>constants::airmw</qualifiedname>
+        <initializer>= 28.9644_fp</initializer>
+        <briefdescription>
+<para>Average molecular weight of dry air [g/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="48" column="1" bodyfile="src/core/constants.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a30bf6390266f8c4e10da291ae1d6d925" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::h2omw</definition>
+        <argsstring></argsstring>
+        <name>h2omw</name>
+        <qualifiedname>constants::h2omw</qualifiedname>
+        <initializer>= 18.016_fp</initializer>
+        <briefdescription>
+<para>Molecular weight of water [g/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="49" column="1" bodyfile="src/core/constants.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1ab098fc41a0595549e89ddcfdd009932a" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::rd</definition>
+        <argsstring></argsstring>
+        <name>rd</name>
+        <qualifiedname>constants::rd</qualifiedname>
+        <initializer>= 287.0_fp</initializer>
+        <briefdescription>
+<para>Gas constant for dry air [J/K/kg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="50" column="1" bodyfile="src/core/constants.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1ae54bafc57083fdc414705a6a9d1b1b62" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::rdg0</definition>
+        <argsstring></argsstring>
+        <name>rdg0</name>
+        <qualifiedname>constants::rdg0</qualifiedname>
+        <initializer>= Rd / <ref refid="namespaceconstants_1a074092ab73ec9281e641beff423daa70" kindref="member">g0</ref></initializer>
+        <briefdescription>
+<para>Gas constant for dry air divided by gravity. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="51" column="1" bodyfile="src/core/constants.F90" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a74c5ff3dcd6994fcb39b15fd0b12e82c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::rv</definition>
+        <argsstring></argsstring>
+        <name>rv</name>
+        <qualifiedname>constants::rv</qualifiedname>
+        <initializer>= 461.00_fp</initializer>
+        <briefdescription>
+<para>Gas constant for water vapor [J/K/kg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="52" column="1" bodyfile="src/core/constants.F90" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1abcbbb645baed97285a55dabacbe84f61" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::scale_height</definition>
+        <argsstring></argsstring>
+        <name>scale_height</name>
+        <qualifiedname>constants::scale_height</qualifiedname>
+        <initializer>= 7600.0_fp</initializer>
+        <briefdescription>
+<para>Atmospheric scale height [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="53" column="1" bodyfile="src/core/constants.F90" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a6385280eb2d344638f2e0cc7313be67b" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::von_karman</definition>
+        <argsstring></argsstring>
+        <name>von_karman</name>
+        <qualifiedname>constants::von_karman</qualifiedname>
+        <initializer>= 0.41_fp</initializer>
+        <briefdescription>
+<para>Von Karman&apos;s constant (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="54" column="1" bodyfile="src/core/constants.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a73191ef25504d56b2c4f8e7ccd452514" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::atm</definition>
+        <argsstring></argsstring>
+        <name>atm</name>
+        <qualifiedname>constants::atm</qualifiedname>
+        <initializer>= 1.01325<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+5_fp</initializer>
+        <briefdescription>
+<para>Standard atmospheric pressure [Pa]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="55" column="1" bodyfile="src/core/constants.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a37bfc013076f7282cc5e93ae83dbe771" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::xnumolair</definition>
+        <argsstring></argsstring>
+        <name>xnumolair</name>
+        <qualifiedname>constants::xnumolair</qualifiedname>
+        <initializer>= AVO / ( AIRMW * 1.<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>-3_fp )</initializer>
+        <briefdescription>
+<para>Molecules of dry air per kg dry air. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="56" column="1" bodyfile="src/core/constants.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a55cbf05d20ed645c35e1952d1156e4e5" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::pi</definition>
+        <argsstring></argsstring>
+        <name>pi</name>
+        <qualifiedname>constants::pi</qualifiedname>
+        <initializer>= 3.14159265358979323_fp</initializer>
+        <briefdescription>
+<para>Pi (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="62" column="1" bodyfile="src/core/constants.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a6f3a66760a1ce06656deebed7485bf9a" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::pi_180</definition>
+        <argsstring></argsstring>
+        <name>pi_180</name>
+        <qualifiedname>constants::pi_180</qualifiedname>
+        <initializer>= PI / 180.0_fp</initializer>
+        <briefdescription>
+<para>Radians per degree conversion factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="63" column="1" bodyfile="src/core/constants.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::e</definition>
+        <argsstring></argsstring>
+        <name>e</name>
+        <qualifiedname>constants::e</qualifiedname>
+        <initializer>= 2.718281828459045235360287471352_fp</initializer>
+        <briefdescription>
+<para>Euler&apos;s number (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="64" column="1" bodyfile="src/core/constants.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a35633974876e0ca0ecc966b180f59d04" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::consvap</definition>
+        <argsstring></argsstring>
+        <name>consvap</name>
+        <qualifiedname>constants::consvap</qualifiedname>
+        <initializer>= 6.1078<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+03_fp / ( BOLTZ * 1<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+7_fp )</initializer>
+        <briefdescription>
+<para>Condensation vapor pressure factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="70" column="1" bodyfile="src/core/constants.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a34729757e77eab6214ac7137c3d50bdd" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::rgaslatm</definition>
+        <argsstring></argsstring>
+        <name>rgaslatm</name>
+        <qualifiedname>constants::rgaslatm</qualifiedname>
+        <initializer>= 8.2057<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>-2_fp</initializer>
+        <briefdescription>
+<para>Gas constant in L⋅atm/(K⋅mol) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="71" column="1" bodyfile="src/core/constants.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a16ae369028d783a95b8b98583de65daf" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::mwcarb</definition>
+        <argsstring></argsstring>
+        <name>mwcarb</name>
+        <qualifiedname>constants::mwcarb</qualifiedname>
+        <initializer>= 12.01<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>-3_fp</initializer>
+        <briefdescription>
+<para>Molecular weight of carbon [kg/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="72" column="1" bodyfile="src/core/constants.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceconstants_1a4baf67839fd0e478a05adceea7f58eb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine constants::validate_atmospheric_constants</definition>
+        <argsstring>(rc)</argsstring>
+        <name>validate_atmospheric_constants</name>
+        <qualifiedname>constants::validate_atmospheric_constants</qualifiedname>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate atmospheric constants for physical consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine performs runtime validation of atmospheric constants to ensure physical consistency and catch any compilation issues.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="83" column="1" bodyfile="src/core/constants.F90" bodystart="84" bodyend="119"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/constants.F90" line="24" column="1"/>
+  </compounddef>
+</doxygen>

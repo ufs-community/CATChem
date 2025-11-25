@@ -1,9 +1,0 @@
-<map id="charpak_mod::cleantext" name="charpak_mod::cleantext">
-<area shape="rect" id="Node000001" title="Clean up a string." alt="" coords="5,55,184,80"/>
-<area shape="rect" id="Node000002" href="$group__core__modules.html#gab4bc75c4ff6b7c8b5b746f704d1e4e5c" title="Strip leading and trailing spaces from a string." alt="" coords="249,5,404,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,52,252,31,253,36,156,57"/>
-<area shape="rect" id="Node000003" href="$group__core__modules.html#gad8af3083dad7379c7960b1c7b220c0fc" title="Replace text in a string." alt="" coords="247,55,407,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="184,65,233,65,233,70,184,70"/>
-<area shape="rect" id="Node000004" href="$group__core__modules.html#ga95f2767665f183c5050abeb01e18a872" title="Remove leading and trailing blanks from a string." alt="" coords="232,104,421,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="156,77,253,98,252,104,154,83"/>
-</map>

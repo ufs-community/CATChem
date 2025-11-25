@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprocessinterface__mod_1_1finalize__interface" kind="interface" language="Fortran" prot="private">
+    <compoundname>processinterface_mod::finalize_interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprocessinterface__mod_1_1finalize__interface_1a352f8b8821c24c99552ceb40383ba823" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>subroutine</type>
+        <definition>subroutine processinterface_mod::finalize_interface::finalize_interface</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize_interface</name>
+        <qualifiedname>processinterface_mod::finalize_interface::finalize_interface</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ProcessInterface_Mod.F90" line="139" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="140" bodyend="142"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Clean up and finalize the process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ProcessInterface_Mod.F90" line="139" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="139" bodyend="142"/>
+    <listofallmembers>
+      <member refid="interfaceprocessinterface__mod_1_1finalize__interface_1a352f8b8821c24c99552ceb40383ba823" prot="public" virt="virtual"><scope>processinterface_mod::finalize_interface</scope><name>finalize_interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

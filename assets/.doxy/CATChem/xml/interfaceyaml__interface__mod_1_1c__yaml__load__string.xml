@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceyaml__interface__mod_1_1c__yaml__load__string" kind="interface" language="Fortran" prot="private">
+    <compoundname>yaml_interface_mod::c_yaml_load_string</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceyaml__interface__mod_1_1c__yaml__load__string_1ad9e17a3901f4d61284e595d877736d70" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(c_ptr) function</type>
+        <definition>type(c_ptr) function yaml_interface_mod::c_yaml_load_string::c_yaml_load_string</definition>
+        <argsstring>(yaml_string)</argsstring>
+        <name>c_yaml_load_string</name>
+        <qualifiedname>yaml_interface_mod::c_yaml_load_string::c_yaml_load_string</qualifiedname>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>yaml_string</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="79" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="80" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="79" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="79" bodyend="82"/>
+    <listofallmembers>
+      <member refid="interfaceyaml__interface__mod_1_1c__yaml__load__string_1ad9e17a3901f4d61284e595d877736d70" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_load_string</scope><name>c_yaml_load_string</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
