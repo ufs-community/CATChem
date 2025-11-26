@@ -1,0 +1,84 @@
+name: "wetdep"
+description: "Process for computing wet deposition of gas and aerosol species"
+class_name: "WetDep"
+process_type: "deposition"
+author: "Wei Li"
+
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "sink" #is not doing anything now
+  tendency_mode: "replacement" #additive or multiplicative or replacement;
+  species_filter:
+    #type: "all_species"
+    type: "by_metadata"
+    metadata_flags:
+      - "is_wetdep"  # Filter for species with is_drydep=true property
+    #type: "by_list"
+    #species_list:
+    #  - "SEASALT_FINE"      # Fine mode sea salt (< 1 μm)
+    #  - "SEASALT_COARSE"    # Coarse mode sea salt (1-10 μm)
+    #  - "SEASALT_SUPER"     # Super-coarse mode sea salt (> 10 μm)
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "independent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))  
+  memory_requirements: "low" #is not doing anything now
+
+#required_met_fields: [] #used for other purpose, such as unit conversion 
+
+schemes:
+  wesely:
+    name: "jacob"
+    class_name: "JACOB"
+    description: "Jacob et al. [2000] wet deposition scheme"
+    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "Jacob, D. J. et al., [2000] Harvard wet deposition scheme for GMI"
+    author: "Wei Li"
+
+    required_met_fields: #needed for scheme calculations
+      - T
+      - TSTEP
+      - AIRDEN
+      - MAIRDEN
+      - PFLLSAN
+      - PFILSAN
+      - PEDGE
+      - REEVAPLS     #need to add to metstate
+      
+
+    required_species_properties:
+      - is_aerosol          
+      - short_name            
+      - henry_cr
+      - henry_k0
+      - henry_pKa
+      - wd_retfactor
+      - wd_LiqAndGas
+      - wd_convfacI2G
+      - wd_rainouteff
+      - radius         
+
+    parameters:
+      scale_factor:
+        default: 1.0
+        description: "Washout tuning factor"
+      radius_threshold:
+        default: 1.0
+        description: "Radius threshold for aerosol wet deposition (um)"
+
+    diagnostics: []
+
+
+diagnostics:
+  - name: "wetdep_mass_per_species_per_level"
+    description: "Wet deposition mass loss per species per level"
+    units: "kg/m2"
+  - name: "wetdep_flux_per_species_per_level"
+    description: "Wet deposition flux per species per level"
+    units: "kg/m2/s"
+  
+

@@ -269,6 +269,16 @@ contains
       
       write(output_unit,'(A)') '  Adding processes to the model (auto-configured from YAML)...'
       
+      block
+            type(StateManagerType), pointer :: state_mgr => null()
+            state_mgr => model%get_state_manager()
+            if (associated(state_mgr)) then
+               state_mgr%tstep = dt
+               write(output_unit,'(A,F8.2,A)') '    Current model timestep: ', state_mgr%tstep, ' seconds'
+            else
+               write(output_unit,'(A)') '    Could not access StateManager to get timestep'
+            endif
+      end block
       ! Add all enabled processes from configuration
       call model%add_process(rc)
       

@@ -489,7 +489,7 @@ contains
       ! Species properties
 {% for prop in scheme.required_species_properties %}
 {% if prop != 'short_name' %}
-      {{ field_classifier.get_species_property_data_type(prop) }}, allocatable :: species_{{ prop }}(:)
+      {{ field_classifier.get_species_property_data_type(prop) }}, allocatable :: species_{{ prop }}{{ field_classifier.get_species_property_dimensions(prop) }}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -622,7 +622,11 @@ contains
 {% if scheme.required_species_properties %}
 {% for prop in scheme.required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+      allocate(species_{{ prop }}(n_species, 3))
+{% else %}
       allocate(species_{{ prop }}(n_species))
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -708,7 +712,11 @@ contains
 {% for prop in scheme.required_species_properties %}
 {% if prop != 'short_name' %}
       ! Use species properties from process configuration
+{% if prop == 'wd_rainouteff' %}
+      species_{{ prop }}(1:n_species, :) = this%process_config%{{ config.name }}_config%species_{{ prop }}(1:n_species, :)
+{% else %}
       species_{{ prop }}(1:n_species) = this%process_config%{{ config.name }}_config%species_{{ prop }}(1:n_species)
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -1277,7 +1285,7 @@ contains
    !> Get required diagnostic fields for this process
    function get_required_diagnostic_fields(this) result(field_names)
       class(Process{{ config.class_name }}Interface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=64), allocatable :: field_names(:)
 
 {% if config.diagnostics %}
       allocate(field_names({{ config.diagnostics | length }}))
@@ -1303,7 +1311,6 @@ contains
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(DiagnosticRegistryType), pointer :: registry
       type(GridManagerType), pointer :: grid_mgr
-      character(len=32) :: selected_scheme
       character(len=256) :: field_name  ! For constructing species-specific field names
       integer :: i  ! Loop variable for diagnostic species
 {% set required_dims = config | analyze_required_dimensions %}
@@ -1358,9 +1365,11 @@ contains
 {% for diagnostic in config.diagnostics %}
       ! Register {{ diagnostic.name }}
 {% set diag_props = diagnostic | infer_diagnostic_properties(config) %}
-{% if 'per_bin' in diagnostic.name or 'per_species' in diagnostic.name %}
+{% set has_level_pattern = ('per_level' in diagnostic.name or 'level' in diagnostic.name or 'vertical' in diagnostic.name or 'profile' in diagnostic.name) %}
+{% set has_species_pattern = ('per_bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
+{% if has_species_pattern and not has_level_pattern %}
 {% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '') %}
-      ! Register individual 2D fields for each diagnostic species
+      ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
       if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
             write(field_name, '(A,A,A)') '{{ clean_name }}_', &
@@ -1372,7 +1381,22 @@ contains
             if (rc /= CC_SUCCESS) return
          end do
       end if
+{% elif has_level_pattern and has_species_pattern %}
+{% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '').replace('_per_level', '') %}
+      ! Register individual 3D fields for each diagnostic species (level + species diagnostics)
+      if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+         do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
+            write(field_name, '(A,A,A)') '{{ clean_name }}_', &
+                  trim(this%process_config%{{ config.name }}_config%diagnostic_species(i))
+            call this%register_diagnostic_field(registry, trim(field_name), &
+                                                '{{ diagnostic.description }}', &
+                                                '{{ diagnostic.units }}', {{ diag_props.data_type }}, &
+                                                '{{ config.name }}', {{ diag_props.fortran_dims }}, rc=rc)
+            if (rc /= CC_SUCCESS) return
+         end do
+      end if
 {% else %}
+      ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, '{{ diagnostic.name }}', &
                                           '{{ diagnostic.description }}', &
                                           '{{ diagnostic.units }}', {{ diag_props.data_type }}, &
@@ -1387,8 +1411,7 @@ contains
       ! Track registered diagnostics to avoid duplicates
 {% set registered_diagnostics = [] %}
       ! Register gas scheme diagnostics
-      selected_scheme = trim(this%process_config%{{ config.name }}_config%gas_scheme)
-      select case (selected_scheme)
+      select case (trim(this%process_config%{{ config.name }}_config%gas_scheme))
 {% for scheme in config.schemes %}
 {% if scheme.gas_or_aero == 'gas' %}
       case ('{{ scheme.name }}')
@@ -1421,8 +1444,7 @@ contains
       end select
 
       ! Register aerosol scheme diagnostics (only if not already registered)
-      selected_scheme = trim(this%process_config%{{ config.name }}_config%aero_scheme)
-      select case (selected_scheme)
+      select case (trim(this%process_config%{{ config.name }}_config%aero_scheme))
 {% for scheme in config.schemes %}
 {% if scheme.gas_or_aero == 'aero' %}
       case ('{{ scheme.name }}')
@@ -1454,10 +1476,8 @@ contains
          ! Unknown aerosol scheme
       end select
 {% else %}
-      selected_scheme = trim(this%process_config%{{ config.name }}_config%scheme)
-      
       ! Register scheme-specific diagnostics based on selected scheme
-      select case (selected_scheme)
+      select case (trim(this%process_config%{{ config.name }}_config%scheme))
       
 {% for scheme in config.schemes %}
       case ('{{ scheme.name }}')
@@ -1522,9 +1542,9 @@ contains
 {% for diagnostic in config.diagnostics %}
 {% set _ = allocated_diagnostics.append(diagnostic.name) %}
 {% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
-      ! 2D diagnostic: levels x species
-      if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_species > 0) then
-         allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_species))
+      ! 2D diagnostic: levels x diagnostic_species
+      if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+         allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
       end if
       if (allocated(this%column_{{ diagnostic.name }})) this%column_{{ diagnostic.name }} = 0.0_fp
 {% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name %}
@@ -1557,9 +1577,9 @@ contains
 {% if diagnostic.name not in allocated_diagnostics %}
 {% set _ = allocated_diagnostics.append(diagnostic.name) %}
 {% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name) %}
-         ! 2D diagnostic: levels x species
-         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_species > 0) then
-            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_species))
+         ! 2D diagnostic: levels x diagnostic_species
+         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
          end if
          if (allocated(this%column_{{ diagnostic.name }})) this%column_{{ diagnostic.name }} = 0.0_fp
 {% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name %}
@@ -1599,9 +1619,9 @@ contains
 {% if diagnostic.name not in allocated_diagnostics %}
 {% set _ = allocated_diagnostics.append(diagnostic.name) %}
 {% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name) %}
-         ! 2D diagnostic: levels x species
-         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_species > 0) then
-            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_species))
+         ! 2D diagnostic: levels x diagnostic_species
+         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
          end if
          if (allocated(this%column_{{ diagnostic.name }})) this%column_{{ diagnostic.name }} = 0.0_fp
 {% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name %}
@@ -1635,9 +1655,9 @@ contains
       ! Allocate common diagnostic fields (used by all schemes)
 {% for diagnostic in config.diagnostics %}
 {% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
-      ! 2D diagnostic: levels x species
-      if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_species > 0) then
-         allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_species))
+      ! 2D diagnostic: levels x diagnostic_species
+      if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+         allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
       end if
       if (allocated(this%column_{{ diagnostic.name }})) this%column_{{ diagnostic.name }} = 0.0_fp
 {% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name %}
@@ -1660,17 +1680,16 @@ contains
 {% endfor %}
       
       ! Allocate scheme-specific diagnostics
-      selected_scheme = trim(this%process_config%{{ config.name }}_config%scheme)
-      select case (selected_scheme)
+      select case (trim(this%process_config%{{ config.name }}_config%scheme))
 {% for scheme in config.schemes %}
       case ('{{ scheme.name }}')
          ! Scheme-specific diagnostics for {{ scheme.name }}
 {% if scheme.scheme_diagnostics %}
 {% for diagnostic in scheme.scheme_diagnostics %}
 {% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name) %}
-         ! 2D diagnostic: levels x species
-         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_species > 0) then
-            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_species))
+         ! 2D diagnostic: levels x diagnostic_species
+         if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+            allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
          end if
          if (allocated(this%column_{{ diagnostic.name }})) this%column_{{ diagnostic.name }} = 0.0_fp
 {% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name %}
@@ -1731,9 +1750,24 @@ contains
 {% set updated_diagnostics = [] %}
 {% for diagnostic in config.diagnostics %}
 {% set _ = updated_diagnostics.append(diagnostic.name) %}
-{% if 'per_bin' in diagnostic.name or 'per_species' in diagnostic.name %}
+{% set has_level_pattern = ('per_level' in diagnostic.name or 'level' in diagnostic.name) %}
+{% set has_species_pattern = ('per_bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
+{% if has_level_pattern and has_species_pattern %}
+{% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '').replace('_per_level', '') %}
+      ! Update individual 3D fields for each diagnostic species (level + species diagnostics)
+      if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+         do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
+            write(field_name, '(A,A,A)') '{{ clean_name }}_', &
+                  trim(this%process_config%{{ config.name }}_config%diagnostic_species(i))
+            call this%update_1d_diagnostic_column(trim(field_name), &
+                                                 this%column_{{ diagnostic.name }}(:,i), &
+                                                 i_col, j_col, container, rc)
+            if (rc /= CC_SUCCESS) return
+         end do
+      end if
+{% elif has_species_pattern and not has_level_pattern %}
 {% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '') %}
-      ! Update individual species diagnostic fields
+      ! Update individual species diagnostic fields (species-only diagnostics)
       if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
             write(field_name, '(A,A,A)') '{{ clean_name }}_', &
@@ -1744,14 +1778,8 @@ contains
             if (rc /= CC_SUCCESS) return
          end do
       end if
-{% elif ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
-      ! 2D diagnostic field
-      call this%update_2d_diagnostic_column('{{ diagnostic.name }}', &
-                                          this%column_{{ diagnostic.name }}, &
-                                          i_col, j_col, container, rc)
-      if (rc /= CC_SUCCESS) return
-{% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name or 'per_bin' in diagnostic.name or 'bin' in diagnostic.name %}
-      ! 1D diagnostic field
+{% elif has_level_pattern and not has_species_pattern %}
+      ! 1D diagnostic field (level-only)
       call this%update_1d_diagnostic_column('{{ diagnostic.name }}', &
                                           this%column_{{ diagnostic.name }}, &
                                           i_col, j_col, container, rc)
@@ -1859,9 +1887,7 @@ contains
          ! No aerosol scheme diagnostics for unknown schemes
       end select
 {% else %}
-      selected_scheme = trim(this%process_config%{{ config.name }}_config%scheme)
-      
-      select case (selected_scheme)
+      select case (trim(this%process_config%{{ config.name }}_config%scheme))
 {% for scheme in config.schemes %}
       case ("{{ scheme.name }}")
          ! Scheme-specific diagnostics for {{ scheme.name }}

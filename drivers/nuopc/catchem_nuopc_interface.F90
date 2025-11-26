@@ -184,6 +184,7 @@ contains
     type(MetStateType), pointer :: met_state
     type(ChemStateType), pointer :: chem_state
     integer :: nx, ny, num_processes, stat
+    integer(ESMF_KIND_I8) :: tstep_seconds
     character(len=128), allocatable :: tracer_names(:) !< NUOPC tracer name
     character(len=128), allocatable :: tracer_units(:) !< NUOPC tracer unit 
     type(CATChem_InternalState) :: is
@@ -283,6 +284,8 @@ contains
     end if
     if (present(timeStep)) then
       cc_wrap%timeStep = timeStep
+      call ESMF_TimeIntervalGet(timeStep, s_i8=tstep_seconds, rc=rc)
+      state_mgr%tstep = real(tstep_seconds, fp)
     end if
 
     ! Add all enabled processes from configuration

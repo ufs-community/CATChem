@@ -282,7 +282,8 @@ class MetFieldClassification:
         # Boolean/logical species properties - properties that represent true/false values
         boolean_properties = {
             'is_dust', 'is_seasalt', 'is_gas', 'is_aerosol', 'is_tracer',
-            'is_transported', 'is_wet_scavenged', 'is_dry_deposited'
+            'is_transported', 'is_wet_scavenged', 'is_dry_deposited',
+            'wd_LiqAndGas'  # Add wet deposition logical property
         }
         
         # Character/string species properties - properties that represent text/names
@@ -293,9 +294,25 @@ class MetFieldClassification:
         if property_name in boolean_properties:
             return 'logical'
         elif property_name in string_properties:
-            return 'character(len=255)'
+            return 'character(len=32)'
         else:
             return 'real(fp)'
+        
+    def get_species_property_dimensions(self, property_name: str) -> str:
+        """Get the Fortran array dimensions for a species property."""
+        # Properties with special dimensions
+        if property_name == 'wd_rainouteff':
+            return '(:,:)'  # 2D array: (n_species, 3)
+        else:
+            return '(:)'    # Default: 1D array (n_species)
+            
+    def get_species_property_allocation_size(self, property_name: str) -> str:
+        """Get the Fortran allocation size for a species property."""
+        # Properties with special dimensions
+        if property_name == 'wd_rainouteff':
+            return '(this%{{ config.name }}_config%n_species, 3)'
+        else:
+            return '(this%{{ config.name }}_config%n_species)'
         
     def get_all_categorical_fields(self) -> List[str]:
         """Get all categorical fields."""
@@ -565,10 +582,31 @@ class ProcessGenerator:
         name_lower = name.lower()
         desc_lower = description.lower()
         
-        # Check for species/bin/distribution patterns in name or description
-        if ('_per_bin' in name or '_per_species' in name or '_per_mode' in name or '_distribution' in name or
-            'per bin' in desc_lower or 'per species' in desc_lower or 'per mode' in desc_lower or 
-            'distribution' in desc_lower or 'size resolved' in desc_lower):
+        # Check for combined level AND species patterns for 4D diagnostics
+        has_level_pattern = ('_per_level' in name or '_profile' in name or '_vertical' in name or 
+                           '_column' in name or '_layer' in name or
+                           'level' in desc_lower or 'levels' in desc_lower or 'vertical' in desc_lower or
+                           'profile' in desc_lower or 'column' in desc_lower or 'layer' in desc_lower or
+                           'atmospheric' in desc_lower)
+        
+        has_species_pattern = ('_per_bin' in name or '_per_species' in name or '_per_mode' in name or '_distribution' in name or
+                             'per bin' in desc_lower or 'per species' in desc_lower or 'per mode' in desc_lower or 
+                             'distribution' in desc_lower or 'size resolved' in desc_lower)
+        
+        # Priority 1: Check for combined level AND species patterns for 3D level diagnostics
+        if has_level_pattern and has_species_pattern:
+            result.update({
+                'data_type': 'DIAG_REAL_3D',
+                'dimensions': ['nx', 'ny', 'nz'],
+                'dimension_vars': ['dims_3d_levels'],
+                'fortran_dims': 'dims_3d_levels',
+                'dimension_source': 'grid_manager',
+                'dimension_type': '3d_levels_species',
+                'dimension_name': 'levels_with_species'
+            })
+        
+        # Priority 2: Check for species/bin/distribution patterns only
+        elif has_species_pattern:
             result.update({
                 'data_type': 'DIAG_REAL_3D',
                 'dimensions': ['nx', 'ny', 'n_species'],
@@ -579,12 +617,8 @@ class ProcessGenerator:
                 'dimension_name': 'n_species'
             })
         
-        # Check for level/vertical patterns in name or description
-        elif (('_per_level' in name or '_profile' in name or '_vertical' in name or 
-               '_column' in name or '_layer' in name) or
-              ('level' in desc_lower or 'levels' in desc_lower or 'vertical' in desc_lower or
-               'profile' in desc_lower or 'column' in desc_lower or 'layer' in desc_lower or
-               'atmospheric' in desc_lower)):
+        # Priority 3: Check for level/vertical patterns only
+        elif has_level_pattern:
             result.update({
                 'data_type': 'DIAG_REAL_3D',
                 'dimensions': ['nx', 'ny', 'nz'],

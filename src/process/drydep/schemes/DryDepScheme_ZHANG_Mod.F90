@@ -252,7 +252,7 @@ contains
       real(fp), intent(in) :: species_mw_g(num_species)  ! Species mw_g property
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
       real(fp), intent(in) :: species_density(num_species)  ! Species density property
-      character(len=255), intent(in) :: species_short_name(num_species)  ! Species short_name property
+      character(len=32), intent(in) :: species_short_name(num_species)  ! Species short_name property
       real(fp), intent(in) :: species_dd_hstar(num_species)  ! Species dd_hstar property
       real(fp), intent(in) :: species_dd_DvzAerSnow(num_species)  ! Species dd_DvzAerSnow property
       real(fp), intent(in) :: species_dd_DvzMinVal_snow(num_species)  ! Species dd_DvzMinVal_snow property

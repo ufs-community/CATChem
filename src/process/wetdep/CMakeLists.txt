@@ -1,31 +1,29 @@
-# SeaSalt Process CMakeLists.txt
-# Generated on: 2025-11-25T13:44:12.259063
-# Author: Barry Baker & Wei Li
-# Description: Process for computing sea salt aerosol emissions over ocean surfaces
+# WetDep Process CMakeLists.txt
+# Generated on: 2025-11-25T22:19:36.397808
+# Author: Wei Li
+# Description: Process for computing wet deposition of gas and aerosol species
 
-# Define seasalt process sources
-set(SEASALT_PROCESS_SOURCES
-    SeaSaltCommon_Mod.F90
-    ProcessSeaSaltInterface_Mod.F90
-    SeaSaltProcessCreator_Mod.F90
+# Define wetdep process sources
+set(WETDEP_PROCESS_SOURCES
+    WetDepCommon_Mod.F90
+    ProcessWetDepInterface_Mod.F90
+    WetDepProcessCreator_Mod.F90
 )
 
-# Define seasalt scheme sources
-set(SEASALT_SCHEME_SOURCES
-    schemes/SeaSaltScheme_GONG97_Mod.F90
-    schemes/SeaSaltScheme_GONG03_Mod.F90
-    schemes/SeaSaltScheme_GEOS12_Mod.F90
+# Define wetdep scheme sources
+set(WETDEP_SCHEME_SOURCES
+    schemes/WetDepScheme_JACOB_Mod.F90
 )
 
 # Combine all sources
-set(SEASALT_ALL_SOURCES
-    ${SEASALT_PROCESS_SOURCES}
-    ${SEASALT_SCHEME_SOURCES}
+set(WETDEP_ALL_SOURCES
+    ${WETDEP_PROCESS_SOURCES}
+    ${WETDEP_SCHEME_SOURCES}
 )
 
-# Create the seasalt process library
-set(_lib CATChem_process_seasalt)
-add_library(${_lib} ${SEASALT_ALL_SOURCES})
+# Create the wetdep process library
+set(_lib CATChem_process_wetdep)
+add_library(${_lib} ${WETDEP_ALL_SOURCES})
 
 # Link with required libraries
 target_link_libraries(${_lib} PUBLIC CATChem_core)
@@ -50,7 +48,7 @@ endif()
 
 # Add preprocessor definitions
 target_compile_definitions(${_lib} PRIVATE
-    PROCESS_NAME="seasalt"
+    PROCESS_NAME="wetdep"
     PROCESS_VERSION="1.0.0"
 )
 
@@ -69,8 +67,8 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/include/
 
 # Add subdirectories
 if(BUILD_TESTING)
-    # Add tests subdirectory - tests are located in tests/process/seasalt/
-    set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/seasalt")
+    # Add tests subdirectory - tests are located in tests/process/wetdep/
+    set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/wetdep")
     if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
         add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
     endif()
@@ -84,50 +82,34 @@ endif()
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen QUIET)
     if(DOXYGEN_FOUND)
-        set(DOXYGEN_PROJECT_NAME "SeaSalt Process")
-        set(DOXYGEN_PROJECT_BRIEF "Process for computing sea salt aerosol emissions over ocean surfaces")
+        set(DOXYGEN_PROJECT_NAME "WetDep Process")
+        set(DOXYGEN_PROJECT_BRIEF "Process for computing wet deposition of gas and aerosol species")
         set(DOXYGEN_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/docs")
         set(DOXYGEN_INPUT "${CMAKE_CURRENT_SOURCE_DIR}")
         set(DOXYGEN_RECURSIVE YES)
         set(DOXYGEN_FILE_PATTERNS "*.F90 *.md")
         set(DOXYGEN_EXCLUDE_PATTERNS "*/build/* */tests/*")
 
-        doxygen_add_docs(seasalt_docs
+        doxygen_add_docs(wetdep_docs
             ${CMAKE_CURRENT_SOURCE_DIR}
-            COMMENT "Generating seasalt process documentation"
+            COMMENT "Generating wetdep process documentation"
         )
 
         install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/
-            DESTINATION share/doc/seasalt
+            DESTINATION share/doc/wetdep
             OPTIONAL
         )
     endif()
 endif()
 
 # Performance testing
-if(BUILD_BENCHMARKS)
-    find_package(benchmark QUIET)
-    if(benchmark_FOUND)
-        add_executable(seasalt_benchmark
-            benchmarks/benchmark_seasalt.F90
-        )
-        target_link_libraries(seasalt_benchmark
-            PRIVATE ${_lib} benchmark::benchmark
-        )
-    endif()
-endif()
 
 # Process-specific targets
-# Emission inventory preprocessing (if needed)
-# add_custom_target(seasalt_preprocess_inventory
-#     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/preprocess_inventory.py
-#     COMMENT "Preprocessing emission inventory for seasalt"
-# )
 
 # Print configuration summary
-message(STATUS "Configured SeaSalt process:")
-message(STATUS "  Process type: emission")
-message(STATUS "  Number of schemes: 3")
+message(STATUS "Configured WetDep process:")
+message(STATUS "  Process type: deposition")
+message(STATUS "  Number of schemes: 1")
 message(STATUS "  Default scheme: ")
 message(STATUS "  Has size bins: No")
 message(STATUS "  Multiphase: No")

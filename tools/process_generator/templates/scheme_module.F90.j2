@@ -249,7 +249,7 @@ contains
 {% endif %}
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
 {% for prop in scheme.required_species_properties %}
-      {{ field_classifier.get_species_property_data_type(prop) }}, intent(in) :: species_{{ prop }}(num_species)  ! Species {{ prop }} property
+      {{ field_classifier.get_species_property_data_type(prop) }}, intent(in) :: species_{{ prop }}{{ field_classifier.get_species_property_dimensions(prop) }}  ! Species {{ prop }} property
 {% endfor %}
 {% endif %}
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
@@ -266,7 +266,9 @@ contains
 {% set diag_name = diag['name'] if diag is mapping else diag %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if 'per_species_per_level' in diag_name %}
+      real(fp), intent(inout), optional :: {{ diag_name }}(:,:)
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% else %}
       real(fp), intent(inout), optional :: {{ diag_name }}
@@ -481,7 +483,19 @@ contains
 {% set diag_desc = diag.get('description', 'diagnostic') if diag is mapping else 'diagnostic' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if 'per_species_per_level' in diag_name %}
+            ! Per-species-per-level diagnostic: 2D array (levels, species)
+            if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
+               ! Find position of this species in diagnostic_species_id array
+               do diag_idx = 1, size(diagnostic_species_id)
+                  if (diagnostic_species_id(diag_idx) == species_idx) then
+                     ! Add your custom {{ diag_desc | lower }} calculation
+                     {{ diag_name }}(k, diag_idx) = species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
+                     exit
+                  end if
+               end do
+            end if
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
             ! Per-species diagnostic: only update for diagnostic species
             if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
@@ -535,7 +549,19 @@ contains
 {% set diag_desc = diag.get('description', 'diagnostic') if diag is mapping else 'diagnostic' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if 'per_species_per_level' in diag_name %}
+            ! Per-species-per-level diagnostic: 2D array (levels, species)
+            if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
+               ! Find position of this species in diagnostic_species_id array
+               do diag_idx = 1, size(diagnostic_species_id)
+                  if (diagnostic_species_id(diag_idx) == species_idx) then
+                     ! Add your custom {{ diag_desc | lower }} calculation
+                     {{ diag_name }}(k, diag_idx) = species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
+                     exit
+                  end if
+               end do
+            end if
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
             ! Per-species diagnostic: only update for diagnostic species
             if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array

@@ -1605,13 +1605,18 @@ contains
             endif
          endif
 
+         if (chem_state%ChemSpecies(i)%is_wetdep) then
+            chem_state%nSpeciesWetDep = chem_state%nSpeciesWetDep + 1
+            chem_state%WetDepIndex(chem_state%nSpeciesWetDep) = species_index
+         endif
+
          if (chem_state%ChemSpecies(i)%is_tracer) then
             chem_state%nSpeciesTracer = chem_state%nSpeciesTracer + 1
             chem_state%TracerIndex(chem_state%nSpeciesTracer) = species_index
          endif
 
          !print species info as a test
-         ! write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
+          write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
          ! write(*, '(A,A)') 'Description: ', chem_state%ChemSpecies(i)%description
          ! write(*, *) 'lower radius: ', chem_state%ChemSpecies(i)%lower_radius
          ! write(*, *) 'upper radius: ', chem_state%ChemSpecies(i)%upper_radius
@@ -1623,6 +1628,7 @@ contains
          ! write(*, *) 'is sea salt: ', chem_state%ChemSpecies(i)%is_seasalt
          ! write(*, *) 'is dry deposition: ', chem_state%ChemSpecies(i)%is_drydep
          ! write(*, *) 'is tracer: ', chem_state%ChemSpecies(i)%is_tracer
+          write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
 
       enddo
 
@@ -1636,6 +1642,7 @@ contains
       write(*, '(A,I0)') '  Dust species: ', chem_state%nSpeciesDust
       write(*, '(A,I0)') '  Sea salt species: ', chem_state%nSpeciesSeaSalt
       write(*, '(A,I0)') '  Dry deposition species: ', chem_state%nSpeciesDryDep
+      write(*, '(A,I0)') '  Wet deposition species: ', chem_state%nSpeciesWetDep
       write(*, '(A,I0)') '  Aerosol dry deposition species: ', chem_state%nSpeciesAeroDryDep
       write(*, '(A,I0)') '  Tracer species: ', chem_state%nSpeciesTracer
 
@@ -1662,10 +1669,11 @@ contains
       character(len=256) :: field_path
       character(len=64) :: species_name
       real(fp) :: temp_real  ! Using project-wide fp precision
+      real(fp), allocatable :: temp_real_array(:)  ! Using project-wide fp precision
       logical :: temp_logical
       character(len=256) :: temp_string
       integer :: yaml_rc  ! Separate return code for YAML operations
-      integer :: i, j  ! Loop variables for debugging
+      integer :: i, j, actual_size  ! Loop variables for debugging
 
       rc = CC_SUCCESS
 
@@ -1798,6 +1806,66 @@ contains
          species%dd_DvzMinVal_land = MISSING
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/henry_k0'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_k0 = temp_real
+      else
+         species%henry_k0 = MISSING
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/henry_cr'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_cr = temp_real
+      else
+         species%henry_cr = MISSING
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/henry_pKa'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_pKa = temp_real
+      else
+         species%henry_pKa = 0.0_fp  ! Default to 0.0 if not specified
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_retfactor'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_retfactor = temp_real
+      else
+         species%wd_retfactor = MISSING
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_LiqAndGas'
+      call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_LiqAndGas = temp_logical
+      else
+         species%wd_LiqAndGas = MISSING_BOOL
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_convfacI2G'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_convfacI2G = temp_real
+      else
+         species%wd_convfacI2G = MISSING
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_rainouteff'
+      allocate(temp_real_array(10))  ! Assume max size of 10 for temporary array
+      success = yaml_get_real_array(yaml_root, trim(field_path), temp_real_array, actual_size)
+      if (success .and. actual_size > 0) then
+         species%wd_rainouteff(1:actual_size) = temp_real_array(1:actual_size)
+         deallocate(temp_real_array)
+      else
+         ! Return missing array 
+         species%wd_rainouteff(:) = MISSING
+         deallocate(temp_real_array)
+      endif
+
       ! Load type flags (with proper default handling)
       write(field_path, '(A,A)') trim(species_path), '/is_gas'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
@@ -1845,6 +1913,14 @@ contains
          species%is_drydep = temp_logical
       else
          species%is_drydep = MISSING_BOOL
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/is_wetdep'
+      call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
+      if (yaml_rc == 0) then
+         species%is_wetdep = temp_logical
+      else
+         species%is_wetdep = MISSING_BOOL
       endif
 
       write(field_path, '(A,A)') trim(species_path), '/is_photolysis'

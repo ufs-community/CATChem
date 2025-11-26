@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! drydep process and its schemes.
 !!
-!! Generated on: 2025-11-17T18:50:12.465496
+!! Generated on: 2025-11-25T22:20:02.319771
 !! Author: Wei Li
 !! Version: 1.0.0
 

@@ -84,6 +84,7 @@ module StateManager_Mod
       logical :: is_initialized = .false.              !< Initialization status
       logical :: is_configured = .false.               !< Configuration status
       character(len=256) :: name = ''                  !< Container name
+      real(fp), public :: tstep = 0.0_fp               !< time step for all processes
 
    contains
       ! Basic lifecycle (called by CATChemCore)
@@ -208,6 +209,7 @@ contains
       this%is_initialized = .false.
       this%is_configured = .false.
       this%name = ''
+      this%tstep = 0.0_fp
 
    end subroutine manager_cleanup
 

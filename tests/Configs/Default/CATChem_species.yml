@@ -9,18 +9,42 @@ so2:
   description: Sulfur dioxide
   is_gas: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 1.0e+5
   mw_g: 64.04
   dd_DvzAerSnow: 0.03
   dd_DvzMinVal_snow: 0.2
   dd_DvzMinVal_land: 0.3
-  viscosity: 0.0
+  viscosity: 0.0 #dummy value
+  #This is Luo's scheme for SO2 but adopted here
+  henry_k0: 1.22
+  henry_cr: 3100.0
+  wd_retfactor: 5.0e-2
+  wd_LiqAndGas: true
+  wd_convfacI2G: 6.17395e-1
+  wd_rainouteff: [1.0, 0.0, 1.0]
+H2O2:
+  name: H2O2
+  description: Hydrogen peroxide
+  is_gas: true
+  is_drydep: true
+  is_wetdep: true
+  dd_f0: 1.0
+  dd_hstar: 5.0e+7
+  mw_g: 34.02
+  viscosity: 0.0 #dummy value
+  henry_k0: 8.3e+4
+  henry_cr: 7400.0
+  wd_retfactor: 5.0e-2
+  wd_LiqAndGas: true
+  wd_convfacI2G: 4.36564e-1
 so4:
   name: so4
   description: sulfate
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 96.06
@@ -31,6 +55,7 @@ so4:
   dd_DvzMinVal_land: 0.01
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 dms:
   name: dms
   description: Dimethyl sulfide
@@ -39,37 +64,44 @@ dms:
   is_dust: false
   is_aerosol: true
   is_drydep: false
+  henry_k0: 0.48
+  henry_cr: 3100.0
 bc1:
   name: bc1
   description: BC1
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
-  radius: 0.087
+  radius: 0.087   #gocart is 0.35
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 bc2:
   name: bc2
   description: BC2
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
-  radius: 0.087
+  radius: 0.087   #gocart is 0.35
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 oc1:
   name: oc1
   description: OC1
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
@@ -78,11 +110,13 @@ oc1:
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 oc2:
   name: oc2
   description: OC2
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
   mw_g: 12.01
@@ -91,6 +125,7 @@ oc2:
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
+  wd_rainouteff: [1.0, 0.0, 1.0]
 dust1:
   name: dust1
   long_name: dust1
@@ -105,6 +140,8 @@ dust1:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 1.0, 0.0]
 dust2:
   name: dust2
   long_name: dust2
@@ -119,6 +156,8 @@ dust2:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 1.0, 0.0]
 dust3:
   name: dust3
   long_name: dust3
@@ -133,6 +172,8 @@ dust3:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 1.0, 0.0]
 dust4:
   name: dust4
   long_name: dust4
@@ -147,6 +188,8 @@ dust4:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 1.0, 0.0]
 dust5:
   name: dust5
   long_name: dust5
@@ -161,6 +204,8 @@ dust5:
   is_dust: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 1.0, 0.0]
 seas1:
   name: seas1
   long_name: seas1
@@ -169,12 +214,14 @@ seas1:
   upper_radius: 0.1
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 but it seems not used in gocart processes. So we go with GC
   radius: 0.079
   density: 2200.
   is_seasalt: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 0.0, 1.0]
 seas2:
   name: seas2
   long_name: seas2
@@ -183,12 +230,14 @@ seas2:
   upper_radius: 0.5
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
   radius: 0.316
   density: 2200.
   is_seasalt: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 0.0, 1.0]
 seas3:
   name: seas3
   long_name: seas3
@@ -197,12 +246,14 @@ seas3:
   upper_radius: 1.5
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
   radius: 1.119
   density: 2200.
   is_seasalt: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 0.0, 1.0]
 seas4:
   name: seas4
   long_name: seas4
@@ -211,12 +262,14 @@ seas4:
   upper_radius: 5.0
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
   radius: 2.818
   density: 2200.
   is_seasalt: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 0.0, 1.0]
 seas5:
   name: seas5
   long_name: seas5
@@ -225,10 +278,12 @@ seas5:
   upper_radius: 10.0
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
   radius: 7.772
   density: 2200.
   is_seasalt: true
   is_aerosol: true
   is_drydep: true
+  is_wetdep: true
+  wd_rainouteff: [1.0, 0.0, 1.0]
 

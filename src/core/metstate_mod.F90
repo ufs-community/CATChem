@@ -144,13 +144,14 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: PRECANV(:,:)      !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
       REAL(fp), ALLOCATABLE        :: PRECCON(:,:)      !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
       REAL(fp), ALLOCATABLE        :: PRECLSC(:,:)      !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
+      real(fp), ALLOCATABLE        :: REEVAPLS(:,:,:)   !< Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
       ! 3D cloud and precipitation arrays
       REAL(fp), ALLOCATABLE        :: QI(:,:,:)         !< Mass fraction of cloud ice water [kg/kg dry air]
       REAL(fp), ALLOCATABLE        :: QL(:,:,:)         !< Mass fraction of cloud liquid water [kg/kg dry air]
       REAL(fp), ALLOCATABLE        :: PFICU(:,:,:)      !< Dwn flux ice prec:conv [kg/m2/s]
       REAL(fp), ALLOCATABLE        :: PFILSAN(:,:,:)    !< Dwn flux ice prec:LS+anv [kg/m2/s]
       REAL(fp), ALLOCATABLE        :: PFLCU(:,:,:)      !< Dwn flux liq prec:conv [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PFLLSAN(:,:,:)    !< Dwn flux ice prec:LS+anv [kg/m2/s]
+      REAL(fp), ALLOCATABLE        :: PFLLSAN(:,:,:)    !< Dwn flux liq prec:LS+anv [kg/m2/s]
       REAL(fp), ALLOCATABLE        :: TAUCLI(:,:,:)     !< Opt depth of ice clouds [1]
       REAL(fp), ALLOCATABLE        :: TAUCLW(:,:,:)     !< Opt depth of H2O clouds [1]
       ! Surface scalars (now 2D: nx, ny)

@@ -75,6 +75,7 @@ module species_mod
       logical :: is_tracer            !< If true, species is a tracer and not an aerosol or gas that undergoes chemistry or photolysis
       logical :: is_advected          !< If true, species is advected
       logical :: is_drydep            !< If true, species undergoes dry deposition
+      logical :: is_wetdep            !< if true, species undergoes wet deposition
       logical :: is_photolysis        !< If true, species undergoes photolysis
       logical :: is_gocart_aero       !< If true, species is a GOCART aerosol species
       logical :: is_dust              !< If true, species is dust
@@ -94,6 +95,16 @@ module species_mod
       real(kind=fp) :: dd_DvzAerSnow        !< fix dry deposition velocity (cm/s) over ice and snow for certain aerosol species
       real(kind=fp) :: dd_DvzMinVal_snow    !< minimum dry deposition velocity (cm/s) over snow and ice
       real(kind=fp) :: dd_DvzMinVal_land    !< minimum dry deposition velocity (cm/s) over land
+
+      ! used for wet deposition
+      !real(kind=fp) :: radius_wet           !< mean molecular diameter in meters for wet conditions (use the same radius for both dry and wet deposition for now)
+      real(kind=fp) :: henry_k0             !< Henry’s law solubility constant ( M / atm)
+      real(kind=fp) :: henry_cr             !< Henry’s law volatility constant (K)
+      real(kind=fp) :: henry_pKa            !< Henry’s Law pH correction factor (seems zeros for all species now)
+      real(kind=fp) :: wd_retfactor         !< retention efficiency of species in the liquid cloud condensate as it is converted to precipitation
+      logical       :: wd_LiqAndGas         !< whether the ice-to-gas ratio can be computed for this species by co-condensation
+      real(kind=fp) :: wd_convfacI2G        !< conversion factor for computing the ice-to-gas ratio by co-condensation when wd_LiqAndGas = .true.
+      real(kind=fp) :: wd_rainouteff(3)     !< temperature-dependent (T < 237k;  237 <= T < 258k;  T >= 258k) scale factor for the fraction of rainout.
 
       ! Default background concentration
       real(kind=fp) :: BackgroundVV        !< Background concentration [v/v]

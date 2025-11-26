@@ -266,7 +266,7 @@ contains
    !! should be created and made available.
    function process_get_required_diagnostic_fields(this) result(field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=64), allocatable :: field_names(:)
 
       ! Default implementation - no diagnostic fields required
       allocate(field_names(0))

@@ -144,3 +144,12 @@ processes:
       resuspension: false
     zhang:
       scale_factor: 1.0
+  wetdep:
+    activate: true
+    diagnostics: true
+    diag_species: [seas1, seas3, seas5]
+    scheme: 'jacob'
+    jacob:
+      scale_factor: 1.0
+      radius_threshold: 1.0
+    

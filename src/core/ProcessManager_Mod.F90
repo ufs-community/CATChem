@@ -98,6 +98,9 @@ contains
       call new_process%init(container, rc)
       if (rc /= CC_SUCCESS) return
 
+      ! Set timestep for each process to the same value.
+      call new_process%set_timestep(container%tstep)
+      
       ! Collect required met fields from this process
       call this%add_met_fields_from_process(new_process, rc)
       if (rc /= CC_SUCCESS) return

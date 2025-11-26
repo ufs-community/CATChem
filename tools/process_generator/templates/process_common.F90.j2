@@ -86,11 +86,7 @@ module {{ config.class_name }}Common_Mod
       ! Species properties
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
-{% if prop.startswith('is_') %}
-      logical, allocatable :: species_{{ prop }}(:)      ! {{ prop }} for each species
-{% else %}
-      real(fp), allocatable :: species_{{ prop }}(:)      ! {{ prop }} for each species
-{% endif %}
+      {{ field_classifier.get_species_property_data_type(prop) }}, allocatable :: species_{{ prop }}{{ field_classifier.get_species_property_dimensions(prop) }}      ! {{ prop }} for each species
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -555,7 +551,11 @@ contains
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+      allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species, 3))
+{% else %}
       allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species))
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -588,7 +588,11 @@ contains
          species_idx = this%{{ config.name }}_config%species_indices(i)
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+         this%{{ config.name }}_config%species_{{ prop }}(i, :) = chem_state%ChemSpecies(species_idx)%{{ prop }}(:)
+{% else %}
          this%{{ config.name }}_config%species_{{ prop }}(i) = chem_state%ChemSpecies(species_idx)%{{ prop }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% if config.gas_aero_differentiation %}
@@ -734,7 +738,11 @@ contains
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+      allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species, 3))
+{% else %}
       allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species))
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -796,7 +804,11 @@ contains
          species_idx = this%{{ config.name }}_config%species_indices(i)
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+         this%{{ config.name }}_config%species_{{ prop }}(i, :) = chem_state%ChemSpecies(species_idx)%{{ prop }}(:)
+{% else %}
          this%{{ config.name }}_config%species_{{ prop }}(i) = chem_state%ChemSpecies(species_idx)%{{ prop }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
@@ -870,7 +882,11 @@ contains
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
+{% if prop == 'wd_rainouteff' %}
+      allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species, 3))
+{% else %}
       allocate(this%{{ config.name }}_config%species_{{ prop }}(this%{{ config.name }}_config%n_species))
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
