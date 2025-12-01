@@ -1,5 +1,5 @@
 # WetDep Schemes CMakeLists.txt
-# Generated on: 2025-11-25T22:19:36.413838
+# Generated on: 2025-12-01T15:00:45.216269
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -13,7 +13,7 @@
 # Required meteorological fields for JACOB:
 #   - T
 #   - TSTEP
-#   - AIRDEN
+#   - AIRDEN_DRY
 #   - MAIRDEN
 #   - PFLLSAN
 #   - PFILSAN

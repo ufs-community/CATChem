@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! wetdep process and its schemes.
 !!
-!! Generated on: 2025-11-25T22:19:36.284809
+!! Generated on: 2025-12-01T15:00:45.070798
 !! Author: Wei Li
 !! Version: 1.0.0
 

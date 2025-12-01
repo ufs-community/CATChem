@@ -149,9 +149,9 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: QI(:,:,:)         !< Mass fraction of cloud ice water [kg/kg dry air]
       REAL(fp), ALLOCATABLE        :: QL(:,:,:)         !< Mass fraction of cloud liquid water [kg/kg dry air]
       REAL(fp), ALLOCATABLE        :: PFICU(:,:,:)      !< Dwn flux ice prec:conv [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PFILSAN(:,:,:)    !< Dwn flux ice prec:LS+anv [kg/m2/s]
+      REAL(fp), ALLOCATABLE        :: PFILSAN(:,:,:)    !< Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
       REAL(fp), ALLOCATABLE        :: PFLCU(:,:,:)      !< Dwn flux liq prec:conv [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PFLLSAN(:,:,:)    !< Dwn flux liq prec:LS+anv [kg/m2/s]
+      REAL(fp), ALLOCATABLE        :: PFLLSAN(:,:,:)    !< Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
       REAL(fp), ALLOCATABLE        :: TAUCLI(:,:,:)     !< Opt depth of ice clouds [1]
       REAL(fp), ALLOCATABLE        :: TAUCLW(:,:,:)     !< Opt depth of H2O clouds [1]
       ! Surface scalars (now 2D: nx, ny)
@@ -182,9 +182,10 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: OMEGA(:,:,:)      !< Updraft velocity [Pa/s]
       REAL(fp), ALLOCATABLE        :: RH(:,:,:)         !< Relative humidity [fraction, not %]
       REAL(fp), ALLOCATABLE        :: SPHU(:,:,:)       !< Specific humidity [g H2O/kg tot air]
-      REAL(fp), ALLOCATABLE        :: AIRDEN(:,:,:)     !< Dry air density [kg/m3]
+      REAL(fp), ALLOCATABLE        :: AIRDEN(:,:,:)     !< Wet air density [kg/m3]
+      REAL(fp), ALLOCATABLE        :: AIRDEN_DRY(:,:,:) !< Dry air density [kg/m3]
       REAL(fp), ALLOCATABLE        :: AIRNUMDEN(:,:,:)  !< Dry air density [molec/cm3]
-      REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)    !< Moist air density [kg/m3]
+      REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)    !< Moist air density (same as AIRDEN to cover possbile use cases) [kg/m3]
       REAL(fp), ALLOCATABLE        :: AVGW(:,:,:)       !< Water vapor volume mixing ratio [vol H2O/vol dry air]
       REAL(fp), ALLOCATABLE        :: DELP(:,:,:)       !< Delta-P (wet) across box [Pa]
       REAL(fp), ALLOCATABLE        :: DELP_DRY(:,:,:)   !< Delta-P (dry) across box [Pa]
@@ -1202,7 +1203,7 @@ CONTAINS
    !! \param[out]   rc          Return code (CC_SUCCESS or error code)
    subroutine metstate_derive_field(this, field_name, error_mgr, time_state, rc)
       use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, ERROR_INVALID_INPUT, ERROR_NOT_FOUND
-      use constants, only: g0, Rd, Rdg0
+      use constants, only: g0, Rd, Rdg0, AIRMW, H2OMW
       
       implicit none
       class(MetStateType), intent(inout) :: this
@@ -1214,6 +1215,8 @@ CONTAINS
       character(len=256) :: thisLoc
       integer :: nx, ny, nz, i, j, k, nlanduse
       real(fp) :: airden
+      real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
+      real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
       
       thisLoc = 'metstate_derive_field (in core/metstate_mod.F90)'
       call error_mgr%push_context('metstate_derive_field', 'deriving field: ' // trim(field_name))
@@ -1223,20 +1226,20 @@ CONTAINS
       
       select case (trim(adjustl(field_name)))
       
-      case ('AIRDEN', 'airden')
+      case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
          if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-               'PMID and T fields required for AIRDEN calculation', rc, &
+               'PMID and T fields required for MAIRDEN/AIRDEN calculation', rc, &
                thisLoc, 'Ensure pressure and temperature are available')
             call error_mgr%pop_context()
             return
          endif
          
-         ! Allocate AIRDEN if not already allocated
-         if (.not. allocated(this%AIRDEN)) then
-            call error_mgr%report_error(rc, 'AIRDEN field needs to be allocated first!', rc, thisLoc)
+         ! Allocate MAIRDEN if not already allocated
+         if (.not. allocated(this%MAIRDEN) .or. .not. allocated(this%AIRDEN)) then
+            call error_mgr%report_error(rc, 'MAIRDEN/AIRDEN fields need to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
@@ -1245,7 +1248,44 @@ CONTAINS
          do k = 1, nz
             do j = 1, ny
                do i = 1, nx
+                  this%MAIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
                   this%AIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
+               enddo
+            enddo
+         enddo
+
+      case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
+         ! Calculate dry air density from pressure and temperature
+         ! ρ = P / (R_specific * T) where R_specific = R / MW
+         if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'PMID and T fields required for AIRDEN_DRY calculation', rc, &
+               thisLoc, 'Ensure pressure and temperature are available')
+            call error_mgr%pop_context()
+            return
+         endif
+         
+         ! Allocate AIRDEN_DRY if not already allocated
+         if (.not. allocated(this%AIRDEN_DRY) .or. .not. allocated(this%PMID_DRY) .or. &
+             .not. allocated(this%PEDGE_DRY) .or. .not. allocated(this%DELP_DRY)) then
+            call error_mgr%report_error(rc, 'AIRDEN_DRY/PMID_DRY/PEDGE_DRY/DELP_DRY fields need to be allocated first!', rc, thisLoc)
+            call error_mgr%pop_context()
+            return
+         endif
+         
+         ! Calculate dry air density: ρ = P / (R_dry * T)
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  avgw = AIRMW * this%QV(i,j,k) / ( H2OMW * (1.0e+0_fp - this%QV(i,j,k)) )
+                  xh2o = avgw / (1.0e+0_fp + avgw)
+                  this%PMID_DRY(i, j, k) = this%PMID(i, j, k) * ( 1.e+0_fp - xh2o )
+                  this%AIRDEN_DRY(i, j, k) = this%PMID_DRY(i, j, k) / rd / this%T(i, j, k)
+                  this%PEDGE_DRY(i, j, k) = this%PEDGE(i, j, k) * ( 1.e+0_fp - xh2o )
+                  if (k == nz) then
+                     this%PEDGE_DRY(i, j, k+1) = this%PEDGE(i, j, k+1) * ( 1.e+0_fp - xh2o )
+                  end if
+                  this%DELP_DRY(i, j, k) = this%PEDGE_DRY(i, j, k) - this%PEDGE_DRY(i, j, k+1)
                enddo
             enddo
          enddo
@@ -1518,6 +1558,9 @@ CONTAINS
          enddo
       case ('SALINITY', 'salinity')
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.      
+      
+      case ('REEVAPLS', 'reevapls')
+         this%REEVAPLS(:,:,:) = 0.0_fp  !set to zero for now because I did not find data from GFS. This will overestimate the washout of aerosols. 
       
       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &

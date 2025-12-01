@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the wetdep process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-11-25T22:19:36.533611
+!! Generated on: 2025-12-01T15:00:45.318763
 
 program test_wetdep_integration
    use precision_mod, only: fp
@@ -213,11 +213,9 @@ contains
                ! Approximate altitude in km (assuming ~1 km per level near surface)
                altitude_km = real(k-1, fp) * 1.0_fp               
                met_state%T(i,j,k) = 288.15_fp - 6.5_fp * altitude_km  ! Temperature lapse rate [K]
-               met_state%AIRDEN(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Air density [kg/m3]
-               met_state%MAIRDEN(i,j,k) = met_state%AIRDEN(i,j,k) * 1.01_fp     ! Moist air density [kg/m3]
+               met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
+               met_state%MAIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp     ! Moist air density [kg/m3]
                met_state%REEVAPLS(i,j,k) = 1.0e-6_fp * (1.0_fp + 0.1_fp * altitude_km)  ! Evaporation of large-scale precipitation [kg/kg/s]
-               met_state%PFILSAN(i,j,k) = 1.0e-3_fp * (1.0_fp + 0.2_fp * altitude_km)  ! Ice precip flux: LS+anvil [kg/m2/s]
-               met_state%PFLLSAN(i,j,k) = 1.5e-3_fp * (1.0_fp + 0.15_fp * altitude_km)  ! Liquid precip flux: LS+anvil [kg/m2/s]
             end do
          end do
       end do
@@ -228,6 +226,8 @@ contains
             do k = 1, nz+1
                edge_altitude_km = real(k-1, fp) * 1.0_fp - 0.5_fp
                met_state%PEDGE(i,j,k) = 101300.25_fp * exp(-edge_altitude_km / 8.0_fp)  ! Pressure at edges [Pa]
+               met_state%PFILSAN(i,j,k) = 1.0e-3_fp * (1.0_fp + 0.2_fp * edge_altitude_km)  ! Ice precip flux: LS+anvil [kg/m2/s]
+               met_state%PFLLSAN(i,j,k) = 1.5e-3_fp * (1.0_fp + 0.15_fp * edge_altitude_km)  ! Liquid precip flux: LS+anvil [kg/m2/s]
             end do
          end do
       end do

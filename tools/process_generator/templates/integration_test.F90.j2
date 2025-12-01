@@ -518,7 +518,7 @@ contains
          end do
       end do      
 {% set has_3d_fields = [] %}
-{% for field in ['T', 'THETA', 'TV', 'U', 'V', 'OMEGA', 'QV', 'SPHU', 'RH', 'AVGW', 'PMID', 'PMID_DRY', 'DELP', 'DELP_DRY', 'AIRDEN', 'AIRNUMDEN', 'MAIRDEN', 'DAIRMASS', 'BXHEIGHT', 'AIRVOL', 'Z', 'ZMID', 'CLDF', 'QI', 'QL', 'TAUCLI', 'TAUCLW', 'CMFMC', 'DTRAIN', 'DQRCU', 'DQRLSAN', 'PFICU', 'PFILSAN', 'PFLCU', 'PFLLSAN', 'F_OF_PBL', 'F_UNDER_PBLTOP'] %}
+{% for field in ['T', 'THETA', 'TV', 'U', 'V', 'OMEGA', 'QV', 'SPHU', 'RH', 'AVGW', 'PMID', 'PMID_DRY', 'DELP', 'DELP_DRY', 'AIRDEN', 'AIRDEN_DRY','AIRNUMDEN', 'MAIRDEN', 'DAIRMASS', 'BXHEIGHT', 'AIRVOL', 'Z', 'ZMID', 'CLDF', 'QI', 'QL', 'TAUCLI', 'TAUCLW', 'CMFMC', 'DTRAIN', 'DQRCU', 'DQRLSAN', 'PFICU', 'PFLCU', 'F_OF_PBL', 'F_UNDER_PBLTOP'] %}
   {% if required_met_fields and field in required_met_fields %}
     {% if has_3d_fields.append(field) %}{% endif %}
   {% endif %}
@@ -576,14 +576,17 @@ contains
 {%- if required_met_fields and 'DELP_DRY' in required_met_fields %}{{- sep.value -}}
                met_state%DELP_DRY(i,j,k) = 4950.0_fp                              ! Dry pressure thickness [Pa]
 {%- set sep.value = '\n               ' %}{%- endif %}              
-{%- if required_met_fields and 'AIRDEN' in required_met_fields %}{{- sep.value -}}
-               met_state%AIRDEN(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Air density [kg/m3]
+{%- if required_met_fields and 'AIRDEN_DRY' in required_met_fields %}{{- sep.value -}}
+               met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
 {%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'AIRNUMDEN' in required_met_fields %}{{- sep.value -}}
                met_state%AIRNUMDEN(i,j,k) = 2.5e19_fp * exp(-altitude_km / 8.0_fp)  ! Air number density [molec/cm3]
 {%- set sep.value = '\n               ' %}{%- endif %}
+{%- if required_met_fields and 'AIRDEN' in required_met_fields %}{{- sep.value -}}
+               met_state%AIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp    ! wet Air density [kg/m3]
+{%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'MAIRDEN' in required_met_fields %}{{- sep.value -}}
-               met_state%MAIRDEN(i,j,k) = met_state%AIRDEN(i,j,k) * 1.01_fp     ! Moist air density [kg/m3]
+               met_state%MAIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp     ! Moist air density [kg/m3]
 {%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'REEVAPLS' in required_met_fields %}{{- sep.value -}}
                met_state%REEVAPLS(i,j,k) = 1.0e-6_fp * (1.0_fp + 0.1_fp * altitude_km)  ! Evaporation of large-scale precipitation [kg/kg/s]
@@ -633,14 +636,8 @@ contains
 {%- if required_met_fields and 'PFICU' in required_met_fields %}{{- sep.value -}}
                met_state%PFICU(i,j,k) = 0.0_fp                                  ! Ice precip flux: convective [kg/m2/s]
 {%- set sep.value = '\n               ' %}{%- endif %}
-{%- if required_met_fields and 'PFILSAN' in required_met_fields %}{{- sep.value -}}
-               met_state%PFILSAN(i,j,k) = 1.0e-3_fp * (1.0_fp + 0.2_fp * altitude_km)  ! Ice precip flux: LS+anvil [kg/m2/s]
-{%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'PFLCU' in required_met_fields %}{{- sep.value -}}
                met_state%PFLCU(i,j,k) = 0.0_fp                                  ! Liquid precip flux: convective [kg/m2/s]
-{%- set sep.value = '\n               ' %}{%- endif %}
-{%- if required_met_fields and 'PFLLSAN' in required_met_fields %}{{- sep.value -}}
-               met_state%PFLLSAN(i,j,k) = 1.5e-3_fp * (1.0_fp + 0.15_fp * altitude_km)  ! Liquid precip flux: LS+anvil [kg/m2/s]
 {%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'F_OF_PBL' in required_met_fields %}{{- sep.value -}}
                met_state%F_OF_PBL(i,j,k) = max(0.0_fp, 1.0_fp - altitude_km / 1.0_fp)  ! Fraction in PBL
@@ -654,7 +651,7 @@ contains
       end do
 {% endif %}      
 {% set has_edge_fields = [] %}
-{% for field in ['PEDGE', 'PEDGE_DRY'] %}
+{% for field in ['PEDGE', 'PEDGE_DRY', 'PFILSAN', 'PFLLSAN'] %}
   {% if required_met_fields and field in required_met_fields %}
     {% if has_edge_fields.append(field) %}{% endif %}
   {% endif %}
@@ -670,6 +667,12 @@ contains
 {%- set sep.value = '\n               ' %}{%- endif %}
 {%- if required_met_fields and 'PEDGE_DRY' in required_met_fields %}{{- sep.value -}}
                met_state%PEDGE_DRY(i,j,k) = met_state%PEDGE(i,j,k) * 0.99_fp    ! Dry pressure at edges [Pa]
+{%- set sep.value = '\n               ' %}{%- endif %}
+{%- if required_met_fields and 'PFILSAN' in required_met_fields %}{{- sep.value -}}
+               met_state%PFILSAN(i,j,k) = 1.0e-3_fp * (1.0_fp + 0.2_fp * edge_altitude_km)  ! Ice precip flux: LS+anvil [kg/m2/s]
+{%- set sep.value = '\n               ' %}{%- endif %}
+{%- if required_met_fields and 'PFLLSAN' in required_met_fields %}{{- sep.value -}}
+               met_state%PFLLSAN(i,j,k) = 1.5e-3_fp * (1.0_fp + 0.15_fp * edge_altitude_km)  ! Liquid precip flux: LS+anvil [kg/m2/s]
 {%- set sep.value = '\n               ' %}{%- endif %}
 
             end do

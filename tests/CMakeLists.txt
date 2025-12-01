@@ -327,6 +327,8 @@ add_test(
 add_executable(test_catchem_api test_catchem_api.F90 ../src/api/CATChem_API.F90)
 target_link_libraries(test_catchem_api PRIVATE CATChem_core)
 target_link_libraries(test_catchem_api PRIVATE CATChem_process_seasalt)
+target_link_libraries(test_catchem_api PRIVATE CATChem_process_drydep)
+target_link_libraries(test_catchem_api PRIVATE CATChem_process_wetdep)
 target_link_libraries(test_catchem_api PRIVATE testing)
 set_target_properties(
   test_catchem_api

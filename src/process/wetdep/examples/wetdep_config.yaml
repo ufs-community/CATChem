@@ -1,5 +1,5 @@
 # Example configuration for wetdep process
-# Generated on: 2025-11-25T22:19:36.577273
+# Generated on: 2025-12-01T15:00:45.357612
 # Author: Wei Li
 
 process:
@@ -32,7 +32,7 @@ schemes:
     required_met_fields:
       - "T"
       - "TSTEP"
-      - "AIRDEN"
+      - "AIRDEN_DRY"
       - "MAIRDEN"
       - "PFLLSAN"
       - "PFILSAN"

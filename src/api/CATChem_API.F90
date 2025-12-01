@@ -45,6 +45,8 @@ module CATChem_API
    use ProcessInterface_Mod, only: ProcessInterface
    ! Import process registration functions
    use SeaSaltProcessCreator_Mod, only: register_seasalt_process
+   use DryDepProcessCreator_Mod, only: register_drydep_process
+   use WetDepProcessCreator_Mod, only: register_wetdep_process
    
    implicit none
    private
@@ -350,6 +352,20 @@ contains
       ! Add more processes here as they become available
       ! case ('dust')
       !    call register_dust_process(process_mgr, rc)
+      case ('drydep')
+         call register_drydep_process(process_mgr, rc)
+         if (rc /= CC_SUCCESS) then
+            call this%error_manager%push_context('model_register_process', 'registering drydep process')
+            call this%error_manager%report_error(1014, 'Failed to register drydep process', rc)
+            call this%error_manager%pop_context()
+         endif
+      case ('wetdep')
+         call register_wetdep_process(process_mgr, rc)
+         if (rc /= CC_SUCCESS) then
+            call this%error_manager%push_context('model_register_process', 'registering wetdep process')
+            call this%error_manager%report_error(1014, 'Failed to register wetdep process', rc)
+            call this%error_manager%pop_context()
+         endif
       ! case ('chemistry')  
       !    call register_chemistry_process(process_mgr, rc)
       

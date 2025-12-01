@@ -62,7 +62,7 @@ contains
    !! @param[in]  num_layers     Number of vertical layers
    !! @param[in]  num_species    Number of chemical species
    !! @param[in]  params         Scheme parameters (pre-validated by host)
-   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  airden_dry    AIRDEN_DRY field [appropriate units]
    !! @param[in]  mairden    MAIRDEN field [appropriate units]
    !! @param[in]  pedge    PEDGE field [appropriate units]
    !! @param[in]  pfilsan    PFILSAN field [appropriate units]
@@ -91,7 +91,7 @@ contains
       num_layers, &
       num_species, &
       params, &
-      airden, &
+      airden_dry, &
       mairden, &
       pedge, &
       pfilsan, &
@@ -120,11 +120,11 @@ contains
       integer, intent(in) :: num_layers
       integer, intent(in) :: num_species
       type(WetDepSchemeJACOBConfig), intent(in) :: params
-      real(fp), intent(in) :: airden(num_layers)    ! 3D atmospheric field
+      real(fp), intent(in) :: airden_dry(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: mairden(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: pedge(num_layers+1)  ! Edge field - requires nz+1 dimensions
-      real(fp), intent(in) :: pfilsan(num_layers)    ! 3D atmospheric field
-      real(fp), intent(in) :: pfllsan(num_layers)    ! 3D atmospheric field
+      real(fp), intent(in) :: pfilsan(num_layers+1)    ! 3D atmospheric field
+      real(fp), intent(in) :: pfllsan(num_layers+1)    ! 3D atmospheric field
       real(fp), intent(in) :: reevapls(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
@@ -231,20 +231,22 @@ contains
          km1 = k + 1
 
          ! -- initialize auxiliary arrays
-         if (k == ktop) then
-            !TODO: GOCART has an additional index on the model top edge;
-            dqls = pfllsan(k)
-            dqis = pfilsan(k)
-            pdwn(k) = kg_to_cm3_liq * pfllsan(k) + kg_to_cm3_ice * pfilsan(k)
-         else
-            ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
-            dqls = pfllsan(k) - pfllsan(km1)
-            dqis = pfilsan(k) - pfilsan(km1)
-            ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
-            pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
+         !if (k == ktop) then
+         !   !TODO: GOCART has an additional index on the model top edge;
+         !   dqls = pfllsan(k)
+         !   dqis = pfilsan(k)
+         !   pdwn(k) = kg_to_cm3_liq * pfllsan(k) + kg_to_cm3_ice * pfilsan(k)
+         !else
          
-         end if ! if (k == ktop)
          !Here we follow GOCART with an additional index; otherwise, uncomment the if else statement above
+         ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
+         dqls = pfllsan(k) - pfllsan(km1)
+         dqis = pfilsan(k) - pfilsan(km1)
+         ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
+         pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
+         
+         !end if ! if (k == ktop)
+         
          delp = pedge(k) - pedge(km1)
          dpog(k) = delp / g0
          delz = dpog(k) / mairden(k) ! thickness of layer [m]
@@ -262,7 +264,7 @@ contains
          ! -- To convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) / s, divide by the density of
          ! -- the precipitation (ice or liquid)
          qq(k) =  dqls_kgm3s / density_liq +  dqis_kgm3s / density_ice
-         reevap(k) = reevapls(k) * (airden(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm2/s
+         reevap(k) = reevapls(k) * (airden_dry(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm2/s
 
          ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
          !pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)

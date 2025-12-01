@@ -42,7 +42,7 @@ schemes:
     required_met_fields: #needed for scheme calculations
       - T
       - TSTEP
-      - AIRDEN
+      - AIRDEN_DRY
       - MAIRDEN
       - PFLLSAN
       - PFILSAN

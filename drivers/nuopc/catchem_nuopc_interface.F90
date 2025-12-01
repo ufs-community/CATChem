@@ -639,8 +639,9 @@ contains
     !type(cc_wrap_type), pointer :: cc_wrap
     real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
     real(ESMF_KIND_R8), pointer :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
+    real(fp), pointer :: column_ptr(:) !catchem met column pointer to get vertical dimension for nz+1 variables
     real(ESMF_KIND_R8) :: unit_conv
-    integer :: i, j, k, v, ni, nj, nk, nv, kk, v_cc, met_index
+    integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index
 
     rc = ESMF_SUCCESS
 
@@ -707,23 +708,40 @@ contains
         ni = size(fptr3d, 1)
         nj = size(fptr3d, 2)
         nk = size(fptr3d, 3)
+
+        !get catchem receriver vertical dimension for nz+1 variables while NUOPC has nz levels
+        !Currently only PFILSAN and PFLLSAN are in this case follwoing GOCART and in most cases,
+        ! nk == nk1
+        call met_state%get_field_ptr(trim(field_map%catchem_var), i=1, j=1, col_ptr=column_ptr, rc=rc)
+        if (rc /= CC_SUCCESS) then
+          call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+            msg="Error getting met field pointer for: " // trim(field_map%catchem_var), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc) 
+          return  ! bail out
+        end if
+        nk1 = size(column_ptr)
         
         ! Allocate fptr3d_rev with the same dimensions as fptr3d
-        allocate(fptr3d_rev(ni, nj, nk))
+        allocate(fptr3d_rev(ni, nj, nk1))
         
-        !reverse vertical layers
-        do k = 1, nk
+        ! -- map provider field levels to receiver field levels in the same (not reverse) order
+        ! -- NOTE: if provider field from NUOPC has fewer vertical levels than the receiver field in CATChem,
+        ! -- the remaining receiver field levels are filled by replicating values from
+        ! -- the closest available level in the provider field.
+        kk = 1
+        do k = 1, nk1
           !kk = nk - k + 1 !no need to reverse 
-          kk = k
+          !kk = k
           do j = 1, nj
             do i = 1, ni
               if (trim(field_map%catchem_var) == 'Z' .or. trim(field_map%catchem_var) == 'ZMID') then
-                fptr3d_rev(i,j,kk) = fptr3d(i,j,k) / g0
+                fptr3d_rev(i,j,k) = fptr3d(i,j,kk) / g0
               else 
-                fptr3d_rev(i,j,kk) = fptr3d(i,j,k)
+                fptr3d_rev(i,j,k) = fptr3d(i,j,kk)
               end if
             end do
           end do
+          kk = min(nk, kk + 1)
         end do
 
         !set to met_state in CATChem
