@@ -258,7 +258,7 @@ contains
    !! Apply tendency to current column and accumulate in emissions
    !========================================================================
    subroutine column_view_apply_tendency(this, species_name, tendency_column, &
-                                        dt, layer_height, rc)
+      dt, layer_height, rc)
       class(ColumnViewType), intent(inout) :: this
       character(len=*), intent(in) :: species_name
       real(fp), intent(in) :: tendency_column(:)  ! Tendency flux (kg/m²/s)

@@ -82,7 +82,7 @@ program test_ProcessManager
    block
       character(len=64) :: process_names(10)
       integer :: count
-      
+
       call process_mgr%list_processes(process_names, count)
       call assert(count >= 0, "Process count should be non-negative")
       call assert(count <= 10, "Process count should not exceed array size")
@@ -96,7 +96,7 @@ program test_ProcessManager
    block
       integer :: column_indices(10)
       integer :: count
-      
+
       call process_mgr%get_column_processes(column_indices, count)
       call assert(count >= 0, "Column process count should be non-negative")
       call assert(count <= 10, "Column process count should not exceed array size")
@@ -112,7 +112,7 @@ program test_ProcessManager
       phase_names(1) = 'Initialization'
       phase_names(2) = 'MainLoop'
       phase_names(3) = 'Finalization'
-      
+
       !call process_mgr%configure_run_phases(phase_names, rc)
       !call assert(rc == CC_SUCCESS, "Run phase configuration should succeed")
    end block
@@ -205,5 +205,5 @@ program test_ProcessManager
    write(*,*) ''
 
    write(*,*) 'All ProcessManager tests passed!'
-   
+
 end program test_ProcessManager

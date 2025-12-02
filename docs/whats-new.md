@@ -38,4 +38,4 @@
 
 ---
 
-For detailed release notes and migration guides, visit our [GitHub releases](https://github.com/CATChem/cc_restructure/releases).
+For detailed release notes and migration guides, visit our **[GitHub releases](https://github.com/UFS-Community/CATChem/releases)**.

@@ -17,7 +17,7 @@ MPI_LIBS = -L$(MPI_ROOT)/lib -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh
 
 # Compiler and flags
 FC = mpifort
-FFLAGS = -g -O2 
+FFLAGS = -g -O2
 FFLAGS += -I$(ESMF_MODDIR) $(NETCDF_FFLAGS)
 FFLAGS += -DHAVE_NETCDF=1
 

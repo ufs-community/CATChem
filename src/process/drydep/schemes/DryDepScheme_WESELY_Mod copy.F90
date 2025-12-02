@@ -183,7 +183,7 @@ contains
       drydep_con_per_species, &
       drydep_velocity_per_species, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -246,10 +246,10 @@ contains
       ErrMsg  = ''
       ThisLoc = ' -> at compute_Wesely (in process/drydep/scheme/DryDepScheme_WESELY_Mod.F90)'
 
-      !TODO : Placeholder for iodide concentration; zero means O3 deposition to ocean through halogen chemistry is not 
+      !TODO : Placeholder for iodide concentration; zero means O3 deposition to ocean through halogen chemistry is not
       !doing anything although the codes are there. If we have iodide as a species in the future, we can get its
-      !concentration from the species_conc array here. 
-      IODIDE = 0.0_fp  
+      !concentration from the species_conc array here.
+      IODIDE = 0.0_fp
 
       ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
       do k = 1, num_layers
@@ -277,7 +277,7 @@ contains
             HSTAR = species_dd_hstar(species_idx)
             XMW   = species_mw_g(species_idx)*1e-3_fp   !convert from g/mol to kg/mole
             SPC   = species_short_name(species_idx)
-            F0    = species_dd_f0(species_idx) 
+            F0    = species_dd_f0(species_idx)
 
             ! Better test for depositing species: We need both HSTAR and XMW
             ! to be nonzero, OR the value of AIROSOL to be true.  This should
@@ -314,7 +314,7 @@ contains
                   IF( (ISSNOW) .OR. (ISICE) ) II=1
 
                   !get bulk surface resistances (Rs)
-                  call Wesely_Rc_Gas( swgdn, ts, suncosmid,  F0, HSTAR, XMW, ustar, cldfrc, & 
+                  call Wesely_Rc_Gas( swgdn, ts, suncosmid,  F0, HSTAR, XMW, ustar, cldfrc, &
                      ps, XLAI_IN, II,  SPC, salinity, tskin, IODIDE, lon, lat, &
                      params%co2_effect, params%co2_level, params%co2_reference, RSURFC,   RC)
 
@@ -328,7 +328,7 @@ contains
                   RSURFC = MAX(1.e+0_fp, MIN(RSURFC,9999.e+0_fp))
                   !*because of high resistance values, different rule applied for ocean ozone
                   IF ( (SPC .EQ. 'O3' .OR. SPC .EQ. 'o3') &
-                  .AND. (II .EQ. 11)) THEN
+                     .AND. (II .EQ. 11)) THEN
                      RSURFC = MAX(1.e+0_fp, MIN(RSURFC,999999.e+0_fp))
                   ENDIF
                   ! Set Rc for strong acids (HNO3,HCl,HBr) to 1 s/m
@@ -357,21 +357,21 @@ contains
 
             !IF ( FLAG(D) .eq. 1 )  THEN
             IF ((SPC .eq. 'N2O5') .or. (SPC .eq. 'HC187') .or. &
-                (SPC .eq. 'n2o5') .or. (SPC .eq. 'hc187') ) THEN
+               (SPC .eq. 'n2o5') .or. (SPC .eq. 'hc187') ) THEN
 
                ! Scale species to HNO3 (MW_g = 63.012 g/mol)
                DVZ = DVZ * sqrt(63.01_fp) / sqrt( XMW*1e3_fp )
 
                !ELSE IF ( FLAG(D) .eq. 2 ) THEN
             ELSE IF ((SPC .eq. 'MPAN') .or. (SPC .eq. 'PPN') .or. (SPC .eq. 'R4N2') .or. &
-                     (SPC .eq. 'mpan') .or. (SPC .eq. 'ppn') .or. (SPC .eq. 'r4n2') ) THEN
+               (SPC .eq. 'mpan') .or. (SPC .eq. 'ppn') .or. (SPC .eq. 'r4n2') ) THEN
 
                ! Scale species to PAN (MW_g = 121.06 g/mol)
                DVZ = DVZ * sqrt(121.06_fp) / sqrt( XMW*1e3_fp )
 
                !ELSE IF ( FLAG(D) .eq. 3 ) THEN
             ELSE IF ((SPC .eq. 'MONITS') .or. (SPC .eq. 'MONITU') .or. (SPC .eq. 'HONIT') .or. &
-                     (SPC .eq. 'monits') .or. (SPC .eq. 'monitu') .or. (SPC .eq. 'honit') ) THEN
+               (SPC .eq. 'monits') .or. (SPC .eq. 'monitu') .or. (SPC .eq. 'honit') ) THEN
 
                ! Scale species to ISOPN (MW_g = 147.15 g/mol)
                DVZ = DVZ * sqrt(147.15_fp)  / sqrt(XMW*1e3_fp)
@@ -441,7 +441,7 @@ contains
             ! and not over the oceans.
             !IF ( N == id_ALD2 ) THEN
             IF ( (SPC == 'ALD2') .or. (SPC == 'MENO3') .or. (SPC == 'ETNO3') .or. (SPC == 'MOH') .or. &
-                 (SPC == 'ald2') .or. (SPC == 'meno3') .or. (SPC == 'etno3') .or. (SPC == 'moh') ) THEN
+               (SPC == 'ald2') .or. (SPC == 'meno3') .or. (SPC == 'etno3') .or. (SPC == 'moh') ) THEN
                IF ( .not. IsLand ) THEN
                   DVZ = 0e+0_fp
                ENDIF
@@ -459,7 +459,7 @@ contains
 
             ! Ensure non-negative emissions
             species_tendencies(k, species_idx) = max(0.0_fp, DDFreq)
-            
+
             ! TODO: Update diagnostic fields here based on your scheme's requirements
             ! Each process should implement custom diagnostic calculations
             ! Example patterns:
@@ -470,7 +470,7 @@ contains
                   if (diagnostic_species_id(diag_idx) == species_idx) then
                      ! Add your custom dry deposition concentration per species calculation
                      drydep_con_per_species(diag_idx) =  &
-                     MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep))) 
+                        MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep)))
                      exit
                   end if
                end do
@@ -496,7 +496,7 @@ contains
    ! SCHEME-SPECIFIC HELPER SUBROUTINES
    ! =======================================================================
    ! Add your custom scientific algorithms here as pure functions/subroutines
-   
+
    !>
    !! \brief Computes the bulk surface resistance (Rc) for the gas species
    !!
@@ -782,7 +782,7 @@ contains
          RSURFC = 1.e+0_fp/(DTMP1 + DTMP2 + DTMP3 + DTMP4)
       ENDIF
 
-      !TODO: this is put in the main scheme function 
+      !TODO: this is put in the main scheme function
       !*Set max and min values for bulk surface resistances
       !!RSURFC = MAX(1.e+0_fp, MIN(RSURFC,9999.e+0_fp))
       !*because of high resistance values, different rule applied for ocean ozone
@@ -1390,6 +1390,6 @@ contains
       END IF
 
    end subroutine Wesely_Ra_Rb
-   
+
 
 end module DryDepScheme_WESELY_Mod

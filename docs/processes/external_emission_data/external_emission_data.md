@@ -185,10 +185,10 @@ processes:
     enabled: true
     scheme: "surface_2d"
     parameters:
-      interpolation_method: 
-      time_interpolation: 
-      spatial_bounds_check: 
-      missing_value_handling: 
+      interpolation_method:
+      time_interpolation:
+      spatial_bounds_check:
+      missing_value_handling:
     diagnostics:
       enabled: true
       output_frequency: "daily"

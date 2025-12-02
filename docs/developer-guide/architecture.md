@@ -71,7 +71,7 @@ graph TB
 
 #### 2. API Layer
 - Public interfaces for external integration
-- NUOPC, CCPP, and FV3 compatibility
+- NUOPC and CCPP compatibility
 - C/Python binding support
 - Version management and compatibility
 
@@ -766,10 +766,10 @@ end function catchem_initialize
 
 ## Related Documentation
 
-- [Build System](build-system.md)
+- [Build System](../user-guide/build-system.md)
 - [Process Architecture](processes/architecture.md)
 - [State Management](core/state-management.md)
-- [Column Virtualization](../guides/column-virtualization.md)
+
 - [Performance Guide](performance.md)
 
 ---

@@ -53,12 +53,12 @@ program test_StateInterface
       type(MetStateType), pointer :: met_ptr
       type(ChemStateType), pointer :: chem_ptr
       type(ErrorManagerType), pointer :: error_ptr
-      
+
       config_ptr => container%get_config_ptr()
       met_ptr => container%get_met_state_ptr()
       chem_ptr => container%get_chem_state_ptr()
       error_ptr => container%get_error_manager()
-      
+
       ! Initially these might be null or point to uninitialized objects
       ! We're not asserting on them because behavior may vary
    end block
@@ -111,5 +111,5 @@ program test_StateInterface
    write(*,*) ''
 
    write(*,*) 'All StateInterface tests passed!'
-   
+
 end program test_StateInterface

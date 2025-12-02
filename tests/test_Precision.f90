@@ -36,17 +36,17 @@ program test_Precision
 
    ! Test 3: Real approximately equal function
    write(*,*) 'Test 3: Real approximately equal function'
-   
+
    ! Test with f4 values
    test_f4 = 1.0_f4
    result = rae(test_f4, 1.0_f4)
    call assert(result, "RAE should return true for equal f4 values")
-   
+
    ! Test with f8 values
    test_f8 = 1.0_f8
    result = rae(test_f8, 1.0_f8)
    call assert(result, "RAE should return true for equal f8 values")
-   
+
    ! Test with slightly different values (should still be true due to tiny tolerance)
    test_f4 = 1.0_f4
    result = rae(test_f4, 1.0_f4 + 1.0e-20_f4)
@@ -56,5 +56,5 @@ program test_Precision
    write(*,*) ''
 
    write(*,*) 'All Precision module tests passed!'
-   
+
 end program test_Precision

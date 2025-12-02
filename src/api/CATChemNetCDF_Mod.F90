@@ -156,7 +156,7 @@ module CATChemNetCDF_Mod
       procedure :: read_int_1d => netcdf_read_int_1d
       procedure :: read_string => netcdf_read_string
       generic :: read_var => read_real_1d, read_real_2d, read_real_3d, read_real_4d, &
-                            read_int_1d, read_string
+         read_int_1d, read_string
 
       ! Variable writing
       procedure :: write_real_1d => netcdf_write_real_1d
@@ -166,7 +166,7 @@ module CATChemNetCDF_Mod
       procedure :: write_int_1d => netcdf_write_int_1d
       procedure :: write_string => netcdf_write_string
       generic :: write_var => write_real_1d, write_real_2d, write_real_3d, write_real_4d, &
-                             write_int_1d, write_string
+         write_int_1d, write_string
 
       ! Attribute operations
       procedure :: read_attribute_real => netcdf_read_attr_real
@@ -287,16 +287,16 @@ contains
 
       ! Determine NetCDF mode with parallel access
       select case (trim(mode_str))
-      case ('r', 'read')
+       case ('r', 'read')
          this%mode = NETCDF_READ
          ncmode = IOR(NF90_NOWRITE, NF90_MPIIO)
-      case ('w', 'write')
+       case ('w', 'write')
          this%mode = NETCDF_WRITE
          ncmode = IOR(IOR(NF90_CLOBBER, NF90_NETCDF4), NF90_MPIIO)
-      case ('a', 'append')
+       case ('a', 'append')
          this%mode = NETCDF_APPEND
          ncmode = IOR(NF90_WRITE, NF90_MPIIO)
-      case default
+       case default
          local_rc = -1
          if (present(rc)) rc = local_rc
          return
@@ -375,7 +375,7 @@ contains
       do i = 1, min(this%ndims, MAX_DIMS)
          this%dim_ids(i) = i - 1  ! NetCDF uses 0-based indexing
          rc = nf90_inquire_dimension(this%ncid, this%dim_ids(i), &
-                                    this%dim_names(i), this%dim_sizes(i))
+            this%dim_names(i), this%dim_sizes(i))
          if (rc /= NF90_NOERR) return
       enddo
 #endif
@@ -961,7 +961,7 @@ contains
 
    !> Read meteorological data bundle
    subroutine netcdf_read_meteorology(this, temperature, pressure, humidity, &
-                                     wind_u, wind_v, surface_pressure, rc)
+      wind_u, wind_v, surface_pressure, rc)
       class(NetCDFFileType), intent(in) :: this
       real(fp), intent(out), allocatable, optional :: temperature(:,:,:)
       real(fp), intent(out), allocatable, optional :: pressure(:,:,:)

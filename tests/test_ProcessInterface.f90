@@ -77,7 +77,7 @@ program test_ProcessInterface
    write(*,*) 'Test 3: Process properties'
    block
       logical :: is_ready
-      
+
       is_ready = dummy_process%is_ready()
       ! Should be ready after initialization
       call assert(is_ready, "Process should be ready after initialization")
@@ -91,16 +91,16 @@ program test_ProcessInterface
    call dummy_process%deactivate()
    block
       logical :: is_ready
-      
+
       is_ready = dummy_process%is_ready()
       ! Should not be ready when deactivated
       ! Note: This might still pass depending on implementation
    end block
-   
+
    call dummy_process%activate()
    block
       logical :: is_ready
-      
+
       is_ready = dummy_process%is_ready()
       ! Should be ready after activation
       call assert(is_ready, "Process should be ready after activation")
@@ -131,6 +131,6 @@ program test_ProcessInterface
    write(*,*) ''
 
    write(*,*) 'All ProcessInterface tests passed!'
-   
+
 
 end program test_ProcessInterface

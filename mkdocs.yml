@@ -1,11 +1,11 @@
-site_name: CATChem - Chemical Transport Model
-site_description: Community Atmospheric Transport Chemistry Model
+site_name: CATChem Library and Modeling Component
+site_description: CATChem (Configurable Atmospheric Chemistry)
 site_author: CATChem Development Team
 site_url: https://catchem.readthedocs.io
 
 # Repository
-repo_name: CATChem/cc_restructure
-repo_url: https://github.com/CATChem/cc_restructure
+repo_name: UFS-Community/CATChem
+repo_url: https://github.com/UFS-Community/CATChem
 edit_uri: edit/main/docs/
 
 # Copyright
@@ -62,8 +62,7 @@ theme:
     - toc.integrate
 
   # Logo and favicon
-  logo: assets/images/catchem_logo.png
-  favicon: assets/images/favicon.ico
+  logo: ../data/CATChem_logo.png
 
   # Fonts
   font:
@@ -206,14 +205,11 @@ extra:
 
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/NOAA-GSL/CATChem
+      link: https://github.com/UFS-Community/CATChem
       name: CATChem on GitHub
     - icon: fontawesome/solid/globe
-      link: https://gsl.noaa.gov
-      name: NOAA Global Systems Laboratory
-    - icon: fontawesome/solid/envelope
-      link: mailto:gsl.help@noaa.gov
-      name: Contact GSL
+      link: https://ufs.epic.noaa.gov/
+      name: UFS - Unified Forecast System
 
   analytics:
     provider: google
@@ -225,73 +221,55 @@ nav:
     - index.md
     - What's New: whats-new.md
     - License: license.md
-
-  - Quick Start:
-    - quick-start/index.md
-    - Installation: quick-start/installation.md
-    - First Run: quick-start/first-run.md
-    - Basic Configuration: quick-start/configuration.md
-    - Examples: quick-start/examples.md
-
   - User Guide:
     - user-guide/index.md
-    - Model Overview: user-guide/model-overview.md
+    - Overview: user-guide/overview.md
+    - Build System: user-guide/build-system.md
+    - HPC Installation: user-guide/hpc-installation.md
     - Configuration System: user-guide/configuration.md
     - Input Files: user-guide/input-files.md
-    - Running CATChem: user-guide/running.md
-    - Output Files: user-guide/output-files.md
-    - Processes:
-      - user-guide/processes/index.md
-      - Atmospheric Chemistry: user-guide/processes/chemistry.md
-      - Emissions: user-guide/processes/emissions.md
-      - Dry Deposition: user-guide/processes/drydep.md
-      - Wet Deposition: user-guide/processes/wetdep.md
-      - Settling: user-guide/processes/settling.md
-      - Vertical Mixing: user-guide/processes/verticalmixing.md
-      - Dust Processes: user-guide/processes/dust.md
-      - Sea Salt: user-guide/processes/seasalt.md
-      - Plume Rise: user-guide/processes/plumerise.md
-    - Diagnostics: user-guide/diagnostics.md
-    - Performance Tuning: user-guide/performance.md
-    - Troubleshooting: user-guide/troubleshooting.md
-
+  - Processes:
+    - Process Overview: processes/index.md
+    - Dust Process: processes/dust_process.md
+    - External Emission Process: processes/externalemission_process.md
+    - Settling Process: processes/settling_process.md
+    - Settling Velocity Process: processes/settlingvelocity_process.md
+    - Test Process: processes/testprocess_process.md
+    - Vertical Diffusion Process: processes/vertical_diffusion_process.md
   - Developer Guide:
     - developer-guide/index.md
-    - Architecture Overview: developer-guide/architecture.md
-    - Build System: developer-guide/build-system.md
+    - Contributing Guide: developer-guide/contributing.md
     - Coding Standards: developer-guide/coding-standards.md
+    - Architecture Overview: developer-guide/architecture.md
     - Process Development:
       - developer-guide/processes/index.md
       - Process Architecture: developer-guide/processes/architecture.md
-      - Creating New Processes: developer-guide/processes/creating.md
-      - Process Templates: developer-guide/processes/templates.md
+      - Process Generator: developer-guide/processes/process-generator.md
+      - Creating Custom Processes: developer-guide/processes/creating.md
+      - Templates and Patterns: developer-guide/processes/templates.md
       - Testing Processes: developer-guide/processes/testing.md
-    - Core Systems:
-      - developer-guide/core/index.md
-      - State Management: developer-guide/core/state-management.md
-      - Column Virtualization: developer-guide/core/column-virtualization.md
-      - Diagnostic System: developer-guide/core/diagnostics.md
-      - Error Handling: developer-guide/core/error-handling.md
-      - Configuration System: developer-guide/core/configuration.md
     - Integration:
       - developer-guide/integration/index.md
       - CCPP Integration: developer-guide/integration/ccpp.md
       - NUOPC Integration: developer-guide/integration/nuopc.md
-      - FV3 Integration: developer-guide/integration/fv3.md
     - Testing: developer-guide/testing.md
-    - Documentation: developer-guide/documentation.md
-    - Contributing: developer-guide/contributing.md
-
+    - Documentation Guide: developer-guide/documentation.md
+  - Core Concepts:
+    - core-concepts/index.md
+    - State Management: core-concepts/state-management.md
+    - Column Virtualization: core-concepts/column-virtualization.md
+    - Diagnostic System: core-concepts/diagnostics.md
+    - Error Handling: core-concepts/error-handling.md
+    - Configuration System: core-concepts/configuration.md
   - API Reference:
     - api/index.md
-    - Auto-Generated API: CATChem/
-
-  - Guides:
-    - guides/index.md
-    - Process Infrastructure: guides/process-infrastructure.md
-    - Column Virtualization: guides/column-virtualization.md
-    - StateContainer: guides/statecontainer.md
-    - Diagnostic System: guides/diagnostic-system.md
-    - Configuration Management: guides/configuration-management.md
-    - Performance Optimization: guides/performance.md
-    - Integration Patterns: guides/integration-patterns.md
+    - Column Interface: api/column-interface.md
+    - Process Interface: api/process-interface.md
+    - State Management: api/state-management.md
+    - Configuration: api/configuration.md
+  - UFS-Chem:
+    - ufschem/index.md
+  - Community Engagement:
+    - community/index.md
+  # - Evaluation:
+  #   - evaluation/index.md

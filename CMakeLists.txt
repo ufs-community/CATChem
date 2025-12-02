@@ -6,6 +6,9 @@ project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Option to build NUOPC cap (defaults to OFF)
+option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
+
 include(CMakePrintHelpers)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -49,6 +52,7 @@ if(
     -ffpe-trap=invalid,zero,overflow
     -fbacktrace
     -fmax-errors=0
+    -ffree-line-length-none
   )
 elseif(
   CMAKE_Fortran_COMPILER_ID MATCHES "Intel"
@@ -94,8 +98,10 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
   find_package(NetCDF REQUIRED COMPONENTS Fortran)
 endif()
 
-if(NOT TARGET esmf)
-  find_package(ESMF REQUIRED)
+if(BUILD_NUOPC)
+  if(NOT TARGET esmf)
+    find_package(ESMF REQUIRED)
+  endif()
 endif()
 
 # Enable testing for standalone builds
@@ -103,66 +109,78 @@ enable_testing()
 
 add_subdirectory(src)
 add_subdirectory(tests)
-add_subdirectory(drivers/nuopc)
 
-# Copy module files from include/ to mod/ for UFS integration during build
-# add_custom_target(copy_modules_to_mod ALL
-#   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/../mod
-#   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/include ${CMAKE_BINARY_DIR}/../mod
-#   DEPENDS NUOPC_CATChem_cap CATChem_core
-#   COMMENT "Copying module files from include/ to mod/ for UFS integration"
-# )
+if(BUILD_NUOPC)
+  add_subdirectory(drivers/nuopc)
 
-# Create a self-contained aqm library by combining all necessary object files
-# This avoids export dependency issues by not linking to other CMake targets
+  # Copy module files from include/ to mod/ for UFS integration during build
+  # add_custom_target(copy_modules_to_mod ALL
+  #   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/../mod
+  #   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/include ${CMAKE_BINARY_DIR}/../mod
+  #   DEPENDS NUOPC_CATChem_cap CATChem_core
+  #   COMMENT "Copying module files from include/ to mod/ for UFS integration"
+  # )
 
-# Create aqm library directly from source files to avoid dependency exports
-add_library(aqm STATIC
-  drivers/nuopc/aqmio.F90
-  drivers/nuopc/catchem_nuopc_cap.F90 
-  drivers/nuopc/catchem_nuopc_interface.F90
-)
+  # Create a self-contained catchem library by combining all necessary object files
+  # This avoids export dependency issues by not linking to other CMake targets
 
-# Link only to external dependencies (not internal CATChem targets)
-target_link_libraries(aqm PUBLIC esmf NetCDF::NetCDF_Fortran)
+  # Create catchem library directly from source files to avoid dependency exports
+  add_library(
+    cc_nuopc
+    STATIC
+    drivers/nuopc/aqmio.F90
+    drivers/nuopc/catchem_nuopc_cap.F90
+    drivers/nuopc/catchem_nuopc_interface.F90
+  )
 
-# Manually handle the CATChem dependencies by linking to built libraries
-# Only need to depend on CATChem - it already depends on CATChem_core, yaml_interface, etc.
-add_dependencies(aqm CATChem)
+  # Link only to external dependencies (not internal CATChem targets)
+  target_link_libraries(cc_nuopc PUBLIC esmf NetCDF::NetCDF_Fortran)
 
-# Link to library files in dependency order (most dependent first)
-target_link_libraries(aqm PRIVATE 
-  $<TARGET_FILE:CATChem>
-  $<TARGET_FILE:CATChem_process_seasalt>
-  $<TARGET_FILE:CATChem_core>
-  $<TARGET_FILE:yaml_interface>
-  $<TARGET_FILE:catchem_utilities>
-)
+  # Manually handle the CATChem dependencies by linking to built libraries
+  # Only need to depend on CATChem - it already depends on CATChem_core, yaml_interface, etc.
+  add_dependencies(cc_nuopc CATChem)
 
-# Include directories for compilation
-target_include_directories(aqm PRIVATE
-  ${CMAKE_BINARY_DIR}/include
-  #$<TARGET_PROPERTY:CATChem,INTERFACE_INCLUDE_DIRECTORIES>
-  #$<TARGET_PROPERTY:esmf,INTERFACE_INCLUDE_DIRECTORIES>
-  #$<TARGET_PROPERTY:NetCDF::NetCDF_Fortran,INTERFACE_INCLUDE_DIRECTORIES>
-)
+  # Link to library files in dependency order (most dependent first)
+  target_link_libraries(
+    cc_nuopc
+    PRIVATE
+      $<TARGET_FILE:CATChem>
+      $<TARGET_FILE:CATChem_process_seasalt>
+      $<TARGET_FILE:CATChem_core>
+      $<TARGET_FILE:yaml_interface>
+      $<TARGET_FILE:catchem_utilities>
+  )
 
-set_target_properties(aqm PROPERTIES 
-  Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../mod
-  EXPORT_NAME aqm
-)
+  # Include directories for compilation
+  target_include_directories(
+    cc_nuopc
+    PRIVATE ${CMAKE_BINARY_DIR}/include
+    #$<TARGET_PROPERTY:CATChem,INTERFACE_INCLUDE_DIRECTORIES>
+    #$<TARGET_PROPERTY:esmf,INTERFACE_INCLUDE_DIRECTORIES>
+    #$<TARGET_PROPERTY:NetCDF::NetCDF_Fortran,INTERFACE_INCLUDE_DIRECTORIES>
+  )
 
-target_compile_options(aqm PRIVATE ${_catchem_compiler_options})
+  set_target_properties(
+    cc_nuopc
+    PROPERTIES
+      Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../mod
+      EXPORT_NAME cc_nuopc
+  )
 
-###############################################################################
-### Installation and Export for UFS integration
-###############################################################################
+  target_compile_options(cc_nuopc PRIVATE ${_catchem_compiler_options})
 
-# Install only the self-contained aqm library - all dependencies are linked directly
-install(TARGETS aqm
-        EXPORT ufs-config
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+  ###############################################################################
+  ### Installation and Export for UFS integration
+  ###############################################################################
+
+  # Install only the self-contained catchem library - all dependencies are linked directly
+  install(
+    TARGETS cc_nuopc
+    EXPORT ufs-config
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+  )
+endif()
 
 # Install module files to both locations for compatibility
 # Keep include/ for standalone CATChem, add mod/ for UFS integration
@@ -176,4 +194,4 @@ install(TARGETS aqm
 #         COMPONENT Development
 #         FILES_MATCHING PATTERN "*.mod")
 
-# Note: aqm target is exported via ufs-config export set in UFS CMakeLists.txt
+# Note: cc_nuopc target is exported via ufs-config export set in UFS CMakeLists.txt

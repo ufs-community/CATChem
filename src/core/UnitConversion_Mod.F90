@@ -125,8 +125,8 @@ contains
 
    !> \brief Convert concentration units between different systems
    subroutine convert_concentration(input_value, input_units, output_units, &
-                                   molecular_weight, temperature, pressure, &
-                                   output_value, rc)
+      molecular_weight, temperature, pressure, &
+      output_value, rc)
       real(fp), intent(in) :: input_value
       character(len=*), intent(in) :: input_units, output_units
       real(fp), intent(in) :: molecular_weight  !< [g/mol]
@@ -142,19 +142,19 @@ contains
       call converter%init(temperature, pressure)
 
       select case (trim(input_units) // ' -> ' // trim(output_units))
-      case ('ppbv -> ug/m3', 'ppb -> ug/m3')
+       case ('ppbv -> ug/m3', 'ppb -> ug/m3')
          output_value = converter%ppbv_to_ugm3(input_value, molecular_weight)
-      case ('ug/m3 -> ppbv', 'ug/m3 -> ppb')
+       case ('ug/m3 -> ppbv', 'ug/m3 -> ppb')
          output_value = converter%ugm3_to_ppbv(input_value, molecular_weight)
-      case ('ppmv -> mg/m3', 'ppm -> mg/m3')
+       case ('ppmv -> mg/m3', 'ppm -> mg/m3')
          output_value = converter%ppmv_to_mgm3(input_value, molecular_weight)
-      case ('mg/m3 -> ppmv', 'mg/m3 -> ppm')
+       case ('mg/m3 -> ppmv', 'mg/m3 -> ppm')
          output_value = converter%mgm3_to_ppmv(input_value, molecular_weight)
-      case ('molec/cm3 -> ppbv')
+       case ('molec/cm3 -> ppbv')
          output_value = converter%molcm3_to_ppbv(input_value, temperature, pressure)
-      case ('ppbv -> molec/cm3')
+       case ('ppbv -> molec/cm3')
          output_value = converter%ppbv_to_molcm3(input_value, temperature, pressure)
-      case default
+       case default
          rc = CC_FAILURE
          output_value = input_value
       end select
@@ -174,17 +174,17 @@ contains
 
       ! First convert to Pa
       select case (trim(input_units))
-      case ('Pa')
+       case ('Pa')
          pressure_pa = pressure_in
-      case ('hPa', 'mb', 'mbar')
+       case ('hPa', 'mb', 'mbar')
          pressure_pa = pressure_in / PA_TO_HPA
-      case ('atm')
+       case ('atm')
          pressure_pa = pressure_in / PA_TO_ATM
-      case ('Torr', 'mmHg')
+       case ('Torr', 'mmHg')
          pressure_pa = pressure_in / PA_TO_TORR
-      case ('psi')
+       case ('psi')
          pressure_pa = pressure_in * 6894.76_fp
-      case default
+       case default
          rc = CC_FAILURE
          pressure_out = pressure_in
          return
@@ -192,17 +192,17 @@ contains
 
       ! Then convert from Pa to output units
       select case (trim(output_units))
-      case ('Pa')
+       case ('Pa')
          pressure_out = pressure_pa
-      case ('hPa', 'mb', 'mbar')
+       case ('hPa', 'mb', 'mbar')
          pressure_out = pressure_pa * PA_TO_HPA
-      case ('atm')
+       case ('atm')
          pressure_out = pressure_pa * PA_TO_ATM
-      case ('Torr', 'mmHg')
+       case ('Torr', 'mmHg')
          pressure_out = pressure_pa * PA_TO_TORR
-      case ('psi')
+       case ('psi')
          pressure_out = pressure_pa / 6894.76_fp
-      case default
+       case default
          rc = CC_FAILURE
          pressure_out = pressure_in
       end select
@@ -222,13 +222,13 @@ contains
 
       ! First convert to Kelvin
       select case (trim(input_units))
-      case ('K', 'Kelvin')
+       case ('K', 'Kelvin')
          temp_k = temp_in
-      case ('C', 'Celsius')
+       case ('C', 'Celsius')
          temp_k = temp_in + 273.15_fp
-      case ('F', 'Fahrenheit')
+       case ('F', 'Fahrenheit')
          temp_k = (temp_in - 32.0_fp) * 5.0_fp/9.0_fp + 273.15_fp
-      case default
+       case default
          rc = CC_FAILURE
          temp_out = temp_in
          return
@@ -236,13 +236,13 @@ contains
 
       ! Then convert from Kelvin to output units
       select case (trim(output_units))
-      case ('K', 'Kelvin')
+       case ('K', 'Kelvin')
          temp_out = temp_k
-      case ('C', 'Celsius')
+       case ('C', 'Celsius')
          temp_out = temp_k - 273.15_fp
-      case ('F', 'Fahrenheit')
+       case ('F', 'Fahrenheit')
          temp_out = (temp_k - 273.15_fp) * 9.0_fp/5.0_fp + 32.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          temp_out = temp_in
       end select
@@ -263,19 +263,19 @@ contains
 
       ! First convert to kg/m²/s
       select case (trim(input_units))
-      case ('kg/m2/s')
+       case ('kg/m2/s')
          flux_kgm2s = flux_in
-      case ('g/m2/s')
+       case ('g/m2/s')
          flux_kgm2s = flux_in * 1.0e-3_fp
-      case ('mg/m2/s')
+       case ('mg/m2/s')
          flux_kgm2s = flux_in * 1.0e-6_fp
-      case ('ug/m2/s')
+       case ('ug/m2/s')
          flux_kgm2s = flux_in * 1.0e-9_fp
-      case ('mol/cm2/s')
+       case ('mol/cm2/s')
          flux_kgm2s = flux_in * molecular_weight * 1.0e-3_fp * 1.0e4_fp
-      case ('molec/cm2/s')
+       case ('molec/cm2/s')
          flux_kgm2s = flux_in * molecular_weight / AVO * 1.0e-3_fp * 1.0e4_fp
-      case default
+       case default
          rc = CC_FAILURE
          flux_out = flux_in
          return
@@ -283,19 +283,19 @@ contains
 
       ! Then convert from kg/m²/s to output units
       select case (trim(output_units))
-      case ('kg/m2/s')
+       case ('kg/m2/s')
          flux_out = flux_kgm2s
-      case ('g/m2/s')
+       case ('g/m2/s')
          flux_out = flux_kgm2s * 1.0e3_fp
-      case ('mg/m2/s')
+       case ('mg/m2/s')
          flux_out = flux_kgm2s * 1.0e6_fp
-      case ('ug/m2/s')
+       case ('ug/m2/s')
          flux_out = flux_kgm2s * 1.0e9_fp
-      case ('mol/cm2/s')
+       case ('mol/cm2/s')
          flux_out = flux_kgm2s / molecular_weight * 1.0e3_fp * 1.0e-4_fp
-      case ('molec/cm2/s')
+       case ('molec/cm2/s')
          flux_out = flux_kgm2s / molecular_weight * AVO * 1.0e3_fp * 1.0e-4_fp
-      case default
+       case default
          rc = CC_FAILURE
          flux_out = flux_in
       end select
@@ -315,15 +315,15 @@ contains
 
       ! First convert to s⁻¹
       select case (trim(input_units))
-      case ('s-1', '/s', '1/s')
+       case ('s-1', '/s', '1/s')
          rate_s = rate_in
-      case ('min-1', '/min', '1/min')
+       case ('min-1', '/min', '1/min')
          rate_s = rate_in / 60.0_fp
-      case ('hr-1', 'h-1', '/hr', '/h', '1/hr', '1/h')
+       case ('hr-1', 'h-1', '/hr', '/h', '1/hr', '1/h')
          rate_s = rate_in / 3600.0_fp
-      case ('day-1', 'd-1', '/day', '/d', '1/day', '1/d')
+       case ('day-1', 'd-1', '/day', '/d', '1/day', '1/d')
          rate_s = rate_in / 86400.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          rate_out = rate_in
          return
@@ -331,15 +331,15 @@ contains
 
       ! Then convert from s⁻¹ to output units
       select case (trim(output_units))
-      case ('s-1', '/s', '1/s')
+       case ('s-1', '/s', '1/s')
          rate_out = rate_s
-      case ('min-1', '/min', '1/min')
+       case ('min-1', '/min', '1/min')
          rate_out = rate_s * 60.0_fp
-      case ('hr-1', 'h-1', '/hr', '/h', '1/hr', '1/h')
+       case ('hr-1', 'h-1', '/hr', '/h', '1/hr', '1/h')
          rate_out = rate_s * 3600.0_fp
-      case ('day-1', 'd-1', '/day', '/d', '1/day', '1/d')
+       case ('day-1', 'd-1', '/day', '/d', '1/day', '1/d')
          rate_out = rate_s * 86400.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          rate_out = rate_in
       end select
@@ -359,21 +359,21 @@ contains
 
       ! First convert to kg
       select case (trim(input_units))
-      case ('kg')
+       case ('kg')
          mass_kg = mass_in
-      case ('g')
+       case ('g')
          mass_kg = mass_in * 1.0e-3_fp
-      case ('mg')
+       case ('mg')
          mass_kg = mass_in * 1.0e-6_fp
-      case ('ug')
+       case ('ug')
          mass_kg = mass_in * 1.0e-9_fp
-      case ('ng')
+       case ('ng')
          mass_kg = mass_in * 1.0e-12_fp
-      case ('Tg')
+       case ('Tg')
          mass_kg = mass_in * 1.0e9_fp
-      case ('Gg')
+       case ('Gg')
          mass_kg = mass_in * 1.0e6_fp
-      case default
+       case default
          rc = CC_FAILURE
          mass_out = mass_in
          return
@@ -381,21 +381,21 @@ contains
 
       ! Then convert from kg to output units
       select case (trim(output_units))
-      case ('kg')
+       case ('kg')
          mass_out = mass_kg
-      case ('g')
+       case ('g')
          mass_out = mass_kg * 1.0e3_fp
-      case ('mg')
+       case ('mg')
          mass_out = mass_kg * 1.0e6_fp
-      case ('ug')
+       case ('ug')
          mass_out = mass_kg * 1.0e9_fp
-      case ('ng')
+       case ('ng')
          mass_out = mass_kg * 1.0e12_fp
-      case ('Tg')
+       case ('Tg')
          mass_out = mass_kg * 1.0e-9_fp
-      case ('Gg')
+       case ('Gg')
          mass_out = mass_kg * 1.0e-6_fp
-      case default
+       case default
          rc = CC_FAILURE
          mass_out = mass_in
       end select
@@ -434,25 +434,25 @@ contains
       ! Simplified implementation - actual implementation would parse chemical formula
       ! For now, return common molecular weights based on formula
       select case (trim(formula))
-      case ('O3')
+       case ('O3')
          mw = 48.0_fp
-      case ('NO2')
+       case ('NO2')
          mw = 46.0_fp
-      case ('NO')
+       case ('NO')
          mw = 30.0_fp
-      case ('CO')
+       case ('CO')
          mw = 28.0_fp
-      case ('SO2')
+       case ('SO2')
          mw = 64.1_fp
-      case ('NH3')
+       case ('NH3')
          mw = 17.0_fp
-      case ('CH4')
+       case ('CH4')
          mw = 16.0_fp
-      case ('H2O')
+       case ('H2O')
          mw = 18.0_fp
-      case ('CO2')
+       case ('CO2')
          mw = 44.0_fp
-      case default
+       case default
          mw = AIRMW  ! Default to air molecular weight
       end select
 
@@ -600,7 +600,7 @@ contains
 
    !> \brief Calculate column mass [kg/m²]
    function converter_calculate_column_mass(this, concentrations, layer_heights, &
-                                          molecular_weight) result(column_mass)
+      molecular_weight) result(column_mass)
       class(UnitConverterType), intent(in) :: this
       real(fp), intent(in) :: concentrations(:) !< [ppbv]
       real(fp), intent(in) :: layer_heights(:)  !< [m]
@@ -614,7 +614,7 @@ contains
       do k = 1, size(concentrations)
          ! Convert ppbv to kg/m³
          mass_density = concentrations(k) * molecular_weight * this%pressure / &
-                       (R_GAS * this%temperature) * 1.0e-12_fp
+            (R_GAS * this%temperature) * 1.0e-12_fp
          column_mass = column_mass + mass_density * layer_heights(k)
       end do
 
@@ -634,7 +634,7 @@ contains
       do k = 1, size(concentrations)
          number_density = this%pressure / (BOLTZMANN * this%temperature) * 1.0e-6_fp
          column_density = column_density + concentrations(k) * number_density * &
-                         layer_heights(k) * 1.0e-9_fp * 1.0e2_fp
+            layer_heights(k) * 1.0e-9_fp * 1.0e2_fp
       end do
 
       ! Convert to Dobson Units (1 DU = 2.687 × 10¹⁶ molecules/cm²)
@@ -693,25 +693,25 @@ contains
 
       ! First convert to meters
       select case (trim(input_units))
-      case ('m', 'meter', 'metre')
+       case ('m', 'meter', 'metre')
          length_m = length_in
-      case ('cm', 'centimeter')
+       case ('cm', 'centimeter')
          length_m = length_in * 0.01_fp
-      case ('mm', 'millimeter')
+       case ('mm', 'millimeter')
          length_m = length_in * 0.001_fp
-      case ('km', 'kilometer')
+       case ('km', 'kilometer')
          length_m = length_in * 1000.0_fp
-      case ('in', 'inch', 'inches')
+       case ('in', 'inch', 'inches')
          length_m = length_in * INCH_TO_M
-      case ('ft', 'foot', 'feet')
+       case ('ft', 'foot', 'feet')
          length_m = length_in * FOOT_TO_M
-      case ('yd', 'yard', 'yards')
+       case ('yd', 'yard', 'yards')
          length_m = length_in * YARD_TO_M
-      case ('mi', 'mile', 'miles')
+       case ('mi', 'mile', 'miles')
          length_m = length_in * MILE_TO_M
-      case ('nmi', 'nautical_mile')
+       case ('nmi', 'nautical_mile')
          length_m = length_in * 1852.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          length_out = length_in
          return
@@ -719,25 +719,25 @@ contains
 
       ! Then convert from meters to output units
       select case (trim(output_units))
-      case ('m', 'meter', 'metre')
+       case ('m', 'meter', 'metre')
          length_out = length_m
-      case ('cm', 'centimeter')
+       case ('cm', 'centimeter')
          length_out = length_m / 0.01_fp
-      case ('mm', 'millimeter')
+       case ('mm', 'millimeter')
          length_out = length_m / 0.001_fp
-      case ('km', 'kilometer')
+       case ('km', 'kilometer')
          length_out = length_m / 1000.0_fp
-      case ('in', 'inch', 'inches')
+       case ('in', 'inch', 'inches')
          length_out = length_m / INCH_TO_M
-      case ('ft', 'foot', 'feet')
+       case ('ft', 'foot', 'feet')
          length_out = length_m / FOOT_TO_M
-      case ('yd', 'yard', 'yards')
+       case ('yd', 'yard', 'yards')
          length_out = length_m / YARD_TO_M
-      case ('mi', 'mile', 'miles')
+       case ('mi', 'mile', 'miles')
          length_out = length_m / MILE_TO_M
-      case ('nmi', 'nautical_mile')
+       case ('nmi', 'nautical_mile')
          length_out = length_m / 1852.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          length_out = length_in
       end select
@@ -757,23 +757,23 @@ contains
 
       ! First convert to m²
       select case (trim(input_units))
-      case ('m2', 'm^2', 'sq_m')
+       case ('m2', 'm^2', 'sq_m')
          area_m2 = area_in
-      case ('cm2', 'cm^2', 'sq_cm')
+       case ('cm2', 'cm^2', 'sq_cm')
          area_m2 = area_in * 1.0e-4_fp
-      case ('km2', 'km^2', 'sq_km')
+       case ('km2', 'km^2', 'sq_km')
          area_m2 = area_in * 1.0e6_fp
-      case ('in2', 'in^2', 'sq_in')
+       case ('in2', 'in^2', 'sq_in')
          area_m2 = area_in * (INCH_TO_M**2)
-      case ('ft2', 'ft^2', 'sq_ft')
+       case ('ft2', 'ft^2', 'sq_ft')
          area_m2 = area_in * SQFT_TO_M2
-      case ('yd2', 'yd^2', 'sq_yd')
+       case ('yd2', 'yd^2', 'sq_yd')
          area_m2 = area_in * (YARD_TO_M**2)
-      case ('acre', 'acres')
+       case ('acre', 'acres')
          area_m2 = area_in * ACRE_TO_M2
-      case ('mi2', 'mi^2', 'sq_mi')
+       case ('mi2', 'mi^2', 'sq_mi')
          area_m2 = area_in * (MILE_TO_M**2)
-      case default
+       case default
          rc = CC_FAILURE
          area_out = area_in
          return
@@ -781,23 +781,23 @@ contains
 
       ! Then convert from m² to output units
       select case (trim(output_units))
-      case ('m2', 'm^2', 'sq_m')
+       case ('m2', 'm^2', 'sq_m')
          area_out = area_m2
-      case ('cm2', 'cm^2', 'sq_cm')
+       case ('cm2', 'cm^2', 'sq_cm')
          area_out = area_m2 / 1.0e-4_fp
-      case ('km2', 'km^2', 'sq_km')
+       case ('km2', 'km^2', 'sq_km')
          area_out = area_m2 / 1.0e6_fp
-      case ('in2', 'in^2', 'sq_in')
+       case ('in2', 'in^2', 'sq_in')
          area_out = area_m2 / (INCH_TO_M**2)
-      case ('ft2', 'ft^2', 'sq_ft')
+       case ('ft2', 'ft^2', 'sq_ft')
          area_out = area_m2 / SQFT_TO_M2
-      case ('yd2', 'yd^2', 'sq_yd')
+       case ('yd2', 'yd^2', 'sq_yd')
          area_out = area_m2 / (YARD_TO_M**2)
-      case ('acre', 'acres')
+       case ('acre', 'acres')
          area_out = area_m2 / ACRE_TO_M2
-      case ('mi2', 'mi^2', 'sq_mi')
+       case ('mi2', 'mi^2', 'sq_mi')
          area_out = area_m2 / (MILE_TO_M**2)
-      case default
+       case default
          rc = CC_FAILURE
          area_out = area_in
       end select
@@ -817,29 +817,29 @@ contains
 
       ! First convert to m³
       select case (trim(input_units))
-      case ('m3', 'm^3', 'cu_m')
+       case ('m3', 'm^3', 'cu_m')
          volume_m3 = volume_in
-      case ('cm3', 'cm^3', 'cu_cm')
+       case ('cm3', 'cm^3', 'cu_cm')
          volume_m3 = volume_in * 1.0e-6_fp
-      case ('L', 'liter', 'litre')
+       case ('L', 'liter', 'litre')
          volume_m3 = volume_in * 1.0e-3_fp
-      case ('mL', 'ml', 'milliliter')
+       case ('mL', 'ml', 'milliliter')
          volume_m3 = volume_in * 1.0e-6_fp
-      case ('in3', 'in^3', 'cu_in')
+       case ('in3', 'in^3', 'cu_in')
          volume_m3 = volume_in * (INCH_TO_M**3)
-      case ('ft3', 'ft^3', 'cu_ft')
+       case ('ft3', 'ft^3', 'cu_ft')
          volume_m3 = volume_in * CUFT_TO_M3
-      case ('yd3', 'yd^3', 'cu_yd')
+       case ('yd3', 'yd^3', 'cu_yd')
          volume_m3 = volume_in * (YARD_TO_M**3)
-      case ('gal', 'gallon', 'us_gal')
+       case ('gal', 'gallon', 'us_gal')
          volume_m3 = volume_in * GALLON_TO_M3
-      case ('qt', 'quart')
+       case ('qt', 'quart')
          volume_m3 = volume_in * GALLON_TO_M3 / 4.0_fp
-      case ('pt', 'pint')
+       case ('pt', 'pint')
          volume_m3 = volume_in * GALLON_TO_M3 / 8.0_fp
-      case ('fl_oz', 'fluid_ounce')
+       case ('fl_oz', 'fluid_ounce')
          volume_m3 = volume_in * GALLON_TO_M3 / 128.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          volume_out = volume_in
          return
@@ -847,29 +847,29 @@ contains
 
       ! Then convert from m³ to output units
       select case (trim(output_units))
-      case ('m3', 'm^3', 'cu_m')
+       case ('m3', 'm^3', 'cu_m')
          volume_out = volume_m3
-      case ('cm3', 'cm^3', 'cu_cm')
+       case ('cm3', 'cm^3', 'cu_cm')
          volume_out = volume_m3 / 1.0e-6_fp
-      case ('L', 'liter', 'litre')
+       case ('L', 'liter', 'litre')
          volume_out = volume_m3 / 1.0e-3_fp
-      case ('mL', 'ml', 'milliliter')
+       case ('mL', 'ml', 'milliliter')
          volume_out = volume_m3 / 1.0e-6_fp
-      case ('in3', 'in^3', 'cu_in')
+       case ('in3', 'in^3', 'cu_in')
          volume_out = volume_m3 / (INCH_TO_M**3)
-      case ('ft3', 'ft^3', 'cu_ft')
+       case ('ft3', 'ft^3', 'cu_ft')
          volume_out = volume_m3 / CUFT_TO_M3
-      case ('yd3', 'yd^3', 'cu_yd')
+       case ('yd3', 'yd^3', 'cu_yd')
          volume_out = volume_m3 / (YARD_TO_M**3)
-      case ('gal', 'gallon', 'us_gal')
+       case ('gal', 'gallon', 'us_gal')
          volume_out = volume_m3 / GALLON_TO_M3
-      case ('qt', 'quart')
+       case ('qt', 'quart')
          volume_out = volume_m3 / GALLON_TO_M3 * 4.0_fp
-      case ('pt', 'pint')
+       case ('pt', 'pint')
          volume_out = volume_m3 / GALLON_TO_M3 * 8.0_fp
-      case ('fl_oz', 'fluid_ounce')
+       case ('fl_oz', 'fluid_ounce')
          volume_out = volume_m3 / GALLON_TO_M3 * 128.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          volume_out = volume_in
       end select
@@ -889,21 +889,21 @@ contains
 
       ! First convert to m/s
       select case (trim(input_units))
-      case ('m/s', 'ms', 'mps')
+       case ('m/s', 'ms', 'mps')
          speed_ms = speed_in
-      case ('km/h', 'kmh', 'kph')
+       case ('km/h', 'kmh', 'kph')
          speed_ms = speed_in / 3.6_fp
-      case ('cm/s', 'cms')
+       case ('cm/s', 'cms')
          speed_ms = speed_in * 0.01_fp
-      case ('ft/s', 'fts', 'fps')
+       case ('ft/s', 'fts', 'fps')
          speed_ms = speed_in * FTS_TO_MS
-      case ('mph', 'mi/h')
+       case ('mph', 'mi/h')
          speed_ms = speed_in * MPH_TO_MS
-      case ('knot', 'kn', 'kt')
+       case ('knot', 'kn', 'kt')
          speed_ms = speed_in * KNOT_TO_MS
-      case ('in/s', 'ips')
+       case ('in/s', 'ips')
          speed_ms = speed_in * INCH_TO_M
-      case default
+       case default
          rc = CC_FAILURE
          speed_out = speed_in
          return
@@ -911,21 +911,21 @@ contains
 
       ! Then convert from m/s to output units
       select case (trim(output_units))
-      case ('m/s', 'ms', 'mps')
+       case ('m/s', 'ms', 'mps')
          speed_out = speed_ms
-      case ('km/h', 'kmh', 'kph')
+       case ('km/h', 'kmh', 'kph')
          speed_out = speed_ms * 3.6_fp
-      case ('cm/s', 'cms')
+       case ('cm/s', 'cms')
          speed_out = speed_ms / 0.01_fp
-      case ('ft/s', 'fts', 'fps')
+       case ('ft/s', 'fts', 'fps')
          speed_out = speed_ms / FTS_TO_MS
-      case ('mph', 'mi/h')
+       case ('mph', 'mi/h')
          speed_out = speed_ms / MPH_TO_MS
-      case ('knot', 'kn', 'kt')
+       case ('knot', 'kn', 'kt')
          speed_out = speed_ms / KNOT_TO_MS
-      case ('in/s', 'ips')
+       case ('in/s', 'ips')
          speed_out = speed_ms / INCH_TO_M
-      case default
+       case default
          rc = CC_FAILURE
          speed_out = speed_in
       end select
@@ -945,19 +945,19 @@ contains
 
       ! First convert to Newtons
       select case (trim(input_units))
-      case ('N', 'newton', 'newtons')
+       case ('N', 'newton', 'newtons')
          force_n = force_in
-      case ('kN', 'kilonewton')
+       case ('kN', 'kilonewton')
          force_n = force_in * 1000.0_fp
-      case ('dyne', 'dynes')
+       case ('dyne', 'dynes')
          force_n = force_in * 1.0e-5_fp
-      case ('lbf', 'lb', 'pound_force')
+       case ('lbf', 'lb', 'pound_force')
          force_n = force_in * LBF_TO_N
-      case ('ozf', 'oz', 'ounce_force')
+       case ('ozf', 'oz', 'ounce_force')
          force_n = force_in * LBF_TO_N / 16.0_fp
-      case ('kip', 'kips')
+       case ('kip', 'kips')
          force_n = force_in * LBF_TO_N * 1000.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          force_out = force_in
          return
@@ -965,19 +965,19 @@ contains
 
       ! Then convert from Newtons to output units
       select case (trim(output_units))
-      case ('N', 'newton', 'newtons')
+       case ('N', 'newton', 'newtons')
          force_out = force_n
-      case ('kN', 'kilonewton')
+       case ('kN', 'kilonewton')
          force_out = force_n / 1000.0_fp
-      case ('dyne', 'dynes')
+       case ('dyne', 'dynes')
          force_out = force_n / 1.0e-5_fp
-      case ('lbf', 'lb', 'pound_force')
+       case ('lbf', 'lb', 'pound_force')
          force_out = force_n / LBF_TO_N
-      case ('ozf', 'oz', 'ounce_force')
+       case ('ozf', 'oz', 'ounce_force')
          force_out = force_n / LBF_TO_N * 16.0_fp
-      case ('kip', 'kips')
+       case ('kip', 'kips')
          force_out = force_n / (LBF_TO_N * 1000.0_fp)
-      case default
+       case default
          rc = CC_FAILURE
          force_out = force_in
       end select
@@ -997,29 +997,29 @@ contains
 
       ! First convert to Pascals
       select case (trim(input_units))
-      case ('Pa', 'pascal')
+       case ('Pa', 'pascal')
          pressure_pa = pressure_in
-      case ('kPa', 'kilopascal')
+       case ('kPa', 'kilopascal')
          pressure_pa = pressure_in * 1000.0_fp
-      case ('MPa', 'megapascal')
+       case ('MPa', 'megapascal')
          pressure_pa = pressure_in * 1.0e6_fp
-      case ('hPa', 'hectopascal', 'mb', 'mbar', 'millibar')
+       case ('hPa', 'hectopascal', 'mb', 'mbar', 'millibar')
          pressure_pa = pressure_in * 100.0_fp
-      case ('bar')
+       case ('bar')
          pressure_pa = pressure_in * 1.0e5_fp
-      case ('atm', 'atmosphere')
+       case ('atm', 'atmosphere')
          pressure_pa = pressure_in * ATM
-      case ('Torr', 'mmHg')
+       case ('Torr', 'mmHg')
          pressure_pa = pressure_in * 133.3224_fp
-      case ('psi', 'lb/in2')
+       case ('psi', 'lb/in2')
          pressure_pa = pressure_in * PSI_TO_PA
-      case ('psf', 'lb/ft2')
+       case ('psf', 'lb/ft2')
          pressure_pa = pressure_in * PSI_TO_PA / 144.0_fp
-      case ('inHg', 'in_hg')
+       case ('inHg', 'in_hg')
          pressure_pa = pressure_in * INHG_TO_PA
-      case ('inH2O', 'in_h2o')
+       case ('inH2O', 'in_h2o')
          pressure_pa = pressure_in * 248.84_fp
-      case default
+       case default
          rc = CC_FAILURE
          pressure_out = pressure_in
          return
@@ -1027,29 +1027,29 @@ contains
 
       ! Then convert from Pascals to output units
       select case (trim(output_units))
-      case ('Pa', 'pascal')
+       case ('Pa', 'pascal')
          pressure_out = pressure_pa
-      case ('kPa', 'kilopascal')
+       case ('kPa', 'kilopascal')
          pressure_out = pressure_pa / 1000.0_fp
-      case ('MPa', 'megapascal')
+       case ('MPa', 'megapascal')
          pressure_out = pressure_pa / 1.0e6_fp
-      case ('hPa', 'hectopascal', 'mb', 'mbar', 'millibar')
+       case ('hPa', 'hectopascal', 'mb', 'mbar', 'millibar')
          pressure_out = pressure_pa / 100.0_fp
-      case ('bar')
+       case ('bar')
          pressure_out = pressure_pa / 1.0e5_fp
-      case ('atm', 'atmosphere')
+       case ('atm', 'atmosphere')
          pressure_out = pressure_pa / ATM
-      case ('Torr', 'mmHg')
+       case ('Torr', 'mmHg')
          pressure_out = pressure_pa / 133.3224_fp
-      case ('psi', 'lb/in2')
+       case ('psi', 'lb/in2')
          pressure_out = pressure_pa / PSI_TO_PA
-      case ('psf', 'lb/ft2')
+       case ('psf', 'lb/ft2')
          pressure_out = pressure_pa / PSI_TO_PA * 144.0_fp
-      case ('inHg', 'in_hg')
+       case ('inHg', 'in_hg')
          pressure_out = pressure_pa / INHG_TO_PA
-      case ('inH2O', 'in_h2o')
+       case ('inH2O', 'in_h2o')
          pressure_out = pressure_pa / 248.84_fp
-      case default
+       case default
          rc = CC_FAILURE
          pressure_out = pressure_in
       end select
@@ -1069,15 +1069,15 @@ contains
 
       ! First convert to Kelvin
       select case (trim(input_units))
-      case ('K', 'Kelvin', 'kelvin')
+       case ('K', 'Kelvin', 'kelvin')
          temp_k = temp_in
-      case ('C', 'Celsius', 'celsius')
+       case ('C', 'Celsius', 'celsius')
          temp_k = temp_in + 273.15_fp
-      case ('F', 'Fahrenheit', 'fahrenheit')
+       case ('F', 'Fahrenheit', 'fahrenheit')
          temp_k = (temp_in - 32.0_fp) * 5.0_fp/9.0_fp + 273.15_fp
-      case ('R', 'Rankine', 'rankine')
+       case ('R', 'Rankine', 'rankine')
          temp_k = temp_in * 5.0_fp/9.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          temp_out = temp_in
          return
@@ -1085,15 +1085,15 @@ contains
 
       ! Then convert from Kelvin to output units
       select case (trim(output_units))
-      case ('K', 'Kelvin', 'kelvin')
+       case ('K', 'Kelvin', 'kelvin')
          temp_out = temp_k
-      case ('C', 'Celsius', 'celsius')
+       case ('C', 'Celsius', 'celsius')
          temp_out = temp_k - 273.15_fp
-      case ('F', 'Fahrenheit', 'fahrenheit')
+       case ('F', 'Fahrenheit', 'fahrenheit')
          temp_out = (temp_k - 273.15_fp) * 9.0_fp/5.0_fp + 32.0_fp
-      case ('R', 'Rankine', 'rankine')
+       case ('R', 'Rankine', 'rankine')
          temp_out = temp_k * 9.0_fp/5.0_fp
-      case default
+       case default
          rc = CC_FAILURE
          temp_out = temp_in
       end select
@@ -1113,27 +1113,27 @@ contains
 
       ! First convert to kg
       select case (trim(input_units))
-      case ('kg', 'kilogram')
+       case ('kg', 'kilogram')
          mass_kg = mass_in
-      case ('g', 'gram')
+       case ('g', 'gram')
          mass_kg = mass_in * 1.0e-3_fp
-      case ('mg', 'milligram')
+       case ('mg', 'milligram')
          mass_kg = mass_in * 1.0e-6_fp
-      case ('ug', 'microgram')
+       case ('ug', 'microgram')
          mass_kg = mass_in * 1.0e-9_fp
-      case ('lb', 'pound', 'lbs')
+       case ('lb', 'pound', 'lbs')
          mass_kg = mass_in * LB_TO_KG
-      case ('oz', 'ounce')
+       case ('oz', 'ounce')
          mass_kg = mass_in * OZ_TO_KG
-      case ('ton', 'short_ton', 'us_ton')
+       case ('ton', 'short_ton', 'us_ton')
          mass_kg = mass_in * TON_TO_KG
-      case ('long_ton', 'uk_ton')
+       case ('long_ton', 'uk_ton')
          mass_kg = mass_in * 1016.047_fp
-      case ('stone')
+       case ('stone')
          mass_kg = mass_in * 6.350293_fp
-      case ('grain')
+       case ('grain')
          mass_kg = mass_in * 6.479891e-5_fp
-      case default
+       case default
          rc = CC_FAILURE
          mass_out = mass_in
          return
@@ -1141,27 +1141,27 @@ contains
 
       ! Then convert from kg to output units
       select case (trim(output_units))
-      case ('kg', 'kilogram')
+       case ('kg', 'kilogram')
          mass_out = mass_kg
-      case ('g', 'gram')
+       case ('g', 'gram')
          mass_out = mass_kg / 1.0e-3_fp
-      case ('mg', 'milligram')
+       case ('mg', 'milligram')
          mass_out = mass_kg / 1.0e-6_fp
-      case ('ug', 'microgram')
+       case ('ug', 'microgram')
          mass_out = mass_kg / 1.0e-9_fp
-      case ('lb', 'pound', 'lbs')
+       case ('lb', 'pound', 'lbs')
          mass_out = mass_kg / LB_TO_KG
-      case ('oz', 'ounce')
+       case ('oz', 'ounce')
          mass_out = mass_kg / OZ_TO_KG
-      case ('ton', 'short_ton', 'us_ton')
+       case ('ton', 'short_ton', 'us_ton')
          mass_out = mass_kg / TON_TO_KG
-      case ('long_ton', 'uk_ton')
+       case ('long_ton', 'uk_ton')
          mass_out = mass_kg / 1016.047_fp
-      case ('stone')
+       case ('stone')
          mass_out = mass_kg / 6.350293_fp
-      case ('grain')
+       case ('grain')
          mass_out = mass_kg / 6.479891e-5_fp
-      case default
+       case default
          rc = CC_FAILURE
          mass_out = mass_in
       end select
@@ -1181,27 +1181,27 @@ contains
 
       ! First convert to Joules
       select case (trim(input_units))
-      case ('J', 'joule', 'joules')
+       case ('J', 'joule', 'joules')
          energy_j = energy_in
-      case ('kJ', 'kilojoule')
+       case ('kJ', 'kilojoule')
          energy_j = energy_in * 1000.0_fp
-      case ('MJ', 'megajoule')
+       case ('MJ', 'megajoule')
          energy_j = energy_in * 1.0e6_fp
-      case ('cal', 'calorie', 'calories')
+       case ('cal', 'calorie', 'calories')
          energy_j = energy_in * CALORIE_TO_J
-      case ('kcal', 'kilocalorie', 'Cal')
+       case ('kcal', 'kilocalorie', 'Cal')
          energy_j = energy_in * CALORIE_TO_J * 1000.0_fp
-      case ('BTU', 'btu', 'british_thermal_unit')
+       case ('BTU', 'btu', 'british_thermal_unit')
          energy_j = energy_in * BTU_TO_J
-      case ('therm', 'therms')
+       case ('therm', 'therms')
          energy_j = energy_in * BTU_TO_J * 100000.0_fp
-      case ('kWh', 'kilowatt_hour')
+       case ('kWh', 'kilowatt_hour')
          energy_j = energy_in * 3.6e6_fp
-      case ('eV', 'electron_volt')
+       case ('eV', 'electron_volt')
          energy_j = energy_in * 1.602176e-19_fp
-      case ('ft_lb', 'foot_pound')
+       case ('ft_lb', 'foot_pound')
          energy_j = energy_in * 1.355818_fp
-      case default
+       case default
          rc = CC_FAILURE
          energy_out = energy_in
          return
@@ -1209,27 +1209,27 @@ contains
 
       ! Then convert from Joules to output units
       select case (trim(output_units))
-      case ('J', 'joule', 'joules')
+       case ('J', 'joule', 'joules')
          energy_out = energy_j
-      case ('kJ', 'kilojoule')
+       case ('kJ', 'kilojoule')
          energy_out = energy_j / 1000.0_fp
-      case ('MJ', 'megajoule')
+       case ('MJ', 'megajoule')
          energy_out = energy_j / 1.0e6_fp
-      case ('cal', 'calorie', 'calories')
+       case ('cal', 'calorie', 'calories')
          energy_out = energy_j / CALORIE_TO_J
-      case ('kcal', 'kilocalorie', 'Cal')
+       case ('kcal', 'kilocalorie', 'Cal')
          energy_out = energy_j / (CALORIE_TO_J * 1000.0_fp)
-      case ('BTU', 'btu', 'british_thermal_unit')
+       case ('BTU', 'btu', 'british_thermal_unit')
          energy_out = energy_j / BTU_TO_J
-      case ('therm', 'therms')
+       case ('therm', 'therms')
          energy_out = energy_j / (BTU_TO_J * 100000.0_fp)
-      case ('kWh', 'kilowatt_hour')
+       case ('kWh', 'kilowatt_hour')
          energy_out = energy_j / 3.6e6_fp
-      case ('eV', 'electron_volt')
+       case ('eV', 'electron_volt')
          energy_out = energy_j / 1.602176e-19_fp
-      case ('ft_lb', 'foot_pound')
+       case ('ft_lb', 'foot_pound')
          energy_out = energy_j / 1.355818_fp
-      case default
+       case default
          rc = CC_FAILURE
          energy_out = energy_in
       end select

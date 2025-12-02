@@ -5,6 +5,7 @@ This section covers the column virtualization APIs that enable efficient 1D atmo
 ## Overview
 
 The Column Interface system provides:
+
 - **ColumnType**: 1D atmospheric column data structure
 - **ColumnInterface_Mod**: Column access and manipulation
 - **Grid virtualization**: Efficient processing across grid columns
@@ -34,12 +35,11 @@ call container%update_column(i, j, column, rc)
 ```
 
 **Benefits:**
-- **Performance**: 10x faster than 3D processing
-- **Memory**: 50% reduction in memory usage
+
 - **Scalability**: Linear scaling with grid resolution
 - **Cache efficiency**: Better data locality
 
-**Auto-Generated Documentation:** [Column Interface Reference](../CATChem/namespacecolumn__interface__mod.md)
+**Auto-Generated Documentation:** [Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)
 
 ## Column Data Structure
 
@@ -155,6 +155,7 @@ end do
 ### Cache Optimization
 
 Column processing optimizes CPU cache usage:
+
 - **Spatial locality**: Processing contiguous vertical levels
 - **Temporal locality**: Reusing column data for multiple operations
 - **Reduced cache misses**: 1D access patterns vs. 3D strided access
@@ -173,6 +174,7 @@ end do
 ### Parallel Scaling
 
 Column processing enables natural parallelization:
+
 - **Grid-level parallelism**: Process multiple columns simultaneously
 - **Process-level parallelism**: Multiple processes per column
 - **Thread safety**: Independent column operations
@@ -196,6 +198,10 @@ call column%interpolate_to_height(target_height, interpolated_data, rc)
 call column%integrate_column('CO', total_co, rc)
 call column%calculate_column_burden('aerosol', burden, rc)
 ```
+
+**Auto-Generated Documentation:** [Diagnostic Manager Reference](../CATChem/namespacediagnosticmanager__mod.md)
+
+**Auto-Generated Documentation:** [Diagnostic Interface Reference](../CATChem/namespacediagnosticinterface__mod.md)
 
 ### Boundary Conditions
 
@@ -222,6 +228,8 @@ if (rc /= CC_SUCCESS) then
     return
 endif
 ```
+
+**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
 
 ## Best Practices
 
@@ -250,9 +258,9 @@ endif
 
 - [State Management API](state-management.md) - Data container interfaces
 - [Process Interface API](process-interface.md) - Column-capable process development
-- [Performance Guide](../guides/performance.md) - Optimization strategies
-- [Column Virtualization Guide](../guides/column-virtualization.md) - Architecture details
+- [Performance Guide](../user-guide/advanced_topics/performance.md) - Optimization strategies
+- [Column Virtualization Guide](../user-guide/advanced_topics/column-virtualization.md) - Architecture details
 
 ---
 
-**Auto-Generated Documentation:** [Complete Column Interface Reference](../CATChem/namespacecolumn__interface__mod.md)
+**Auto-Generated Documentation:** [Complete Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)

@@ -12,29 +12,29 @@ This document provides a side-by-side comparison of the old and new process inte
 ```fortran
 type :: Process{{ config.class_name }}Interface
    private
-   
+
    ! Process state (manual management)
    logical :: is_initialized = .false.
    character(len=64) :: active_scheme = 'default'
-   
+
    ! Species information (manual tracking)
    integer :: n_species = 0
    character(len=32), allocatable :: species_names(:)
    integer, allocatable :: species_indices(:)
-   
+
    ! Process tendencies (manual allocation)
    real(fp), allocatable :: process_tendencies(:,:)
-   
+
    ! Diagnostic storage (manual management)
    real(fp), allocatable :: process_diagnostics(:)
    real(fp), allocatable :: scheme_diagnostics(:)
-   
+
    ! Scheme parameters
    type({{ scheme.name }}_params_t) :: config_{{ scheme.name }}
-   
+
    ! Diagnostic indices (manual tracking)
    integer :: diag_emission_flux_idx = -1
-   
+
 contains
    ! Manual implementations of everything
    procedure :: initialize => init_process
@@ -52,25 +52,25 @@ end type
 ```fortran
 type, extends(ProcessInterface) :: Process{{ config.class_name }}Interface
    private
-   
+
    ! Only process-specific configuration
    character(len=64) :: active_scheme = 'default'
    type({{ scheme.name }}_params_t) :: config_{{ scheme.name }}
-   
+
    ! Utility helpers (leverage core infrastructure)
    type(ChemSpeciesUtilsType) :: species_utils
    type(UnitConverterType) :: unit_converter
    type(MetFieldUtilsType) :: met_utils
-   
+
    ! Process-specific diagnostic indices only
    integer :: diag_emission_flux_idx = -1
-   
+
 contains
    ! Minimal required implementations
    procedure :: init => process_init
    procedure :: run => process_run
    procedure :: finalize => process_finalize
-   
+
    ! Process-specific logic only
    procedure, private :: configure_schemes
    procedure, private :: run_active_scheme
@@ -92,42 +92,42 @@ subroutine init_process(this, config_data, state_manager, error_handler)
    character(len=*), intent(in) :: config_data
    type(StateManagerType), intent(inout) :: state_manager
    type(ErrorHandler), intent(inout) :: error_handler
-   
+
    character(len=256) :: error_msg
-   
+
    ! Manual state checking
    if (this%is_initialized) then
       call error_handler%set_error(ERROR_PROCESS, "Process already initialized")
       return
    end if
-   
+
    ! Manual configuration parsing (simplified)
    this%active_scheme = 'default'
-   
+
    ! Manual validation
    call this%validate_config(error_handler)
    if (error_handler%has_error()) return
-   
+
    ! Manual species setup
    call this%setup_species_info(state_manager, error_handler)
    if (error_handler%has_error()) return
-   
+
    ! Manual scheme initialization
    if (trim(this%active_scheme) == 'scheme_name') then
       ! Initialize scheme parameters manually
    end if
-   
+
    ! Manual diagnostic registration
    call this%register_diagnostics(state_manager, error_handler)
    if (error_handler%has_error()) return
-   
+
    ! Manual memory allocation
    allocate(this%process_tendencies(this%n_species, state_manager%get_n_columns()))
    this%process_tendencies = 0.0_fp
-   
+
    allocate(this%process_diagnostics(number_of_diagnostics))
    this%process_diagnostics = 0.0_fp
-   
+
    this%is_initialized = .true.
 end subroutine
 ```
@@ -139,20 +139,20 @@ subroutine process_init(this, config_data, state_manager, error_manager)
    type(ConfigDataType), intent(in) :: config_data
    type(StateManagerType), intent(in) :: state_manager
    type(ErrorManagerType), intent(inout) :: error_manager
-   
+
    ! Delegate to base class (handles common infrastructure)
    call this%ProcessInterface%init(config_data, state_manager, error_manager)
    if (error_manager%has_error()) return
-   
+
    ! Set process-specific metadata
    call this%set_name('{{ config.name }}')
    call this%set_version('{{ version }}')
    call this%set_description('{{ config.description }}')
-   
+
    ! Process-specific configuration only
    call this%configure_schemes(config_data, error_manager)
    if (error_manager%has_error()) return
-   
+
    ! Initialize utility helpers
    call this%species_utils%init(state_manager, error_manager)
    call this%unit_converter%init(error_manager)
@@ -205,10 +205,10 @@ do i_spec = 1, this%n_species
       call state_manager%get_species_concentration(this%species_indices(i_spec), i_col, &
                                                   current_conc, error_handler)
       if (error_handler%has_error()) return
-      
+
       new_conc(1) = current_conc(1) + this%process_tendencies(i_spec, i_col) * dt
       new_conc(1) = max(0.0_fp, new_conc(1))
-      
+
       call state_manager%set_species_concentration(this%species_indices(i_spec), i_col, &
                                                   new_conc, error_handler)
       if (error_handler%has_error()) return
@@ -249,26 +249,26 @@ if (error_manager%has_error()) return
 ! Complex scheme-specific data preparation
 if (scheme.scheme_type == "emission") then
    allocate(emission_rates_2d(n_levels, this%n_species))
-   
+
    call compute_scheme(n_levels, this%n_species, this%config_scheme%params, &
                       temperature, wind_speed, pressure, &
                       reshape(species_conc, [n_levels, this%n_species]), &
                       emission_rates_2d, scheme_diagnostics)
-                      
+
    species_tendencies = sum(emission_rates_2d, dim=1)
    deallocate(emission_rates_2d)
-   
+
 elif (scheme.scheme_type == "chemistry") then
    allocate(species_conc_2d_updated(n_levels, this%n_species))
-   
+
    call compute_scheme(n_levels, this%n_species, this%config_scheme%params, &
                       temperature, wind_speed, pressure, &
                       reshape(species_conc, [n_levels, this%n_species]), &
                       species_conc_2d_updated, scheme_diagnostics)
-                      
+
    species_tendencies = reshape(species_conc_2d_updated, [this%n_species]) - species_conc
    deallocate(species_conc_2d_updated)
-   
+
 else
    ! Generic scheme handling...
 end if

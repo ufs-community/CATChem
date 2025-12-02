@@ -1,6 +1,6 @@
 # CCPP Integration
 
-This guide covers integrating CATChem with the Common Community Physics Package (CCPP) framework used in UFS and FV3 models.
+This guide covers integrating CATChem inline with the Common Community Physics Package (CCPP) framework used in the UFS directly in the atmosphere (ATM) component. This option is important for research as some processes require close interactions between chemistry and physics. Considering the interactive and interdependent nature of chemistry and physics, it is useful for certain applications to insert the aerosol or chemistry modules directly inside the physics suites.
 
 ## Overview
 
@@ -537,4 +537,4 @@ if (rc /= 0) then
 end if
 ```
 
-This CCPP integration provides seamless coupling between CATChem and CCPP-enabled host models while maintaining performance and standards compliance.
+CATChem integrated inline with the CCPP framework provides close interactions between chemistry and physics while maintaining performance and standards compliance.

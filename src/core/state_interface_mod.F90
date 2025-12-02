@@ -187,20 +187,20 @@ contains
       character(len=32) :: name
 
       select case (state_type)
-         case (STATE_TYPE_MET)
-            name = 'Meteorology'
-         case (STATE_TYPE_CHEM)
-            name = 'Chemistry'
-         case (STATE_TYPE_EMIS)
-            name = 'Emissions'
-         case (STATE_TYPE_DIAG)
-            name = 'Diagnostics'
-         case (STATE_TYPE_CONFIG)
-            name = 'Configuration'
-         case (STATE_TYPE_GRID)
-            name = 'Grid'
-         case default
-            name = 'Unknown'
+       case (STATE_TYPE_MET)
+         name = 'Meteorology'
+       case (STATE_TYPE_CHEM)
+         name = 'Chemistry'
+       case (STATE_TYPE_EMIS)
+         name = 'Emissions'
+       case (STATE_TYPE_DIAG)
+         name = 'Diagnostics'
+       case (STATE_TYPE_CONFIG)
+         name = 'Configuration'
+       case (STATE_TYPE_GRID)
+         name = 'Grid'
+       case default
+         name = 'Unknown'
       end select
 
    end function get_state_type_name

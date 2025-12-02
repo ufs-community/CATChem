@@ -13,7 +13,7 @@ module DryDepCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -38,7 +38,7 @@ module DryDepCommon_Mod
       character(len=32) :: aero_scheme = 'gocart'  ! Scheme for aerosol species
       logical :: is_active = .true.
       logical :: diagnostics = .false.  ! Diagnostic switch
-      
+
       ! Diagnostic species configuration
       integer :: n_diagnostic_species = 0
       character(len=32), allocatable :: diagnostic_species(:)  ! User-defined species for diagnostics
@@ -164,21 +164,21 @@ module DryDepCommon_Mod
    !> Unified process configuration type that bridges ConfigManager and process-specific configs
    !! This is the main configuration type that ProcessInterface should use
    type :: DryDepProcessConfig
-      
+
       ! Process metadata
       character(len=64) :: process_name = 'drydep'
       character(len=16) :: process_version = '1.0.0'
       logical :: is_active = .true.
-      
+
       ! Process-specific configuration (delegate to DryDepConfig)
       type(DryDepConfig) :: drydep_config
-      
+
       ! Scheme configurations
       ! Separate gas and aerosol scheme configurations
       type(DryDepSchemeWESELYConfig) :: wesely_config
       type(DryDepSchemeGOCARTConfig) :: gocart_config
       type(DryDepSchemeZHANGConfig) :: zhang_config
-      
+
    contains
       procedure, public :: load_from_config => drydep_process_load_config
       procedure, public :: load_species_from_chem_state => load_species_from_chem_state
@@ -217,7 +217,7 @@ contains
       ! Validate active scheme(s)
       ! Validate gas scheme
       if (trim(this%gas_scheme) /= 'wesely' .and. &
-          .true.) then
+         .true.) then
          write(error_msg, '(A)') "Invalid gas scheme: " // trim(this%gas_scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -225,8 +225,8 @@ contains
 
       ! Validate aerosol scheme
       if (trim(this%aero_scheme) /= 'gocart' .and. &
-          trim(this%aero_scheme) /= 'zhang' .and. &
-          .true.) then
+         trim(this%aero_scheme) /= 'zhang' .and. &
+         .true.) then
          write(error_msg, '(A)') "Invalid aerosol scheme: " // trim(this%aero_scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -249,7 +249,7 @@ contains
 
    end subroutine print_drydep_config_summary
 
-      !> Finalize drydep configuration
+   !> Finalize drydep configuration
    subroutine finalize_drydep_config(this)
       class(DryDepConfig), intent(inout) :: this
 
@@ -396,7 +396,7 @@ contains
 
       ! Process reads directly from master YAML structure: processes.drydep
       ! ConfigManager provides generic YAML access, process handles its own configuration
-      
+
       ! Load process metadata
       call config_manager%get_string("processes/drydep/name", this%process_name, rc, "drydep")
       if (rc /= CC_SUCCESS) this%process_name = "drydep"  ! default
@@ -428,7 +428,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/drydep/diag_species", this%drydep_config%diagnostic_species, &
-                                    rc, default_values=["All"])
+         rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%drydep_config%diagnostic_species(1))
@@ -452,9 +452,9 @@ contains
       ! Load gas scheme configuration
       scheme_name = trim(this%drydep_config%gas_scheme)
       select case (scheme_name)
-      case ('wesely')
+       case ('wesely')
          call this%load_wesely_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown drydep gas scheme: " // trim(scheme_name), rc)
          return
@@ -463,11 +463,11 @@ contains
       ! Load aerosol scheme configuration
       scheme_name = trim(this%drydep_config%aero_scheme)
       select case (scheme_name)
-      case ('gocart')
+       case ('gocart')
          call this%load_gocart_config(config_manager, error_handler)
-      case ('zhang')
+       case ('zhang')
          call this%load_zhang_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown drydep aerosol scheme: " // trim(scheme_name), rc)
          return
@@ -476,49 +476,49 @@ contains
    end subroutine drydep_process_load_config
 
 
-   !> Load species from ChemState 
+   !> Load species from ChemState
    !! This function is used for dynamic species discovery (by_metadata or all_species)
    !! For 'all_species' mode: loads all species using nSpecies and SpeciesIndex
    !! For 'by_metadata' mode: loads species by type using nSpeciesDryDep and DryDepIndex
    subroutine load_species_from_chem_state(this, chem_state, error_handler)
       use ChemState_Mod, only: ChemStateType
-      
+
       class(DryDepProcessConfig), intent(inout) :: this
       type(ChemStateType), pointer, intent(in) :: chem_state
       type(ErrorManagerType), intent(inout) :: error_handler
-      
+
       integer :: i, rc
       integer :: species_idx
-      
+
       if (.not. associated(chem_state)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "ChemState not associated in load_species_from_chem_state", rc)
          return
       end if
-      
+
       ! by_metadata mode: Load species by type from ChemState using dynamic metadata flag mapping
       ! Dynamic mapping: is_drydep -> nSpeciesDryDep and DryDepIndex
       this%drydep_config%n_species = chem_state%nSpeciesDryDep
-      
+
       if (this%drydep_config%n_species <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No drydep species found in ChemState", rc)
          return
       end if
-      
+
       ! Check if DryDepIndex is allocated and has correct size
       if (.not. allocated(chem_state%DryDepIndex)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "DryDepIndex not allocated in ChemState", rc)
          return
       end if
-      
+
       if (size(chem_state%DryDepIndex) < this%drydep_config%n_species) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "DryDepIndex size inconsistent with nSpeciesDryDep", rc)
          return
       end if
-      
+
       ! Deallocate existing arrays if allocated
       if (allocated(this%drydep_config%species_names)) then
          deallocate(this%drydep_config%species_names)
@@ -526,12 +526,12 @@ contains
       if (allocated(this%drydep_config%species_indices)) then
          deallocate(this%drydep_config%species_indices)
       end if
-      
+
       ! Allocate arrays
       allocate(this%drydep_config%species_names(this%drydep_config%n_species))
       allocate(this%drydep_config%species_indices(this%drydep_config%n_species))
       allocate(this%drydep_config%is_gas(this%drydep_config%n_species))
-      
+
       ! Allocate species properties arrays
       allocate(this%drydep_config%species_dd_DvzAerSnow(this%drydep_config%n_species))
       allocate(this%drydep_config%species_dd_DvzMinVal_land(this%drydep_config%n_species))
@@ -545,16 +545,16 @@ contains
       allocate(this%drydep_config%species_mw_g(this%drydep_config%n_species))
       allocate(this%drydep_config%species_radius(this%drydep_config%n_species))
       allocate(this%drydep_config%species_upper_radius(this%drydep_config%n_species))
-      
+
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_drydep -> DryDepIndex
       this%drydep_config%species_indices(1:this%drydep_config%n_species) = &
          chem_state%DryDepIndex(1:this%drydep_config%n_species)
-      
+
       ! Get species names using the indices
       do i = 1, this%drydep_config%n_species
          if (this%drydep_config%species_indices(i) > 0 .and. &
-             this%drydep_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
+            this%drydep_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%drydep_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%drydep_config%species_indices(i)))
          else
@@ -563,7 +563,7 @@ contains
             return
          end if
       end do
-      
+
       ! Load species properties from ChemState
       do i = 1, this%drydep_config%n_species
          species_idx = this%drydep_config%species_indices(i)
@@ -581,7 +581,7 @@ contains
          this%drydep_config%species_upper_radius(i) = chem_state%ChemSpecies(species_idx)%upper_radius
          this%drydep_config%is_gas(i) = chem_state%ChemSpecies(species_idx)%is_gas
       end do
-      
+
    end subroutine load_species_from_chem_state
 
 
@@ -595,16 +595,16 @@ contains
 
       ! Load scheme parameters directly from processes/drydep/wesely/ in master YAML
       call config_manager%get_real("processes/drydep/wesely/scale_factor", &
-           this%wesely_config%scale_factor, rc, 1.0_fp)
+         this%wesely_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%wesely_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/drydep/wesely/co2_effect", &
-           this%wesely_config%co2_effect, rc, .true.)
+         this%wesely_config%co2_effect, rc, .true.)
       if (rc /= CC_SUCCESS) this%wesely_config%co2_effect = .true.
       call config_manager%get_real("processes/drydep/wesely/co2_level", &
-           this%wesely_config%co2_level, rc, 600.0_fp)
+         this%wesely_config%co2_level, rc, 600.0_fp)
       if (rc /= CC_SUCCESS) this%wesely_config%co2_level = 600.0_fp
       call config_manager%get_real("processes/drydep/wesely/co2_reference", &
-           this%wesely_config%co2_reference, rc, 380.0_fp)
+         this%wesely_config%co2_reference, rc, 380.0_fp)
       if (rc /= CC_SUCCESS) this%wesely_config%co2_reference = 380.0_fp
 
 
@@ -620,10 +620,10 @@ contains
 
       ! Load scheme parameters directly from processes/drydep/gocart/ in master YAML
       call config_manager%get_real("processes/drydep/gocart/scale_factor", &
-           this%gocart_config%scale_factor, rc, 1.0_fp)
+         this%gocart_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%gocart_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/drydep/gocart/resuspension", &
-           this%gocart_config%resuspension, rc, .false.)
+         this%gocart_config%resuspension, rc, .false.)
       if (rc /= CC_SUCCESS) this%gocart_config%resuspension = .false.
 
 
@@ -639,7 +639,7 @@ contains
 
       ! Load scheme parameters directly from processes/drydep/zhang/ in master YAML
       call config_manager%get_real("processes/drydep/zhang/scale_factor", &
-           this%zhang_config%scale_factor, rc, 1.0_fp)
+         this%zhang_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%zhang_config%scale_factor = 1.0_fp
 
 
@@ -658,15 +658,15 @@ contains
       ! Validate scheme-specific config
       ! Validate gas scheme config
       select case (trim(this%drydep_config%gas_scheme))
-      case ('wesely')
+       case ('wesely')
          call this%wesely_config%validate(error_handler)
       end select
 
-      ! Validate aerosol scheme config  
+      ! Validate aerosol scheme config
       select case (trim(this%drydep_config%aero_scheme))
-      case ('gocart')
+       case ('gocart')
          call this%gocart_config%validate(error_handler)
-      case ('zhang')
+       case ('zhang')
          call this%zhang_config%validate(error_handler)
       end select
 
@@ -693,19 +693,19 @@ contains
       if (present(gas_scheme) .and. gas_scheme) then
          ! Return gas scheme
          select case (trim(this%drydep_config%gas_scheme))
-         case ('wesely')
+          case ('wesely')
             allocate(scheme_config, source=this%wesely_config)
-         case default
+          case default
             ! Return null
          end select
       else
          ! Return aerosol scheme (default or when gas_scheme = false)
          select case (trim(this%drydep_config%aero_scheme))
-         case ('gocart')
+          case ('gocart')
             allocate(scheme_config, source=this%gocart_config)
-         case ('zhang')
+          case ('zhang')
             allocate(scheme_config, source=this%zhang_config)
-         case default
+          case default
             ! Return null
          end select
       end if
@@ -728,8 +728,8 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%drydep_config%n_diagnostic_species == 1 .and. &
-          trim(this%drydep_config%diagnostic_species(1)) == "All") then
-         
+         trim(this%drydep_config%diagnostic_species(1)) == "All") then
+
          ! Deallocate and reallocate for all species
          if (allocated(this%drydep_config%diagnostic_species_id)) deallocate(this%drydep_config%diagnostic_species_id)
          allocate(this%drydep_config%diagnostic_species_id(this%drydep_config%n_species))
@@ -742,7 +742,7 @@ contains
          do i = 1, this%drydep_config%n_species
             this%drydep_config%diagnostic_species_id(i) = i
          end do
-         
+
          return
       end if
 
@@ -753,7 +753,7 @@ contains
       ! Map each diagnostic species name to its index in species_names
       do i = 1, this%drydep_config%n_diagnostic_species
          found_species = .false.
-         
+
          do j = 1, this%drydep_config%n_species
             if (trim(this%drydep_config%diagnostic_species(i)) == trim(this%drydep_config%species_names(j))) then
                this%drydep_config%diagnostic_species_id(i) = j
@@ -761,11 +761,11 @@ contains
                exit
             end if
          end do
-         
+
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-                  trim(this%drydep_config%diagnostic_species(i)), &
-                  "' not found in process species list"
+               trim(this%drydep_config%diagnostic_species(i)), &
+               "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             return
          end if

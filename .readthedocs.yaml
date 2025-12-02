@@ -7,10 +7,9 @@ build:
   jobs:
     pre_build:
       - cd docs && doxygen Doxyfile
-      - cd docs && doxysphinx build . $READTHEDOCS_OUTPUT/html/ Doxyfile
 
-sphinx:
-  configuration: docs/conf.py
+mkdocs:
+  configuration: mkdocs.yml
 
 conda:
   environment: docs/environment-docs.yml

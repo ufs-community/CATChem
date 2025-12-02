@@ -68,14 +68,14 @@ contains
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
-      
+
       call process_mgr%register_process( &
          name='drydep', &
          category='deposition', &
          description='Process for computing dry deposition of gas and aerosol species', &
          creator=create_drydep_process, &
          rc=rc &
-      )
+         )
 
    end subroutine register_drydep_process
 

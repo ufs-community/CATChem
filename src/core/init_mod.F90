@@ -76,9 +76,9 @@ contains
       call initialize_core_states(container, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                   'Failed to initialize core states', rc, &
-                                   'initialize_catchem', &
-                                   'Check system memory and configuration file')
+            'Failed to initialize core states', rc, &
+            'initialize_catchem', &
+            'Check system memory and configuration file')
          call error_mgr%pop_context()
          return
       endif
@@ -87,9 +87,9 @@ contains
       call load_configuration(container, config_file, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-                                   'Failed to load configuration', rc, &
-                                   'initialize_catchem', &
-                                   'Verify configuration file exists and is valid')
+            'Failed to load configuration', rc, &
+            'initialize_catchem', &
+            'Verify configuration file exists and is valid')
          call error_mgr%pop_context()
          return
       endif
@@ -98,9 +98,9 @@ contains
       call initialize_processes(container, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                   'Failed to initialize processes', rc, &
-                                   'initialize_catchem', &
-                                   'Check process configuration and input data')
+            'Failed to initialize processes', rc, &
+            'initialize_catchem', &
+            'Check process configuration and input data')
          call error_mgr%pop_context()
          return
       endif
@@ -109,9 +109,9 @@ contains
       call validate_initialization(container, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_STATE_INCONSISTENCY, &
-                                   'Initialization validation failed', rc, &
-                                   'initialize_catchem', &
-                                   'Review error messages for specific validation failures')
+            'Initialization validation failed', rc, &
+            'initialize_catchem', &
+            'Review error messages for specific validation failures')
          call error_mgr%pop_context()
          return
       endif
@@ -150,9 +150,9 @@ contains
       met_state => container%get_met_state_ptr()
       if (.not. associated(met_state)) then
          call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                   'Failed to get meteorological state pointer', rc, &
-                                   'initialize_core_states', &
-                                   'Check memory availability')
+            'Failed to get meteorological state pointer', rc, &
+            'initialize_core_states', &
+            'Check memory availability')
          call error_mgr%pop_context()
          call error_mgr%pop_context()
          return
@@ -164,9 +164,9 @@ contains
       chem_state => container%get_chem_state_ptr()
       if (.not. associated(chem_state)) then
          call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                   'Failed to get chemical state pointer', rc, &
-                                   'initialize_core_states', &
-                                   'Check memory availability')
+            'Failed to get chemical state pointer', rc, &
+            'initialize_core_states', &
+            'Check memory availability')
          call error_mgr%pop_context()
          call error_mgr%pop_context()
          return
@@ -178,9 +178,9 @@ contains
       emis_state => container%get_emis_state_ptr()
       if (.not. associated(emis_state)) then
          call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                   'Failed to get emission state pointer', rc, &
-                                   'initialize_core_states', &
-                                   'Check memory availability')
+            'Failed to get emission state pointer', rc, &
+            'initialize_core_states', &
+            'Check memory availability')
          call error_mgr%pop_context()
          call error_mgr%pop_context()
          return
@@ -192,9 +192,9 @@ contains
       diag_state => container%get_diag_state_ptr()
       if (.not. associated(diag_state)) then
          call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                   'Failed to get diagnostic state pointer', rc, &
-                                   'initialize_core_states', &
-                                   'Check memory availability')
+            'Failed to get diagnostic state pointer', rc, &
+            'initialize_core_states', &
+            'Check memory availability')
          call error_mgr%pop_context()
          call error_mgr%pop_context()
          return
@@ -232,9 +232,9 @@ contains
       inquire(file=trim(config_file), exist=file_exists)
       if (.not. file_exists) then
          call error_mgr%report_error(ERROR_FILE_NOT_FOUND, &
-                                   'Configuration file not found: '//trim(config_file), rc, &
-                                   'load_configuration', &
-                                   'Ensure configuration file exists in specified location')
+            'Configuration file not found: '//trim(config_file), rc, &
+            'load_configuration', &
+            'Ensure configuration file exists in specified location')
          call error_mgr%pop_context()
          return
       endif
@@ -243,9 +243,9 @@ contains
       config => container%get_config_ptr()
       if (.not. associated(config)) then
          call error_mgr%report_error(ERROR_STATE_INCONSISTENCY, &
-                                   'Configuration state not properly initialized', rc, &
-                                   'load_configuration', &
-                                   'Call initialize_core_states first')
+            'Configuration state not properly initialized', rc, &
+            'load_configuration', &
+            'Call initialize_core_states first')
          call error_mgr%pop_context()
          return
       endif
@@ -262,9 +262,9 @@ contains
 
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_FILE_READ, &
-                                   'Failed to parse configuration file', rc, &
-                                   'load_configuration', &
-                                   'Check configuration file syntax and format')
+            'Failed to parse configuration file', rc, &
+            'load_configuration', &
+            'Check configuration file syntax and format')
          call error_mgr%pop_context()
          return
       endif
@@ -295,9 +295,9 @@ contains
       config => container%get_config_ptr()
       if (.not. associated(config)) then
          call error_mgr%report_error(ERROR_STATE_INCONSISTENCY, &
-                                   'Configuration not loaded', rc, &
-                                   'initialize_processes', &
-                                   'Load configuration before initializing processes')
+            'Configuration not loaded', rc, &
+            'initialize_processes', &
+            'Load configuration before initializing processes')
          call error_mgr%pop_context()
          return
       endif
@@ -313,9 +313,9 @@ contains
 
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                   'Failed to initialize dust process', rc, &
-                                   'initialize_processes', &
-                                   'Check dust process configuration')
+            'Failed to initialize dust process', rc, &
+            'initialize_processes', &
+            'Check dust process configuration')
          call error_mgr%pop_context()
          return
       endif
@@ -328,9 +328,9 @@ contains
 
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                   'Failed to initialize sea salt process', rc, &
-                                   'initialize_processes', &
-                                   'Check sea salt process configuration')
+            'Failed to initialize sea salt process', rc, &
+            'initialize_processes', &
+            'Check sea salt process configuration')
          call error_mgr%pop_context()
          return
       endif
@@ -362,9 +362,9 @@ contains
       call container%validate(rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_STATE_INCONSISTENCY, &
-                                   'Container validation failed', rc, &
-                                   'validate_initialization', &
-                                   'Check initialization steps and error messages above')
+            'Container validation failed', rc, &
+            'validate_initialization', &
+            'Check initialization steps and error messages above')
          call error_mgr%pop_context()
          return
       endif
@@ -373,9 +373,9 @@ contains
       call validator%validate_container(container, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_STATE_INCONSISTENCY, &
-                                   'Detailed validation failed', rc, &
-                                   'validate_initialization', &
-                                   'Review state consistency and configuration')
+            'Detailed validation failed', rc, &
+            'validate_initialization', &
+            'Review state consistency and configuration')
          call error_mgr%pop_context()
          return
       endif
@@ -411,9 +411,9 @@ contains
       call container%finalize(rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_MEMORY_DEALLOCATION, &
-                                   'Failed to properly finalize container', rc, &
-                                   'finalize_catchem', &
-                                   'Check for memory leaks or resource conflicts')
+            'Failed to properly finalize container', rc, &
+            'finalize_catchem', &
+            'Check for memory leaks or resource conflicts')
          call error_mgr%pop_context()
          return
       endif

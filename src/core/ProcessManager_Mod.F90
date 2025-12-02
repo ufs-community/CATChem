@@ -100,7 +100,7 @@ contains
 
       ! Set timestep for each process to the same value.
       call new_process%set_timestep(container%tstep)
-      
+
       ! Collect required met fields from this process
       call this%add_met_fields_from_process(new_process, rc)
       if (rc /= CC_SUCCESS) return
@@ -159,10 +159,10 @@ contains
          if (this%processes(i)%is_ready()) then
             ! Check if this is a column process
             select type(proc => this%processes(i))
-            class is (ColumnProcessInterface)
+             class is (ColumnProcessInterface)
                ! Run column-based process
                call this%run_process_on_columns(i, container, local_rc)
-            class default
+             class default
                ! Run traditional 3D process
                call this%processes(i)%run(container, local_rc)
             end select
@@ -213,7 +213,7 @@ contains
          ! Run all column processes on this column
          do i = 1, this%num_processes
             select type(proc => this%processes(i))
-            class is (ColumnProcessInterface)
+             class is (ColumnProcessInterface)
                if (proc%is_ready()) then
                   call proc%run_column(virtual_col, container, local_rc)
                   if (local_rc /= CC_SUCCESS) then
@@ -223,7 +223,7 @@ contains
                endif
             end select
          enddo
-         
+
          ! Apply virtual column changes back to container
          call container%apply_virtual_column(virtual_col, rc)
          if (rc /= CC_SUCCESS) return
@@ -257,7 +257,7 @@ contains
       endif
 
       select type(proc => this%processes(process_index))
-      class is (ColumnProcessInterface)
+       class is (ColumnProcessInterface)
          ! Initialize column iterator using create_column_iterator
          col_iter = grid_mgr%create_column_iterator()
 
@@ -297,9 +297,9 @@ contains
          if (trim(this%processes(i)%get_name()) == trim(process_name)) then
             ! Check if this is a column process and run appropriately
             select type(proc => this%processes(i))
-            class is (ColumnProcessInterface)
+             class is (ColumnProcessInterface)
                call this%run_process_on_columns(i, container, rc)
-            class default
+             class default
                call this%processes(i)%run(container, rc)
             end select
             return
@@ -320,7 +320,7 @@ contains
 
       do i = 1, this%num_processes
          select type(proc => this%processes(i))
-         class is (ColumnProcessInterface)
+          class is (ColumnProcessInterface)
             count = count + 1
             if (count <= max_count) then
                column_indices(count) = i
@@ -371,7 +371,7 @@ contains
       ! Loop through each process in this phase
       do j = 1, current_phase%num_processes
          process_config = current_phase%processes(j)
-         
+
          ! Check if process is enabled
          if (.not. process_config%enabled) then
             write(*,*) 'INFO: Skipping disabled process: ', trim(process_config%name)
@@ -380,11 +380,11 @@ contains
 
          ! Map process_index to actual process in manager's array
          process_idx = process_config%process_index
-         
+
          ! Validate process index bounds
          if (process_idx < 1 .or. process_idx > this%num_processes) then
             write(*,*) 'WARNING: Process index ', process_idx, ' out of bounds for process: ', &
-                      trim(process_config%name)
+               trim(process_config%name)
             cycle
          endif
 
@@ -393,9 +393,9 @@ contains
          ! Run the process based on its type
          if (this%processes(process_idx)%is_ready()) then
             select type(proc => this%processes(process_idx))
-            class is (ColumnProcessInterface)
+             class is (ColumnProcessInterface)
                call this%run_process_on_columns(process_idx, container, local_rc)
-            class default
+             class default
                call this%processes(process_idx)%run(container, local_rc)
             end select
 
@@ -441,9 +441,9 @@ contains
       ! Loop through all phases and run each one
       do phase_idx = 1, size(config_data%run_phases)
          phase_name = config_data%run_phases(phase_idx)%name
-         
+
          write(*,*) 'INFO: Starting phase ', phase_idx, ' of ', size(config_data%run_phases), &
-                   ': "', trim(phase_name), '"'
+            ': "', trim(phase_name), '"'
 
          ! Run this phase
          call this%run_phase(phase_name, config_data, container, local_rc)
@@ -594,7 +594,7 @@ contains
       ! Merge fields, avoiding duplicates
       ! Worst case: all new fields are unique, so allocate maximum possible size
       allocate(merged_fields(current_size + new_size))
-      
+
       ! Start with current fields
       merged_fields(1:current_size) = current_fields(1:current_size)
       merged_size = current_size
@@ -602,7 +602,7 @@ contains
       ! Add new fields if they're not already present
       do i = 1, new_size
          field_exists = .false.
-         
+
          ! Check if this field already exists (case insensitive)
          do j = 1, merged_size
             if (trim(adjustl(new_fields(i))) == trim(adjustl(merged_fields(j)))) then
@@ -610,7 +610,7 @@ contains
                exit
             endif
          end do
-         
+
          ! Add if it's a new field
          if (.not. field_exists) then
             merged_size = merged_size + 1

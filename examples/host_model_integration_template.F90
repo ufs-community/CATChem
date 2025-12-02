@@ -172,8 +172,8 @@ contains
 
       ! Setup grid
       call this%catchem%setup_grid(host_state%latitudes, &
-                                  host_state%longitudes, &
-                                  host_state%vertical_levels, rc)
+         host_state%longitudes, &
+         host_state%vertical_levels, rc)
       if (rc /= CATCHEM_SUCCESS) then
          print *, "ERROR: CATChem grid setup failed"
          rc = HOST_CATCHEM_FAILURE
@@ -283,7 +283,7 @@ contains
       ! ================================================================
 
       if (this%config%enable_diagnostics .and. &
-          mod(this%current_step, this%config%diagnostic_frequency) == 0) then
+         mod(this%current_step, this%config%diagnostic_frequency) == 0) then
          call this%get_diagnostics(rc)
          if (rc /= HOST_CATCHEM_SUCCESS) then
             print *, "WARNING: Diagnostic collection failed"
@@ -470,7 +470,7 @@ contains
       ! Map species (simplified - in practice, use a mapping file)
       do i = 1, min(size(host_state%species_names), size(catchem_species))
          call this%catchem%add_field_mapping('chem', trim(catchem_species(i)), &
-                                           trim(host_state%species_names(i)), 'real64', rc=rc)
+            trim(host_state%species_names(i)), 'real64', rc=rc)
       end do
 
       print *, "  Species mappings configured for ", size(catchem_species), " species"
@@ -704,7 +704,7 @@ contains
 
       ! Species names
       state%species_names = ['O3  ', 'NO2 ', 'CO  ', 'SO2 ', 'NH3 ', &
-                           'PM25', 'PM10', 'BC  ', 'OC  ', 'DUST']
+         'PM25', 'PM10', 'BC  ', 'OC  ', 'DUST']
 
    end subroutine setup_host_model_state
 

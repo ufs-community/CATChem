@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catchem-docs"
+version = "1.0.0"
+description = "CATChem (Configurable Atmospheric Chemistry) Documentation"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    {name = "CATChem Development Team"},
+]
+keywords = ["mkdocs", "documentation", "atmospheric-chemistry", "climate-modeling"]
+
+dependencies = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdoxy>=1.2.0",
+    "pymdown-extensions>=10.0",
+    "markdown-include>=0.8.1",
+    "mkdocs-minify-plugin>=0.7.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.2.0",
+    "mkdocs-git-authors-plugin>=0.7.0",
+    "mkdocs-mermaid2-plugin>=1.1.0",
+    "mkdocs-awesome-pages-plugin>=2.9.0",
+    "mkdocs-macros-plugin>=1.0.0",
+    "watchdog>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "black",
+    "flake8",
+    "mypy",
+]
+
+[tool.setuptools]
+packages = []
+
+[tool.mkdocs]
+config-file = "mkdocs.yml"

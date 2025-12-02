@@ -34,7 +34,7 @@ module CATChemAPI_Mod
    use EmisState_Mod, only: EmisStateType
    use DiagState_Mod, only: DiagStateType
    use DiagnosticInterface_Mod, only: DiagnosticManagerType, DiagnosticRegistryType, &
-                                     DiagnosticFieldType
+      DiagnosticFieldType
 
    implicit none
    private
@@ -813,9 +813,9 @@ contains
       if (allocated(chem_state%concentrations)) then
          if (.not. allocated(data%concentrations)) then
             allocate(data%concentrations(size(chem_state%concentrations,1), &
-                                       size(chem_state%concentrations,2), &
-                                       size(chem_state%concentrations,3), &
-                                       size(chem_state%concentrations,4)))
+               size(chem_state%concentrations,2), &
+               size(chem_state%concentrations,3), &
+               size(chem_state%concentrations,4)))
          endif
          data%concentrations = chem_state%concentrations
       endif
@@ -867,8 +867,8 @@ contains
       ! Basic validation - check array dimensions match expected grid
       if (allocated(data%temperature)) then
          if (size(data%temperature,1) /= this%nx .or. &
-             size(data%temperature,2) /= this%ny .or. &
-             size(data%temperature,3) /= this%nz) then
+            size(data%temperature,2) /= this%ny .or. &
+            size(data%temperature,3) /= this%nz) then
             rc = CATCHEM_FAILURE
             return
          endif
@@ -876,9 +876,9 @@ contains
 
       if (allocated(data%concentrations)) then
          if (size(data%concentrations,1) /= this%nx .or. &
-             size(data%concentrations,2) /= this%ny .or. &
-             size(data%concentrations,3) /= this%nz .or. &
-             size(data%concentrations,4) /= this%nspecies) then
+            size(data%concentrations,2) /= this%ny .or. &
+            size(data%concentrations,3) /= this%nz .or. &
+            size(data%concentrations,4) /= this%nspecies) then
             rc = CATCHEM_FAILURE
             return
          endif

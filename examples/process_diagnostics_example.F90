@@ -208,19 +208,19 @@ program process_diagnostics_example
          if (rc == CATCHEM_SUCCESS .and. diagnostic%is_available) then
 
             select case (trim(diagnostic%field_name))
-            case ('species_tendency')
+             case ('species_tendency')
                if (allocated(diagnostic%data_3d)) then
                   write(*,'(A,E12.4,A)') '     Species tendency range: ', &
                      maxval(diagnostic%data_3d) - minval(diagnostic%data_3d), ' mol/mol/s'
                endif
 
-            case ('emission_rate_applied')
+             case ('emission_rate_applied')
                if (allocated(diagnostic%data_2d)) then
                   write(*,'(A,E12.4,A)') '     Applied emission rate: ', &
                      sum(diagnostic%data_2d), ' mol/m²/s'
                endif
 
-            case ('species_validation_status')
+             case ('species_validation_status')
                write(*,'(A,F4.1)') '     Species validation status: ', diagnostic%scalar_data
 
             end select

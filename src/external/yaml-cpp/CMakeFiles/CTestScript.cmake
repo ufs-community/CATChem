@@ -5,8 +5,14 @@
 cmake_minimum_required(VERSION 4.1.1)
 
 # CTest Start Step
-set(CTEST_SOURCE_DIRECTORY "/Users/barry/Documents/GitHub/CATChem/src/external/yaml-cpp")
-set(CTEST_BINARY_DIRECTORY "/Users/barry/Documents/GitHub/CATChem/src/external/yaml-cpp")
+set(
+  CTEST_SOURCE_DIRECTORY
+  "/Users/barry/Documents/GitHub/CATChem/src/external/yaml-cpp"
+)
+set(
+  CTEST_BINARY_DIRECTORY
+  "/Users/barry/Documents/GitHub/CATChem/src/external/yaml-cpp"
+)
 
 # CTest Update Step
 set(CTEST_UPDATE_COMMAND "")
@@ -91,7 +97,10 @@ endif()
 
 set(_exit_code 0)
 
-if("Start" IN_LIST ACTIONS OR NOT EXISTS "${CTEST_BINARY_DIRECTORY}/Testing/TAG")
+if(
+  "Start" IN_LIST ACTIONS
+  OR NOT EXISTS "${CTEST_BINARY_DIRECTORY}/Testing/TAG"
+)
   ctest_start("${MODEL}")
 else()
   ctest_start("${MODEL}" APPEND)
@@ -146,19 +155,18 @@ if("MemCheck" IN_LIST ACTIONS)
   endif()
 endif()
 
-file(GLOB notes_files LIST_DIRECTORIES OFF
-  "${CTEST_BINARY_DIRECTORY}/Testing/Notes/*")
+file(
+  GLOB notes_files
+  LIST_DIRECTORIES OFF
+  "${CTEST_BINARY_DIRECTORY}/Testing/Notes/*"
+)
 if(notes_files)
   list(APPEND CTEST_NOTES_FILES "${notes_files}")
 endif()
 
 if("Submit" IN_LIST ACTIONS)
   ctest_read_custom_files("${CTEST_BINARY_DIRECTORY}")
-  ctest_submit(
-    RETRY_COUNT "3"
-    RETRY_DELAY "5"
-    RETURN_VALUE success
-    )
+  ctest_submit(RETRY_COUNT "3" RETRY_DELAY "5" RETURN_VALUE success)
   if(NOT success EQUAL 0)
     math(EXPR _exit_code "${_exit_code} | 0x40")
   endif()

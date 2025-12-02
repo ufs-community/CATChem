@@ -37,22 +37,16 @@ mkdocs build --config-file mkdocs.yml
 
 ```
 docs/
-├── mkdocs.yml              # Main configuration
-├── requirements.txt        # Python dependencies
-├── index.md               # Homepage
-├── assets/                # Static assets
-│   ├── stylesheets/       # NOAA theme CSS
-│   ├── javascripts/       # Custom JS
-│   └── images/           # Images and logos
-├── quick-start/          # Quick start guide
-├── user-guide/           # User documentation
-│   └── processes/        # Process-specific docs
-├── developer-guide/      # Developer documentation
-│   ├── processes/        # Process development
-│   ├── core/            # Core system docs
-│   └── integration/     # Integration guides
-├── api/                 # Auto-generated API docs
-└── guides/              # Technical guides
+├── index.md                  # Main landing page
+├── user-guide/               # End-user documentation
+├── processes/                # Process-specific documentation used in the user-guide
+├── developer-guide/          # Technical documentation for developers
+├── api/                      # API reference
+├── ufschem/                  # How CATChem is integrated into the UFS to create UFS-Chem
+├── community/                # How to get involved?
+├── evaluation/               # How CATChem and UFS-Chem are evaluated
+├── assets/                   # Images, stylesheets, scripts
+└── ../mkdocs.yml             # Documentation configuration
 ```
 
 ## Features

@@ -23,10 +23,10 @@ process_behavior:
   timestep_dependency: "independent" #is not doing anything now
   spatial_scope: "column" #is not doing anything now
   #only 'column' is supported for now
-  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))  
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
   memory_requirements: "low" #is not doing anything now
 
-#required_met_fields: [] #used for other purpose, such as unit conversion 
+#required_met_fields: [] #used for other purpose, such as unit conversion
 
 schemes:
   wesely:
@@ -44,34 +44,34 @@ schemes:
       - TSTEP
       - TS
       - SWGDN
-      - SUNCOSmid 
+      - SUNCOSmid
       - OBK
       - CLDFRC
       - BXHEIGHT
       - Z0
-      - PS 
+      - PS
       - FRLAI
       - ILAND     #need to add to metstate
       - SALINITY     #need to add to metstate
       ##- IODIDE     #need to add to metstate
       - FRLANDUSE
       - TSKIN
-      - LON 
+      - LON
       - LAT
       - LUCNAME
       - IsSnow
       - IsIce
       - IsLand
-      
+
 
     required_species_properties:
-      - mw_g         
-      - dd_f0  
-      - short_name            
-      - dd_hstar               
-      - dd_DvzAerSnow       
+      - mw_g
+      - dd_f0
+      - short_name
+      - dd_hstar
+      - dd_DvzAerSnow
       - dd_DvzMinVal_snow
-      - dd_DvzMinVal_land          
+      - dd_DvzMinVal_land
 
     parameters:
       scale_factor:
@@ -104,7 +104,7 @@ schemes:
       #- NLEVS
       - USTAR
       - TSTEP
-      - T 
+      - T
       - AIRDEN
       - Z
       - LWI
@@ -115,10 +115,10 @@ schemes:
       - V10M
       - FRLAKE
       - GWETTOP
-    
-    required_species_properties:         
-      - density              
-      - radius               
+
+    required_species_properties:
+      - density
+      - radius
       - is_seasalt
 
     parameters:
@@ -145,7 +145,7 @@ schemes:
       - USTAR
       - TSTEP
       - TS
-      - OBK 
+      - OBK
       - BXHEIGHT
       - Z0
       - RH
@@ -158,15 +158,15 @@ schemes:
       - IsSnow
       - IsIce
 
-    required_species_properties:         
-      - mw_g 
+    required_species_properties:
+      - mw_g
       - radius
       - density
-      - short_name            
-      - dd_hstar               
-      - dd_DvzAerSnow       
+      - short_name
+      - dd_hstar
+      - dd_DvzAerSnow
       - dd_DvzMinVal_snow
-      - dd_DvzMinVal_land 
+      - dd_DvzMinVal_land
       - lower_radius
       - upper_radius
       - is_dust
@@ -186,5 +186,3 @@ diagnostics:
   - name: "drydep_velocity_per_species"
     description: "Dry deposition velocity"
     units: "m/s"
-  
-

@@ -184,7 +184,7 @@ contains
       ! For ColumnProcessInterface processes, the ProcessManager handles column iteration
       ! and calls run_column() for each virtual column. This method is mainly a placeholder
       ! for any global 3D operations that need to happen before/after column processing.
-      
+
       ! Currently no global 3D operations needed for wetdep process
       ! All processing happens in run_column() method
 
@@ -227,7 +227,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -235,7 +235,7 @@ contains
       ! This handles the complexity of parsing hierarchical YAML into process-specific types
       call this%process_config%load_from_config(config_manager, error_manager)
       ! Note: Error handling managed by error_manager internally
-      
+
       ! Process is now configured - the unified config contains all scheme-specific settings
 
    end subroutine parse_wetdep_config
@@ -319,9 +319,9 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%wetdep_config%scheme))
-      case ('jacob')
+       case ('jacob')
          call this%run_jacob_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -363,13 +363,13 @@ contains
 
       ! Get dimensions from virtual column
       call column%get_dimensions(n_levels, n_chem, n_emis)  ! Full column processing
-      
+
       ! Get wetdep species information from process configuration
       n_species = this%process_config%wetdep_config%n_species
       if (n_species <= 0) then
          return
       end if
-      
+
       ! Get species indices directly from configuration (pre-computed)
       allocate(species_indices(n_species))
       species_indices(1:n_species) = this%process_config%wetdep_config%species_indices(1:n_species)
@@ -499,7 +499,7 @@ contains
             species_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -508,7 +508,7 @@ contains
          do i = 1, n_species
             ! Replacement tendency: new_conc = tendency (tendency is the new value)
             call column%set_chem_field(k, species_indices(i), &
-                                      species_tendencies(k, i))
+               species_tendencies(k, i))
          end do
       end do
 
@@ -532,7 +532,7 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%wetdep_config%scheme))
-      case ('jacob')
+       case ('jacob')
          scheme_count = 8
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'T'
@@ -543,7 +543,7 @@ contains
          scheme_fields(6) = 'PFILSAN'
          scheme_fields(7) = 'PEDGE'
          scheme_fields(8) = 'REEVAPLS'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -553,7 +553,7 @@ contains
       total_fields = process_count + scheme_count
       allocate(unique_fields(total_fields))
       unique_count = 0
-      
+
       ! Add process-level fields first
       do i = 1, process_count
          unique_count = unique_count + 1
@@ -601,11 +601,11 @@ contains
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
       use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_2D, DIAG_REAL_3D
-      
+
       class(ProcessWetDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
-      
+
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(DiagnosticRegistryType), pointer :: registry
       type(GridManagerType), pointer :: grid_mgr
@@ -614,82 +614,82 @@ contains
       integer :: nx, ny, nz
       integer :: dims_2d(2)
       integer :: dims_3d_levels(3)
-      
+
       rc = CC_SUCCESS
-      
+
       ! Only register diagnostics if enabled in config
       if (.not. this%process_config%wetdep_config%diagnostics) then
          return
       endif
-      
+
       ! Get managers
       diag_mgr => container%get_diagnostic_manager()
       grid_mgr => container%get_grid_manager()
-      
+
       ! Register this process with diagnostic manager (only once per process)
       call diag_mgr%register_process('wetdep', rc)
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get the process registry for registering individual diagnostics
       call diag_mgr%get_process_registry('wetdep', registry, rc)
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get grid dimensions
       call grid_mgr%get_shape(nx, ny, nz)
       dims_2d = [nx, ny]
-      
+
       dims_3d_levels = [nx, ny, nz]
-      
+
       ! Register wetdep_mass_per_species_per_level
       ! Register individual 3D fields for each diagnostic species (level + species diagnostics)
       if (this%process_config%wetdep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%wetdep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'wetdep_mass_', &
-                  trim(this%process_config%wetdep_config%diagnostic_species(i))
+               trim(this%process_config%wetdep_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Wet deposition mass loss per species per level', &
-                                                'kg/m2', DIAG_REAL_3D, &
-                                                'wetdep', dims_3d_levels, rc=rc)
+               'Wet deposition mass loss per species per level', &
+               'kg/m2', DIAG_REAL_3D, &
+               'wetdep', dims_3d_levels, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       if (rc /= CC_SUCCESS) return
-      
+
       ! Register wetdep_flux_per_species_per_level
       ! Register individual 3D fields for each diagnostic species (level + species diagnostics)
       if (this%process_config%wetdep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%wetdep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'wetdep_flux_', &
-                  trim(this%process_config%wetdep_config%diagnostic_species(i))
+               trim(this%process_config%wetdep_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Wet deposition flux per species per level', &
-                                                'kg/m2/s', DIAG_REAL_3D, &
-                                                'wetdep', dims_3d_levels, rc=rc)
+               'Wet deposition flux per species per level', &
+               'kg/m2/s', DIAG_REAL_3D, &
+               'wetdep', dims_3d_levels, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get selected scheme(s)
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%wetdep_config%scheme))
-      
-      case ('jacob')
+
+       case ('jacob')
          ! Register jacob-specific diagnostics
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
-         
+
       end select
 
       ! Now allocate diagnostic class members after successful registration
       ! First, deallocate if already allocated (for scheme switching)
       if (allocated(this%column_wetdep_mass_per_species_per_level)) deallocate(this%column_wetdep_mass_per_species_per_level)
       if (allocated(this%column_wetdep_flux_per_species_per_level)) deallocate(this%column_wetdep_flux_per_species_per_level)
-      
+
       ! Allocate and initialize scheme-specific diagnostic fields based on selected scheme
       ! For non-gas/aero differentiated process, allocate diagnostics normally
-      
+
       ! Allocate common diagnostic fields (used by all schemes)
       ! 2D diagnostic: levels x diagnostic_species
       if (nz > 0 .and. this%process_config%wetdep_config%n_diagnostic_species > 0) then
@@ -701,20 +701,20 @@ contains
          allocate(this%column_wetdep_flux_per_species_per_level(nz, this%process_config%wetdep_config%n_diagnostic_species))
       end if
       if (allocated(this%column_wetdep_flux_per_species_per_level)) this%column_wetdep_flux_per_species_per_level = 0.0_fp
-      
+
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%wetdep_config%scheme))
-      case ('jacob')
+       case ('jacob')
          ! Scheme-specific diagnostics for jacob
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
    end subroutine register_and_allocate_diagnostics
 
    !> Calculate and update all diagnostic fields for this process
-   !! 
-   !! With the new flexible column-level design, diagnostics are calculated directly by the 
+   !!
+   !! With the new flexible column-level design, diagnostics are calculated directly by the
    !! science schemes for each column and passed to this method for aggregation or output.
    !! This approach uses dimension inference to reduce 2D->scalar and 3D->1D for column processing.
    subroutine calculate_and_update_diagnostics(this, column, container, rc)
@@ -722,28 +722,28 @@ contains
       type(VirtualColumnType), intent(in) :: column
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
-      
+
       integer :: i_col, j_col  ! Column grid position
       integer :: i  ! Loop variable for diagnostic species
       character(len=256) :: field_name  ! For constructing species-specific field names
-      
+
       rc = CC_SUCCESS
-      
+
       ! Skip if diagnostics not enabled
       if (.not. this%process_config%wetdep_config%diagnostics) return
-      
+
       ! Get column grid position (x, y indices)
       call column%get_position(i_col, j_col)
-      
-      ! Update common diagnostic fields (used by all schemes) 
+
+      ! Update common diagnostic fields (used by all schemes)
       ! Update individual 3D fields for each diagnostic species (level + species diagnostics)
       if (this%process_config%wetdep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%wetdep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'wetdep_mass_', &
-                  trim(this%process_config%wetdep_config%diagnostic_species(i))
+               trim(this%process_config%wetdep_config%diagnostic_species(i))
             call this%update_1d_diagnostic_column(trim(field_name), &
-                                                 this%column_wetdep_mass_per_species_per_level(:,i), &
-                                                 i_col, j_col, container, rc)
+               this%column_wetdep_mass_per_species_per_level(:,i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -751,19 +751,19 @@ contains
       if (this%process_config%wetdep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%wetdep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'wetdep_flux_', &
-                  trim(this%process_config%wetdep_config%diagnostic_species(i))
+               trim(this%process_config%wetdep_config%diagnostic_species(i))
             call this%update_1d_diagnostic_column(trim(field_name), &
-                                                 this%column_wetdep_flux_per_species_per_level(:,i), &
-                                                 i_col, j_col, container, rc)
+               this%column_wetdep_flux_per_species_per_level(:,i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%wetdep_config%scheme))
-      case ("jacob")
+       case ("jacob")
          ! Scheme-specific diagnostics for jacob
       end select
-      
+
    end subroutine calculate_and_update_diagnostics
 
 
@@ -777,9 +777,9 @@ contains
    subroutine set_wetdep_scheme(this, scheme_name)
       class(ProcessWetDepInterface), intent(inout) :: this
       character(len=*), intent(in) :: scheme_name
-      
+
       this%process_config%wetdep_config%scheme = trim(scheme_name)
-      
+
    end subroutine set_wetdep_scheme
 
    !> Get the current active scheme
@@ -792,9 +792,9 @@ contains
    function get_wetdep_scheme(this) result(scheme_name)
       class(ProcessWetDepInterface), intent(in) :: this
       character(len=64) :: scheme_name
-      
+
       scheme_name = trim(this%process_config%wetdep_config%scheme)
-      
+
    end function get_wetdep_scheme
 
 end module ProcessWetDepInterface_Mod

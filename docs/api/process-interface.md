@@ -5,6 +5,7 @@ This section covers the process interface APIs that define how atmospheric proce
 ## Overview
 
 The Process Interface system provides:
+
 - **ProcessInterface**: Base interface for all atmospheric processes
 - **ColumnProcessInterface**: Column-optimized process interface
 - **ProcessManager**: Process orchestration and lifecycle management
@@ -28,11 +29,12 @@ end type
 ```
 
 **Required Methods:**
+
 - `initialize(container, rc)` - Setup process with configuration
 - `run(container, rc)` - Execute process calculations
 - `finalize(rc)` - Clean up process resources
 
-**Auto-Generated Documentation:** [Process Interface Reference](../CATChem/namespaceprocess__interface__mod.md)
+**Auto-Generated Documentation:** [Process Interface Reference](../CATChem/namespaceprocessinterface__mod.md)
 
 ### ColumnProcessInterface
 
@@ -61,10 +63,12 @@ end subroutine
 ```
 
 **Performance Benefits:**
-- 10x faster than 3D processing
+
 - Automatic parallelization
 - Cache-optimized memory access
 - Linear scaling with grid size
+
+**Auto-Generated Documentation:** [Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)
 
 ## Process Implementation
 
@@ -193,12 +197,13 @@ call process_mgr%finalize(rc)
 ```
 
 **Key Features:**
+
 - Automatic process discovery
 - Dependency resolution
 - Parallel process execution
 - Error recovery and reporting
 
-**Auto-Generated Documentation:** [Process Manager Reference](../CATChem/namespaceprocess__manager__mod.md)
+**Auto-Generated Documentation:** [Process Manager Reference](../CATChem/namespaceprocessmanager__mod.md)
 
 ## Process Registry
 
@@ -218,6 +223,8 @@ call process_registry%create_process('emission_process', &
 ! List available processes
 call process_registry%list_processes(process_names, rc)
 ```
+
+**Auto-Generated Documentation:** [Process Registry Reference](../CATChem/namespaceprocessregistry__mod.md)
 
 ## Error Handling
 
@@ -246,6 +253,8 @@ subroutine my_process_run(this, container, rc)
     call error_mgr%pop_context()
 end subroutine
 ```
+
+**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
 
 ## Configuration Integration
 
@@ -294,6 +303,10 @@ subroutine process_with_diagnostics(this, container, rc)
 end subroutine
 ```
 
+**Auto-Generated Documentation:** [Diagnostic Manager Reference](../CATChem/namespacediagnosticmanager__mod.md)
+
+**Auto-Generated Documentation:** [Diagnostic Interface Reference](../CATChem/namespacediagnosticinterface__mod.md)
+
 ## Testing Framework
 
 Process testing utilities:
@@ -334,7 +347,7 @@ end program
 
 ### Performance
 
-1. **Use column processing** when possible for 10x speedup
+1. **Use column processing** when possible
 2. **Minimize memory allocations** in run methods
 3. **Cache frequently accessed data**
 4. **Use efficient algorithms** for atmospheric calculations
@@ -367,6 +380,7 @@ python util/catchem_generate_process.py \
 ```
 
 This creates a complete process template with:
+
 - Process interface implementation
 - Column processing support
 - Configuration integration
@@ -379,9 +393,8 @@ This creates a complete process template with:
 - [State Management API](state-management.md) - Data access and manipulation
 - [Column Interface API](column-interface.md) - Column-based processing
 - [Configuration API](configuration.md) - Process configuration
-- [Error Handling API](error-handling.md) - Error management
 - [Process Development Guide](../developer-guide/processes/creating.md) - Step-by-step process creation
 
 ---
 
-**Auto-Generated Documentation:** [Complete Process Interface Reference](../CATChem/namespaceprocess__interface__mod.md)
+**Auto-Generated Documentation:** [Complete Process Interface Reference](../CATChem/namespaceprocessinterface__mod.md)

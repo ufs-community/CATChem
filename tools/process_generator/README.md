@@ -343,7 +343,7 @@ Generated processes automatically integrate with the CATChem CMake build system:
    ```bash
    # Check if MetState file exists
    ls -la ../../src/core/metstate_mod.F90
-   
+
    # Use explicit path
    python process_generator.py generate --config config.yaml --metstate /path/to/metstate_mod.F90
    ```
@@ -352,7 +352,7 @@ Generated processes automatically integrate with the CATChem CMake build system:
    ```bash
    # Check discovered fields
    python process_generator.py fields --type all --verbose
-   
+
    # Verify field exists in MetState
    grep -n "FIELD_NAME" ../../src/core/metstate_mod.F90
    ```

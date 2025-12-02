@@ -126,7 +126,7 @@ program modern_initialization_example
 
    print *, "Configuring process manager..."
    call catchem%configure_process_manager(max_processes=50, &
-                                         enable_column_batching=.true., rc=rc)
+      enable_column_batching=.true., rc=rc)
    if (rc == CATCHEM_SUCCESS) then
       print *, "✓ Process manager configured"
    else

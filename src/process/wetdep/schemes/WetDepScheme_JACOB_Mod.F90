@@ -29,7 +29,7 @@
 module WetDepScheme_JACOB_Mod
 
    use precision_mod, only: fp, zero, one, rae, TINY_
-   use error_mod, only: CC_Warning, CC_SUCCESS !CC_Error 
+   use error_mod, only: CC_Warning, CC_SUCCESS !CC_Error
    use WetDepCommon_Mod, only: WetDepSchemeJACOBConfig
    use Constants, only: g0, AIRMW  !load the constants needed for this scheme
 
@@ -114,7 +114,7 @@ contains
       wetdep_mass_per_species_per_level, &
       wetdep_flux_per_species_per_level, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -195,7 +195,7 @@ contains
       dt = tstep
 
       allocate(qq(kbot:ktop), pdwn(kbot:ktop), conc(kbot:ktop), dconc(kbot:ktop), dpog(kbot:ktop), c_h2o(kbot:ktop), &
-      cldice(kbot:ktop), cldliq(kbot:ktop), delz_cm(kbot:ktop), SO2(kbot:ktop), SO4(kbot:ktop), H2O2(kbot:ktop), reevap(kbot:ktop))
+         cldice(kbot:ktop), cldliq(kbot:ktop), delz_cm(kbot:ktop), SO2(kbot:ktop), SO4(kbot:ktop), H2O2(kbot:ktop), reevap(kbot:ktop))
 
       ! find species indices for SO2, SO4, and H2O2
       so2_id = -1
@@ -208,24 +208,24 @@ contains
          errMsg = 'SO2 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
          CALL CC_Warning( errMsg, RC, thisLoc )
          SO2 = zero
-      else 
+      else
          SO2 = species_conc(:, so2_id) * 1.e-09_fp  !convert from ug/kg to kg/kg
       endif
       if (so4_id < 1 ) then
          errMsg = 'SO4 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
          CALL CC_Warning( errMsg, RC, thisLoc )
          SO4 = zero
-      else 
+      else
          SO4 = species_conc(:, so4_id) * 1.e-09_fp  !convert from ug/kg to kg/kg
       endif
       if (h2o2_id < 1 ) then
          errMsg = 'H2O2 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
          CALL CC_Warning( errMsg, RC, thisLoc )
          H2O2 = zero
-      else 
+      else
          H2O2 = species_conc(:, h2o2_id) * 1.e-09_fp  !convert from ug/kg to kg/kg
       endif
-      
+
       ! calculate vertical met first
       do k = kbot, ktop
          km1 = k + 1
@@ -237,16 +237,16 @@ contains
          !   dqis = pfilsan(k)
          !   pdwn(k) = kg_to_cm3_liq * pfllsan(k) + kg_to_cm3_ice * pfilsan(k)
          !else
-         
+
          !Here we follow GOCART with an additional index; otherwise, uncomment the if else statement above
          ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
          dqls = pfllsan(k) - pfllsan(km1)
          dqis = pfilsan(k) - pfilsan(km1)
          ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
          pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
-         
+
          !end if ! if (k == ktop)
-         
+
          delp = pedge(k) - pedge(km1)
          dpog(k) = delp / g0
          delz = dpog(k) / mairden(k) ! thickness of layer [m]
@@ -297,7 +297,7 @@ contains
          ! -- initialize loss array
          dconc(:) = zero
          efficiency(:) = species_wd_rainouteff(species_idx, :)
-         
+
          ! -- starts at the top
          k = ktop
          f = zero
@@ -307,13 +307,13 @@ contains
             f = qq(k) / ( k_rain * cwc )
 
             call rainout(species_is_aerosol(species_idx), efficiency, species_wd_LiqAndGas(species_idx), &
-                         species_henry_k0(species_idx), species_henry_cr(species_idx), species_henry_pKa(species_idx),              &
-                         species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f, k_rain, dt, t(k),  c_h2o(k),     &
-                         cldice(k), cldliq(k), species_short_name(species_idx), lossfrac, SO2(k), H2O2(k))
-            
+               species_henry_k0(species_idx), species_henry_cr(species_idx), species_henry_pKa(species_idx),              &
+               species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f, k_rain, dt, t(k),  c_h2o(k),     &
+               cldice(k), cldliq(k), species_short_name(species_idx), lossfrac, SO2(k), H2O2(k))
+
             ! -- compute and apply effective loss fraction
             call rainout_loss( k, lossfrac, conc, dconc )
-            
+
          end if
 
          ! -- middle layers
@@ -343,13 +343,13 @@ contains
                if ( f_rainout > zero ) then
 
                   call rainout(species_is_aerosol(species_idx), efficiency, species_wd_LiqAndGas(species_idx), &
-                         species_henry_k0(species_idx), species_henry_cr(species_idx), species_henry_pKa(species_idx),              &
-                         species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f, k_rain, dt, t(k),  c_h2o(k),     &
-                         cldice(k), cldliq(k), species_short_name(species_idx), lossfrac, SO2(k), H2O2(k))
-                  
+                     species_henry_k0(species_idx), species_henry_cr(species_idx), species_henry_pKa(species_idx),              &
+                     species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f, k_rain, dt, t(k),  c_h2o(k),     &
+                     cldice(k), cldliq(k), species_short_name(species_idx), lossfrac, SO2(k), H2O2(k))
+
                   ! -- compute and apply effective loss fraction
                   call rainout_loss( k, lossfrac, conc, dconc )
-                  
+
                end if
                if ( f_washout > zero ) then
                   if ( f_rainout > zero ) then
@@ -363,8 +363,8 @@ contains
                   end if
 
                   call washout(species_radius(species_idx), f, t(k), qdwn, delz_cm(k), dt, species_short_name(species_idx), &
-                  species_is_aerosol(species_idx), species_henry_k0(species_idx), species_henry_cr(species_idx), &
-                  species_henry_pKa(species_idx), params%scale_factor, params%radius_threshold, lossfrac, kin, SO2(k), H2O2(k))
+                     species_is_aerosol(species_idx), species_henry_k0(species_idx), species_henry_cr(species_idx), &
+                     species_henry_pKa(species_idx), params%scale_factor, params%radius_threshold, lossfrac, kin, SO2(k), H2O2(k))
 
                   ! -- compute and apply effective loss fraction
                   call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
@@ -394,17 +394,17 @@ contains
 
                ! -- compute and apply effective loss fraction
                call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                     delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
+                  delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
 
             end if
          end if
-         
+
          ! calculate vertical met first
          do k = kbot, ktop
 
             ! -- convert back to kg/kg
             species_tendencies(k, species_idx) = max(0.0_fp, conc(k) / dpog(k) )
-            
+
             ! Update diagnostic fields here based on your scheme's requirements
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(wetdep_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
@@ -412,7 +412,7 @@ contains
                do diag_idx = 1, size(diagnostic_species_id)
                   if (diagnostic_species_id(diag_idx) == species_idx) then
                      ! Add your custom wet deposition mass loss per species per level calculation
-                     wetdep_mass_per_species_per_level(k, diag_idx) = dconc(k)  
+                     wetdep_mass_per_species_per_level(k, diag_idx) = dconc(k)
                      exit
                   end if
                end do
@@ -429,7 +429,7 @@ contains
                end do
             end if
          end do ! End layer loop
-         
+
       end do ! End species loop
 
       deallocate(qq, pdwn, conc, dconc, dpog, delz_cm, c_h2o, cldice, cldliq, SO2, SO4, H2O2, reevap)
@@ -530,7 +530,7 @@ contains
       ! considered to be a gas-phase species elsewhere
       !=================================================================
       if (is_aero .or. spc == 'SO2' .or. spc == 'HNO3' .or. spc == 'H2SO4'  &
-                  .or. spc == 'so2' .or. spc == 'hno3' .or. spc == 'h2so4') then
+         .or. spc == 'so2' .or. spc == 'hno3' .or. spc == 'h2so4') then
          lossfrac = rainfrac( f, k, dt )
 
          ! -- apply rainout efficiency (simplify from APPLY_RAINOUT_EFF)
@@ -680,7 +680,7 @@ contains
          ! to be a gas-phase species elsewhere (e.g. dry deposition)
          !=================================================================
       ELSE IF ( Spc == 'SO2' .or. spc == 'H2SO4' .or. &
-                spc == 'so2' .or. spc == 'h2so4') THEN  !TODO: better way to check species name?
+         spc == 'so2' .or. spc == 'h2so4') THEN  !TODO: better way to check species name?
 
          ! NOTE: Even though SO2 is not an aerosol we treat it as SO4 in
          ! wet scavenging.  When evaporation occurs, it returns to SO4.

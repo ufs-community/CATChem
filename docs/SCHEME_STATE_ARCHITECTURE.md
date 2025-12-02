@@ -164,7 +164,7 @@ subroutine compute_gong97(n_levels, n_species, config, &
    ! All variables are local - no persistent state needed
    real(fp) :: local_emission_rate
    real(fp) :: wind_speed
-   
+
    wind_speed = sqrt(u10m**2 + v10m**2)
    local_emission_rate = config%scale_factor * wind_function(wind_speed)
    species_tendencies(:) = local_emission_rate * size_distribution(:)
@@ -179,7 +179,7 @@ subroutine compute_complex(n_levels, n_species, config, state, &
    if (state%last_computation_time < 0.0) then
       call initialize_size_distribution(state%size_distribution)
    end if
-   
+
    call update_distribution(state%size_distribution, met_fields)
    state%last_computation_time = current_time
 end subroutine

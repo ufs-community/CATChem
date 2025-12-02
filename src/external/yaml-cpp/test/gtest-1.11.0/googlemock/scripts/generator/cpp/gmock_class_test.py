@@ -187,9 +187,9 @@ class Foo {
 class Foo {
  public:
   virtual void Bar(
-        int a = 42, 
-        char c = 'x', 
-        const int* const p = nullptr, 
+        int a = 42,
+        char c = 'x',
+        const int* const p = nullptr,
         const std::string& s = "42",
         char tab[] = {'4','2'},
         int const *& rp = aDefaultPointer) = 0;

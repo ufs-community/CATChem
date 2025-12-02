@@ -69,7 +69,7 @@ program test_{{ config.name }}_unit
    write(*,*) 'Test 6 passed!'
    write(*,*) ''
 
-   ! Test 7: Process{{ config.class_name }}Interface creation  
+   ! Test 7: Process{{ config.class_name }}Interface creation
    write(*,*) 'Test 7: Process{{ config.class_name }}Interface creation'
    call test_process_interface_creation()
 
@@ -178,7 +178,7 @@ contains
 {% endif %}
 {% endfor %}
 
-      ! Test aerosol schemes  
+      ! Test aerosol schemes
 {% for scheme in config.schemes %}
 {% if scheme.gas_or_aero == 'aero' or scheme.gas_or_aero == 'both' %}
       config%aero_scheme = '{{ scheme.name }}'
@@ -193,7 +193,7 @@ contains
       call config%validate(error_manager)
       call assert(.true., "Invalid gas scheme validation completed")
 
-      config%aero_scheme = 'invalid_aero_scheme'  
+      config%aero_scheme = 'invalid_aero_scheme'
       call config%validate(error_manager)
       call assert(.true., "Invalid aerosol scheme validation completed")
 {% else %}
@@ -241,4 +241,3 @@ contains
    end subroutine test_process_interface_methods
 
 end program test_{{ config.name }}_unit
-

@@ -157,7 +157,7 @@ program standalone_column_driver
 
    ! Configure process manager for optimal column processing
    call catchem%configure_process_manager(max_processes=20, &
-                                         enable_column_batching=.true., rc=rc)
+      enable_column_batching=.true., rc=rc)
    if (rc /= CATCHEM_SUCCESS) then
       print *, "⚠ Process manager configuration failed"
    endif

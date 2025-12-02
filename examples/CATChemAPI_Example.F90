@@ -138,7 +138,7 @@ contains
       ! ===================================================================
       if (allocated(output_data%dust_emissions)) then
          write(*,*) 'Dust emissions calculated for ', &
-                   size(output_data%dust_emissions, 3), ' size bins'
+            size(output_data%dust_emissions, 3), ' size bins'
          write(*,*) 'Max dust emission: ', maxval(output_data%dust_emissions), ' kg/m2/s'
       endif
 
@@ -296,7 +296,7 @@ contains
          if (chemistry_enabled) then
             ! Transfer data from host model to CATChem
             call transfer_host_to_catchem(host_temperature, host_concentrations, &
-                                        host_emissions, chem_data)
+               host_emissions, chem_data)
 
             ! Run CATChem for this time step
             call catchem%run_timestep(chem_data, chem_data, rc)
@@ -386,7 +386,7 @@ contains
       do step = 1, size(output_data)
          if (allocated(output_data(step)%dust_emissions)) then
             write(*,'(A,I3,A,E12.4)') 'Hour ', step, ': Max dust emission = ', &
-                  maxval(output_data(step)%dust_emissions)
+               maxval(output_data(step)%dust_emissions)
          endif
       end do
 
@@ -445,7 +445,7 @@ contains
       real(fp), intent(in) :: concentrations(:,:,:,:)
 
       write(*,'(A,I6,A,E12.4)') 'Step ', time_step, ': Total concentration = ', &
-            sum(concentrations)
+         sum(concentrations)
 
    end subroutine host_model_output
 

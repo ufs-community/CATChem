@@ -424,7 +424,7 @@ contains
          write(*,'(A)') 'Available Processes:'
          do i = 1, this%num_entries
             write(*,'(A,A,A,A,A)') '  ', trim(this%entries(i)%name), &
-                 ' [', trim(this%entries(i)%category), ']'
+               ' [', trim(this%entries(i)%category), ']'
          enddo
       endif
       write(*,'(A)') '================================='

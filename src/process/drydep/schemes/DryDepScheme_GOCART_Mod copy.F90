@@ -72,8 +72,8 @@ contains
    !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)
    !! @param[inout] drydep_velocity_per_species    Dry deposition velocity [m/s] (num_species)
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
-   
-subroutine compute_gocart( &
+
+   subroutine compute_gocart( &
       num_layers, &
       num_species, &
       params, &
@@ -99,7 +99,7 @@ subroutine compute_gocart( &
       drydep_con_per_species, &
       drydep_velocity_per_species, &
       diagnostic_species_id &
-   )
+      )
 
       ! Uses
       USE GOCART2G_Process, only: DryDeposition
@@ -208,7 +208,7 @@ subroutine compute_gocart( &
                call DryDeposition(num_layers, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
                   GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, drydepf, RC)
             endif
-            
+
             ! Ensure non-negative values
             species_tendencies(k, species_idx) = max(0.0_fp, drydepf(1,1)) * params%scale_factor
             !increase drydep frequency by factor of 5 for seasalt species to match GOCART2G. See the codes in:
@@ -217,9 +217,9 @@ subroutine compute_gocart( &
                species_tendencies(k, species_idx) = species_tendencies(k, species_idx) * 5.0_fp
             end if
 
-            VD = max(species_tendencies(k, species_idx) * (z(k+1) -z(k) ), 1.e-4_fp)  
+            VD = max(species_tendencies(k, species_idx) * (z(k+1) -z(k) ), 1.e-4_fp)
 
-            
+
             ! TODO: Update diagnostic fields here based on your scheme's requirements
             ! Each process should implement custom diagnostic calculations
             ! Example patterns:
@@ -230,7 +230,7 @@ subroutine compute_gocart( &
                   if (diagnostic_species_id(diag_idx) == species_idx) then
                      ! Add your custom dry deposition concentration per species calculation
                      drydep_con_per_species(diag_idx) =  &
-                     MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep))) 
+                        MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep)))
                      exit
                   end if
                end do
@@ -370,13 +370,13 @@ subroutine compute_gocart( &
       allocate(GOCART_Z0H(1, 1))
 
       !Note: GOCART scheme expects vertical levels in reverse order (top to bottom)
-      
+
       GOCART_TMPU(1,1,:) = tmpu(size(tmpu):1:-1) ! temperature [K]
       GOCART_RHOA(1,1,:) = rhoa(size(rhoa):1:-1) ! air density [kg/m^3]
       GOCART_HGHTE(1,1,:) = hghte(size(hghte):1:-1)    ! top of layer geopotential height [m]
       GOCART_LWI = real(LWI, fp)     ! orography flag; Land, ocean, ice mask
       GOCART_USTAR  = ustar
-      
+
       ! friction speed [m/sec]
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]

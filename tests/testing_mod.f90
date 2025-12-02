@@ -31,9 +31,9 @@ contains
 
    !> Error out if `a` and `b` are not within `tol` of each other.
    subroutine assert_close(a, b, tol, msg)
-       real(fp), intent(in) :: a, b
-       real(fp), intent(in), optional :: tol  !< Absolute tolerance, defaults to TINY
-       character(len=*), intent(in), optional :: msg  !< Brief description of the assertion
+      real(fp), intent(in) :: a, b
+      real(fp), intent(in), optional :: tol  !< Absolute tolerance, defaults to TINY
+      character(len=*), intent(in), optional :: msg  !< Brief description of the assertion
 
       real(fp) :: diff, tol_
       character(len=:), allocatable :: msg_

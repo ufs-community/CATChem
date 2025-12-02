@@ -75,11 +75,11 @@ program test_DiagnosticManager
    block
       character(len=64), allocatable :: process_list(:)
       integer :: num_processes
-      
+
       call diag_mgr%list_processes(process_list, num_processes, rc)
       call assert(rc == CC_SUCCESS, "Listing processes should succeed")
       call assert(num_processes >= 0, "Number of processes should be non-negative")
-      
+
       if (allocated(process_list)) then
          deallocate(process_list)
       end if
@@ -150,7 +150,7 @@ program test_DiagnosticManager
    write(*,*) 'Test 15: Get total diagnostics'
    block
       integer :: total_diagnostics
-      
+
       total_diagnostics = diag_mgr%get_total_diagnostics()
       call assert(total_diagnostics >= 0, "Total diagnostics should be non-negative")
    end block
@@ -206,5 +206,5 @@ program test_DiagnosticManager
    write(*,*) ''
 
    write(*,*) 'All DiagnosticManager tests passed!'
-   
+
 end program test_DiagnosticManager

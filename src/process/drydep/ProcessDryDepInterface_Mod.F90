@@ -188,7 +188,7 @@ contains
       ! For ColumnProcessInterface processes, the ProcessManager handles column iteration
       ! and calls run_column() for each virtual column. This method is mainly a placeholder
       ! for any global 3D operations that need to happen before/after column processing.
-      
+
       ! Currently no global 3D operations needed for drydep process
       ! All processing happens in run_column() method
 
@@ -231,7 +231,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -239,7 +239,7 @@ contains
       ! This handles the complexity of parsing hierarchical YAML into process-specific types
       call this%process_config%load_from_config(config_manager, error_manager)
       ! Note: Error handling managed by error_manager internally
-      
+
       ! Process is now configured - the unified config contains all scheme-specific settings
 
    end subroutine parse_drydep_config
@@ -324,21 +324,21 @@ contains
       ! For gas/aerosol differentiated processing, run schemes based on species type
       ! Run gas scheme for gas species
       select case (trim(this%process_config%drydep_config%gas_scheme))
-      case ('wesely')
+       case ('wesely')
          call this%run_wesely_scheme_column(column, rc)
          if (rc /= CC_SUCCESS) return
-      case default
+       case default
          rc = CC_FAILURE
          return
       end select
 
       ! Run aerosol scheme for aerosol species
       select case (trim(this%process_config%drydep_config%aero_scheme))
-      case ('gocart')
+       case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
-      case ('zhang')
+       case ('zhang')
          call this%run_zhang_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -391,13 +391,13 @@ contains
 
       ! Get dimensions from virtual column
       n_levels = 1  ! Surface-only processing
-      
+
       ! Get drydep species information from process configuration
       n_species = this%process_config%drydep_config%n_species
       if (n_species <= 0) then
          return
       end if
-      
+
       ! Get species indices directly from configuration (pre-computed)
       allocate(species_indices(n_species))
       species_indices(1:n_species) = this%process_config%drydep_config%species_indices(1:n_species)
@@ -408,9 +408,9 @@ contains
       ! Allocate meteorological field arrays based on field type and process configuration
       allocate(bxheight(n_levels))  ! Atmospheric field - always n_levels
       allocate(cldfrc(1))  ! Surface field - always scalar
-      
-      
-      
+
+
+
       allocate(isice(1))  ! Surface field - always scalar
       allocate(island(1))  ! Surface field - always scalar
       allocate(issnow(1))  ! Surface field - always scalar
@@ -567,7 +567,7 @@ contains
             species_conc, &
             species_tendencies, &
             this%process_config%drydep_config%is_gas &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -579,7 +579,7 @@ contains
          ! where loss_fraction = 1 - exp(-tendency * dt)
          loss_fraction = MAX(1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep()), 0.0_fp)
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) * (1.0_fp - loss_fraction))
+            species_conc(1, i) * (1.0_fp - loss_fraction))
       end do
 
    end subroutine run_wesely_scheme_column
@@ -620,13 +620,13 @@ contains
 
       ! Get dimensions from virtual column
       n_levels = 1  ! Surface-only processing
-      
+
       ! Get drydep species information from process configuration
       n_species = this%process_config%drydep_config%n_species
       if (n_species <= 0) then
          return
       end if
-      
+
       ! Get species indices directly from configuration (pre-computed)
       allocate(species_indices(n_species))
       species_indices(1:n_species) = this%process_config%drydep_config%species_indices(1:n_species)
@@ -744,7 +744,7 @@ contains
             species_conc, &
             species_tendencies, &
             this%process_config%drydep_config%is_gas &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -756,7 +756,7 @@ contains
          ! where loss_fraction = 1 - exp(-tendency * dt)
          loss_fraction = MAX(1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep()), 0.0_fp)
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) * (1.0_fp - loss_fraction))
+            species_conc(1, i) * (1.0_fp - loss_fraction))
       end do
 
    end subroutine run_gocart_scheme_column
@@ -807,13 +807,13 @@ contains
 
       ! Get dimensions from virtual column
       n_levels = 1  ! Surface-only processing
-      
+
       ! Get drydep species information from process configuration
       n_species = this%process_config%drydep_config%n_species
       if (n_species <= 0) then
          return
       end if
-      
+
       ! Get species indices directly from configuration (pre-computed)
       allocate(species_indices(n_species))
       species_indices(1:n_species) = this%process_config%drydep_config%species_indices(1:n_species)
@@ -823,8 +823,8 @@ contains
       allocate(species_tendencies(1, n_species))
       ! Allocate meteorological field arrays based on field type and process configuration
       allocate(bxheight(n_levels))  ! Atmospheric field - always n_levels
-      
-      
+
+
       allocate(isice(1))  ! Surface field - always scalar
       allocate(issnow(1))  ! Surface field - always scalar
       allocate(lucname(1))  ! Surface field - always scalar
@@ -983,7 +983,7 @@ contains
             species_conc, &
             species_tendencies, &
             this%process_config%drydep_config%is_gas &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -995,7 +995,7 @@ contains
          ! where loss_fraction = 1 - exp(-tendency * dt)
          loss_fraction = MAX(1.0_fp - exp(-species_tendencies(1, i) * this%get_timestep()), 0.0_fp)
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) * (1.0_fp - loss_fraction))
+            species_conc(1, i) * (1.0_fp - loss_fraction))
       end do
 
    end subroutine run_zhang_scheme_column
@@ -1021,7 +1021,7 @@ contains
       ! For gas/aero differentiated processes, get fields from both schemes
       ! Get gas scheme fields
       select case (trim(this%process_config%drydep_config%gas_scheme))
-      case ('wesely')
+       case ('wesely')
          gas_scheme_count = 21
          allocate(gas_scheme_fields(gas_scheme_count))
          gas_scheme_fields(1) = 'USTAR'
@@ -1045,14 +1045,14 @@ contains
          gas_scheme_fields(19) = 'IsSnow'
          gas_scheme_fields(20) = 'IsIce'
          gas_scheme_fields(21) = 'IsLand'
-      case default
+       case default
          gas_scheme_count = 0
          allocate(gas_scheme_fields(0))
       end select
 
       ! Get aerosol scheme fields
       select case (trim(this%process_config%drydep_config%aero_scheme))
-      case ('gocart')
+       case ('gocart')
          aero_scheme_count = 13
          allocate(aero_scheme_fields(aero_scheme_count))
          aero_scheme_fields(1) = 'USTAR'
@@ -1068,7 +1068,7 @@ contains
          aero_scheme_fields(11) = 'V10M'
          aero_scheme_fields(12) = 'FRLAKE'
          aero_scheme_fields(13) = 'GWETTOP'
-      case ('zhang')
+       case ('zhang')
          aero_scheme_count = 15
          allocate(aero_scheme_fields(aero_scheme_count))
          aero_scheme_fields(1) = 'USTAR'
@@ -1086,7 +1086,7 @@ contains
          aero_scheme_fields(13) = 'LUCNAME'
          aero_scheme_fields(14) = 'IsSnow'
          aero_scheme_fields(15) = 'IsIce'
-      case default
+       case default
          aero_scheme_count = 0
          allocate(aero_scheme_fields(0))
       end select
@@ -1096,7 +1096,7 @@ contains
       total_fields = process_count + gas_scheme_count + aero_scheme_count
       allocate(unique_fields(total_fields))
       unique_count = 0
-      
+
       ! Add process-level fields first
       do i = 1, process_count
          unique_count = unique_count + 1
@@ -1160,11 +1160,11 @@ contains
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
       use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_2D, DIAG_REAL_3D
-      
+
       class(ProcessDryDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
-      
+
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(DiagnosticRegistryType), pointer :: registry
       type(GridManagerType), pointer :: grid_mgr
@@ -1174,82 +1174,82 @@ contains
       integer :: n_species
       integer :: dims_2d(2)
       integer :: dims_3d_species(3)
-      
+
       rc = CC_SUCCESS
-      
+
       ! Only register diagnostics if enabled in config
       if (.not. this%process_config%drydep_config%diagnostics) then
          return
       endif
-      
+
       ! Get managers
       diag_mgr => container%get_diagnostic_manager()
       grid_mgr => container%get_grid_manager()
-      
+
       ! Register this process with diagnostic manager (only once per process)
       call diag_mgr%register_process('drydep', rc)
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get the process registry for registering individual diagnostics
       call diag_mgr%get_process_registry('drydep', registry, rc)
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get grid dimensions
       call grid_mgr%get_shape(nx, ny, nz)
       dims_2d = [nx, ny]
-      
+
       ! Get species count for 3D diagnostics
       n_species = this%process_config%drydep_config%n_species
       dims_3d_species = [nx, ny, n_species]
-      
+
       ! Register drydep_con_per_species
       ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
       if (this%process_config%drydep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%drydep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'drydep_con_', &
-                  trim(this%process_config%drydep_config%diagnostic_species(i))
+               trim(this%process_config%drydep_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Dry deposition concentration per species', &
-                                                'ug/kg or ppm', DIAG_REAL_2D, &
-                                                'drydep', dims_2d, rc=rc)
+               'Dry deposition concentration per species', &
+               'ug/kg or ppm', DIAG_REAL_2D, &
+               'drydep', dims_2d, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       if (rc /= CC_SUCCESS) return
-      
+
       ! Register drydep_velocity_per_species
       ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
       if (this%process_config%drydep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%drydep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'drydep_velocity_', &
-                  trim(this%process_config%drydep_config%diagnostic_species(i))
+               trim(this%process_config%drydep_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Dry deposition velocity', &
-                                                'm/s', DIAG_REAL_2D, &
-                                                'drydep', dims_2d, rc=rc)
+               'Dry deposition velocity', &
+               'm/s', DIAG_REAL_2D, &
+               'drydep', dims_2d, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       if (rc /= CC_SUCCESS) return
-      
+
       ! Get selected scheme(s)
       ! For gas/aero differentiated processes, register diagnostics from both schemes
       ! Track registered diagnostics to avoid duplicates
       ! Register gas scheme diagnostics
       select case (trim(this%process_config%drydep_config%gas_scheme))
-      case ('wesely')
+       case ('wesely')
          ! Register wesely-specific diagnostics (gas)
-      case default
+       case default
          ! Unknown gas scheme
       end select
 
       ! Register aerosol scheme diagnostics (only if not already registered)
       select case (trim(this%process_config%drydep_config%aero_scheme))
-      case ('gocart')
+       case ('gocart')
          ! Register gocart-specific diagnostics (aerosol)
-      case ('zhang')
+       case ('zhang')
          ! Register zhang-specific diagnostics (aerosol)
-      case default
+       case default
          ! Unknown aerosol scheme
       end select
 
@@ -1257,11 +1257,11 @@ contains
       ! First, deallocate if already allocated (for scheme switching)
       if (allocated(this%column_drydep_con_per_species)) deallocate(this%column_drydep_con_per_species)
       if (allocated(this%column_drydep_velocity_per_species)) deallocate(this%column_drydep_velocity_per_species)
-      
+
       ! Allocate and initialize scheme-specific diagnostic fields based on selected scheme
       ! For gas/aero differentiated process, allocate diagnostics from both gas and aero schemes
       ! Track allocated diagnostics to avoid duplicates
-      
+
       ! Allocate common diagnostic fields (used by all schemes)
       ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
       if (this%process_config%drydep_config%n_diagnostic_species > 0) then
@@ -1273,30 +1273,30 @@ contains
          allocate(this%column_drydep_velocity_per_species(this%process_config%drydep_config%n_diagnostic_species))
       end if
       if (allocated(this%column_drydep_velocity_per_species)) this%column_drydep_velocity_per_species = 0.0_fp
-      
+
       ! Gas scheme diagnostics
       select case (trim(this%process_config%drydep_config%gas_scheme))
-      case ("wesely")
+       case ("wesely")
          ! Gas scheme-specific diagnostics for wesely
-      case default
+       case default
          ! No gas scheme-specific diagnostics for unknown schemes
       end select
-      
+
       ! Aerosol scheme diagnostics (only allocate if not already allocated by gas scheme)
       select case (trim(this%process_config%drydep_config%aero_scheme))
-      case ("gocart")
+       case ("gocart")
          ! Aerosol scheme-specific diagnostics for gocart
-      case ("zhang")
+       case ("zhang")
          ! Aerosol scheme-specific diagnostics for zhang
-      case default
+       case default
          ! No aerosol scheme-specific diagnostics for unknown schemes
       end select
 
    end subroutine register_and_allocate_diagnostics
 
    !> Calculate and update all diagnostic fields for this process
-   !! 
-   !! With the new flexible column-level design, diagnostics are calculated directly by the 
+   !!
+   !! With the new flexible column-level design, diagnostics are calculated directly by the
    !! science schemes for each column and passed to this method for aggregation or output.
    !! This approach uses dimension inference to reduce 2D->scalar and 3D->1D for column processing.
    subroutine calculate_and_update_diagnostics(this, column, container, rc)
@@ -1304,28 +1304,28 @@ contains
       type(VirtualColumnType), intent(in) :: column
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
-      
+
       integer :: i_col, j_col  ! Column grid position
       integer :: i  ! Loop variable for diagnostic species
       character(len=256) :: field_name  ! For constructing species-specific field names
-      
+
       rc = CC_SUCCESS
-      
+
       ! Skip if diagnostics not enabled
       if (.not. this%process_config%drydep_config%diagnostics) return
-      
+
       ! Get column grid position (x, y indices)
       call column%get_position(i_col, j_col)
-      
-      ! Update common diagnostic fields (used by all schemes) 
+
+      ! Update common diagnostic fields (used by all schemes)
       ! Update individual species diagnostic fields (species-only diagnostics)
       if (this%process_config%drydep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%drydep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'drydep_con_', &
-                  trim(this%process_config%drydep_config%diagnostic_species(i))
+               trim(this%process_config%drydep_config%diagnostic_species(i))
             call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                    this%column_drydep_con_per_species(i), &
-                                                    i_col, j_col, container, rc)
+               this%column_drydep_con_per_species(i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -1333,10 +1333,10 @@ contains
       if (this%process_config%drydep_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%drydep_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'drydep_velocity_', &
-                  trim(this%process_config%drydep_config%diagnostic_species(i))
+               trim(this%process_config%drydep_config%diagnostic_species(i))
             call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                    this%column_drydep_velocity_per_species(i), &
-                                                    i_col, j_col, container, rc)
+               this%column_drydep_velocity_per_species(i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -1345,22 +1345,22 @@ contains
       ! Track updated diagnostics to avoid duplicates
       ! Update gas scheme diagnostics
       select case (trim(this%process_config%drydep_config%gas_scheme))
-      case ("wesely")
+       case ("wesely")
          ! Gas scheme-specific diagnostics for wesely
-      case default
+       case default
          ! No gas scheme diagnostics for unknown schemes
       end select
-      
+
       ! Update aerosol scheme diagnostics (only if not already updated)
       select case (trim(this%process_config%drydep_config%aero_scheme))
-      case ("gocart")
+       case ("gocart")
          ! Aerosol scheme-specific diagnostics for gocart
-      case ("zhang")
+       case ("zhang")
          ! Aerosol scheme-specific diagnostics for zhang
-      case default
+       case default
          ! No aerosol scheme diagnostics for unknown schemes
       end select
-      
+
    end subroutine calculate_and_update_diagnostics
 
 
@@ -1376,19 +1376,19 @@ contains
       class(ProcessDryDepInterface), intent(inout) :: this
       character(len=*), intent(in) :: scheme_name
       logical, intent(in), optional :: gas_scheme
-      
+
       logical :: is_gas
-      
+
       ! Default to setting the single scheme for backward compatibility
       is_gas = .true.
       if (present(gas_scheme)) is_gas = gas_scheme
-      
+
       if (is_gas) then
          this%process_config%drydep_config%gas_scheme = trim(scheme_name)
       else
          this%process_config%drydep_config%aero_scheme = trim(scheme_name)
       end if
-      
+
    end subroutine set_drydep_scheme
 
    !> Get the current active scheme
@@ -1403,19 +1403,19 @@ contains
       class(ProcessDryDepInterface), intent(in) :: this
       logical, intent(in), optional :: gas_scheme
       character(len=64) :: scheme_name
-      
+
       logical :: is_gas
-      
+
       ! Default to getting the gas scheme for backward compatibility
       is_gas = .true.
       if (present(gas_scheme)) is_gas = gas_scheme
-      
+
       if (is_gas) then
          scheme_name = trim(this%process_config%drydep_config%gas_scheme)
       else
          scheme_name = trim(this%process_config%drydep_config%aero_scheme)
       end if
-      
+
    end function get_drydep_scheme
 
 end module ProcessDryDepInterface_Mod

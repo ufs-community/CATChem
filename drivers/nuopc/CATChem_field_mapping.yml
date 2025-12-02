@@ -211,31 +211,28 @@ import_fields:
     optional: false
 
 export_fields:
- - standard_name: "inst_tracer_mass_frac"
+  - standard_name: "inst_tracer_mass_frac"
     catchem_var: "chem"
     dimensions: 4
     units: "ug/kg"
     optional: false
- - standard_name: "inst_tracer_diag_aod"
+  - standard_name: "inst_tracer_diag_aod"
     catchem_var: "AOD"
     dimensions: 2
     units: "1"
     optional: false
- - standard_name: "inst_tracer_diag_coszens"
+  - standard_name: "inst_tracer_diag_coszens"
     catchem_var: "coszens"
     dimensions: 2
     units: "1"
     optional: false
- - standard_name: "inst_tracer_diag_jo3o1d"
+  - standard_name: "inst_tracer_diag_jo3o1d"
     catchem_var: "jo3o1d"
     dimensions: 2
     units: "1"
     optional: false
- - standard_name: "inst_tracer_diag_jno2"
+  - standard_name: "inst_tracer_diag_jno2"
     catchem_var: "jno2"
     dimensions: 2
     units: "1"
     optional: false
-
-
-  

@@ -22,8 +22,8 @@ program test_DiagnosticInterface
    ! Test 1: Initialize diagnostic field
    write(*,*) 'Test 1: Initialize diagnostic field'
    call diag_field%create('test_field', 'Test diagnostic field', &
-                         'kg/m2/s', DIAG_REAL_2D, 'TestProcess', rc=rc)
-  write(*,*) 'diag_field%create rc:', rc
+      'kg/m2/s', DIAG_REAL_2D, 'TestProcess', rc=rc)
+   write(*,*) 'diag_field%create rc:', rc
    call assert(rc == CC_SUCCESS, "Diagnostic field creation should succeed")
    write(*,*) 'assert for diag_field%create passed'
 
@@ -37,12 +37,12 @@ program test_DiagnosticInterface
       character(len=128) :: description
       character(len=32) :: units
       integer :: data_type
-      
+
       name = diag_field%get_name()
       description = diag_field%get_description()
       units = diag_field%get_units()
       data_type = diag_field%get_data_type()
-      
+
       call assert(trim(name) == 'test_field', "Field name should match")
       call assert(trim(description) == 'Test diagnostic field', "Field description should match")
       call assert(trim(units) == 'kg/m2/s', "Field units should match")
@@ -98,13 +98,13 @@ program test_DiagnosticInterface
    block
       character(len=64), allocatable :: field_names(:)
       integer :: num_fields
-      
+
       ! Allocate the array to the maximum size
       allocate(field_names(10))
       call diag_registry%list_fields(field_names, num_fields)
       call assert(num_fields == 1, "Registry should contain one field")
       call assert(trim(field_names(1)) == 'test_field', "Field name should match")
-      
+
       if (allocated(field_names)) deallocate(field_names)
    end block
 
@@ -120,5 +120,5 @@ program test_DiagnosticInterface
    write(*,*) ''
 
    write(*,*) 'All DiagnosticInterface tests passed!'
-   
+
 end program test_DiagnosticInterface

@@ -41,7 +41,7 @@ program test_ProcessRegistry
       character(len=64) :: name
       character(len=32) :: version
       integer :: num_processes
-      
+
       call registry%get_registry_info(name, version, num_processes, rc)
       call assert(rc == CC_SUCCESS, "Getting registry info should succeed")
       call assert(num_processes == 0, "Registry should initially contain zero processes")
@@ -63,12 +63,12 @@ program test_ProcessRegistry
    block
       character(len=64), allocatable :: process_names(:)
       integer :: num_processes
-      
+
       call registry%list_processes(process_names, rc)
       num_processes = size(process_names)
       call assert(rc == CC_SUCCESS, "Listing processes should succeed")
       call assert(num_processes == 0, "Registry should contain zero processes")
-      
+
       if (allocated(process_names)) then
          deallocate(process_names)
       end if
@@ -82,12 +82,12 @@ program test_ProcessRegistry
    block
       character(len=32), allocatable :: categories(:)
       integer :: num_categories
-      
+
       call registry%list_categories(categories, rc)
       num_categories = size(categories)
       call assert(rc == CC_SUCCESS, "Listing categories should succeed")
       call assert(num_categories == 0, "Registry should contain zero categories")
-      
+
       if (allocated(categories)) then
          deallocate(categories)
       end if
@@ -105,5 +105,5 @@ program test_ProcessRegistry
    write(*,*) ''
 
    write(*,*) 'All ProcessRegistry tests passed!'
-   
+
 end program test_ProcessRegistry

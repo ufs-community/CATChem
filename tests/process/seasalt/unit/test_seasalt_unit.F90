@@ -69,7 +69,7 @@ program test_seasalt_unit
    write(*,*) 'Test 6 passed!'
    write(*,*) ''
 
-   ! Test 7: ProcessSeaSaltInterface creation  
+   ! Test 7: ProcessSeaSaltInterface creation
    write(*,*) 'Test 7: ProcessSeaSaltInterface creation'
    call test_process_interface_creation()
 

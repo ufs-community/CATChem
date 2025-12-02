@@ -42,6 +42,7 @@ module CATChemCore_Mod
    use ConfigManager_Mod, only: ConfigManagerType, ConfigDataType
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType, GridManagerGeometryType => GridGeometryType
+   use GridGeometry_Mod, only: GridManagerGeometryType => GridGeometryType
    use GridGeometry_Mod, only: GridGeometryType
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -80,7 +81,7 @@ module CATChemCore_Mod
       ! Grid configuration
       integer :: nx = 64, ny = 64, nz = 72          !< Default grid dimensions
       integer :: nsoil = 4                          !< Number of soil layers
-      integer :: nsoiltype = 19                     !< Number of soil types  
+      integer :: nsoiltype = 19                     !< Number of soil types
       integer :: nsurftype = 13                     !< Number of surface types
       logical :: nsoil_surftype_provided = .false.  !< true when nsoil, nsurftype and nsoiltype are provided at initialization
 
@@ -129,7 +130,7 @@ module CATChemCore_Mod
       character(len=256) :: name = 'CATChem_Core'
       integer :: nx = 64, ny = 64, nz = 72
       integer :: nsoil = 4                          !< Number of soil layers
-      integer :: nsoiltype = 19                     !< Number of soil types  
+      integer :: nsoiltype = 19                     !< Number of soil types
       integer :: nsurftype = 13                     !< Number of surface types
       logical :: nsoil_surftype_provided = .false.  !< true when nsoil, nsurftype and nsoiltype are provided at initialization
       logical :: verbose = .false.
@@ -173,7 +174,7 @@ contains
       call this%error_mgr%push_context('core_init', 'Initializing CATChem core')
 
       this%is_initialized = .true.
- 
+
       ! Initialize configuration data to ensure it's in a valid state
       call this%config%init(rc)
       if (rc /= CC_SUCCESS) then
@@ -299,7 +300,7 @@ contains
       endif
 
       call this%error_mgr%pop_context()
-      
+
       write(*,*) 'Exiting core_setup_grid'
 
    end subroutine core_setup_grid
@@ -321,17 +322,17 @@ contains
       rc = CC_SUCCESS
 
       write(*,*) 'Grid dimensions in setup_state: ', this%nx, this%ny, this%nz
-      
+
       write(*,*) 'calling push_context in setup_state'
       call this%error_mgr%push_context('core_setup_state', 'Setting up state manager')
 
       ! Get pointer to error manager
       error_mgr_ptr => this%error_mgr
-      
+
       ! Create compatible grid geometry for ChemState
       ! Get dimensions from GridManager
       call this%grid_mgr%get_shape(nx, ny, nz)
-      
+
       ! Allocate and initialize a simple GridGeometry_Mod::GridGeometryType
       allocate(grid_geom_ptr)
       call grid_geom_ptr%set(nx, ny, nz)
@@ -370,22 +371,22 @@ contains
       write(*,*) 'calling state_mgr%get_met_state_ptr in setup_state'
       met_ptr => this%state_mgr%get_met_state_ptr()
       if (associated(met_ptr)) then
-          ! Only pass soil/surface parameters if they were provided
-          if (this%nsoil_surftype_provided) then
-              call met_ptr%init(this%nx, this%ny, this%nz, this%nsoil, this%nsoiltype, this%nsurftype, error_mgr_ptr, local_rc)
-          else
-              call met_ptr%init(this%nx, this%ny, this%nz, error_mgr=error_mgr_ptr, rc=local_rc)
-          end if
-          if (local_rc /= CC_SUCCESS) then
-             call this%error_mgr%report_error(local_rc, 'Failed to initialize met state', rc)
-             call this%error_mgr%pop_context()
-             return
-          endif
+         ! Only pass soil/surface parameters if they were provided
+         if (this%nsoil_surftype_provided) then
+            call met_ptr%init(this%nx, this%ny, this%nz, this%nsoil, this%nsoiltype, this%nsurftype, error_mgr_ptr, local_rc)
+         else
+            call met_ptr%init(this%nx, this%ny, this%nz, error_mgr=error_mgr_ptr, rc=local_rc)
+         end if
+         if (local_rc /= CC_SUCCESS) then
+            call this%error_mgr%report_error(local_rc, 'Failed to initialize met state', rc)
+            call this%error_mgr%pop_context()
+            return
+         endif
       else
-          ! Log the fact that met_ptr is null, but don't fail the whole process
-          ! This allows the core to continue functioning even if met state is not available
-          write(*,*) 'WARNING: MetState pointer is null, skipping met state initialization'
-          ! Continue with the rest of the setup
+         ! Log the fact that met_ptr is null, but don't fail the whole process
+         ! This allows the core to continue functioning even if met state is not available
+         write(*,*) 'WARNING: MetState pointer is null, skipping met state initialization'
+         ! Continue with the rest of the setup
       endif
 
       ! Initialize chemistry state with species loading
@@ -400,7 +401,7 @@ contains
                error_mgr_ptr, &
                grid_geom_ptr, &
                local_rc &
-            )
+               )
             if (local_rc /= CC_SUCCESS) then
                call this%error_mgr%report_error(local_rc, 'Failed to load and initialize species', rc)
                call this%error_mgr%pop_context()
@@ -417,7 +418,7 @@ contains
                return
             endif
          endif
-         
+
          ! Load emission configuration if available
          if (len_trim(this%config_mgr%get_emission_file()) > 0) then
             call this%config_mgr%load_emission_mapping(this%config_mgr%get_emission_file(), local_rc, chem_ptr)
@@ -440,7 +441,7 @@ contains
       ! It will be cleaned up when ChemState is destroyed
 
       call this%error_mgr%pop_context()
-      
+
       write(*,*) 'Exiting core_setup_state'
 
    end subroutine core_setup_state
@@ -469,7 +470,7 @@ contains
       call this%state_mgr%set_diagnostic_manager(this%diag_mgr)
 
       call this%error_mgr%pop_context()
-      
+
       write(*,*) 'Exiting core_setup_diagnostics'
 
    end subroutine core_setup_diagnostics
@@ -497,7 +498,7 @@ contains
       endif
 
       call this%error_mgr%pop_context()
-      
+
       write(*,*) 'Exiting core_setup_processes'
 
    end subroutine core_setup_processes
@@ -529,7 +530,7 @@ contains
 
       call this%error_mgr%push_context("core_run_processes")
       rc = CC_SUCCESS
-      
+
       call this%process_mgr%run_all(this%state_mgr, rc)
       if (rc /= CC_SUCCESS) then
          call this%error_mgr%report_error(rc, "Failed to run processes", rc)
@@ -571,7 +572,7 @@ contains
       if (rc /= CC_SUCCESS) then
          ! Don't fail the timestep for diagnostic issues, just warn
          call this%error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                         'Diagnostic collection failed', rc)
+            'Diagnostic collection failed', rc)
          rc = CC_SUCCESS
       endif
 
@@ -599,7 +600,7 @@ contains
          call this%diag_mgr%finalize(local_rc)
          if (local_rc /= CC_SUCCESS) then
             call this%error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                            'Failed to finalize diagnostic manager', local_rc)
+               'Failed to finalize diagnostic manager', local_rc)
          endif
 
          ! Clean up state manager
@@ -612,7 +613,7 @@ contains
          call this%config_mgr%finalize(local_rc)
          if (local_rc /= CC_SUCCESS) then
             call this%error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-                                            'Failed to finalize config manager', local_rc)
+               'Failed to finalize config manager', local_rc)
          endif
       endif
 
@@ -629,9 +630,9 @@ contains
       logical :: is_valid
 
       is_valid = this%is_initialized .and. &
-                 this%is_configured .and. &
-                 this%state_mgr%is_ready() .and. &
-                 this%grid_mgr%is_ready()
+         this%is_configured .and. &
+         this%state_mgr%is_ready() .and. &
+         this%grid_mgr%is_ready()
 
    end function core_validate
 
@@ -858,14 +859,14 @@ contains
       if (len_trim(this%config_file) > 0) then
          if (this%nsoil_surftype_provided) then
             call core%configure(this%config_file, this%nx, this%ny, this%nz, &
-                              this%nsoil, this%nsoiltype, this%nsurftype, local_rc)
+               this%nsoil, this%nsoiltype, this%nsurftype, local_rc)
          else
             call core%configure(this%config_file, this%nx, this%ny, this%nz, rc=local_rc)
          endif
       else
          if (this%nsoil_surftype_provided) then
             call core%configure(nx=this%nx, ny=this%ny, nz=this%nz, &
-                              nsoil=this%nsoil, nsoiltype=this%nsoiltype, nsurftype=this%nsurftype, rc=local_rc)
+               nsoil=this%nsoil, nsoiltype=this%nsoiltype, nsurftype=this%nsurftype, rc=local_rc)
          else
             call core%configure(nx=this%nx, ny=this%ny, nz=this%nz, rc=local_rc)
          end if

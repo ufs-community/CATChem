@@ -47,7 +47,7 @@ module {{ config.class_name }}Common_Mod
       logical :: is_active = .true.
 {% if config.diagnostics %}
       logical :: diagnostics = .false.  ! Diagnostic switch
-      
+
       ! Diagnostic species configuration
       integer :: n_diagnostic_species = 0
       character(len=32), allocatable :: diagnostic_species(:)  ! User-defined species for diagnostics
@@ -64,7 +64,7 @@ module {{ config.class_name }}Common_Mod
       logical, allocatable :: is_gas(:)           ! Is gas species (true for gas, false for aerosol)
 {% endif %}
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
-      
+
       ! Emission category mapping (for emission_mapping filter only)
       type(EmissionCategoryMapping) :: emission_mapping   ! Complete emission mapping for this category
 {% endif %}
@@ -143,15 +143,15 @@ module {{ config.class_name }}Common_Mod
    !> Unified process configuration type that bridges ConfigManager and process-specific configs
    !! This is the main configuration type that ProcessInterface should use
    type :: {{ config.class_name }}ProcessConfig
-      
+
       ! Process metadata
       character(len=64) :: process_name = '{{ config.name }}'
       character(len=16) :: process_version = '1.0.0'
       logical :: is_active = .true.
-      
+
       ! Process-specific configuration (delegate to {{ config.class_name }}Config)
       type({{ config.class_name }}Config) :: {{ config.name }}_config
-      
+
       ! Scheme configurations
 {% if config.gas_aero_differentiation %}
       ! Separate gas and aerosol scheme configurations
@@ -167,7 +167,7 @@ module {{ config.class_name }}Common_Mod
       type({{ config.class_name }}Scheme{{ scheme.class_name }}Config) :: {{ scheme.name }}_config
 {% endfor %}
 {% endif %}
-      
+
    contains
       procedure, public :: load_from_config => {{ config.name }}_process_load_config
 {% if config.species %}
@@ -379,7 +379,7 @@ contains
 
       ! Process reads directly from master YAML structure: processes.{{ config.name }}
       ! ConfigManager provides generic YAML access, process handles its own configuration
-      
+
       ! Load process metadata
       call config_manager%get_string("processes/{{ config.name }}/name", this%process_name, rc, "{{ config.name }}")
       if (rc /= CC_SUCCESS) this%process_name = "{{ config.name }}"  ! default
@@ -501,30 +501,30 @@ contains
    !! This function is used when explicit species are provided via species_filter
    subroutine load_species_from_list(this, chem_state, error_handler)
       use ChemState_Mod, only: ChemStateType
-      
+
       class({{ config.class_name }}ProcessConfig), intent(inout) :: this
       type(ChemStateType), pointer, intent(in) :: chem_state
       type(ErrorManagerType), intent(inout) :: error_handler
-      
+
       integer :: i, species_idx
       character(len=32) :: species_name
       logical :: found
-      
+
       ! Explicit species list from configuration
       character(len=32), parameter :: EXPLICIT_SPECIES({{ config.species|length }}) = [ &
 {% for species in config.species %}
          "{{ species }}"{{ ", &" if not loop.last else " ]" }}
 {% endfor %}
-      
+
       if (.not. associated(chem_state)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "ChemState not associated in load_species_from_list", rc)
          return
       end if
-      
+
       ! Set number of species from explicit list
       this%{{ config.name }}_config%n_species = {{ config.species|length }}
-      
+
       ! Deallocate existing arrays if allocated
       if (allocated(this%{{ config.name }}_config%species_names)) then
          deallocate(this%{{ config.name }}_config%species_names)
@@ -539,7 +539,7 @@ contains
       end if
 {% endfor %}
 {% endif %}
-      
+
       ! Allocate arrays
       allocate(this%{{ config.name }}_config%species_names(this%{{ config.name }}_config%n_species))
       allocate(this%{{ config.name }}_config%species_indices(this%{{ config.name }}_config%n_species))
@@ -547,7 +547,7 @@ contains
       allocate(this%{{ config.name }}_config%is_gas(this%{{ config.name }}_config%n_species))
 {% endif %}
 {% if all_required_species_properties %}
-      
+
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
@@ -559,12 +559,12 @@ contains
 {% endif %}
 {% endfor %}
 {% endif %}
-      
+
       ! Find indices for each explicit species
       do i = 1, this%{{ config.name }}_config%n_species
          species_name = trim(EXPLICIT_SPECIES(i))
          found = .false.
-         
+
          ! Search for species in ChemState
          do species_idx = 1, size(chem_state%SpeciesNames)
             if (trim(chem_state%SpeciesNames(species_idx)) == species_name) then
@@ -574,14 +574,14 @@ contains
                exit
             end if
          end do
-         
+
          if (.not. found) then
             call error_handler%report_error(ERROR_INVALID_STATE, &
                "Species not found in ChemState: " // trim(species_name))
             return
          end if
       end do
-      
+
 {% if all_required_species_properties %}
       ! Load species properties from ChemState using found indices
       do i = 1, this%{{ config.name }}_config%n_species
@@ -600,50 +600,50 @@ contains
 {% endif %}
       end do
 {% endif %}
-      
+
    end subroutine load_species_from_list
 {% endif %}
 
 {% if not config.species %}
-   !> Load species from ChemState 
+   !> Load species from ChemState
    !! This function is used for dynamic species discovery (by_metadata or all_species)
    !! For 'all_species' mode: loads all species using nSpecies and SpeciesIndex
    !! For 'by_metadata' mode: loads species by type using nSpecies{{ config.class_name }} and {{ config.class_name }}Index
    subroutine load_species_from_chem_state(this, chem_state, error_handler)
       use ChemState_Mod, only: ChemStateType
-      
+
       class({{ config.class_name }}ProcessConfig), intent(inout) :: this
       type(ChemStateType), pointer, intent(in) :: chem_state
       type(ErrorManagerType), intent(inout) :: error_handler
-      
+
       integer :: i, rc
 {% if all_required_species_properties %}
       integer :: species_idx
 {% endif %}
-      
+
       if (.not. associated(chem_state)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "ChemState not associated in load_species_from_chem_state", rc)
          return
       end if
-      
+
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "all_species" %}
       ! all_species mode: Load all species from ChemState
       this%{{ config.name }}_config%n_species = chem_state%nSpecies
-      
+
       if (this%{{ config.name }}_config%n_species <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No species found in ChemState", rc)
          return
       end if
-      
+
       ! Check if SpeciesIndex is allocated and has correct size
       if (.not. allocated(chem_state%SpeciesIndex)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "SpeciesIndex not allocated in ChemState", rc)
          return
       end if
-      
+
       if (size(chem_state%SpeciesIndex) < this%{{ config.name }}_config%n_species) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "SpeciesIndex size inconsistent with nSpecies", rc)
@@ -675,20 +675,20 @@ contains
 {% endif %}
       ! Dynamic mapping: {{ metadata_flag }} -> nSpecies{{ species_type }} and {{ species_type }}Index
       this%{{ config.name }}_config%n_species = chem_state%nSpecies{{ species_type }}
-      
+
       if (this%{{ config.name }}_config%n_species <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No {{ flag_base }} species found in ChemState", rc)
          return
       end if
-      
+
       ! Check if {{ species_type }}Index is allocated and has correct size
       if (.not. allocated(chem_state%{{ species_type }}Index)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "{{ species_type }}Index not allocated in ChemState", rc)
          return
       end if
-      
+
       if (size(chem_state%{{ species_type }}Index) < this%{{ config.name }}_config%n_species) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "{{ species_type }}Index size inconsistent with nSpecies{{ species_type }}", rc)
@@ -697,20 +697,20 @@ contains
 {% else %}
       ! No metadata flags specified, use class-based indexing
       this%{{ config.name }}_config%n_species = chem_state%nSpecies{{ config.class_name }}
-      
+
       if (this%{{ config.name }}_config%n_species <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No {{ config.name }} species found in ChemState", rc)
          return
       end if
-      
+
       ! Check if {{ config.class_name }}Index is allocated and has correct size
       if (.not. allocated(chem_state%{{ config.class_name }}Index)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "{{ config.class_name }}Index not allocated in ChemState", rc)
          return
       end if
-      
+
       if (size(chem_state%{{ config.class_name }}Index) < this%{{ config.name }}_config%n_species) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "{{ config.class_name }}Index size inconsistent with nSpecies{{ config.class_name }}", rc)
@@ -718,7 +718,7 @@ contains
       end if
 {% endif %}
 {% endif %}
-      
+
       ! Deallocate existing arrays if allocated
       if (allocated(this%{{ config.name }}_config%species_names)) then
          deallocate(this%{{ config.name }}_config%species_names)
@@ -726,7 +726,7 @@ contains
       if (allocated(this%{{ config.name }}_config%species_indices)) then
          deallocate(this%{{ config.name }}_config%species_indices)
       end if
-      
+
       ! Allocate arrays
       allocate(this%{{ config.name }}_config%species_names(this%{{ config.name }}_config%n_species))
       allocate(this%{{ config.name }}_config%species_indices(this%{{ config.name }}_config%n_species))
@@ -734,7 +734,7 @@ contains
       allocate(this%{{ config.name }}_config%is_gas(this%{{ config.name }}_config%n_species))
 {% endif %}
 {% if all_required_species_properties %}
-      
+
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
@@ -746,7 +746,7 @@ contains
 {% endif %}
 {% endfor %}
 {% endif %}
-      
+
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "all_species" %}
       ! all_species mode: Copy all indices from SpeciesIndex
       this%{{ config.name }}_config%species_indices(1:this%{{ config.name }}_config%n_species) = &
@@ -784,7 +784,7 @@ contains
          chem_state%{{ config.class_name }}Index(1:this%{{ config.name }}_config%n_species)
 {% endif %}
 {% endif %}
-      
+
       ! Get species names using the indices
       do i = 1, this%{{ config.name }}_config%n_species
          if (this%{{ config.name }}_config%species_indices(i) > 0 .and. &
@@ -797,7 +797,7 @@ contains
             return
          end if
       end do
-      
+
 {% if all_required_species_properties %}
       ! Load species properties from ChemState
       do i = 1, this%{{ config.name }}_config%n_species
@@ -816,7 +816,7 @@ contains
 {% endif %}
       end do
 {% endif %}
-      
+
    end subroutine load_species_from_chem_state
 {% endif %}
 
@@ -824,7 +824,7 @@ contains
    !> Load species from emission mapping configuration
    !!
    !! This method loads species information from the ConfigManager's emission mapping system.
-   !! The process name is used as the emission category name to retrieve the corresponding 
+   !! The process name is used as the emission category name to retrieve the corresponding
    !! species mapping from the emission configuration.
    !! For emission mapping, species_names will contain emission field names (e.g., "DU1", "SeaS1")
    !! and the emission_mapping contains the complete mapping to chemical species.
@@ -837,35 +837,35 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
       type(ChemStateType), optional, intent(in) :: chem_state
-      
+
       integer :: mapping_index, i, rc
       character(len=64) :: category_name
 
       ! Use process name as emission category name
       category_name = trim("{{ config.name }}")
-      
+
       ! Get emission mapping index for this category
       mapping_index = config_manager%get_emission_mapping_for_category(category_name)
-      
+
       if (mapping_index <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No emission mapping found for category: " // trim(category_name), rc)
          return
       end if
-      
+
       ! Copy the complete emission mapping from config_manager
       call this%{{ config.name }}_config%emission_mapping%copy( &
          config_manager%config_data%emission_mapping%categories(mapping_index))
-      
+
       ! Set n_species based on emission mapping
       this%{{ config.name }}_config%n_species = this%{{ config.name }}_config%emission_mapping%n_emission_species
-      
+
       if (this%{{ config.name }}_config%n_species <= 0) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "No emission species found for category: " // trim(category_name), rc)
          return
       end if
-      
+
       ! Deallocate existing arrays if allocated
       if (allocated(this%{{ config.name }}_config%species_names)) then
          deallocate(this%{{ config.name }}_config%species_names)
@@ -873,12 +873,12 @@ contains
       if (allocated(this%{{ config.name }}_config%species_indices)) then
          deallocate(this%{{ config.name }}_config%species_indices)
       end if
-      
+
       ! Allocate arrays for species names and indices
       allocate(this%{{ config.name }}_config%species_names(this%{{ config.name }}_config%n_species))
       allocate(this%{{ config.name }}_config%species_indices(this%{{ config.name }}_config%n_species))
 {% if all_required_species_properties %}
-      
+
       ! Allocate species properties arrays
 {% for prop in all_required_species_properties %}
 {% if prop != 'short_name' %}
@@ -891,17 +891,17 @@ contains
 {% endfor %}
 {% endif %}
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
-      
+
       ! Allocate gas/aerosol flag array
       allocate(this%{{ config.name }}_config%is_gas(this%{{ config.name }}_config%n_species))
 {% endif %}
-      
+
       ! Load emission field names as species_names (used by schemes)
       do i = 1, this%{{ config.name }}_config%n_species
          ! Store emission field names as species_names (used in schemes)
          this%{{ config.name }}_config%species_names(i) = &
             trim(this%{{ config.name }}_config%emission_mapping%species_mappings(i)%emission_field)
-         
+
          ! Set species index (will be resolved later against ChemState)
          this%{{ config.name }}_config%species_indices(i) = i
       end do
@@ -966,7 +966,7 @@ contains
 {% endfor %}
       end select
 
-      ! Validate aerosol scheme config  
+      ! Validate aerosol scheme config
       select case (trim(this%{{ config.name }}_config%aero_scheme))
 {% for scheme in config.schemes %}
 {% if scheme.gas_or_aero == 'aero' %}
@@ -1066,7 +1066,7 @@ contains
       ! Handle "All" case - map all available species
       if (this%{{ config.name }}_config%n_diagnostic_species == 1 .and. &
           trim(this%{{ config.name }}_config%diagnostic_species(1)) == "All") then
-         
+
          ! Deallocate and reallocate for all species
          if (allocated(this%{{ config.name }}_config%diagnostic_species_id)) deallocate(this%{{ config.name }}_config%diagnostic_species_id)
          allocate(this%{{ config.name }}_config%diagnostic_species_id(this%{{ config.name }}_config%n_species))
@@ -1079,7 +1079,7 @@ contains
          do i = 1, this%{{ config.name }}_config%n_species
             this%{{ config.name }}_config%diagnostic_species_id(i) = i
          end do
-         
+
          return
       end if
 
@@ -1090,7 +1090,7 @@ contains
       ! Map each diagnostic species name to its index in species_names
       do i = 1, this%{{ config.name }}_config%n_diagnostic_species
          found_species = .false.
-         
+
          do j = 1, this%{{ config.name }}_config%n_species
             if (trim(this%{{ config.name }}_config%diagnostic_species(i)) == trim(this%{{ config.name }}_config%species_names(j))) then
                this%{{ config.name }}_config%diagnostic_species_id(i) = j
@@ -1098,7 +1098,7 @@ contains
                exit
             end if
          end do
-         
+
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
                   trim(this%{{ config.name }}_config%diagnostic_species(i)), &

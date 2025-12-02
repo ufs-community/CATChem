@@ -33,7 +33,7 @@ program test_StateManager
    write(*,*) 'Test 1: Initialize state manager'
    call state_mgr%init('TestStateManager', rc)
    call assert(rc == CC_SUCCESS, "StateManager initialization should succeed")
-   
+
    ! Check if state manager is initialized
    is_ready = state_mgr%is_ready()
    call assert(.not. is_ready, "StateManager should not be ready before configuration")
@@ -67,12 +67,12 @@ program test_StateManager
    write(*,*) 'Test 4 passed!'
    write(*,*) ''
 
-   ! Test 5: Get time state pointer  
+   ! Test 5: Get time state pointer
    write(*,*) 'Test 5: Get time state pointer'
    block
       use TimeState_Mod, only: TimeStateType
       type(TimeStateType), pointer :: time_ptr
-      
+
       time_ptr => state_mgr%get_time_state_ptr()
       call assert(associated(time_ptr), "Should be able to get time state pointer")
    end block
@@ -93,7 +93,7 @@ program test_StateManager
    grid_mgr_ptr => state_mgr%get_grid_manager()
    ! Grid manager might not be associated initially
    call assert(.not. associated(grid_mgr_ptr) .or. associated(grid_mgr_ptr), &
-              "Grid manager pointer should be valid (null or associated)")
+      "Grid manager pointer should be valid (null or associated)")
 
    write(*,*) 'Test 7 passed!'
    write(*,*) ''
@@ -103,12 +103,12 @@ program test_StateManager
    diag_mgr_ptr => state_mgr%get_diagnostic_manager()
    ! Diagnostic manager might not be associated initially
    call assert(.not. associated(diag_mgr_ptr) .or. associated(diag_mgr_ptr), &
-              "Diagnostic manager pointer should be valid (null or associated)")
+      "Diagnostic manager pointer should be valid (null or associated)")
 
    write(*,*) 'Test 8 passed!'
    write(*,*) ''
 
-      ! Test 9: Set name
+   ! Test 9: Set name
    write(*,*) 'Test 9: Set name'
    call state_mgr%set_name('NewName')
    ! (No direct way to test this other than with print_info)
@@ -138,7 +138,7 @@ program test_StateManager
    write(*,*) 'Test 12: Cleanup'
    call state_mgr%cleanup(rc)
    call assert(rc == CC_SUCCESS, "StateManager cleanup should succeed")
-   
+
    ! Check if state manager is no longer ready
    is_ready = state_mgr%is_ready()
    call assert(.not. is_ready, "StateManager should not be ready after cleanup")
@@ -147,5 +147,5 @@ program test_StateManager
    write(*,*) ''
 
    write(*,*) 'All StateManager tests passed!'
-   
+
 end program test_StateManager

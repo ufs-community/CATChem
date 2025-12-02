@@ -1,6 +1,6 @@
 # NUOPC Integration
 
-This guide covers integrating CATChem with the National Unified Operational Prediction Capability (NUOPC) framework used in Earth system models.
+This guide covers coupling CATChem with the National Unified Operational Prediction Capability (NUOPC) software layer used in Earth system models. In this integration, CATChem is coupled to the atmosphere (ATM) component within the UFS and CATChem acts as any other modeling component within an Earth system model.
 
 ## Overview
 

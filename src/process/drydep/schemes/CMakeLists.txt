@@ -69,26 +69,26 @@
 #   - IsSnow
 #   - IsIce
 
-
 # Scheme validation targets
-add_custom_target(validate_wesely_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating wesely scheme implementation"
-    COMMENT "Validating wesely scheme"
+add_custom_target(
+  validate_wesely_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating wesely scheme implementation"
+  COMMENT "Validating wesely scheme"
 )
-add_custom_target(validate_gocart_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating gocart scheme implementation"
-    COMMENT "Validating gocart scheme"
+add_custom_target(
+  validate_gocart_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating gocart scheme implementation"
+  COMMENT "Validating gocart scheme"
 )
-add_custom_target(validate_zhang_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating zhang scheme implementation"
-    COMMENT "Validating zhang scheme"
+add_custom_target(
+  validate_zhang_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating zhang scheme implementation"
+  COMMENT "Validating zhang scheme"
 )
 
 # Combined validation target
-add_custom_target(validate_all_schemes
-    DEPENDS
-        validate_wesely_scheme
-        validate_gocart_scheme
-        validate_zhang_scheme
-    COMMENT "Validating all drydep schemes"
+add_custom_target(
+  validate_all_schemes
+  DEPENDS validate_wesely_scheme validate_gocart_scheme validate_zhang_scheme
+  COMMENT "Validating all drydep schemes"
 )

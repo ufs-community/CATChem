@@ -77,12 +77,12 @@ program test_ConfigManager
    write(*,*) 'Test 7: Load configuration from string'
    block
       character(len=512) :: yaml_string
-      
-       yaml_string = 'simulation: {name: "test", start_date: "20240501 0000", end_date: "20240501 0100"}' // achar(10) // &
-                     'runtime: {nSpecies: 50, nLevs: 72}' // achar(10) // &
-                     'processes: {dust: {activate: true}}' // achar(10) // &
-                     'output: {directory: "./output"}'
-      
+
+      yaml_string = 'simulation: {name: "test", start_date: "20240501 0000", end_date: "20240501 0100"}' // achar(10) // &
+         'runtime: {nSpecies: 50, nLevs: 72}' // achar(10) // &
+         'processes: {dust: {activate: true}}' // achar(10) // &
+         'output: {directory: "./output"}'
+
       call config_mgr%load_from_string(yaml_string, rc)
       call assert(rc == CC_SUCCESS, "Loading config from string should succeed")
    end block
@@ -102,13 +102,13 @@ program test_ConfigManager
    write(*,*) 'Test 9: Load configuration preset'
    block
       type(ConfigPresetType) :: preset
-      
+
       ! Create a simple preset
       preset%name = 'test_preset'
       preset%description = 'Test configuration preset'
       preset%yaml_content = 'simulation: {name: "test_preset", start_date: "20240501 0000", end_date: "20240501 0100"}' // achar(10) // &
-                            'runtime: {nSpecies: 25, nLevs: 36}'
-      
+         'runtime: {nSpecies: 25, nLevs: 36}'
+
       call config_mgr%load_preset(preset, rc)
       ! This might not fully work depending on implementation, but shouldn't crash
    end block
@@ -136,7 +136,7 @@ program test_ConfigManager
    write(*,*) 'Test 12: Get string value'
    block
       character(len=256) :: value
-      
+
       call config_mgr%get_string('output/directory', value, rc, './default_output')
       call assert(rc == CC_SUCCESS, "Getting string value should succeed")
       ! Value might be './output' or './default_output' depending on config state
@@ -149,7 +149,7 @@ program test_ConfigManager
    write(*,*) 'Test 13: Get integer value'
    block
       integer :: value
-      
+
       call config_mgr%get_integer('runtime/nSpecies', value, rc, 10)
       call assert(rc == CC_SUCCESS, "Getting integer value should succeed")
       ! Value might be 50, 25, or 10 depending on config state
@@ -163,7 +163,7 @@ program test_ConfigManager
    write(*,*) 'Test 14: Get real value'
    block
       real(fp) :: value
-       
+
       call config_mgr%get_real('processes/dust/scale_factor', value, rc, 1.0_fp)
       call assert(rc == CC_SUCCESS, "Getting real value should succeed")
       ! Value might be 1.0 or some other value depending on config state
@@ -177,7 +177,7 @@ program test_ConfigManager
    write(*,*) 'Test 15: Get logical value'
    block
       logical :: value
-      
+
       call config_mgr%get_logical('processes/dust/activate', value, rc, .false.)
       call assert(rc == CC_SUCCESS, "Getting logical value should succeed")
       ! Value might be true or false depending on config state
@@ -192,7 +192,7 @@ program test_ConfigManager
       character(len=64), allocatable :: values(:)
       character(len=64) :: default_values(2) = ['dust1', 'dust2']
       integer :: count
-      
+
       call config_mgr%get_array('processes/dust/species_list', values, rc, default_values)
       call assert(rc == CC_SUCCESS, "Getting array value should succeed")
       ! Values will be the default values if the key doesn't exist
@@ -218,7 +218,7 @@ program test_ConfigManager
    write(*,*) 'Test 17: Get number of species'
    block
       integer :: nspecies
-      
+
       nspecies = config_mgr%get_nspecies()
       call assert(nspecies >= 0, "Number of species should be non-negative")
    end block
@@ -230,7 +230,7 @@ program test_ConfigManager
    write(*,*) 'Test 18: Get maximum species'
    block
       integer :: max_species
-      
+
       max_species = config_mgr%get_max_species()
       call assert(max_species >= 0, "Maximum species should be non-negative")
    end block
@@ -242,7 +242,7 @@ program test_ConfigManager
    write(*,*) 'Test 19: Get emission categories'
    block
       integer :: nemission_categories
-      
+
       nemission_categories = config_mgr%get_nemission_categories()
       call assert(nemission_categories >= 0, "Emission categories should be non-negative")
    end block
@@ -254,7 +254,7 @@ program test_ConfigManager
    write(*,*) 'Test 20: Get emission species'
    block
       integer :: nemission_species
-      
+
       nemission_species = config_mgr%get_nemission_species()
       call assert(nemission_species >= 0, "Emission species should be non-negative")
    end block
@@ -363,7 +363,7 @@ program test_ConfigManager
    write(*,*) ''
 
    write(*,*) 'All ConfigManager tests passed!'
-   
+
 contains
 
    !> \brief Test the emission mapping functionality
@@ -374,7 +374,7 @@ contains
    subroutine test_emission_mapping_load(config_manager, species_state)
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ChemStateType), intent(in) :: species_state
-      
+
       integer :: test_rc, mapping_index, i, j, k, species_idx
       character(len=256) :: emission_file
       logical :: file_exists
@@ -396,54 +396,54 @@ contains
 
       write(*,*) '  Subtest 31.3: Display detailed emission mapping information'
       write(*,*) '    ============== Emission Mapping Details =============='
-      
+
       if (config_manager%config_data%emission_mapping%is_loaded) then
          write(*,'(A,I0)') '    Total categories loaded: ', config_manager%config_data%emission_mapping%n_categories
-         
+
          do i = 1, config_manager%config_data%emission_mapping%n_categories
             write(*,*) ''
             write(*,'(A,A)') '    Category: ', trim(config_manager%config_data%emission_mapping%categories(i)%category_name)
             write(*,'(A,I0)') '      Number of emission species: ', config_manager%config_data%emission_mapping%categories(i)%n_emission_species
             write(*,'(A,L1)') '      Active: ', config_manager%config_data%emission_mapping%categories(i)%is_active
-            
+
             do j = 1, config_manager%config_data%emission_mapping%categories(i)%n_emission_species
                write(*,'(A,I0,A,A)') '        Field ', j, ': ', &
-                     trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%emission_field)
+                  trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%emission_field)
                write(*,'(A,A)') '          Description: ', &
-                     trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%long_name)
+                  trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%long_name)
                write(*,'(A,A)') '          units: ', &
-                     trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%units)
+                  trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%units)
                write(*,'(A,I0)') '          Number of mappings: ', &
-                     config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%n_mappings
+                  config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%n_mappings
                write(*,'(A,L1)') '          Active: ', &
-                     config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%is_active
-               
+                  config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%is_active
+
                if (config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%n_mappings > 0) then
                   if (allocated(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map) .and. &
-                      allocated(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale)) then
+                     allocated(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale)) then
                      do k = 1, config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%n_mappings
                         ! Get species index from ChemState if available
                         if (allocated(species_state%ChemSpecies)) then
                            species_idx = species_state%find_species(trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)))
                            if (species_idx > 0) then
                               write(*,'(A,I0,A,A,A,F6.3,A,I0,A)') '          Mapping ', k, ': ', &
-                                    trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)), &
-                                    ' (Scale: ', &
-                                    config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(k), &
-                                    ', Index: ', species_idx, ')'
-                           else
-                              write(*,'(A,I0,A,A,A,F6.3,A)') '          Mapping ', k, ': ', &
-                                    trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)), &
-                                    ' (Scale: ', &
-                                    config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(k), &
-                                    ', Index: NOT FOUND)'
-                           endif
-                        else
-                           write(*,'(A,I0,A,A,A,F6.3,A)') '          Mapping ', k, ': ', &
                                  trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)), &
                                  ' (Scale: ', &
                                  config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(k), &
-                                 ', Index: N/A - ChemState not available)'
+                                 ', Index: ', species_idx, ')'
+                           else
+                              write(*,'(A,I0,A,A,A,F6.3,A)') '          Mapping ', k, ': ', &
+                                 trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)), &
+                                 ' (Scale: ', &
+                                 config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(k), &
+                                 ', Index: NOT FOUND)'
+                           endif
+                        else
+                           write(*,'(A,I0,A,A,A,F6.3,A)') '          Mapping ', k, ': ', &
+                              trim(config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)), &
+                              ' (Scale: ', &
+                              config_manager%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(k), &
+                              ', Index: N/A - ChemState not available)'
                         endif
                      end do
                   end if
@@ -462,7 +462,7 @@ contains
       else
          write(*,*) '    Note: Seasalt mapping index not found'
       endif
-      
+
       mapping_index = config_manager%get_emission_mapping_for_category('dust')
       if (mapping_index > 0) then
          write(*,'(A,I0)') '    ✓ Dust mapping index: ', mapping_index
@@ -486,8 +486,8 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ChemStateType), intent(inout) :: species_state
       type(ErrorManagerType), intent(inout), target :: error_manager
-      
-      
+
+
       type(GridGeometryType), target :: grid_geometry
       integer :: test_rc, num_species, i, species_idx
       character(len=256) :: config_file, species_file
@@ -526,32 +526,32 @@ contains
       call assert(.true., "Grid geometry initialization should succeed")
 
       write(*,*) '  Subtest 30.5: Load and initialize species in ChemState'
-      
+
       ! Set a more permissive loading strategy
       call config_manager%set_loading_strategy(CONFIG_STRATEGY_PERMISSIVE)
-      
+
       ! Note: YAML parsing errors will be suppressed but species loading will still work
       call config_manager%load_and_init_species(species_file, species_state, error_mgr_ptr, grid_ptr, test_rc, &
-                                               num_species=num_species)
-      
+         num_species=num_species)
+
       call assert(test_rc == CC_SUCCESS, "Should successfully identify species from config file")
 
       write(*,*) '  Subtest 30.6: Validate loaded species data'
       call assert(num_species > 0, "Should load at least one species")
       call assert(allocated(species_state%ChemSpecies), "ChemState ChemSpecies array should be allocated")
       call assert(size(species_state%ChemSpecies) >= num_species, "ChemSpecies array size should be sufficient")
-      
+
       write(*,'(A,I0,A)') '    ✓ Successfully processed ', num_species, ' species from YAML config'
 
       write(*,*) '  Subtest 30.7: Check individual species properties'
       ! Look for specific species we know should be in the file, but be flexible about property parsing
       block
          logical :: found_so2, found_dust1, found_seas1
-         
+
          found_so2 = .false.
          found_dust1 = .false.
          found_seas1 = .false.
-         
+
          ! Test by comparing first N characters (more reliable than trim with current YAML interface)
          do i = 1, num_species
             if (species_state%ChemSpecies(i)%short_name(1:3) == 'so2') then
@@ -564,13 +564,13 @@ contains
                found_seas1 = .true.
             endif
          enddo
-         
+
          call assert(found_so2, "Should find SO2 species")
          ! Note: YAML property parsing still needs work, so species lookup may fail
          if (.not. found_dust1) then
             write(*,*) '     Note: dust1 species not found - this may be due to YAML parsing issues'
          endif
-         if (.not. found_seas1) then 
+         if (.not. found_seas1) then
             write(*,*) '     Note: seas1 species not found - this may be due to YAML parsing issues'
          endif
       end block
@@ -579,7 +579,7 @@ contains
       ! Only test basic ChemState functionality if we have some species loaded
       if (species_state%get_num_species() > 0) then
          call assert(species_state%get_num_species() == num_species, "ChemState should have correct number of species")
-         
+
          ! Test finding species by name - be flexible since properties might not be fully parsed
          species_idx = species_state%find_species('so2')
          if (species_idx > 0) then
@@ -587,8 +587,8 @@ contains
          else
             write(*,*) '    SO2 species not found in ChemState (this may be expected)'
          endif
-         
-         species_idx = species_state%find_species('dust1') 
+
+         species_idx = species_state%find_species('dust1')
          if (species_idx > 0) then
             write(*,'(A,I0)') '    dust1 species index in ChemState: ', species_idx
          else
@@ -605,7 +605,7 @@ contains
          else
             write(*,*) '    ChemState does not have SO2 species (may be expected due to parsing issues)'
          endif
-         
+
          call assert(.not. species_state%has_species('nonexistent'), "ChemState should not have nonexistent species")
       else
          write(*,*) '    Skipping has_species tests due to empty ChemState'
@@ -618,7 +618,7 @@ contains
       ! Note: Not cleaning up species_state here so it can be passed to Test 31
       ! call species_state%cleanup(test_rc)
       ! call assert(test_rc == CC_SUCCESS, "ChemState cleanup should succeed")
-      
+
       ! Grid geometry doesn't need explicit cleanup
       write(*,*) '    Grid geometry cleaned up'
 
@@ -632,7 +632,7 @@ contains
    !! parsing functionality, verifying ProcessConfigType and RunPhaseType data
    subroutine test_run_phases_loading(config_manager)
       type(ConfigManagerType), intent(inout) :: config_manager
-      
+
       integer :: test_rc, i, j
       character(len=256) :: config_file
       logical :: file_exists
@@ -648,7 +648,7 @@ contains
             inquire(file=config_file, exist=file_exists)
          endif
       endif
-      
+
       ! Final check - if still not found, print helpful message
       if (.not. file_exists) then
          write(*,*) 'ERROR: Could not find CATChem_new_config.yml in any of these locations:'
@@ -658,7 +658,7 @@ contains
          write(*,*) 'Skipping run phases test.'
          return
       endif
-      
+
       call assert(file_exists, "Main configuration file should exist: " // trim(config_file))
       write(*,*) '    Main config file found: ', trim(config_file)
 
@@ -671,7 +671,7 @@ contains
       if (config_manager%config_data%run_phases_enabled) then
          call assert(allocated(config_manager%config_data%run_phases), "Run phases array should be allocated")
          call assert(allocated(config_manager%config_data%run_phase_processes), "Run phase processes array should be allocated")
-         
+
          if (allocated(config_manager%config_data%run_phases)) then
             call assert(size(config_manager%config_data%run_phases) > 0, "Should have at least one run phase")
             write(*,'(A,I0,A)') '    ✓ Found ', size(config_manager%config_data%run_phases), ' run phases'
@@ -685,7 +685,7 @@ contains
 
       write(*,*) '  Subtest 31.4: Display detailed run phase information'
       write(*,*) '    ============== Run Phase Configuration =============='
-      
+
       if (allocated(config_manager%config_data%run_phases)) then
          do i = 1, size(config_manager%config_data%run_phases)
             write(*,*) ''
@@ -694,7 +694,7 @@ contains
             write(*,'(A,A)') '      Frequency: ', trim(config_manager%config_data%run_phases(i)%frequency)
             write(*,'(A,I0)') '      Subcycling: ', config_manager%config_data%run_phases(i)%subcycling
             write(*,'(A,I0)') '      Number of processes: ', config_manager%config_data%run_phases(i)%num_processes
-            
+
             if (allocated(config_manager%config_data%run_phases(i)%processes)) then
                do j = 1, config_manager%config_data%run_phases(i)%num_processes
                   write(*,'(A,I0,A,A)') '        Process ', j, ': ', &
@@ -725,7 +725,7 @@ contains
 
       write(*,*) '  Subtest 31.5: Display global run phase processes array'
       write(*,*) '    ========== Global Run Phase Processes Array ======='
-      
+
       if (allocated(config_manager%config_data%run_phase_processes)) then
          do i = 1, size(config_manager%config_data%run_phase_processes)
             write(*,'(A,I0,A,A)') '    Global Process ', i, ': ', &

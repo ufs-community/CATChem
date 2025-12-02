@@ -143,8 +143,8 @@ program standalone_column_driver
    call setup_fv3_vertical_levels(levels, ak_full, bk_full, ak_half, bk_half, nz)
 
    call catchem%setup_grid(lats, lons, levels, rc, &
-                           ak_full=ak_full, bk_full=bk_full, &
-                           ak_half=ak_half, bk_half=bk_half)
+      ak_full=ak_full, bk_full=bk_full, &
+      ak_half=ak_half, bk_half=bk_half)
    if (rc /= CATCHEM_SUCCESS) then
       print *, "✗ Grid setup failed!"
       stop 1
@@ -165,7 +165,7 @@ program standalone_column_driver
 
    ! Configure process manager for optimal column processing
    call catchem%configure_process_manager(max_processes=20, &
-                                         enable_column_batching=.true., rc=rc)
+      enable_column_batching=.true., rc=rc)
    if (rc /= CATCHEM_SUCCESS) then
       print *, "⚠ Process manager configuration failed"
    endif
@@ -201,7 +201,7 @@ program standalone_column_driver
 
    ! Try to read initial conditions from NetCDF (demonstration of NetCDF API)
    call try_read_initial_conditions_from_netcdf(input_data, nx, ny, nz, nspecies, &
-                                               levels, ak_half, bk_half)
+      levels, ak_half, bk_half)
 
    call initialize_atmospheric_data(input_data, nx, ny, nz, nspecies, levels, ak_half, bk_half)
    call initialize_atmospheric_data(output_data, nx, ny, nz, nspecies, levels, ak_half, bk_half)
@@ -525,7 +525,7 @@ contains
          ! Print sample levels for verification
          if (k == 1 .or. k == nz/2 .or. k == nz) then
             print *, "      L", k, ": p=", data%pressure(1,1,k)/100.0, " hPa, T=", &
-                     data%temperature(1,1,k), " K, z≈", z_height, " m"
+               data%temperature(1,1,k), " K, z≈", z_height, " m"
          endif
       enddo
 
@@ -725,7 +725,7 @@ contains
 
    !> Attempt to read initial conditions from NetCDF files (demonstration of NetCDF API)
    subroutine try_read_initial_conditions_from_netcdf(data, nx, ny, nz, nspecies, &
-                                                     levels, ak_half, bk_half)
+      levels, ak_half, bk_half)
       type(CATChemDataType), intent(inout) :: data
       integer, intent(in) :: nx, ny, nz, nspecies
       real(fp), intent(in) :: levels(nz), ak_half(nz), bk_half(nz)
@@ -943,7 +943,7 @@ contains
       real(fp), allocatable :: temp_4d(:,:,:,:)
       integer :: rc
       character(len=32) :: species_vars(10) = ['O3    ', 'CO2   ', 'CH4   ', 'CO    ', 'NO    ', &
-                                              'NO2   ', 'SO2   ', 'NH3   ', 'HNO3  ', 'H2O2  ']
+         'NO2   ', 'SO2   ', 'NH3   ', 'HNO3  ', 'H2O2  ']
       integer :: i
       logical :: found_species = .false.
 

@@ -69,7 +69,7 @@ program test_wetdep_unit
    write(*,*) 'Test 6 passed!'
    write(*,*) ''
 
-   ! Test 7: ProcessWetDepInterface creation  
+   ! Test 7: ProcessWetDepInterface creation
    write(*,*) 'Test 7: ProcessWetDepInterface creation'
    call test_process_interface_creation()
 

@@ -1,5 +1,5 @@
 !> \file DryDepScheme_ZHANG_Mod.F90
-!! \brief Zhang et al. [2001] scheme with Emerson et al. [2020] updates. 
+!! \brief Zhang et al. [2001] scheme with Emerson et al. [2020] updates.
 !! The Ra and Rb are still from Wesely (1989) for now.
 !!
 !! Pure science kernel for zhang scheme in drydep process.
@@ -228,7 +228,7 @@ contains
       drydep_con_per_species, &
       drydep_velocity_per_species, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -279,7 +279,7 @@ contains
       integer  :: ILDT   !< index of the land types in the grid box
       integer  :: LDT    !loop index of land types
       integer  :: LUCINDEX !mapping above II to Zhang's 15 land types for aerosols
-      !logical 
+      !logical
       logical, save :: firsttime = .true.
       !string
       character(255) :: SPC  !current species name
@@ -298,9 +298,9 @@ contains
       IF ( firsttime ) THEN
          ! Derive seasalt bin boundaries from species properties
          call get_seasalt_bin_boundaries(num_species, species_is_seasalt, &
-                                       species_lower_radius, species_upper_radius, &
-                                       SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin)
-         
+            species_lower_radius, species_upper_radius, &
+            SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin)
+
          CALL INIT_WEIGHTSS(MINVAL(SeaSalt_Lower_Bin), MAXVAL(SeaSalt_UPPER_Bin), RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate arrays in INIT_WEIGHTSS'
@@ -320,7 +320,7 @@ contains
          do species_idx = 1, num_species
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (is_gas(species_idx)) cycle
-            
+
             ! Add option for non-local PBL mixing scheme: THIK must be the first box height.
             ! TODO: we only use non-local mixing here
             !IF (.NOT. LNLPBL) THIK = MAX( ZH, THIK )
@@ -372,7 +372,7 @@ contains
 
                !get bulk surface resistances (Rs)
                !Note to change pressure unit from Pa to kPa
-               RSURFC = AERO_SFCRSII ( SPC, species_is_dust(species_idx), species_is_seasalt(species_idx), LUCINDEX, & 
+               RSURFC = AERO_SFCRSII ( SPC, species_is_dust(species_idx), species_is_seasalt(species_idx), LUCINDEX, &
                   species_radius(species_idx)*1e-6_fp, species_density(species_idx), PS*1e-3_fp, & !um to m; Pa to kPa
                   TS, USTAR, RH(1), W10, SeaSalt_Lower_Bin, SeaSalt_UPPER_Bin,VTSoutput, RC)
 
@@ -387,7 +387,7 @@ contains
                ! Set Rc for strong acids (HNO3,HCl,HBr) to 1 s/m
                ! Ref. Jaegle et al. 2018, cf. Erisman,van Pul,Ayers 1994
                IF ( HSTAR .gt. 1.e+10_fp ) RSURFC= 1.e+0_fp
-               
+
                !get Ra and Rb
                call Wesely_Ra_Rb(TS, PS, XMW, USTAR, OBK, Z0, bxheight(1), .FALSE., Ra, Rb,  RC)
 
@@ -397,7 +397,7 @@ contains
                !VD = VK + DBLE( IUSE(LDT) ) / C1X + DBLE( IUSE(LDT) ) * VTSoutput
                VD = VK +  frlanduse(LDT)  / C1X +  frlanduse(LDT) * VTSoutput
             END DO
-            
+
             !apply spectial treatment or scaling factor to Vd
             DVZ = VD *100.e+0_fp !m/s -- > cm/s
 
@@ -453,7 +453,7 @@ contains
 
             ! Ensure non-negative emissions
             species_tendencies(k, species_idx) = max(0.0_fp, DDFreq)
-            
+
             ! TODO: Update diagnostic fields here based on your scheme's requirements
             ! Each process should implement custom diagnostic calculations
             ! Example patterns:
@@ -464,7 +464,7 @@ contains
                   if (diagnostic_species_id(diag_idx) == species_idx) then
                      ! Add your custom dry deposition concentration per species calculation
                      drydep_con_per_species(diag_idx) =  &
-                     MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep))) 
+                        MAX(0.0_fp, species_conc(k,species_idx) * (1.0_fp - exp(-1.0_fp * species_tendencies(k, species_idx) * tstep)))
                      exit
                   end if
                end do
@@ -481,7 +481,7 @@ contains
                end do
             end if
          end do
-         
+
       end do
 
    end subroutine compute_zhang
@@ -505,15 +505,15 @@ contains
    !! @param[out] lower_bin         Sorted lower bin boundaries [μm]
    !! @param[out] upper_bin         Sorted upper bin boundaries [μm]
    subroutine get_seasalt_bin_boundaries(num_species, is_seasalt, lower_radius, upper_radius, &
-                                       lower_bin, upper_bin)
+      lower_bin, upper_bin)
       implicit none
-      
+
       ! Arguments
       integer, intent(in) :: num_species
       logical, intent(in) :: is_seasalt(num_species)
       real(fp), intent(in) :: lower_radius(num_species), upper_radius(num_species)
       real(fp), allocatable, intent(out) :: lower_bin(:), upper_bin(:)
-      
+
       ! Local variables
       integer :: n, n_bin, rc
       real(fp), allocatable :: temp_lower(:), temp_upper(:), temp_lower1(:), temp_upper1(:)
@@ -525,14 +525,14 @@ contains
       RC = CC_SUCCESS
       ErrMsg = ''
       thisLoc = ' -> at get_seasalt_bin_boundaries (in src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90)'
-      
+
       ! Count unique seasalt bins (similar to Find_SeaSalt_Bin approach)
       n_bin = 0
       allocate(temp_lower1(num_species), temp_upper1(num_species))
-      
+
       do n = 1, num_species
          if (.not. is_seasalt(n)) cycle
-         
+
          if (n_bin == 0) then
             ! First seasalt species
             n_bin = 1
@@ -547,14 +547,14 @@ contains
             endif
          endif
       enddo
-      
+
       if (n_bin == 0) then
          ! No seasalt species - allocate empty arrays
          allocate(lower_bin(0), upper_bin(0))
          deallocate(temp_lower1, temp_upper1)
          return
       end if
-      
+
       ! Allocate output arrays
       allocate(lower_bin(n_bin), upper_bin(n_bin))
       allocate(temp_lower(n_bin), temp_upper(n_bin))
@@ -586,10 +586,10 @@ contains
             RETURN
          endif
       enddo
-      
+
       ! Clean up
       deallocate(temp_lower, temp_upper, temp_lower1, temp_upper1,mask)
-      
+
    end subroutine get_seasalt_bin_boundaries
 
    !>
@@ -957,7 +957,7 @@ contains
       ELSE
          RS   = 1.e0_fp / (E0 * USTAR * (EB + EIM + EIN) * R1 )
       ENDIF
-      
+
    END FUNCTION AERO_SFCRSII
 
    !>
@@ -1040,7 +1040,7 @@ contains
          ! SIA (TODO: keep this for now and need to be consistent with real species names in the future)
          !IF ( K == idd_NIT .or. K == idd_NH4 .or. K == idd_SO4 ) THEN
          IF ( SPC == 'NIT' .or. SPC == 'NH4' .or. SPC == 'SO4' .or. &
-              SPC == 'nit' .or. SPC == 'nh4' .or. SPC == 'so4' ) THEN
+            SPC == 'nit' .or. SPC == 'nh4' .or. SPC == 'so4' ) THEN
             ! Efflorescence transitions
             IF (RHBL .LT. 0.35) THEN
                ! DIAM is not changed
@@ -1058,7 +1058,7 @@ contains
             !BC
             !ELSE IF ( K == idd_BCPI .OR. K == idd_BCPO )  THEN
          ELSE IF ( SPC == 'BCPI' .OR. SPC == 'BCPO' .OR. &
-                   SPC == 'bcpi' .OR. SPC == 'bcpo' )  THEN
+            SPC == 'bcpi' .OR. SPC == 'bcpo' )  THEN
             ! DIAM is not changed
 
             !OA
@@ -1066,7 +1066,7 @@ contains
             DIAM = DIAM * ((1.0_fp + 0.1_fp * RHBL / (1.0_fp - RHBL))             &
                ** (1.0_fp / 3.0_fp))
          ENDIF
-         
+
          !get RWET
          RWET = DIAM / 2.0e+0_fp
          ! Particle density [kg/m3]; same for all aerosols except sea salt and  dust
@@ -1103,7 +1103,7 @@ contains
          ! (jaegle 5/11/11)
          RWET = RDRY * (4.e+0_fp / 3.7e+0_fp) * &
             ( (2.e+0_fp - RHBL)/(1.e+0_fp - RHBL) )**(1.e+0_fp/3.e+0_fp)
-         
+
          ! Ratio dry over wet radii at the cubic power
          !RATIO_R = ( A_RADI(K) / RWET )**3.e+0_fp
 
@@ -1117,7 +1117,7 @@ contains
          ! Iteratively solve Tang et al., 1997 equation 5 to calculate density of wet aerosol (kg/m3)
          ! Redefine RATIO_R
          RATIO_R = RDRY / RWET
-         
+
          ! Assume an initial density of 1000 kg/m3
          DEN0 = DEN !assign initial DEN to DEN0
          DEN  = 1000.e+0_fp
@@ -1630,6 +1630,6 @@ contains
 
    end subroutine Wesely_Ra_Rb
 
-   
+
 
 end module DryDepScheme_ZHANG_Mod

@@ -18,7 +18,7 @@ target_link_libraries(test_CATChemCore PRIVATE CATChem_core)
 target_link_libraries(test_CATChemCore PRIVATE testing)
 set_target_properties(
   test_CATChemCore
-  PROPERTIES 
+  PROPERTIES
     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
     LINKER_LANGUAGE Fortran
 )
@@ -35,11 +35,14 @@ target_link_libraries(test_StateManager PRIVATE CATChem_core)
 target_link_libraries(test_StateManager PRIVATE testing)
 set_target_properties(
   test_StateManager
-  PROPERTIES 
+  PROPERTIES
     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
     LINKER_LANGUAGE Fortran
 )
-target_include_directories(test_StateManager PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(
+  test_StateManager
+  PRIVATE ${CMAKE_BINARY_DIR}/include
+)
 add_dependencies(test_StateManager CATChem_core)
 add_test(
   NAME test_StateManager
@@ -90,7 +93,10 @@ set_target_properties(
     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
     LINKER_LANGUAGE Fortran
 )
-target_include_directories(test_ConfigManager PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(
+  test_ConfigManager
+  PRIVATE ${CMAKE_BINARY_DIR}/include
+)
 add_dependencies(test_ConfigManager CATChem_core)
 add_test(
   NAME test_ConfigManager
@@ -344,7 +350,6 @@ add_test(
   COMMAND test_catchem_api
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
 
 # # Legacy tests (to be updated)
 # add_executable(test_main test_main.F90)

@@ -12,25 +12,33 @@
 #   Test and Google Mock's option() definitions, and thus must be
 #   called *after* the options have been defined.
 
-if (POLICY CMP0054)
+if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
-endif (POLICY CMP0054)
+endif(POLICY CMP0054)
 
 # Tweaks CMake's default compiler/linker settings to suit Google Test's needs.
 #
 # This must be a macro(), as inside a function string() can only
 # update variables in the function scope.
 macro(fix_default_compiler_settings_)
-  if (MSVC)
+  if(MSVC)
     # For MSVC, CMake sets certain flags to defaults we want to override.
     # This replacement code is taken from sample in the CMake Wiki at
     # https://gitlab.kitware.com/cmake/community/wikis/FAQ#dynamic-replace.
-    foreach (flag_var
-             CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-             CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
-             CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-             CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-      if (NOT BUILD_SHARED_LIBS AND NOT gtest_force_shared_crt)
+    foreach(
+      flag_var
+      CMAKE_C_FLAGS
+      CMAKE_C_FLAGS_DEBUG
+      CMAKE_C_FLAGS_RELEASE
+      CMAKE_C_FLAGS_MINSIZEREL
+      CMAKE_C_FLAGS_RELWITHDEBINFO
+      CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_CXX_FLAGS_RELEASE
+      CMAKE_CXX_FLAGS_MINSIZEREL
+      CMAKE_CXX_FLAGS_RELWITHDEBINFO
+    )
+      if(NOT BUILD_SHARED_LIBS AND NOT gtest_force_shared_crt)
         # When Google Test is built as a shared library, it should also use
         # shared runtime libraries.  Otherwise, it may end up with multiple
         # copies of runtime library data in different modules, resulting in
@@ -60,20 +68,23 @@ macro(config_compiler_and_linker)
   # Note: pthreads on MinGW is not supported, even if available
   # instead, we use windows threading primitives
   unset(GTEST_HAS_PTHREAD)
-  if (NOT gtest_disable_pthreads AND NOT MINGW)
+  if(NOT gtest_disable_pthreads AND NOT MINGW)
     # Defines CMAKE_USE_PTHREADS_INIT and CMAKE_THREAD_LIBS_INIT.
     find_package(Threads)
-    if (CMAKE_USE_PTHREADS_INIT)
+    if(CMAKE_USE_PTHREADS_INIT)
       set(GTEST_HAS_PTHREAD ON)
     endif()
   endif()
 
   fix_default_compiler_settings_()
-  if (MSVC)
+  if(MSVC)
     # Newlines inside flags variables break CMake's NMake generator.
     # TODO(vladl@google.com): Add -RTCs and -RTCu to debug builds.
     set(cxx_base_flags "-GS -W4 -WX -wd4251 -wd4275 -nologo -J")
-    set(cxx_base_flags "${cxx_base_flags} -D_UNICODE -DUNICODE -DWIN32 -D_WIN32")
+    set(
+      cxx_base_flags
+      "${cxx_base_flags} -D_UNICODE -DUNICODE -DWIN32 -D_WIN32"
+    )
     set(cxx_base_flags "${cxx_base_flags} -DSTRICT -DWIN32_LEAN_AND_MEAN")
     set(cxx_exception_flags "-EHsc -D_HAS_EXCEPTIONS=1")
     set(cxx_no_exception_flags "-EHs-c- -D_HAS_EXCEPTIONS=0")
@@ -83,13 +94,16 @@ macro(config_compiler_and_linker)
     set(cxx_base_flags "${cxx_base_flags} -wd4702")
     # Ensure MSVC treats source files as UTF-8 encoded.
     set(cxx_base_flags "${cxx_base_flags} -utf-8")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(cxx_base_flags "-Wall -Wshadow -Werror -Wconversion")
     set(cxx_exception_flags "-fexceptions")
     set(cxx_no_exception_flags "-fno-exceptions")
-    set(cxx_strict_flags "-W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls")
+    set(
+      cxx_strict_flags
+      "-W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls"
+    )
     set(cxx_no_rtti_flags "-fno-rtti")
-  elseif (CMAKE_COMPILER_IS_GNUCXX)
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
     set(cxx_base_flags "-Wall -Wshadow -Werror")
     if(NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0.0)
       set(cxx_base_flags "${cxx_base_flags} -Wno-error=dangling-else")
@@ -100,16 +114,20 @@ macro(config_compiler_and_linker)
     # whether RTTI is enabled.  Therefore we define GTEST_HAS_RTTI
     # explicitly.
     set(cxx_no_rtti_flags "-fno-rtti -DGTEST_HAS_RTTI=0")
-    set(cxx_strict_flags
-      "-Wextra -Wno-unused-parameter -Wno-missing-field-initializers")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "SunPro")
+    set(
+      cxx_strict_flags
+      "-Wextra -Wno-unused-parameter -Wno-missing-field-initializers"
+    )
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "SunPro")
     set(cxx_exception_flags "-features=except")
     # Sun Pro doesn't provide macros to indicate whether exceptions and
     # RTTI are enabled, so we define GTEST_HAS_* explicitly.
     set(cxx_no_exception_flags "-features=no%except -DGTEST_HAS_EXCEPTIONS=0")
     set(cxx_no_rtti_flags "-features=no%rtti -DGTEST_HAS_RTTI=0")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "VisualAge" OR
-      CMAKE_CXX_COMPILER_ID STREQUAL "XL")
+  elseif(
+    CMAKE_CXX_COMPILER_ID STREQUAL "VisualAge"
+    OR CMAKE_CXX_COMPILER_ID STREQUAL "XL"
+  )
     # CMake 2.8 changes Visual Age's compiler ID to "XL".
     set(cxx_exception_flags "-qeh")
     set(cxx_no_exception_flags "-qnoeh")
@@ -117,7 +135,7 @@ macro(config_compiler_and_linker)
     # whether RTTI is enabled.  Therefore we define GTEST_HAS_RTTI
     # explicitly.
     set(cxx_no_rtti_flags "-qnortti -DGTEST_HAS_RTTI=0")
-  elseif (CMAKE_CXX_COMPILER_ID STREQUAL "HP")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "HP")
     set(cxx_base_flags "-AA -mt")
     set(cxx_exception_flags "-DGTEST_HAS_EXCEPTIONS=1")
     set(cxx_no_exception_flags "+noeh -DGTEST_HAS_EXCEPTIONS=0")
@@ -126,7 +144,7 @@ macro(config_compiler_and_linker)
   endif()
 
   # The pthreads library is available and allowed?
-  if (DEFINED GTEST_HAS_PTHREAD)
+  if(DEFINED GTEST_HAS_PTHREAD)
     set(GTEST_HAS_PTHREAD_MACRO "-DGTEST_HAS_PTHREAD=1")
   else()
     set(GTEST_HAS_PTHREAD_MACRO "-DGTEST_HAS_PTHREAD=0")
@@ -135,8 +153,10 @@ macro(config_compiler_and_linker)
 
   # For building gtest's own tests and samples.
   set(cxx_exception "${cxx_base_flags} ${cxx_exception_flags}")
-  set(cxx_no_exception
-    "${CMAKE_CXX_FLAGS} ${cxx_base_flags} ${cxx_no_exception_flags}")
+  set(
+    cxx_no_exception
+    "${CMAKE_CXX_FLAGS} ${cxx_base_flags} ${cxx_no_exception_flags}"
+  )
   set(cxx_default "${cxx_exception}")
   set(cxx_no_rtti "${cxx_default} ${cxx_no_rtti_flags}")
 
@@ -151,40 +171,43 @@ function(cxx_library_with_type name type cxx_flags)
   # ARGN refers to additional arguments after 'cxx_flags'.
   add_library(${name} ${type} ${ARGN})
   add_library(${cmake_package_name}::${name} ALIAS ${name})
-  set_target_properties(${name}
-    PROPERTIES
-    COMPILE_FLAGS "${cxx_flags}")
+  set_target_properties(${name} PROPERTIES COMPILE_FLAGS "${cxx_flags}")
   # Generate debug library name with a postfix.
-  set_target_properties(${name}
-    PROPERTIES
-    DEBUG_POSTFIX "d")
+  set_target_properties(${name} PROPERTIES DEBUG_POSTFIX "d")
   # Set the output directory for build artifacts
-  set_target_properties(${name}
+  set_target_properties(
+    ${name}
     PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+  )
   # make PDBs match library name
   get_target_property(pdb_debug_postfix ${name} DEBUG_POSTFIX)
-  set_target_properties(${name}
+  set_target_properties(
+    ${name}
     PROPERTIES
-    PDB_NAME "${name}"
-    PDB_NAME_DEBUG "${name}${pdb_debug_postfix}"
-    COMPILE_PDB_NAME "${name}"
-    COMPILE_PDB_NAME_DEBUG "${name}${pdb_debug_postfix}")
+      PDB_NAME "${name}"
+      PDB_NAME_DEBUG "${name}${pdb_debug_postfix}"
+      COMPILE_PDB_NAME "${name}"
+      COMPILE_PDB_NAME_DEBUG "${name}${pdb_debug_postfix}"
+  )
 
-  if (BUILD_SHARED_LIBS OR type STREQUAL "SHARED")
-    set_target_properties(${name}
-      PROPERTIES
-      COMPILE_DEFINITIONS "GTEST_CREATE_SHARED_LIBRARY=1")
-    if (NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
-      target_compile_definitions(${name} INTERFACE
-        $<INSTALL_INTERFACE:GTEST_LINKED_AS_SHARED_LIBRARY=1>)
+  if(BUILD_SHARED_LIBS OR type STREQUAL "SHARED")
+    set_target_properties(
+      ${name}
+      PROPERTIES COMPILE_DEFINITIONS "GTEST_CREATE_SHARED_LIBRARY=1"
+    )
+    if(NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
+      target_compile_definitions(
+        ${name}
+        INTERFACE $<INSTALL_INTERFACE:GTEST_LINKED_AS_SHARED_LIBRARY=1>
+      )
     endif()
   endif()
-  if (DEFINED GTEST_HAS_PTHREAD)
-    if ("${CMAKE_VERSION}" VERSION_LESS "3.1.0")
+  if(DEFINED GTEST_HAS_PTHREAD)
+    if("${CMAKE_VERSION}" VERSION_LESS "3.1.0")
       set(threads_spec ${CMAKE_THREAD_LIBS_INIT})
     else()
       set(threads_spec Threads::Threads)
@@ -192,7 +215,7 @@ function(cxx_library_with_type name type cxx_flags)
     target_link_libraries(${name} PUBLIC ${threads_spec})
   endif()
 
-  if (NOT "${CMAKE_VERSION}" VERSION_LESS "3.8")
+  if(NOT "${CMAKE_VERSION}" VERSION_LESS "3.8")
     target_compile_features(${name} PUBLIC cxx_std_11)
   endif()
 endfunction()
@@ -215,23 +238,22 @@ endfunction()
 # is built from the given source files with the given compiler flags.
 function(cxx_executable_with_flags name cxx_flags libs)
   add_executable(${name} ${ARGN})
-  if (MSVC)
+  if(MSVC)
     # BigObj required for tests.
     set(cxx_flags "${cxx_flags} -bigobj")
   endif()
-  if (cxx_flags)
-    set_target_properties(${name}
-      PROPERTIES
-      COMPILE_FLAGS "${cxx_flags}")
+  if(cxx_flags)
+    set_target_properties(${name} PROPERTIES COMPILE_FLAGS "${cxx_flags}")
   endif()
-  if (BUILD_SHARED_LIBS)
-    set_target_properties(${name}
-      PROPERTIES
-      COMPILE_DEFINITIONS "GTEST_LINKED_AS_SHARED_LIBRARY=1")
+  if(BUILD_SHARED_LIBS)
+    set_target_properties(
+      ${name}
+      PROPERTIES COMPILE_DEFINITIONS "GTEST_LINKED_AS_SHARED_LIBRARY=1"
+    )
   endif()
   # To support mixing linking in static and dynamic libraries, link each
   # library in with an extra call to target_link_libraries.
-  foreach (lib "${libs}")
+  foreach(lib "${libs}")
     target_link_libraries(${name} ${lib})
   endforeach()
 endfunction()
@@ -243,11 +265,12 @@ endfunction()
 # the source file list.
 function(cxx_executable name dir libs)
   cxx_executable_with_flags(
-    ${name} "${cxx_default}" "${libs}" "${dir}/${name}.cc" ${ARGN})
+    ${name} "${cxx_default}" "${libs}" "${dir}/${name}.cc" ${ARGN}
+  )
 endfunction()
 
 # Sets PYTHONINTERP_FOUND and PYTHON_EXECUTABLE.
-if ("${CMAKE_VERSION}" VERSION_LESS "3.12.0")
+if("${CMAKE_VERSION}" VERSION_LESS "3.12.0")
   find_package(PythonInterp)
 else()
   find_package(Python COMPONENTS Interpreter)
@@ -261,7 +284,7 @@ endif()
 # from the given source files with the given compiler flags.
 function(cxx_test_with_flags name cxx_flags libs)
   cxx_executable_with_flags(${name} "${cxx_flags}" "${libs}" ${ARGN})
-    add_test(NAME ${name} COMMAND "$<TARGET_FILE:${name}>")
+  add_test(NAME ${name} COMMAND "$<TARGET_FILE:${name}>")
 endfunction()
 
 # cxx_test(name libs srcs...)
@@ -271,7 +294,8 @@ endfunction()
 # test/name.cc is already implicitly included in the source file list.
 function(cxx_test name libs)
   cxx_test_with_flags("${name}" "${cxx_default}" "${libs}"
-    "test/${name}.cc" ${ARGN})
+    "test/${name}.cc" ${ARGN}
+  )
 endfunction()
 
 # py_test(name)
@@ -279,30 +303,40 @@ endfunction()
 # creates a Python test with the given name whose main module is in
 # test/name.py.  It does nothing if Python is not installed.
 function(py_test name)
-  if (PYTHONINTERP_FOUND)
-    if ("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" VERSION_GREATER 3.1)
-      if (CMAKE_CONFIGURATION_TYPES)
+  if(PYTHONINTERP_FOUND)
+    if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" VERSION_GREATER 3.1)
+      if(CMAKE_CONFIGURATION_TYPES)
         # Multi-configuration build generators as for Visual Studio save
         # output in a subdirectory of CMAKE_CURRENT_BINARY_DIR (Debug,
         # Release etc.), so we have to provide it here.
-        add_test(NAME ${name}
-          COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
-              --build_dir=${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG> ${ARGN})
-      else (CMAKE_CONFIGURATION_TYPES)
+        add_test(
+          NAME ${name}
+          COMMAND
+            ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+            --build_dir=${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG> ${ARGN}
+        )
+      else(CMAKE_CONFIGURATION_TYPES)
         # Single-configuration build generators like Makefile generators
         # don't have subdirs below CMAKE_CURRENT_BINARY_DIR.
-        add_test(NAME ${name}
-          COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
-            --build_dir=${CMAKE_CURRENT_BINARY_DIR} ${ARGN})
-      endif (CMAKE_CONFIGURATION_TYPES)
+        add_test(
+          NAME ${name}
+          COMMAND
+            ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+            --build_dir=${CMAKE_CURRENT_BINARY_DIR} ${ARGN}
+        )
+      endif(CMAKE_CONFIGURATION_TYPES)
     else()
       # ${CMAKE_CURRENT_BINARY_DIR} is known at configuration time, so we can
       # directly bind it from cmake. ${CTEST_CONFIGURATION_TYPE} is known
       # only at ctest runtime (by calling ctest -c <Configuration>), so
       # we have to escape $ to delay variable substitution here.
-      add_test(NAME ${name}
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
-          --build_dir=${CMAKE_CURRENT_BINARY_DIR}/\${CTEST_CONFIGURATION_TYPE} ${ARGN})
+      add_test(
+        NAME ${name}
+        COMMAND
+          ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+          --build_dir=${CMAKE_CURRENT_BINARY_DIR}/\${CTEST_CONFIGURATION_TYPE}
+          ${ARGN}
+      )
     endif()
   endif(PYTHONINTERP_FOUND)
 endfunction()
@@ -312,33 +346,44 @@ endfunction()
 # Installs the specified targets and configures the associated pkgconfig files.
 function(install_project)
   if(INSTALL_GTEST)
-    install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+    install(
+      DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
+      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
     # Install the project targets.
-    install(TARGETS ${ARGN}
+    install(
+      TARGETS ${ARGN}
       EXPORT ${targets_export_name}
       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
       ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    )
     if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
       # Install PDBs
       foreach(t ${ARGN})
         get_target_property(t_pdb_name ${t} COMPILE_PDB_NAME)
         get_target_property(t_pdb_name_debug ${t} COMPILE_PDB_NAME_DEBUG)
         get_target_property(t_pdb_output_directory ${t} PDB_OUTPUT_DIRECTORY)
-        install(FILES
-          "${t_pdb_output_directory}/\${CMAKE_INSTALL_CONFIG_NAME}/$<$<CONFIG:Debug>:${t_pdb_name_debug}>$<$<NOT:$<CONFIG:Debug>>:${t_pdb_name}>.pdb"
+        install(
+          FILES
+            "${t_pdb_output_directory}/\${CMAKE_INSTALL_CONFIG_NAME}/$<$<CONFIG:Debug>:${t_pdb_name_debug}>$<$<NOT:$<CONFIG:Debug>>:${t_pdb_name}>.pdb"
           DESTINATION ${CMAKE_INSTALL_LIBDIR}
-          OPTIONAL)
+          OPTIONAL
+        )
       endforeach()
     endif()
     # Configure and install pkgconfig files.
     foreach(t ${ARGN})
       set(configured_pc "${generated_dir}/${t}.pc")
-      configure_file("${PROJECT_SOURCE_DIR}/cmake/${t}.pc.in"
-        "${configured_pc}" @ONLY)
-      install(FILES "${configured_pc}"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+      configure_file(
+        "${PROJECT_SOURCE_DIR}/cmake/${t}.pc.in"
+        "${configured_pc}"
+        @ONLY
+      )
+      install(
+        FILES "${configured_pc}"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+      )
     endforeach()
   endif()
 endfunction()

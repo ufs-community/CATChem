@@ -38,7 +38,7 @@ jobs:
           run: |
             cmake ${{ env.CMAKE_GENERATOR }} -S "${{ github.workspace }}" -B build -DYAML_BUILD_SHARED_LIBS=${{ env.YAML_BUILD_SHARED_LIBS }}
             cd build && cmake --build . --parallel ${{ steps.cpu-cores.outputs.count }}
-            
+
         - name: Build Tests
           shell: bash
           run: |
@@ -69,4 +69,3 @@ jobs:
           run: |
             cd "${{ github.workspace }}"
             bazel test test
-

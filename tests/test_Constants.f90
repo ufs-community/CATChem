@@ -44,5 +44,5 @@ program test_Constants
    write(*,*) ''
 
    write(*,*) 'All Constants tests passed!'
-   
+
 end program test_Constants

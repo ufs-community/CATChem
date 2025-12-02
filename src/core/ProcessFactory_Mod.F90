@@ -60,15 +60,15 @@ contains
 
       error_mgr => container%get_error_manager()
       call error_mgr%push_context('factory_create_process', &
-                                  'creating process: ' // trim(process_name))
+         'creating process: ' // trim(process_name))
 
       ! Create process from registry (scheme is read from process configuration)
       call this%registry%create_process(process_name, process, rc)
       if (rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-                                     'Unknown process: ' // trim(process_name), rc, &
-                                     'factory_create_process', &
-                                     'Check available processes with list_available()')
+            'Unknown process: ' // trim(process_name), rc, &
+            'factory_create_process', &
+            'Check available processes with list_available()')
          call error_mgr%pop_context()
          return
       endif

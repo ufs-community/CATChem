@@ -40,10 +40,10 @@
 module DiagnosticManager_Mod
    use precision_mod, only: fp
    use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, &
-                        ERROR_INVALID_INPUT, ERROR_NOT_FOUND, ERROR_MEMORY_ALLOCATION
+      ERROR_INVALID_INPUT, ERROR_NOT_FOUND, ERROR_MEMORY_ALLOCATION
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
-                                      DiagnosticDataType, DIAG_REAL_SCALAR, DIAG_REAL_1D, &
-                                      DIAG_REAL_2D, DIAG_REAL_3D
+      DiagnosticDataType, DIAG_REAL_SCALAR, DIAG_REAL_1D, &
+      DIAG_REAL_2D, DIAG_REAL_3D
    ! Removed StateManager_Mod import to break circular dependency
 
    implicit none
@@ -135,7 +135,7 @@ contains
          allocate(this%process_registries(this%max_processes), stat=rc)
          if (rc /= 0) then
             call this%error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate process registries', rc)
+               'Failed to allocate process registries', rc)
             call this%error_mgr%pop_context()
             return
          endif
@@ -145,7 +145,7 @@ contains
          allocate(this%process_names(this%max_processes), stat=rc)
          if (rc /= 0) then
             call this%error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate process names', rc)
+               'Failed to allocate process names', rc)
             call this%error_mgr%pop_context()
             return
          endif
@@ -237,7 +237,7 @@ contains
       do i = 1, this%num_processes
          if (trim(this%process_names(i)) == trim(process_name)) then
             call this%error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        'Process already registered: ' // trim(process_name), rc)
+               'Process already registered: ' // trim(process_name), rc)
             return
          endif
       enddo
@@ -245,7 +245,7 @@ contains
       ! Check capacity
       if (this%num_processes >= this%max_processes) then
          call this%error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                     'Maximum number of processes reached', rc)
+            'Maximum number of processes reached', rc)
          return
       endif
 
@@ -355,7 +355,7 @@ contains
    !! \param[in] output_frequency Optional output frequency in timesteps
    !! \param[out] rc Return code
    subroutine diagnostic_manager_configure_output(this, rc, output_prefix, &
-                                                  output_directory, output_frequency)
+      output_directory, output_frequency)
       class(DiagnosticManagerType), intent(inout) :: this
       integer, intent(out) :: rc
       character(len=*), optional, intent(in) :: output_prefix
@@ -440,19 +440,19 @@ contains
       if (.not. this%collection_enabled) return
 
       call this%error_mgr%push_context('diagnostic_manager_collect_all', &
-                                  'Collecting diagnostics from all processes')
+         'Collecting diagnostics from all processes')
 
       total_fields = 0
 
       ! Collect from each registered process
       do i = 1, this%num_processes
          current_process = trim(this%process_names(i))
-         
+
          call this%collect_process_diagnostics(current_process, local_rc)
          if (local_rc /= CC_SUCCESS) then
             call this%error_mgr%report_error(local_rc, &
-                                        'Failed to collect diagnostics from: ' // &
-                                        trim(current_process), local_rc)
+               'Failed to collect diagnostics from: ' // &
+               trim(current_process), local_rc)
             ! Continue with other processes - don't let one failure stop collection
          else
             ! Count fields collected from this process
@@ -463,7 +463,7 @@ contains
       ! Log collection summary
       if (this%num_processes > 0) then
          write(*,'(A,I0,A,I0,A)') 'DiagnosticManager: Collected diagnostics from ', &
-                                  this%num_processes, ' processes (', total_fields, ' total fields)'
+            this%num_processes, ' processes (', total_fields, ' total fields)'
       else
          write(*,'(A)') 'DiagnosticManager: No processes registered for diagnostic collection'
       end if
@@ -494,7 +494,7 @@ contains
       rc = CC_SUCCESS
 
       call this%error_mgr%push_context('diagnostic_manager_collect_process', &
-                                  'Collecting diagnostics from process: ' // trim(process_name))
+         'Collecting diagnostics from process: ' // trim(process_name))
 
       ! Get process registry
       call this%get_process_registry(process_name, registry, rc)
@@ -514,7 +514,7 @@ contains
       allocate(field_names(num_fields), stat=local_rc)
       if (local_rc /= 0) then
          call this%error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                     'Failed to allocate field names array', rc)
+            'Failed to allocate field names array', rc)
          call this%error_mgr%pop_context()
          return
       end if
@@ -528,13 +528,13 @@ contains
 
          ! Get field value using existing get_field_value method
          call this%get_field_value(process_name, field_name, &
-                                  scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, &
-                                  data_type, rc=local_rc)
-         
+            scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, &
+            data_type, rc=local_rc)
+
          if (local_rc /= CC_SUCCESS) then
             ! Log warning but continue with other fields
             call this%error_mgr%report_error(local_rc, &
-                                        'Failed to collect field: ' // trim(field_name), local_rc)
+               'Failed to collect field: ' // trim(field_name), local_rc)
             ! Don't fail the entire collection for one field
          else
             ! TODO: Write diagnostic fields to output file
@@ -571,8 +571,8 @@ contains
    !! \param[out] units Optional field units for NetCDF metadata
    !! \param[out] rc Return code
    subroutine diagnostic_manager_get_field_value(this, process_name, field_name, &
-                                                scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, &
-                                                data_type, description, units, rc)
+      scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, &
+      data_type, description, units, rc)
       class(DiagnosticManagerType), intent(inout) :: this
       character(len=*), intent(in) :: process_name
       character(len=*), intent(in) :: field_name
@@ -610,7 +610,7 @@ contains
       if (.not. associated(field_ptr)) then
          rc = ERROR_NOT_FOUND
          call this%error_mgr%report_error(ERROR_NOT_FOUND, &
-                'Diagnostic field not found: ' // trim(field_name), rc)
+            'Diagnostic field not found: ' // trim(field_name), rc)
          return
       end if
 
@@ -618,7 +618,7 @@ contains
       if (.not. field_ptr%is_ready() .or. .not. field_ptr%get_is_enabled()) then
          rc = ERROR_INVALID_INPUT
          call this%error_mgr%report_error(ERROR_INVALID_INPUT, &
-                'Diagnostic field not ready or disabled: ' // trim(field_name), rc)
+            'Diagnostic field not ready or disabled: ' // trim(field_name), rc)
          return
       end if
 
@@ -637,36 +637,36 @@ contains
       if (present(description)) then
          description = field_ptr%get_description()
       end if
-      
+
       if (present(units)) then
          units = field_ptr%get_units()
       end if
 
       select case (local_data_type)
-      case (DIAG_REAL_SCALAR)
+       case (DIAG_REAL_SCALAR)
          if (present(scalar_value)) then
             scalar_value = data_ptr%get_real_scalar()
          end if
 
-      case (DIAG_REAL_1D)
+       case (DIAG_REAL_1D)
          if (present(array_1d_ptr)) then
             array_1d_ptr => data_ptr%get_real_1d_ptr()
          end if
 
-      case (DIAG_REAL_2D)
+       case (DIAG_REAL_2D)
          if (present(array_2d_ptr)) then
             array_2d_ptr => data_ptr%get_real_2d_ptr()
          end if
 
-      case (DIAG_REAL_3D)
+       case (DIAG_REAL_3D)
          if (present(array_3d_ptr)) then
             array_3d_ptr => data_ptr%get_real_3d_ptr()
          end if
 
-      case default
+       case default
          rc = ERROR_INVALID_INPUT
          call this%error_mgr%report_error(ERROR_INVALID_INPUT, &
-                'Unsupported diagnostic data type for field: ' // trim(field_name), rc)
+            'Unsupported diagnostic data type for field: ' // trim(field_name), rc)
       end select
 
    end subroutine diagnostic_manager_get_field_value
@@ -687,7 +687,7 @@ contains
       if (mod(this%current_timestep, this%output_frequency) /= 0) return
 
       call this%error_mgr%push_context('diagnostic_manager_write_output', &
-                                  'Writing diagnostic output')
+         'Writing diagnostic output')
 
       ! TODO: Implement actual file output
       ! This would write diagnostic data to NetCDF files or other formats
@@ -747,7 +747,7 @@ contains
       write(*,'(A)') 'Registered processes:'
       do i = 1, this%num_processes
          write(*,'(A,I0,A,A,A,I0,A)') '  ', i, ': ', trim(this%process_names(i)), &
-                                      ' (', this%process_registries(i)%get_num_diagnostics(), ' diagnostics)'
+            ' (', this%process_registries(i)%get_num_diagnostics(), ' diagnostics)'
       enddo
 
       write(*,'(A)') '================================='
@@ -771,8 +771,8 @@ contains
          call this%process_registries(i)%validate(this%error_mgr, local_rc)
          if (local_rc /= CC_SUCCESS) then
             call this%error_mgr%report_error(local_rc, &
-                                        'Validation failed for process: ' // &
-                                        trim(this%process_names(i)), rc)
+               'Validation failed for process: ' // &
+               trim(this%process_names(i)), rc)
             return
          endif
       enddo

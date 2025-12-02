@@ -23,10 +23,10 @@ process_behavior:
   timestep_dependency: "independent" #is not doing anything now
   spatial_scope: "column" #is not doing anything now
   #only 'column' is supported for now
-  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))  
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
   memory_requirements: "low" #is not doing anything now
 
-#required_met_fields: [] #used for other purpose, such as unit conversion 
+#required_met_fields: [] #used for other purpose, such as unit conversion
 
 schemes:
   wesely:
@@ -48,11 +48,11 @@ schemes:
       - PFILSAN
       - PEDGE
       - REEVAPLS     #need to add to metstate
-      
+
 
     required_species_properties:
-      - is_aerosol          
-      - short_name            
+      - is_aerosol
+      - short_name
       - henry_cr
       - henry_k0
       - henry_pKa
@@ -60,7 +60,7 @@ schemes:
       - wd_LiqAndGas
       - wd_convfacI2G
       - wd_rainouteff
-      - radius         
+      - radius
 
     parameters:
       scale_factor:
@@ -80,5 +80,3 @@ diagnostics:
   - name: "wetdep_flux_per_species_per_level"
     description: "Wet deposition flux per species per level"
     units: "kg/m2/s"
-  
-

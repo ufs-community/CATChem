@@ -1,709 +1,223 @@
-# Creating New Processes
+# Creating a New Column-Based Process
 
-This guide walks you through the complete process of creating a new atmospheric process in CATChem, from initial design to testing and integration.
+This guide provides a step-by-step tutorial for creating a new column-based atmospheric process in CATChem. We will use a simplified version of the `seasalt` process as an example.
 
-## Planning Your Process
+## 1. Directory and File Structure
 
-Before writing code, carefully plan your process implementation:
+First, create a directory for your new process within `src/process`. The structure should look like this:
 
-### 1. Define the Physical Process
-
-- **What does it do?** (e.g., "Calculate dry deposition of gas-phase species")
-- **What inputs does it need?** (meteorology, species concentrations, surface properties)
-- **What outputs does it produce?** (updated concentrations, fluxes, diagnostics)
-- **What schemes/algorithms will it support?** (resistance model, big-leaf model, etc.)
-
-### 2. Identify Dependencies
-
-- Which species does it affect?
-- What meteorological fields are required?
-- Does it need emissions data or surface properties?
-- What diagnostic outputs should it provide?
-
-### 3. Choose Integration Approach
-
-- **Column-based**: Most processes (chemistry, deposition, settling)
-- **Horizontal**: Some emission processes
-- **3D**: Advection, turbulent mixing
-
-## Step-by-Step Implementation
-
-### Step 1: Create Directory Structure
-
-```bash
-cd src/process
-mkdir newprocess
-cd newprocess
-mkdir schemes
-
-# Create required files
-touch newprocessProcess_Mod.F90
-touch newprocessCommon_Mod.F90
-touch CMakeLists.txt
-touch schemes/CMakeLists.txt
+```
+src/process/newprocess/
+├── schemes/
+│   ├── NewProcessScheme_Mod.F90
+│   └── CMakeLists.txt
+├── NewProcessInterface_Mod.F90
+├── NewProcessCommon_Mod.F90
+├── NewProcessCreator_Mod.F90
+└── CMakeLists.txt
 ```
 
-### Step 2: Use the Process Generator
+-   `NewProcessInterface_Mod.F90`: The main process module, extending `ColumnProcessInterface`.
+-   `NewProcessCommon_Mod.F90`: A module for common data structures and utilities, like the process configuration.
+-   `NewProcessCreator_Mod.F90`: A module responsible for creating an instance of the process.
+-   `schemes/`: A directory to hold the different algorithmic implementations (schemes) for the process.
 
-CATChem provides a Python generator to create process templates:
+## 2. The Process Interface
 
-```bash
-cd util
-python catchem_generate_process.py \
-    --name newprocess \
-    --description "New atmospheric process" \
-    --schemes scheme1,scheme2 \
-    --species O3,NO2,PM25 \
-    --diagnostics rate,flux
-```
+The process interface is the main entry point for the process. It extends `ColumnProcessInterface` for column-based processes.
 
-This creates the basic file structure and boilerplate code.
-
-### Step 3: Implement the Process Module
-
-Edit `newprocessProcess_Mod.F90`:
-
+`NewProcessInterface_Mod.F90`:
 ```fortran
-!> \file newprocessProcess_Mod.F90
-!! \brief New atmospheric process implementation
-!! \ingroup process_modules
-!!
-!! \author Your Name
-!! \date 2025
-!! \version 1.0
-!!
-!! Detailed description of what this process does,
-!! including physical equations and assumptions.
-!!
-module newprocessProcess_Mod
-   use precision_mod
-   use state_mod, only : StateContainerType
-   use error_mod
-   use ProcessInterface_Mod
-   use newprocessCommon_Mod
-   ! Add scheme modules
-   use Scheme1Scheme_Mod
-   use Scheme2Scheme_Mod
+module NewProcessInterface_Mod
+  use precision_mod, only: fp
+  use ProcessInterface_Mod, only: ColumnProcessInterface
+  use StateManager_Mod, only: StateManagerType
+  use VirtualColumn_Mod, only: VirtualColumnType
+  use NewProcessCommon_Mod, only: NewProcessConfigType
+  use NewProcessScheme_Mod, only: compute_scheme
 
-   implicit none
-   private
+  implicit none
+  private
+  public :: NewProcessInterfaceType
 
-   public :: newprocessProcessType
-
-   !> New process type extending ProcessInterface
-   type, extends(ProcessInterface) :: newprocessProcessType
-      private
-
-      ! Process-specific configuration
-      character(len=32) :: selected_scheme = 'scheme1'
-      real(fp) :: process_parameter = 1.0_fp
-      logical :: enable_diagnostics = .true.
-
-      ! Process-specific data
-      real(fp), allocatable :: work_array(:,:,:)
-
-   contains
-      ! Required ProcessInterface methods
-      procedure :: init => newprocess_init
-      procedure :: run => newprocess_run
-      procedure :: finalize => newprocess_finalize
-
-      ! Process-specific methods
-      procedure, private :: setup_diagnostics
-      procedure, private :: validate_configuration
-   end type newprocessProcessType
+  type, extends(ColumnProcessInterface) :: NewProcessInterfaceType
+    private
+    type(NewProcessConfigType) :: config
+  contains
+    procedure :: init => newprocess_init
+    procedure :: run => newprocess_run
+    procedure :: finalize => newprocess_finalize
+    procedure :: run_column => newprocess_run_column
+    procedure :: get_required_met_fields => newprocess_get_required_met_fields
+  end type NewProcessInterfaceType
 
 contains
 
-   !> Initialize new process
-   subroutine newprocess_init(this, container, rc)
-      class(newprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
+  subroutine newprocess_init(this, container, rc)
+    class(NewProcessInterfaceType), intent(inout) :: this
+    type(StateManagerType), intent(inout) :: container
+    integer, intent(out) :: rc
+    ! Get config, load species, etc.
+  end subroutine
 
-      type(ErrorManagerType), pointer :: error_mgr
-      type(ConfigDataType), pointer :: config
-      character(len=256) :: message
-      integer :: local_rc
+  subroutine newprocess_run(this, container, rc)
+    class(NewProcessInterfaceType), intent(inout) :: this
+    type(StateManagerType), intent(inout) :: container
+    integer, intent(out) :: rc
+    ! No 3D operations needed for this example
+    rc = 0
+  end subroutine
 
-      rc = CC_SUCCESS
-      error_mgr => container%get_error_manager()
+  subroutine newprocess_finalize(this, rc)
+    class(NewProcessInterfaceType), intent(inout) :: this
+    integer, intent(out) :: rc
+    ! Deallocate resources
+    rc = 0
+  end subroutine
 
-      call error_mgr%push_context("newprocess_init")
+  subroutine newprocess_run_column(this, column, container, rc)
+    class(NewProcessInterfaceType), intent(inout) :: this
+    type(VirtualColumnType), intent(inout) :: column
+    type(StateManagerType), intent(inout) :: container
+    integer, intent(out) :: rc
 
-      ! Set process metadata
-      this%name = 'newprocess'
-      this%version = '1.0'
-      this%description = 'New atmospheric process'
+    ! Get met data from the virtual column
+    real(fp) :: u10m, v10m, sst
+    u10m = column%get_met()%U10M
+    v10m = column%get_met()%V10M
+    sst = column%get_met()%SST
 
-      ! Get configuration
-      config => container%get_config_ptr()
+    ! Call the scheme
+    call compute_scheme(u10m, v10m, sst, ...)
 
-      ! Read process-specific configuration
-      call config%get_value('processes.newprocess.scheme', &
-                           this%selected_scheme, local_rc)
-      if (local_rc /= CC_SUCCESS) then
-         call error_mgr%report_warning("Using default scheme: " // &
-                                      trim(this%selected_scheme))
-      end if
+    ! Update chemical state
+    ! ...
+  end subroutine
 
-      call config%get_value('processes.newprocess.process_parameter', &
-                           this%process_parameter, local_rc)
-      if (local_rc /= CC_SUCCESS) then
-         call error_mgr%report_warning("Using default process parameter")
-      end if
+  function newprocess_get_required_met_fields(this) result(field_names)
+    class(NewProcessInterfaceType), intent(in) :: this
+    character(len=32), allocatable :: field_names(:)
+    allocate(field_names(3))
+    field_names(1) = 'U10M'
+    field_names(2) = 'V10M'
+    field_names(3) = 'SST'
+  end function newprocess_get_required_met_fields
 
-      ! Validate configuration
-      call this%validate_configuration(container, local_rc)
-      if (local_rc /= CC_SUCCESS) then
-         call error_mgr%report_error("Configuration validation failed")
-         rc = local_rc
-         call error_mgr%pop_context()
-         return
-      end if
-
-      ! Allocate work arrays
-      ! Get grid dimensions from container
-      associate (grid => container%get_grid_manager())
-         allocate(this%work_array(grid%nx, grid%ny, grid%nz))
-         this%work_array = 0.0_fp
-      end associate
-
-      ! Set up diagnostics
-      if (this%enable_diagnostics) then
-         call this%setup_diagnostics(container, local_rc)
-         if (local_rc /= CC_SUCCESS) then
-            call error_mgr%report_error("Diagnostic setup failed")
-            rc = local_rc
-            call error_mgr%pop_context()
-            return
-         end if
-      end if
-
-      this%is_initialized = .true.
-      this%is_active = .true.
-
-      write(message, '(A,A,A)') 'New process initialized with scheme: ', &
-                                trim(this%selected_scheme)
-      call error_mgr%report_info(message)
-
-      call error_mgr%pop_context()
-
-   end subroutine newprocess_init
-
-   !> Run new process
-   subroutine newprocess_run(this, container, rc)
-      class(newprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
-
-      type(MetStateType), pointer :: met_state
-      type(ChemStateType), pointer :: chem_state
-      type(ErrorManagerType), pointer :: error_mgr
-      integer :: local_rc
-
-      rc = CC_SUCCESS
-
-      if (.not. this%is_ready()) then
-         rc = CC_FAILURE
-         return
-      end if
-
-      error_mgr => container%get_error_manager()
-      call error_mgr%push_context("newprocess_run")
-
-      ! Get state pointers
-      met_state => container%get_met_state_ptr()
-      chem_state => container%get_chem_state_ptr()
-
-      ! Execute scheme-specific calculations
-      select case (trim(this%selected_scheme))
-      case ('scheme1')
-         call scheme1_calculate(container, this%work_array, local_rc)
-      case ('scheme2')
-         call scheme2_calculate(container, this%work_array, local_rc)
-      case default
-         call error_mgr%report_error("Unknown scheme: " // &
-                                    trim(this%selected_scheme))
-         rc = CC_FAILURE
-         call error_mgr%pop_context()
-         return
-      end select
-
-      if (local_rc /= CC_SUCCESS) then
-         call error_mgr%report_error("Scheme calculation failed")
-         rc = local_rc
-         call error_mgr%pop_context()
-         return
-      end if
-
-      ! Update diagnostics if enabled
-      if (this%enable_diagnostics) then
-         call this%update_diagnostics(container, local_rc)
-      end if
-
-      call error_mgr%pop_context()
-
-   end subroutine newprocess_run
-
-   !> Finalize new process
-   subroutine newprocess_finalize(this, rc)
-      class(newprocessProcessType), intent(inout) :: this
-      integer, intent(out) :: rc
-
-      rc = CC_SUCCESS
-
-      ! Deallocate work arrays
-      if (allocated(this%work_array)) then
-         deallocate(this%work_array)
-      end if
-
-      this%is_initialized = .false.
-      this%is_active = .false.
-
-   end subroutine newprocess_finalize
-
-   !> Validate process configuration
-   subroutine validate_configuration(this, container, rc)
-      class(newprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
-
-      type(ErrorManagerType), pointer :: error_mgr
-      character(len=32), parameter :: valid_schemes(2) = &
-         ['scheme1', 'scheme2']
-      integer :: i
-      logical :: scheme_found
-
-      rc = CC_SUCCESS
-      error_mgr => container%get_error_manager()
-
-      ! Validate scheme selection
-      scheme_found = .false.
-      do i = 1, size(valid_schemes)
-         if (trim(this%selected_scheme) == trim(valid_schemes(i))) then
-            scheme_found = .true.
-            exit
-         end if
-      end do
-
-      if (.not. scheme_found) then
-         call error_mgr%report_error("Invalid scheme: " // &
-                                    trim(this%selected_scheme))
-         rc = CC_FAILURE
-         return
-      end if
-
-      ! Validate parameter ranges
-      if (this%process_parameter <= 0.0_fp) then
-         call error_mgr%report_error("Process parameter must be positive")
-         rc = CC_FAILURE
-         return
-      end if
-
-   end subroutine validate_configuration
-
-   !> Set up diagnostic outputs
-   subroutine setup_diagnostics(this, container, rc)
-      class(newprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
-
-      type(DiagnosticManagerType), pointer :: diag_mgr
-      type(GridManagerType), pointer :: grid_mgr
-
-      rc = CC_SUCCESS
-      diag_mgr => container%get_diagnostic_manager()
-      grid_mgr => container%get_grid_manager()
-
-      ! Register diagnostic fields
-      call diag_mgr%register_field('newprocess_rate', &
-                                  'New process rate', &
-                                  'kg/m3/s', &
-                                  [grid_mgr%nx, grid_mgr%ny, grid_mgr%nz])
-
-      call diag_mgr%register_field('newprocess_flux', &
-                                  'New process flux', &
-                                  'kg/m2/s', &
-                                  [grid_mgr%nx, grid_mgr%ny])
-
-   end subroutine setup_diagnostics
-
-end module newprocessProcess_Mod
+end module NewProcessInterface_Mod
 ```
 
-### Step 4: Implement Common Utilities
+### Key Points:
 
-Edit `newprocessCommon_Mod.F90`:
+-   **`extends(ColumnProcessInterface)`**: This is crucial for column-based processes. It provides the `run_column` method and other column-related utilities.
+-   **`get_required_met_fields`**: This function tells the `StateManager` which meteorological fields this process needs. The fields will then be available in the `VirtualColumnType`'s `met` object.
+-   **`run_column`**: This is where the core logic for a single column is executed. You can get met data and chemical species from the `column` object, call your scheme, and then update the chemical state.
 
+## 3. The Scheme
+
+The scheme contains the actual scientific algorithm.
+
+`schemes/NewProcessScheme_Mod.F90`:
 ```fortran
-!> \file newprocessCommon_Mod.F90
-!! \brief Common utilities for new process
-!! \ingroup process_modules
-!!
-module newprocessCommon_Mod
-   use precision_mod
-   use constants, only : R_GAS, AVOGADRO
-
-   implicit none
-   private
-
-   public :: calculate_common_parameter
-   public :: convert_units
-
-   ! Process-specific constants
-   real(fp), parameter :: PROCESS_CONSTANT = 1.23e-4_fp
+module NewProcessScheme_Mod
+  use precision_mod, only: fp
+  implicit none
+  private
+  public :: compute_scheme
 
 contains
 
-   !> Calculate common parameter used by multiple schemes
-   pure function calculate_common_parameter(temperature, pressure) result(param)
-      real(fp), intent(in) :: temperature  !< Temperature [K]
-      real(fp), intent(in) :: pressure     !< Pressure [Pa]
-      real(fp) :: param                    !< Common parameter
+  subroutine compute_scheme(u10m, v10m, sst, tendency, rc)
+    real(fp), intent(in) :: u10m, v10m, sst
+    real(fp), intent(out) :: tendency
+    integer, intent(out) :: rc
 
-      param = PROCESS_CONSTANT * (temperature / 273.15_fp) * &
-              (101325.0_fp / pressure)
+    ! Calculate tendency based on met inputs
+    tendency = (u10m**2 + v10m**2) * sst * 1.0e-5
+    rc = 0
+  end subroutine
 
-   end function calculate_common_parameter
-
-   !> Convert concentration units
-   pure function convert_units(conc_in, molar_mass, temp, press) result(conc_out)
-      real(fp), intent(in) :: conc_in      !< Input concentration [mol/m3]
-      real(fp), intent(in) :: molar_mass   !< Molar mass [g/mol]
-      real(fp), intent(in) :: temp         !< Temperature [K]
-      real(fp), intent(in) :: press        !< Pressure [Pa]
-      real(fp) :: conc_out                 !< Output concentration [μg/m3]
-
-      conc_out = conc_in * molar_mass * 1.0e6_fp
-
-   end function convert_units
-
-end module newprocessCommon_Mod
+end module NewProcessScheme_Mod
 ```
 
-### Step 5: Implement Schemes
+## 4. Configuration and Creator
 
-Create `schemes/Scheme1Scheme_Mod.F90`:
+You'll need a way to configure and create your process.
 
+`NewProcessCommon_Mod.F90`:
 ```fortran
-!> \file Scheme1Scheme_Mod.F90
-!! \brief Scheme 1 implementation for new process
-!! \ingroup scheme_modules
-!!
-module Scheme1Scheme_Mod
-   use precision_mod
-   use state_mod, only : StateContainerType
-   use error_mod
-   use newprocessCommon_Mod
+module NewProcessCommon_Mod
+  use precision_mod, only: fp
+  implicit none
+  private
+  public :: NewProcessConfigType
 
-   implicit none
-   private
+  type :: NewProcessConfigType
+    character(len=32) :: scheme = 'default'
+    logical :: diagnostics = .false.
+  end type NewProcessConfigType
 
-   public :: scheme1_calculate
+end module
+```
+
+`NewProcessCreator_Mod.F90`:
+```fortran
+module NewProcessCreator_Mod
+  use ProcessInterface_Mod, only: ProcessInterface
+  use NewProcessInterface_Mod, only: NewProcessInterfaceType
+  implicit none
+  private
+  public :: create_newprocess
 
 contains
 
-   !> Calculate using Scheme 1 algorithm
-   subroutine scheme1_calculate(container, work_array, rc)
-      type(StateContainerType), intent(inout) :: container
-      real(fp), intent(inout) :: work_array(:,:,:)
-      integer, intent(out) :: rc
+  function create_newprocess() result(process)
+    type(ProcessInterface), pointer :: process
+    type(NewProcessInterfaceType), pointer :: new_process
+    allocate(new_process)
+    process => new_process
+  end function create_newprocess
 
-      type(MetStateType), pointer :: met_state
-      type(ChemStateType), pointer :: chem_state
-      real(fp), pointer :: temperature(:,:,:)
-      real(fp), pointer :: pressure(:,:,:)
-      real(fp), pointer :: species_conc(:,:,:)
-      integer :: i, j, k
-
-      rc = CC_SUCCESS
-
-      ! Get state data
-      met_state => container%get_met_state_ptr()
-      chem_state => container%get_chem_state_ptr()
-
-      temperature => met_state%get_field('temperature')
-      pressure => met_state%get_field('pressure')
-      species_conc => chem_state%get_species_ptr('O3')  ! Example
-
-      ! Scheme 1 calculations
-      do k = 1, size(work_array, 3)
-         do j = 1, size(work_array, 2)
-            do i = 1, size(work_array, 1)
-               work_array(i,j,k) = calculate_common_parameter( &
-                  temperature(i,j,k), pressure(i,j,k))
-
-               ! Update species concentration
-               species_conc(i,j,k) = species_conc(i,j,k) * &
-                  (1.0_fp - work_array(i,j,k) * container%dt)
-            end do
-         end do
-      end do
-
-   end subroutine scheme1_calculate
-
-end module Scheme1Scheme_Mod
+end module
 ```
 
-### Step 6: Create Build Configuration
+## 5. Build System (CMake)
 
-Create `CMakeLists.txt`:
+Update the CMake files to include your new process.
 
+`src/process/newprocess/CMakeLists.txt`:
 ```cmake
-# Process: newprocess
-set(PROCESS_NAME newprocess)
+add_library(newprocess_interface OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/NewProcessInterface_Mod.F90)
+add_library(newprocess_common OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/NewProcessCommon_Mod.F90)
+add_library(newprocess_creator OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/NewProcessCreator_Mod.F90)
 
-# Source files
-set(PROCESS_SOURCES
-    newprocessProcess_Mod.F90
-    newprocessCommon_Mod.F90
-)
-
-# Create process library
-add_library(${PROCESS_NAME}_process ${PROCESS_SOURCES})
-
-# Set module output directory
-set_target_properties(${PROCESS_NAME}_process PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-)
-
-# Link dependencies
-target_link_libraries(${PROCESS_NAME}_process
-    PRIVATE
-        catchem_core
-        catchem_process_interface
-)
-
-# Include directories
-target_include_directories(${PROCESS_NAME}_process
-    PRIVATE
-        ${CMAKE_BINARY_DIR}/modules
-)
-
-# Add schemes subdirectory
 add_subdirectory(schemes)
 
-# Link scheme libraries
-target_link_libraries(${PROCESS_NAME}_process
-    PRIVATE
-        ${PROCESS_NAME}_schemes
+add_library(newprocess STATIC)
+target_sources(newprocess PRIVATE
+    $<TARGET_OBJECTS:newprocess_interface>
+    $<TARGET_OBJECTS:newprocess_common>
+    $<TARGET_OBJECTS:newprocess_creator>
+    $<TARGET_OBJECTS:newprocess_schemes>
 )
+
+target_link_libraries(newprocess PUBLIC catchem_core)
 ```
 
-Create `schemes/CMakeLists.txt`:
-
+`src/process/newprocess/schemes/CMakeLists.txt`:
 ```cmake
-# Schemes for newprocess
-set(PROCESS_NAME newprocess)
-
-# Scheme source files
-set(SCHEME_SOURCES
-    Scheme1Scheme_Mod.F90
-    Scheme2Scheme_Mod.F90
-)
-
-# Create schemes library
-add_library(${PROCESS_NAME}_schemes ${SCHEME_SOURCES})
-
-# Set module output directory
-set_target_properties(${PROCESS_NAME}_schemes PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-)
-
-# Link dependencies
-target_link_libraries(${PROCESS_NAME}_schemes
-    PRIVATE
-        catchem_core
-        ${PROCESS_NAME}_process
-)
-
-# Include directories
-target_include_directories(${PROCESS_NAME}_schemes
-    PRIVATE
-        ${CMAKE_BINARY_DIR}/modules
-)
+add_library(newprocess_schemes OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/NewProcessScheme_Mod.F90)
 ```
 
-### Step 7: Update Parent CMakeLists.txt
-
-Add to `src/process/CMakeLists.txt`:
-
+Finally, add your process to `src/process/CMakeLists.txt`:
 ```cmake
-# Add new process
 add_subdirectory(newprocess)
-
-# Update process library dependencies
-target_link_libraries(catchem_processes
-    PUBLIC
-        # ...existing processes...
-        newprocess_process
-)
+list(APPEND PROCESS_LIBRARIES newprocess)
 ```
 
-### Step 8: Create Configuration Template
+And register it in `src/core/ProcessRegistry_Mod.F90`.
 
-Create `parm/config/newprocess_config.yml`:
+## 6. Testing
 
-```yaml
-# New Process Configuration Template
-newprocess:
-  enabled: true
-  scheme: scheme1
-  timestep: 60.0  # seconds
+Create a new test file in the `tests/` directory to test your process. You can use the `test_ProcessFactory.f90` as a starting point to see how to create and run a process.
 
-  parameters:
-    process_parameter: 1.0
-    enable_diagnostics: true
-
-  species:
-    - O3
-    - NO2
-    - PM25
-
-  diagnostics:
-    - name: newprocess_rate
-      description: "New process rate"
-      units: "kg/m3/s"
-      output_frequency: hourly
-
-    - name: newprocess_flux
-      description: "New process flux"
-      units: "kg/m2/s"
-      output_frequency: hourly
-```
-
-### Step 9: Create Unit Tests
-
-Create `tests/test_newprocess.F90`:
-
-```fortran
-!> \file test_newprocess.F90
-!! \brief Unit tests for new process
-!!
-program test_newprocess
-   use newprocessProcess_Mod
-   use testing_mod
-   use state_mod
-
-   implicit none
-
-   type(newprocessProcessType) :: process
-   type(StateContainerType) :: container
-   integer :: rc
-
-   call testing_init("New Process Tests")
-
-   ! Test 1: Process initialization
-   call test_process_init()
-
-   ! Test 2: Process calculation
-   call test_process_run()
-
-   ! Test 3: Process finalization
-   call test_process_finalize()
-
-   call testing_finalize()
-
-contains
-
-   subroutine test_process_init()
-      call testing_start_test("Process Initialization")
-
-      ! Create test state container
-      call create_test_state_container(container)
-
-      ! Initialize process
-      call process%init(container, rc)
-      call assert_equal(rc, CC_SUCCESS, "Process initialization failed")
-      call assert_true(process%is_ready(), "Process not ready after init")
-
-      call testing_end_test()
-   end subroutine test_process_init
-
-   subroutine test_process_run()
-      call testing_start_test("Process Calculation")
-
-      ! Run process
-      call process%run(container, rc)
-      call assert_equal(rc, CC_SUCCESS, "Process run failed")
-
-      ! Verify results
-      ! Add specific tests for your process outputs
-
-      call testing_end_test()
-   end subroutine test_process_run
-
-   subroutine test_process_finalize()
-      call testing_start_test("Process Finalization")
-
-      call process%finalize(rc)
-      call assert_equal(rc, CC_SUCCESS, "Process finalization failed")
-
-      call testing_end_test()
-   end subroutine test_process_finalize
-
-end program test_newprocess
-```
-
-## Testing and Validation
-
-### Unit Testing
-
-```bash
-# Build and run unit tests
-cd build
-make test_newprocess
-./tests/test_newprocess
-```
-
-### Integration Testing
-
-```bash
-# Test with full model
-make catchem_test
-./tests/catchem_test --config test_newprocess_config.yml
-```
-
-### Performance Testing
-
-```bash
-# Profile performance
-make catchem_profile
-./profile/catchem_profile --config newprocess_profile.yml
-```
-
-## Integration Checklist
-
-Before integrating your process:
-
-- [ ] All unit tests pass
-- [ ] Integration tests pass
-- [ ] Documentation is complete
-- [ ] Code follows style guidelines
-- [ ] Error handling is robust
-- [ ] Configuration is validated
-- [ ] Diagnostics are working
-- [ ] Memory leaks are checked
-- [ ] Performance is acceptable
-
-## Common Pitfalls
-
-1. **Memory leaks**: Always deallocate in finalize()
-2. **Uninitialized pointers**: Check pointer association before use
-3. **Missing error handling**: Always check return codes
-4. **Configuration errors**: Validate all user inputs
-5. **Thread safety**: Avoid global variables in processes
-6. **Performance issues**: Profile before optimizing
-
-## Best Practices Summary
-
-1. **Start simple**: Implement basic functionality first
-2. **Test early and often**: Write tests as you develop
-3. **Document everything**: Include Doxygen comments
-4. **Handle errors gracefully**: Use the error manager
-5. **Follow conventions**: Match existing code style
-6. **Validate inputs**: Check all user-provided data
-7. **Profile performance**: Ensure acceptable speed
-
-For more examples, see the existing processes in `src/process/` and refer to the [Process Templates](templates.md) guide.
+This guide provides a basic skeleton. For more advanced features like diagnostics and handling multiple species, refer to the `seasalt` process implementation in `src/process/seasalt`.

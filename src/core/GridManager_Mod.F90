@@ -245,7 +245,7 @@ contains
       ! Allocate geographic arrays if needed
       if (this%coord_system == COORD_LONLAT) then
          allocate(this%lon(this%nx, this%ny), this%lat(this%nx, this%ny), &
-                  this%grid_area(this%nx, this%ny), stat=alloc_stat)
+            this%grid_area(this%nx, this%ny), stat=alloc_stat)
          if (alloc_stat /= 0) then
             rc = CC_FAILURE
             return
@@ -394,7 +394,7 @@ contains
       logical :: is_local
 
       is_local = (i >= this%i_start .and. i <= this%i_end .and. &
-                  j >= this%j_start .and. j <= this%j_end)
+         j >= this%j_start .and. j <= this%j_end)
    end function decomp_is_local_column
 
    !========================================================================
@@ -494,7 +494,7 @@ contains
       call this%geometry%init(nx, ny, nz, grid_type, coord_system, local_rc)
       if (local_rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-              'Failed to initialize grid geometry', rc, thisLoc)
+            'Failed to initialize grid geometry', rc, thisLoc)
          return
       endif
 
@@ -502,13 +502,13 @@ contains
       call this%decomp%init(this%geometry, 1, 0, local_rc)
       if (local_rc /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_PROCESS_INITIALIZATION, &
-              'Failed to initialize grid decomposition', rc, thisLoc)
+            'Failed to initialize grid decomposition', rc, thisLoc)
          return
       endif
 
       ! Calculate number of local columns
       this%n_local_columns = (this%decomp%i_end - this%decomp%i_start + 1) * &
-                              (this%decomp%j_end - this%decomp%j_start + 1)
+         (this%decomp%j_end - this%decomp%j_start + 1)
 
       this%is_initialized = .true.
 
@@ -530,8 +530,8 @@ contains
       logical :: is_valid
 
       is_valid = this%is_initialized .and. &
-                 this%geometry%is_initialized .and. &
-                 associated(this%error_mgr)
+         this%geometry%is_initialized .and. &
+         associated(this%error_mgr)
    end function grid_manager_validate
 
    !> \brief Get grid geometry
@@ -633,7 +633,7 @@ contains
 
    !> \brief Interpolate data to specific column
    subroutine grid_manager_interpolate_to_column(this, source_data, target_i, target_j, &
-                                                 interpolated_data, rc)
+      interpolated_data, rc)
       class(GridManagerType), intent(in) :: this
       real(fp), intent(in) :: source_data(:,:)
       integer, intent(in) :: target_i, target_j

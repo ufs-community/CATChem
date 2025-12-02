@@ -21,4 +21,3 @@ Include a detailed description of the feature, with usage examples.
 **Is the feature specific to an operating system, compiler, or build system version?**
 
 If it is, please specify which versions.
-

@@ -193,7 +193,7 @@ CONTAINS
             ChemState%nSpeciesDryDep = ChemState%nSpeciesDryDep + 1
          endif
          if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true. .and. &
-             ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
+            ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
             ChemState%nSpeciesAeroDryDep = ChemState%nSpeciesAeroDryDep + 1
          endif
          if (ChemState%ChemSpecies(i)%is_wetdep .eqv. .true.) then
@@ -573,8 +573,8 @@ CONTAINS
          allocate(this%SpeciesIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate SpeciesIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate SpeciesIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -582,8 +582,8 @@ CONTAINS
          allocate(this%TracerIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                    'Failed to allocate TracerIndex', rc, &
-                                    thisLoc, 'Check available memory')
+               'Failed to allocate TracerIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -591,8 +591,8 @@ CONTAINS
          allocate(this%AeroIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate AeroIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate AeroIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -600,8 +600,8 @@ CONTAINS
          allocate(this%GasIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate GasIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate GasIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -609,8 +609,8 @@ CONTAINS
          allocate(this%DustIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate DustIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate DustIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -618,8 +618,8 @@ CONTAINS
          allocate(this%SeaSaltIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate SeaSaltIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate SeaSaltIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -627,8 +627,8 @@ CONTAINS
          allocate(this%DryDepIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate DryDepIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate DryDepIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -636,8 +636,8 @@ CONTAINS
          allocate(this%WetDepIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate WetDepIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate WetDepIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -645,8 +645,8 @@ CONTAINS
          allocate(this%AeroDryDepIndex(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate AeroDryDepIndex', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate AeroDryDepIndex', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -654,8 +654,8 @@ CONTAINS
          allocate(this%SpeciesNames(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate SpeciesNames', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate SpeciesNames', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -663,8 +663,8 @@ CONTAINS
          allocate(this%ChemSpecies(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                                        'Failed to allocate ChemSpecies', rc, &
-                                        thisLoc, 'Check available memory')
+               'Failed to allocate ChemSpecies', rc, &
+               thisLoc, 'Check available memory')
             call error_mgr%pop_context()
             return
          endif
@@ -680,14 +680,14 @@ CONTAINS
             nx = this%Grid%nx
             ny = this%Grid%ny
             nz = this%Grid%nz
-            
+
             do s = 1, max_species
                ! Always nullify and reallocate to ensure proper dimensions
                ! Skip trying to deallocate potentially corrupted pointers
                if (associated(this%ChemSpecies(s)%conc)) then
                   nullify(this%ChemSpecies(s)%conc)
                endif
-               
+
                allocate(this%ChemSpecies(s)%conc(nx,ny,nz), stat=allocStat)
                if (allocStat /= 0) then
                   call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
@@ -763,16 +763,16 @@ CONTAINS
       ! Check that species counts are consistent
       if (this%nSpecies < 0) then
          call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                     'Number of species cannot be negative', rc, &
-                                     thisLoc, 'Check species initialization')
+            'Number of species cannot be negative', rc, &
+            thisLoc, 'Check species initialization')
          call error_mgr%pop_context()
          return
       endif
 
       if (this%nSpeciesGas < 0 .or. this%nSpeciesAero < 0) then
          call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                     'Species type counts cannot be negative', rc, &
-                                     thisLoc, 'Check species type initialization')
+            'Species type counts cannot be negative', rc, &
+            thisLoc, 'Check species type initialization')
          call error_mgr%pop_context()
          return
       endif
@@ -781,8 +781,8 @@ CONTAINS
       if (this%nSpecies > 0) then
          if (this%nSpeciesGas + this%nSpeciesAero > this%nSpecies) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        'Sum of species types exceeds total species', rc, &
-                                        thisLoc, 'Check species counting logic')
+               'Sum of species types exceeds total species', rc, &
+               thisLoc, 'Check species counting logic')
             call error_mgr%pop_context()
             return
          endif
@@ -791,8 +791,8 @@ CONTAINS
       ! Check array allocation consistency
       if (this%nSpecies > 0 .and. .not. this%is_allocated()) then
          call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                     'Species arrays not allocated but nSpecies > 0', rc, &
-                                     thisLoc, 'Call init() to allocate arrays')
+            'Species arrays not allocated but nSpecies > 0', rc, &
+            thisLoc, 'Call init() to allocate arrays')
          call error_mgr%pop_context()
          return
       endif
@@ -840,7 +840,7 @@ CONTAINS
       logical :: is_alloc
 
       is_alloc = allocated(this%SpeciesIndex) .and. allocated(this%SpeciesNames) .and. &
-                 allocated(this%ChemSpecies)
+         allocated(this%ChemSpecies)
    end function chemstate_is_allocated
 
    !> \brief Get approximate memory usage in bytes
@@ -972,43 +972,43 @@ CONTAINS
    end subroutine chemstate_set_concentration
 
    !> \brief Get a pointer to a vertical column for a given field name and (i,j) indices (type-safe)
-subroutine chemstate_get_column_ptr(this, field_name, i, j, col_ptr, rc)
-   use GridGeometry_Mod, only: GridGeometryType
-   class(ChemStateType), intent(inout) :: this
-   character(len=*), intent(in) :: field_name
-   integer, intent(in) :: i, j
-   real(fp), pointer :: col_ptr(:)
-   integer, intent(out) :: rc
-   integer :: species_idx, nz
+   subroutine chemstate_get_column_ptr(this, field_name, i, j, col_ptr, rc)
+      use GridGeometry_Mod, only: GridGeometryType
+      class(ChemStateType), intent(inout) :: this
+      character(len=*), intent(in) :: field_name
+      integer, intent(in) :: i, j
+      real(fp), pointer :: col_ptr(:)
+      integer, intent(out) :: rc
+      integer :: species_idx, nz
 
-   rc = CC_FAILURE
-   nullify(col_ptr)
+      rc = CC_FAILURE
+      nullify(col_ptr)
 
-   species_idx = -1
-   if (allocated(this%SpeciesNames)) then
-      do species_idx = 1, size(this%SpeciesNames)
-         if (trim(this%SpeciesNames(species_idx)) == trim(field_name)) exit
-      end do
-      if (species_idx < 1 .or. species_idx > size(this%SpeciesNames)) species_idx = -1
-   endif
+      species_idx = -1
+      if (allocated(this%SpeciesNames)) then
+         do species_idx = 1, size(this%SpeciesNames)
+            if (trim(this%SpeciesNames(species_idx)) == trim(field_name)) exit
+         end do
+         if (species_idx < 1 .or. species_idx > size(this%SpeciesNames)) species_idx = -1
+      endif
 
-   if (species_idx > 0 .and. allocated(this%ChemSpecies)) then
-      if (associated(this%ChemSpecies(species_idx)%conc)) then
-         if (associated(this%Grid)) then
-            nz = this%Grid%nz
-            if (i >= 1 .and. j >= 1 .and. i <= this%Grid%nx .and. j <= this%Grid%ny) then
-               col_ptr => this%ChemSpecies(species_idx)%conc(i,j,:)
-               if (associated(col_ptr)) then
-                  rc = CC_SUCCESS
-                  return
+      if (species_idx > 0 .and. allocated(this%ChemSpecies)) then
+         if (associated(this%ChemSpecies(species_idx)%conc)) then
+            if (associated(this%Grid)) then
+               nz = this%Grid%nz
+               if (i >= 1 .and. j >= 1 .and. i <= this%Grid%nx .and. j <= this%Grid%ny) then
+                  col_ptr => this%ChemSpecies(species_idx)%conc(i,j,:)
+                  if (associated(col_ptr)) then
+                     rc = CC_SUCCESS
+                     return
+                  endif
                endif
             endif
          endif
       endif
-   endif
-   nullify(col_ptr)
-   rc = CC_FAILURE
-end subroutine chemstate_get_column_ptr
+      nullify(col_ptr)
+      rc = CC_FAILURE
+   end subroutine chemstate_get_column_ptr
 
    !> \brief Get the number of species in the chemical state
    function chemstate_get_num_species(this) result(num_species)
@@ -1153,9 +1153,9 @@ end subroutine chemstate_get_column_ptr
 
       ! Validate array dimensions
       if (size(concentrations, 1) /= this%Grid%nx .or. &
-          size(concentrations, 2) /= this%Grid%ny .or. &
-          size(concentrations, 3) /= this%Grid%nz .or. &
-          size(concentrations, 4) /= size(this%ChemSpecies)) then
+         size(concentrations, 2) /= this%Grid%ny .or. &
+         size(concentrations, 3) /= this%Grid%nz .or. &
+         size(concentrations, 4) /= size(this%ChemSpecies)) then
          return
       end if
 

@@ -27,7 +27,7 @@ program test_CATChemCore
    write(*,*) 'Test 1: Basic initialization'
    call core%init('TestCore', rc)
    call assert(rc == CC_SUCCESS, "Core initialization should succeed")
-   
+
    ! Check if core is initialized
    is_ready = core%is_ready()
    call assert(.not. is_ready, "Core should not be ready before configuration")
@@ -39,7 +39,7 @@ program test_CATChemCore
    write(*,*) 'Test 2: Configuration'
    call core%configure(nx=10, ny=10, nz=20, rc=rc, nsoil=4, nsoiltype=19, nsurftype=13)
    call assert(rc == CC_SUCCESS, "Core configuration should succeed")
-   
+
    ! Check if core is ready after configuration
    is_ready = core%is_ready()
    call assert(is_ready, "Core should be ready after configuration")
@@ -56,22 +56,22 @@ program test_CATChemCore
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(ConfigDataType), pointer :: config_data
       type(ErrorManagerType), pointer :: error_mgr
-      
+
       state_mgr => core%get_state_manager()
       call assert(associated(state_mgr), "Should be able to get state manager")
-      
+
       grid_mgr => core%get_grid_manager()
       call assert(associated(grid_mgr), "Should be able to get grid manager")
-      
+
       process_mgr => core%get_process_manager()
       call assert(associated(process_mgr), "Should be able to get process manager")
-      
+
       diag_mgr => core%get_diagnostic_manager()
       call assert(associated(diag_mgr), "Should be able to get diagnostic manager")
-      
+
       config_data => core%get_config()
       call assert(associated(config_data), "Should be able to get config data")
-      
+
       error_mgr => core%get_error_manager()
       call assert(associated(error_mgr), "Should be able to get error manager")
    end block
@@ -84,7 +84,7 @@ program test_CATChemCore
    call builder%init()
    builder = builder%with_name('BuilderTest')
    builder = builder%with_grid(5, 5, 10)
-   
+
    ! Build core using builder
    call builder%build(core, rc)
    call assert(rc == CC_SUCCESS, "Builder should be able to build core")
@@ -115,7 +115,7 @@ program test_CATChemCore
    write(*,*) 'Test 7: Finalization'
    call core%finalize(rc)
    call assert(rc == CC_SUCCESS, "Core finalization should succeed")
-   
+
    ! Check if core is no longer ready
    is_ready = core%is_ready()
    call assert(.not. is_ready, "Core should not be ready after finalization")
@@ -124,5 +124,5 @@ program test_CATChemCore
    write(*,*) ''
 
    write(*,*) 'All CATChemCore tests passed!'
-   
+
 end program test_CATChemCore

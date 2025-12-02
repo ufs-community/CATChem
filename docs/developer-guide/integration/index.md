@@ -2,13 +2,15 @@
 
 This section covers integrating CATChem with external modeling systems.
 
+!!! note "We are actively integrating CATChem into the UFS. Please check back frequently for updates to this Integration Guide. Further updates on this section will be coming soon!"
+
+
 ## Overview
 
 CATChem is designed to integrate seamlessly with various atmospheric modeling frameworks:
 
-- **CCPP Integration**: Common Community Physics Package
-- **NUOPC Integration**: National Unified Operational Prediction Capability
-- **FV3 Integration**: Finite-Volume Cubed-Sphere Dynamical Core
+- **[CCPP Integration](ccpp.md)**: Common Community Physics Package
+- **[NUOPC Integration](nuopc.md)**: National Unified Operational Prediction Capability
 - **Standalone Operation**: Independent execution mode
 
 ## Integration Patterns
@@ -54,12 +56,6 @@ call catchem%finalize(rc)
 - ESMF field and grid handling
 - Multi-component coupling
 - Timekeeping and scheduling
-
-### FV3 (Finite-Volume Cubed-Sphere)
-- **[FV3 Integration](fv3.md)** - Direct FV3 coupling
-- Cubed-sphere grid support
-- FV3 field interfaces
-- Performance optimization
 
 ## Data Exchange
 
@@ -174,7 +170,6 @@ end program
 cd tests/integration
 ./run_ccpp_tests.sh
 ./run_nuopc_tests.sh
-./run_fv3_tests.sh
 ```
 
 ## Troubleshooting
@@ -204,4 +199,4 @@ diagnostics:
 
 - [Process Development](../processes/index.md)
 - [Core Systems](../core/index.md)
-- [Configuration Guide](../../user-guide/configuration.md)
+- [Configuration Guide](../core/configuration.md)

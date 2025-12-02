@@ -38,12 +38,12 @@ program test_ColumnInterface
       real(fp), pointer :: met_ptr(:)
       real(fp), pointer :: chem_ptr(:)
       real(fp), pointer :: emis_ptr(:)
-      
+
       ! These should return null pointers since we haven't set up state objects
       met_ptr => col_view%get_met_column_ptr('T')
       chem_ptr => col_view%get_chem_column_ptr('O3')
       emis_ptr => col_view%get_emis_column_ptr('NOx')
-      
+
       call assert(.not. associated(met_ptr), "Met pointer should not be associated")
       call assert(.not. associated(chem_ptr), "Chem pointer should not be associated")
       call assert(.not. associated(emis_ptr), "Emis pointer should not be associated")
@@ -68,5 +68,5 @@ program test_ColumnInterface
    write(*,*) ''
 
    write(*,*) 'All ColumnInterface tests passed!'
-   
+
 end program test_ColumnInterface

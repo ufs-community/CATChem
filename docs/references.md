@@ -112,7 +112,7 @@ If you have scientific papers, reports, or other references that should be inclu
 ## Related Documentation
 
 - [Contributing Guide](developer-guide/contributing.md)
-- [Validation Studies](validation/index.md)
+- [Validation Studies](evaluation/index.md)
 - [Process Documentation](processes/index.md)
 - [Developer Guide](developer-guide/index.md)
 

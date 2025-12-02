@@ -171,7 +171,7 @@ contains
 
    !> Add a new field mapping
    subroutine mapping_add(this, host_name, catchem_name, category, rc, &
-                         units, description, is_required, min_value, max_value)
+      units, description, is_required, min_value, max_value)
       class(FieldMappingType), intent(inout) :: this
       character(len=*), intent(in) :: host_name
       character(len=*), intent(in) :: catchem_name
@@ -473,7 +473,7 @@ contains
       ! Check bounds if enabled
       if (this%mappings(idx)%check_bounds) then
          if (any(data < this%mappings(idx)%min_value) .or. &
-             any(data > this%mappings(idx)%max_value)) then
+            any(data > this%mappings(idx)%max_value)) then
             is_valid = .false.
          endif
       endif
@@ -502,7 +502,7 @@ contains
          endif
 
          if (len_trim(this%mappings(i)%host_name) == 0 .or. &
-             len_trim(this%mappings(i)%catchem_name) == 0) then
+            len_trim(this%mappings(i)%catchem_name) == 0) then
             all_valid = .false.
             rc = MAPPING_FAILURE
             if (present(error_message)) then
@@ -616,9 +616,9 @@ contains
       logical :: is_valid
 
       is_valid = (trim(category) == CATEGORY_METEO .or. &
-                  trim(category) == CATEGORY_CHEMISTRY .or. &
-                  trim(category) == CATEGORY_EMISSIONS .or. &
-                  trim(category) == CATEGORY_DIAGNOSTICS)
+         trim(category) == CATEGORY_CHEMISTRY .or. &
+         trim(category) == CATEGORY_EMISSIONS .or. &
+         trim(category) == CATEGORY_DIAGNOSTICS)
    end function is_valid_category
 
 end module FieldMapping_Mod

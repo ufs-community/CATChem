@@ -612,8 +612,8 @@ contains
       ! Check grid dimensions match
       if (allocated(data%temperature)) then
          if (size(data%temperature,1) /= this%config%nx .or. &
-             size(data%temperature,2) /= this%config%ny .or. &
-             size(data%temperature,3) /= this%config%nz) then
+            size(data%temperature,2) /= this%config%ny .or. &
+            size(data%temperature,3) /= this%config%nz) then
             rc = CC_FAILURE
             return
          endif

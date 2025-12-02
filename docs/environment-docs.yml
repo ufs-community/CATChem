@@ -9,13 +9,18 @@ dependencies:
   #
   # Docs
   - doxygen=1.9.8
-  - graphviz
-  - sphinx=8.*
-  - sphinx-autobuild
-  - sphinx-design
-  - sphinx-book-theme
-  - sphinx_rtd_theme
-  - sphinx-togglebutton
-  #
+
+# Python packages via pip
   - pip:
-    - doxysphinx
+    - mkdocs>=1.5.0
+    - mkdocs-material>=9.4.0
+    - mkdoxy>=1.2.0
+    - pymdown-extensions>=10.0
+    - markdown-include>=0.8.1
+    - mkdocs-minify-plugin>=0.7.0
+    - mkdocs-git-revision-date-localized-plugin>=1.2.0
+    - mkdocs-git-authors-plugin>=0.7.0
+    - mkdocs-mermaid2-plugin>=1.1.0
+    - mkdocs-awesome-pages-plugin>=2.9.0
+    - mkdocs-macros-plugin>=1.0.0
+    - watchdog>=3.0.0

@@ -1,12 +1,6 @@
-# CATChem - Community Atmospheric Transport Chemistry Model
+# CATChem Library and Modeling Component
 
-<div class="community-header">
-  <h1>CATChem</h1>
-  <p style="font-size: 1.2rem; margin: 0.5rem 0;">Community Atmospheric Transport Chemistry Model</p>
-</div>
-
-!!! info "What is CATChem?"
-    CATChem is a modern, high-performance atmospheric chemistry transport model designed for operational weather prediction and research applications. Built with modern Fortran and designed for scalability, CATChem provides sophisticated atmospheric chemistry capabilities as an open-source community project.
+CATChem (Configurable ATmospheric Chemistry) is a library and modeling component that includes all chemical and aerosol processes needed to perform atmospheric chemistry and composition simulations within a model through a flexible, easy to modify, and well-documented infrastructure. CATChem will include the following processes: chemical kinetics, aerosols, photolysis, wet deposition, dry deposition, connections to emissions, and connection to physics schemes. CATChem is integrated into NOAA’s Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. UFS-Chem is a modern, high-performance atmospheric chemistry model designed for operational and research applications including weather, air quality, and smoke forecasting. Built with modern Fortran and designed for scalability, CATChem provides sophisticated atmospheric chemistry capabilities as an open-source community project.
 
 ## ✨ Key Features
 
@@ -30,7 +24,7 @@
 
   Designed for 24/7 operational use with robust error handling, comprehensive diagnostics, and monitoring capabilities.
 
-- :material-science: **Comprehensive Chemistry**
+- :material-flask-empty-outline: **Comprehensive Chemistry**
 
   ---
 
@@ -44,24 +38,22 @@
 
     ```bash
     # Clone the repository
-    git clone https://github.com/NOAA-GSL/CATChem.git
+    git clone https://github.com/UFS-Community/CATChem.git
     cd CATChem
 
     # Build with CMake
     mkdir build && cd build
-    cmake -DCMAKE_BUILD_TYPE=Release ..
+    cmake ..
     make -j$(nproc)
     ```
 
-=== "First Run"
+=== "Testing"
 
     ```bash
     # Run a test case
     cd build
-    ctest -R test_settling
+    ctest -R test_CATChemCore
 
-    # Run with sample configuration
-    ./catchem_driver --config ../parm/config/catchem_test.yml
     ```
 
 === "Integration"
@@ -77,41 +69,18 @@
     call catchem%finalize(rc)
     ```
 
-## 📊 Performance Highlights
-
-<div class="performance-metric">
-  <span>Computational Efficiency</span>
-  <span class="performance-metric__value">10x faster column processing</span>
-</div>
-
-<div class="performance-metric">
-  <span>Memory Usage</span>
-  <span class="performance-metric__value">50% reduction vs traditional models</span>
-</div>
-
-<div class="performance-metric">
-  <span>Scalability</span>
-  <span class="performance-metric__value">Linear scaling to 10,000+ cores</span>
-</div>
-
-<div class="performance-metric">
-  <span>Operational Readiness</span>
-  <span class="performance-metric__value">24/7 production deployment</span>
-</div>
-
 ## 🧪 Available Processes
 
 | Process Type | Description | Status |
 |--------------|-------------|--------|
-| <span class="process-badge process-badge--chemistry">Chemistry</span> | Gas-phase and aerosol chemistry | ✅ Production |
-| <span class="process-badge process-badge--emission">Emissions</span> | Anthropogenic and biogenic emissions | ✅ Production |
-| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | ✅ Production |
-| <span class="process-badge process-badge--transport">Vertical Mixing</span> | YSU boundary layer scheme | ✅ Production |
-| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | ✅ Production |
-| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | 🚧 Development |
-| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | ✅ Production |
+| <span class="process-badge process-badge--chemistry">Chemistry</span> | Gas-phase and aerosol chemistry | 🚧 In development|
+| <span class="process-badge process-badge--emission">Emissions</span> | Anthropogenic and biogenic emissions | 🚧 In development|
+| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | 🚧 In Development |
+| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | 🚧 In Development |
+| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | 🚧 In Development |
+| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | 🚧 In development |
 | <span class="process-badge process-badge--emission">Sea Salt</span> | Marine aerosol processes | ✅ Production |
-| <span class="process-badge process-badge--transport">Plume Rise</span> | Wildfire and point source plume rise | ✅ Production |
+
 
 ## 🏗️ Architecture Overview
 
@@ -161,7 +130,7 @@ flowchart TB
 
 <div class="grid cards" markdown>
 
-- [:material-rocket-launch-outline: **Quick Start**](quick-start/index.md)
+- [:material-rocket-launch-outline: **Quick Start**](old_guides/quick-start/index.md)
 
   ---
 
@@ -185,25 +154,36 @@ flowchart TB
 
   Complete API documentation
 
+- [:material-earth: **UFS-Chem**](ufschem/index.md)
+
+  ---
+
+  CATChem is incorporated into the UFS to create UFS-Chem or the Unified Forecast System with Chemistry
+
+- [:material-handshake-outline: **Community Engagement**](community/index.md)
+
+  ---
+
+  Learn more how you can use, test, or develop CATChem and UFS-Chem!
+
 </div>
 
-## 🤝 Community & Support
+## 🤝 Community & Support Quick Reference
 
-- **GitHub Repository**: [NOAA-GSL/CATChem](https://github.com/NOAA-GSL/CATChem)
+- **GitHub Repository**: [UFS-Community/CATChem](https://github.com/UFS-Community/CATChem)
 - **Documentation**: [https://catchem.readthedocs.io](https://catchem.readthedocs.io)
-- **Issue Tracker**: [GitHub Issues](https://github.com/NOAA-GSL/CATChem/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/NOAA-GSL/CATChem/discussions)
-- **Contact**: [gsl.help@noaa.gov](mailto:gsl.help@noaa.gov)
+- **Issue Tracker**: [GitHub Issues](https://github.com/UFS-Community/CATChem/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/UFS-Community/CATChem/discussions)
 
 ## 📄 License
 
-CATChem is released under the [Apache 2.0 License](license.md).
+CATChem is released under the **[Apache 2.0 License](license.md)**.
 
 ---
 
 <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--noaa-gray-light); border-radius: 0.5rem;">
   <p><strong>Community-Driven Atmospheric Chemistry Modeling</strong></p>
   <p style="font-size: 0.9rem; color: var(--noaa-gray-dark);">
-    Open source project supporting operational weather prediction and atmospheric research
+    Open source project supporting operational and research applications including weather, air quality, and smoke forecasting
   </p>
 </div>

@@ -23,10 +23,10 @@ process_behavior:
   timestep_dependency: "independent" #is not doing anything now
   spatial_scope: "column" #is not doing anything now
   #only 'column' is supported for now
-  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))  
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
   memory_requirements: "low" #is not doing anything now
 
-required_met_fields: #used for other purpose, such as unit conversion 
+required_met_fields: #needed for other purposes, such as unit conversion
   - DELP
 
 schemes:
@@ -46,11 +46,11 @@ schemes:
       - U10M
       - V10M
 
-    required_species_properties:         
-      - density              
-      - radius               
-      - lower_radius       
-      - upper_radius          
+    required_species_properties:
+      - density
+      - radius
+      - lower_radius
+      - upper_radius
 
     parameters:
       scale_factor:
@@ -86,11 +86,11 @@ schemes:
       - SST
       - U10M
       - V10M
-    
-    required_species_properties:         
-      - density              
-      - radius               
-      - lower_radius       
+
+    required_species_properties:
+      - density
+      - radius
+      - lower_radius
       - upper_radius
 
     parameters:
@@ -126,10 +126,10 @@ schemes:
       - SST
       - USTAR
 
-    required_species_properties:         
-      - density              
-      - radius               
-      - lower_radius       
+    required_species_properties:
+      - density
+      - radius
+      - lower_radius
       - upper_radius
 
     parameters:
@@ -154,4 +154,3 @@ diagnostics:
   - name: "seasalt_number_emission_total"
     description: "Sea salt number emission flux total"
     units: "kg/m2/s"
-

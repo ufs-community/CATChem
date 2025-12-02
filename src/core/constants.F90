@@ -72,7 +72,7 @@ module Constants
    REAL(fp), PARAMETER, PUBLIC :: MWCARB = 12.01e-3_fp             !< Molecular weight of carbon [kg/mol]
    ! \}
 
-   contains
+contains
 
    !> \brief Validate atmospheric constants for physical consistency
    !!

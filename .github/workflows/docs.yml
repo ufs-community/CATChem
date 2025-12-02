@@ -1,4 +1,4 @@
-name: Doxygen docs
+name: Build and Deploy Docs
 
 on:
   push:
@@ -9,26 +9,31 @@ permissions:
   contents: write
 
 jobs:
-  doxygen:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-      - name: Build
-        run: |
-          cd docs2
-          doxygen
-          cd -
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y doxygen
 
-      - name: Deploy
+      - name: Install Python dependencies
+        run: pip install .
+
+      - name: Build MkDocs site
+        run: mkdocs build
+
+      - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/develop'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: docs2/html
+          folder: site
           git-config-name: github-actions
           git-config-email: 41898282+github-actions[bot]@users.noreply.github.com
           clean: true

@@ -20,11 +20,7 @@ set(_lib NUOPC_CATChem_cap)
 # find_package(NetCDF REQUIRED)      # Removed to avoid conflicts
 
 add_library(${_lib} ${_srcs})
-target_link_libraries(${_lib} PUBLIC
-  CATChem
-  esmf
-  NetCDF::NetCDF_Fortran
-)
+target_link_libraries(${_lib} PUBLIC CATChem esmf NetCDF::NetCDF_Fortran)
 
 # target_include_directories(${_lib} PUBLIC
 #   $<TARGET_PROPERTY:esmf,INTERFACE_INCLUDE_DIRECTORIES>

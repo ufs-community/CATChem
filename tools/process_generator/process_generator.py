@@ -63,12 +63,12 @@ class SchemeBehavior:
 @dataclass
 class MetFieldClassification:
     """Classification for meteorological field types based on MetState definition."""
-    
+
     def __init__(self, metstate_file: Optional[str] = None):
         """Initialize with optional MetState file path for automatic field discovery."""
         self.metstate_file = metstate_file
         self._fields_cache = None
-        
+
         # Fallback hardcoded lists for when MetState file is not available
         self._fallback_2d_surface = [
             'FROCEAN', 'FRSEAICE', 'FRLAKE', 'FRLAND', 'SST', 'TSK', 'SKINTEMP',
@@ -79,7 +79,7 @@ class MetFieldClassification:
         ]
         self._fallback_3d_atmospheric = [
             'T', 'QV', 'P', 'PLE', 'DELP', 'U', 'V', 'OMEGA', 'W',
-            'RH', 'CLOUD', 'QC', 'QR', 'QI', 'QS', 'QG', 'PMID', 'AIRDEN', 
+            'RH', 'CLOUD', 'QC', 'QR', 'QI', 'QS', 'QG', 'PMID', 'AIRDEN',
             'THETA', 'SPHU', 'AIRNUMDEN', 'MAIRDEN', 'AVGW', 'DELP_DRY',
             'DAIRMASS', 'AIRVOL', 'PEDGE_DRY', 'PEDGE', 'PMID_DRY', 'Z',
             'ZMID', 'BXHEIGHT', 'TV', 'CLDF', 'CMFMC', 'DQRCU', 'DQRLSAN',
@@ -87,8 +87,8 @@ class MetFieldClassification:
             'TAUCLI', 'TAUCLW', 'F_OF_PBL', 'F_UNDER_PBLTOP'
         ]
         self._fallback_categorical = [
-            'SOILM', 'FRLANDUSE', 'FRSOIL', 'FRLAI', 'FRZ0', 'ILAND', 'LU_INDEX', 
-            'VEGFRA', 'SOILTYP', 'SLOPETYP', 'XLAND', 'IVGTYP', 'ISLTYP', 
+            'SOILM', 'FRLANDUSE', 'FRSOIL', 'FRLAI', 'FRZ0', 'ILAND', 'LU_INDEX',
+            'VEGFRA', 'SOILTYP', 'SLOPETYP', 'XLAND', 'IVGTYP', 'ISLTYP',
             'VEGETATION_TYPE'
         ]
 
@@ -96,16 +96,16 @@ class MetFieldClassification:
         """Parse MetState file to extract field definitions."""
         if self._fields_cache is not None:
             return self._fields_cache
-            
+
         if not self.metstate_file or not Path(self.metstate_file).exists():
             logger.warning(f"MetState file not found: {self.metstate_file}, using fallback classifications")
             self._fields_cache = {}
             return self._fields_cache
-            
+
         try:
             # Use the same parsing logic as generate_metstate_macros.py
             fields_cache = {}
-            
+
             with open(self.metstate_file, 'r') as f:
                 lines = f.readlines()
 
@@ -126,11 +126,11 @@ class MetFieldClassification:
                         # Check if this is an edge field (nz+1 dimension)
                         is_edge = 'nz+1' in line or 'nlevs+1' in line.lower()
                         fields_cache[name] = (rank, dims, is_edge)
-                        
+
             self._fields_cache = fields_cache
             logger.info(f"Parsed {len(fields_cache)} fields from MetState file")
             return self._fields_cache
-            
+
         except Exception as e:
             logger.warning(f"Error parsing MetState file {self.metstate_file}: {e}, using fallback classifications")
             self._fields_cache = {}
@@ -138,16 +138,16 @@ class MetFieldClassification:
 
     def get_field_type(self, field_name: str) -> str:
         """Get the type of a meteorological field."""
-        
+
         # Handle special non-meteorological fields first
         if field_name == 'TSTEP':
             return 'special_timestep'
-        
+
         fields = self._parse_metstate_fields()
-        
+
         if field_name in fields:
             rank, dims, is_edge = fields[field_name]
-            
+
             # Categorize based on rank and known categorical fields
             if rank == 2:
                 return '2d_surface'
@@ -178,7 +178,7 @@ class MetFieldClassification:
     def get_array_size(self, field_name: str, affects_full_column: bool) -> str:
         """Get the array size specification for a field based on affects_full_column."""
         field_type = self.get_field_type(field_name)
-        
+
         if field_type == 'categorical':
             return '(:)'  # Always 1D array for categorical
         elif field_type == '2d_surface':
@@ -195,30 +195,30 @@ class MetFieldClassification:
                 return ''  # Scalar for surface only
         else:
             return ''  # Default to scalar
-            
+
     def get_all_2d_fields(self) -> List[str]:
         """Get all 2D surface fields."""
         fields = self._parse_metstate_fields()
         result = []
-        
+
         # From parsed fields
         for field_name, field_info in fields.items():
             rank = field_info[0]  # Handle both 2-tuple and 3-tuple formats
             if rank == 2:
                 result.append(field_name)
-                
+
         # Add fallback fields not found in parsed file
         for field_name in self._fallback_2d_surface:
             if field_name not in result:
                 result.append(field_name)
-                
+
         return sorted(result)
-        
+
     def get_all_3d_atmospheric_fields(self) -> List[str]:
         """Get all 3D atmospheric fields (excluding categorical and edge)."""
         fields = self._parse_metstate_fields()
         result = []
-        
+
         # From parsed fields
         categorical_3d = {'SOILM', 'FRLANDUSE', 'FRSOIL', 'FRLAI', 'FRZ0'}
         for field_name, field_info in fields.items():
@@ -226,28 +226,28 @@ class MetFieldClassification:
             is_edge = field_info[2] if len(field_info) >= 3 else False
             if rank == 3 and field_name not in categorical_3d and not is_edge:
                 result.append(field_name)
-                
+
         # Add fallback fields not found in parsed file
         for field_name in self._fallback_3d_atmospheric:
             if field_name not in result:
                 result.append(field_name)
-                
+
         return sorted(result)
-        
+
     def get_all_3d_edge_fields(self) -> List[str]:
         """Get all 3D edge fields (nz+1 dimension)."""
         fields = self._parse_metstate_fields()
         result = []
-        
+
         # From parsed fields - only those with is_edge=True
         for field_name, field_info in fields.items():
             rank = field_info[0]
             is_edge = field_info[2] if len(field_info) >= 3 else False
             if rank == 3 and is_edge:
                 result.append(field_name)
-                
+
         return sorted(result)
-    
+
     def get_data_type(self, field_name: str) -> str:
         """Get the Fortran data type for a meteorological field."""
         # Boolean/logical fields - fields that represent true/false values
@@ -255,19 +255,19 @@ class MetFieldClassification:
             'IsSnow', 'IsIce', 'IsLand', 'ISICE', 'ISSNOW', 'ISLAND',
             'is_snow', 'is_ice', 'is_land'
         }
-        
+
         # Character/string fields - fields that represent text/names
         character_fields = {
             'LUCNAME', 'State', 'lucname', 'state'
         }
-        
+
         # Integer fields - fields that represent integer values
         integer_fields = {
-            'ILAND', 'iland', 'LWI', 'lwi', 'DLUSE', 'dluse', 
-            'DSOILTYPE', 'dsoiltype', 'nLNDTYPE', 'nlndtype', 
+            'ILAND', 'iland', 'LWI', 'lwi', 'DLUSE', 'dluse',
+            'DSOILTYPE', 'dsoiltype', 'nLNDTYPE', 'nlndtype',
             'TropLev', 'troplev'
         }
-        
+
         if field_name in boolean_fields:
             return 'logical'
         elif field_name in character_fields:
@@ -276,7 +276,7 @@ class MetFieldClassification:
             return 'integer'
         else:
             return 'real(fp)'
-    
+
     def get_species_property_data_type(self, property_name: str) -> str:
         """Get the Fortran data type for a species property."""
         # Boolean/logical species properties - properties that represent true/false values
@@ -285,19 +285,19 @@ class MetFieldClassification:
             'is_transported', 'is_wet_scavenged', 'is_dry_deposited',
             'wd_LiqAndGas'  # Add wet deposition logical property
         }
-        
+
         # Character/string species properties - properties that represent text/names
         string_properties = {
             'short_name', 'name', 'long_name', 'formula', 'chem_formula'
         }
-        
+
         if property_name in boolean_properties:
             return 'logical'
         elif property_name in string_properties:
             return 'character(len=32)'
         else:
             return 'real(fp)'
-        
+
     def get_species_property_dimensions(self, property_name: str) -> str:
         """Get the Fortran array dimensions for a species property."""
         # Properties with special dimensions
@@ -305,7 +305,7 @@ class MetFieldClassification:
             return '(:,:)'  # 2D array: (n_species, 3)
         else:
             return '(:)'    # Default: 1D array (n_species)
-            
+
     def get_species_property_allocation_size(self, property_name: str) -> str:
         """Get the Fortran allocation size for a species property."""
         # Properties with special dimensions
@@ -313,24 +313,24 @@ class MetFieldClassification:
             return '(this%{{ config.name }}_config%n_species, 3)'
         else:
             return '(this%{{ config.name }}_config%n_species)'
-        
+
     def get_all_categorical_fields(self) -> List[str]:
         """Get all categorical fields."""
         fields = self._parse_metstate_fields()
         result = []
-        
+
         # From parsed fields
         categorical_3d = {'SOILM', 'FRLANDUSE', 'FRSOIL', 'FRLAI', 'FRZ0'}
         for field_name, field_info in fields.items():
             rank = field_info[0]  # Handle both 2-tuple and 3-tuple formats
             if field_name in categorical_3d:
                 result.append(field_name)
-                
+
         # Add fallback fields not found in parsed file
         for field_name in self._fallback_categorical:
             if field_name not in result:
                 result.append(field_name)
-                
+
         return sorted(result)
 
 
@@ -362,7 +362,7 @@ class ProcessConfig:
     author: str
     version: str = "1.0.0"
     license: str = "Apache 2.0"
-    
+
     # Process behavior configuration (replaces hardcoded process_type)
     process_behavior: Optional[ProcessBehavior] = None
 
@@ -427,7 +427,7 @@ class ProcessGenerator:
             template_dir = str(Path(__file__).parent / "templates")
 
         self.template_dir = Path(template_dir)
-        
+
         # Try to find MetState file automatically if not provided
         if metstate_file is None:
             script_dir = Path(__file__).resolve().parent
@@ -441,11 +441,11 @@ class ProcessGenerator:
                     metstate_file = str(path)
                     logger.info(f"Found MetState file automatically: {metstate_file}")
                     break
-        
+
         self.metstate_file = metstate_file
         if metstate_file and not Path(metstate_file).exists():
             logger.warning(f"MetState file not found: {metstate_file}")
-        
+
         self.env = Environment(
             loader=FileSystemLoader(str(self.template_dir)),
             autoescape=select_autoescape(['html', 'xml']),
@@ -463,49 +463,76 @@ class ProcessGenerator:
         self.env.filters['infer_diagnostic_type'] = self._infer_diagnostic_type
         self.env.filters['infer_diagnostic_properties'] = self._infer_diagnostic_properties
         self.env.filters['analyze_required_dimensions'] = self._analyze_required_dimensions
-        
+
         # Add a filter to get all required met fields for a scheme
         def get_all_met_fields_filter(scheme):
             """Jinja2 filter to get all required meteorological fields for a scheme."""
             # Access the config from template globals if available
             context = self.env.globals.get('config', {})
-            
+
             all_fields = set()
-            
+
             # Add common process-level fields from config
             if hasattr(context, 'required_met_fields') and context.required_met_fields:
                 all_fields.update(context.required_met_fields)
-            
+
             # Add scheme-specific fields - handle both dict and object
             scheme_fields = None
             if isinstance(scheme, dict):
                 scheme_fields = scheme.get('required_met_fields')
             elif hasattr(scheme, 'required_met_fields'):
                 scheme_fields = scheme.required_met_fields
-            
+
             if scheme_fields:
                 all_fields.update(scheme_fields)
-            
+
             # Return sorted list for consistent ordering
             return sorted(list(all_fields))
-            
+
         # Add filter for scheme-only met fields (excludes process-level fields)
         def get_scheme_only_met_fields_filter(scheme, context=None):
             """Filter for scheme-only meteorological fields (excludes process-level fields)."""
             scheme_fields = set()
-            
+
             # Add only scheme-specific fields - handle both dict and object
             if isinstance(scheme, dict):
                 if 'required_met_fields' in scheme and scheme['required_met_fields']:
                     scheme_fields.update(scheme['required_met_fields'])
             elif hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
                 scheme_fields.update(scheme.required_met_fields)
-            
+
             # Return sorted list for consistent ordering
             return sorted(list(scheme_fields))
-            
+
         self.env.filters['all_required_met_fields'] = get_all_met_fields_filter
         self.env.filters['scheme_only_met_fields'] = get_scheme_only_met_fields_filter
+
+        # Add a filter to get all required met fields for a scheme
+        def get_all_met_fields_filter(scheme):
+            """Jinja2 filter to get all required meteorological fields for a scheme."""
+            # Access the config from template globals if available
+            context = self.env.globals.get('config', {})
+
+            all_fields = set()
+
+            # Add common process-level fields from config
+            if hasattr(context, 'required_met_fields') and context.required_met_fields:
+                all_fields.update(context.required_met_fields)
+
+            # Add scheme-specific fields - handle both dict and object
+            scheme_fields = None
+            if isinstance(scheme, dict):
+                scheme_fields = scheme.get('required_met_fields')
+            elif hasattr(scheme, 'required_met_fields'):
+                scheme_fields = scheme.required_met_fields
+
+            if scheme_fields:
+                all_fields.update(scheme_fields)
+
+            # Return sorted list for consistent ordering
+            return sorted(list(all_fields))
+
+        self.env.filters['all_required_met_fields'] = get_all_met_fields_filter
 
     @staticmethod
     def _upper_snake_case(s: str) -> str:
@@ -548,7 +575,7 @@ class ProcessGenerator:
         name = diagnostic.get('name', '')
         units = diagnostic.get('units', '')
         description = diagnostic.get('description', '')
-        
+
         # Default result structure
         result = {
             'data_type': 'DIAG_REAL_2D',
@@ -559,7 +586,7 @@ class ProcessGenerator:
             'dimension_type': 'scalar',  # 'scalar', '1d', '2d', '3d'
             'dimension_name': None       # Primary dimension name for 1D arrays
         }
-        
+
         # 1. Check for explicit specifications
         if 'data_type' in diagnostic:
             result['data_type'] = diagnostic['data_type']
@@ -577,22 +604,22 @@ class ProcessGenerator:
             else:
                 result['dimension_type'] = '3d'
             return result
-        
+
         # 2. Infer from field name and description patterns (continuous variables)
         name_lower = name.lower()
         desc_lower = description.lower()
-        
+
         # Check for combined level AND species patterns for 4D diagnostics
-        has_level_pattern = ('_per_level' in name or '_profile' in name or '_vertical' in name or 
+        has_level_pattern = ('_per_level' in name or '_profile' in name or '_vertical' in name or
                            '_column' in name or '_layer' in name or
                            'level' in desc_lower or 'levels' in desc_lower or 'vertical' in desc_lower or
                            'profile' in desc_lower or 'column' in desc_lower or 'layer' in desc_lower or
                            'atmospheric' in desc_lower)
-        
+
         has_species_pattern = ('_per_bin' in name or '_per_species' in name or '_per_mode' in name or '_distribution' in name or
-                             'per bin' in desc_lower or 'per species' in desc_lower or 'per mode' in desc_lower or 
+                             'per bin' in desc_lower or 'per species' in desc_lower or 'per mode' in desc_lower or
                              'distribution' in desc_lower or 'size resolved' in desc_lower)
-        
+
         # Priority 1: Check for combined level AND species patterns for 3D level diagnostics
         if has_level_pattern and has_species_pattern:
             result.update({
@@ -604,7 +631,7 @@ class ProcessGenerator:
                 'dimension_type': '3d_levels_species',
                 'dimension_name': 'levels_with_species'
             })
-        
+
         # Priority 2: Check for species/bin/distribution patterns only
         elif has_species_pattern:
             result.update({
@@ -616,7 +643,7 @@ class ProcessGenerator:
                 'dimension_type': '1d',
                 'dimension_name': 'n_species'
             })
-        
+
         # Priority 3: Check for level/vertical patterns only
         elif has_level_pattern:
             result.update({
@@ -628,7 +655,7 @@ class ProcessGenerator:
                 'dimension_type': '1d',
                 'dimension_name': 'n_levels'
             })
-        
+
         elif '_per_soil_layer' in name or '_soil_profile' in name:
             result.update({
                 'data_type': 'DIAG_REAL_3D',
@@ -639,7 +666,7 @@ class ProcessGenerator:
                 'dimension_type': '1d',
                 'dimension_name': 'n_soil_layers'
             })
-        
+
         # Check for column integrated patterns in name or description
         elif (('_column_integrated' in name or '_vertically_integrated' in name) or
               ('column integrated' in desc_lower or 'vertically integrated' in desc_lower or
@@ -654,8 +681,8 @@ class ProcessGenerator:
                 'dimension_type': 'scalar',
                 'dimension_name': None
             })
-        
-        # Check for flux/total patterns in name or description  
+
+        # Check for flux/total patterns in name or description
         elif (('_total' in name or '_integrated' in name or 'flux' in name) or
               ('total' in desc_lower or 'integrated' in desc_lower or 'flux' in desc_lower or
                'surface' in desc_lower or 'emission' in desc_lower)):
@@ -682,7 +709,7 @@ class ProcessGenerator:
                     'dimension_type': 'scalar',
                     'dimension_name': None
                 })
-        
+
         # 4. Infer from units
         elif units in ['unitless', 'dimensionless', 'index', 'category', '1', '-']:
             # Likely categorical or index data
@@ -706,7 +733,7 @@ class ProcessGenerator:
                     'dimension_type': 'scalar',
                     'dimension_name': None
                 })
-        
+
         # 5. Infer from process characteristics
         elif hasattr(config, 'process_type'):
             if config.process_type in ['emission', 'deposition']:
@@ -746,7 +773,7 @@ class ProcessGenerator:
                     'dimension_type': '1d',
                     'dimension_name': 'n_levels'
                 })
-        
+
         # 6. Infer from standard units
         elif '/m2/' in units:  # Surface flux units (per square meter)
             # Keep 2D inference (already set as default) - scalar per grid cell
@@ -764,7 +791,7 @@ class ProcessGenerator:
                 'dimension_type': '1d',
                 'dimension_name': 'n_levels'
             })
-        
+
         # 7. Check diagnostic location (process vs scheme level)
         elif scheme_config:  # Scheme-specific diagnostic
             # Often more detailed (per-bin, per-level)
@@ -779,7 +806,7 @@ class ProcessGenerator:
                         'dimension_type': '1d',
                         'dimension_name': 'n_species'
                     })
-        
+
         return result
 
     def _analyze_required_dimensions(self, config: ProcessConfig) -> Dict[str, bool]:
@@ -792,10 +819,10 @@ class ProcessGenerator:
             'dims_landuse': False,
             'dims_vegetation': False
         }
-        
+
         # Always need 2D for most surface diagnostics
         required_dims['dims_2d'] = True
-        
+
         # Check common diagnostics
         if hasattr(config, 'diagnostics') and config.diagnostics:
             for diagnostic in config.diagnostics:
@@ -803,7 +830,7 @@ class ProcessGenerator:
                 fortran_dims = diag_props.get('fortran_dims', 'dims_2d')
                 if fortran_dims in required_dims:
                     required_dims[fortran_dims] = True
-        
+
         # Check scheme-specific diagnostics
         if hasattr(config, 'schemes') and config.schemes:
             for scheme in config.schemes:
@@ -813,21 +840,21 @@ class ProcessGenerator:
                         fortran_dims = diag_props.get('fortran_dims', 'dims_2d')
                         if fortran_dims in required_dims:
                             required_dims[fortran_dims] = True
-        
+
         return required_dims
 
     def _get_all_met_fields_filter(self, scheme_dict: Dict[str, Any], config_dict: Dict[str, Any]) -> List[str]:
         """Jinja2 filter to get all required meteorological fields (common + scheme-specific)."""
         all_fields = set()
-        
+
         # Add common process-level fields
         if 'required_met_fields' in config_dict and config_dict['required_met_fields']:
             all_fields.update(config_dict['required_met_fields'])
-        
+
         # Add scheme-specific fields
         if 'required_met_fields' in scheme_dict and scheme_dict['required_met_fields']:
             all_fields.update(scheme_dict['required_met_fields'])
-        
+
         # Return sorted list for consistent ordering
         return sorted(list(all_fields))
 
@@ -858,32 +885,32 @@ class ProcessGenerator:
     def _get_dimension_source_and_access(self, dim_name: str) -> tuple:
         """
         Get the source manager and access pattern for a given dimension.
-        
+
         Returns:
             tuple: (source_manager, access_pattern, variable_declaration)
         """
-        
+
         # All dimensions come from GridManager for consistency
         grid_mapping = {
             'nx': ('grid_manager', 'nx', 'integer :: nx, ny, nz'),
-            'ny': ('grid_manager', 'ny', 'integer :: nx, ny, nz'),  
+            'ny': ('grid_manager', 'ny', 'integer :: nx, ny, nz'),
             'nz': ('grid_manager', 'nz', 'integer :: nx, ny, nz'),
             'nlev': ('grid_manager', 'nz', 'integer :: nx, ny, nz'),
         }
-        
+
         if dim_name in grid_mapping:
             return grid_mapping[dim_name]
         else:
             # Default to process config for unknown dimensions
-            return ('process_config', f'process_config%{dim_name}', 
+            return ('process_config', f'process_config%{dim_name}',
                    f'integer :: {dim_name}')
-        
+
     def _generate_dimension_access_code(self, diagnostics: List[Dict], template_vars: Dict) -> str:
         """Generate code for accessing dimensional information."""
-        
+
         required_dims = set()
         grid_needed = False
-        
+
         # Collect all required dimensions
         for diag in diagnostics:
             if 'dimensions' in diag:
@@ -893,9 +920,9 @@ class ProcessGenerator:
                         source, _, _ = self._get_dimension_source_and_access(dim)
                         if source == 'grid_manager':
                             grid_needed = True
-        
+
         code_lines = []
-        
+
         if grid_needed:
             code_lines.extend([
                 "      ! Get grid manager pointer for dimension access",
@@ -903,15 +930,15 @@ class ProcessGenerator:
                 "      grid_mgr => state_manager%get_grid_manager()",
                 ""
             ])
-            
+
             # Get basic grid dimensions
             code_lines.extend([
-                "      ! Get basic grid dimensions", 
+                "      ! Get basic grid dimensions",
                 "      integer :: nx, ny, nz",
                 "      call grid_mgr%get_dimensions(nx, ny, nz)",
                 ""
             ])
-        
+
         return '\n'.join(code_lines)
 
     def validate_config(self, config: ProcessConfig) -> None:
@@ -1061,10 +1088,10 @@ class ProcessGenerator:
 
     def get_all_required_species_properties(self, config: ProcessConfig) -> List[str]:
         """Collect all unique required species properties from all schemes.
-        
+
         Args:
             config: ProcessConfig object containing schemes
-            
+
         Returns:
             List of unique property names required by all schemes
         """
@@ -1072,30 +1099,30 @@ class ProcessGenerator:
         for scheme in config.schemes:
             if scheme.required_species_properties:
                 all_properties.update(scheme.required_species_properties)
-        
+
         # Return sorted list for consistent ordering
         return sorted(list(all_properties))
 
     def get_all_required_met_fields(self, config: ProcessConfig, scheme_config: SchemeConfig = None) -> List[str]:
         """Get all unique required meteorological fields for a scheme (common + scheme-specific).
-        
+
         Args:
             config: ProcessConfig object containing common fields
             scheme_config: Optional SchemeConfig object containing scheme-specific fields
-            
+
         Returns:
             List of unique field names required by the process and/or scheme
         """
         all_fields = set()
-        
+
         # Add common process-level fields
         if hasattr(config, 'required_met_fields') and config.required_met_fields:
             all_fields.update(config.required_met_fields)
-        
+
         # Add scheme-specific fields
         if scheme_config and hasattr(scheme_config, 'required_met_fields') and scheme_config.required_met_fields:
             all_fields.update(scheme_config.required_met_fields)
-        
+
         # Return sorted list for consistent ordering
         return sorted(list(all_fields))
 
@@ -1104,7 +1131,7 @@ class ProcessGenerator:
         return [scheme for scheme in config.schemes if scheme.gas_or_aero in ['gas', 'both']]
 
     def get_aero_schemes(self, config: ProcessConfig) -> List[SchemeConfig]:
-        """Get schemes that apply to aerosol species.""" 
+        """Get schemes that apply to aerosol species."""
         return [scheme for scheme in config.schemes if scheme.gas_or_aero in ['aero', 'both']]
 
     def _load_filtered_species(self, species_filter: Dict[str, Any]) -> List[str]:
@@ -1236,16 +1263,16 @@ class ProcessGenerator:
         logger.info("Generating main process interface")
 
         template = self.env.get_template('process_interface.F90.j2')
-        
+
         # Collect all unique required species properties from all schemes
         all_required_species_properties = self.get_all_required_species_properties(config)
-        
+
         # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
-        
+
         # Set config as global for filter access
         self.env.globals['config'] = config
-        
+
         content = template.render(
             config=config,
             all_required_species_properties=all_required_species_properties,
@@ -1268,13 +1295,13 @@ class ProcessGenerator:
         logger.info("Generating common module")
 
         template = self.env.get_template('process_common.F90.j2')
-        
+
         # Collect all unique required species properties from all schemes
         all_required_species_properties = self.get_all_required_species_properties(config)
-        
+
         # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
-        
+
         content = template.render(
             config=config,
             all_required_species_properties=all_required_species_properties,
@@ -1336,10 +1363,10 @@ class ProcessGenerator:
             logger.info(f"Rendering scheme: {scheme_dict.get('name', '<unknown>')} with class {scheme_dict.get('class_name', '<unknown>')}")
             logger.info(f"SCHEME DICT: {scheme_dict}")
             logger.info(f"CONFIG DICT: {config_dict}")
-            
+
             # Set config as global for filter access during scheme generation
             self.env.globals['config'] = config
-            
+
             try:
                 content = template.render(
                     config=config_dict,
@@ -1393,13 +1420,13 @@ class ProcessGenerator:
 
         # Collect all required meteorological fields from process and schemes
         required_met_fields = []
-        
+
         # Add process-level required fields first
         if hasattr(config, 'required_met_fields') and config.required_met_fields:
             for field in config.required_met_fields:
                 if field not in required_met_fields:
                     required_met_fields.append(field)
-        
+
         # Add scheme-level required fields
         for scheme in config.schemes:
             if hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
@@ -1410,7 +1437,7 @@ class ProcessGenerator:
         # Unit tests
         unit_template = self.env.get_template('unit_test.F90.j2')
         unit_content = unit_template.render(
-            config=config, 
+            config=config,
             timestamp=datetime.now().isoformat(),
             required_met_fields=required_met_fields
         )
@@ -1639,7 +1666,7 @@ Features:
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
     # Generate command
-    generate_parser = subparsers.add_parser('generate', 
+    generate_parser = subparsers.add_parser('generate',
                                            help='Generate process implementation',
                                            description='Generate complete process implementation from YAML configuration. '
                                                      'Automatically discovers meteorological fields from MetState definition '
@@ -1656,7 +1683,7 @@ Features:
                                help='Enable verbose output')
 
     # Validate command
-    validate_parser = subparsers.add_parser('validate', 
+    validate_parser = subparsers.add_parser('validate',
                                            help='Validate configuration file',
                                            description='Validate YAML configuration file syntax and check field compatibility '
                                                      'with discovered MetState fields. Ensures configuration is ready for generation.')
@@ -1675,7 +1702,7 @@ Features:
                                help='Output file for template')
 
     # Fields command - show discovered MetState fields
-    fields_parser = subparsers.add_parser('fields', 
+    fields_parser = subparsers.add_parser('fields',
                                          help='Show discovered MetState fields',
                                          description='Display meteorological fields discovered from MetState definition. '
                                                    'Fields are automatically classified into 2D surface, 3D atmospheric, '
@@ -1725,30 +1752,30 @@ Features:
         elif args.command == 'fields':
             generator = ProcessGenerator(metstate_file=getattr(args, 'metstate', None))
             classifier = MetFieldClassification(generator.metstate_file)
-            
+
             if args.type in ['2d', 'all']:
                 fields_2d = classifier.get_all_2d_fields()
                 logger.info(f"2D Surface fields ({len(fields_2d)}): {', '.join(fields_2d[:10])}{'...' if len(fields_2d) > 10 else ''}")
-                
+
             if args.type in ['3d', 'all']:
                 fields_3d = classifier.get_all_3d_atmospheric_fields()
                 logger.info(f"3D Atmospheric fields ({len(fields_3d)}): {', '.join(fields_3d[:10])}{'...' if len(fields_3d) > 10 else ''}")
-                
+
             if args.type in ['categorical', 'all']:
                 fields_cat = classifier.get_all_categorical_fields()
                 logger.info(f"Categorical fields ({len(fields_cat)}): {', '.join(fields_cat)}")
-            
+
             if args.verbose:
                 if args.type in ['2d', 'all']:
                     print(f"\nAll 2D Surface fields ({len(fields_2d)}):")
                     for i, field in enumerate(fields_2d, 1):
                         print(f"  {i:3d}. {field}")
-                        
+
                 if args.type in ['3d', 'all']:
                     print(f"\nAll 3D Atmospheric fields ({len(fields_3d)}):")
                     for i, field in enumerate(fields_3d, 1):
                         print(f"  {i:3d}. {field}")
-                        
+
                 if args.type in ['categorical', 'all']:
                     print(f"\nAll Categorical fields ({len(fields_cat)}):")
                     for i, field in enumerate(fields_cat, 1):

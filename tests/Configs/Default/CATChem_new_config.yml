@@ -152,4 +152,3 @@ processes:
     jacob:
       scale_factor: 1.0
       radius_threshold: 1.0
-    

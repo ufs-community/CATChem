@@ -15,11 +15,11 @@ The template system uses Jinja2 templating to generate:
 
 ## Generator Tool
 
-The `catchem_generate_process.py` tool automates process creation:
+The process_generator.py tool automates process creation:
 
 ```bash
-cd util
-python catchem_generate_process.py --help
+cd tools/process_generator
+python process_generator.py --help
 ```
 
 ### Basic Usage
@@ -53,7 +53,7 @@ python catchem_generate_process.py \
 
 ### Process Main Template
 
-Location: `util/templates/process_main.f90.j2`
+Location: `tools/process_generator/templates/process_main.f90.j2`
 
 This template generates the main process module:
 

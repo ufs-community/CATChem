@@ -34,7 +34,7 @@ program test_GridManager
    write(*,*) 'Test 2: Initialize grid geometry'
    call geometry%init(5, 5, 10, GRID_TYPE_3D, COORD_CARTESIAN, rc)
    call assert(rc == CC_SUCCESS, "Grid geometry initialization should succeed")
-   
+
    call geometry%get_dimensions(nx, ny, nz)
    call assert(nx == 5, "NX should be 5")
    call assert(ny == 5, "NY should be 5")
@@ -63,9 +63,9 @@ program test_GridManager
    write(*,*) 'Test 5: Get grid geometry'
    block
       type(GridGeometryType) :: geom
-      
+
       geom = grid_mgr%get_geometry()
-      
+
       call geom%get_dimensions(nx, ny, nz)
       call assert(nx == 5, "NX should be 5")
       call assert(ny == 5, "NY should be 5")
@@ -79,9 +79,9 @@ program test_GridManager
    write(*,*) 'Test 6: Get grid decomposition'
    block
       type(GridDecompositionType) :: decomp
-      
+
       decomp = grid_mgr%get_decomposition()
-      
+
       ! For single processor, should have simple decomposition
       ! We're not asserting on specific values because they depend on implementation
    end block
@@ -93,10 +93,10 @@ program test_GridManager
    write(*,*) 'Test 7: Get grid dimensions'
    block
       integer :: total_cols, local_cols
-      
+
       total_cols = grid_mgr%get_total_columns()
       local_cols = grid_mgr%get_local_columns()
-      
+
       call assert(total_cols == 25, "Total columns should be 25 (5x5)")
       call assert(local_cols >= 0, "Local columns should be non-negative")
    end block
@@ -108,9 +108,9 @@ program test_GridManager
    write(*,*) 'Test 8: Get grid shape'
    block
       integer :: shape_nx, shape_ny, shape_nz
-      
+
       call grid_mgr%get_shape(shape_nx, shape_ny, shape_nz)
-      
+
       call assert(shape_nx == 5, "Shape NX should be 5")
       call assert(shape_ny == 5, "Shape NY should be 5")
       call assert(shape_nz == 10, "Shape NZ should be 10")
@@ -123,7 +123,7 @@ program test_GridManager
    write(*,*) 'Test 9: Create column iterator'
    block
       type(ColumnIteratorType) :: iterator
-      
+
       iterator = grid_mgr%create_column_iterator()
       ! Should create a valid iterator
    end block
@@ -135,7 +135,7 @@ program test_GridManager
    write(*,*) 'Test 10: Get column by indices'
    block
       type(ColumnViewType) :: column_view
-      
+
       column_view = grid_mgr%get_column_by_indices(3, 3)
       ! Should return a valid column view (even if uninitialized)
    end block
@@ -148,7 +148,7 @@ program test_GridManager
    block
       real(fp) :: distance
       integer :: local_rc
-      
+
       call grid_mgr%compute_distances(1, 1, 2, 2, distance, local_rc)
       call assert(local_rc == CC_SUCCESS, "Distance computation should succeed")
       call assert(distance > 0.0_fp, "Distance should be positive")
@@ -163,14 +163,14 @@ program test_GridManager
       real(fp), allocatable :: source_data(:,:)
       real(fp) :: interpolated_data
       integer :: local_rc
-      
+
       allocate(source_data(5, 5))
       source_data = 1.0_fp  ! Fill with constant values
-      
+
       call grid_mgr%interpolate_to_column(source_data, 3, 3, interpolated_data, local_rc)
       call assert(local_rc == CC_SUCCESS, "Interpolation should succeed")
       call assert_close(interpolated_data, 1.0_fp, 1.0e-6_fp, "Interpolated data should match source")
-      
+
       deallocate(source_data)
    end block
 
@@ -194,5 +194,5 @@ program test_GridManager
    write(*,*) ''
 
    write(*,*) 'All GridManager tests passed!'
-   
+
 end program test_GridManager

@@ -2,13 +2,13 @@
 !! \brief Virtual column data container for CATChem processes with macro-generated meteorological fields
 !! \ingroup core_modules
 !!
-!! \author CATChem Development Team  
+!! \author CATChem Development Team
 !! \date 2025
 !! \version 3.0
 !!
 !! This module provides a column-based data container that allows processes
 !! to work with vertical column data extracted from 3D grid fields.
-!! The VirtualColumn contains a VirtualMetType with direct pointers to 
+!! The VirtualColumn contains a VirtualMetType with direct pointers to
 !! meteorological fields, eliminating data copying overhead.
 !! The VirtualMetType definition is now generated automatically from
 !! MetState field definitions using macros.
@@ -162,8 +162,8 @@ contains
       real(fp) :: value
 
       if (allocated(this%chem_data) .and. &
-          k >= 1 .and. k <= this%nlev .and. &
-          ispec >= 1 .and. ispec <= this%nspec_chem) then
+         k >= 1 .and. k <= this%nlev .and. &
+         ispec >= 1 .and. ispec <= this%nspec_chem) then
          value = this%chem_data(k, ispec)
       else
          value = 0.0_fp
@@ -177,8 +177,8 @@ contains
       real(fp) :: value
 
       if (allocated(this%emis_data) .and. &
-          k >= 1 .and. k <= this%nlev .and. &
-          ispec >= 1 .and. ispec <= this%nspec_emis) then
+         k >= 1 .and. k <= this%nlev .and. &
+         ispec >= 1 .and. ispec <= this%nspec_emis) then
          value = this%emis_data(k, ispec)
       else
          value = 0.0_fp
@@ -192,8 +192,8 @@ contains
       real(fp), intent(in) :: value
 
       if (allocated(this%chem_data) .and. &
-          k >= 1 .and. k <= this%nlev .and. &
-          ispec >= 1 .and. ispec <= this%nspec_chem) then
+         k >= 1 .and. k <= this%nlev .and. &
+         ispec >= 1 .and. ispec <= this%nspec_chem) then
          this%chem_data(k, ispec) = value
       endif
    end subroutine virtual_column_set_chem_field
@@ -205,8 +205,8 @@ contains
       real(fp), intent(in) :: value
 
       if (allocated(this%emis_data) .and. &
-          k >= 1 .and. k <= this%nlev .and. &
-          ispec >= 1 .and. ispec <= this%nspec_emis) then
+         k >= 1 .and. k <= this%nlev .and. &
+         ispec >= 1 .and. ispec <= this%nspec_emis) then
          this%emis_data(k, ispec) = value
       endif
    end subroutine virtual_column_set_emis_field

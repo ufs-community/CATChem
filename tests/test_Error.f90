@@ -17,7 +17,7 @@ program test_Error
    ! Test 1: Error manager initialization
    write(*,*) 'Test 1: Error manager initialization'
    call error_mgr%init(verbose=.false., track_performance=.false., rc=rc)
-   
+
    ! Check initial state
    ! No get_status() member; just check rc from init
    call assert(rc == CC_SUCCESS, "Error manager should initialize successfully")
@@ -28,10 +28,10 @@ program test_Error
    ! Test 2: Pushing and popping context
    write(*,*) 'Test 2: Pushing and popping context'
    call error_mgr%push_context('test_context', 'Testing context handling')
-   
+
    ! Pop context
    call error_mgr%pop_context()
-   
+
    write(*,*) 'Test 2 passed!'
    write(*,*) ''
 
@@ -54,5 +54,5 @@ program test_Error
    write(*,*) ''
 
    write(*,*) 'All Error module tests passed!'
-   
+
 end program test_Error

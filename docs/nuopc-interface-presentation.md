@@ -13,7 +13,7 @@
 - **Operational Focus**: Designed for 24/7 operational weather and climate prediction
 - **Multi-Agency Standard**: Used by NOAA, NASA, Navy, Air Force, and international partners
 
-![NUOPC Architecture](../diagrams/nuopc-architecture.png)
+![NUOPC Architecture](diagrams/nuopc-architecture.png)
 
 ---
 
@@ -521,8 +521,7 @@ ctest -R nuopc_performance
 
 - **[NUOPC Layer Documentation](https://earthsystemmodeling.org/docs/release/latest/NUOPC_refdoc/)**
 - **[ESMF Reference Manual](https://earthsystemmodeling.org/docs/release/latest/ESMF_refdoc/)**
-- **[CATChem NUOPC Integration Guide](../developer-guide/integration/nuopc.md)**
-- **[Field Exchange Standards](../developer-guide/integration/field-standards.md)**
+- **[CATChem NUOPC Integration Guide](developer-guide/integration/nuopc.md)**
 
 ---
 

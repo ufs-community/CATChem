@@ -69,7 +69,7 @@ program test_drydep_unit
    write(*,*) 'Test 6 passed!'
    write(*,*) ''
 
-   ! Test 7: ProcessDryDepInterface creation  
+   ! Test 7: ProcessDryDepInterface creation
    write(*,*) 'Test 7: ProcessDryDepInterface creation'
    call test_process_interface_creation()
 
@@ -138,7 +138,7 @@ contains
       call assert(.true., "WESELY gas scheme validation completed")
       call assert(.true., "WESELY scheme configured for gas species")
 
-      ! Test aerosol schemes  
+      ! Test aerosol schemes
       config%aero_scheme = 'gocart'
       call config%validate(error_manager)
       call assert(.true., "GOCART aerosol scheme validation completed")
@@ -153,7 +153,7 @@ contains
       call config%validate(error_manager)
       call assert(.true., "Invalid gas scheme validation completed")
 
-      config%aero_scheme = 'invalid_aero_scheme'  
+      config%aero_scheme = 'invalid_aero_scheme'
       call config%validate(error_manager)
       call assert(.true., "Invalid aerosol scheme validation completed")
 

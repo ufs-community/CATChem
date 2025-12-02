@@ -24,7 +24,7 @@ program test_ChemSpeciesUtils
 
    ! Test 2: ChemSpeciesUtils initialization
    write(*,*) 'Test 2: ChemSpeciesUtils initialization'
-   ! The ChemSpeciesUtilsType doesn't have an explicit init method, 
+   ! The ChemSpeciesUtilsType doesn't have an explicit init method,
    ! so we just test its methods directly
 
    write(*,*) 'Test 2 passed!'
@@ -34,7 +34,7 @@ program test_ChemSpeciesUtils
    write(*,*) 'Test 3: Getting species index'
    block
       integer :: species_idx
-      
+
       species_idx = chem_utils%get_index(state_mgr, 'NONEXISTENT', rc)
       ! This should fail since no species are defined
       ! We're not asserting on rc because behavior may vary
@@ -47,7 +47,7 @@ program test_ChemSpeciesUtils
    write(*,*) 'Test 4: Checking if species exists'
    block
       logical :: exists
-      
+
       exists = chem_utils%exists(state_mgr, 'NONEXISTENT', rc)
       ! This should return false since no species are defined
       ! We're not asserting on the result because behavior may vary
@@ -65,5 +65,5 @@ program test_ChemSpeciesUtils
    write(*,*) ''
 
    write(*,*) 'All ChemSpeciesUtils tests passed!'
-   
+
 end program test_ChemSpeciesUtils

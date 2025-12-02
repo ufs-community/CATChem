@@ -42,12 +42,12 @@ Processes involving multiple atmospheric phases:
 
 ## Available Processes
 
-- **[SeaSalt](seasalt/)** - SeaSalt atmospheric process
-- **[Dust](dust/)** - Dust atmospheric process
-- **[Dust](dust/)** - Emission process (sources)
-- **[CleanTest](cleantest/)** - Emission process (sources)
-- **[SeaSalt](seasalt/)** - Emission process (sources)
-- **[TestProcess](testprocess/)** - Emission process (sources)
+- **[SeaSalt](seasalt/index.md)** - SeaSalt atmospheric process
+- **[Dust](dust/index.md)** - Dust atmospheric process
+- **[Dust](dust/index.md)** - Emission process (sources)
+- **[CleanTest](cleantest/index.md)** - Emission process (sources)
+- **[SeaSalt](seasalt/index.md)** - Emission process (sources)
+- **[TestProcess](testprocess/index.md)** - Emission process (sources)
 *This section will be automatically updated as new processes are generated.*
 
 ## Using Processes

@@ -142,6 +142,7 @@ emissions:
 CATChem requires the following meteorological variables:
 
 **3D Variables:**
+
 - Temperature (K)
 - Pressure (Pa)
 - Specific humidity (kg/kg)
@@ -151,6 +152,7 @@ CATChem requires the following meteorological variables:
 - Turbulent kinetic energy (m²/s²)
 
 **2D Variables:**
+
 - Surface pressure (Pa)
 - 2m temperature (K)
 - 2m specific humidity (kg/kg)
@@ -206,6 +208,7 @@ variables:
 ### Data Sources
 
 **Common Meteorological Data Sources:**
+
 - **NCEP GFS** - Global Forecast System
 - **ECMWF ERA5** - Reanalysis data
 - **NCAR WRF** - Weather Research and Forecasting model
@@ -252,7 +255,8 @@ variables:
 }
 ```
 
-**Required Species:**
+**Recommended Minimal Species:**
+
 - NOx (as NO2 equivalent)
 - CO
 - SO2
@@ -390,6 +394,7 @@ variables:
 ```
 
 **Land Use Categories:**
+
 1. Urban and Built-up
 2. Dryland Cropland and Pasture
 3. Irrigated Cropland and Pasture
@@ -598,15 +603,11 @@ def validate_emission_data(filename):
 ### File Naming Conventions
 
 **Time-based Files:**
+
 - `%Y` - 4-digit year (2024)
 - `%m` - 2-digit month (01-12)
 - `%d` - 2-digit day (01-31)
 - `%H` - 2-digit hour (00-23)
-
-**Examples:**
-- `met_20240115_12.nc` - Meteorology for Jan 15, 2024, 12:00 UTC
-- `emis_anthro_202401.nc` - Anthropogenic emissions for January 2024
-- `catchem_output_20240115_12.nc` - Model output for Jan 15, 2024, 12:00 UTC
 
 ## Troubleshooting
 
@@ -667,4 +668,3 @@ mixing_ratio_mol = mixing_ratio_kg * mw_air / mw_species
 - [EDGAR Emission Database](https://edgar.jrc.ec.europa.eu/)
 - [MEGAN Biogenic Emissions](https://bai.ess.uci.edu/megan/)
 - [Configuration Guide](configuration.md)
-- [Running CATChem](running.md)

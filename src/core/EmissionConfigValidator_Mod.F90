@@ -155,7 +155,7 @@ contains
 
       do i = 1, size(test_species)
          call this%validate_single_species(trim(test_species(i)), container, &
-                                          results, n_results, rc)
+            results, n_results, rc)
          if (rc /= CC_SUCCESS) return
       end do
 
@@ -163,7 +163,7 @@ contains
 
    !> Validate single species mapping
    subroutine validate_single_species(this, species_name, container, &
-                                     results, n_results, rc)
+      results, n_results, rc)
       class(EmissionConfigValidatorType), intent(inout) :: this
       character(len=*), intent(in) :: species_name
       type(StateManagerType), intent(inout) :: container
@@ -207,7 +207,7 @@ contains
 
    !> Check if species exists in chemical mechanism
    subroutine check_species_in_mechanism(this, species_name, container, &
-                                       species_exists, rc)
+      species_exists, rc)
       class(EmissionConfigValidatorType), intent(in) :: this
       character(len=*), intent(in) :: species_name
       type(StateManagerType), intent(inout) :: container
@@ -237,7 +237,7 @@ contains
 
    !> Validate scale factors for mass conservation
    subroutine validate_scale_factors(this, scale_factors, n_factors, &
-                                   species_name, results, n_results, rc)
+      species_name, results, n_results, rc)
       class(EmissionConfigValidatorType), intent(inout) :: this
       real(fp), intent(in) :: scale_factors(:)
       integer, intent(in) :: n_factors
@@ -350,7 +350,7 @@ contains
 
    !> Set validation mode (strict or permissive)
    subroutine set_validation_mode(this, strict_mode, require_mass_conservation, &
-                                 check_species_existence)
+      check_species_existence)
       class(EmissionConfigValidatorType), intent(inout) :: this
       logical, intent(in), optional :: strict_mode
       logical, intent(in), optional :: require_mass_conservation

@@ -31,7 +31,7 @@ module utilities_mod
    use precision_mod
    use constants
    use error_mod, only: CC_SUCCESS, CC_FAILURE, ERROR_NUMERICAL_INSTABILITY, ERROR_INVALID_INPUT, &
-                        ErrorManagerType
+      ErrorManagerType
 
    implicit none
    private
@@ -72,7 +72,7 @@ contains
       if (g0 <= 0.0_fp) then
          if (present(error_mgr)) then
             call error_mgr%report_error(ERROR_NUMERICAL_INSTABILITY, &
-                                      'Invalid gravitational acceleration', rc)
+               'Invalid gravitational acceleration', rc)
          else
             rc = CC_FAILURE
          endif
@@ -82,7 +82,7 @@ contains
       if (Rd <= 0.0_fp) then
          if (present(error_mgr)) then
             call error_mgr%report_error(ERROR_NUMERICAL_INSTABILITY, &
-                                      'Invalid dry air gas constant', rc)
+               'Invalid dry air gas constant', rc)
          else
             rc = CC_FAILURE
          endif
@@ -93,7 +93,7 @@ contains
       if (abs(Cp - Cv - Rd) > 1.0e-6_fp) then
          if (present(error_mgr)) then
             call error_mgr%report_error(ERROR_NUMERICAL_INSTABILITY, &
-                                      'Inconsistent thermodynamic constants: Cp - Cv ≠ Rd', rc)
+               'Inconsistent thermodynamic constants: Cp - Cv ≠ Rd', rc)
          else
             rc = CC_FAILURE
          endif
@@ -128,30 +128,30 @@ contains
 
       ! Convert input to Pascals
       select case (trim(unit_in))
-      case ('Pa')
+       case ('Pa')
          pressure_pa = pressure_in
-      case ('hPa', 'mbar')
+       case ('hPa', 'mbar')
          pressure_pa = pressure_in * 100.0_fp
-      case ('atm')
+       case ('atm')
          pressure_pa = pressure_in * ATM
-      case ('mmHg', 'torr')
+       case ('mmHg', 'torr')
          pressure_pa = pressure_in * 133.322_fp
-      case default
+       case default
          rc = ERROR_INVALID_INPUT
          return
       end select
 
       ! Convert from Pascals to output unit
       select case (trim(unit_out))
-      case ('Pa')
+       case ('Pa')
          pressure_out = pressure_pa
-      case ('hPa', 'mbar')
+       case ('hPa', 'mbar')
          pressure_out = pressure_pa / 100.0_fp
-      case ('atm')
+       case ('atm')
          pressure_out = pressure_pa / ATM
-      case ('mmHg', 'torr')
+       case ('mmHg', 'torr')
          pressure_out = pressure_pa / 133.322_fp
-      case default
+       case default
          rc = ERROR_INVALID_INPUT
          return
       end select
@@ -180,26 +180,26 @@ contains
 
       ! Convert input to Kelvin
       select case (trim(unit_in))
-      case ('K')
+       case ('K')
          temp_k = temp_in
-      case ('C')
+       case ('C')
          temp_k = temp_in + 273.15_fp
-      case ('F')
+       case ('F')
          temp_k = (temp_in - 32.0_fp) * 5.0_fp/9.0_fp + 273.15_fp
-      case default
+       case default
          rc = ERROR_INVALID_INPUT
          return
       end select
 
       ! Convert from Kelvin to output unit
       select case (trim(unit_out))
-      case ('K')
+       case ('K')
          temp_out = temp_k
-      case ('C')
+       case ('C')
          temp_out = temp_k - 273.15_fp
-      case ('F')
+       case ('F')
          temp_out = (temp_k - 273.15_fp) * 9.0_fp/5.0_fp + 32.0_fp
-      case default
+       case default
          rc = ERROR_INVALID_INPUT
          return
       end select

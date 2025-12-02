@@ -50,11 +50,11 @@ module ConfigManager_Mod
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE, ERROR_INVALID_CONFIG, ERROR_INVALID_INPUT, ErrorManagerType
    use Species_Mod, only: SpeciesType
    use yaml_interface_mod, only : yaml_node_t, yaml_load_file, yaml_load_string, yaml_destroy_node, &
-                                  yaml_get_string, yaml_get_integer, yaml_get_real, yaml_get_logical, &
-                                  yaml_has_key, yaml_get, yaml_set, yaml_is_map, yaml_is_sequence, &
-                                  yaml_get_size, yaml_get_string_array, yaml_get_all_keys, &
-                                  yaml_get_real_array, safe_yaml_get_real, safe_yaml_get_logical, &
-                                  safe_yaml_get_integer
+      yaml_get_string, yaml_get_integer, yaml_get_real, yaml_get_logical, &
+      yaml_has_key, yaml_get, yaml_set, yaml_is_map, yaml_is_sequence, &
+      yaml_get_size, yaml_get_string_array, yaml_get_all_keys, &
+      yaml_get_real_array, safe_yaml_get_real, safe_yaml_get_logical, &
+      safe_yaml_get_integer
 
    implicit none
    private
@@ -855,7 +855,7 @@ contains
       endif
 
       success = yaml_get_string(schema_config, "schema/description", &
-                               schema_description)
+         schema_description)
 
       ! Read required fields
       call safe_yaml_get_integer(schema_config, "schema/required_fields/n_fields", n_required, local_rc)
@@ -1034,7 +1034,7 @@ contains
       character(len=256) :: temp_values(100)  ! Temporary array with maximum size
 
       rc = CC_FAILURE
-      
+
       ! Check if configuration is loaded
       if (.not. this%is_loaded) then
          ! Use default values if provided
@@ -1051,7 +1051,7 @@ contains
       ! Try to get string array from loaded YAML data
       max_size = size(temp_values)
       success = yaml_get_string_array(this%yaml_data, key, temp_values, actual_size)
-      
+
       if (success .and. actual_size > 0) then
          ! Allocate the output array with the correct size
          allocate(values(actual_size))
@@ -1086,7 +1086,7 @@ contains
       real(fp) :: temp_values(100)  ! Temporary array with maximum size
 
       rc = CC_FAILURE
-      
+
       ! Check if configuration is loaded
       if (.not. this%is_loaded) then
          allocate(values(0))
@@ -1096,7 +1096,7 @@ contains
       ! Try to get real array from loaded YAML data
       max_size = size(temp_values)
       success = yaml_get_real_array(this%yaml_data, key, temp_values, actual_size)
-      
+
       if (success .and. actual_size > 0) then
          ! Allocate the output array with the correct size
          allocate(values(actual_size))
@@ -1197,7 +1197,7 @@ contains
 
       ! Open file for writing
       open(newunit=unit_num, file=trim(filename), status='replace', &
-           action='write', iostat=io_stat)
+         action='write', iostat=io_stat)
       if (io_stat /= 0) then
          rc = CC_FAILURE
          return
@@ -1288,7 +1288,10 @@ contains
       this%is_validated = .false.
       this%source_file = ''
       this%config_version = '2.0'
-      
+
+      ! Initialize emission mapping
+      call this%emission_mapping%init()
+
       ! Initialize emission mapping
       call this%emission_mapping%init()
 
@@ -1323,7 +1326,7 @@ contains
       ! Basic validation checks
       if (this%runtime%numCPUs < 1) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Number of CPUs must be positive', rc, 'config_data_validate')
+            'Number of CPUs must be positive', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1331,7 +1334,7 @@ contains
 
       if (this%runtime%nLevs < 1) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Number of levels must be positive', rc, 'config_data_validate')
+            'Number of levels must be positive', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1339,7 +1342,7 @@ contains
 
       if (this%runtime%nx < 1) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Number of nx must be positive', rc, 'config_data_validate')
+            'Number of nx must be positive', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1347,7 +1350,7 @@ contains
 
       if (this%runtime%ny < 1) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Number of ny must be positive', rc, 'config_data_validate')
+            'Number of ny must be positive', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1355,7 +1358,7 @@ contains
 
       if (this%runtime%maxSpecies < 1) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Maximum species must be positive', rc, 'config_data_validate')
+            'Maximum species must be positive', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1363,7 +1366,7 @@ contains
 
       if (len_trim(this%file_paths%Input_Directory) == 0) then
          call error_mgr%report_error(ERROR_INVALID_CONFIG, &
-              'Input directory must be specified', rc, 'config_data_validate')
+            'Input directory must be specified', rc, 'config_data_validate')
          is_valid = .false.
          call error_mgr%pop_context()
          return
@@ -1525,14 +1528,14 @@ contains
       ! Get all top-level keys - these are the species names
       total_keys = yaml_get_size(species_config)
       success = yaml_get_all_keys(species_config, all_yaml_keys, list_size)
-      
+
       if (.not. success .or. list_size <= 0) then
          write(*, '(A)') 'ERROR: Failed to read species keys from configuration file'
          rc = CC_FAILURE
          call yaml_destroy_node(species_config)
          return
       endif
-      
+
       write(*, '(A,I0,A)') 'INFO: Found ', list_size, ' species keys in configuration'
 
       ! Initialize ChemState with the number of species and grid geometry
@@ -1545,21 +1548,21 @@ contains
 
       ! Allocate species keys array
       allocate(species_keys(list_size))
-      
+
       ! Copy species keys (null character cleaning now handled in yaml_get_all_keys)
       do i = 1, list_size
          species_keys(i) = all_yaml_keys(i)
       end do
-      
+
       ! Load each species and directly populate ChemState in single loop
       do i = 1, list_size
          species_path = trim(species_keys(i))
-         
+
          ! Load species properties directly into ChemState%ChemSpecies array
          call load_species_properties(species_config, trim(species_path), chem_state%ChemSpecies(i), rc)
          if (rc /= CC_SUCCESS) then
             write(*, '(A,A,A,I0)') 'ERROR: Failed to load species properties for "', &
-                                  trim(species_path), '", species #', i
+               trim(species_path), '", species #', i
             deallocate(species_keys)
             call yaml_destroy_node(species_config)
             return
@@ -1616,7 +1619,7 @@ contains
          endif
 
          !print species info as a test
-          write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
+         write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
          ! write(*, '(A,A)') 'Description: ', chem_state%ChemSpecies(i)%description
          ! write(*, *) 'lower radius: ', chem_state%ChemSpecies(i)%lower_radius
          ! write(*, *) 'upper radius: ', chem_state%ChemSpecies(i)%upper_radius
@@ -1628,7 +1631,7 @@ contains
          ! write(*, *) 'is sea salt: ', chem_state%ChemSpecies(i)%is_seasalt
          ! write(*, *) 'is dry deposition: ', chem_state%ChemSpecies(i)%is_drydep
          ! write(*, *) 'is tracer: ', chem_state%ChemSpecies(i)%is_tracer
-          write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
+         write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
 
       enddo
 
@@ -1638,7 +1641,7 @@ contains
 
       write(*, '(A,I0,A)') 'INFO: Successfully initialized ChemState with ', list_size, ' species'
       write(*, '(A,I0)') '  Gas species: ', chem_state%nSpeciesGas
-      write(*, '(A,I0)') '  Aerosol species: ', chem_state%nSpeciesAero  
+      write(*, '(A,I0)') '  Aerosol species: ', chem_state%nSpeciesAero
       write(*, '(A,I0)') '  Dust species: ', chem_state%nSpeciesDust
       write(*, '(A,I0)') '  Sea salt species: ', chem_state%nSpeciesSeaSalt
       write(*, '(A,I0)') '  Dry deposition species: ', chem_state%nSpeciesDryDep
@@ -1722,7 +1725,7 @@ contains
       else
          ! No molecular weight specified - keep default from init
          write(*, '(A,A,A)') 'WARNING: No molecular_weight found for species ', &
-                            trim(species%short_name), ', using default 28.0'
+            trim(species%short_name), ', using default 28.0'
       endif
 
       ! Load physical properties
@@ -1861,7 +1864,7 @@ contains
          species%wd_rainouteff(1:actual_size) = temp_real_array(1:actual_size)
          deallocate(temp_real_array)
       else
-         ! Return missing array 
+         ! Return missing array
          species%wd_rainouteff(:) = MISSING
          deallocate(temp_real_array)
       endif
@@ -1981,7 +1984,7 @@ contains
 
    !> \brief Apply emission mapping to map emission field to chemical species
    subroutine config_manager_apply_emission_mapping(this, category_name, emission_field, &
-                                                   chemical_species, scaling_factors, rc)
+      chemical_species, scaling_factors, rc)
       implicit none
       class(ConfigManagerType), intent(in) :: this
       character(len=*), intent(in) :: category_name
@@ -2003,21 +2006,21 @@ contains
       do i = 1, category_mapping%n_emission_species
          if (trim(category_mapping%species_mappings(i)%emission_field) == trim(emission_field)) then
             n_mappings = category_mapping%species_mappings(i)%n_mappings
-            
+
             if (n_mappings > 0) then
                ! Allocate output arrays
                allocate(chemical_species(n_mappings))
                allocate(scaling_factors(n_mappings))
-               
+
                ! Copy mapping data
                do j = 1, n_mappings
                   chemical_species(j) = category_mapping%species_mappings(i)%map(j)
                   scaling_factors(j) = category_mapping%species_mappings(i)%scale(j)
                end do
-               
+
                rc = CC_SUCCESS
             endif
-            
+
             return
          end if
       end do
@@ -2080,19 +2083,19 @@ contains
 
       ! Read basic emission settings
       success = yaml_get_string(emission_config, "emissions/data_directory", &
-                               emission_directory)
+         emission_directory)
       if (success) then
          write(*, '(A,A)') 'INFO: Emission data directory: ', trim(emission_directory)
       endif
 
       success = yaml_get_string(emission_config, "emissions/scaling_method", &
-                               scaling_method)
+         scaling_method)
       if (success) then
          write(*, '(A,A)') 'INFO: Emission scaling method: ', trim(scaling_method)
       endif
 
       call safe_yaml_get_real(emission_config, "emissions/global_scaling_factor", &
-                             global_scaling_factor, local_rc)
+         global_scaling_factor, local_rc)
       if (local_rc == 0) then
          write(*, '(A,F8.3)') 'INFO: Global emission scaling factor: ', global_scaling_factor
       endif
@@ -2160,41 +2163,41 @@ contains
          call yaml_destroy_node(mapping_config)
          return
       end if
-      
+
       ! Initialize emission mapping configuration
       call this%config_data%emission_mapping%init()
       this%config_data%emission_mapping%n_categories = n_categories
       allocate(this%config_data%emission_mapping%categories(n_categories))
       this%config_data%emission_mapping%config_file = filename
-      
+
       ! Process each category
       do i = 1, n_categories
          call this%config_data%emission_mapping%categories(i)%init()
          this%config_data%emission_mapping%categories(i)%category_name = all_categories(i)
-         
+
          ! Get all emission field names for this category using character-based discovery
          ! Since yaml_get_node is not available, we'll use the text-based approach
          allocate(all_species(100))  ! Temporary array, we'll reallocate later
          call discover_yaml_section_items(filename, trim(all_categories(i)), 'emission_fields', &
-                                          all_species, n_species, rc)
-         
+            all_species, n_species, rc)
+
          if (rc /= CC_SUCCESS .or. n_species == 0) then
             ! Skip this category if we can't find any emission fields
             if (allocated(all_species)) deallocate(all_species)
             write(*, '(A,A)') 'INFO: No emission fields found for category: ', trim(all_categories(i))
             cycle
          end if
-         
+
          this%config_data%emission_mapping%categories(i)%n_emission_species = n_species
          allocate(this%config_data%emission_mapping%categories(i)%species_mappings(n_species))
-         
+
          ! Process each emission species
          do j = 1, n_species
             call this%config_data%emission_mapping%categories(i)%species_mappings(j)%init()
-            
+
             ! Get emission field name
             this%config_data%emission_mapping%categories(i)%species_mappings(j)%emission_field = all_species(j)
-            
+
             ! Get long name using full path
             success = yaml_get_string(mapping_config, trim(all_categories(i))//'/'//trim(all_species(j))//'/long_name', &
                this%config_data%emission_mapping%categories(i)%species_mappings(j)%long_name)
@@ -2202,7 +2205,7 @@ contains
                write(*, '(A,A,A,A)') 'DEBUG: Failed to get long_name for ', trim(all_categories(i)), '/', trim(all_species(j))
                this%config_data%emission_mapping%categories(i)%species_mappings(j)%long_name = 'No description'
             end if
-            
+
             ! Get units using full path
             success = yaml_get_string(mapping_config, trim(all_categories(i))//'/'//trim(all_species(j))//'/units', &
                this%config_data%emission_mapping%categories(i)%species_mappings(j)%units)
@@ -2213,21 +2216,21 @@ contains
                !write(*, '(A,A,A,A,A,A)') 'DEBUG: Read units "', trim(this%config_data%emission_mapping%categories(i)%species_mappings(j)%units), &
                !      '" for ', trim(all_categories(i)), '/', trim(all_species(j))
             end if
-            
+
             ! Try to read mapping arrays using YAML API with full key paths
             ! First allocate arrays with maximum possible size
             allocate(this%config_data%emission_mapping%categories(i)%species_mappings(j)%map(10))
             allocate(this%config_data%emission_mapping%categories(i)%species_mappings(j)%scale(10))
             allocate(this%config_data%emission_mapping%categories(i)%species_mappings(j)%index(10))
-            
+
             success = yaml_get_string_array(mapping_config, trim(all_categories(i))//'/'//trim(all_species(j))//'/map', &
-                                          this%config_data%emission_mapping%categories(i)%species_mappings(j)%map, n_maps)
-            
+               this%config_data%emission_mapping%categories(i)%species_mappings(j)%map, n_maps)
+
             if (success .and. n_maps > 0) then
                ! Try to read scale array
                success = yaml_get_real_array(mapping_config, trim(all_categories(i))//'/'//trim(all_species(j))//'/scale', &
-                                           this%config_data%emission_mapping%categories(i)%species_mappings(j)%scale, n_scales)
-               
+                  this%config_data%emission_mapping%categories(i)%species_mappings(j)%scale, n_scales)
+
                if (success .and. n_scales > 0) then
                   ! Make sure both arrays have the same size (use minimum)
                   n_maps = min(n_maps, n_scales)
@@ -2241,7 +2244,7 @@ contains
                   !write(*, '(A,I0,A,A,A,A)') 'DEBUG: Read ', n_maps, ' mappings with default scale for ', &
                   !      trim(all_categories(i)), '/', trim(all_species(j))
                end if
-               
+
                ! Initialize indices to zero (will be resolved later when ChemState is available)
                this%config_data%emission_mapping%categories(i)%species_mappings(j)%index(1:n_maps) = 0
             else
@@ -2253,25 +2256,25 @@ contains
                write(*, '(A,A,A,A)') 'WARNING: No mapping found for ', trim(all_categories(i)), '/', trim(all_species(j))
             end if
          end do
-         
+
          ! Clean up temporary species array for this category
          if (allocated(all_species)) deallocate(all_species)
       end do
-      
+
       this%config_data%emission_mapping%is_loaded = .true.
 
       ! Resolve chemical species indices if ChemState is provided
       if (present(chem_state)) then
          n_resolved = 0
          n_unresolved = 0
-         
+
          ! Loop through all categories and species mappings to resolve indices
          do i = 1, this%config_data%emission_mapping%n_categories
             do j = 1, this%config_data%emission_mapping%categories(i)%n_emission_species
                ! Resolve indices for each mapped species
                do k = 1, this%config_data%emission_mapping%categories(i)%species_mappings(j)%n_mappings
                   species_idx = chem_state%find_species(trim(this%config_data%emission_mapping%categories(i)%species_mappings(j)%map(k)))
-                  
+
                   if (species_idx > 0) then
                      this%config_data%emission_mapping%categories(i)%species_mappings(j)%index(k) = species_idx
                      n_resolved = n_resolved + 1
@@ -2289,7 +2292,7 @@ contains
          end do
 
          write(*, '(A,I0,A,I0,A)') 'INFO: Resolved ', n_resolved, ' species indices, ', n_unresolved, ' unresolved'
-         
+
          if (n_unresolved > 0) then
             write(*, '(A)') 'WARNING: Some emission mapping species were not found in ChemState'
          endif
@@ -2326,11 +2329,11 @@ contains
       character(len=256) :: line, trimmed_line, field_name
       logical :: in_section, found_section
       integer :: line_number, field_indent
-      
+
       ! Emission field specific variables
       logical :: field_has_map, field_has_scale, field_added_on_exit
       character(len=64) :: current_field
-      
+
       ! Variables for duplicate detection
       logical :: already_exists
       integer :: check_idx, i
@@ -2392,7 +2395,7 @@ contains
 
             ! Process items within the section
             if (in_section .and. indent_level > section_indent) then
-               
+
                if (trim(parse_mode) == 'simple') then
                   ! Simple mode: direct children are items
                   if (indent_level == section_indent + 2) then
@@ -2402,7 +2405,7 @@ contains
                         write(*, '(A,A)') 'INFO: Discovered item: ', trim(field_name)
                      endif
                   endif
-                  
+
                elseif (trim(parse_mode) == 'emission_fields') then
                   ! Emission fields mode: validate fields have both 'map' and 'scale'
                   if (indent_level == section_indent + 2) then
@@ -2419,7 +2422,7 @@ contains
                                  exit
                               endif
                            end do
-                           
+
                            if (.not. already_exists) then
                               n_items = n_items + 1
                               item_names(n_items) = trim(current_field)
@@ -2428,14 +2431,14 @@ contains
                            endif
                         endif
                      endif
-                     
+
                      ! Start tracking new potential field
                      current_field = trim(field_name)
                      field_indent = indent_level
                      field_has_map = .false.
                      field_has_scale = .false.
                      field_added_on_exit = .false.
-                     
+
                   elseif (indent_level == field_indent + 2 .and. current_field /= '') then
                      ! Properties of current field
                      if (trim(field_name) == 'map') then
@@ -2445,11 +2448,11 @@ contains
                      endif
                   endif
                endif
-               
+
             elseif (in_section .and. indent_level <= section_indent) then
                ! We've left our section - process final field
                if (trim(parse_mode) == 'emission_fields' .and. current_field /= '' .and. &
-                   field_has_map .and. field_has_scale .and. .not. field_added_on_exit) then
+                  field_has_map .and. field_has_scale .and. .not. field_added_on_exit) then
                   if (n_items < size(item_names)) then
                      ! Check for duplicates before adding
                      already_exists = .false.
@@ -2460,7 +2463,7 @@ contains
                            exit
                         endif
                      end do
-                     
+
                      if (.not. already_exists) then
                         n_items = n_items + 1
                         item_names(n_items) = trim(current_field)
@@ -2476,7 +2479,7 @@ contains
 
       ! Handle pending emission field at end of file (only for the very last category)
       if (trim(parse_mode) == 'emission_fields' .and. current_field /= '' .and. &
-          field_has_map .and. field_has_scale .and. .not. field_added_on_exit) then
+         field_has_map .and. field_has_scale .and. .not. field_added_on_exit) then
          if (n_items < size(item_names)) then
             ! Check for duplicates before adding
             already_exists = .false.
@@ -2487,7 +2490,7 @@ contains
                   exit
                endif
             end do
-            
+
             if (.not. already_exists) then
                n_items = n_items + 1
                item_names(n_items) = trim(current_field)
@@ -2545,7 +2548,7 @@ contains
       integer :: unit_num, io_stat, colon_pos, indent_level
       character(len=256) :: line, trimmed_line, field_name, content_after_colon
       integer :: line_number, target_indent
-      
+
       ! Path navigation variables
       character(len=64) :: path_components(10)  ! Support up to 10 levels deep
       integer :: n_path_components, current_depth
@@ -2556,7 +2559,7 @@ contains
       n_items = 0
       line_number = 0
       target_indent = -1
-      
+
       ! Initialize path tracking
       current_depth = 0
       path_matched = .false.
@@ -2565,7 +2568,7 @@ contains
 
       ! Parse the section path (e.g., "processes/extemis/anthro" -> ["processes", "extemis", "anthro"])
       call parse_yaml_path(section_path, path_components, n_path_components)
-      
+
       if (n_path_components == 0) then
          write(*, '(A,A)') 'ERROR: Invalid section path: ', trim(section_path)
          rc = CC_FAILURE
@@ -2605,7 +2608,7 @@ contains
 
             ! Update path tracking with flexible indentation
             call update_flexible_path_tracking(field_name, indent_level, path_components, n_path_components, &
-                                              current_depth, path_indents, path_matched, target_indent, in_target_section)
+               current_depth, path_indents, path_matched, target_indent, in_target_section)
 
             ! Once we've found the target section, process child items directly
             ! Don't rely on complex path tracking for children
@@ -2626,7 +2629,7 @@ contains
                      endif
                   endif
                endif
-               
+
                ! Check exit conditions for the target section
                if (indent_level <= target_indent .and. trim(field_name) /= trim(path_components(n_path_components))) then
                   ! We've moved to a different section at the same level or higher
@@ -2655,16 +2658,16 @@ contains
       character(len=*), intent(in) :: path_string
       character(len=64), intent(out) :: components(:)
       integer, intent(out) :: n_components
-      
+
       integer :: start_pos, end_pos, slash_pos
       character(len=256) :: remaining_path
-      
+
       n_components = 0
       remaining_path = trim(path_string)
-      
+
       do while (len_trim(remaining_path) > 0 .and. n_components < size(components))
          slash_pos = index(remaining_path, '/')
-         
+
          if (slash_pos > 0) then
             ! Found a slash, extract component
             n_components = n_components + 1
@@ -2677,12 +2680,12 @@ contains
             exit
          endif
       end do
-      
+
    end subroutine parse_yaml_path
 
    !> \brief Update path tracking state while parsing YAML with flexible indentation
    subroutine update_flexible_path_tracking(field_name, indent_level, path_components, n_path_components, &
-                                       current_depth, path_indents, path_matched, target_indent, in_target_section)
+      current_depth, path_indents, path_matched, target_indent, in_target_section)
       implicit none
       character(len=*), intent(in) :: field_name
       integer, intent(in) :: indent_level, n_path_components
@@ -2690,38 +2693,38 @@ contains
       integer, intent(inout) :: current_depth, path_indents(:)
       logical, intent(inout) :: path_matched, in_target_section
       integer, intent(inout) :: target_indent
-      
+
       ! Reset tracking if indentation level suggests we've backed out
       ! Only check if we have a valid current_depth
       if (current_depth >= 1 .and. current_depth <= size(path_indents)) then
          if (path_indents(current_depth) >= 0 .and. indent_level <= path_indents(current_depth)) then
             ! Back out to appropriate depth
             do while (current_depth >= 1 .and. current_depth <= size(path_indents) .and. &
-                      path_indents(current_depth) >= 0 .and. path_indents(current_depth) >= indent_level)
+               path_indents(current_depth) >= 0 .and. path_indents(current_depth) >= indent_level)
                current_depth = current_depth - 1
                ! Exit early if we've gone to root level
                if (current_depth < 1) exit
             end do
          endif
       endif
-      
+
       ! Update path_matched based on current state
       path_matched = (current_depth == n_path_components)
-      
+
       ! Only set in_target_section to true when we first find the target
       ! Don't reset it unless we explicitly exit the section
       if (path_matched .and. current_depth >= 1 .and. current_depth <= size(path_indents)) then
          target_indent = path_indents(current_depth)
       endif
-      
+
       ! Try to advance to the next path component
       if (current_depth >= 0 .and. current_depth < n_path_components) then
          if (current_depth + 1 <= n_path_components .and. &
-             trim(field_name) == trim(path_components(current_depth + 1))) then
+            trim(field_name) == trim(path_components(current_depth + 1))) then
             current_depth = current_depth + 1
             if (current_depth >= 1 .and. current_depth <= size(path_indents)) then
                path_indents(current_depth) = indent_level
-               
+
                ! Check if we've found our complete target path
                if (current_depth == n_path_components) then
                   path_matched = .true.
@@ -2783,7 +2786,7 @@ contains
       integer :: i
 
       call this%cleanup()
-      
+
       this%emission_field = other%emission_field
       this%long_name = other%long_name
       this%units = other%units
@@ -2796,7 +2799,7 @@ contains
          if (allocated(other%index)) then
             allocate(this%index(other%n_mappings))
          end if
-         
+
          do i = 1, other%n_mappings
             this%map(i) = other%map(i)
             this%scale(i) = other%scale(i)
@@ -2853,14 +2856,14 @@ contains
       integer :: i
 
       call this%cleanup()
-      
+
       this%category_name = other%category_name
       this%n_emission_species = other%n_emission_species
       this%is_active = other%is_active
 
       if (other%n_emission_species > 0 .and. allocated(other%species_mappings)) then
          allocate(this%species_mappings(other%n_emission_species))
-         
+
          do i = 1, other%n_emission_species
             call this%species_mappings(i)%copy(other%species_mappings(i))
          end do
@@ -2945,45 +2948,45 @@ contains
       endif
 
       ! Initialize arrays
-      allocate(process_array(50))  
+      allocate(process_array(50))
       allocate(discovered_phases(20))
-      allocate(unique_processes(50))    
-      allocate(unique_process_indices(50))  
+      allocate(unique_processes(50))
+      allocate(unique_process_indices(50))
       n_unique_processes = 0
-      
+
       ! Initialize run_phases_enabled to false
       this%config_data%run_phases_enabled = .false.
 
       ! Check if run_phases section exists by trying to discover phases
       call discover_yaml_section_items(this%config_file, 'run_phases', 'simple', discovered_phases, n_discovered_phases, rc)
       has_run_phases = (rc == CC_SUCCESS .and. n_discovered_phases > 0)
-      
+
       if (has_run_phases) then
          write(*,*) 'Loading run phases from configuration...'
-         
+
          if (n_discovered_phases == 0) then
             write(*,*) 'Warning: No phases found in run_phases section'
             deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
             return
          endif
-         
+
          ! Set run_phases_enabled to true since we found phases
          this%config_data%run_phases_enabled = .true.
-         
+
          ! First pass: count unique processes and valid phases
          n_unique_processes = 0
          valid_phases = 0
-         
+
          do phase_idx = 1, n_discovered_phases
             phase_name = trim(discovered_phases(phase_idx))
-            
+
             ! Get processes for this phase - try new nested structure first
             success = yaml_get_string_array(this%yaml_data, 'run_phases/' // trim(phase_name) // '/processes', process_array, num_processes)
-            
+
             if (.not. success) then
                ! Try old direct structure for backward compatibility
                success = yaml_get_string_array(this%yaml_data, 'run_phases/' // trim(phase_name), process_array, num_processes)
-               
+
                if (.not. success) then
                   ! Try as a single string and parse it manually (new structure)
                   success = yaml_get_string(this%yaml_data, 'run_phases/' // trim(phase_name) // '/processes', test_value)
@@ -2991,7 +2994,7 @@ contains
                      ! Try old structure as single string
                      success = yaml_get_string(this%yaml_data, 'run_phases/' // trim(phase_name), test_value)
                   endif
-                  
+
                   if (success) then
                      call parse_space_separated_string(test_value, process_array, num_processes)
                      if (num_processes > 0) then
@@ -3000,7 +3003,7 @@ contains
                   endif
                endif
             endif
-            
+
             if (success .and. num_processes > 0) then
                ! Validate that all processes exist in processes section before counting
                do process_idx = 1, num_processes
@@ -3013,19 +3016,19 @@ contains
                   endif
                   if (.not. success) then
                      write(*,'(A,A,A,A,A)') 'ERROR: Run phases process "', trim(process_name), &
-                          '" listed in phase "', trim(phase_name), '" is not defined in the processes section of the configuration YAML file'
+                        '" listed in phase "', trim(phase_name), '" is not defined in the processes section of the configuration YAML file'
                      rc = CC_FAILURE
                      deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
                      return
                   endif
                end do
-               
+
                valid_phases = valid_phases + 1
-               
+
                ! Check for unique processes
                do process_idx = 1, num_processes
                   process_name = trim(process_array(process_idx))
-                  
+
                   ! Check if already in unique list
                   is_duplicate = .false.
                   do unique_idx = 1, n_unique_processes
@@ -3034,7 +3037,7 @@ contains
                         exit
                      endif
                   end do
-                  
+
                   ! Add to unique list if not duplicate
                   if (.not. is_duplicate) then
                      n_unique_processes = n_unique_processes + 1
@@ -3046,9 +3049,9 @@ contains
                write(*,'(A,A,A)') 'Info: Skipping phase "', trim(phase_name), '" - no processes found'
             endif
          end do
-         
+
          write(*,'(A,I0,A,I0,A)') 'Found ', valid_phases, ' valid phases with ', n_unique_processes, ' unique processes'
-         
+
          ! Allocate arrays based on valid phase count
          if (allocated(this%config_data%run_phases)) then
             deallocate(this%config_data%run_phases)
@@ -3059,20 +3062,20 @@ contains
             deallocate(this%config_data%run_phase_processes)
          endif
          allocate(this%config_data%run_phase_processes(n_unique_processes))
-         
+
          ! Second pass: populate the data structures (only valid phases)
          valid_phases = 0
-         
+
          do phase_idx = 1, n_discovered_phases
             phase_name = trim(discovered_phases(phase_idx))
-            
-            ! Get processes for this phase - try new nested structure first  
+
+            ! Get processes for this phase - try new nested structure first
             success = yaml_get_string_array(this%yaml_data, 'run_phases/' // trim(phase_name) // '/processes', process_array, num_processes)
-            
+
             if (.not. success) then
                ! Try old direct structure for backward compatibility
                success = yaml_get_string_array(this%yaml_data, 'run_phases/' // trim(phase_name), process_array, num_processes)
-               
+
                if (.not. success) then
                   ! Try as a single string and parse it manually (new structure)
                   success = yaml_get_string(this%yaml_data, 'run_phases/' // trim(phase_name) // '/processes', test_value)
@@ -3080,7 +3083,7 @@ contains
                      ! Try old structure as single string
                      success = yaml_get_string(this%yaml_data, 'run_phases/' // trim(phase_name), test_value)
                   endif
-                  
+
                   if (success) then
                      call parse_space_separated_string(test_value, process_array, num_processes)
                      if (num_processes > 0) then
@@ -3089,14 +3092,14 @@ contains
                   endif
                endif
             endif
-            
+
             if (.not. success .or. num_processes == 0) then
                cycle  ! Skip phases with no processes
             endif
-            
+
             ! Increment the valid phase counter
             valid_phases = valid_phases + 1
-            
+
             ! Initialize phase metadata with flexible YAML reading
             call populate_phase_config(this, phase_name, this%config_data%run_phases(valid_phases), rc)
             if (rc /= CC_SUCCESS) then
@@ -3104,7 +3107,7 @@ contains
                return
             endif
             this%config_data%run_phases(valid_phases)%num_processes = num_processes
-            
+
             ! Allocate processes array for this phase
             if (allocated(this%config_data%run_phases(valid_phases)%processes)) then
                deallocate(this%config_data%run_phases(valid_phases)%processes)
@@ -3114,9 +3117,9 @@ contains
             ! Process each process in this phase
             do process_idx = 1, num_processes
                process_name = trim(process_array(process_idx))
-               
+
                ! Note: Process validation already done in first pass, no need to check again
-               
+
                ! Find unique index for this process
                unique_idx = 0
                do global_process_idx = 1, n_unique_processes
@@ -3125,11 +3128,11 @@ contains
                      exit
                   endif
                end do
-               
+
                ! Initialize process in phase with flexible configuration reading
                call populate_process_config(this, process_name, phase_name, &
-                                          this%config_data%run_phases(valid_phases)%processes(process_idx), &
-                                          unique_idx, process_idx, rc)
+                  this%config_data%run_phases(valid_phases)%processes(process_idx), &
+                  unique_idx, process_idx, rc)
                if (rc /= CC_SUCCESS) then
                   deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
                   return
@@ -3140,28 +3143,28 @@ contains
                   trim(this%config_data%run_phases(valid_phases)%processes(process_idx)%scheme), &
                   ', index: ', unique_idx, ')'
             end do
-            
+
             write(*,'(A,A,A,I0,A)') 'Completed phase "', trim(phase_name), '" with ', num_processes, ' processes'
          end do
-         
+
          ! Populate global run_phase_processes array with unique processes
          do unique_idx = 1, n_unique_processes
             process_name = trim(unique_processes(unique_idx))
-            
+
             call populate_process_config(this, process_name, '', &
-                                       this%config_data%run_phase_processes(unique_idx), &
-                                       unique_idx, unique_idx, rc)
+               this%config_data%run_phase_processes(unique_idx), &
+               unique_idx, unique_idx, rc)
             if (rc /= CC_SUCCESS) then
                deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
                return
             endif
-            
+
             write(*,'(A,I0,A,A,A,A,A)') 'Global Process ', unique_idx, ': ', trim(process_name), &
                ' (scheme: ', trim(this%config_data%run_phase_processes(unique_idx)%scheme), ')'
          end do
-         
+
          write(*,*) 'All run phases loaded successfully!'
-         
+
       else
          ! No run_phases section found - try direct 'processes' section
          ! Check if processes section exists by trying to discover processes
@@ -3169,40 +3172,40 @@ contains
          has_processes = (rc == CC_SUCCESS .and. num_processes > 0)
          if (has_processes) then
             write(*,*) 'No run_phases found, loading direct processes section...'
-            
+
             ! Set run_phases_enabled to false for direct processes mode
             this%config_data%run_phases_enabled = .false.
-            
+
             if (num_processes == 0) then
                write(*,*) 'Info: No processes found in direct processes section'
                deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
                return
             endif
-            
+
             write(*,'(A,I0,A)') 'Found ', num_processes, ' processes in direct processes section'
-            
+
             ! Allocate only run_phase_processes array (no phases structure)
             if (allocated(this%config_data%run_phase_processes)) then
                deallocate(this%config_data%run_phase_processes)
             endif
             allocate(this%config_data%run_phase_processes(num_processes))
-            
+
             ! Populate run_phase_processes array directly
             do process_idx = 1, num_processes
                process_name = trim(process_array(process_idx))
-               
+
                call populate_process_config(this, process_name, '', &
-                                          this%config_data%run_phase_processes(process_idx), &
-                                          process_idx, process_idx, rc)
+                  this%config_data%run_phase_processes(process_idx), &
+                  process_idx, process_idx, rc)
                if (rc /= CC_SUCCESS) then
                   deallocate(process_array, discovered_phases, unique_processes, unique_process_indices)
                   return
                endif
-               
+
                write(*,'(A,I0,A,A,A,A,A)') 'Process ', process_idx, ': ', trim(process_name), &
                   ' (scheme: ', trim(this%config_data%run_phase_processes(process_idx)%scheme), ')'
             end do
-            
+
             write(*,*) 'Direct processes loaded successfully!'
          else
             write(*,*) 'Info: No run_phases or processes section found in configuration'
@@ -3213,12 +3216,12 @@ contains
       deallocate(discovered_phases)
       deallocate(unique_processes)
       deallocate(unique_process_indices)
-      
+
    end subroutine config_manager_load_run_phases
 
    !> \brief Helper subroutine to populate ProcessConfigType with flexible YAML reading
    !! Reads configuration values from YAML first, then assigns defaults if not found
-   !! \param[in] config_mgr ConfigManager instance  
+   !! \param[in] config_mgr ConfigManager instance
    !! \param[in] process_name Process name to read configuration for
    !! \param[in] phase_name Phase name (empty for direct processes)
    !! \param[inout] process_config ProcessConfigType to populate
@@ -3226,7 +3229,7 @@ contains
    !! \param[in] local_priority Local priority within phase/global list
    !! \param[out] rc Return code
    subroutine populate_process_config(config_mgr, process_name, phase_name, process_config, &
-                                     process_index, local_priority, rc)
+      process_index, local_priority, rc)
       implicit none
       class(ConfigManagerType), intent(in) :: config_mgr
       character(len=*), intent(in) :: process_name
@@ -3241,14 +3244,14 @@ contains
       integer :: temp_integer, local_rc
 
       rc = CC_SUCCESS
-      
+
       ! Build base path for this process in YAML
       write(process_path, '(A,A)') 'processes/', trim(process_name)
-      
+
       ! Always set basic required fields
       process_config%name = trim(process_name)
       process_config%process_index = process_index
-      
+
       ! Read process_type from YAML or default to process name
       success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/type', temp_string)
       if (success) then
@@ -3256,7 +3259,7 @@ contains
       else
          process_config%process_type = trim(process_name)
       endif
-      
+
       ! Read enabled from YAML or default to true
       success = yaml_get_logical(config_mgr%yaml_data, trim(process_path) // '/activate', temp_logical)
       if (success) then
@@ -3264,7 +3267,7 @@ contains
       else
          process_config%enabled = .true.
       endif
-      
+
       ! Read priority from YAML or default to local priority
       call safe_yaml_get_integer(config_mgr%yaml_data, trim(process_path) // '/priority', temp_integer, local_rc)
       if (local_rc == 0) then
@@ -3272,7 +3275,7 @@ contains
       else
          process_config%priority = local_priority
       endif
-      
+
       ! Read timing from YAML or default to 'default'
       success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/timing', temp_string)
       if (success) then
@@ -3280,7 +3283,7 @@ contains
       else
          process_config%timing = 'explicit'
       endif
-      
+
       ! Read subcycling from YAML or default to 1
       call safe_yaml_get_integer(config_mgr%yaml_data, trim(process_path) // '/subcycling', temp_integer, local_rc)
       if (local_rc == 0) then
@@ -3288,7 +3291,7 @@ contains
       else
          process_config%subcycling = 1
       endif
-      
+
       ! Read scheme from YAML or use process name as default
       success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/scheme', temp_string)
       if (success) then
@@ -3297,12 +3300,12 @@ contains
          write(*,'(A,A,A)') 'Warning: Scheme of process "', trim(process_name), '" is not defined!'
          process_config%scheme = 'default'
       endif
-      
+
    end subroutine populate_process_config
 
    !> \brief Helper subroutine to populate run phase metadata with flexible YAML reading
    !! Reads phase configuration values from YAML first, then assigns defaults if not found
-   !! \param[in] config_mgr ConfigManager instance  
+   !! \param[in] config_mgr ConfigManager instance
    !! \param[in] phase_name Phase name to read configuration for
    !! \param[inout] phase_config RunPhaseType to populate
    !! \param[out] rc Return code
@@ -3318,13 +3321,13 @@ contains
       integer :: temp_integer, local_rc
 
       rc = CC_SUCCESS
-      
+
       ! Build base path for this phase in YAML
       write(phase_path, '(A,A)') 'run_phases/', trim(phase_name)
-      
+
       ! Always set the phase name
       phase_config%name = trim(phase_name)
-      
+
       ! Read description from YAML or default to 'Phase: <phase_name>'
       success = yaml_get_string(config_mgr%yaml_data, trim(phase_path) // '/description', temp_string)
       if (success) then
@@ -3332,7 +3335,7 @@ contains
       else
          phase_config%description = 'Phase: ' // trim(phase_name)
       endif
-      
+
       ! Read frequency from YAML or default to 'every timestep'
       success = yaml_get_string(config_mgr%yaml_data, trim(phase_path) // '/frequency', temp_string)
       if (success) then
@@ -3340,7 +3343,7 @@ contains
       else
          phase_config%frequency = 'every timestep'
       endif
-      
+
       ! Read subcycling from YAML or default to 1
       call safe_yaml_get_integer(config_mgr%yaml_data, trim(phase_path) // '/subcycling', temp_integer, local_rc)
       if (local_rc == 0) then
@@ -3348,7 +3351,7 @@ contains
       else
          phase_config%subcycling = 1
       endif
-      
+
    end subroutine populate_phase_config
    !> \brief Parse space-separated string into array elements
    subroutine parse_space_separated_string(input_string, output_array, num_elements)
@@ -3356,21 +3359,21 @@ contains
       character(len=*), intent(in) :: input_string
       character(len=64), intent(out) :: output_array(:)
       integer, intent(out) :: num_elements
-      
+
       character(len=len(input_string)) :: work_string
       integer :: pos, start_pos, str_len, i
       logical :: in_word
-      
+
       num_elements = 0
       work_string = trim(adjustl(input_string))
       str_len = len_trim(work_string)
-      
+
       if (str_len == 0) return
-      
+
       ! Simple space-separated parsing
       start_pos = 1
       in_word = .false.
-      
+
       do pos = 1, str_len + 1
          if (pos > str_len .or. work_string(pos:pos) == ' ') then
             ! End of word or end of string
@@ -3389,7 +3392,7 @@ contains
             endif
          endif
       end do
-      
+
    end subroutine parse_space_separated_string
 
    !> \brief Remove duplicate strings from an array
@@ -3397,13 +3400,13 @@ contains
       implicit none
       character(len=64), intent(inout) :: array(:)
       integer, intent(inout) :: n_items
-      
+
       integer :: i, j, new_count
       character(len=64) :: temp_array(size(array))
       logical :: is_duplicate
-      
+
       if (n_items <= 1) return
-      
+
       new_count = 0
       do i = 1, n_items
          is_duplicate = .false.
@@ -3413,13 +3416,13 @@ contains
                exit
             endif
          end do
-         
+
          if (.not. is_duplicate) then
             new_count = new_count + 1
             temp_array(new_count) = array(i)
          endif
       end do
-      
+
       ! Copy back to original array
       do i = 1, new_count
          array(i) = temp_array(i)

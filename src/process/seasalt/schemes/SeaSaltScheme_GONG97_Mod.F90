@@ -83,7 +83,7 @@ contains
       seasalt_mass_emission_per_bin, &
       seasalt_number_emission_per_bin, &
       diagnostic_species_id  &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -101,7 +101,7 @@ contains
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       real(fp), intent(inout), optional :: seasalt_mass_emission_total
-      real(fp), intent(inout), optional :: seasalt_number_emission_total  
+      real(fp), intent(inout), optional :: seasalt_number_emission_total
       real(fp), intent(inout), optional :: seasalt_mass_emission_per_bin(:)
       real(fp), intent(inout), optional :: seasalt_number_emission_per_bin(:)
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
@@ -132,7 +132,7 @@ contains
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale
-      
+
 
       ! Initialize output (pure subroutines must initialize all outputs)
       RC = 0
@@ -233,7 +233,7 @@ contains
 
                ! Ensure non-negative emissions
                species_tendencies(k, n) = max(0.0_fp, mass_emission_flux(k, n))
-               
+
                ! TODO: Update diagnostic fields here based on your scheme's requirements
                ! Each process should implement custom diagnostic calculations
                ! Example patterns:
@@ -248,7 +248,7 @@ contains
                   do diag_idx = 1, size(diagnostic_species_id)
                      if (diagnostic_species_id(diag_idx) == n) then
                         ! Add your custom sea salt mass emission flux per bin calculation
-                        seasalt_mass_emission_per_bin(diag_idx) = mass_emission_flux(k, n) 
+                        seasalt_mass_emission_per_bin(diag_idx) = mass_emission_flux(k, n)
                         exit
                      end if
                   end do
@@ -258,7 +258,7 @@ contains
                   do diag_idx = 1, size(diagnostic_species_id)
                      if (diagnostic_species_id(diag_idx) == n) then
                         ! Add your custom sea salt mass emission flux per bin calculation
-                        seasalt_number_emission_per_bin(diag_idx) = numb_emission_flux(k, n) 
+                        seasalt_number_emission_per_bin(diag_idx) = numb_emission_flux(k, n)
                         exit
                      end if
                   end do
@@ -327,7 +327,7 @@ contains
       RC = 0
    end subroutine jeagleSSTcorrection
 
-      !>
+   !>
    !! \brief Function to compute sea salt emissions following the Gong style parameterization.
    !!
    !! Functional form is from Gong 2003:
@@ -454,7 +454,7 @@ contains
       ENDIF
 
       IF (rae(X, 0.0_fp)) THEN
-      !IF ( X == 0.0_fp) THEN
+         !IF ( X == 0.0_fp) THEN
          IGAMMA=GAMMA(A)
 
       ELSE IF (X.LE.1.0_fp+A) THEN

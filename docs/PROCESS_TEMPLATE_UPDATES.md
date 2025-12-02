@@ -19,13 +19,13 @@ type :: {{ config.class_name }}ProcessConfig
    character(len=64) :: process_name
    character(len=16) :: process_version
    logical :: is_active
-   
+
    ! Process-specific configuration
    type({{ config.class_name }}Config) :: {{ config.name }}_config
-   
+
    ! Scheme configurations
    type({{ config.class_name }}Scheme{{ scheme.class_name }}Config) :: {{ scheme.name }}_config
-   
+
 contains
    procedure :: load_from_config
    procedure :: validate
@@ -68,22 +68,22 @@ processes:
     name: "{{ config.name }}"
     version: "1.0.0"
     active: true
-    
+
     # Main process configuration
     scheme: "{{ scheme.name }}"
     dt_min: 60.0
     dt_max: 3600.0
-    
+
     # Species configuration
     species:
       - name: "species1"
         active: true
-    
+
     # Scheme-specific configuration (optional)
     scheme_config:
       scale_factor: 1.0
       # scheme-specific parameters
-    
+
     # Diagnostic configuration
     diagnostics:
       diagnostic_name:

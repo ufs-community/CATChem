@@ -34,7 +34,7 @@ module Process{{ config.class_name }}Interface_Mod
    use ChemSpeciesUtils_Mod, only: ChemSpeciesUtilsType
    use UnitConversion_Mod, only: UnitConverterType
    use MetFieldUtils_Mod, only: MetFieldUtilsType
-   
+
    ! Process extends base infrastructure
    type, extends(ProcessInterface) :: Process{{ config.class_name }}Interface
       private
@@ -58,11 +58,11 @@ The scheme template remains focused on pure science:
 ```jinja
 module {{ config.class_name }}Scheme_{{ scheme.class_name }}_Mod
    use iso_fortran_env, only: fp => real64
-   
+
    ! Pure science interface
    public :: compute_{{ scheme.name }}
    public :: {{ scheme.name }}_params_t
-   
+
    ! Science-only implementation
    pure subroutine compute_{{ scheme.name }}(...)
       ! Pure computational kernel
@@ -80,40 +80,40 @@ processes:
     description: "Mineral dust emission process"
     process_type: "emission"
     enable_column_processing: true
-    
+
     schemes:
       - name: "fengsha"
         description: "Fengsha dust emission scheme"
         author: "NOAA/NCEP"
         reference: "Feng et al. (2007)"
-        
+
         parameters:
           threshold_velocity:
             value: 0.2
             units: "m/s"
             description: "Threshold wind velocity"
-          
+
           emission_factor:
             value: 1.0e-6
             units: "kg/m²/s"
             description: "Base emission factor"
-        
+
         required_met_fields:
           - name: "surface_wind_speed"
             dimensions: "scalar"
             units: "m/s"
-            
+
           - name: "soil_moisture"
             dimensions: "1d"
             units: "m³/m³"
-    
+
     species: ["DUST_1", "DUST_2", "DUST_3", "DUST_4", "DUST_5"]
-    
+
     diagnostics:
       - name: "dust_emission_flux"
         description: "Total dust emission flux"
         units: "kg/m²/s"
-      
+
       - name: "dust_threshold_velocity"
         description: "Threshold velocity diagnostic"
         units: "m/s"
@@ -327,7 +327,7 @@ python tools/process_generator/migrate_process.py --process my_old_process --out
    ```fortran
    ! Old
    type :: ProcessMyInterface
-   
+
    ! New
    type, extends(ProcessInterface) :: ProcessMyInterface
    ```
@@ -343,7 +343,7 @@ python tools/process_generator/migrate_process.py --process my_old_process --out
    ```fortran
    ! Call base class initialization
    call this%ProcessInterface%init(config_data, state_manager, error_manager)
-   
+
    ! Initialize utilities
    call this%species_utils%init(state_manager, error_manager)
    ```
@@ -352,7 +352,7 @@ python tools/process_generator/migrate_process.py --process my_old_process --out
    ```fortran
    ! Old manual access
    call state_manager%get_met_field('temperature', i_col, temperature, error_handler)
-   
+
    ! New utility access
    call this%met_utils%get_field('temperature', virtual_column, temperature, error_manager)
    ```

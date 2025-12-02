@@ -10,48 +10,36 @@ Welcome to the CATChem API documentation. This section provides comprehensive re
 ### Core Modules
 High-level APIs for the main CATChem systems:
 
-- **[State Management](state-management.md)** - StateContainer, ChemState, MetState data handling
+- **[State Management](state-management.md)** - StateContainer, ChemState, MetState, & DiagState data handling
 - **[Process Interface](process-interface.md)** - Process development and integration APIs
 - **[Column Interface](column-interface.md)** - Column virtualization and 1D processing
 - **[Configuration Manager](configuration.md)** - YAML configuration system
-- **[Error Handling](error-handling.md)** - Comprehensive error management
-
-### Process Modules
-APIs for specific atmospheric process implementations:
-
-- **[Emission Processes](emission-processes.md)** - External emissions, dust, sea salt
-- **[Transport Processes](transport-processes.md)** - Settling, vertical mixing, diffusion
-- **[Chemistry Processes](chemistry-processes.md)** - Gas-phase and aerosol chemistry
-- **[Deposition Processes](deposition-processes.md)** - Dry and wet deposition
-
-### Utility Modules
-Supporting APIs and utilities:
-
-- **[Constants](constants.md)** - Physical and mathematical constants
-- **[Utilities](utilities.md)** - Common utility functions and tools
-- **[Diagnostics](diagnostics.md)** - Diagnostic output and monitoring
 
 ## 🔗 Auto-Generated Documentation
 
-**[→ Complete Auto-Generated API Reference](../CATChem/)**
+**[→ Complete Auto-Generated API Reference](../CATChem/group__catchem.md)**
 
 The complete API documentation includes:
-- **[Modules Index](../CATChem/modules.md)** - All Fortran modules
-- **[Namespaces Index](../CATChem/namespaces.md)** - Module namespaces
-- **[Files Index](../CATChem/files.md)** - Source file documentation
+
+- **[Modules Index](../CATChem/modules.md)** - List of all modules
+- **[Namespaces Index](../CATChem/namespaces.md)** - List of all namespaces
+- **[Files Index](../CATChem/files.md)** - List of all files
+- **[Functions Index](../CATChem/functions.md)** - List of all functions
 
 ### Key Auto-Generated Sections
 
-**Core System Modules:**
-- **[State Module](../CATChem/namespacestate__mod.md)** - StateContainer implementation
-- **[Process Manager](../CATChem/namespaceprocess__manager__mod.md)** - Process orchestration
-- **[Column Interface](../CATChem/namespacecolumn__interface__mod.md)** - Column virtualization
-- **[Config Manager](../CATChem/namespaceconfig__manager__mod.md)** - Configuration system
+**Core System Modules and Processes:**
 
-**Process Implementation Modules:**
-- **[Emission Processes](../CATChem/namespaceemission__process__mod.md)** - Emission process implementations
-- **[Transport Processes](../CATChem/namespacetransport__process__mod.md)** - Transport physics
-- **[Chemistry Processes](../CATChem/namespacechemistry__process__mod.md)** - Chemical mechanisms
+- **[CATChem Directory](../CATChem/group__catchem.md)** - Main CATChem Directory
+- **[Core CATChem API](../CATChem/group__catchem__api.md)** - Core CATChem API functions and data types
+- **[Core Modules](../CATChem/group__core__modules.md)** - Core modules and data types for CATChem
+- **[Processes](../CATChem/group__process__modules.md)** - All atmospheric chemistry processes
+
+**Utilities:**
+
+- **[Constants](../CATChem/constants_8_f90.md)** - Physical and mathematical constants
+- **[Utilities](../CATChem/utilities__mod_8_f90.md)** - Common utility functions and tools
+
 
 ## Quick Reference
 
@@ -129,4 +117,4 @@ Found an issue with the documentation? The API docs are generated automatically,
 2. **Organization Issues**: Modify the MkDoxy configuration in `mkdocs.yml`
 3. **Missing Documentation**: Add Doxygen-style comments to the source code
 
-For details on documentation standards, see the developer guide section on documentation.
+For details on documentation standards, see the [developer guide section on documentation](../developer-guide/documentation.md).

@@ -403,32 +403,32 @@ CONTAINS
       write(context_str, '(A,": ",A)') trim(this%routine_name), trim(this%description)
       if (len_trim(this%file_name) > 0) then
          write(context_str, '(A," (",A,":",I0,")")') trim(context_str), &
-               trim(this%file_name), this%line_number
+            trim(this%file_name), this%line_number
       endif
    end function error_context_to_string
 
    !> \brief Initialize error manager
    subroutine error_manager_init(this, verbose, track_performance, rc)
-       implicit none
-       class(ErrorManagerType), intent(inout) :: this
-       logical, intent(in), optional :: verbose
-       logical, intent(in), optional :: track_performance
-       integer, intent(out), optional :: rc
-   
-       ! Allocate context stack
-       if (.not. allocated(this%context_stack)) then
-           allocate(this%context_stack(this%max_stack_depth))
-       endif
-   
-       this%stack_depth = 0
-       this%total_errors = 0
-       this%total_warnings = 0
-       this%errors_by_severity = 0
-       this%errors_by_category = 0
-   
-       if (present(verbose)) this%verbose_errors = verbose
-       if (present(track_performance)) this%track_performance = track_performance
-       if (present(rc)) rc = CC_SUCCESS
+      implicit none
+      class(ErrorManagerType), intent(inout) :: this
+      logical, intent(in), optional :: verbose
+      logical, intent(in), optional :: track_performance
+      integer, intent(out), optional :: rc
+
+      ! Allocate context stack
+      if (.not. allocated(this%context_stack)) then
+         allocate(this%context_stack(this%max_stack_depth))
+      endif
+
+      this%stack_depth = 0
+      this%total_errors = 0
+      this%total_warnings = 0
+      this%errors_by_severity = 0
+      this%errors_by_category = 0
+
+      if (present(verbose)) this%verbose_errors = verbose
+      if (present(track_performance)) this%track_performance = track_performance
+      if (present(rc)) rc = CC_SUCCESS
    end subroutine error_manager_init
 
    !> \brief Push context onto error context stack
@@ -487,7 +487,7 @@ CONTAINS
       ! Add context information if available
       if (this%stack_depth > 0) then
          write(full_message, '(A,A,A)') trim(full_message), ' [Context: ', &
-               trim(this%context_stack(this%stack_depth)%to_string())//']'
+            trim(this%context_stack(this%stack_depth)%to_string())//']'
       endif
 
       ! Use legacy error reporting for now (can be enhanced)
@@ -522,25 +522,25 @@ CONTAINS
 
       ! Classify based on error code
       select case (error_code)
-      case (ERROR_INVALID_INPUT, ERROR_INVALID_CONFIG)
+       case (ERROR_INVALID_INPUT, ERROR_INVALID_CONFIG)
          severity = SEVERITY_ERROR
          category = CATEGORY_INPUT
-      case (ERROR_FILE_NOT_FOUND, ERROR_FILE_READ, ERROR_FILE_WRITE)
+       case (ERROR_FILE_NOT_FOUND, ERROR_FILE_READ, ERROR_FILE_WRITE)
          severity = SEVERITY_ERROR
          category = CATEGORY_IO
-      case (ERROR_MEMORY_ALLOCATION, ERROR_MEMORY_DEALLOCATION)
+       case (ERROR_MEMORY_ALLOCATION, ERROR_MEMORY_DEALLOCATION)
          severity = SEVERITY_CRITICAL
          category = CATEGORY_MEMORY
-      case (ERROR_NUMERICAL_INSTABILITY, ERROR_CONVERGENCE)
+       case (ERROR_NUMERICAL_INSTABILITY, ERROR_CONVERGENCE)
          severity = SEVERITY_WARNING
          category = CATEGORY_COMPUTATION
-      case (ERROR_MPI_COMMUNICATION)
+       case (ERROR_MPI_COMMUNICATION)
          severity = SEVERITY_CRITICAL
          category = CATEGORY_MPI
-      case (ERROR_STATE_INCONSISTENCY)
+       case (ERROR_STATE_INCONSISTENCY)
          severity = SEVERITY_ERROR
          category = CATEGORY_PROCESS
-      case default
+       case default
          severity = SEVERITY_ERROR
          category = CATEGORY_GENERAL
       end select

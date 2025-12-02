@@ -100,7 +100,7 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=64)                         :: category_name = ''  !< Category name
       CHARACTER(LEN=256)                        :: description = ''    !< Category description
       INTEGER                                   :: n_fields = 0        !< Number of emission fields
-      INTEGER                                   :: irec = 0            !< time slice index 
+      INTEGER                                   :: irec = 0            !< time slice index
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)           !< Emission fields array
       LOGICAL                                   :: is_active = .true.  !< Category enabled/disabled
       LOGICAL                                   :: gridded = .true.   !< Is this a gridded emission category
@@ -115,7 +115,7 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=128)                        :: stkhtname = ''      !< Stack height variable name in the file
       CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
       CHARACTER(LEN=128)                        :: stkvename = ''      !< Stack velocity variable name in the file
-      CHARACTER(LEN=128)                        :: plumerise = ''      !< plumerise scheme  
+      CHARACTER(LEN=128)                        :: plumerise = ''      !< plumerise scheme
 
 
    CONTAINS
@@ -313,20 +313,20 @@ CONTAINS
 
       if (.not. this%is_loaded) then
          call error_mgr%report_error(ERROR_INVALID_STATE, &
-                                   'Field not loaded: ' // trim(this%field_name), rc)
+            'Field not loaded: ' // trim(this%field_name), rc)
          return
       endif
 
       if (.not. allocated(this%emission_data)) then
          call error_mgr%report_error(ERROR_INVALID_STATE, &
-                                   'Emission data not allocated: ' // trim(this%field_name), rc)
+            'Emission data not allocated: ' // trim(this%field_name), rc)
          return
       endif
 
       ! Check for reasonable values (non-negative)
       if (any(this%emission_data < 0.0_fp)) then
          call error_mgr%report_error(ERROR_INVALID_STATE, &
-                                   'Invalid emission values in field: ' // trim(this%field_name), rc)
+            'Invalid emission values in field: ' // trim(this%field_name), rc)
          return
       endif
 
@@ -363,9 +363,9 @@ CONTAINS
 
       if (this%is_loaded .and. allocated(this%emission_data)) then
          if (i >= 1 .and. i <= this%nx .and. &
-             j >= 1 .and. j <= this%ny .and. &
-             k_use >= 1 .and. k_use <= this%nz .and. &
-             time_use >= 1 .and. time_use <= this%n_times) then
+            j >= 1 .and. j <= this%ny .and. &
+            k_use >= 1 .and. k_use <= this%nz .and. &
+            time_use >= 1 .and. time_use <= this%n_times) then
             emission_rate = this%emission_data(i, j, k_use, time_use)
          endif
       endif
@@ -419,7 +419,7 @@ CONTAINS
 
       if (this%is_loaded .and. allocated(this%emission_data)) then
          if (i >= 1 .and. i <= this%nx .and. &
-             j >= 1 .and. j <= this%ny) then
+            j >= 1 .and. j <= this%ny) then
             column_ptr => this%emission_data(i, j, :, :)
          endif
       endif
@@ -928,9 +928,9 @@ CONTAINS
          do j = 1, this%categories(i)%n_fields
             if (allocated(this%categories(i)%fields(j)%emission_data)) then
                field_size_mb = real(this%categories(i)%fields(j)%nx * &
-                                   this%categories(i)%fields(j)%ny * &
-                                   this%categories(i)%fields(j)%nz * &
-                                   this%categories(i)%fields(j)%n_times, fp) * 8.0_fp  ! 8 bytes per real(fp)
+                  this%categories(i)%fields(j)%ny * &
+                  this%categories(i)%fields(j)%nz * &
+                  this%categories(i)%fields(j)%n_times, fp) * 8.0_fp  ! 8 bytes per real(fp)
                memory_bytes = memory_bytes + int(field_size_mb, kind=8)
             endif
          end do

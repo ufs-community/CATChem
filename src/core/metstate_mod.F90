@@ -185,7 +185,7 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: AIRDEN(:,:,:)     !< Wet air density [kg/m3]
       REAL(fp), ALLOCATABLE        :: AIRDEN_DRY(:,:,:) !< Dry air density [kg/m3]
       REAL(fp), ALLOCATABLE        :: AIRNUMDEN(:,:,:)  !< Dry air density [molec/cm3]
-      REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)    !< Moist air density (same as AIRDEN to cover possbile use cases) [kg/m3]
+      REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)    !< Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
       REAL(fp), ALLOCATABLE        :: AVGW(:,:,:)       !< Water vapor volume mixing ratio [vol H2O/vol dry air]
       REAL(fp), ALLOCATABLE        :: DELP(:,:,:)       !< Delta-P (wet) across box [Pa]
       REAL(fp), ALLOCATABLE        :: DELP_DRY(:,:,:)   !< Delta-P (dry) across box [Pa]
@@ -195,7 +195,7 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: PEDGE(:,:,:)      !< Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
       REAL(fp), ALLOCATABLE        :: PMID(:,:,:)       !< Average wet air pressure [Pa] defined as arithmetic average of edge pressures
       REAL(fp), ALLOCATABLE        :: PMID_DRY(:,:,:)   !< Dry air partial pressure [Pa] defined as arithmetic avg of edge pressures
-      contains
+   contains
       procedure :: init => metstate_init
       procedure :: cleanup => metstate_cleanup
       procedure :: validate => metstate_validate
@@ -219,14 +219,14 @@ MODULE MetState_Mod
       procedure, public :: get_scalar_value_logical => metstate_get_scalar_value_logical
       ! Generic interface for setting fields with proper dimensions
       generic, public :: set_field => metstate_set_field_scalar_real, &
-                                      metstate_set_field_scalar_int, &
-                                      metstate_set_field_scalar_logical, &
-                                      metstate_set_field_2d_real, &
-                                      metstate_set_field_2d_int, &
-                                      metstate_set_field_2d_logical, &
-                                      metstate_set_field_3d_real, &
-                                      metstate_set_field_3d_int, &
-                                      metstate_set_field_3d_logical
+         metstate_set_field_scalar_int, &
+         metstate_set_field_scalar_logical, &
+         metstate_set_field_2d_real, &
+         metstate_set_field_2d_int, &
+         metstate_set_field_2d_logical, &
+         metstate_set_field_3d_real, &
+         metstate_set_field_3d_int, &
+         metstate_set_field_3d_logical
       procedure, public :: metstate_set_field_scalar_real
       procedure, public :: metstate_set_field_scalar_int
       procedure, public :: metstate_set_field_scalar_logical
@@ -278,7 +278,7 @@ CONTAINS
       this%NLEVS = nlevs
 
       call this%geometry%set(nx, ny, nlevs) ! Add a set() method to GridGeometryType
-      
+
       this%State = 'MET'
 
       ! Set soil and surface parameters if provided
@@ -287,14 +287,14 @@ CONTAINS
       else
          this%NSURFTYPE = 0  ! Will prevent allocation of surface arrays
       end if
-      
+
       ! Set soil parameters if provided
       if (present(nsoil)) then
          this%nSOIL = nsoil
       else
          this%nSOIL = 0  ! Will prevent allocation of soil arrays
       end if
-      
+
       if (present(nsoiltype)) then
          this%nSOILTYPE = nsoiltype
       else
@@ -330,7 +330,7 @@ CONTAINS
       rc = CC_SUCCESS
 
       call this%geometry%get_dimensions(nx, ny, nz)
-      
+
       ! Use the properly initialized values (no more defaults needed)
       nsoil = this%nSOIL
       nsoiltype = this%nSOILTYPE
@@ -409,8 +409,8 @@ CONTAINS
       ! Check basic state
       if (this%NLEVS <= 0) then
          call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                     'Number of levels must be positive', rc, &
-                                     thisLoc, 'Set NLEVS to a positive integer')
+            'Number of levels must be positive', rc, &
+            thisLoc, 'Set NLEVS to a positive integer')
          call error_mgr%pop_context()
          return
       endif
@@ -419,8 +419,8 @@ CONTAINS
       if (allocated(this%T2M)) then
          if (maxval(this%T2M) > 400.0_fp .or. minval(this%T2M) < 100.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        '2m temperature out of physical range', rc, &
-                                        thisLoc, 'Check temperature units and values')
+               '2m temperature out of physical range', rc, &
+               thisLoc, 'Check temperature units and values')
             call error_mgr%pop_context()
             return
          endif
@@ -429,8 +429,8 @@ CONTAINS
       if (allocated(this%TS)) then
          if (maxval(this%TS) > 400.0_fp .or. minval(this%TS) < 100.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        'Surface temperature out of physical range', rc, &
-                                        thisLoc, 'Check temperature units and values')
+               'Surface temperature out of physical range', rc, &
+               thisLoc, 'Check temperature units and values')
             call error_mgr%pop_context()
             return
          endif
@@ -440,8 +440,8 @@ CONTAINS
       if (allocated(this%PS)) then
          if (maxval(this%PS) > 120000.0_fp .or. minval(this%PS) < 1000.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        'Surface pressure out of physical range', rc, &
-                                        thisLoc, 'Check pressure units and values')
+               'Surface pressure out of physical range', rc, &
+               thisLoc, 'Check pressure units and values')
             call error_mgr%pop_context()
             return
          endif
@@ -450,8 +450,8 @@ CONTAINS
       if (allocated(this%SLP)) then
          if (maxval(this%SLP) > 120000.0_fp .or. minval(this%SLP) < 50000.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                        'Sea level pressure out of physical range', rc, &
-                                        thisLoc, 'Check pressure units and values')
+               'Sea level pressure out of physical range', rc, &
+               thisLoc, 'Check pressure units and values')
             call error_mgr%pop_context()
             return
          endif
@@ -460,8 +460,8 @@ CONTAINS
       ! Check array allocation
       if (.not. this%is_allocated()) then
          call error_mgr%report_error(ERROR_INVALID_INPUT, &
-                                     'Required arrays not allocated', rc, &
-                                     thisLoc, 'Call init() before using MetState')
+            'Required arrays not allocated', rc, &
+            thisLoc, 'Call init() before using MetState')
          call error_mgr%pop_context()
          return
       endif
@@ -511,7 +511,7 @@ CONTAINS
       logical :: is_alloc
 
       is_alloc = allocated(this%T) .and. allocated(this%U) .and. allocated(this%V) .and. &
-                 allocated(this%QV) .and. allocated(this%PMID) .and. allocated(this%DELP)
+         allocated(this%QV) .and. allocated(this%PMID) .and. allocated(this%DELP)
    end function metstate_is_allocated
 
    !> \brief Get approximate memory usage of MetStateType in bytes
@@ -616,7 +616,7 @@ CONTAINS
       integer :: nx, ny, nz, nsoil, nsoiltype, nSURFTYPE
       rc = CC_SUCCESS
       call this%geometry%get_dimensions(nx, ny, nz)
-      ! Use the properly initialized values (no more defaults needed) 
+      ! Use the properly initialized values (no more defaults needed)
       nsoil = this%nSOIL
       nsoiltype = this%nSOILTYPE
       nSURFTYPE = this%NSURFTYPE
@@ -811,8 +811,8 @@ CONTAINS
       if (present(col_ptr) .and. present(i) .and. present(j)) then
          col_ptr => this%get_column_ptr_func(field_name, i, j)
          if (associated(col_ptr)) then
-               rc = 0
-               return
+            rc = 0
+            return
          end if
       end if
       ! Try 2D scalar
@@ -842,8 +842,8 @@ CONTAINS
       if (present(col_ptr) .and. present(i) .and. present(j)) then
          col_ptr => this%get_column_ptr_func_int(field_name, i, j)
          if (associated(col_ptr)) then
-               rc = 0
-               return
+            rc = 0
+            return
          end if
       end if
       ! Try 2D scalar
@@ -873,8 +873,8 @@ CONTAINS
       if (present(col_ptr) .and. present(i) .and. present(j)) then
          col_ptr => this%get_column_ptr_func_logical(field_name, i, j)
          if (associated(col_ptr)) then
-               rc = 0
-               return
+            rc = 0
+            return
          end if
       end if
       ! Try 2D scalar
@@ -935,15 +935,15 @@ CONTAINS
       ! If not found as 3D field, try as 2D field and create a single-element array
       ! For 2D fields, we return a pointer to a single-element array containing the scalar value
       select case (trim(field_name))
-      case ('PS', 'SLP', 'TS', 'T2M', 'TSKIN', 'SST', 'PHIS', 'PS_WET', 'PS_DRY', &
-            'QV2M', 'AREA_M2', 'ALBD_VIS', 'ALBD_NIR', 'ALBD_UV', 'PARDR', 'PARDF', &
-            'SUNCOS', 'SUNCOSmid', 'SWGDN', 'EFLUX', 'HFLUX', 'U10M', 'V10M', &
-            'USTAR', 'Z0', 'Z0H', 'PBLH', 'OBK', 'CLDFRC', 'CONV_DEPTH', &
-            'FLASH_DENS', 'CNV_FRC', 'PRECANV', 'PRECCON', 'PRECLSC', &
-            'LAI', 'GVF', 'RDRAG', 'CLAYFRAC', 'SANDFRAC', 'FRVEG', 'FRLAKE', &
-            'FRLAND', 'FRLANDIC', 'FROCEAN', 'FRSEAICE', 'FRSNO', 'SNODP', &
-            'SNOMAS', 'SSM', 'USTAR_THRESHOLD', 'GWETTOP', 'GWETROOT', 'WILT', &
-            'TO3', 'TROPP', 'TropHt', 'LAT', 'LON')
+       case ('PS', 'SLP', 'TS', 'T2M', 'TSKIN', 'SST', 'PHIS', 'PS_WET', 'PS_DRY', &
+          'QV2M', 'AREA_M2', 'ALBD_VIS', 'ALBD_NIR', 'ALBD_UV', 'PARDR', 'PARDF', &
+          'SUNCOS', 'SUNCOSmid', 'SWGDN', 'EFLUX', 'HFLUX', 'U10M', 'V10M', &
+          'USTAR', 'Z0', 'Z0H', 'PBLH', 'OBK', 'CLDFRC', 'CONV_DEPTH', &
+          'FLASH_DENS', 'CNV_FRC', 'PRECANV', 'PRECCON', 'PRECLSC', &
+          'LAI', 'GVF', 'RDRAG', 'CLAYFRAC', 'SANDFRAC', 'FRVEG', 'FRLAKE', &
+          'FRLAND', 'FRLANDIC', 'FROCEAN', 'FRSEAICE', 'FRSNO', 'SNODP', &
+          'SNOMAS', 'SSM', 'USTAR_THRESHOLD', 'GWETTOP', 'GWETROOT', 'WILT', &
+          'TO3', 'TROPP', 'TropHt', 'LAT', 'LON')
 
          scalar_val = this%get_2Dto0D_value(field_name, i, j)
 
@@ -953,7 +953,7 @@ CONTAINS
          rc = CC_FAILURE
          return
 
-      case default
+       case default
          ! Try as scalar field - similar limitation
          scalar_val = this%get_scalar_value(field_name)
          rc = CC_FAILURE
@@ -966,7 +966,7 @@ CONTAINS
    !---------------------------------------------------------------------------
    !                 Dimensional MetState Set Field Subroutines
    !---------------------------------------------------------------------------
-   
+
    !> @brief Set a scalar REAL field
    subroutine metstate_set_field_scalar_real(this, field_name, field_data, error_mgr, rc)
       use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE
@@ -976,21 +976,21 @@ CONTAINS
       real(fp), intent(in) :: field_data
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       rc = CC_SUCCESS
-      
+
       ! Handle scalar REAL fields directly
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_scalar_real.inc"
-      case default
+       case default
          ! If not a scalar field, try broadcasting to 2D REAL arrays
          select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_real.inc"
-         case default
+          case default
             ! Try broadcasting to 3D REAL arrays
             select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_real.inc"
-            case default
+             case default
                call error_mgr%report_error(ERROR_NOT_FOUND, &
                   'Unknown REAL field name: ' // trim(field_name), rc)
                rc = CC_FAILURE
@@ -1008,21 +1008,21 @@ CONTAINS
       integer, intent(in) :: field_data
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       rc = CC_SUCCESS
-      
+
       ! Handle scalar INTEGER fields directly
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_scalar_int.inc"
-      case default
+       case default
          ! If not a scalar field, try broadcasting to 2D INTEGER arrays
          select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_int.inc"
-         case default
+          case default
             ! Try broadcasting to 3D INTEGER arrays
             select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_int.inc"
-            case default
+             case default
                call error_mgr%report_error(ERROR_NOT_FOUND, &
                   'Unknown INTEGER field name: ' // trim(field_name), rc)
                rc = CC_FAILURE
@@ -1040,21 +1040,21 @@ CONTAINS
       logical, intent(in) :: field_data
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       rc = CC_SUCCESS
-      
+
       ! Handle scalar LOGICAL fields directly
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_scalar_logical.inc"
-      case default
+       case default
          ! If not a scalar field, try broadcasting to 2D LOGICAL arrays
          select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_logical.inc"
-         case default
+          case default
             ! Try broadcasting to 3D LOGICAL arrays
             select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_logical.inc"
-            case default
+             case default
                call error_mgr%report_error(ERROR_NOT_FOUND, &
                   'Unknown LOGICAL field name: ' // trim(field_name), rc)
                rc = CC_FAILURE
@@ -1072,12 +1072,12 @@ CONTAINS
       real(fp), intent(in) :: field_data(:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 2D REAL field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_real.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1093,12 +1093,12 @@ CONTAINS
       integer, intent(in) :: field_data(:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 2D INTEGER field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_int.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1114,12 +1114,12 @@ CONTAINS
       logical, intent(in) :: field_data(:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 2D LOGICAL field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_logical.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1135,12 +1135,12 @@ CONTAINS
       real(fp), intent(in) :: field_data(:,:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 3D REAL field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_real.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1156,12 +1156,12 @@ CONTAINS
       integer, intent(in) :: field_data(:,:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 3D INTEGER field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_int.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1177,12 +1177,12 @@ CONTAINS
       logical, intent(in) :: field_data(:,:,:)
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
-      
+
       ! Generated include file for 3D LOGICAL field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_3d_logical.inc"
-      case default
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
@@ -1204,29 +1204,29 @@ CONTAINS
    subroutine metstate_derive_field(this, field_name, error_mgr, time_state, rc)
       use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, ERROR_INVALID_INPUT, ERROR_NOT_FOUND
       use constants, only: g0, Rd, Rdg0, AIRMW, H2OMW
-      
+
       implicit none
       class(MetStateType), intent(inout) :: this
       character(len=*), intent(in) :: field_name
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       type(TimeStateType), pointer,intent(inout) :: time_state
       integer, intent(out) :: rc
-      
+
       character(len=256) :: thisLoc
       integer :: nx, ny, nz, i, j, k, nlanduse
       real(fp) :: airden
       real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
       real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
-      
+
       thisLoc = 'metstate_derive_field (in core/metstate_mod.F90)'
       call error_mgr%push_context('metstate_derive_field', 'deriving field: ' // trim(field_name))
-      
+
       rc = CC_SUCCESS
       call this%get_dimensions(nx, ny, nz)
-      
+
       select case (trim(adjustl(field_name)))
-      
-      case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
+
+       case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
          if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
@@ -1236,14 +1236,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate MAIRDEN if not already allocated
          if (.not. allocated(this%MAIRDEN) .or. .not. allocated(this%AIRDEN)) then
             call error_mgr%report_error(rc, 'MAIRDEN/AIRDEN fields need to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate dry air density: ρ = P / (R_dry * T)
          do k = 1, nz
             do j = 1, ny
@@ -1254,7 +1254,7 @@ CONTAINS
             enddo
          enddo
 
-      case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
+       case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
          if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
@@ -1264,15 +1264,15 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate AIRDEN_DRY if not already allocated
          if (.not. allocated(this%AIRDEN_DRY) .or. .not. allocated(this%PMID_DRY) .or. &
-             .not. allocated(this%PEDGE_DRY) .or. .not. allocated(this%DELP_DRY)) then
+            .not. allocated(this%PEDGE_DRY) .or. .not. allocated(this%DELP_DRY)) then
             call error_mgr%report_error(rc, 'AIRDEN_DRY/PMID_DRY/PEDGE_DRY/DELP_DRY fields need to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate dry air density: ρ = P / (R_dry * T)
          do k = 1, nz
             do j = 1, ny
@@ -1290,7 +1290,7 @@ CONTAINS
             enddo
          enddo
 
-      case ('RH', 'rh')
+       case ('RH', 'rh')
          ! Calculate virtual temperature from temperature and humidity
          if (.not. allocated(this%T) .or. .not. allocated(this%QV) .or. .not. allocated(this%PMID)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1299,14 +1299,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate RH if not already allocated
          if (.not. allocated(this%RH)) then
             call error_mgr%report_error(rc, 'RH field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate relative humidity from met_utility module
          do k = 1, nz
             do j = 1, ny
@@ -1315,8 +1315,8 @@ CONTAINS
                enddo
             enddo
          enddo
-         
-      case ('TV', 'tv')
+
+       case ('TV', 'tv')
          ! Calculate virtual temperature from temperature and humidity
          if (.not. allocated(this%T) .or. .not. allocated(this%QV)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1325,14 +1325,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate TV if not already allocated
          if (.not. allocated(this%TV)) then
             call error_mgr%report_error(rc, 'TV field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate virtual temperature: Tv = T * (1 + 0.608 * qv)
          do k = 1, nz
             do j = 1, ny
@@ -1342,24 +1342,24 @@ CONTAINS
             enddo
          enddo
 
-      case ('OBK', 'obk')
+       case ('OBK', 'obk')
          ! Calculate OBK from sensible heat flux and air density
          if (.not. allocated(this%HFLUX) .or. .not. allocated(this%AIRDEN) .or. .not. allocated(this%TS) .or. &
-             .not. allocated(this%USTAR)) then
+            .not. allocated(this%USTAR)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'TS, USTAR, AIRDEN and HFLUX fields required for OBK calculation', rc, &
                thisLoc, 'Ensure temperature, ustar, air density, and sensible heat flux are available')
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate OBK if not already allocated
          if (.not. allocated(this%OBK)) then
             call error_mgr%report_error(rc, 'OBK field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate OBK from met_utility module
          do j = 1, ny
             do i = 1, nx
@@ -1368,8 +1368,8 @@ CONTAINS
                this%OBK(i, j) = monin_obukhov_length(this%USTAR(i, j), this%TS(i, j), this%HFLUX(i, j), airden)
             enddo
          enddo
-      
-      case ('SUNCOS', 'suncos')
+
+       case ('SUNCOS', 'suncos')
          ! Calculate SUNCOS
          if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1378,14 +1378,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate OBK if not already allocated
          if (.not. allocated(this%SUNCOS)) then
             call error_mgr%report_error(rc, 'SUNCOS field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate OBK from met_utility module
          do j = 1, ny
             do i = 1, nx
@@ -1394,7 +1394,7 @@ CONTAINS
             enddo
          enddo
 
-      case ('SUNCOSmid', 'suncosmid')
+       case ('SUNCOSmid', 'suncosmid')
          ! Calculate SUNCOSmid
          if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1403,14 +1403,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate OBK if not already allocated
          if (.not. allocated(this%SUNCOSmid)) then
             call error_mgr%report_error(rc, 'SUNCOSmid field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate OBK from met_utility module
          do j = 1, ny
             do i = 1, nx
@@ -1418,8 +1418,8 @@ CONTAINS
                this%SUNCOSmid(i, j) = time_state%get_cos_sza(this%LAT(i, j), this%LON(i, j), .true.)
             enddo
          enddo
-      
-      case ('DELP', 'delp')
+
+       case ('DELP', 'delp')
          ! Calculate box height from geopotential heights
          if (.not. allocated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1428,14 +1428,14 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate BXHEIGHT if not already allocated
          if (.not. allocated(this%DELP)) then
             call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate box height as difference between edge heights
          do k = 1, nz
             do j = 1, ny
@@ -1445,8 +1445,8 @@ CONTAINS
                enddo
             enddo
          enddo
-      
-      case ('BXHEIGHT', 'bxheight')
+
+       case ('BXHEIGHT', 'bxheight')
          ! Calculate box height from geopotential heights
          if (.not. allocated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
@@ -1455,69 +1455,69 @@ CONTAINS
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Allocate BXHEIGHT if not already allocated
          if (.not. allocated(this%BXHEIGHT)) then
             call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
          endif
-         
+
          ! Calculate box height as difference between edge heights
          do k = 1, nz
             do j = 1, ny
                do i = 1, nx
                   ! Refer to https://github.com/geoschem/geos-chem/GeosCore/calc_met_mod.F90
                   this%BXHEIGHT(i, j, k) = Rdg0 * virtual_temperature(this%T(i, j, k), this%QV(i, j, k)) * &
-                                             LOG(this%PEDGE(i, j, k) / this%PEDGE(i, j, k+1))
+                     LOG(this%PEDGE(i, j, k) / this%PEDGE(i, j, k+1))
                enddo
             enddo
          enddo
-      
-      case ('SST', 'sst')
+
+       case ('SST', 'sst')
          this%SST(:,:) = this%TS(:,:)  !just copy TS to SST
-      
-      case ('TSKIN', 'tskin')
+
+       case ('TSKIN', 'tskin')
          this%TSKIN(:,:) = this%TS(:,:)  !just copy TS to TSKIN
-      
-      case ('Z0H', 'z0h')
+
+       case ('Z0H', 'z0h')
          this%Z0H(:,:) = this%Z0(:,:)  !just copy Z0 to Z0H
 
-      case ('IsLand', 'island', 'ISLAND')
+       case ('IsLand', 'island', 'ISLAND')
          do j = 1, ny
             do i = 1, nx
                this%IsLand(i, j) = ( abs(this%LWI(i, j) - 1.0_fp) < 0.5_fp ) ! Land if LWI = 1.0
             enddo
          enddo
 
-      case ('IsIce', 'isice', 'ISICE')
+       case ('IsIce', 'isice', 'ISICE')
          do j = 1, ny
             do i = 1, nx
                this%IsIce(i, j) = ( abs(this%LWI(i, j) - 2.0_fp) < 0.5_fp ) ! Ice if LWI = 2.0
             enddo
          enddo
 
-      case ('IsWater', 'iswater', 'ISWATER')
+       case ('IsWater', 'iswater', 'ISWATER')
          do j = 1, ny
             do i = 1, nx
                this%IsWater(i, j) = ( abs(this%LWI(i, j) - 0.0_fp) < 0.5_fp ) ! sea if LWI = 0.0
             enddo
          enddo
 
-      case ('IsSnow', 'issnow', 'ISSNOW')
+       case ('IsSnow', 'issnow', 'ISSNOW')
          do j = 1, ny
             do i = 1, nx
                !geos-chem has a different method: https://github.com/geoschem/geos-chem/GeosCore/calc_met_mod.F90#L324
-               this%IsSnow(i, j) = ( this%FRSNO(i, j) >= 0.5_fp ) ! Snow fraction is read in 
+               this%IsSnow(i, j) = ( this%FRSNO(i, j) >= 0.5_fp ) ! Snow fraction is read in
             enddo
          enddo
-      
-      case ('LUCNAME', 'lucname')
+
+       case ('LUCNAME', 'lucname')
          this%LUCNAME = 'NOAH'
-      case ('nLNDTYPE', 'nlndtype', 'NLNDTYPE')
+       case ('nLNDTYPE', 'nlndtype', 'NLNDTYPE')
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
-         this%nLNDTYPE(:,:) = nlanduse  !manually set to 20 for now; not sure if NUOPC can get it 
-      case ('FRLANDUSE', 'frlanduse')
+         this%nLNDTYPE(:,:) = nlanduse  !manually set to 20 for now; not sure if NUOPC can get it
+       case ('FRLANDUSE', 'frlanduse')
          !Note that FRLANDUSE is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
          if (.not. allocated(this%FRLANDUSE)) allocate(this%FRLANDUSE(nx, ny, nlanduse))
@@ -1526,12 +1526,12 @@ CONTAINS
             do i = 1, nx
                do k = 1, nlanduse
                   if (this%DLUSE(i, j) == k) this%FRLANDUSE(i, j, k) = 1.0_fp
-                  !We receive DLUSE = 0 over water but it should be 17th type 
+                  !We receive DLUSE = 0 over water but it should be 17th type
                   if (this%DLUSE(i, j) == 0 .and. k == 17) this%FRLANDUSE(i, j, k) = 1.0_fp
                enddo
             enddo
          enddo
-      case ('ILAND', 'iland')
+       case ('ILAND', 'iland')
          !Note that ILAND is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
          if (.not. allocated(this%ILAND)) allocate(this%ILAND(nx, ny, nlanduse))
@@ -1543,7 +1543,7 @@ CONTAINS
                enddo
             enddo
          enddo
-      case ('FRLAI', 'frlai')
+       case ('FRLAI', 'frlai')
          !Note that FRLAI is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
          if (.not. allocated(this%FRLAI)) allocate(this%FRLAI(nx, ny, nlanduse))
@@ -1556,19 +1556,19 @@ CONTAINS
                this%FRLAI(i, j, 15:17) = 0.0 !manually give index 15(snow and ice), 16(barren), 17(water) zeros
             enddo
          enddo
-      case ('SALINITY', 'salinity')
-         this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.      
-      
-      case ('REEVAPLS', 'reevapls')
-         this%REEVAPLS(:,:,:) = 0.0_fp  !set to zero for now because I did not find data from GFS. This will overestimate the washout of aerosols. 
-      
-      case default
+       case ('SALINITY', 'salinity')
+         this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
+
+       case ('REEVAPLS', 'reevapls')
+         this%REEVAPLS(:,:,:) = 0.0_fp  !set to zero for now because I did not find data from GFS. This will overestimate the washout of aerosols.
+
+       case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             'Unknown derived field: ' // trim(field_name), rc, &
             thisLoc, 'Supported fields: AIRDEN,  TV,  BXHEIGHT')
          rc = CC_FAILURE
       end select
-      
+
       call error_mgr%pop_context()
    end subroutine metstate_derive_field
 

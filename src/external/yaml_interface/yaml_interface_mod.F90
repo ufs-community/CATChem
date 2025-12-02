@@ -273,7 +273,7 @@ contains
 
       character(len=len(value)) :: c_value
       integer :: i
-      
+
       success = c_yaml_get_string(node%ptr, trim(key)//c_null_char, c_value, len(value))
       if (success) then
          ! Clean null characters from C string before returning to Fortran
@@ -340,7 +340,7 @@ contains
       integer(c_int) :: c_actual_size
 
       success = c_yaml_get_real_array(node%ptr, trim(key)//c_null_char, &
-                                      c_values, size(values), c_actual_size)
+         c_values, size(values), c_actual_size)
       if (success) then
          actual_size = c_actual_size
          values(1:actual_size) = real(c_values(1:actual_size), fp)
@@ -359,7 +359,7 @@ contains
       integer(c_int) :: c_actual_size
 
       success = c_yaml_get_integer_array(node%ptr, trim(key)//c_null_char, &
-                                         c_values, size(values), c_actual_size)
+         c_values, size(values), c_actual_size)
       if (success) then
          actual_size = c_actual_size
          values(1:actual_size) = c_values(1:actual_size)
@@ -379,7 +379,7 @@ contains
       integer :: i, j
 
       success = c_yaml_get_string_array(node%ptr, trim(key)//c_null_char, &
-                                        c_values, size(values), len(values), c_actual_size)
+         c_values, size(values), len(values), c_actual_size)
       if (success) then
          actual_size = c_actual_size
          do i = 1, actual_size
@@ -561,7 +561,7 @@ contains
       if (present(rc)) rc = local_rc
    end subroutine yaml_get_real_sp_generic
 
-   !> Generic double precision real getter  
+   !> Generic double precision real getter
    subroutine yaml_get_real_dp_generic(node, key, value, rc, default_value)
       use iso_fortran_env, only: real64
       type(yaml_node_t), intent(in) :: node
@@ -747,7 +747,7 @@ contains
 
       key_len = len(keys(1))
       success = c_yaml_get_all_keys(node%ptr, c_keys, size(keys), key_len, c_actual_count)
-      
+
       if (success) then
          actual_count = c_actual_count
          do i = 1, actual_count
@@ -847,14 +847,14 @@ contains
 
       ! Convert string to logical with various accepted formats
       select case (trim(lower_str))
-         case ('true', 't', '1', 'yes', 'y', 'on')
-            value = .true.
-            rc = 0
-         case ('false', 'f', '0', 'no', 'n', 'off')
-            value = .false.
-            rc = 0
-         case default
-            rc = -1  ! Conversion failed
+       case ('true', 't', '1', 'yes', 'y', 'on')
+         value = .true.
+         rc = 0
+       case ('false', 'f', '0', 'no', 'n', 'off')
+         value = .false.
+         rc = 0
+       case default
+         rc = -1  ! Conversion failed
       end select
    end subroutine safe_yaml_get_logical
 

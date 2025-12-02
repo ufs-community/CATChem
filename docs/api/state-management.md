@@ -5,10 +5,10 @@ This section covers the core state management APIs in CATChem, providing unified
 ## Overview
 
 The state management system provides:
-- **StateContainer**: Central data repository for all model state
+
+- **StateContainer**: Central data repository for all model states
 - **ChemState**: Chemical species concentrations and properties
 - **MetState**: Meteorological fields and atmospheric conditions
-- **EmisState**: Emission data and accumulation
 - **DiagState**: Diagnostic variables and output management
 
 ## Core Components
@@ -32,38 +32,13 @@ call container%get_met_state(met_state, rc)
 ```
 
 **Key Features:**
+
 - Unified data access across all processes
 - Automatic memory management
 - Thread-safe operations
 - Efficient column-based access
 
 **Auto-Generated Documentation:** [State Module](../CATChem/namespacestate__mod.md)
-
-### Column Virtualization
-
-Access data efficiently through column interfaces:
-
-```fortran
-use ColumnInterface_Mod
-type(ColumnType) :: column
-
-! Get column data
-call container%get_column(i, j, column, rc)
-
-! Process column data
-do k = 1, column%nz
-    ! Process atmospheric level k
-    column%chem_data(k, species_idx) = new_value
-end do
-
-! Update container
-call container%update_column(i, j, column, rc)
-```
-
-**Performance Benefits:**
-- Cache-optimized 1D processing
-- Reduced memory allocations
-- Natural parallelization
 
 ## State Types
 
@@ -84,6 +59,8 @@ call chem_state%set_species_conc(species_name, new_concentration, rc)
 call chem_state%get_all_species(species_data, rc)
 ```
 
+**Auto-Generated Documentation:** [ChemState Reference](../CATChem/namespacechemstate__mod.md)
+
 ### Meteorological State (MetState)
 
 Handles atmospheric conditions:
@@ -101,22 +78,7 @@ call met_state%get_pressure(pressure, rc)
 call met_state%get_wind(u_wind, v_wind, w_wind, rc)
 ```
 
-### Emission State (EmisState)
-
-Tracks emission sources and accumulation:
-
-```fortran
-type(EmisStateType) :: emis_state
-
-! Set emission rates
-call emis_state%set_emission_rates(species_name, rates, rc)
-
-! Accumulate emissions for diagnostics
-call emis_state%accumulate_emissions(species_name, increment, rc)
-
-! Get total emissions
-call emis_state%get_total_emissions(species_name, total, rc)
-```
+**Auto-Generated Documentation:** [MetState Reference](../CATChem/namespacemetstate__mod.md)
 
 ## Data Access Patterns
 
@@ -181,6 +143,8 @@ call container%operation(data, rc)
 call error_mgr%pop_context()
 ```
 
+**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
+
 ## Thread Safety
 
 State operations are designed for parallel processing:
@@ -242,8 +206,9 @@ call container%optimize_memory_layout(rc)
 - [Process Interface API](process-interface.md) - How processes interact with state
 - [Column Interface API](column-interface.md) - Efficient column-based processing
 - [Configuration API](configuration.md) - State initialization and setup
-- [Error Handling API](error-handling.md) - Comprehensive error management
 
 ---
 
-**Auto-Generated Documentation:** [Complete State Management Reference](../CATChem/namespacestate__mod.md)
+**Auto-Generated Documentation:** [Complete State Management Reference](../CATChem/namespacestatemanager__mod.md)
+
+**Auto-Generated Documentation:** [Complete State Interface Reference](../CATChem/namespacestate__interface__mod.md)

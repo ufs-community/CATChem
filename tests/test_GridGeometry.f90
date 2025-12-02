@@ -20,7 +20,7 @@ program test_GridGeometry
    nx = geometry%get_nx()
    ny = geometry%get_ny()
    nz = geometry%get_nz()
-   
+
    call assert(nx == 1, "Default NX should be 1")
    call assert(ny == 1, "Default NY should be 1")
    call assert(nz == 1, "Default NZ should be 1")
@@ -31,11 +31,11 @@ program test_GridGeometry
    ! Test 2: Setting dimensions
    write(*,*) 'Test 2: Setting dimensions'
    call geometry%set(10, 20, 30)
-   
+
    nx = geometry%get_nx()
    ny = geometry%get_ny()
    nz = geometry%get_nz()
-   
+
    call assert(nx == 10, "NX should be 10 after setting")
    call assert(ny == 20, "NY should be 20 after setting")
    call assert(nz == 30, "NZ should be 30 after setting")
@@ -46,7 +46,7 @@ program test_GridGeometry
    ! Test 3: Getting dimensions as array
    write(*,*) 'Test 3: Getting dimensions as array'
    call geometry%get_dimensions(nx, ny, nz)
-   
+
    call assert(nx == 10, "NX should be 10")
    call assert(ny == 20, "NY should be 20")
    call assert(nz == 30, "NZ should be 30")
@@ -55,5 +55,5 @@ program test_GridGeometry
    write(*,*) ''
 
    write(*,*) 'All GridGeometry tests passed!'
-   
+
 end program test_GridGeometry

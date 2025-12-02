@@ -230,7 +230,7 @@ seas2:
   upper_radius: 0.5
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58
   radius: 0.316
   density: 2200.
   is_seasalt: true
@@ -246,7 +246,7 @@ seas3:
   upper_radius: 1.5
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58
   radius: 1.119
   density: 2200.
   is_seasalt: true
@@ -262,7 +262,7 @@ seas4:
   upper_radius: 5.0
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58
   radius: 2.818
   density: 2200.
   is_seasalt: true
@@ -278,7 +278,7 @@ seas5:
   upper_radius: 10.0
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58 
+  mw_g: 31.40  #GEOS-Chem is 31.40; gocart is 58
   radius: 7.772
   density: 2200.
   is_seasalt: true
@@ -286,4 +286,3 @@ seas5:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
-
