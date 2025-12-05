@@ -331,7 +331,7 @@ contains
 
       ! Get drydep process interface
       drydep_interface => null()
-      select type(process => process_mgr%processes(1))
+      select type(process => process_mgr%processes(1)%item)
        type is (ProcessDryDepInterface)
          drydep_interface => process
       end select

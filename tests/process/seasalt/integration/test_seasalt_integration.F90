@@ -263,7 +263,7 @@ contains
 
       ! Get seasalt process interface
       seasalt_interface => null()
-      select type(process => process_mgr%processes(1))
+      select type(process => process_mgr%processes(1)%item)
        type is (ProcessSeaSaltInterface)
          seasalt_interface => process
       end select

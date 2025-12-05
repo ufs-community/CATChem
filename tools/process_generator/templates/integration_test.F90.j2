@@ -823,7 +823,7 @@ contains
 
       ! Get {{ config.name }} process interface
       {{ config.name }}_interface => null()
-      select type(process => process_mgr%processes(1))
+      select type(process => process_mgr%processes(1)%item)
       type is (Process{{ config.class_name }}Interface)
          {{ config.name }}_interface => process
       end select
