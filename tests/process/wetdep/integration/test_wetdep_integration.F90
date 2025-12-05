@@ -257,7 +257,7 @@ contains
 
       ! Get wetdep process interface
       wetdep_interface => null()
-      select type(process => process_mgr%processes(1))
+      select type(process => process_mgr%processes(1)%item)
        type is (ProcessWetDepInterface)
          wetdep_interface => process
       end select
