@@ -265,12 +265,12 @@ contains
       if (ESMF_LogFoundAllocError(statusToCheck=stat, &
          msg="Unable to allocate nuopc_to_cc mapping", &
          line=__LINE__,  file=__FILE__, rcToReturn=rc)) return  ! bail out
-
+      
       ! assign mapping index
       call create_species_mapping(state_mgr, cc_wrap%tracer_map%names, cc_wrap%tracer_map%nuopc_to_cc, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__,  file=__FILE__)) return  ! bail out
-
+      
       !copy fields to cc_wrap
       cc_wrap%field_config = field_config
       ! Set the process-local grid variable
@@ -282,12 +282,13 @@ contains
       if (present(startTime)) then
          cc_wrap%startTime = startTime
       end if
+      
       if (present(timeStep)) then
          cc_wrap%timeStep = timeStep
          call ESMF_TimeIntervalGet(timeStep, s_i8=tstep_seconds, rc=rc)
          state_mgr%tstep = real(tstep_seconds, fp)
       end if
-
+      
       ! Add all enabled processes from configuration
       call cc_wrap%catchem_model%add_process(rc)
       num_processes = cc_wrap%catchem_model%get_num_processes()
@@ -297,7 +298,7 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)
          return  ! bail out
       end if
-
+      
       ! Mark this process as initialized
       cc_wrap%initialized = .true.
 
@@ -327,7 +328,7 @@ contains
       !   errflg = CC_FAILURE
       !   return
       ! end if
-
+      
    end subroutine catchem_nuopc_init
 
    !> Get process-local CATChem wrapper (guaranteed thread/process safe)
@@ -709,17 +710,22 @@ contains
          nj = size(fptr3d, 2)
          nk = size(fptr3d, 3)
 
-         !get catchem receriver vertical dimension for nz+1 variables while NUOPC has nz levels
-         !Currently only PFILSAN and PFLLSAN are in this case following GOCART and in most cases,
-         ! nk == nk1
-         call met_state%get_field_ptr(trim(field_map%catchem_var), i=1, j=1, col_ptr=column_ptr, rc=rc)
-         if (rc /= CC_SUCCESS) then
-            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-               msg="Error getting met field pointer for: " // trim(field_map%catchem_var), &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-            return  ! bail out
+         if (trim(field_map%catchem_var) .ne. 'SOILM' .and.  trim(field_map%catchem_var) .ne. 'SOILT') then 
+            !get catchem receriver vertical dimension for nz+1 variables while NUOPC has nz levels
+            !Currently only PFILSAN and PFLLSAN are in this case following GOCART and in most cases,
+            ! nk == nk1
+            call met_state%get_field_ptr(trim(field_map%catchem_var), i=1, j=1, col_ptr=column_ptr, rc=rc)
+            if (rc /= CC_SUCCESS) then
+               call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+                  msg="Error getting met field pointer for: " // trim(field_map%catchem_var), &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)
+               return  ! bail out
+            end if
+            nk1 = size(column_ptr)
+         else 
+            !SOILM and SOILT have not been allocated because we do not have soil layers yet and the get_field_ptr will fail
+            nk1 = nk
          end if
-         nk1 = size(column_ptr)
 
          ! Allocate fptr3d_rev with the same dimensions as fptr3d
          allocate(fptr3d_rev(ni, nj, nk1))

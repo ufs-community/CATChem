@@ -42,7 +42,6 @@ module CATChemCore_Mod
    use ConfigManager_Mod, only: ConfigManagerType, ConfigDataType
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType, GridManagerGeometryType => GridGeometryType
-   use GridGeometry_Mod, only: GridManagerGeometryType => GridGeometryType
    use GridGeometry_Mod, only: GridGeometryType
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use ProcessManager_Mod, only: ProcessManagerType

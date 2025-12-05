@@ -146,10 +146,17 @@ if(BUILD_NUOPC)
     PRIVATE
       $<TARGET_FILE:CATChem>
       $<TARGET_FILE:CATChem_process_seasalt>
+      $<TARGET_FILE:CATChem_process_drydep>
+      $<TARGET_FILE:CATChem_process_wetdep>
       $<TARGET_FILE:CATChem_core>
       $<TARGET_FILE:yaml_interface>
       $<TARGET_FILE:catchem_utilities>
   )
+
+  # Link GOCART2G library if available (needed for drydep process)
+  if(TARGET GOCART2G)
+    target_link_libraries(cc_nuopc PRIVATE $<TARGET_FILE:GOCART2G>)
+  endif()
 
   # Include directories for compilation
   target_include_directories(

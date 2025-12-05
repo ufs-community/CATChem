@@ -164,22 +164,22 @@ import_fields:
     dimensions: 2
     units: "1"
     optional: false
-  - standard_name: "lake_fraction"  ###need to add to UFSATM
+  - standard_name: "lake_fraction"
     catchem_var: "FRLAKE"
     dimensions: 2
     units: "1"
     optional: false
-  - standard_name: "inst_surface_soil_wetness"  ###need to add to UFSATM
+  - standard_name: "inst_surface_soil_wetness"
     catchem_var: "GWETTOP"
     dimensions: 2
     units: "1"
     optional: false
-  - standard_name: "inst_ice_nonconv_tendency_levels" ###need to add to UFSATM
+  - standard_name: "inst_ice_nonconv_tendency_levels"
     catchem_var: "PFILSAN"
     dimensions: 3
     units: "kg/m2/s"
     optional: false
-  - standard_name: "inst_liq_nonconv_tendency_levels" ###need to add to UFSATM
+  - standard_name: "inst_liq_nonconv_tendency_levels"
     catchem_var: "PFLLSAN"
     dimensions: 3
     units: "kg/m2/s"

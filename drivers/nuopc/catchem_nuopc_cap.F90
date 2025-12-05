@@ -35,7 +35,7 @@
 !! \date November 2024
 !! \ingroup catchem_nuopc_group
 
-module aqm
+module cc_nuopc
 ! Renamed from catchem_nuopc_cap to aqm for UFS Driver compatibility
 ! UFS expects: use aqm, only: AQM_SS => SetServices (after FRONT_AQM=aqm substitution)
 
@@ -402,7 +402,7 @@ contains
          name="InitializeDataComplete", value="true", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return  ! bail out
-
+      
    end subroutine InitializeP2
 
    !> \brief Model advance routine - Execute one time step of chemistry calculations
@@ -451,7 +451,7 @@ contains
       real(ESMF_KIND_R8) :: dt_seconds
 
       rc = ESMF_SUCCESS
-
+      
       ! Get component information
       call ESMF_GridCompGet(model, localPet=localPet, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -477,17 +477,17 @@ contains
             trim(adjustl(real_to_string(dt_seconds))) // " seconds", &
             ESMF_LOGMSG_INFO, rc=rc)
       end if
-
+      
       ! -- get component's internal state
       call ESMF_GridCompGetInternalState(model, is, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__,  file=__FILE__))  return  ! bail out
-
+      
       ! Import meteorological data from other components
       call transform_nuopc_to_catchem(is%wrap, importState, currTime, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
-
+      
       ! Run CATChem processes with current time
       call catchem_nuopc_run(is%wrap, dt_seconds, currTime, errmsg, rc)
       if (rc /= ESMF_SUCCESS) then
@@ -496,7 +496,7 @@ contains
          rc = ESMF_FAILURE
          return
       end if
-
+      
       ! Export results to other components
       call transform_catchem_to_nuopc(is%wrap, exportState, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -591,4 +591,4 @@ contains
       str = adjustl(str)
    end function real_to_string
 
-end module aqm
+end module cc_nuopc

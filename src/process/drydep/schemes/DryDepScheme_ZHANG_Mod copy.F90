@@ -32,7 +32,7 @@
 !! Reference: Zhang et al., 2001; Emerson et al., 2020
 module DryDepScheme_ZHANG_Mod
 
-   use precision_mod, only: fp, rae
+   use precision_mod, only: fp, rae, f8
    use error_mod, only: CC_SUCCESS, CC_Error
    use DryDepCommon_Mod, only: DryDepSchemeZHANGConfig
    use Constants, only: PI, AVO, VON_KARMAN, RSTARG, g0, BOLTZ  !load the constants needed for this scheme
@@ -777,7 +777,8 @@ contains
 
       ! Over oceans the RH in the viscous sublayer is set to 98%,
       ! following Lewis and Schwartz (2004)
-      IF (LUC == 14) THEN
+      !I added condition when RHBL=1 to avoid DIAM = infinity issue in the New_DIAM_DEN subroutine later for SO4 (Wei Li)
+      IF (LUC == 14 .or. rae(RHBL, 1.0_fp)) THEN 
          RHBL = 0.98_fp
       ENDIF
 
@@ -939,10 +940,12 @@ contains
          R1 = 1.e+0_fp
       ELSE
          R1 = EXP( -1e+0_fp * SQRT( ST ) )
+         R1 = MAX( tiny(R1), R1 ) !avoid R1 = 0 when ST is large under very low TEMP and AA < 0 (Wei Li)  
       ENDIF
 
       !add error check here to make sure RS below is not a infinite value
       IF (rae(R1, 0.0_fp) .or. rae(USTAR, 0.0_fp)) THEN
+         !write(*,*) 'DEBUG INFO: SPC=', trim(SPC), LUC, USTAR, R1, ST, AA, VTS, CONST, DEN, DIAM, RHBL, RHB, AIRVS   
          errMsg = 'USTAR or R1 is zero. Check met field or diameter (in m) of aerosol is too big.'
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
@@ -1005,7 +1008,7 @@ contains
       REAL(fp),  PARAMETER  :: A2       = -4.28e-5_fp
       REAL(fp),  PARAMETER  :: A3       =  2.52e-6_fp
       REAL(fp),  PARAMETER  :: A4       = -2.35e-8_fp
-      REAL(fp),  PARAMETER  :: EPSI     =  1.0e-4_fp
+      REAL(f8),  PARAMETER  :: EPSI     =  1.0e-4_f8 !!!Note we changed it fp to f8 otherwise the do while loop may not converge
 
       ! parameters for assumed size distribution of accumulation and coarse
       ! mode sea salt aerosols, as described in Jaegle et al. (ACP, 11, 2011)
@@ -1021,8 +1024,8 @@ contains
       !local variables
       real(fp)    :: FAC1, FAC2  !Exponential factors for hygroscopic growth
       real(fp)    :: RUM         !Radius of dry particle in micronmeters [um]
-      REAL(fp)    :: RATIO_R     !Ratio dry over wet radii
-      REAL(fp)    :: DEN0, DEN1, WTP
+      REAL(f8)    :: RATIO_R     !Ratio dry over wet radii
+      REAL(f8)    :: DEN0, DEN1, WTP, DEN_f8
       integer     :: I          !Loop index
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
@@ -1116,37 +1119,40 @@ contains
          ! Above density calculation is chemically unsound because it ignores chemical solvation.
          ! Iteratively solve Tang et al., 1997 equation 5 to calculate density of wet aerosol (kg/m3)
          ! Redefine RATIO_R
-         RATIO_R = RDRY / RWET
+         RATIO_R = real(RDRY / RWET, f8)
 
          ! Assume an initial density of 1000 kg/m3
-         DEN0 = DEN !assign initial DEN to DEN0
-         DEN  = 1000.e+0_fp
-         DEN1 = 0.e+0_fp !initialize
+         DEN0 = real(DEN, f8) !assign initial DEN to DEN0
+         DEN_f8  = 1000.e+0_f8
+         DEN1 = 0.e+0_f8 !initialize
          i = 0 !initialize loop index
          !Note that if RH is too low, the loop will not converge and will run forever
-         DO WHILE ( ABS( DEN1-DEN ) .gt. EPSI )
+         DO WHILE ( ABS( DEN1-DEN_f8 ) .gt. EPSI )
             ! First calculate weight percent of aerosol (kg_RH=0.8/kg_wet)
-            WTP    = 100.e+0_fp * DEN0/DEN * RATIO_R**3.e+0_fp
+            WTP    = 100.e+0_f8 * DEN0/DEN_f8 * RATIO_R**3
             ! Then calculate density of wet aerosol using equation 5
             ! in Tang et al., 1997 [kg/m3]
-            DEN1   = ( 0.9971e+0_fp + (A1 * WTP) + (A2 * WTP**2) + &
-               (A3 * WTP**3) + (A4 * WTP**4) ) * 1000.e+0_fp
+            DEN1   = ( 0.9971e+0_f8 + (A1 * WTP) + (A2 * WTP**2) + &
+               (A3 * WTP**3) + (A4 * WTP**4) ) * 1000.e+0_f8
 
             ! Now calculate new weight percent using above density calculation
-            WTP    = 100.e+0_fp * DEN0/DEN1 * RATIO_R**3.e+0_fp
+            WTP    = 100.e+0_f8 * DEN0/DEN1 * RATIO_R**3
             ! Now recalculate new wet density [kg/m3]
-            DEN   = ( 0.9971e+0_fp + (A1 * WTP) + (A2 * WTP**2) + &
-               (A3 * WTP**3) + (A4 * WTP**4) ) * 1000.e+0_fp
+            DEN_f8   = ( 0.9971e+0_f8 + (A1 * WTP) + (A2 * WTP**2) + &
+               (A3 * WTP**3) + (A4 * WTP**4) ) * 1000.e+0_f8
 
             ! add some protection against infinite loop
             i = i+1
             IF ( i .GT. 500 ) THEN
+               !write(*,*) 'Test NEW_DIAM_DEN output: ', trim(SPC), RHBL, RDRY, RWET, DIAM, DEN0, DEN,DEN1
                errMsg = 'Error in calculating new density for sea salt aerosol due to very low RH input!'
                CALL CC_Error( errMsg, RC, thisLoc )
                RETURN
             ENDIF
 
          ENDDO
+         ! Convert back to fp
+         DEN = REAL(DEN_f8, fp)
       ENDIF
 
    END SUBROUTINE New_DIAM_DEN
