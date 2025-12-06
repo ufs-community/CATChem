@@ -1484,9 +1484,11 @@ contains
          ! Register {{ scheme.name }}-specific diagnostics
 {% for diagnostic in scheme.scheme_diagnostics %}
 {% set diag_props = diagnostic | infer_diagnostic_properties(config, scheme) %}
-{% if 'per_bin' in diagnostic.name or 'per_species' in diagnostic.name %}
+{% set has_level_pattern = ('per_level' in diagnostic.name or 'level' in diagnostic.name or 'vertical' in diagnostic.name or 'profile' in diagnostic.name) %}
+{% set has_species_pattern = ('per_bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
+{% if has_species_pattern and not has_level_pattern %}
 {% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '') %}
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
                write(field_name, '(A,A,A)') '{{ clean_name }}_', &
@@ -1498,11 +1500,32 @@ contains
                if (rc /= CC_SUCCESS) return
             end do
          end if
+{% elif has_level_pattern and has_species_pattern %}
+{% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '').replace('_per_level', '') %}
+         ! Register individual 3D fields for each diagnostic species (level + species diagnostics)
+         if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+            do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
+               write(field_name, '(A,A,A)') '{{ clean_name }}_', &
+                     trim(this%process_config%{{ config.name }}_config%diagnostic_species(i))
+               call this%register_diagnostic_field(registry, trim(field_name), &
+                                                   '{{ diagnostic.description }}', &
+                                                   '{{ diagnostic.units }}', {{ diag_props.data_type }}, &
+                                                   '{{ config.name }}', {{ diag_props.fortran_dims }}, rc=rc)
+               if (rc /= CC_SUCCESS) return
+            end do
+         end if
+{% elif has_level_pattern and not has_species_pattern %}
+         ! Register single 3D field for level-only diagnostics
+         call this%register_diagnostic_field(registry, '{{ diagnostic.name }}', &
+                                             '{{ diagnostic.description }}', &
+                                             '{{ diagnostic.units }}', DIAG_REAL_3D, &
+                                             '{{ config.name }}', dims_3d_levels, rc=rc)
 {% else %}
+         ! Register single field for scalar diagnostics
          call this%register_diagnostic_field(registry, '{{ diagnostic.name }}', &
                                              '{{ diagnostic.description }}', &
                                              '{{ diagnostic.units }}', {{ diag_props.data_type }}, &
-                                             '{{ config.name }}', {{ diag_props.fortran_dims }}, rc)
+                                             '{{ config.name }}', {{ diag_props.fortran_dims }}, rc=rc)
 {% endif %}
          if (rc /= CC_SUCCESS) return
 
@@ -1686,7 +1709,7 @@ contains
          ! Scheme-specific diagnostics for {{ scheme.name }}
 {% if scheme.scheme_diagnostics %}
 {% for diagnostic in scheme.scheme_diagnostics %}
-{% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name) %}
+{% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
          ! 2D diagnostic: levels x diagnostic_species
          if (nz > 0 .and. this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
             allocate(this%column_{{ diagnostic.name }}(nz, this%process_config%{{ config.name }}_config%n_diagnostic_species))
@@ -1893,35 +1916,46 @@ contains
          ! Scheme-specific diagnostics for {{ scheme.name }}
 {% if scheme.scheme_diagnostics %}
 {% for diagnostic in scheme.scheme_diagnostics %}
-{% if ('per_level' in diagnostic.name or 'level' in diagnostic.name) and ('per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
-         ! Update 2D level-species diagnostics (map to 4D global fields)
-         if (allocated(this%column_{{ diagnostic.name }})) then
-            call this%update_2d_diagnostic_column('{{ diagnostic.name }}', &
-                                                this%column_{{ diagnostic.name }}, &
-                                                i_col, j_col, container, rc)
-            if (rc /= CC_SUCCESS) return
+{% set has_level_pattern = ('per_level' in diagnostic.name or 'level' in diagnostic.name) %}
+{% set has_species_pattern = ('per_bin' in diagnostic.name or 'per_species' in diagnostic.name) %}
+{% if has_level_pattern and has_species_pattern %}
+{% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '').replace('_per_level', '') %}
+         ! Update individual 3D fields for each diagnostic species (level + species diagnostics)
+         if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
+            do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
+               write(field_name, '(A,A,A)') '{{ clean_name }}_', &
+                     trim(this%process_config%{{ config.name }}_config%diagnostic_species(i))
+               call this%update_1d_diagnostic_column(trim(field_name), &
+                                                    this%column_{{ diagnostic.name }}(:,i), &
+                                                    i_col, j_col, container, rc)
+               if (rc /= CC_SUCCESS) return
+            end do
          end if
-{% elif 'per_level' in diagnostic.name or 'level' in diagnostic.name or 'per_bin' in diagnostic.name or 'bin' in diagnostic.name or 'per_species' in diagnostic.name %}
+{% elif has_species_pattern and not has_level_pattern %}
 {% set clean_name = diagnostic.name.replace('_per_bin', '').replace('_per_species', '') %}
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%{{ config.name }}_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%{{ config.name }}_config%n_diagnostic_species
                write(field_name, '(A,A,A)') '{{ clean_name }}_', &
                      trim(this%process_config%{{ config.name }}_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                       this%column_{{ diagnostic.name }}(i), &
-                                                       i_col, j_col, container, rc)
+                                                        this%column_{{ diagnostic.name }}(i), &
+                                                        i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
+{% elif has_level_pattern and not has_species_pattern %}
+         ! 1D diagnostic field (level-only)
+         call this%update_1d_diagnostic_column('{{ diagnostic.name }}', &
+                                             this%column_{{ diagnostic.name }}, &
+                                             i_col, j_col, container, rc)
+         if (rc /= CC_SUCCESS) return
 {% else %}
-         ! Update scalar diagnostics (map to 2D global fields)
-         if (allocated(this%column_{{ diagnostic.name }})) then
-            call this%update_scalar_diagnostic_column('{{ diagnostic.name }}', &
-                                                this%column_{{ diagnostic.name }}, &
-                                                i_col, j_col, container, rc)
-            if (rc /= CC_SUCCESS) return
-         end if
+         ! Scalar diagnostic field
+         call this%update_scalar_diagnostic_column('{{ diagnostic.name }}', &
+                                                 this%column_{{ diagnostic.name }}, &
+                                                 i_col, j_col, container, rc)
+         if (rc /= CC_SUCCESS) return
 {% endif %}
 {% endfor %}
 {% endif %}

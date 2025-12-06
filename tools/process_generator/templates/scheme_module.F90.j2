@@ -100,7 +100,11 @@ contains
 {% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if ('per_level' in diag_name or 'level' in diag_name) and ('per_species' in diag_name or 'per_bin' in diag_name) %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers, num_species)
+{% elif 'per_level' in diag_name or 'level' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
 {% else %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
@@ -147,7 +151,11 @@ contains
 {% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if ('per_level' in diag_name or 'level' in diag_name) and ('per_species' in diag_name or 'per_bin' in diag_name) %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers, num_species)
+{% elif 'per_level' in diag_name or 'level' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
 {% else %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
@@ -278,7 +286,7 @@ contains
 {% elif diag_dims == '1d' or diag_dims == 'num_species' %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% elif diag_dims == 'num_layers' %}
-      real(fp), intent(inout), optional :: {{ diag_name }}(num_layers)
+      real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% else %}
       real(fp), intent(inout), optional :: {{ diag_name }}({{ diag_dims }})
 {% endif %}
@@ -289,7 +297,11 @@ contains
 {% set diag_name = diag['name'] if diag is mapping else diag %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if ('per_level' in diag_name or 'level' in diag_name) and ('per_species' in diag_name or 'per_bin' in diag_name) %}
+      real(fp), intent(inout), optional :: {{ diag_name }}(:,:)
+{% elif 'per_level' in diag_name or 'level' in diag_name %}
+      real(fp), intent(inout), optional :: {{ diag_name }}(:)
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% else %}
       real(fp), intent(inout), optional :: {{ diag_name }}
@@ -299,7 +311,7 @@ contains
 {% elif diag_dims == '1d' or diag_dims == 'num_species' %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% elif diag_dims == 'num_layers' %}
-      real(fp), intent(inout), optional :: {{ diag_name }}(num_layers)
+      real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% else %}
       real(fp), intent(inout), optional :: {{ diag_name }}({{ diag_dims }})
 {% endif %}
@@ -549,7 +561,9 @@ contains
 {% set diag_desc = diag.get('description', 'diagnostic') if diag is mapping else 'diagnostic' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species_per_level' in diag_name %}
+{% set has_level_pattern = ('per_level' in diag_name or 'level' in diag_name) %}
+{% set has_species_pattern = ('per_species' in diag_name or 'per_bin' in diag_name) %}
+{% if has_level_pattern and has_species_pattern %}
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
@@ -561,7 +575,7 @@ contains
                   end if
                end do
             end if
-{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% elif has_species_pattern and not has_level_pattern %}
             ! Per-species diagnostic: only update for diagnostic species
             if (present({{ diag_name }}) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
@@ -572,6 +586,12 @@ contains
                      exit
                   end if
                end do
+            end if
+{% elif has_level_pattern and not has_species_pattern %}
+            ! Per-level diagnostic: update for current level
+            if (present({{ diag_name }})) then
+               ! Add your custom {{ diag_desc | lower }} calculation
+               {{ diag_name }}(k) = {{ diag_name }}(k) + species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
             end if
 {% else %}
             if (present({{ diag_name }})) then
