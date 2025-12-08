@@ -25,10 +25,10 @@ module ProcessManager_Mod
 
    public :: ProcessManagerType
 
-   ! 1. Define a wrapper otherwise the polymorphic array allocation fails 
+   ! 1. Define a wrapper otherwise the polymorphic array allocation fails
    type :: ProcessContainerType
       ! The 'allocatable' keyword here is the magic sauce
-      class(ProcessInterface), allocatable :: item 
+      class(ProcessInterface), allocatable :: item
    end type ProcessContainerType
 
    type :: ProcessManagerType
@@ -624,12 +624,12 @@ contains
       ! Worst case: all new fields are unique, so allocate maximum possible size
       allocate(merged_fields(current_size + new_size))
       merged_size = 0
-      
+
       ! Start with current fields, but filter out TSTEP
       do i = 1, current_size
          if (trim(adjustl(current_fields(i))) /= 'TSTEP' .and. &
-             trim(adjustl(current_fields(i))) /= 'LON'   .and. &
-             trim(adjustl(current_fields(i))) /= 'LAT') then
+            trim(adjustl(current_fields(i))) /= 'LON'   .and. &
+            trim(adjustl(current_fields(i))) /= 'LAT') then
             merged_size = merged_size + 1
             merged_fields(merged_size) = current_fields(i)
          endif
@@ -641,8 +641,8 @@ contains
 
          ! Skip TSTEP field (case insensitive)
          if (trim(adjustl(new_fields(i))) == 'TSTEP' .or. &
-             trim(adjustl(new_fields(i))) == 'LON'   .or. &
-             trim(adjustl(new_fields(i))) == 'LAT') then
+            trim(adjustl(new_fields(i))) == 'LON'   .or. &
+            trim(adjustl(new_fields(i))) == 'LAT') then
             cycle
          endif
 

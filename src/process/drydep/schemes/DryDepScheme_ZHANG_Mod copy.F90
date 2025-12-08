@@ -778,7 +778,7 @@ contains
       ! Over oceans the RH in the viscous sublayer is set to 98%,
       ! following Lewis and Schwartz (2004)
       !I added condition when RHBL=1 to avoid DIAM = infinity issue in the New_DIAM_DEN subroutine later for SO4 (Wei Li)
-      IF (LUC == 14 .or. rae(RHBL, 1.0_fp)) THEN 
+      IF (LUC == 14 .or. rae(RHBL, 1.0_fp)) THEN
          RHBL = 0.98_fp
       ENDIF
 
@@ -940,12 +940,12 @@ contains
          R1 = 1.e+0_fp
       ELSE
          R1 = EXP( -1e+0_fp * SQRT( ST ) )
-         R1 = MAX( tiny(R1), R1 ) !avoid R1 = 0 when ST is large under very low TEMP and AA < 0 (Wei Li)  
+         R1 = MAX( tiny(R1), R1 ) !avoid R1 = 0 when ST is large under very low TEMP and AA < 0 (Wei Li)
       ENDIF
 
       !add error check here to make sure RS below is not a infinite value
       IF (rae(R1, 0.0_fp) .or. rae(USTAR, 0.0_fp)) THEN
-         !write(*,*) 'DEBUG INFO: SPC=', trim(SPC), LUC, USTAR, R1, ST, AA, VTS, CONST, DEN, DIAM, RHBL, RHB, AIRVS   
+         !write(*,*) 'DEBUG INFO: SPC=', trim(SPC), LUC, USTAR, R1, ST, AA, VTS, CONST, DEN, DIAM, RHBL, RHB, AIRVS
          errMsg = 'USTAR or R1 is zero. Check met field or diameter (in m) of aerosol is too big.'
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN

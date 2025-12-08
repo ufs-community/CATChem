@@ -29,7 +29,7 @@ process_behavior:
 #required_met_fields: [] #used for other purpose, such as unit conversion
 
 schemes:
-  wesely:
+  jacob:
     name: "jacob"
     class_name: "JACOB"
     description: "Jacob et al. [2000] wet deposition scheme"

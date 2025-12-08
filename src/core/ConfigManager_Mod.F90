@@ -3239,8 +3239,8 @@ contains
       integer, intent(in) :: local_priority
       integer, intent(out) :: rc
 
-      character(len=256) :: process_path, temp_string
-      logical :: temp_logical, success
+      character(len=256) :: process_path, temp_string, gas_scheme, aero_scheme
+      logical :: temp_logical, success, gas_success, aero_success
       integer :: temp_integer, local_rc
 
       rc = CC_SUCCESS
@@ -3297,8 +3297,24 @@ contains
       if (success) then
          process_config%scheme = trim(temp_string)
       else
-         write(*,'(A,A,A)') 'Warning: Scheme of process "', trim(process_name), '" is not defined!'
-         process_config%scheme = 'default'
+         ! Try to read separate gas_scheme and aero_scheme
+         gas_success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/gas_scheme', gas_scheme)
+         aero_success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/aero_scheme', aero_scheme)
+
+         if (gas_success .and. aero_success) then
+            ! Combine gas and aero schemes
+            process_config%scheme = trim(gas_scheme) // ' (gas) & ' // trim(aero_scheme) // ' (aero)'
+         elseif (gas_success) then
+            ! Only gas scheme found
+            process_config%scheme = trim(gas_scheme) // ' (gas)'
+         elseif (aero_success) then
+            ! Only aero scheme found
+            process_config%scheme = trim(aero_scheme) // ' (aero)'
+         else
+            ! No scheme configuration found
+            write(*,'(A,A,A)') 'Warning: Scheme of process "', trim(process_name), '" is not defined!'
+            process_config%scheme = 'default'
+         endif
       endif
 
    end subroutine populate_process_config

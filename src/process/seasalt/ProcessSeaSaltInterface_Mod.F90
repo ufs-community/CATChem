@@ -284,13 +284,13 @@ contains
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
-      
+
       ! Check if process is active
       if (.not. this%process_config%is_active) return
-      
+
       ! Delegate to the active scheme for column processing
       call this%run_active_scheme_column(column, rc)
-      
+
       ! Calculate and update diagnostics if enabled
       if (this%process_config%seasalt_config%diagnostics .and. rc == CC_SUCCESS) then
          call this%calculate_and_update_diagnostics(column, container, rc)

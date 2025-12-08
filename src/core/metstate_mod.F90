@@ -1483,7 +1483,7 @@ CONTAINS
        case ('Z0H', 'z0h')
          this%Z0H(:,:) = this%Z0(:,:)  !just copy Z0 to Z0H
 
-      case ('CLDFRC', 'cldfrc')
+       case ('CLDFRC', 'cldfrc')
          this%CLDFRC(:,:) = this%CLDF(:,:, 1)  !just copy surface CLDF to CLDFRC
 
        case ('IsLand', 'island', 'ISLAND')
