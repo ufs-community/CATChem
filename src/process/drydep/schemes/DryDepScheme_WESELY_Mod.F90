@@ -657,6 +657,7 @@ contains
       RI = IRI(II)
       IF (RI   .GE. 9999.e+0_fp) THEN
          RI   = 1.e+12_fp
+         RIX   = 1.e+12_fp
       ELSE
          GFACT = 100.0e+0_fp
          IF (TEMPC .GT. 0.e+0_fp .AND. TEMPC .LT. 40.e+0_fp) THEN

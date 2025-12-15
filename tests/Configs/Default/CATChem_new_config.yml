@@ -50,7 +50,7 @@ run_phases:
     processes:
       seasalt
       drydep
-      #wetdep
+      wetdep
   # test2:
   #   description: "Test phase 2"
   #   processes:
@@ -113,7 +113,7 @@ processes:
   seasalt:
     activate: true
     diagnostics: true
-    diag_species: [seas1, seas3, seas5]
+    diag_species: []
     scheme: 'geos12'
     gong97:
       scale_factor: 1.0
@@ -134,7 +134,7 @@ processes:
   drydep:
     activate: true
     diagnostics: true
-    diag_species: [seas1, seas3, seas5]
+    diag_species: [so2, aso4j, seas1, seas3, seas5]
     gas_scheme: 'wesely'
     aero_scheme: 'zhang'
     wesely:
@@ -147,7 +147,7 @@ processes:
   wetdep:
     activate: true
     diagnostics: true
-    diag_species: [seas1, seas3, seas5]
+    diag_species: [so2, aso4j, seas1, seas3, seas5]
     scheme: 'jacob'
     jacob:
       scale_factor: 1.0

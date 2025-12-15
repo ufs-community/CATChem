@@ -202,7 +202,8 @@ contains
       so4_id = -1
       h2o2_id = -1
       so2_id = max(find_species_ind(species_short_name, 'SO2'), find_species_ind(species_short_name, 'so2'))
-      so4_id = max(find_species_ind(species_short_name, 'SO4'), find_species_ind(species_short_name, 'so4'))
+      so4_id = max(find_species_ind(species_short_name, 'SO4'), find_species_ind(species_short_name, 'so4'), &
+                   find_species_ind(species_short_name, 'aso4j'), find_species_ind(species_short_name, 'ASO4J'))
       h2o2_id = max(find_species_ind(species_short_name, 'H2O2'), find_species_ind(species_short_name, 'h2o2'))
       if (so2_id < 1 ) then
          errMsg = 'SO2 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
@@ -319,7 +320,7 @@ contains
          ! -- middle layers
          ftop = f
          do k = ktop-1 , kbot+1, -1
-            km1 = k - 1
+            km1 = k + 1
 
             f_prime = zero
             ! -- if precipitation is forming in the grid cell

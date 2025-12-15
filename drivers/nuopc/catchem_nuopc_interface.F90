@@ -223,6 +223,10 @@ contains
       met_state => state_mgr%get_met_state_ptr()
       met_state%lat = lat
       met_state%lon = lon
+      ! Convert longitude from 0–360 to -180–180
+      where (met_state%lon > 180.0_fp)
+         met_state%lon = met_state%lon - 360.0_fp
+      end where
 
       !populate tracer mapping using process-local tracer_map
       call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
@@ -675,6 +679,8 @@ contains
             trim(field_map%catchem_var) == 'LWI') then
             !convert to integer
             call met_state%set_field(trim(field_map%catchem_var), int(fptr2d), error_mgr, rc)
+         else if (trim(field_map%catchem_var) == 'Z0') then ! roughness length in cm in NUOPC but m in CATChem
+            call met_state%set_field(trim(field_map%catchem_var), real(fptr2d, fp)*0.01_fp, error_mgr, rc)
          else
             call met_state%set_field(trim(field_map%catchem_var), real(fptr2d, fp), error_mgr, rc)
          end if
@@ -798,6 +804,7 @@ contains
 
          ! Allocate fptr4d_rev with the same dimensions as fptr4d
          allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
+         fptr4d_rev = 0.0_fp  ! Initialize to zero
 
          ! Reverse vertical layers
          do v = 1, nv
@@ -820,7 +827,7 @@ contains
                   call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                      msg="Met field is not set successfully for: QV", &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  deallocate(fptr3d_rev)  ! Clean up before returning
+                  deallocate(fptr4d_rev)  ! Clean up before returning
                   return  ! bail out
                end if
             end if
@@ -830,7 +837,8 @@ contains
             if (v_cc <= 0) cycle !if not a species in CATChem, go to next cycle
             !unit conversion
             if (chem_state%ChemSpecies(v_cc)%is_gas) then
-               unit_conv = 28.9644  / chem_state%ChemSpecies(v_cc)%mw_g * 1.0e-3  ! convert from ug/kg to ppm for gases
+               !unit_conv = 28.9644  / chem_state%ChemSpecies(v_cc)%mw_g * 1.0e-3  ! convert from ug/kg to ppm for gases
+               unit_conv = 1.00  !keep it in ppmV
             else
                unit_conv = 1.00  ! convert from ug/kg to ug/kg for aerosols
             end if
@@ -840,7 +848,7 @@ contains
                kk = k
                do j = 1, nj
                   do i = 1, ni
-                     fptr4d_rev(i,j,kk,v_cc) = fptr4d(i,j,k,v) * unit_conv
+                        fptr4d_rev(i,j,kk,v_cc) = max(fptr4d(i,j,k,v), 0.0_fp) * unit_conv
                   end do
                end do
             end do
@@ -996,7 +1004,8 @@ contains
             if (v_cc > 0) then
                cc_diag_data = chem_state%ChemSpecies(v_cc)%conc
                if (chem_state%ChemSpecies(v_cc)%is_gas) then
-                  unit_conv = 1.0e3 * chem_state%ChemSpecies(v_cc)%mw_g /28.9644  ! convert from ppm to ug/kg for gases
+                  !unit_conv = 1.0e3 * chem_state%ChemSpecies(v_cc)%mw_g /28.9644  ! convert from ppm to ug/kg for gases
+                  unit_conv = 1.00  !keep it in ppmV
                else
                   unit_conv = 1.00  ! convert from ug/kg to ug/kg for aerosols
                end if

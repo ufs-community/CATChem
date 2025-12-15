@@ -442,7 +442,7 @@ contains
             if (associated(this%chem_state%ChemSpecies(ispec)%conc)) then
                do k = 1, nlev
                   ! Get modified concentration from virtual column
-                  chem_value = virtual_col%get_chem_field(k, ispec)
+                  chem_value = virtual_col%get_chem_field(ispec, k)
                   ! Apply back to the 3D concentration array
                   this%chem_state%ChemSpecies(ispec)%conc(grid_i, grid_j, k) = chem_value
                end do

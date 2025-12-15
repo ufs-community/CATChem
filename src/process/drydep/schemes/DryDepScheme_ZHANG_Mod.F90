@@ -1042,8 +1042,8 @@ contains
 
          ! SIA (TODO: keep this for now and need to be consistent with real species names in the future)
          !IF ( K == idd_NIT .or. K == idd_NH4 .or. K == idd_SO4 ) THEN
-         IF ( SPC == 'NIT' .or. SPC == 'NH4' .or. SPC == 'SO4' .or. &
-            SPC == 'nit' .or. SPC == 'nh4' .or. SPC == 'so4' ) THEN
+         IF ( SPC == 'NIT' .or. SPC == 'NH4' .or. SPC == 'SO4' .or. SPC == 'ASO4J' .or. &
+            SPC == 'nit' .or. SPC == 'nh4' .or. SPC == 'so4' .or. SPC == 'aso4j' ) THEN
             ! Efflorescence transitions
             IF (RHBL .LT. 0.35) THEN
                ! DIAM is not changed

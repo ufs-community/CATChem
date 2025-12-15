@@ -24,8 +24,8 @@ so2:
   wd_LiqAndGas: true
   wd_convfacI2G: 6.17395e-1
   wd_rainouteff: [1.0, 0.0, 1.0]
-H2O2:
-  name: H2O2
+h2o2:
+  name: h2o2
   description: Hydrogen peroxide
   is_gas: true
   is_drydep: true
@@ -39,8 +39,8 @@ H2O2:
   wd_retfactor: 5.0e-2
   wd_LiqAndGas: true
   wd_convfacI2G: 4.36564e-1
-so4:
-  name: so4
+aso4j:       #This is to match CMAQ name to use the restart file. so4 is used in GEOS-Chem.
+  name: aso4j  
   description: sulfate
   is_aerosol: true
   is_drydep: true
