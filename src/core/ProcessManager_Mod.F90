@@ -256,7 +256,7 @@ contains
          call container%apply_virtual_column(virtual_col, rc)
          if (rc /= CC_SUCCESS) return
       enddo
-      ! Clean up virtual column 
+      ! Clean up virtual column
       if (virtual_col%is_valid)  call virtual_col%cleanup()
 
    end subroutine manager_run_column_processes
@@ -310,7 +310,7 @@ contains
             call container%apply_virtual_column(virtual_col, rc)
             if (rc /= CC_SUCCESS) return
          enddo
-         ! Clean up virtual column 
+         ! Clean up virtual column
          if (virtual_col%is_valid)  call virtual_col%cleanup()
 
       end select

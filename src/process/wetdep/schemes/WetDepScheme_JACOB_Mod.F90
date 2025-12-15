@@ -80,6 +80,7 @@ contains
    !! @param[in]  species_wd_convfacI2G    Species wd_convfacI2G property
    !! @param[in]  species_wd_rainouteff    Species wd_rainouteff property
    !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_mw_g    Species mw_g property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] wetdep_mass_per_species_per_level    Wet deposition mass loss per species per level [kg/m2] (num_species)
@@ -109,6 +110,7 @@ contains
       species_wd_convfacI2G, &
       species_wd_rainouteff, &
       species_radius, &
+      species_mw_g, &
       species_conc, &
       species_tendencies, &
       wetdep_mass_per_species_per_level, &
@@ -138,6 +140,7 @@ contains
       real(fp), intent(in) :: species_wd_convfacI2G(:)  ! Species wd_convfacI2G property
       real(fp), intent(in) :: species_wd_rainouteff(:,:)  ! Species wd_rainouteff property
       real(fp), intent(in) :: species_radius(:)  ! Species radius property
+      real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       real(fp), intent(inout), optional :: wetdep_mass_per_species_per_level(:,:)
@@ -203,14 +206,14 @@ contains
       h2o2_id = -1
       so2_id = max(find_species_ind(species_short_name, 'SO2'), find_species_ind(species_short_name, 'so2'))
       so4_id = max(find_species_ind(species_short_name, 'SO4'), find_species_ind(species_short_name, 'so4'), &
-                   find_species_ind(species_short_name, 'aso4j'), find_species_ind(species_short_name, 'ASO4J'))
+         find_species_ind(species_short_name, 'aso4j'), find_species_ind(species_short_name, 'ASO4J'))
       h2o2_id = max(find_species_ind(species_short_name, 'H2O2'), find_species_ind(species_short_name, 'h2o2'))
       if (so2_id < 1 ) then
          errMsg = 'SO2 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
          CALL CC_Warning( errMsg, RC, thisLoc )
          SO2 = zero
       else
-         SO2 = species_conc(:, so2_id) * 1.e-09_fp  !convert from ug/kg to kg/kg
+         SO2 = species_conc(:, so2_id) * species_mw_g(so2_id) * 1.0e6_fp / AIRMW !convert from ppmv to kg/kg
       endif
       if (so4_id < 1 ) then
          errMsg = 'SO4 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
@@ -224,7 +227,7 @@ contains
          CALL CC_Warning( errMsg, RC, thisLoc )
          H2O2 = zero
       else
-         H2O2 = species_conc(:, h2o2_id) * 1.e-09_fp  !convert from ug/kg to kg/kg
+         H2O2 = species_conc(:, h2o2_id) * species_mw_g(h2o2_id) * 1.0e6_fp / AIRMW !convert from ppmv to kg/kg
       endif
 
       ! calculate vertical met first
@@ -293,8 +296,12 @@ contains
       ! loop each species for wet deposition calculation
       do species_idx = 1, num_species
          !get input concentration for this species
-         ! -- initialize concentrations array, converting from kg/kg to kg/m2
-         conc(:) = species_conc(:, species_idx)  * 1.e-09_fp * dpog(:) !convert from ug/kg to kg/kg and then to kg/m2
+         ! -- initialize concentrations array, converting from ug/kg or ppmv to kg/m2
+         if (species_is_aerosol(species_idx)) then
+            conc(:) = species_conc(:, species_idx)  * 1.e-09_fp * dpog(:) !convert from ug/kg to kg/kg and then to kg/m2
+         else
+            conc(:) = species_conc(:, species_idx) * species_mw_g(species_idx) * 1.0e6_fp / AIRMW * dpog(:) !convert from ppmv to kg/kg and then to kg/m2
+         end if
          ! -- initialize loss array
          dconc(:) = zero
          efficiency(:) = species_wd_rainouteff(species_idx, :)
@@ -403,8 +410,12 @@ contains
          ! calculate vertical met first
          do k = kbot, ktop
 
-            ! -- convert back to kg/kg
-            species_tendencies(k, species_idx) = max(0.0_fp, conc(k) / dpog(k) )
+            ! -- convert back to ug/kg or ppmv
+            if (species_is_aerosol(species_idx)) then
+               species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp
+            else
+               species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * AIRMW / species_mw_g(species_idx) * 1.0e6_fp
+            end if
 
             ! Update diagnostic fields here based on your scheme's requirements
             ! Per-species-per-level diagnostic: 2D array (levels, species)

@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the wetdep process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-12-01T15:00:45.318763
+!! Generated on: 2025-12-15T16:30:33.888881
 
 program test_wetdep_integration
    use precision_mod, only: fp
@@ -219,7 +219,6 @@ contains
             end do
          end do
       end do
-
       ! Set up pressure edge arrays (nx, ny, nz+1)
       do j = 1, ny
          do i = 1, nx

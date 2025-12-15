@@ -3,7 +3,7 @@
 !!
 !! This file contains unit tests for the wetdep process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2025-12-01T15:00:45.228691
+!! Generated on: 2025-12-15T16:30:33.789112
 
 program test_wetdep_unit
    use testing_mod, only: assert, assert_close

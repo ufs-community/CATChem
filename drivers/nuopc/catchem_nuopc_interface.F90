@@ -848,7 +848,7 @@ contains
                kk = k
                do j = 1, nj
                   do i = 1, ni
-                        fptr4d_rev(i,j,kk,v_cc) = max(fptr4d(i,j,k,v), 0.0_fp) * unit_conv
+                     fptr4d_rev(i,j,kk,v_cc) = max(fptr4d(i,j,k,v), 0.0_fp) * unit_conv
                   end do
                end do
             end do

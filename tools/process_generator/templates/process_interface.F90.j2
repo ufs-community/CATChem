@@ -863,13 +863,13 @@ contains
                call column%set_chem_field(k, chem_species_indices(chem_idx), &
                                          species_tendencies(k, i))
 {% else %}
-               ! Additive tendency (default): new_conc = conc + dqa
-               ! where dqa = tendency * dt * g0 / DELP(k)
+               ! Additive tendency: convert emission flux to concentration change
+               ! Step 1: Convert to mass mixing ratio change (kg/kg)
                dqa = species_tendencies(k, i) * this%get_timestep() * g0 / met%DELP(k)
-               ! Apply unit conversion for emission processes
-               ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-               ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
-               ! Also apply emission mapping scale factor
+
+               ! Step 2: Convert to final concentration units with emission mapping scale factor
+               ! For gas species: convert kg/kg to ppmv
+               ! For aerosol species: convert kg/kg to ug/kg
                if (this%chem_state%ChemSpecies(chem_species_indices(chem_idx))%is_gas) then
                   converter = AIRMW / this%chem_state%ChemSpecies(chem_species_indices(chem_idx))%mw_g * 1.0e6_fp
                else
@@ -877,6 +877,7 @@ contains
                end if
                converter = converter * this%process_config%{{ config.name }}_config%emission_mapping%species_mappings(i)%scale(j)
                dqa = dqa * converter
+
                call column%set_chem_field(k, chem_species_indices(chem_idx), &
                                          species_conc(k, chem_idx) + dqa)
 
@@ -902,13 +903,13 @@ contains
             call column%set_chem_field(1, chem_species_indices(chem_idx), &
                                       species_tendencies(1, i))
 {% else %}
-            ! Additive tendency (default): new_conc = conc + dqa
-            ! where dqa = tendency * dt * g0 / DELP(1) for surface
+            ! Additive tendency: convert emission flux to concentration change
+            ! Step 1: Convert to mass mixing ratio change (kg/kg)
             dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-            ! Apply unit conversion for emission processes
-            ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-            ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
-            ! Also apply emission mapping scale factor
+
+            ! Step 2: Convert to final concentration units with emission mapping scale factor
+            ! For gas species: convert kg/kg to ppmv
+            ! For aerosol species: convert kg/kg to ug/kg
             if (this%chem_state%ChemSpecies(chem_species_indices(chem_idx))%is_gas) then
                converter = AIRMW / this%chem_state%ChemSpecies(chem_species_indices(chem_idx))%mw_g * 1.0e6_fp
             else
@@ -916,6 +917,7 @@ contains
             end if
             converter = converter * this%process_config%{{ config.name }}_config%emission_mapping%species_mappings(i)%scale(j)
             dqa = dqa * converter
+
             call column%set_chem_field(1, chem_species_indices(chem_idx), &
                                       species_conc(1, chem_idx) + dqa)
 
@@ -948,18 +950,20 @@ contains
             call column%set_chem_field(k, species_indices(i), &
                                       species_tendencies(k, i))
 {% else %}
-            ! Additive tendency (default): new_conc = conc + dqa
-            ! where dqa = tendency * dt * g0 / DELP(k)
+            ! Additive tendency: convert emission flux to concentration change
+            ! Step 1: Convert to mass mixing ratio change (kg/kg)
             dqa = species_tendencies(k, i) * this%get_timestep() * g0 / met%DELP(k)
-            ! Apply unit conversion for emission processes
-            ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-            ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
+
+            ! Step 2: Convert to final concentration units
+            ! For gas species: convert kg/kg to ppmv
+            ! For aerosol species: convert kg/kg to ug/kg
             if (this%chem_state%ChemSpecies(species_indices(i))%is_gas) then
                converter = AIRMW / this%chem_state%ChemSpecies(species_indices(i))%mw_g * 1.0e6_fp
             else
                converter = 1.0e9_fp
             end if
             dqa = dqa * converter
+
             call column%set_chem_field(k, species_indices(i), &
                                       species_conc(k, i) + dqa)
 
@@ -988,18 +992,20 @@ contains
          call column%set_chem_field(1, species_indices(i), &
                                    species_tendencies(1, i))
 {% else %}
-         ! Additive tendency (default): new_conc = conc + dqa
-         ! where dqa = tendency * dt * g0 / DELP(1) for surface
+         ! Additive tendency: convert emission flux to concentration change
+         ! Step 1: Convert to mass mixing ratio change (kg/kg)
          dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-         ! Apply unit conversion for emission processes
-         ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-         ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
+
+         ! Step 2: Convert to final concentration units
+         ! For gas species: convert kg/kg to ppmv
+         ! For aerosol species: convert kg/kg to ug/kg
          if (this%chem_state%ChemSpecies(species_indices(i))%is_gas) then
             converter = AIRMW / this%chem_state%ChemSpecies(species_indices(i))%mw_g * 1.0e6_fp
          else
             converter = 1.0e9_fp
          end if
          dqa = dqa * converter
+
          call column%set_chem_field(1, species_indices(i), &
                                    species_conc(1, i) + dqa)
 

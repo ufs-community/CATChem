@@ -79,9 +79,9 @@ contains
 
       !print *, '[DEBUG] Entering virtual_met_cleanup'
       if (associated(this%T)) then
-      !   print *, '[DEBUG] Cleaning up T, associated before nullify'
+         !   print *, '[DEBUG] Cleaning up T, associated before nullify'
       else
-      !   print *, '[DEBUG] T not associated'
+         !   print *, '[DEBUG] T not associated'
       endif
 
       ! Generated cleanup code from MetState field definitions

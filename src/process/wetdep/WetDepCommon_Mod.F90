@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! wetdep process and its schemes.
 !!
-!! Generated on: 2025-12-01T15:00:45.070798
+!! Generated on: 2025-12-15T16:30:33.593509
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -55,6 +55,7 @@ module WetDepCommon_Mod
       real(fp), allocatable :: species_henry_k0(:)      ! henry_k0 for each species
       real(fp), allocatable :: species_henry_pKa(:)      ! henry_pKa for each species
       logical, allocatable :: species_is_aerosol(:)      ! is_aerosol for each species
+      real(fp), allocatable :: species_mw_g(:)      ! mw_g for each species
       real(fp), allocatable :: species_radius(:)      ! radius for each species
       logical, allocatable :: species_wd_LiqAndGas(:)      ! wd_LiqAndGas for each species
       real(fp), allocatable :: species_wd_convfacI2G(:)      ! wd_convfacI2G for each species
@@ -198,6 +199,9 @@ contains
       end if
       if (allocated(this%species_is_aerosol)) then
          deallocate(this%species_is_aerosol)
+      end if
+      if (allocated(this%species_mw_g)) then
+         deallocate(this%species_mw_g)
       end if
       if (allocated(this%species_radius)) then
          deallocate(this%species_radius)
@@ -389,6 +393,7 @@ contains
       allocate(this%wetdep_config%species_henry_k0(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_henry_pKa(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_is_aerosol(this%wetdep_config%n_species))
+      allocate(this%wetdep_config%species_mw_g(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_radius(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_LiqAndGas(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_convfacI2G(this%wetdep_config%n_species))
@@ -420,6 +425,7 @@ contains
          this%wetdep_config%species_henry_k0(i) = chem_state%ChemSpecies(species_idx)%henry_k0
          this%wetdep_config%species_henry_pKa(i) = chem_state%ChemSpecies(species_idx)%henry_pKa
          this%wetdep_config%species_is_aerosol(i) = chem_state%ChemSpecies(species_idx)%is_aerosol
+         this%wetdep_config%species_mw_g(i) = chem_state%ChemSpecies(species_idx)%mw_g
          this%wetdep_config%species_radius(i) = chem_state%ChemSpecies(species_idx)%radius
          this%wetdep_config%species_wd_LiqAndGas(i) = chem_state%ChemSpecies(species_idx)%wd_LiqAndGas
          this%wetdep_config%species_wd_convfacI2G(i) = chem_state%ChemSpecies(species_idx)%wd_convfacI2G

@@ -61,6 +61,7 @@ schemes:
       - wd_convfacI2G
       - wd_rainouteff
       - radius
+      - mw_g
 
     parameters:
       scale_factor:
