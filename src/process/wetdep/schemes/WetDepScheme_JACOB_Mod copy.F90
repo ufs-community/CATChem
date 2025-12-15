@@ -213,7 +213,7 @@ contains
          CALL CC_Warning( errMsg, RC, thisLoc )
          SO2 = zero
       else
-         SO2 = species_conc(:, so2_id) * species_mw_g(so2_id) * 1.0e6_fp / AIRMW !convert from ppmv to kg/kg
+         SO2 = species_conc(:, so2_id) * species_mw_g(so2_id) * 1.0e-6_fp / AIRMW !convert from ppmv to kg/kg
       endif
       if (so4_id < 1 ) then
          errMsg = 'SO4 is not a chemical species in the model. Jacob wet deposition scheme will assign zero to it.'
@@ -227,7 +227,7 @@ contains
          CALL CC_Warning( errMsg, RC, thisLoc )
          H2O2 = zero
       else
-         H2O2 = species_conc(:, h2o2_id) * species_mw_g(h2o2_id) * 1.0e6_fp / AIRMW !convert from ppmv to kg/kg
+         H2O2 = species_conc(:, h2o2_id) * species_mw_g(h2o2_id) * 1.0e-6_fp / AIRMW !convert from ppmv to kg/kg
       endif
 
       ! calculate vertical met first
@@ -300,7 +300,7 @@ contains
          if (species_is_aerosol(species_idx)) then
             conc(:) = species_conc(:, species_idx)  * 1.e-09_fp * dpog(:) !convert from ug/kg to kg/kg and then to kg/m2
          else
-            conc(:) = species_conc(:, species_idx) * species_mw_g(species_idx) * 1.0e6_fp / AIRMW * dpog(:) !convert from ppmv to kg/kg and then to kg/m2
+            conc(:) = species_conc(:, species_idx) * species_mw_g(species_idx) * 1.0e-6_fp / AIRMW * dpog(:) !convert from ppmv to kg/kg and then to kg/m2
          end if
          ! -- initialize loss array
          dconc(:) = zero
