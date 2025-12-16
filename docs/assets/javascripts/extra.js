@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     metric.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(metric);
   });
+});
 
 // Smooth scrolling for anchor links
 document.addEventListener('click', function(e) {
