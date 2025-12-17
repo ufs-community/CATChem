@@ -42,6 +42,18 @@ diagnostics:
     enabled: true
     buffer_size: 1000
 #============================================================================
+# Optics files for Mie
+#============================================================================
+mie:
+  directory: "../../../../../tests/Configs/Default/optics/"
+  files:
+    SS: opticsBands_SS.v3_3.RRTMG.nc
+    DU: opticsBands_DU.v15_3.RRTMG.nc
+    BC: opticsBands_BC.v1_3.RRTMG.nc
+    OC: opticsBands_OC.v1_3.RRTMG.nc
+    NI: opticsBands_NI.v2_5.RRTMG.nc
+    SU: opticsBands_SU.v1_3.RRTMG.nc
+#============================================================================
 # RunPhase settings: define process running order
 #============================================================================
 run_phases:
@@ -152,3 +164,11 @@ processes:
     jacob:
       scale_factor: 1.0
       radius_threshold: 1.0
+  settling:
+    activate: true
+    diagnostics: true
+    diag_species: [aso4j, seas1, seas3, seas5]
+    scheme: 'gocart'
+    gocart:
+      scale_factor: 1.0
+      correction_maring: false

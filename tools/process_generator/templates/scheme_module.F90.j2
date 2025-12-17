@@ -26,6 +26,9 @@ module {{ config.class_name }}Scheme_{{ scheme.class_name }}_Mod
    use precision_mod, only: fp
    use {{ config.class_name }}Common_Mod, only: {{ config.class_name }}Scheme{{ scheme.class_name }}Config
    use Constants, only: PI  !load the constants needed for this scheme
+{% if scheme.required_species_properties and 'mie_map' in scheme.required_species_properties %}
+   use GOCART2G_MieMod, only: GOCART2G_Mie  ! For Mie data in {{ scheme.name }} scheme
+{% endif %}
 
    implicit none
    private
@@ -65,7 +68,12 @@ contains
 {% endfor %}
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
 {% for prop in scheme.required_species_properties %}
+{% if prop == 'mie_map' %}
+   !! @param[in]  mie_data           Complete Mie data array from ChemState
+   !! @param[in]  species_mie_map    Mapping from process species to MieData indices
+{% else %}
    !! @param[in]  species_{{ prop }}    Species {{ prop }} property
+{% endif %}
 {% endfor %}
 {% endif %}
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
@@ -77,7 +85,9 @@ contains
 {% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
 {% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
 {% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
+{% if 'per_species_per_level' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers, num_species)
+{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
 {% else %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
@@ -120,58 +130,9 @@ contains
 {% endif %}
 {% endfor %}
 {% endif %}
-{% set scheme_met_fields = scheme | scheme_only_met_fields %}
-{% if config.diagnostics %}
-{% for diag in config.diagnostics %}
-{% set diag_name = diag['name'] if diag is mapping else diag %}
-{% set diag_desc = diag.get('description', 'Diagnostic field') if diag is mapping else 'Diagnostic field' %}
-{% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
-{% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
-{% if diag_dims == 'auto' %}
-{% if 'per_species' in diag_name or 'per_bin' in diag_name %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
-{% else %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
-{% endif %}
-{% elif diag_dims == 'scalar' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
-{% elif diag_dims == '1d' or diag_dims == 'num_species' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
-{% elif diag_dims == 'num_layers' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
-{% else %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] ({{ diag_dims }})
-{% endif %}
-{% endfor %}
-{% endif %}
-{% if scheme.scheme_diagnostics %}
-{% for diag in scheme.scheme_diagnostics %}
-{% set diag_name = diag['name'] if diag is mapping else diag %}
-{% set diag_desc = diag.get('description', 'Diagnostic field') if diag is mapping else 'Diagnostic field' %}
-{% set diag_units = diag.get('units', 'units') if diag is mapping else 'units' %}
-{% set diag_dims = diag.get('dimensions', 'auto') if diag is mapping else 'auto' %}
-{% if diag_dims == 'auto' %}
-{% if ('per_level' in diag_name or 'level' in diag_name) and ('per_species' in diag_name or 'per_bin' in diag_name) %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers, num_species)
-{% elif 'per_level' in diag_name or 'level' in diag_name %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
-{% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
-{% else %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
-{% endif %}
-{% elif diag_dims == 'scalar' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}]
-{% elif diag_dims == '1d' or diag_dims == 'num_species' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
-{% elif diag_dims == 'num_layers' %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
-{% else %}
-   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] ({{ diag_dims }})
-{% endif %}
-{% endfor %}
-{% endif %}
+{% if config.diagnostics or scheme.scheme_diagnostics %}
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
+{% endif %}
    pure subroutine compute_{{ scheme.name }}( &
       num_layers, &
       num_species, &
@@ -190,7 +151,12 @@ contains
 {% endfor %}{% endif %}, &
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
 {% for prop in scheme.required_species_properties %}
+{% if prop == 'mie_map' %}
+      mie_data, &
+      species_mie_map, &
+{% else %}
       species_{{ prop }}, &
+{% endif %}
 {% endfor %}
 {% endif %}
       species_conc, &
@@ -257,7 +223,12 @@ contains
 {% endif %}
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
 {% for prop in scheme.required_species_properties %}
+{% if prop == 'mie_map' %}
+      type(GOCART2G_Mie), intent(in) :: mie_data(:)  ! Complete Mie data array from ChemState
+      integer, intent(in) :: species_mie_map(num_species)  ! Mapping from process species to MieData indices
+{% else %}
       {{ field_classifier.get_species_property_data_type(prop) }}, intent(in) :: species_{{ prop }}{{ field_classifier.get_species_property_dimensions(prop) }}  ! Species {{ prop }} property
+{% endif %}
 {% endfor %}
 {% endif %}
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}

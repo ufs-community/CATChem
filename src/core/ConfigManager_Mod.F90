@@ -107,6 +107,7 @@ module ConfigManager_Mod
    type :: FilePathConfig
       character(len=255) :: Emission_File = ''       !< Path to emission mapping file
       character(len=255) :: Species_File = ''        !< Path to species configuration file
+      character(len=255) :: Mie_Directory = ''        !< Path to Mie optics data directory
       character(len=255) :: Input_Directory = './'   !< Input data directory
       character(len=255) :: Output_Directory = './'  !< Output data directory
    end type FilePathConfig
@@ -319,6 +320,7 @@ module ConfigManager_Mod
       procedure :: get_nemission_species => config_manager_get_nemission_species
       procedure :: get_species_file => config_manager_get_species_file
       procedure :: get_emission_file => config_manager_get_emission_file
+      procedure :: get_mie_data => config_manager_get_mie_data
 
       ! State integration
       !procedure :: apply_to_container => config_manager_apply_to_container
@@ -1452,6 +1454,7 @@ contains
 
       ! Parse file paths
       call yaml_get(this%yaml_data, 'diagnostics/output/directory', this%config_data%file_paths%Output_Directory, rc, './')
+      call yaml_get(this%yaml_data, 'mie/directory', this%config_data%file_paths%Mie_Directory, rc, './')
       call yaml_get(this%yaml_data, 'simulation/species_filename', this%config_data%file_paths%Species_File, rc, '')
       call yaml_get(this%yaml_data, 'simulation/emission_filename', this%config_data%file_paths%Emission_File, rc, '')
 
@@ -1649,6 +1652,14 @@ contains
       write(*, '(A,I0)') '  Aerosol dry deposition species: ', chem_state%nSpeciesAeroDryDep
       write(*, '(A,I0)') '  Tracer species: ', chem_state%nSpeciesTracer
 
+      ! Initialize Mie data if configuration is available
+      call this%get_mie_data(chem_state, rc)
+      if (rc /= CC_SUCCESS) then
+         write(*, '(A)') 'WARNING: Mie data initialization failed or skipped'
+         ! Don't fail the overall species loading for Mie issues
+         rc = CC_SUCCESS
+      end if
+
       ! Return optional output parameters
       if (present(num_species)) then
          num_species = list_size
@@ -1715,6 +1726,13 @@ contains
       call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
       if (yaml_rc == 0) then
          species%description = trim(adjustl(temp_string))
+      endif
+
+      ! Load mie name (optional)
+      write(field_path, '(A,A)') trim(species_path), '/mie_name'
+      call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
+      if (yaml_rc == 0) then
+         species%mie_name = trim(adjustl(temp_string))
       endif
 
       ! Load molecular weight (optional, but important) - use safe conversion for numeric values
@@ -1954,6 +1972,83 @@ contains
          ', seasalt=', species%is_seasalt, ')'
 
    end subroutine load_species_properties
+
+   !> \brief Get Mie data and initialize ChemState Mie arrays
+   !!
+   !! This subroutine reads the mie/files section from the configuration,
+   !! loads the Mie data files, and initializes the ChemState Mie arrays.
+   !!
+   !! \param[in] this ConfigManager object
+   !! \param[inout] chem_state ChemState object to initialize with Mie data
+   !! \param[out] rc Return code
+   subroutine config_manager_get_mie_data(this, chem_state, rc)
+      use ChemState_Mod, only: ChemStateType
+      implicit none
+      class(ConfigManagerType), intent(in) :: this
+      type(ChemStateType), intent(inout) :: chem_state
+      integer, intent(out) :: rc
+
+      ! Temporary variables for file information
+      integer :: n_mie_files
+      character(len=30) :: mie_names(100)
+      character(len=255) :: mie_filenames(100)
+      character(len=512) :: mie_full_paths(100)
+      character(len=320) :: key_value_pairs(100)  ! key:value entries
+      integer :: i, colon_pos
+      character(len=255) :: mie_dir
+      character(len=320) :: trimmed_entry
+
+      rc = CC_SUCCESS
+      n_mie_files = 0
+
+      ! Get Mie directory
+      mie_dir = this%config_data%file_paths%Mie_Directory
+      if (len_trim(mie_dir) == 0) then
+         mie_dir = './'
+      end if
+
+      ! Discover key:value pairs in mie/files section using modified function
+      call discover_nested_yaml_section_items(this%config_file, 'mie/files', key_value_pairs, n_mie_files, rc, 'key_value_pairs')
+
+      if (rc /= CC_SUCCESS .or. n_mie_files == 0) then
+         write(*, '(A)') 'WARNING: No Mie files found in configuration. Skipping Mie data initialization.'
+         rc = CC_SUCCESS  ! Don't fail, just skip Mie initialization
+         return
+      end if
+
+      ! Parse each key:value pair inline (reusing existing colon parsing logic)
+      do i = 1, n_mie_files
+         trimmed_entry = trim(key_value_pairs(i))
+
+         ! Find the colon separator (reusing existing pattern)
+         colon_pos = index(trimmed_entry, ':')
+         if (colon_pos == 0) then
+            rc = CC_FAILURE
+            return
+         end if
+
+         ! Extract Mie name (before colon) and filename (after colon)
+         mie_names(i) = trim(trimmed_entry(1:colon_pos-1))
+         mie_filenames(i) = trim(adjustl(trimmed_entry(colon_pos+1:)))
+
+         ! Construct full path
+         if (trim(mie_dir) == './') then
+            mie_full_paths(i) = trim(mie_filenames(i))
+         else
+            mie_full_paths(i) = trim(mie_dir) // trim(mie_filenames(i))
+         end if
+      end do
+
+      ! Initialize Mie data in ChemState directly
+      call chem_state%init_mie_data(n_mie_files, mie_names(1:n_mie_files), mie_full_paths(1:n_mie_files), rc)
+
+      if (rc == CC_SUCCESS) then
+         write(*, '(A,I0,A)') 'INFO: Successfully initialized Mie data with ', n_mie_files, ' files'
+      else
+         write(*, '(A)') 'ERROR: Failed to initialize Mie data in ChemState'
+      end if
+
+   end subroutine config_manager_get_mie_data
 
    !> \brief Find category mapping for a specific category
    subroutine config_manager_find_category_mapping(this, category_name, category_mapping, rc)
@@ -2530,24 +2625,27 @@ contains
    !! Examples:
    !!   - "processes/extemis" -> finds anthro, point, fire, fengsha
    !!   - "processes/extemis/anthro" -> finds activate, scale_factor, source_file, etc.
-   !!   - "simulation/grid/levels" -> finds any items under that path
+   !!   - "mie/files" with mode 'key_value_pairs' -> finds "SS: opticsBands_SS.v3_3.RRTMG.nc"
    !!
    !! \param[in]    filename      YAML file to parse
    !! \param[in]    section_path  Nested path (e.g., "processes/extemis/anthro")
    !! \param[inout] item_names    Array to store discovered item names
    !! \param[out]   n_items       Number of items found
    !! \param[out]   rc           Return code
-   subroutine discover_nested_yaml_section_items(filename, section_path, item_names, n_items, rc)
+   !! \param[in]    search_mode   Optional: 'section_headers' (default) or 'key_value_pairs'
+   subroutine discover_nested_yaml_section_items(filename, section_path, item_names, n_items, rc, search_mode)
       implicit none
       character(len=*), intent(in) :: filename
       character(len=*), intent(in) :: section_path
-      character(len=64), intent(inout) :: item_names(:)
+      character(len=*), intent(inout) :: item_names(:)
       integer, intent(out) :: n_items
       integer, intent(out) :: rc
+      character(len=*), optional, intent(in) :: search_mode
 
       integer :: unit_num, io_stat, colon_pos, indent_level
       character(len=256) :: line, trimmed_line, field_name, content_after_colon
       integer :: line_number, target_indent
+      character(len=20) :: mode
 
       ! Path navigation variables
       character(len=64) :: path_components(10)  ! Support up to 10 levels deep
@@ -2559,6 +2657,13 @@ contains
       n_items = 0
       line_number = 0
       target_indent = -1
+
+      ! Set search mode (default to section headers for backward compatibility)
+      if (present(search_mode)) then
+         mode = trim(search_mode)
+      else
+         mode = 'section_headers'
+      end if
 
       ! Initialize path tracking
       current_depth = 0
@@ -2617,14 +2722,24 @@ contains
                if (indent_level > target_indent) then
                   ! Check if this is a direct child (first level below target)
                   if (indent_level == target_indent + 2) then
-                     ! Only add items that don't have a scalar value after the colon (i.e., are nodes)
                      content_after_colon = adjustl(trimmed_line(colon_pos+1:))
-                     if (len_trim(content_after_colon) == 0) then
-                        ! Nothing after colon - this is a node
-                        if (n_items < size(item_names)) then
-                           n_items = n_items + 1
-                           item_names(n_items) = trim(field_name)
-                           !write(*, '(A,A)') 'INFO: Discovered field in file: ', trim(field_name)
+
+                     ! Handle different search modes
+                     if (trim(mode) == 'key_value_pairs') then
+                        ! Look for entries WITH content after colon (key:value pairs)
+                        if (len_trim(content_after_colon) > 0) then
+                           if (n_items < size(item_names)) then
+                              n_items = n_items + 1
+                              item_names(n_items) = trim(trimmed_line)  ! Store full line
+                           endif
+                        endif
+                     else
+                        ! Default: look for entries WITHOUT content after colon (section headers)
+                        if (len_trim(content_after_colon) == 0) then
+                           if (n_items < size(item_names)) then
+                              n_items = n_items + 1
+                              item_names(n_items) = trim(field_name)  ! Store just field name
+                           endif
                         endif
                      endif
                   endif

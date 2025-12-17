@@ -1,0 +1,73 @@
+name: "settling"
+description: "Process for computing gravitational settling of aerosol species"
+class_name: "Settling"
+process_type: "deposition"
+author: "Wei Li"
+
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "sink" #is not doing anything now
+  tendency_mode: "replacement" #additive or multiplicative or replacement;
+  species_filter:
+    #type: "all_species"
+    type: "by_metadata"
+    metadata_flags:
+      - "is_aerosol"  # Filter for species with is_aerosol=true property
+    #type: "by_list"
+    #species_list:
+    #  - "SEASALT_FINE"      # Fine mode sea salt (< 1 μm)
+    #  - "SEASALT_COARSE"    # Coarse mode sea salt (1-10 μm)
+    #  - "SEASALT_SUPER"     # Super-coarse mode sea salt (> 10 μm)
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "independent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
+  memory_requirements: "low" #is not doing anything now
+
+#required_met_fields: [] #used for other purpose, such as unit conversion
+
+schemes:
+  gocart:
+    name: "gocart"
+    class_name: "GOCART"
+    description: "GOCART gravitational settling scheme"
+    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "GOCART2G process library Chem_SettlingSimple function"
+    author: "Wei Li"
+
+    required_met_fields: #needed for scheme calculations
+      - T
+      - TSTEP
+      - AIRDEN
+      - RH
+      - ZMID
+      - PMID
+      - DELP
+
+
+    required_species_properties:
+      - short_name
+      - mie_map
+
+    parameters:
+      scale_factor:
+        default: 1.0
+        description: "settling velocity factor"
+      correction_maring:
+        default: false
+        description: "correct the settling velocity following Maring et al, 2003"
+
+    diagnostics: []
+
+
+diagnostics:
+  - name: "settling_velocity_per_species_per_level"
+    description: "settling velocity per species per level"
+    units: "m/s"
+  - name: "settling_flux_per_species"
+    description: "settling flux per species across column"
+    units: "kg/m2/s"

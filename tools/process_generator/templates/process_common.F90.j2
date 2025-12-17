@@ -590,6 +590,8 @@ contains
 {% if prop != 'short_name' %}
 {% if prop == 'wd_rainouteff' %}
          this%{{ config.name }}_config%species_{{ prop }}(i, :) = chem_state%ChemSpecies(species_idx)%{{ prop }}(:)
+{% elif prop == 'mie_map' %}
+         this%{{ config.name }}_config%species_mie_map(i) = chem_state%SpcMieMap(species_idx)
 {% else %}
          this%{{ config.name }}_config%species_{{ prop }}(i) = chem_state%ChemSpecies(species_idx)%{{ prop }}
 {% endif %}
@@ -666,6 +668,8 @@ contains
 {% set species_type = 'Gas' %}
 {% elif flag_base == 'tracer' or flag_base == 'Tracer' %}
 {% set species_type = 'Tracer' %}
+{% elif flag_base == 'aerosol' or flag_base == 'Aerosol' %}
+{% set species_type = 'Aero' %}
 {% elif flag_base == 'aerodrydep' or flag_base == 'aeroDryDep' or flag_base == 'AeroDryDep' %}
 {% set species_type = 'AeroDryDep' %}
 {% elif flag_base == 'drydep' or flag_base == 'dryDep' or flag_base == 'DryDep' %}
@@ -768,6 +772,8 @@ contains
 {% set species_type = 'Gas' %}
 {% elif flag_base == 'tracer' or flag_base == 'Tracer' %}
 {% set species_type = 'Tracer' %}
+{% elif flag_base == 'aerosol' or flag_base == 'Aerosol' %}
+{% set species_type = 'Aero' %}
 {% elif flag_base == 'aerodrydep' or flag_base == 'aeroDryDep' or flag_base == 'AeroDryDep' %}
 {% set species_type = 'AeroDryDep' %}
 {% elif flag_base == 'drydep' or flag_base == 'dryDep' or flag_base == 'DryDep' %}
@@ -806,6 +812,8 @@ contains
 {% if prop != 'short_name' %}
 {% if prop == 'wd_rainouteff' %}
          this%{{ config.name }}_config%species_{{ prop }}(i, :) = chem_state%ChemSpecies(species_idx)%{{ prop }}(:)
+{% elif prop == 'mie_map' %}
+         this%{{ config.name }}_config%species_mie_map(i) = chem_state%SpcMieMap(species_idx)
 {% else %}
          this%{{ config.name }}_config%species_{{ prop }}(i) = chem_state%ChemSpecies(species_idx)%{{ prop }}
 {% endif %}

@@ -15,7 +15,7 @@ module ChemState_Mod
    USE Precision_Mod
    USE species_mod, only: SpeciesType
    USE GridGeometry_Mod, only: GridGeometryType
-   ! USE state_interface_mod   ! Removed for decoupling
+   USE GOCART2G_MieMod, only: GOCART2G_Mie
 
    IMPLICIT NONE
    PRIVATE
@@ -85,6 +85,9 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: DryDepIndex(:)   ! DryDep Species Index
       INTEGER, ALLOCATABLE :: WetDepIndex(:)   ! WetDep Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  ! Species Names
+      type(GOCART2G_Mie), ALLOCATABLE :: MieData(:) ! Mie data for aerosols
+      CHARACTER(len=50), ALLOCATABLE :: MieNames(:) ! Mie species names
+      INTEGER, ALLOCATABLE :: SpcMieMap(:)   ! Mapping from species name to Mie data
 
       !---------------------------------------------------------------------
       ! Reals
@@ -116,6 +119,7 @@ module ChemState_Mod
 
       procedure :: has_species => chemstate_has_species
       procedure :: get_dimensions => chemstate_get_dimensions
+      procedure :: init_mie_data => chemstate_init_mie_data
    end type ChemStateType
 
 CONTAINS
@@ -724,6 +728,9 @@ CONTAINS
       if (allocated(this%AeroDryDepIndex)) deallocate(this%AeroDryDepIndex)
       if (allocated(this%SpeciesNames)) deallocate(this%SpeciesNames)
       if (allocated(this%ChemSpecies)) deallocate(this%ChemSpecies)
+      if (allocated(this%MieData)) deallocate(this%MieData)
+      if (allocated(this%MieNames)) deallocate(this%MieNames)
+      if (allocated(this%SpcMieMap)) deallocate(this%SpcMieMap)
 
       ! Clean up grid geometry pointer (nullify only, don't deallocate as we don't own it)
       if (associated(this%Grid)) then
@@ -1168,5 +1175,99 @@ CONTAINS
 
       rc = CC_SUCCESS
    end subroutine chemstate_set_all_concentrations
+
+   !> \brief Initialize Mie data for aerosol optical properties
+   !!
+   !! This subroutine allocates and initializes Mie scattering data based on
+   !! the configuration file information and species Mie name mappings.
+   !!
+   !! \param[inout] this ChemStateType object
+   !! \param[in] n_mie_files Number of Mie files
+   !! \param[in] mie_names Array of Mie type names (e.g., 'SS', 'DU', 'BC')
+   !! \param[in] mie_full_paths Array of full file paths to Mie data files
+   !! \param[out] rc Return code
+   subroutine chemstate_init_mie_data(this, n_mie_files, mie_names, mie_full_paths, rc)
+      implicit none
+      class(ChemStateType), intent(inout) :: this
+      integer, intent(in) :: n_mie_files
+      character(len=30), intent(in) :: mie_names(:)
+      character(len=512), intent(in) :: mie_full_paths(:)
+      integer, intent(out) :: rc
+
+      integer :: i, j, local_rc
+      character(len=255) :: err_msg
+      character(len=255) :: this_loc
+
+      rc = CC_SUCCESS
+      this_loc = ' -> at chemstate_init_mie_data (in core/chemstate_mod.F90)'
+
+      ! Allocate MieData and MieNames arrays
+      if (allocated(this%MieData)) deallocate(this%MieData)
+      if (allocated(this%MieNames)) deallocate(this%MieNames)
+
+      allocate(this%MieData(n_mie_files), stat=rc)
+      if (rc /= CC_SUCCESS) then
+         err_msg = 'Error allocating MieData array'
+         call CC_Error(err_msg, rc, this_loc)
+         return
+      end if
+
+      allocate(this%MieNames(n_mie_files), stat=rc)
+      if (rc /= CC_SUCCESS) then
+         err_msg = 'Error allocating MieNames array'
+         call CC_Error(err_msg, rc, this_loc)
+         return
+      end if
+
+      ! Copy Mie names and load Mie data files
+      do i = 1, n_mie_files
+         this%MieNames(i) = mie_names(i)
+
+         ! Initialize Mie data from file
+         this%MieData(i) = GOCART2G_Mie(trim(mie_full_paths(i)), rc=local_rc)
+         if (local_rc /= 0) then
+            err_msg = 'Error initializing Mie data for ' // trim(mie_names(i)) // &
+               ' from file: ' // trim(mie_full_paths(i))
+            rc = local_rc
+            call CC_Error(err_msg, rc, this_loc)
+            return
+         end if
+      end do
+
+      ! Allocate and compute species-to-Mie mapping
+      if (allocated(this%SpcMieMap)) deallocate(this%SpcMieMap)
+      allocate(this%SpcMieMap(this%nSpecies), stat=rc)
+      if (rc /= CC_SUCCESS) then
+         err_msg = 'Error allocating SpcMieMap array'
+         call CC_Error(err_msg, rc, this_loc)
+         return
+      end if
+
+      ! Initialize mapping to zero (no Mie data)
+      this%SpcMieMap(:) = 0
+
+      ! Map species to Mie data based on species mie_name field
+      do i = 1, this%nSpecies
+         if (len_trim(this%ChemSpecies(i)%mie_name) > 0) then
+            ! Find matching Mie data
+            do j = 1, n_mie_files
+               if (trim(this%ChemSpecies(i)%mie_name) == trim(this%MieNames(j))) then
+                  this%SpcMieMap(i) = j
+                  exit
+               end if
+            end do
+
+            ! Warn if no matching Mie data found
+            if (this%SpcMieMap(i) == 0) then
+               err_msg = 'Warning: No Mie data found for species ' // &
+                  trim(this%ChemSpecies(i)%short_name) // ' with mie_name: ' // &
+                  trim(this%ChemSpecies(i)%mie_name)
+               call CC_Warning(err_msg, rc, this_loc)
+            end if
+         end if
+      end do
+
+      rc = CC_SUCCESS
+   end subroutine chemstate_init_mie_data
 
 end module ChemState_Mod

@@ -488,8 +488,12 @@ contains
 {% if scheme.required_species_properties %}
       ! Species properties
 {% for prop in scheme.required_species_properties %}
+{% if prop == 'mie_map' %}
+      integer, allocatable :: species_mie_map(:)  ! Mapping from process species to MieData indices
+{% else %}
 {% if prop != 'short_name' %}
       {{ field_classifier.get_species_property_data_type(prop) }}, allocatable :: species_{{ prop }}{{ field_classifier.get_species_property_dimensions(prop) }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -621,7 +625,9 @@ contains
 {% endif %}
 {% if scheme.required_species_properties %}
 {% for prop in scheme.required_species_properties %}
-{% if prop != 'short_name' %}
+{% if prop == 'mie_map' %}
+      allocate(species_mie_map(n_species))
+{% elif prop != 'short_name' %}
 {% if prop == 'wd_rainouteff' %}
       allocate(species_{{ prop }}(n_species, 3))
 {% else %}
@@ -710,7 +716,10 @@ contains
 {% if scheme.required_species_properties %}
       ! Get species properties from configuration (pre-loaded during initialization)
 {% for prop in scheme.required_species_properties %}
-{% if prop != 'short_name' %}
+{% if prop == 'mie_map' %}
+      ! Extract filtered Mie mapping for process species
+      species_mie_map(1:n_species) = this%process_config%{{ config.name }}_config%species_mie_map(1:n_species)
+{% elif prop != 'short_name' %}
       ! Use species properties from process configuration
 {% if prop == 'wd_rainouteff' %}
       species_{{ prop }}(1:n_species, :) = this%process_config%{{ config.name }}_config%species_{{ prop }}(1:n_species, :)
@@ -768,7 +777,10 @@ contains
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
             , &
 {% for prop in scheme.required_species_properties %}
-{% if prop == 'short_name' %}
+{% if prop == 'mie_map' %}
+            this%chem_state%MieData, &
+            species_mie_map, &
+{% elif prop == 'short_name' %}
             this%process_config%{{ config.name }}_config%species_names, &
 {% else %}
             species_{{ prop }}, &
@@ -829,7 +841,10 @@ contains
 {% if scheme.required_species_properties and scheme.required_species_properties|length > 0 %}
             , &
 {% for prop in scheme.required_species_properties %}
-{% if prop == 'short_name' %}
+{% if prop == 'mie_map' %}
+            this%chem_state%MieData, &
+            species_mie_map, &
+{% elif prop == 'short_name' %}
             this%process_config%{{ config.name }}_config%species_names, &
 {% else %}
             species_{{ prop }}, &

@@ -56,6 +56,7 @@ aso4j:       #This is to match CMAQ name to use the restart file. so4 is used in
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SU
 dms:
   name: dms
   description: Dimethyl sulfide
@@ -81,6 +82,7 @@ bc1:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: BC
 bc2:
   name: bc2
   description: BC2
@@ -96,6 +98,7 @@ bc2:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: BC
 oc1:
   name: oc1
   description: OC1
@@ -111,6 +114,7 @@ oc1:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: OC
 oc2:
   name: oc2
   description: OC2
@@ -126,6 +130,7 @@ oc2:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: OC
 dust1:
   name: dust1
   long_name: dust1
@@ -142,6 +147,7 @@ dust1:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 1.0, 0.0]
+  mie_name: DU
 dust2:
   name: dust2
   long_name: dust2
@@ -158,6 +164,7 @@ dust2:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 1.0, 0.0]
+  mie_name: DU
 dust3:
   name: dust3
   long_name: dust3
@@ -174,6 +181,7 @@ dust3:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 1.0, 0.0]
+  mie_name: DU
 dust4:
   name: dust4
   long_name: dust4
@@ -190,6 +198,7 @@ dust4:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 1.0, 0.0]
+  mie_name: DU
 dust5:
   name: dust5
   long_name: dust5
@@ -206,6 +215,7 @@ dust5:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 1.0, 0.0]
+  mie_name: DU
 seas1:
   name: seas1
   long_name: seas1
@@ -222,6 +232,7 @@ seas1:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SS
 seas2:
   name: seas2
   long_name: seas2
@@ -238,6 +249,7 @@ seas2:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SS
 seas3:
   name: seas3
   long_name: seas3
@@ -254,6 +266,7 @@ seas3:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SS
 seas4:
   name: seas4
   long_name: seas4
@@ -270,6 +283,7 @@ seas4:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SS
 seas5:
   name: seas5
   long_name: seas5
@@ -286,3 +300,4 @@ seas5:
   is_drydep: true
   is_wetdep: true
   wd_rainouteff: [1.0, 0.0, 1.0]
+  mie_name: SS
