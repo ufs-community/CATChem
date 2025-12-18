@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! settling process and its schemes.
 !!
-!! Generated on: 2025-12-17T15:27:52.129601
+!! Generated on: 2025-12-18T14:12:32.947343
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -13,7 +13,7 @@ module SettlingCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -51,7 +51,9 @@ module SettlingCommon_Mod
 
 
       ! Species properties
+      real(fp), allocatable :: species_density(:)      ! density for each species
       real(fp), allocatable :: species_mie_map(:)      ! mie_map for each species
+      real(fp), allocatable :: species_radius(:)      ! radius for each species
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -77,6 +79,8 @@ module SettlingCommon_Mod
 
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! settling velocity factor
+      logical :: simple_scheme = .false.  ! read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      integer :: swelling_method = 1  ! method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985
       logical :: correction_maring = .false.  ! correct the settling velocity following Maring et al, 2003
 
       ! Required meteorological fields
@@ -142,7 +146,7 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'gocart' .and. &
-          .true.) then
+         .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -164,7 +168,7 @@ contains
 
    end subroutine print_settling_config_summary
 
-      !> Finalize settling configuration
+   !> Finalize settling configuration
    subroutine finalize_settling_config(this)
       class(SettlingConfig), intent(inout) :: this
 
@@ -179,8 +183,14 @@ contains
       end if
 
       ! Deallocate species properties arrays
+      if (allocated(this%species_density)) then
+         deallocate(this%species_density)
+      end if
       if (allocated(this%species_mie_map)) then
          deallocate(this%species_mie_map)
+      end if
+      if (allocated(this%species_radius)) then
+         deallocate(this%species_radius)
       end if
 
 
@@ -263,7 +273,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/settling/diag_species", this%settling_config%diagnostic_species, &
-                                    rc, default_values=["All"])
+         rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%settling_config%diagnostic_species(1))
@@ -286,9 +296,9 @@ contains
       ! Load scheme-specific configuration from master YAML
       scheme_name = trim(this%settling_config%scheme)
       select case (scheme_name)
-      case ('gocart')
+       case ('gocart')
          call this%load_gocart_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown settling scheme: " // trim(scheme_name), rc)
          return
@@ -353,7 +363,9 @@ contains
       allocate(this%settling_config%species_indices(this%settling_config%n_species))
 
       ! Allocate species properties arrays
+      allocate(this%settling_config%species_density(this%settling_config%n_species))
       allocate(this%settling_config%species_mie_map(this%settling_config%n_species))
+      allocate(this%settling_config%species_radius(this%settling_config%n_species))
 
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_aerosol -> AeroIndex
@@ -363,7 +375,7 @@ contains
       ! Get species names using the indices
       do i = 1, this%settling_config%n_species
          if (this%settling_config%species_indices(i) > 0 .and. &
-             this%settling_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
+            this%settling_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%settling_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%settling_config%species_indices(i)))
          else
@@ -376,7 +388,13 @@ contains
       ! Load species properties from ChemState
       do i = 1, this%settling_config%n_species
          species_idx = this%settling_config%species_indices(i)
-         this%settling_config%species_mie_map(i) = chem_state%SpcMieMap(species_idx)
+         this%settling_config%species_density(i) = chem_state%ChemSpecies(species_idx)%density
+         if (allocated(chem_state%SpcMieMap)) then
+            this%settling_config%species_mie_map(i) = chem_state%SpcMieMap(species_idx)
+         else
+            this%settling_config%species_mie_map(i) = -1  ! Default or error value
+         end if
+         this%settling_config%species_radius(i) = chem_state%ChemSpecies(species_idx)%radius
       end do
 
    end subroutine load_species_from_chem_state
@@ -392,10 +410,16 @@ contains
 
       ! Load scheme parameters directly from processes/settling/gocart/ in master YAML
       call config_manager%get_real("processes/settling/gocart/scale_factor", &
-           this%gocart_config%scale_factor, rc, 1.0_fp)
+         this%gocart_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%gocart_config%scale_factor = 1.0_fp
+      call config_manager%get_logical("processes/settling/gocart/simple_scheme", &
+         this%gocart_config%simple_scheme, rc, .false.)
+      if (rc /= CC_SUCCESS) this%gocart_config%simple_scheme = .false.
+      call config_manager%get_integer("processes/settling/gocart/swelling_method", &
+         this%gocart_config%swelling_method, rc, 1)
+      if (rc /= CC_SUCCESS) this%gocart_config%swelling_method = 1
       call config_manager%get_logical("processes/settling/gocart/correction_maring", &
-           this%gocart_config%correction_maring, rc, .false.)
+         this%gocart_config%correction_maring, rc, .false.)
       if (rc /= CC_SUCCESS) this%gocart_config%correction_maring = .false.
 
 
@@ -413,7 +437,7 @@ contains
 
       ! Validate scheme-specific config
       select case (trim(this%settling_config%scheme))
-      case ('gocart')
+       case ('gocart')
          call this%gocart_config%validate(error_handler)
       end select
 
@@ -434,9 +458,9 @@ contains
       class(*), allocatable :: scheme_config
 
       select case (trim(this%settling_config%scheme))
-      case ('gocart')
+       case ('gocart')
          allocate(scheme_config, source=this%gocart_config)
-      case default
+       case default
          ! Return null
       end select
 
@@ -458,7 +482,7 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%settling_config%n_diagnostic_species == 1 .and. &
-          trim(this%settling_config%diagnostic_species(1)) == "All") then
+         trim(this%settling_config%diagnostic_species(1)) == "All") then
 
          ! Deallocate and reallocate for all species
          if (allocated(this%settling_config%diagnostic_species_id)) deallocate(this%settling_config%diagnostic_species_id)
@@ -494,8 +518,8 @@ contains
 
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-                  trim(this%settling_config%diagnostic_species(i)), &
-                  "' not found in process species list"
+               trim(this%settling_config%diagnostic_species(i)), &
+               "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             return
          end if

@@ -86,7 +86,7 @@ contains
       settling_velocity_per_species_per_level, &
       settling_flux_per_species, &
       diagnostic_species_id &
-      )
+   )
       ! Uses
       USE GOCART2G_Process, only: Chem_SettlingSimple, Chem_Settling
       ! Arguments
@@ -134,12 +134,12 @@ contains
       ThisLoc = ' -> at compute_gocart (in process/settling/schemes/SettlingScheme_GOCART_Mod.F90)'
       ! Initialize
       RC = CC_SUCCESS
-      klid = 1 !since the layer is reversed, we give 1 here, which is the top layer
+      klid = 1 !since the layer is reversed, we give 1 here, which is the top layer 
       qa = 0.0_fp
       allocate(SD(1, 1, num_layers))
       allocate(fluxout_temp(1,1))
       SD = 0.0_fp
-      fluxout_temp = 0.0_fp
+      fluxout_temp = 0.0_fp      
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
@@ -167,7 +167,7 @@ contains
          call CC_Error(trim(ErrMsg), RC, thisLoc)
          return
       end if
-
+      
       ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
       ! Apply to each species
       do species_idx = 1, num_species
@@ -175,17 +175,17 @@ contains
          if (len_trim(species_short_name(species_idx)) >= 1) then
             p = len_trim(species_short_name(species_idx))
             select case (species_short_name(species_idx)(p:p))
-             case ('1')
+            case ('1')
                bin = 1
-             case ('2')
+            case ('2')
                bin = 2
-             case ('3')
+            case ('3')
                bin = 3
-             case ('4')
+            case ('4')
                bin = 4
-             case ('5')
+            case ('5')
                bin = 5
-             case default
+            case default
                bin = 1  ! default bin if no match
             end select
          else
@@ -198,7 +198,7 @@ contains
 
          !reverse vertical layer and convert from ug/kg to kg/kg
          qa(1,1,:) = species_conc(num_layers:1:-1, species_idx) * 1.0e-9_fp  ! from ug/kg to kg/kg
-
+         
          if (params%simple_scheme) then !call gocart simple settling function with mie data provided
             !check mie data is available
             if (species_mie_map(species_idx) <= 0) then
@@ -226,7 +226,7 @@ contains
                return
             end if
          end if
-
+         
          ! convert concentrations back to original order and units
          species_tendencies(:, species_idx) = max(0.0_fp, qa(1, 1, num_layers:1:-1) * 1.0e9_fp)   ! from kg/kg to ug/kg
 
@@ -239,7 +239,7 @@ contains
             do diag_idx = 1, size(diagnostic_species_id)
                if (diagnostic_species_id(diag_idx) == species_idx) then
                   ! Add your custom settling velocity per species per level calculation
-                  settling_velocity_per_species_per_level(:, diag_idx) = SD(1,1,num_layers:1:-1)  !reverse layers
+                  settling_velocity_per_species_per_level(:, diag_idx) = SD(1,1,num_layers:1:-1)  !reverse layers  
                   exit
                end if
             end do
@@ -280,7 +280,7 @@ contains
    !! \brief findKlid - Finds corresponding vertical index for defined pressure lid
    !!
    !! \param [INOUT] klid
-   !! \param [IN] plid
+   !! \param [IN] plid  
    !! \param [IN] ple
    !! \param [OUT] rc
    !!!>
@@ -293,7 +293,7 @@ contains
       real(fp), dimension(:,:,:), intent(in) :: ple  ! air pressure [Pa]
       ! !OUTPUT PARAMETERS:
       integer, intent(out) :: rc ! return code; 0 - all is good; 1 - bad
-      ! !Reference to gocart: https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/ESMF/Shared/Chem_AeroGeneric.F90#L316
+      ! !Reference to gocart: https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/ESMF/Shared/Chem_AeroGeneric.F90#L316 
       ! !Local Variables
       integer :: k, j, i
       real(fp) :: plid_, diff, refDiff
@@ -328,7 +328,7 @@ contains
       do j = 1, ubound(ple,2)
          do i = 1, ubound(ple,1)
             !if (pres(klid) /= ple(i,j,klid)) then !This gives a warning for floating point comparison. Use rae instead
-            if (.not. rae(pres(klid), ple(i,j,klid))) then
+            if (.not. rae(pres(klid), ple(i,j,klid))) then 
                rc = 1
                return
             end if
@@ -371,7 +371,7 @@ contains
       IMPLICIT NONE
 
       ! INPUTS
-      INTEGER, intent(in)                     :: km     ! number of vertical levels
+      INTEGER, intent(in)                     :: km     ! number of vertical levels  
       REAL(fp),  intent(in), DIMENSION(:), target :: tmpu   ! Temperature [K]
       REAL(fp),  intent(in), DIMENSION(:), target :: rhoa   ! Air density [kg/m^3]
       REAL(fp),  intent(in), DIMENSION(:), target :: hghte  ! Geopotential Height [m]
@@ -394,7 +394,7 @@ contains
       allocate(GOCART_RH(1,1, km))
       allocate(GOCART_PRESS(1,1, km))
       allocate(GOCART_DELP(1,1, km))
-
+      
       !Note: GOCART scheme expects vertical levels in reverse order (top to bottom)
       GOCART_TMPU(1,1,:) = tmpu(size(tmpu):1:-1)       ! temperature [K]
       GOCART_RHOA(1,1,:) = rhoa(size(rhoa):1:-1)       ! air density [kg/m^3]

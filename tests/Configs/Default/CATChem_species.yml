@@ -67,6 +67,7 @@ dms:
   is_drydep: false
   henry_k0: 0.48
   henry_cr: 3100.0
+  mie_name: SU
 bc1:
   name: bc1
   description: BC1

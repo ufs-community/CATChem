@@ -45,14 +45,20 @@ diagnostics:
 # Optics files for Mie
 #============================================================================
 mie:
-  directory: "../../../../../tests/Configs/Default/optics/"
+  directory: "../../../../../../optics/"
   files:
-    SS: opticsBands_SS.v3_3.RRTMG.nc
-    DU: opticsBands_DU.v15_3.RRTMG.nc
-    BC: opticsBands_BC.v1_3.RRTMG.nc
-    OC: opticsBands_OC.v1_3.RRTMG.nc
-    NI: opticsBands_NI.v2_5.RRTMG.nc
-    SU: opticsBands_SU.v1_3.RRTMG.nc
+    # SS: opticsBands_SS.v3_3.RRTMG.nc
+    # DU: opticsBands_DU.v15_3.RRTMG.nc
+    # BC: opticsBands_BC.v1_3.RRTMG.nc
+    # OC: opticsBands_OC.v1_3.RRTMG.nc
+    # NI: opticsBands_NI.v2_5.RRTMG.nc
+    # SU: opticsBands_SU.v1_3.RRTMG.nc
+    SS: optics_SS.v3_5.nc
+    DU: optics_DU.v15_5.nc
+    BC: optics_BC.v1_5.nc
+    OC: optics_OC.v1_5.nc
+    NI: optics_NI.v2_5.nc
+    SU: optics_SU.v1_5.nc
 #============================================================================
 # RunPhase settings: define process running order
 #============================================================================
@@ -170,5 +176,7 @@ processes:
     diag_species: [aso4j, seas1, seas3, seas5]
     scheme: 'gocart'
     gocart:
-      scale_factor: 1.0
-      correction_maring: false
+      scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
+      simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
+      correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes

@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the drydep process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-11-25T22:20:02.527024
+!! Generated on: 2025-12-18T14:21:30.137417
 
 program test_drydep_integration
    use precision_mod, only: fp
@@ -254,13 +254,21 @@ contains
                altitude_km = real(k-1, fp) * 1.0_fp
                met_state%T(i,j,k) = 288.15_fp - 6.5_fp * altitude_km  ! Temperature lapse rate [K]
                met_state%RH(i,j,k) = 0.90_fp * exp(-altitude_km / 5.0_fp)       ! Relative humidity [fraction]
-               met_state%AIRDEN(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Air density [kg/m3]
+               met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
+               met_state%AIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp    ! wet Air density [kg/m3]
                met_state%BXHEIGHT(i,j,k) = 1000.0_fp                            ! Grid box height [m]
-               met_state%Z(i,j,k) = altitude_km * 1000.0_fp * 9.81_fp           ! Geopotential height [m2/s2]
             end do
          end do
       end do
-
+      ! Set up pressure edge arrays (nx, ny, nz+1)
+      do j = 1, ny
+         do i = 1, nx
+            do k = 1, nz+1
+               edge_altitude_km = real(k-1, fp) * 1.0_fp - 0.5_fp
+               met_state%Z(i,j,k) = 1000.0_fp * (edge_altitude_km + 0.65_fp)   ! Geopotential height at edges [m]
+            end do
+         end do
+      end do
 
       ! Set up some arrays with special dimensions (nx, ny, ncat)
       do j = 1, ny

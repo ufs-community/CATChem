@@ -1,5 +1,5 @@
 # Example configuration for settling process
-# Generated on: 2025-12-17T15:27:52.371794
+# Generated on: 2025-12-18T14:12:33.350626
 # Author: Wei Li
 
 process:
@@ -26,6 +26,8 @@ schemes:
     # Scheme-specific parameters
     parameters:
       scale_factor: 1.0  # settling velocity factor
+      simple_scheme: False  # read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      swelling_method: 1  # method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985
       correction_maring: False  # correct the settling velocity following Maring et al, 2003
 
     # Required meteorological fields for this scheme
@@ -34,7 +36,7 @@ schemes:
       - "TSTEP"
       - "AIRDEN"
       - "RH"
-      - "ZMID"
+      - "Z"
       - "PMID"
       - "DELP"
 

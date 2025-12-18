@@ -1195,6 +1195,7 @@ CONTAINS
       integer, intent(out) :: rc
 
       integer :: i, j, local_rc
+      !integer :: channels(4) = [470, 550, 670, 870]  ! Example channels: 470, 550, 670, 870 nm
       character(len=255) :: err_msg
       character(len=255) :: this_loc
 
@@ -1223,7 +1224,8 @@ CONTAINS
       do i = 1, n_mie_files
          this%MieNames(i) = mie_names(i)
 
-         ! Initialize Mie data from file
+         ! Initialize Mie data from file [470 550 670 870] nm for diagnostics
+         !this%MieData(i) = GOCART2G_Mie(trim(mie_full_paths(i)), channels*1.e-9, nmom=0, rc=local_rc) !This is for diagMie
          this%MieData(i) = GOCART2G_Mie(trim(mie_full_paths(i)), rc=local_rc)
          if (local_rc /= 0) then
             err_msg = 'Error initializing Mie data for ' // trim(mie_names(i)) // &

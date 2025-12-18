@@ -3,7 +3,7 @@
 !!
 !! This file contains unit tests for the settling process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2025-12-17T15:27:52.237433
+!! Generated on: 2025-12-18T14:12:33.147744
 
 program test_settling_unit
    use testing_mod, only: assert, assert_close

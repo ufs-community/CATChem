@@ -44,7 +44,7 @@ schemes:
       - TSTEP
       - AIRDEN
       - RH
-      - ZMID
+      - Z
       - PMID
       - DELP
 
@@ -52,11 +52,19 @@ schemes:
     required_species_properties:
       - short_name
       - mie_map
+      - radius
+      - density
 
     parameters:
       scale_factor:
         default: 1.0
         description: "settling velocity factor"
+      simple_scheme:
+        default: false
+        description: "read in mie data for wet particles if true; otherwise calculate particles wet swelling internally"
+      swelling_method:
+        default: 1
+        description: "method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985"
       correction_maring:
         default: false
         description: "correct the settling velocity following Maring et al, 2003"

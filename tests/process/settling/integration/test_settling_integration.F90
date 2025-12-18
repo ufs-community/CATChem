@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the settling process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-12-17T15:27:52.318981
+!! Generated on: 2025-12-18T14:12:33.239223
 
 program test_settling_integration
    use precision_mod, only: fp
@@ -22,8 +22,8 @@ program test_settling_integration
    use SettlingProcessCreator_Mod, only: register_settling_process
    use SettlingCommon_Mod, only: SettlingProcessConfig
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
-                                      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D, &
-                                      DIAG_INTEGER_SCALAR, DIAG_INTEGER_1D, DIAG_INTEGER_2D, DIAG_INTEGER_3D
+      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D, &
+      DIAG_INTEGER_SCALAR, DIAG_INTEGER_1D, DIAG_INTEGER_2D, DIAG_INTEGER_3D
 
    implicit none
 
@@ -216,8 +216,17 @@ contains
                met_state%RH(i,j,k) = 0.90_fp * exp(-altitude_km / 5.0_fp)       ! Relative humidity [fraction]
                met_state%PMID(i,j,k) = 101300.25_fp * exp(-altitude_km / 8.0_fp)  ! Mid-level pressure [Pa]
                met_state%DELP(i,j,k) = 5000.0_fp                                  ! Pressure thickness [Pa]
+               met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
                met_state%AIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp    ! wet Air density [kg/m3]
-               met_state%ZMID(i,j,k) = altitude_km * 1000.0_fp * 9.81_fp        ! Mid-level geopotential [m2/s2]
+            end do
+         end do
+      end do
+      ! Set up pressure edge arrays (nx, ny, nz+1)
+      do j = 1, ny
+         do i = 1, nx
+            do k = 1, nz+1
+               edge_altitude_km = real(k-1, fp) * 1.0_fp - 0.5_fp
+               met_state%Z(i,j,k) = 1000.0_fp * (edge_altitude_km + 0.65_fp)   ! Geopotential height at edges [m]
             end do
          end do
       end do
@@ -248,7 +257,7 @@ contains
       ! Get settling process interface
       settling_interface => null()
       select type(process => process_mgr%processes(1)%item)
-      type is (ProcessSettlingInterface)
+       type is (ProcessSettlingInterface)
          settling_interface => process
       end select
 
@@ -269,7 +278,7 @@ contains
 
       if (.not. associated(config_mgr)) then
          call error_mgr%report_error(1003, &
-                                    'ConfigManager not available from StateManager', rc_arg)
+            'ConfigManager not available from StateManager', rc_arg)
          return
       end if
 
@@ -280,11 +289,11 @@ contains
 
       ! Call the scheme-specific loading function directly
       select case (trim(scheme_name))
-      case ('gocart')
+       case ('gocart')
          call settling_interface%process_config%load_gocart_config(config_mgr, error_mgr)
-      case default
+       case default
          call error_mgr%report_error(1004, &
-                                    'Unknown scheme: ' // trim(scheme_name), rc_arg)
+            'Unknown scheme: ' // trim(scheme_name), rc_arg)
          return
       end select
 
@@ -327,7 +336,7 @@ contains
       call diag_mgr%remove_process('settling', rc_arg)
       if (rc_arg /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_UNSUPPORTED_OPERATION, &
-                                   'Failed to remove existing diagnostics for settling process', rc_arg)
+            'Failed to remove existing diagnostics for settling process', rc_arg)
          ! Continue anyway - this might be the first registration
          rc_arg = CC_SUCCESS
       endif
@@ -337,8 +346,8 @@ contains
       call settling_interface%register_diagnostics(container, rc_arg)
       if (rc_arg /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_UNSUPPORTED_OPERATION, &
-                                   'Failed to re-register diagnostics for scheme: ' // &
-                                   trim(current_scheme), rc_arg)
+            'Failed to re-register diagnostics for scheme: ' // &
+            trim(current_scheme), rc_arg)
          return
       endif
 
@@ -415,12 +424,12 @@ contains
 
          ! Get field values and type information directly from DiagnosticManager
          call diag_mgr%get_field_value('settling', field_name, &
-                                     scalar_value=scalar_value, &
-                                     array_1d_ptr=array_1d_ptr, &
-                                     array_2d_ptr=array_2d_ptr, &
-                                     array_3d_ptr=array_3d_ptr, &
-                                     data_type=data_type, &
-                                     rc=local_rc)
+            scalar_value=scalar_value, &
+            array_1d_ptr=array_1d_ptr, &
+            array_2d_ptr=array_2d_ptr, &
+            array_3d_ptr=array_3d_ptr, &
+            data_type=data_type, &
+            rc=local_rc)
          if (local_rc /= CC_SUCCESS) then
             write(error_unit,'(A,A)') '    WARNING: Could not retrieve field value: ', trim(field_name)
             validation_passed = .false.
@@ -429,7 +438,7 @@ contains
 
          ! Convert data type to readable name and validate values
          call validate_field_by_type(field_name, data_type, scalar_value, &
-                                   array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose=.false.)
+            array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose=.false.)
 
       end do
 
@@ -451,7 +460,7 @@ contains
 
    !> Validate field values based on type and emission expectations
    subroutine validate_field_by_type(field_name, data_type, scalar_value, &
-                                    array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose)
+      array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose)
       character(len=*), intent(in) :: field_name
       integer, intent(in) :: data_type
       real(fp), intent(in) :: scalar_value
@@ -474,7 +483,7 @@ contains
 
       ! Convert data type to readable name and validate values
       select case (data_type)
-      case (DIAG_REAL_SCALAR)
+       case (DIAG_REAL_SCALAR)
          type_name = 'Real Scalar'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(output_unit,'(A,E12.5)') '        Scalar value: ', scalar_value
@@ -496,7 +505,7 @@ contains
             write(output_unit,'(A,A)') '        ✓ Field has valid finite non-negative value: ', trim(field_name)
          end if
 
-      case (DIAG_REAL_1D)
+       case (DIAG_REAL_1D)
          type_name = 'Real 1D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_1d_ptr)) then
@@ -537,7 +546,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_REAL_2D)
+       case (DIAG_REAL_2D)
          type_name = 'Real 2D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_2d_ptr)) then
@@ -580,7 +589,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_REAL_3D)
+       case (DIAG_REAL_3D)
          type_name = 'Real 3D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_3d_ptr)) then
@@ -625,7 +634,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_SCALAR)
+       case (DIAG_INTEGER_SCALAR)
          type_name = 'Integer Scalar'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(output_unit,'(A,E12.5)') '        Scalar value: ', scalar_value
@@ -641,7 +650,7 @@ contains
             write(output_unit,'(A,A)') '        ✓ Integer field has non-negative value: ', trim(field_name)
          end if
 
-      case (DIAG_INTEGER_1D)
+       case (DIAG_INTEGER_1D)
          type_name = 'Integer 1D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_1d_ptr)) then
@@ -678,7 +687,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_2D)
+       case (DIAG_INTEGER_2D)
          type_name = 'Integer 2D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_2d_ptr)) then
@@ -717,7 +726,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_3D)
+       case (DIAG_INTEGER_3D)
          type_name = 'Integer 3D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_3d_ptr)) then
@@ -758,7 +767,7 @@ contains
             field_passed = .false.
          end if
 
-      case default
+       case default
          type_name = 'Unknown Type'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(error_unit,'(A,A)') '    ERROR: Unsupported data type for field: ', trim(field_name)
