@@ -45,6 +45,7 @@ diagnostics:
 # Optics files for Mie
 #============================================================================
 mie:
+  #directory: "/gpfs/f6/bil-fire3/world-shared/Emissions/NASA/ExtData/monochromatic/"  #location on gaeac6
   directory: "../../../../../../optics/"
   files:
     # SS: opticsBands_SS.v3_3.RRTMG.nc
@@ -67,6 +68,7 @@ run_phases:
     description: "Test phase 1"
     processes:
       seasalt
+      settling
       drydep
       wetdep
   # test2:
@@ -177,6 +179,6 @@ processes:
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
-      simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
