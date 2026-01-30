@@ -129,6 +129,7 @@ if(BUILD_NUOPC)
     cc_nuopc
     STATIC
     drivers/nuopc/aqmio.F90
+    drivers/nuopc/catchem_emis_mod.F90
     drivers/nuopc/catchem_nuopc_cap.F90
     drivers/nuopc/catchem_nuopc_interface.F90
   )

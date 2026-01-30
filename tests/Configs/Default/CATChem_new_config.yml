@@ -93,6 +93,7 @@ processes:
       format: "netcdf"
       gridded: true
       frequency: "hourly"
+      diagnostics: true
       diag_list: [NO, SO2, CO]
     point:
       activate: true
@@ -109,6 +110,7 @@ processes:
       stack_height:      STKHT
       stack_temperature: STKTK
       stack_velocity:    STKVE
+      diagnostics: true
       diag_list: [NO, SO2, CO]
     fire:
       activate: true
@@ -119,6 +121,7 @@ processes:
       gridded: true
       frequency: "hourly"
       plume_rise: "sofiev"
+      diagnostics: true
       diag_list: [NO, SO2, CO]
     fengsha:
       activate: true
@@ -129,6 +132,7 @@ processes:
       format: "netcdf"
       gridded: true
       frequency: "static"
+      diagnostics: true
       diag_list: []
   seasalt:
     activate: true

@@ -330,12 +330,8 @@ add_test(
 )
 
 # New CATChem API test
-add_executable(test_catchem_api test_catchem_api.F90 ../src/api/CATChem_API.F90)
-target_link_libraries(test_catchem_api PRIVATE CATChem_core)
-target_link_libraries(test_catchem_api PRIVATE CATChem_process_seasalt)
-target_link_libraries(test_catchem_api PRIVATE CATChem_process_drydep)
-target_link_libraries(test_catchem_api PRIVATE CATChem_process_wetdep)
-target_link_libraries(test_catchem_api PRIVATE CATChem_process_settling)
+add_executable(test_catchem_api test_catchem_api.F90)
+target_link_libraries(test_catchem_api PRIVATE CATChem)
 target_link_libraries(test_catchem_api PRIVATE testing)
 set_target_properties(
   test_catchem_api
@@ -344,8 +340,7 @@ set_target_properties(
     LINKER_LANGUAGE Fortran
 )
 target_include_directories(test_catchem_api PRIVATE ${CMAKE_BINARY_DIR}/include)
-add_dependencies(test_catchem_api CATChem_core)
-add_dependencies(test_catchem_api CATChem_process_seasalt)
+add_dependencies(test_catchem_api CATChem)
 add_test(
   NAME test_catchem_api
   COMMAND test_catchem_api

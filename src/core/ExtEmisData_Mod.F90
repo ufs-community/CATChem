@@ -103,7 +103,8 @@ MODULE ExtEmisData_Mod
       INTEGER                                   :: irec = 0            !< time slice index
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)           !< Emission fields array
       LOGICAL                                   :: is_active = .true.  !< Category enabled/disabled
-      LOGICAL                                   :: gridded = .true.   !< Is this a gridded emission category
+      LOGICAL                                   :: gridded = .true.    !< Is this a gridded emission category
+      LOGICAL                                   :: diagnostic = .true.  !< Enable diagnostic output for this category?
       REAL(fp)                                  :: global_scale = 1.0_fp !< Global scaling factor
       REAL(fp)                                  :: topfraction = -1.0_fp !< Top fraction for plumerise
       CHARACTER(LEN=128)                        :: source_file = ''    !< Source file path and name
@@ -245,6 +246,9 @@ CONTAINS
 
       if (allocated(this%emission_data)) deallocate(this%emission_data)
       allocate(this%emission_data(this%nx, this%ny, this%nz, this%n_times))
+      
+      ! Initialize emission data to zero to avoid garbage values
+      this%emission_data = 0.0_fp
 
       this%current_time_idx = 1
       this%factors = 1.0_fp

@@ -393,7 +393,7 @@ contains
 
       ! Initialize CATChem using the interface (TODO: not provide nsoil, nsoiltype and nsurftype)
       call catchem_nuopc_init(model, config_file, lat, lon, numLevels, tracerInfo, grid, &
-         startTime=startTime, stopTime=stopTime, timeStep=timeStep, rc=rc)
+         startTime=startTime, stopTime=stopTime, timeStep=timeStep, clock=clock, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return  ! bail out
 

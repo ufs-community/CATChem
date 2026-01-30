@@ -37,13 +37,16 @@ module catchem_nuopc_interface
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
+   use ConfigManager_Mod, only: ConfigManagerType
    use error_mod, only: ErrorManagerType
    use MetState_Mod, only: MetStateType
    use ChemState_Mod, only: ChemStateType
    use TimeState_Mod, only: TimeStateType
+   use ExtEmisData_Mod, only: ExtEmisDataType  ! External emissions data type
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
    use aqmio, only: AQMIO_Create, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF
+   use catchem_emis_mod
 
    implicit none
 
@@ -103,6 +106,7 @@ module catchem_nuopc_interface
    !> Container for process-private CATChem state to avoid MPI sharing
    type :: cc_wrap_type
       type(CATChem_Model) :: catchem_model
+      type(ExtEmisDataType) :: ext_emis ! External emissions data object
       type(field_config_type) :: field_config  ! Moved from module level for MPI safety
       type(tracer_index_map) :: tracer_map
       type(ESMF_Grid) :: grid
@@ -164,7 +168,7 @@ contains
    !!       and requires valid ESMF grid and configuration files
    !!
    !! @warning Proper error checking should be performed on errflg after calling
-   subroutine catchem_nuopc_init(model, config_file, lat, lon, nlev, tracerinfo, input_grid, startTime,stopTime, timeStep, nsoil, nsoiltype, nsurftype, rc)
+   subroutine catchem_nuopc_init(model, config_file, lat, lon, nlev, tracerinfo, input_grid, startTime,stopTime, timeStep, clock, nsoil, nsoiltype, nsurftype, rc)
       use ChemSpeciesUtils_Mod, only : create_species_mapping
 
       type(ESMF_GridComp)  :: model
@@ -176,11 +180,13 @@ contains
       type(ESMF_Grid), intent(in) :: input_grid
       type(ESMF_Time), intent(in), optional :: startTime,stopTime
       type(ESMF_TimeInterval), intent(in), optional :: timeStep
+      type(ESMF_Clock), intent(in), optional :: clock
       integer, intent(in), optional :: nsoil, nsoiltype, nsurftype
       integer, intent(out) :: rc
 
       ! Local variables
       type(StateManagerType), pointer :: state_mgr
+      type(ConfigManagerType), pointer :: config_manager
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
       integer :: nx, ny, num_processes, stat
@@ -227,6 +233,10 @@ contains
       where (met_state%lon > 180.0_fp)
          met_state%lon = met_state%lon - 360.0_fp
       end where
+
+      !initialize extemission data here
+      config_manager => state_mgr%get_config_ptr()
+      call catchem_emis_init(cc_wrap%ext_emis, config_manager, nx, ny, nlev, clock, rc)
 
       !populate tracer mapping using process-local tracer_map
       call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
@@ -384,7 +394,7 @@ contains
       integer, intent(out) :: rc
 
       ! Get process-local state
-      !type(cc_wrap_type), pointer :: cc_wrap
+      type(StateManagerType), pointer :: state_mgr => null()
       integer, save :: timestep = 0
 
       !cc_wrap => get_cc_wrap()
@@ -392,12 +402,10 @@ contains
       rc = CC_SUCCESS
       errmsg = ''
 
-      ! Update CF input data if needed
-      ! call cf_input_update(current_time, rc)
-      ! if (rc /= ESMF_SUCCESS) then
-      !   errmsg = 'Error updating CF input data'
-      !   return
-      ! end if
+      ! Update extemission data first
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
+            cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
 
       !Run CATChem processes
       timestep = timestep + 1
@@ -446,6 +454,9 @@ contains
 
       ! Finalize CATChem model
       if (cc_wrap%initialized) then
+         !finalize extemission data
+         call catchem_emis_finalize(cc_wrap%ext_emis, rc)
+         !finalize catchem model
          call cc_wrap%catchem_model%finalize(rc)
          if (rc /= CC_SUCCESS) then
             errmsg = 'Error in calling cc_wrap%catchem_model%finalize!'

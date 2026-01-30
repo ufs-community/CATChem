@@ -69,6 +69,7 @@ module ConfigManager_Mod
    public :: ProcessConfigType   ! Process configuration type
    public :: EmissionCategoryMapping  ! Emission category mapping structure
    public :: EmisSpeciesMappingEntry  ! Individual emission species mapping
+   public :: EmissionMappingConfig
    public :: discover_yaml_section_items
    public :: discover_nested_yaml_section_items
    public :: CONFIG_STRATEGY_STRICT, CONFIG_STRATEGY_PERMISSIVE, CONFIG_STRATEGY_FALLBACK
