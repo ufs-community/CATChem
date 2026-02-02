@@ -151,6 +151,13 @@ contains
             
             ! Initialize timing information for this category
             category_timings(icat)%category_name = config_manager%config_data%emission_mapping%categories(icat)%category_name
+            
+            !debug: Check what we're accessing from ext_emis_data
+            write(msg, '(A,A,I0,A,A)') trim(pName), ': Accessing ext_emis_data%categories(', icat, &
+                                      ') with name: "', trim(ext_emis_data%categories(icat)%category_name)//'"'
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+            !end debug
+            
             category_timings(icat)%frequency = trim(ext_emis_data%categories(icat)%frequency)  ! Get frequency from parsed category
             category_timings(icat)%current_record = 0
             category_timings(icat)%needs_update = .false.
@@ -1043,6 +1050,12 @@ contains
       character(len=*), parameter :: pName = 'catchem_emis_setup_timing'
 
       rc = CC_SUCCESS
+
+      !debug: Check what category name we received
+      write(msg, '(A,A,A)') trim(pName), ': Received category with name: "', &
+                           trim(category%category_name)//'"'
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+      !end debug
 
       ! Find the category index in timing storage
       cat_idx = 0
