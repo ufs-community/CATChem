@@ -50,6 +50,7 @@ module catchem_emis_mod
    public :: catchem_emis_init
    public :: catchem_emis_update  
    public :: catchem_emis_finalize
+   public :: catchem_emis_write_diagnostics
 
 
    !> \brief Parameters for emission handling
@@ -550,6 +551,242 @@ contains
       ! Clean up
       deallocate(concentrations, emission_flux, species_tendency)
    end subroutine catchem_emis_apply
+
+   !> \brief Write emission diagnostics to NetCDF file
+   !!
+   !! Loops through all emission categories and fields, writing diagnostic
+   !! output for fields where diagnostics are enabled. Uses AQMIO for NetCDF output.
+   !!
+   !! \param[in] ext_emis_data External emission data container
+   !! \param[inout] IO ESMF GridComp for I/O operations
+   !! \param[in] grid ESMF grid for field creation
+   !! \param[in] filename Output filename for diagnostics
+   !! \param[out] rc Return code
+   subroutine catchem_emis_write_diagnostics(ext_emis_data, time_slice, IO, grid, filename, rc)
+      implicit none
+      
+      type(ExtEmisDataType), intent(in) :: ext_emis_data
+      integer, intent(in) :: time_slice
+      type(ESMF_GridComp), intent(inout) :: IO
+      type(ESMF_Grid), intent(in) :: grid
+      character(len=*), intent(in) :: filename
+      integer, intent(out) :: rc
+
+      ! Local variables
+      integer :: localrc, icat, ifield
+      character(len=EMIS_MAXSTR) :: msg
+      character(len=64) :: field_name, category_name
+      character(len=128) :: description
+      character(len=32) :: units
+      character(len=*), parameter :: pName = 'catchem_emis_write_diagnostics'
+      
+      rc = CC_SUCCESS
+      
+      ! Check if diagnostics are enabled globally
+      if (.not. ext_emis_data%diagnostic) then
+         call ESMF_LogWrite(trim(pName)//': Global emission diagnostics disabled', &
+                           ESMF_LOGMSG_INFO, rc=localrc)
+         return
+      end if
+      
+      
+      ! Loop through all emission categories
+      do icat = 1, ext_emis_data%n_categories
+         if (.not. ext_emis_data%categories(icat)%is_active) cycle
+         if (.not. ext_emis_data%categories(icat)%diagnostic) cycle
+         
+         category_name = trim(ext_emis_data%categories(icat)%category_name)
+         
+         ! Loop through all fields in this category
+         do ifield = 1, ext_emis_data%categories(icat)%n_fields
+            if (.not. ext_emis_data%categories(icat)%fields(ifield)%diagnostic) cycle
+            if (.not. ext_emis_data%categories(icat)%fields(ifield)%is_loaded) cycle
+            if (.not. allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data)) cycle
+            
+            field_name = trim(ext_emis_data%categories(icat)%fields(ifield)%field_name)
+            description = trim(ext_emis_data%categories(icat)%fields(ifield)%long_name)
+            units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
+            
+            ! Write field based on whether it's gridded (2D) or not (3D)
+            if (ext_emis_data%categories(icat)%gridded) then
+               ! 2D gridded emission field
+               call write_emission_field_2d(IO, grid, field_name, &
+                                           ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
+                                           description, units, filename, time_slice, localrc)
+            else
+               ! 3D point source or vertical emission field  
+               call write_emission_field_3d(IO, grid, field_name, &
+                                           ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,:,1), &
+                                           description, units, filename, time_slice, localrc)
+            end if
+            
+            if (localrc /= CC_SUCCESS) then
+               write(msg, '(A,A,A,A,A)') trim(pName), ': Failed to write emission field ', &
+                                       trim(field_name), ' from category ', trim(category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+               ! Continue with other fields
+            else
+               write(msg, '(A,A,A,A,A)') trim(pName), ': Wrote emission field ', &
+                                       trim(field_name), ' from category ', trim(category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+            end if
+         end do
+      end do
+      
+      call ESMF_LogWrite(trim(pName)//': Emission diagnostics written to '//trim(filename), &
+                        ESMF_LOGMSG_INFO, rc=localrc)
+
+   end subroutine catchem_emis_write_diagnostics
+
+   !> \brief Write 2D emission field to NetCDF
+   !!
+   !! Helper subroutine to write 2D emission data using AQMIO.
+   !!
+   !! \param[inout] IO ESMF GridComp for I/O operations
+   !! \param[in] grid ESMF grid for field creation
+   !! \param[in] field_name Name of the emission field
+   !! \param[in] emission_data 2D emission data array
+   !! \param[in] description Field description for metadata
+   !! \param[in] units Field units for metadata
+   !! \param[in] filename Output filename
+   !! \param[in] time_slice Time slice for NetCDF output
+   !! \param[out] rc Return code
+   subroutine write_emission_field_2d(IO, grid, field_name, emission_data, &
+                                     description, units, filename, time_slice, rc)
+      implicit none
+      
+      type(ESMF_GridComp), intent(inout) :: IO
+      type(ESMF_Grid), intent(in) :: grid
+      character(len=*), intent(in) :: field_name
+      real(fp), intent(in) :: emission_data(:,:)
+      character(len=*), intent(in) :: description
+      character(len=*), intent(in) :: units
+      character(len=*), intent(in) :: filename
+      integer, intent(in) :: time_slice
+      integer, intent(out) :: rc
+      
+      ! Local variables
+      type(ESMF_Field) :: esmf_field
+      type(ESMF_Info) :: info
+      real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
+      integer :: i, j
+      !character(len=*), parameter :: pName = 'write_emission_field_2d'
+      
+      rc = CC_SUCCESS
+      
+      ! Create 2D ESMF field
+      esmf_field = ESMF_FieldCreate(grid, &
+                                   name=trim(field_name), &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   rc=rc)
+      if (rc /= ESMF_SUCCESS) return
+      
+      ! Set field metadata
+      call ESMF_InfoGetFromHost(esmf_field, info, rc=rc)
+      if (rc == ESMF_SUCCESS) then
+         call ESMF_InfoSet(info, "units", trim(units), rc=rc)
+         call ESMF_InfoSet(info, "description", trim(description), rc=rc)
+      end if
+      
+      ! Get field data pointer and copy emission data
+      call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
+      if (rc /= ESMF_SUCCESS) then
+         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         return
+      end if
+      
+      ! Copy data (convert from fp to ESMF_KIND_R4)
+      do j = 1, size(emission_data, 2)
+         do i = 1, size(emission_data, 1)
+            field_data_2d(i, j) = real(emission_data(i, j), ESMF_KIND_R4)
+         end do
+      end do
+      
+      ! Write to NetCDF using AQMIO
+      call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
+                       iofmt=AQMIO_FMT_NETCDF, rc=rc)
+      
+      ! Clean up
+      call ESMF_FieldDestroy(esmf_field, rc=rc)
+      
+   end subroutine write_emission_field_2d
+
+   !> \brief Write 3D emission field to NetCDF
+   !!
+   !! Helper subroutine to write 3D emission data using AQMIO.
+   !!
+   !! \param[inout] IO ESMF GridComp for I/O operations
+   !! \param[in] grid ESMF grid for field creation
+   !! \param[in] field_name Name of the emission field
+   !! \param[in] emission_data 3D emission data array
+   !! \param[in] description Field description for metadata
+   !! \param[in] units Field units for metadata
+   !! \param[in] filename Output filename
+   !! \param[in] time_slice Time slice for NetCDF output
+   !! \param[out] rc Return code
+   subroutine write_emission_field_3d(IO, grid, field_name, emission_data, &
+                                     description, units, filename, time_slice, rc)
+      implicit none
+      
+      type(ESMF_GridComp), intent(inout) :: IO
+      type(ESMF_Grid), intent(in) :: grid
+      character(len=*), intent(in) :: field_name
+      real(fp), intent(in) :: emission_data(:,:,:)
+      character(len=*), intent(in) :: description
+      character(len=*), intent(in) :: units
+      character(len=*), intent(in) :: filename
+      integer, intent(in) :: time_slice
+      integer, intent(out) :: rc
+      
+      ! Local variables
+      type(ESMF_Field) :: esmf_field
+      type(ESMF_Info) :: info
+      real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
+      integer :: i, j, k
+      !character(len=*), parameter :: pName = 'write_emission_field_3d'
+      
+      rc = CC_SUCCESS
+      
+      ! Create 3D ESMF field
+      esmf_field = ESMF_FieldCreate(grid, &
+                                   name=trim(field_name), &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/size(emission_data, 3)/), &
+                                   rc=rc)
+      if (rc /= ESMF_SUCCESS) return
+      
+      ! Set field metadata
+      call ESMF_InfoGetFromHost(esmf_field, info, rc=rc)
+      if (rc == ESMF_SUCCESS) then
+         call ESMF_InfoSet(info, "units", trim(units), rc=rc)
+         call ESMF_InfoSet(info, "description", trim(description), rc=rc)
+      end if
+      
+      ! Get field data pointer and copy emission data
+      call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
+      if (rc /= ESMF_SUCCESS) then
+         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         return
+      end if
+      
+      ! Copy data (convert from fp to ESMF_KIND_R4)
+      do k = 1, size(emission_data, 3)
+         do j = 1, size(emission_data, 2)
+            do i = 1, size(emission_data, 1)
+               field_data_3d(i, j, k) = real(emission_data(i, j, k), ESMF_KIND_R4)
+            end do
+         end do
+      end do
+      
+      ! Write to NetCDF using AQMIO
+      call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
+                       iofmt=AQMIO_FMT_NETCDF, rc=rc)
+      
+      ! Clean up
+      call ESMF_FieldDestroy(esmf_field, rc=rc)
+      
+   end subroutine write_emission_field_3d
 
 
    !> \brief Finalize emission data and clean up resources

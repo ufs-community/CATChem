@@ -1125,6 +1125,13 @@ contains
          end if
       end do
 
+      !write extemission fields if needed
+      call catchem_emis_write_diagnostics(cc_wrap%ext_emis, cc_wrap%current_time_slice, cc_wrap%iocomp, cc_wrap%grid, filename, rc)
+      if (rc /= CC_SUCCESS) then
+         write(*,'(A)') 'Error: Failed to write external emission diagnostics.'
+         return
+      end if
+
       ! Update last output time
       cc_wrap%last_output_time = current_time
 
