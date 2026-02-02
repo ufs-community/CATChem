@@ -89,7 +89,7 @@ processes:
     anthro:
       activate: true
       scale_factor: 1.0
-      source_file: "anthro_emis.nc"
+      source_file: "INPUT/NEXUS_Expt.nc"
       format: "netcdf"
       gridded: true
       frequency: "hourly"

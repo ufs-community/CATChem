@@ -134,7 +134,7 @@ contains
          !debug
          write(msg, '(A,A,A)') trim(pName), ': Populate category ', &
                                     trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
          !end debug
 
          if (config_manager%config_data%emission_mapping%categories(icat)%is_active) then
@@ -937,7 +937,7 @@ contains
 
       !debug
       write(msg, '(A,A)') trim(pName), ': Populating category '//trim(new_category%category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
       !end debug
 
       ! Set category properties from mapping
