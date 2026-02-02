@@ -3,73 +3,89 @@ anthro:
     long_name: "Nitrogen Oxide"
     units: "kg/m2/s"
     scale: [1.0]
-    map: ["NO"]
-point:
-  NO:
-    long_name: "Nitrogen Oxide"
+    map: ["NO"]   #double check upper or lower case
+  SO2:
+    long_name: "Sulfur Dioxide"
     units: "kg/m2/s"
     scale: [1.0]
-    map: ["NO"]
-fire:
-  NO:
-    long_name: "Nitrogen Oxide"
+    map: ["so2"]
+  POC:
+    long_name: "Primary Organic Carbon"
+    units: "kg/m2/s"
+    scale: [0.8, 0.2] #random fraction; need to look for real values
+    map: ["oc1", "oc2"]
+  PSO4:
+    long_name: "Primary Sulfate"
     units: "kg/m2/s"
     scale: [1.0]
-    map: ["NO"]
-  FRP:
-    long_name: "Fire Radiative Power"
-    units: "1"
-    scale: [1.0]
-    map: []
-dust:
-  DU1:
-    long_name: "Dust Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["dust1"]
-  DU2:
-    long_name: "Dust Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["dust2"]
-  DU3:
-    long_name: "Dust Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["dust3"]
-  DU4:
-    long_name: "Dust Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["dust4"]
-  DU5:
-    long_name: "Dust Species Coarse Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["dust5"]
-seasalt:
-  SeaS1:
-    long_name: "Seasalt Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["seas1"] ##dummy mapping here for test only
-  SeaS2:
-    long_name: "Seasalt Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["seas2"]
-  SeaS3:
-    long_name: "Seasalt Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["seas3"]
-  SeaS4:
-    long_name: "Seasalt Species Fine Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["seas4"]
-  SeaS5:
-    long_name: "Seasalt Species Coarse Mode"
-    units: "kg/m2/s"
-    scale: [1.0]
-    map: ["seas5"]
+    map: ["aso4j"]    #will be changed to SO4 later
+  
+# point:
+#   NO:
+#     long_name: "Nitrogen Oxide"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["NO"]
+# fire:
+#   NO:
+#     long_name: "Nitrogen Oxide"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["NO"]
+#   FRP:
+#     long_name: "Fire Radiative Power"
+#     units: "1"
+#     scale: [1.0]
+#     map: []
+# dust:
+#   DU1:
+#     long_name: "Dust Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["dust1"]
+#   DU2:
+#     long_name: "Dust Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["dust2"]
+#   DU3:
+#     long_name: "Dust Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["dust3"]
+#   DU4:
+#     long_name: "Dust Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["dust4"]
+#   DU5:
+#     long_name: "Dust Species Coarse Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["dust5"]
+# seasalt:
+#   SeaS1:
+#     long_name: "Seasalt Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["seas1"] ##dummy mapping here for test only
+#   SeaS2:
+#     long_name: "Seasalt Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["seas2"]
+#   SeaS3:
+#     long_name: "Seasalt Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["seas3"]
+#   SeaS4:
+#     long_name: "Seasalt Species Fine Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["seas4"]
+#   SeaS5:
+#     long_name: "Seasalt Species Coarse Mode"
+#     units: "kg/m2/s"
+#     scale: [1.0]
+#     map: ["seas5"]

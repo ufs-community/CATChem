@@ -10,14 +10,16 @@ simulation:
   name: test
   start_date: 20240501 0000
   end_date: 20240501 0100
-  species_filename: CATChem_species.yml
+  species_filename: ./Configs/Default/CATChem_species.yml
+  emission_filename: ./Configs/Default/CATChem_emission.yml
   verbose:
     activate: true
 #============================================================================
 # Grid settings
 #============================================================================
 grid:
-  number_of_levels: 28
+  number_of_levels: 64
+  number_of_soil_layers: 4
 #============================================================================
 # Timesteps settings
 #============================================================================
@@ -27,16 +29,15 @@ timesteps:
 #============================================================================
 # Settings for CATChem processes
 #============================================================================
-processes:
+process:
   seasalt:
     activate: true
-    scheme: "geos12"
+    scheme_opt: 3
     scale_factor: 1.0
     weibull: true
-    diag_species: ["SALA", "SALC"]
   dust:
     activate: true
-    scheme: "fengsha"
+    scheme_opt: 1
     dust_drag_opt: 1
     dust_moist_opt: 1
     dust_horizflux_opt: 1
@@ -44,5 +45,5 @@ processes:
     dust_beta: 1.0
   drydep:
     activate: true
-    scheme: "wesley"
+    scheme_opt: 1
     resuspension: false

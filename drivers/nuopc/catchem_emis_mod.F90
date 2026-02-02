@@ -604,6 +604,7 @@ contains
             if (.not. allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data)) cycle
             
             field_name = trim(ext_emis_data%categories(icat)%fields(ifield)%field_name)
+            field_name = "Emis_" // trim(category_name) // trim(field_name)  ! Prefix for diagnostics
             description = trim(ext_emis_data%categories(icat)%fields(ifield)%long_name)
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
             
