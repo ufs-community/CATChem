@@ -130,6 +130,13 @@ contains
 
       ! Populate emission categories from already-loaded configuration
       do icat = 1, config_manager%config_data%emission_mapping%n_categories
+
+         !debug
+         write(msg, '(A,A,A)') trim(pName), ': Populate category ', &
+                                    trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=rc)
+         !end debug
+
          if (config_manager%config_data%emission_mapping%categories(icat)%is_active) then
             call catchem_emis_populate_category(ext_emis_data, &
                                                config_manager%config_data%emission_mapping%categories(icat), &
@@ -927,6 +934,11 @@ contains
          rc = CC_FAILURE
          return
       end if
+
+      !debug
+      write(msg, '(A,A)') trim(pName), ': Populating category '//trim(new_category%category_name)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      !end debug
 
       ! Set category properties from mapping
       new_category%is_active = category_mapping%is_active
