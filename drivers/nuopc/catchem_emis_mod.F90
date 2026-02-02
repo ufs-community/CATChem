@@ -990,6 +990,12 @@ contains
       end do
 
       ! Add category to ExtEmisDataType
+      !debug: Check category name before adding
+      write(msg, '(A,A,A)') trim(pName), ': Adding category with name: "', &
+                           trim(new_category%category_name)//'"'
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+      !end debug
+      
       call ext_emis_data%add_category(new_category, localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to add category to ExtEmisDataType'
@@ -997,6 +1003,14 @@ contains
          rc = CC_FAILURE
          return
       end if
+      
+      !debug: Check category name after adding
+      if (ext_emis_data%n_categories > 0) then
+         write(msg, '(A,A,A)') trim(pName), ': After adding, category name is: "', &
+                              trim(ext_emis_data%categories(ext_emis_data%n_categories)%category_name)//'"'
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+      end if
+      !end debug
 
       write(msg, '(A,A,A)') trim(pName), ': Successfully populated category ', &
                            trim(category_mapping%category_name)
