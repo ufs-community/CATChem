@@ -113,9 +113,9 @@ contains
          return
       end if
 
-      ! Initialize ExtEmisDataType with number of categories from config
-      call ext_emis_data%init(config_manager%config_data%emission_mapping%n_categories, &
-         'CATChem NUOPC Emission Data', localrc)
+      ! Initialize ExtEmisDataType with 0 to allow push-back population
+      ! We start with 0 and let add_category grow the array incrementally
+      call ext_emis_data%init(0, 'CATChem NUOPC Emission Data', localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to initialize ExtEmisDataType'
          call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
@@ -942,11 +942,6 @@ contains
          return
       end if
 
-      !debug
-      write(msg, '(A,A)') trim(pName), ': Populating category '//trim(new_category%category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-      !end debug
-
       ! Set category properties from mapping
       new_category%is_active = category_mapping%is_active
 
@@ -996,13 +991,6 @@ contains
          end if
       end do
 
-      ! Add category to ExtEmisDataType
-      !debug: Check category name before adding
-      write(msg, '(A,A,A)') trim(pName), ': Adding category with name: "', &
-         trim(new_category%category_name)//'"'
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-      !end debug
-
       call ext_emis_data%add_category(new_category, localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to add category to ExtEmisDataType'
@@ -1010,14 +998,6 @@ contains
          rc = CC_FAILURE
          return
       end if
-
-      !debug: Check category name after adding
-      if (ext_emis_data%n_categories > 0) then
-         write(msg, '(A,A,A)') trim(pName), ': After adding, category name is: "', &
-            trim(ext_emis_data%categories(ext_emis_data%n_categories)%category_name)//'"'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-      end if
-      !end debug
 
       write(msg, '(A,A,A)') trim(pName), ': Successfully populated category ', &
          trim(category_mapping%category_name)
