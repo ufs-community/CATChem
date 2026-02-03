@@ -19,7 +19,7 @@ anthro:
     units: "kg/m2/s"
     scale: [1.0]
     map: ["aso4j"]    #will be changed to SO4 later
-  
+
 # point:
 #   NO:
 #     long_name: "Nitrogen Oxide"

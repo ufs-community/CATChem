@@ -405,7 +405,7 @@ contains
       ! Update extemission data first
       state_mgr => cc_wrap%catchem_model%get_state_manager()
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
-            cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
+         cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
 
       !Run CATChem processes
       timestep = timestep + 1

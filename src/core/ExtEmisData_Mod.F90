@@ -246,7 +246,7 @@ CONTAINS
 
       if (allocated(this%emission_data)) deallocate(this%emission_data)
       allocate(this%emission_data(this%nx, this%ny, this%nz, this%n_times))
-      
+
       ! Initialize emission data to zero to avoid garbage values
       this%emission_data = 0.0_fp
 
