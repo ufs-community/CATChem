@@ -88,6 +88,20 @@
         </inbodydescription>
         <location file="src/core/chemstate_mod.F90" line="73" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="73" bodyend="73"/>
       </memberdef>
+      <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1ad6f08fd46bddfbe08008ecefc46779a4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer chemstate_mod::chemstatetype::nspecieswetdep</definition>
+        <argsstring></argsstring>
+        <name>nspecieswetdep</name>
+        <qualifiedname>chemstate_mod::chemstatetype::nspecieswetdep</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="74" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a9df9a9db4d94f30dc67ac428ecf2a350" prot="public" static="no" mutable="no">
         <type>integer</type>
         <definition>integer chemstate_mod::chemstatetype::nspeciestracer</definition>
@@ -100,7 +114,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="74" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="74" bodyend="74"/>
+        <location file="src/core/chemstate_mod.F90" line="75" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a3e41fcac80b385e47aff59bb3a1e2885" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -114,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="75" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/core/chemstate_mod.F90" line="76" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1af5cd1f06d26d429e72975d65fa842ead" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -128,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="76" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="76" bodyend="76"/>
+        <location file="src/core/chemstate_mod.F90" line="77" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="77" bodyend="77"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a3189df799e068086fc24d1b09ee1d7f2" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -142,7 +156,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="77" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="77" bodyend="77"/>
+        <location file="src/core/chemstate_mod.F90" line="78" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="78" bodyend="78"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a245469cf7604df1b83fb0143ec6d14f9" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -156,7 +170,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="78" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="78" bodyend="78"/>
+        <location file="src/core/chemstate_mod.F90" line="79" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="79" bodyend="79"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1adca2841739c15194d8d9b9d2d585a888" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -170,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="79" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="79" bodyend="79"/>
+        <location file="src/core/chemstate_mod.F90" line="80" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1aa04360c7764791925d9a32bfde944444" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -184,7 +198,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="80" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="80" bodyend="80"/>
+        <location file="src/core/chemstate_mod.F90" line="81" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="81" bodyend="81"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a8ae3db54a3bf578488a09704427228e7" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -198,7 +212,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="81" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="81" bodyend="81"/>
+        <location file="src/core/chemstate_mod.F90" line="82" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1ad3c61fba845ccf8eea8d00cdee61a2be" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -212,7 +226,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="82" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="82" bodyend="82"/>
+        <location file="src/core/chemstate_mod.F90" line="83" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="83" bodyend="83"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1ab18e842883467663e0affcb032f3c777" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -226,7 +240,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="83" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="83" bodyend="83"/>
+        <location file="src/core/chemstate_mod.F90" line="84" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="84" bodyend="84"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1ae99d71e3b01f5565476429b2590414a5" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -240,7 +254,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="84" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="84" bodyend="84"/>
+        <location file="src/core/chemstate_mod.F90" line="85" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a071f38e3bc218ad8a008ebc8c17cc303" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable chemstate_mod::chemstatetype::wetdepindex</definition>
+        <argsstring></argsstring>
+        <name>wetdepindex</name>
+        <qualifiedname>chemstate_mod::chemstatetype::wetdepindex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="86" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="86" bodyend="86"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1abe9801b0a00bd7cb501ab1bf6cbd11a6" prot="public" static="no" mutable="no">
         <type>character(len=50), dimension(:), allocatable</type>
@@ -254,7 +282,49 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="85" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="85" bodyend="85"/>
+        <location file="src/core/chemstate_mod.F90" line="87" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1afc1bf8ae10d3bcd8bcd08130418e7ee4" prot="public" static="no" mutable="no">
+        <type>type(gocart2g_mie), dimension(:), allocatable</type>
+        <definition>type(gocart2g_mie), dimension(:), allocatable chemstate_mod::chemstatetype::miedata</definition>
+        <argsstring></argsstring>
+        <name>miedata</name>
+        <qualifiedname>chemstate_mod::chemstatetype::miedata</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="88" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1adc625978e27a0567aa601ae2f400d1e8" prot="public" static="no" mutable="no">
+        <type>character(len=50), dimension(:), allocatable</type>
+        <definition>character(len=50), dimension(:), allocatable chemstate_mod::chemstatetype::mienames</definition>
+        <argsstring></argsstring>
+        <name>mienames</name>
+        <qualifiedname>chemstate_mod::chemstatetype::mienames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="89" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1ab44c69c239b03df8777e2481e1a457b3" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable chemstate_mod::chemstatetype::spcmiemap</definition>
+        <argsstring></argsstring>
+        <name>spcmiemap</name>
+        <qualifiedname>chemstate_mod::chemstatetype::spcmiemap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="90" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="90" bodyend="90"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1accbd386dace4c75e9114377a3e75d208" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), dimension(:), allocatable</type>
@@ -268,7 +338,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="90" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="90" bodyend="90"/>
+        <location file="src/core/chemstate_mod.F90" line="95" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="95" bodyend="95"/>
       </memberdef>
       <memberdef kind="variable" id="structchemstate__mod_1_1chemstatetype_1a0e84f1da3a6efbdeced72a7b5032658f" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structgridgeometry__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), pointer</type>
@@ -283,7 +353,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="91" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="91" bodyend="91"/>
+        <location file="src/core/chemstate_mod.F90" line="96" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="96" bodyend="96"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -528,7 +598,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="95" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="95" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="100" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="100" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1ace4d302280ccf89cc3a08ad0563f8156" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -551,7 +621,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="96" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="96" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="101" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="101" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a978ae5e828072982305536b01367b56c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -578,7 +648,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="97" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="97" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="102" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="102" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a7429d47a65e046822abe296272e579a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -601,7 +671,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="98" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="98" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="103" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="103" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1acf0b69db993cedb61609819dd7be5252" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -620,7 +690,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="99" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="99" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="104" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1ad990ea3e2b07a9e466eec1e7d28ae3e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -639,7 +709,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="100" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="100" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="105" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1ad7ac77273c4c154346f36d6c1ab7e26f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -658,7 +728,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="101" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="101" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="106" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a66f5c50033ef928508d686e707ee108f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -681,7 +751,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="102" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="102" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="107" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="107" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a486d5062033210b5906a8fb3bf5a7fb1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -704,7 +774,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="103" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="103" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="108" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="108" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a4911318917b438c7a6956c75e0ee0eb4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -735,7 +805,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="104" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="109" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a2263f7eb43f8652977683826e0d5dc6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -774,7 +844,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="105" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="105" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="110" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="110" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a21965d7f32234f0f44ecf780b3ea4f6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -793,7 +863,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="106" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="106" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="111" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="111" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1aca16522fb892f020646edb34b9056e4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -812,7 +882,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="107" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="107" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="112" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="112" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a1e55b99d14cac4696f9c93f90a0b155e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -839,7 +909,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="110" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="110" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="115" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="115" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a8ed5921e7f7b472f2d8a0288da028b32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -874,7 +944,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="111" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="111" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="116" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="116" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a1e5e7250ec6e6d0781648c839981b5b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -928,7 +998,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="112" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="112" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="117" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="117" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a4af9a82fa12897a73b52fdddf3118105" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -982,7 +1052,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="113" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="113" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="118" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="118" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a3ae49906239ca88cfc649ebb0223fe49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1005,7 +1075,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="115" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="115" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="120" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="120" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1a7e4e141a303e00c01e0a3c94d9843dc8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1024,7 +1094,85 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="116" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="116" bodyend="-1"/>
+        <location file="src/core/chemstate_mod.F90" line="121" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structchemstate__mod_1_1chemstatetype_1ad957a63bd23c46b11c9bdc049f5d2948" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure chemstate_mod::chemstatetype::init_mie_data</definition>
+        <argsstring>(this, n_mie_files, mie_names, mie_full_paths, rc)</argsstring>
+        <name>init_mie_data</name>
+        <qualifiedname>chemstate_mod::chemstatetype::init_mie_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_mie_files</defname>
+        </param>
+        <param>
+          <type>character(len=30), dimension(:), intent(in)</type>
+          <defname>mie_names</defname>
+        </param>
+        <param>
+          <type>character(len=512), dimension(:), intent(in)</type>
+          <defname>mie_full_paths</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize Mie data for aerosol optical properties. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine allocates and initializes Mie scattering data based on the configuration file information and species Mie name mappings.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_mie_files</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of Mie files </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mie_names</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of Mie type names (e.g., &apos;SS&apos;, &apos;DU&apos;, &apos;BC&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mie_full_paths</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of full file paths to Mie data files </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="122" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="122" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -1136,22 +1284,28 @@
         <label>chemstate_mod::chemstatetype</label>
         <link refid="structchemstate__mod_1_1chemstatetype"/>
         <childnode refid="2" relation="usage">
-          <edgelabel>chemspecies</edgelabel>
+          <edgelabel>miedata</edgelabel>
         </childnode>
         <childnode refid="3" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
           <edgelabel>grid</edgelabel>
         </childnode>
       </node>
-      <node id="3">
+      <node id="2">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="4">
         <label>gridgeometry_mod::gridgeometrytype</label>
         <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
       </node>
-      <node id="2">
+      <node id="3">
         <label>species_mod::speciestype</label>
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/chemstate_mod.F90" line="60" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="60" bodyend="117"/>
+    <location file="src/core/chemstate_mod.F90" line="60" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="60" bodyend="123"/>
     <listofallmembers>
       <member refid="structchemstate__mod_1_1chemstatetype_1aa04360c7764791925d9a32bfde944444" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>aerodrydepindex</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1adca2841739c15194d8d9b9d2d585a888" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>aeroindex</name></member>
@@ -1172,7 +1326,10 @@
       <member refid="structchemstate__mod_1_1chemstatetype_1a0e84f1da3a6efbdeced72a7b5032658f" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>grid</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a3ae49906239ca88cfc649ebb0223fe49" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>has_species</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1ab43a3b0ff23262d3381064f85fe47fd0" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>init</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1ad957a63bd23c46b11c9bdc049f5d2948" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>init_mie_data</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1acf0b69db993cedb61609819dd7be5252" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>is_allocated</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1afc1bf8ae10d3bcd8bcd08130418e7ee4" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>miedata</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1adc625978e27a0567aa601ae2f400d1e8" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>mienames</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1aa687797b2400250287b29e4a0e427ab1" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspecies</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a829f30ed5fc6e3d40fe78102bdb3f082" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspeciesaero</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1ae792336a026b8f3430c5b92e47ea6996" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspeciesaerodrydep</name></member>
@@ -1181,17 +1338,20 @@
       <member refid="structchemstate__mod_1_1chemstatetype_1a19924bca13f08297d80cd53016dfa72b" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspeciesgas</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1af5cd1f06d26d429e72975d65fa842ead" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspeciesseasalt</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a9df9a9db4d94f30dc67ac428ecf2a350" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspeciestracer</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1ad6f08fd46bddfbe08008ecefc46779a4" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>nspecieswetdep</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1ad7ac77273c4c154346f36d6c1ab7e26f" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>print_summary</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a7429d47a65e046822abe296272e579a8" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>reset</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1ab18e842883467663e0affcb032f3c777" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>seasaltindex</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a4af9a82fa12897a73b52fdddf3118105" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>set_all_concentrations</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a4911318917b438c7a6956c75e0ee0eb4" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>set_concentration</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a8ed5921e7f7b472f2d8a0288da028b32" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>set_concentrations</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1ab44c69c239b03df8777e2481e1a457b3" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>spcmiemap</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a3189df799e068086fc24d1b09ee1d7f2" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>speciesindex</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1abe9801b0a00bd7cb501ab1bf6cbd11a6" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>speciesnames</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a37f88babeb32e8121c774c18c6f94fea" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>state</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a245469cf7604df1b83fb0143ec6d14f9" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>tracerindex</name></member>
       <member refid="structchemstate__mod_1_1chemstatetype_1a978ae5e828072982305536b01367b56c" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>validate</name></member>
+      <member refid="structchemstate__mod_1_1chemstatetype_1a071f38e3bc218ad8a008ebc8c17cc303" prot="public" virt="non-virtual"><scope>chemstate_mod::chemstatetype</scope><name>wetdepindex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

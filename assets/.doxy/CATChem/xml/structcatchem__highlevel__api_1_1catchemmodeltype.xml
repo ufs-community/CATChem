@@ -611,6 +611,7 @@
       </node>
       <node id="10">
         <label>configmanager_mod::emissionmappingconfig</label>
+        <link refid="structconfigmanager__mod_1_1emissionmappingconfig"/>
         <childnode refid="11" relation="usage">
           <edgelabel>categories</edgelabel>
         </childnode>

@@ -3,9 +3,9 @@
   <compounddef id="structprocessmanager__mod_1_1processmanagertype" kind="type" language="Fortran" prot="public">
     <compoundname>processmanager_mod::processmanagertype</compoundname>
     <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1a7186743b53e846851a15c6242401e06d" prot="public" static="no" mutable="no">
-        <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), dimension(:), allocatable, public</type>
-        <definition>class(processinterface), dimension(:), allocatable, public processmanager_mod::processmanagertype::processes</definition>
+      <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1a49d29e91cd4b515fec8fbc8d14f8fa84" prot="public" static="no" mutable="no">
+        <type>class(processcontainertype), dimension(:), allocatable, public</type>
+        <definition>class(processcontainertype), dimension(:), allocatable, public processmanager_mod::processmanagertype::processes</definition>
         <argsstring></argsstring>
         <name>processes</name>
         <qualifiedname>processmanager_mod::processmanagertype::processes</qualifiedname>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="30" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="30" bodyend="30"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="36" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="36" bodyend="36"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1aa679c705a6fa7a796172bb8e80eecf65" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="31" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="31" bodyend="31"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="37" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="37" bodyend="37"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1a0752b4bbc4cc5bcd8ad3c6288ca7fb0a" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="32" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="32" bodyend="32"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="38" bodyend="38"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1a485fa72f5d242e92a73ea8eb088ab249" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structprocessfactory__mod_1_1processfactorytype" kindref="compound">processfactorytype</ref>)</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="33" bodyend="33"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="39" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="39" bodyend="39"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1a3de847ed42dfdd0cd55fb87116e56e80" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>)</type>
@@ -74,7 +74,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="34" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="34" bodyend="34"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="40" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="40" bodyend="40"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessmanager__mod_1_1processmanagertype_1ae8a5b344edd49dea83f13033aa851fa8" prot="public" static="no" mutable="no">
         <type>character(len=64), dimension(:), allocatable, public</type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="35" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="35" bodyend="35"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="41" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="41" bodyend="41"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -114,7 +114,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="37" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="37" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="43" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="43" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1aa004ec641b58eb7c6a17f948b45066ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -145,7 +145,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="38" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="44" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="44" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1ab9b569f4f17e6eb047edab4172c26a2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="39" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="39" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="45" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="45" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a08e07521207131804c43f41f21548300" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -203,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="40" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="40" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1ac190ff6f9000443a71111f9f78c76d54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -230,7 +230,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="41" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="41" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="47" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="47" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1ab3ce25df3a2b58cf1aad62a679ea3a08" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -261,7 +261,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="42" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="42" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="48" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="48" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a33188222198a3571bcd147c055be6826" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -284,7 +284,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="43" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="43" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="49" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="49" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a45828f4762fe7f73153bfcebaffca5e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -311,7 +311,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="44" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="44" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="50" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="50" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a897da9bc703a100a03c25786c3e2f793" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -338,7 +338,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="45" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="45" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="51" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="51" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1ad066b335f2ea4be40df3720aad94c2ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -373,7 +373,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="46" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="52" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="52" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a9df07cdc934efe09bc8689624dc4353d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -404,7 +404,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="47" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="47" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="53" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="53" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1ad697d63e96eeb0f3cca837e509d035a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -431,7 +431,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="48" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="48" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="54" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a1b10e8c77c8fdb3482cea219445a74b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -458,7 +458,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="49" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="49" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="55" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="55" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a7b3b772c74b558eda07de37c93669263" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -485,7 +485,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="50" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="50" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="56" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="56" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessmanager__mod_1_1processmanagertype_1a6b2cc435876511bda4737e2863b00480" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -575,7 +575,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="51" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="51" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="57" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="57" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -631,7 +631,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="52" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="52" bodyend="-1"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="58" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -658,7 +658,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/ProcessManager_Mod.F90" line="28" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="28" bodyend="53"/>
+    <location file="src/core/ProcessManager_Mod.F90" line="34" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="34" bodyend="59"/>
     <listofallmembers>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1aa233560c34889e05afb39842982df54b" prot="private" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>add_met_fields_from_process</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1aa004ec641b58eb7c6a17f948b45066ea" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>add_process</name></member>
@@ -671,7 +671,7 @@
       <member refid="structprocessmanager__mod_1_1processmanagertype_1a45828f4762fe7f73153bfcebaffca5e8" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>list_processes</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1a0752b4bbc4cc5bcd8ad3c6288ca7fb0a" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>max_processes</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1aa679c705a6fa7a796172bb8e80eecf65" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>num_processes</name></member>
-      <member refid="structprocessmanager__mod_1_1processmanagertype_1a7186743b53e846851a15c6242401e06d" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>processes</name></member>
+      <member refid="structprocessmanager__mod_1_1processmanagertype_1a49d29e91cd4b515fec8fbc8d14f8fa84" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>processes</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1a6b2cc435876511bda4737e2863b00480" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>register_process</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1ae8a5b344edd49dea83f13033aa851fa8" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>required_met_fields</name></member>
       <member refid="structprocessmanager__mod_1_1processmanagertype_1ab9b569f4f17e6eb047edab4172c26a2d" prot="public" virt="non-virtual"><scope>processmanager_mod::processmanagertype</scope><name>run_all</name></member>

@@ -10,7 +10,6 @@
 
 _Unified state management module for CATChem._ [More...](#detailed-description)
 
-* `#include "virtualmet_populate.inc"`
 
 
 

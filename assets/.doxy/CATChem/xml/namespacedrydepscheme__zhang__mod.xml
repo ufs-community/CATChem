@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="68" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="68" bodyend="68"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="68" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="68" bodyend="68"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a061702d766dff5ccd6571cee4db29d61" prot="private" static="no" mutable="no">
         <type>integer, dimension(20)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="70" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="70" bodyend="70"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="70" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="70" bodyend="70"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a9c27d6dbf486238c1201dc772e9a2b32" prot="private" static="no" mutable="no">
         <type>integer, dimension(17)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="72" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="72" bodyend="72"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="72" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="72" bodyend="72"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a1f0bc94b2b5203760d3a0d9e31e781e0" prot="private" static="no" mutable="no">
         <type>integer, dimension(74)</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="75" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="75" bodyend="75"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="75" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1aa8effaace19506cce394e6ed7b8075d8" prot="private" static="no" mutable="no">
         <type>real(fp), parameter</type>
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="79" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="79" bodyend="79"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="79" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="79" bodyend="79"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a89a9dc14a781593ab408eb28ed16ed98" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(15)</type>
@@ -90,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="90" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="90" bodyend="94"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="90" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="90" bodyend="94"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1ac865c6454d84d74ab2b83b6c6abdaef7" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(15, 5)</type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="116" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="116" bodyend="116"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="116" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="116" bodyend="116"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1ac5211a7bf190aaf4d1519f76e0fb229b" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable, save</type>
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="143" bodyend="143"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="143" bodyend="143"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a3be5336c702550fbc0b4957cb9566202" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable, save</type>
@@ -132,7 +132,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="143" bodyend="-1"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="143" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="143" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1af373efa5ca25af4f5b359c5e2db6b2c0" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable, save</type>
@@ -146,7 +146,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="145" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="145" bodyend="145"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="145" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="145" bodyend="145"/>
       </memberdef>
       <memberdef kind="variable" id="namespacedrydepscheme__zhang__mod_1a460c3ae5c7840eabc28fcd9e321f5d25" prot="private" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable, save</type>
@@ -160,13 +160,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="146" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="146" bodyend="146"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="146" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="146" bodyend="146"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacedrydepscheme__zhang__mod_1a8e394283c65463b81d368143ff13796b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacedrydepscheme__zhang__mod_1a64be0aa29e1e02713cb97710f8f3ddee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
-        <definition>subroutine public drydepscheme_zhang_mod::compute_zhang</definition>
+        <definition>subroutine, public drydepscheme_zhang_mod::compute_zhang</definition>
         <argsstring>(num_layers, num_species, params, bxheight, frlanduse, iland, isice, issnow, lucname, obk, ps, rh, ts, tstep, u10m, ustar, v10m, z0, species_mw_g, species_radius, species_density, species_short_name, species_dd_hstar, species_dd_dvzaersnow, species_dd_dvzminval_snow, species_dd_dvzminval_land, species_lower_radius, species_upper_radius, species_is_dust, species_is_seasalt, species_conc, species_tendencies, is_gas, drydep_con_per_species, drydep_velocity_per_species, diagnostic_species_id)</argsstring>
         <name>compute_zhang</name>
         <qualifiedname>drydepscheme_zhang_mod::compute_zhang</qualifiedname>
@@ -255,7 +255,7 @@
           <defname>species_density</defname>
         </param>
         <param>
-          <type>character(len=255), dimension(num_species), intent(in)</type>
+          <type>character(len=32), dimension(num_species), intent(in)</type>
           <defname>species_short_name</defname>
         </param>
         <param>
@@ -465,6 +465,102 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">species_mw_g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species mw_g property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species density property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_short_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species short_name property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_dd_hstar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species dd_hstar property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_dd_DvzAerSnow</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species dd_DvzAerSnow property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_dd_DvzMinVal_snow</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species dd_DvzMinVal_snow property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_dd_DvzMinVal_land</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species dd_DvzMinVal_land property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_lower_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species lower_radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_upper_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species upper_radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_is_dust</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species is_dust property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_is_seasalt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species is_seasalt property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">species_conc</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -508,7 +604,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="182" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="220" bodyend="474"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="194" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="232" bodyend="486"/>
       </memberdef>
       <memberdef kind="function" id="namespacedrydepscheme__zhang__mod_1a0eccc87f49cc807efdb55b39078336ca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -598,7 +694,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="495" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" bodystart="497" bodyend="580"/>
+        <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="507" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" bodystart="509" bodyend="592"/>
       </memberdef>
       <member refid="group__catchem__drydep__process_1ga309028e0827b2371d5bbdae3ca9fca4b" kind="function"><name>aero_sfcrsii</name></member>
       <member refid="group__catchem__drydep__process_1gaa78bfe87f992c4ec644049efc0b3ee94" kind="function"><name>new_diam_den</name></member>
@@ -610,6 +706,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod copy.F90" line="33" column="1"/>
+    <location file="src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90" line="33" column="1"/>
   </compounddef>
 </doxygen>

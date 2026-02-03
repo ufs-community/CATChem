@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structwetdepcommon__mod_1_1wetdepprocessconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>wetdepcommon_mod::wetdepprocessconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1ac9615e5f8d49f40a13daaea78fc8d8a5" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) wetdepcommon_mod::wetdepprocessconfig::process_name</definition>
+        <argsstring></argsstring>
+        <name>process_name</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::process_name</qualifiedname>
+        <initializer>= &apos;wetdep&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="108" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a463aeb21e10100c953757deb4fcf18f6" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) wetdepcommon_mod::wetdepprocessconfig::process_version</definition>
+        <argsstring></argsstring>
+        <name>process_version</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::process_version</qualifiedname>
+        <initializer>= &apos;1.0.0&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="109" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="109" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a6db0adaa7c21cecbd124bd90ea0c3a08" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical wetdepcommon_mod::wetdepprocessconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="110" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a07655526e5ff3fffc76242ad5b50ada7" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepconfig" kindref="compound">wetdepconfig</ref>)</type>
+        <definition>type(wetdepconfig) wetdepcommon_mod::wetdepprocessconfig::wetdep_config</definition>
+        <argsstring></argsstring>
+        <name>wetdep_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::wetdep_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="113" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a84b8876d5ee4ec3e0ad42ae62fb0e1dd" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kindref="compound">wetdepschemejacobconfig</ref>)</type>
+        <definition>type(wetdepschemejacobconfig) wetdepcommon_mod::wetdepprocessconfig::jacob_config</definition>
+        <argsstring></argsstring>
+        <name>jacob_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::jacob_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="116" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1ad2fc9948125693b880491bd2f34b3607" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::load_from_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_from_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::load_from_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="119" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a4ab363817ecb73631214e0bd6372ccde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::load_species_from_chem_state</definition>
+        <argsstring>(this, chem_state, error_handler)</argsstring>
+        <name>load_species_from_chem_state</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::load_species_from_chem_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load species from ChemState This function is used for dynamic species discovery (by_metadata or all_species) For &apos;all_species&apos; mode: loads all species using nSpecies and SpeciesIndex For &apos;by_metadata&apos; mode: loads species by type using nSpeciesWetDep and WetDepIndex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="120" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1aba1f23b9ac6265e31048acd79f3fcd16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="121" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1aed46f834f0fd8111a5b09bbb49a33a41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="122" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1adb7090a490a928166831fd7d409ab3b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::get_active_scheme_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="123" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1575e13d4623315c2d70a63723cbce12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::load_jacob_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_jacob_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::load_jacob_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load jacob scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="124" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a744fe334308e65c87855f40adfff225c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="125" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="125" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Unified process configuration type that bridges ConfigManager and process-specific configs This is the main configuration type that ProcessInterface should use. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>wetdepcommon_mod::wetdepconfig</label>
+        <link refid="structwetdepcommon__mod_1_1wetdepconfig"/>
+      </node>
+      <node id="1">
+        <label>wetdepcommon_mod::wetdepprocessconfig</label>
+        <link refid="structwetdepcommon__mod_1_1wetdepprocessconfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>wetdep_config</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>jacob_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>wetdepcommon_mod::wetdepschemejacobconfig</label>
+        <link refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="105" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="105" bodyend="126"/>
+    <listofallmembers>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1aed46f834f0fd8111a5b09bbb49a33a41" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>finalize</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1adb7090a490a928166831fd7d409ab3b2" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>get_active_scheme_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a6db0adaa7c21cecbd124bd90ea0c3a08" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>is_active</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a84b8876d5ee4ec3e0ad42ae62fb0e1dd" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>jacob_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1ad2fc9948125693b880491bd2f34b3607" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_from_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1575e13d4623315c2d70a63723cbce12" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_jacob_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a4ab363817ecb73631214e0bd6372ccde" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_species_from_chem_state</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a744fe334308e65c87855f40adfff225c" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>map_diagnostic_species_indices</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1ac9615e5f8d49f40a13daaea78fc8d8a5" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>process_name</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a463aeb21e10100c953757deb4fcf18f6" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>process_version</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1aba1f23b9ac6265e31048acd79f3fcd16" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>validate</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a07655526e5ff3fffc76242ad5b50ada7" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>wetdep_config</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

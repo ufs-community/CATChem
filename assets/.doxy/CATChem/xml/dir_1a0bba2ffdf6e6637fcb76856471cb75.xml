@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_1a0bba2ffdf6e6637fcb76856471cb75" kind="dir">
+    <compoundname>src/process/settling</compoundname>
+    <innerdir refid="dir_ccadb5b29918b194ae5ca60f91721c2d">src/process/settling/examples</innerdir>
+    <innerdir refid="dir_34df91cc26d24067840a7381fe21b817">src/process/settling/schemes</innerdir>
+    <innerfile refid="_process_settling_interface___mod_8_f90">ProcessSettlingInterface_Mod.F90</innerfile>
+    <innerfile refid="_settling_common___mod_8_f90">SettlingCommon_Mod.F90</innerfile>
+    <innerfile refid="_settling_process_creator___mod_8_f90">SettlingProcessCreator_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/"/>
+  </compounddef>
+</doxygen>

@@ -104,31 +104,7 @@ INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
 
 
 
-Generated on: 2025-09-16T00:40:10.206610 Author: Barry Baker Reference: Gong et al. [1997]
-
-
-Pure science kernel for gong97 scheme in seasalt process. This module contains ONLY the computational algorithm with NO infrastructure dependencies. Uses only basic Fortran types for maximum portability and reusability.
-
-
-SCIENCE CUSTOMIZATION GUIDE:
-* Modify the algorithm in compute\_gong97 (search for "TODO")
-* Add scheme-specific helper subroutines as needed
-* Update physical constants for your scheme
-* Customize the environmental response functions
-
-
-
-
-INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
-* Parameter initialization and validation
-* Input array validation and error handling
-* Memory management and array allocation
-* Integration with host model time stepping
-
-
-
-
-Generated on: 2025-11-14T23:01:21.714170 Author: Barry Baker Reference: Gong et al. [1997] 
+Generated on: 2025-09-16T00:40:10.206610 Author: Barry Baker Reference: Gong et al. [1997] 
 
 
     

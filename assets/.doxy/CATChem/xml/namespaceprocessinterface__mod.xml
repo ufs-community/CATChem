@@ -216,9 +216,9 @@
         </inbodydescription>
         <location file="src/core/ProcessInterface_Mod.F90" line="255" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="256" bodyend="260"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessinterface__mod_1a87c16e7e66ca85d084a4e7ed63263926" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processinterface_mod::process_get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocessinterface__mod_1a86ab5f90dc7a59e3895f27e5f12a48fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=64) function, dimension(:), allocatable</type>
+        <definition>character(len=64) function, dimension(:), allocatable processinterface_mod::process_get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>process_get_required_diagnostic_fields</name>
         <qualifiedname>processinterface_mod::process_get_required_diagnostic_fields</qualifiedname>

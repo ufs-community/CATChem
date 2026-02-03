@@ -1,0 +1,576 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacesettlingscheme__gocart__mod" kind="namespace" language="Fortran">
+    <compoundname>settlingscheme_gocart_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacesettlingscheme__gocart__mod_1ade9bc9ff435d9e6dbdba666f8963d8da" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter settlingscheme_gocart_mod::plid</definition>
+        <argsstring></argsstring>
+        <name>plid</name>
+        <qualifiedname>settlingscheme_gocart_mod::plid</qualifiedname>
+        <initializer>= 0.01_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="38" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1aaeb4e16db9b09d9273320b3dd90d09ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public settlingscheme_gocart_mod::compute_gocart</definition>
+        <argsstring>(num_layers, num_species, params, airden, delp, pmid, rh, t, tstep, z, species_short_name, mie_data, species_mie_map, species_radius, species_density, species_conc, species_tendencies, settling_velocity_per_species_per_level, settling_flux_per_species, diagnostic_species_id)</argsstring>
+        <name>compute_gocart</name>
+        <qualifiedname>settlingscheme_gocart_mod::compute_gocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kindref="compound">settlingschemegocartconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>rh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers+1), intent(in)</type>
+          <defname>z</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(in)</type>
+          <defname>species_short_name</defname>
+        </param>
+        <param>
+          <type>type(gocart2g_mie), dimension(:), intent(in)</type>
+          <defname>mie_data</defname>
+        </param>
+        <param>
+          <type>integer, dimension(num_species), intent(in)</type>
+          <defname>species_mie_map</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), optional</type>
+          <defname>settling_velocity_per_species_per_level</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>settling_flux_per_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for gocart scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing GOCART gravitational settling scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">airden</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>AIRDEN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DELP field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pmid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PMID field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>RH field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>T field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_short_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species short_name property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mie_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Complete Mie data array from ChemState </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_mie_map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mapping from process species to MieData indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species density property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">settling_velocity_per_species_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>settling velocity per species per level [m/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">settling_flux_per_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>settling flux per species across column [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="68" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="90" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1a3c2f3947823b2d9471df855507c7402c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingscheme_gocart_mod::findklid</definition>
+        <argsstring>(klid, plid, ple, rc)</argsstring>
+        <name>findklid</name>
+        <qualifiedname>settlingscheme_gocart_mod::findklid</qualifiedname>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>klid</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>plid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>ple</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>findKlid - Finds corresponding vertical index for defined pressure lid </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>klid </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>plid </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ple </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[OUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rc <blockquote><para><zwj/> </para>
+</blockquote></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="287" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="288" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1a91c8cecc4f6dc0432e15436d530c79b7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingscheme_gocart_mod::prepmetvarsforgocart</definition>
+        <argsstring>(km, tmpu, rhoa, hghte, rh, press, delp, gocart_tmpu, gocart_rhoa, gocart_hghte, gocart_rh, gocart_press, gocart_delp)</argsstring>
+        <name>prepmetvarsforgocart</name>
+        <qualifiedname>settlingscheme_gocart_mod::prepmetvarsforgocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>km</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>tmpu</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>hghte</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>rh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>press</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_tmpu</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_hghte</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_rh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_press</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_delp</defname>
+        </param>
+        <briefdescription>
+<para>PrepMetVarsForGOCART - Prep the meteorological variables for GOCART settling scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>km </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tmpu </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rhoa </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>hghte </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rh </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>press </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>delp </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_tmpu </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_RHOA </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_HGHTE </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_RH </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_PRESS </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GOCART_DELP <blockquote><para><zwj/> </para>
+</blockquote></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_tmpu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_rhoa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_hghte</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>geometric height [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_rh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>relative humidity [decimal; not %] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_press</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pressure thickness [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="357" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="370" bodyend="405"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

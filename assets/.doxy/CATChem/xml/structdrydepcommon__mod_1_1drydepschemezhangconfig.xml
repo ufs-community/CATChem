@@ -99,7 +99,7 @@
         <argsstring></argsstring>
         <name>n_required_met_fields</name>
         <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::n_required_met_fields</qualifiedname>
-        <initializer>= 13</initializer>
+        <initializer>= 15</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -108,9 +108,9 @@
         </inbodydescription>
         <location file="src/process/drydep/DryDepCommon_Mod.F90" line="153" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="153" bodyend="153"/>
       </memberdef>
-      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ac35dc3e1a8363a8fe2595da98dc87250" prot="public" static="no" mutable="no">
-        <type>character(len=32), dimension(13)</type>
-        <definition>character(len=32), dimension(13) drydepcommon_mod::drydepschemezhangconfig::required_met_fields</definition>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a04ae21fe4a7002611b30067e03f31c9c" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(15)</type>
+        <definition>character(len=32), dimension(15) drydepcommon_mod::drydepschemezhangconfig::required_met_fields</definition>
         <argsstring></argsstring>
         <name>required_met_fields</name>
         <qualifiedname>drydepcommon_mod::drydepschemezhangconfig::required_met_fields</qualifiedname>
@@ -180,7 +180,7 @@
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a44293be5b1b9c497189011835d4098df" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>description</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a7c750a1149c53487e7540a5370102a96" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>finalize</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2bbff822beb6c562eaa514320885c906" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>n_required_met_fields</name></member>
-      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ac35dc3e1a8363a8fe2595da98dc87250" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>required_met_fields</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a04ae21fe4a7002611b30067e03f31c9c" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>required_met_fields</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1afb384a741e6dfb3083377d865548d398" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>scale_factor</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a375bde861bb5fdf540ab364717f04413" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>scheme_name</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2cf11dcdb5b76147a6a348c40d723220" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemezhangconfig</scope><name>validate</name></member>

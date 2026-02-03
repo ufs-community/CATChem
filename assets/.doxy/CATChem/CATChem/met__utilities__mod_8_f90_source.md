@@ -75,6 +75,8 @@ contains
       e = qv * p / (0.622_fp + 0.378_fp * qv)
       es = saturation_vapor_pressure(t)
       rh = e / es
+      ! Clip to physical limits
+      rh = max(0.0_fp, min(1.0_fp, rh))
    end function relative_humidity
 
    function saturation_vapor_pressure(T) result(es)
@@ -116,7 +118,7 @@ contains
       if (ustar > 0.0_fp .and. abs(h) > 0.0_fp) then
          l = - (ustar**3 * rho * cp * t0) / (von_karman * g0 * h)
       else
-         l = 1.0e6_fp  ! Neutral/very stable default
+         l = 1.0e5_fp  ! Neutral/very stable default
       endif
    end function monin_obukhov_length
 

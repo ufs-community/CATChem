@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>wetdepcommon_mod::wetdepschemejacobconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a16690ad20995067988b52008581e91e6" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) wetdepcommon_mod::wetdepschemejacobconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;jacob&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="79" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7a1e68de03b952d996484f86656227d7" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) wetdepcommon_mod::wetdepschemejacobconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::description</qualifiedname>
+        <initializer>= &apos;Jacob et al. [2000] wet deposition scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="80" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1aab8d01b9e48026aa7a632b0868dbc534" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) wetdepcommon_mod::wetdepschemejacobconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="81" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a70c8da892dfe6a298c6feb9551dc67ef" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) wetdepcommon_mod::wetdepschemejacobconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical wetdepcommon_mod::wetdepschemejacobconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::affects_full_column</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="85" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) wetdepcommon_mod::wetdepschemejacobconfig::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="88" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a9c644720bc6669580cfdaa05d990b253" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) wetdepcommon_mod::wetdepschemejacobconfig::radius_threshold</definition>
+        <argsstring></argsstring>
+        <name>radius_threshold</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::radius_threshold</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="89" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a361b7882ced5fde798b1b25d7b8c1415" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer wetdepcommon_mod::wetdepschemejacobconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="92" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(8)</type>
+        <definition>character(len=32), dimension(8) wetdepcommon_mod::wetdepschemejacobconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="93" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1ae45321fda598963adc17760a4ea165e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepschemejacobconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kindref="compound">wetdepschemejacobconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate jacob scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="96" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7edfee8399405578460919ebff16bc99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepschemejacobconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kindref="compound">wetdepschemejacobconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize jacob scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="97" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for jacob scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="76" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="76" bodyend="98"/>
+    <listofallmembers>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>affects_full_column</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a70c8da892dfe6a298c6feb9551dc67ef" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>algorithm_type</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1aab8d01b9e48026aa7a632b0868dbc534" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>author</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7a1e68de03b952d996484f86656227d7" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>description</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7edfee8399405578460919ebff16bc99" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>finalize</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a361b7882ced5fde798b1b25d7b8c1415" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a9c644720bc6669580cfdaa05d990b253" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>radius_threshold</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>required_met_fields</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>scale_factor</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a16690ad20995067988b52008581e91e6" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>scheme_name</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1ae45321fda598963adc17760a4ea165e3" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

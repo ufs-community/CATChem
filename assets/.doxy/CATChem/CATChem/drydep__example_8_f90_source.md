@@ -196,10 +196,6 @@ subroutine setup_meteorological_fields(state_manager, error_handler)
    type(ErrorHandler), intent(inout) :: error_handler
 
    ! Add required meteorological fields
-   call state_manager%add_met_field('USTAR', error_handler)
-   if (error_handler%has_error()) return
-   call state_manager%add_met_field('TSTEP', error_handler)
-   if (error_handler%has_error()) return
 
    ! Add optional meteorological fields
 
@@ -223,12 +219,6 @@ subroutine initialize_test_meteorology(state_manager, error_handler)
          latitude = 45.0_fp + real(i_col - 1, fp) * 1.0_fp  ! Latitude
          longitude = -120.0_fp + real(i_col - 1, fp) * 1.0_fp  ! Longitude
 
-         call state_manager%set_met_field('USTAR', i_col, i_lev, &
-            1.0_fp, error_handler)  ! Default value
-         if (error_handler%has_error()) return
-         call state_manager%set_met_field('TSTEP', i_col, i_lev, &
-            1.0_fp, error_handler)  ! Default value
-         if (error_handler%has_error()) return
 
       end do
    end do

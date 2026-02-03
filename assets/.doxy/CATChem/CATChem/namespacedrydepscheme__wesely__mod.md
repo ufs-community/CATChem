@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine, public | [**compute\_wesely**](#function-compute_wesely) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**drydepschemeweselyconfig**](namespacedrydepcommon__mod.md#none-drydepschemeweselyconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) bxheight, real(fp), intent(in) cldfrc, real(fp), dimension(:), intent(in) frlai, real(fp), dimension(:), intent(in) frlanduse, integer, dimension(:), intent(in) iland, logical, intent(in) isice, logical, intent(in) island, logical, intent(in) issnow, real(fp), intent(in) lat, real(fp), intent(in) lon, character(len=255), intent(in) lucname, real(fp), intent(in) obk, real(fp), intent(in) ps, real(fp), intent(in) salinity, real(fp), intent(in) suncosmid, real(fp), intent(in) swgdn, real(fp), intent(in) ts, real(fp), intent(in) tskin, real(fp), intent(in) tstep, real(fp), intent(in) ustar, real(fp), intent(in) z0, real(fp), dimension(num\_species), intent(in) species\_mw\_g, real(fp), dimension(num\_species), intent(in) species\_dd\_f0, character(len=255), dimension(num\_species), intent(in) species\_short\_name, real(fp), dimension(num\_species), intent(in) species\_dd\_hstar, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzaersnow, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzminval\_snow, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzminval\_land, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, logical, dimension(num\_species), intent(in) is\_gas, real(fp), dimension(:), intent(inout), optional drydep\_con\_per\_species, real(fp), dimension(:), intent(inout), optional drydep\_velocity\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for wesely scheme._  |
+|  subroutine, public | [**compute\_wesely**](#function-compute_wesely) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**drydepschemeweselyconfig**](namespacedrydepcommon__mod.md#none-drydepschemeweselyconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) bxheight, real(fp), intent(in) cldfrc, real(fp), dimension(:), intent(in) frlai, real(fp), dimension(:), intent(in) frlanduse, integer, dimension(:), intent(in) iland, logical, intent(in) isice, logical, intent(in) island, logical, intent(in) issnow, real(fp), intent(in) lat, real(fp), intent(in) lon, character(len=255), intent(in) lucname, real(fp), intent(in) obk, real(fp), intent(in) ps, real(fp), intent(in) salinity, real(fp), intent(in) suncosmid, real(fp), intent(in) swgdn, real(fp), intent(in) ts, real(fp), intent(in) tskin, real(fp), intent(in) tstep, real(fp), intent(in) ustar, real(fp), intent(in) z0, real(fp), dimension(num\_species), intent(in) species\_mw\_g, real(fp), dimension(num\_species), intent(in) species\_dd\_f0, character(len=32), dimension(num\_species), intent(in) species\_short\_name, real(fp), dimension(num\_species), intent(in) species\_dd\_hstar, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzaersnow, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzminval\_snow, real(fp), dimension(num\_species), intent(in) species\_dd\_dvzminval\_land, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, logical, dimension(num\_species), intent(in) is\_gas, real(fp), dimension(:), intent(inout), optional drydep\_con\_per\_species, real(fp), dimension(:), intent(inout), optional drydep\_velocity\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for wesely scheme._  |
 
 
 
@@ -116,7 +116,7 @@ subroutine, public drydepscheme_wesely_mod::compute_wesely (
     real(fp), intent(in) z0,
     real(fp), dimension(num_species), intent(in) species_mw_g,
     real(fp), dimension(num_species), intent(in) species_dd_f0,
-    character(len=255), dimension(num_species), intent(in) species_short_name,
+    character(len=32), dimension(num_species), intent(in) species_short_name,
     real(fp), dimension(num_species), intent(in) species_dd_hstar,
     real(fp), dimension(num_species), intent(in) species_dd_dvzaersnow,
     real(fp), dimension(num_species), intent(in) species_dd_dvzminval_snow,
@@ -164,6 +164,13 @@ This is a pure computational kernel implementing Wesely 1989 gas dry deposition 
 * `tstep` Time step [s] - retrieved from process interface 
 * `ustar` USTAR field [appropriate units] 
 * `z0` Z0 field [appropriate units] 
+* `species_mw_g` Species mw\_g property 
+* `species_dd_f0` Species dd\_f0 property 
+* `species_short_name` Species short\_name property 
+* `species_dd_hstar` Species dd\_hstar property 
+* `species_dd_DvzAerSnow` Species dd\_DvzAerSnow property 
+* `species_dd_DvzMinVal_snow` Species dd\_DvzMinVal\_snow property 
+* `species_dd_DvzMinVal_land` Species dd\_DvzMinVal\_land property 
 * `species_conc` Species concentrations [mol/mol] (num\_layers, num\_species) 
 * `species_tendencies` Species tendency terms [mol/mol/s] (num\_layers, num\_species) 
 * `drydep_con_per_species` Dry deposition concentration per species [ug/kg or ppm] (num\_species) 
@@ -178,5 +185,5 @@ This is a pure computational kernel implementing Wesely 1989 gas dry deposition 
 <hr>
 
 ------------------------------
-The documentation for this class was generated from the following file `src/process/drydep/schemes/DryDepScheme_WESELY_Mod copy.F90`
+The documentation for this class was generated from the following file `src/process/drydep/schemes/DryDepScheme_WESELY_Mod.F90`
 

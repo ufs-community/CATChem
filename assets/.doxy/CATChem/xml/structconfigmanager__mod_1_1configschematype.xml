@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="242" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="242" bodyend="242"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="244" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="244" bodyend="244"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="243" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="243" bodyend="243"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="245" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="245" bodyend="245"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1afcb8c33c7d961e30fed743a1457bb4df" prot="public" static="no" mutable="no">
         <type>character(len=64), dimension(:), allocatable</type>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="244" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="244" bodyend="244"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="246" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="246" bodyend="246"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1ab7e881ac5ca1054124828afe99965a44" prot="public" static="no" mutable="no">
         <type>character(len=64), dimension(:), allocatable</type>
@@ -63,7 +63,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="245" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="245" bodyend="245"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="247" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="247" bodyend="247"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configschematype_1a4dc68437d79224cf1dbaa33690135756" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -79,7 +79,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="246" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="246" bodyend="246"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="248" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="248" bodyend="248"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="248" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="248" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="250" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="250" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1af24542c5fb5b200901bcb174aee715a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -135,7 +135,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="249" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="249" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="251" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="251" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1aeb4737f7e9811dbbfbb05184369ef171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -158,7 +158,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="250" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="250" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="252" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="252" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1ab08db9a4dbd18a8990e01f7299715c4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -185,7 +185,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="251" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="251" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="253" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="253" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1a3146b923408e4c53d67c4a7b26e38208" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -216,7 +216,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="253" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="253" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="255" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="255" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1ae8cc7126819a744d51efe35b81a321e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -243,7 +243,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="254" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="254" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="256" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="256" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configschematype_1a4320b31da6ef8c77b4be9505f162d9c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -270,7 +270,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="255" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="255" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="257" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="257" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -279,7 +279,7 @@
     <detaileddescription>
 <para>Defines the expected structure and validation rules for configuration files. </para>
     </detaileddescription>
-    <location file="src/core/ConfigManager_Mod.F90" line="240" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="240" bodyend="256"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="242" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="242" bodyend="258"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1configschematype_1aeb4737f7e9811dbbfbb05184369ef171" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>add_optional_field</name></member>
       <member refid="structconfigmanager__mod_1_1configschematype_1af24542c5fb5b200901bcb174aee715a3" prot="public" virt="non-virtual"><scope>configmanager_mod::configschematype</scope><name>add_required_field</name></member>

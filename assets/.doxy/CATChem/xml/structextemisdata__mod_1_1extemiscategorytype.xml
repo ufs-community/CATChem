@@ -114,6 +114,22 @@
         </inbodydescription>
         <location file="src/core/ExtEmisData_Mod.F90" line="106" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="106" bodyend="106"/>
       </memberdef>
+      <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ae962286ec05e6d57f902c4f3c4df6e79" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical extemisdata_mod::extemiscategorytype::diagnostic</definition>
+        <argsstring></argsstring>
+        <name>diagnostic</name>
+        <qualifiedname>extemisdata_mod::extemiscategorytype::diagnostic</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable diagnostic output for this category? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ExtEmisData_Mod.F90" line="107" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a8abe8f8332b23a202a2bf1ca0bd98c5a" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
         <definition>real(fp) extemisdata_mod::extemiscategorytype::global_scale</definition>
@@ -128,7 +144,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="107" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="107" bodyend="107"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="108" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="108" bodyend="108"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1af7fc28920b5fa2e189d83d4c41338672" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -144,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="108" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="108" bodyend="108"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="109" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="109" bodyend="109"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1adb068646c28681b5cfaaa091ac09ccd6" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -160,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="109" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="109" bodyend="109"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="110" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="110" bodyend="110"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a32630b59c559b2c8dd389f861545d8c0" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -176,7 +192,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="110" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="110" bodyend="110"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="111" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="111" bodyend="111"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a8b027ac1c63ab3a3a5982647bf8791db" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -192,7 +208,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="111" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="111" bodyend="111"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="112" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="112" bodyend="112"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a90a4db5678f0fc544d1a9d2f0dff3f14" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -208,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="112" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="112" bodyend="112"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="113" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="113" bodyend="113"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a1bd768e1193128232f71fa82550eed5e" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -224,7 +240,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="113" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="113" bodyend="113"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="114" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="114" bodyend="114"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ad75eff292086a37a5308519e24ed2143" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -240,7 +256,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="114" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="114" bodyend="114"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="115" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="115" bodyend="115"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1ae906f40fb1bf6e4319313ff70c3b772d" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -256,7 +272,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="115" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="115" bodyend="115"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="116" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="116" bodyend="116"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a550d0ff0f4c194d9784c8f2d7e182174" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -272,7 +288,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="116" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="116" bodyend="116"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="117" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="117" bodyend="117"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1a5fc90313efb09d50f1f5bbbf343f314a" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -288,7 +304,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="117" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="117" bodyend="117"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="118" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="118" bodyend="118"/>
       </memberdef>
       <memberdef kind="variable" id="structextemisdata__mod_1_1extemiscategorytype_1abd8b72b860723af290e2a95c3fecf25e" prot="public" static="no" mutable="no">
         <type>character(len=128)</type>
@@ -304,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="118" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="118" bodyend="118"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="119" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="119" bodyend="119"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -385,7 +401,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="124" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="124" bodyend="-1"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="125" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="125" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a9377637c7707bf844557e977009a9ea2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -428,7 +444,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="127" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="127" bodyend="-1"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="128" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="128" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a5dde2a6e5628898f7cc93411328238f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -483,7 +499,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="130" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="130" bodyend="-1"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="131" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="131" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1a9971b07454f2de07995b2204a67c6c1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -538,7 +554,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="133" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="133" bodyend="-1"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="134" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="134" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structextemisdata__mod_1_1extemiscategorytype_1afb40f01c5d9a1d1f68ad09b31ed2043c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -583,7 +599,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="136" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="136" bodyend="-1"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="137" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="137" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -607,12 +623,13 @@
         <link refid="structextemisdata__mod_1_1extemisfieldtype"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/ExtEmisData_Mod.F90" line="99" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="99" bodyend="137"/>
+    <location file="src/core/ExtEmisData_Mod.F90" line="99" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="99" bodyend="138"/>
     <listofallmembers>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9971b07454f2de07995b2204a67c6c1d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>add_field</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1af7b95f8b0bec8bf4d1b4ea984ac6b4c2" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>category_name</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9377637c7707bf844557e977009a9ea2" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>cleanup</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1ab70c443eeabfd4617b351e0669104ffc" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>description</name></member>
+      <member refid="structextemisdata__mod_1_1extemiscategorytype_1ae962286ec05e6d57f902c4f3c4df6e79" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>diagnostic</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1a0a9b0e11b32789e959b6eb3fa2e7847d" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>fields</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1afb40f01c5d9a1d1f68ad09b31ed2043c" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>find_field</name></member>
       <member refid="structextemisdata__mod_1_1extemiscategorytype_1a32630b59c559b2c8dd389f861545d8c0" prot="public" virt="non-virtual"><scope>extemisdata_mod::extemiscategorytype</scope><name>format</name></member>

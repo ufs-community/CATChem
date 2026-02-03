@@ -17,7 +17,7 @@ module chemstate_mod
    USE precision_mod
    USE species_mod, only: speciestype
    USE gridgeometry_mod, only: gridgeometrytype
-   ! USE state_interface_mod   ! Removed for decoupling
+   USE gocart2g_miemod, only: gocart2g_mie
 
    IMPLICIT NONE
    PRIVATE
@@ -55,6 +55,7 @@ module chemstate_mod
       INTEGER              :: nSpeciesAero      ! Number of Aerosol Species
       INTEGER              :: nSpeciesAeroDryDep ! Number of Aerosol Species for Dry Dep
       INTEGER              :: nSpeciesDryDep    ! Number of DryDep Species
+      INTEGER              :: nSpeciesWetDep    ! Number of WetDep Species
       INTEGER              :: nSpeciesTracer    ! Number of Tracer Species
       INTEGER              :: nSpeciesDust      ! Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   ! Number of SeaSalt Species
@@ -66,7 +67,11 @@ module chemstate_mod
       INTEGER, ALLOCATABLE :: DustIndex(:)      ! Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   ! SeaSalt Species Index
       INTEGER, ALLOCATABLE :: DryDepIndex(:)   ! DryDep Species Index
+      INTEGER, ALLOCATABLE :: WetDepIndex(:)   ! WetDep Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  ! Species Names
+      type(GOCART2G_Mie), ALLOCATABLE :: MieData(:) ! Mie data for aerosols
+      CHARACTER(len=50), ALLOCATABLE :: MieNames(:) ! Mie species names
+      INTEGER, ALLOCATABLE :: SpcMieMap(:)   ! Mapping from species name to Mie data
 
       !---------------------------------------------------------------------
       ! Reals
@@ -98,6 +103,7 @@ module chemstate_mod
 
       procedure :: has_species => chemstate_has_species
       procedure :: get_dimensions => chemstate_get_dimensions
+      procedure :: init_mie_data => chemstate_init_mie_data
    end type chemstatetype
 
 CONTAINS
@@ -139,6 +145,7 @@ CONTAINS
       chemstate%nSpeciesAero = 0
       chemstate%nSpeciesAeroDryDep = 0
       chemstate%nSpeciesDryDep = 0
+      chemstate%nSpeciesWetDep = 0
       chemstate%nSpeciesDust = 0
       chemstate%nSpeciesGas = 0
       chemstate%nSpeciesSeaSalt = 0
@@ -162,12 +169,14 @@ CONTAINS
             chemstate%nSpeciesTracer = chemstate%nSpeciesTracer + 1
          endif
          if (chemstate%ChemSpecies(i)%is_drydep .eqv. .true.) then
-            chemstate%nSpeciesAeroDryDep = chemstate%nSpeciesAeroDryDep + 1
             chemstate%nSpeciesDryDep = chemstate%nSpeciesDryDep + 1
          endif
          if (chemstate%ChemSpecies(i)%is_drydep .eqv. .true. .and. &
             chemstate%ChemSpecies(i)%is_aerosol .eqv. .true.) then
             chemstate%nSpeciesAeroDryDep = chemstate%nSpeciesAeroDryDep + 1
+         endif
+         if (chemstate%ChemSpecies(i)%is_wetdep .eqv. .true.) then
+            chemstate%nSpeciesWetDep = chemstate%nSpeciesWetDep + 1
          endif
       enddo
 
@@ -471,6 +480,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesDryDep = 0
+      this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
       this%nSpeciesDust = 0
       this%nSpeciesSeaSalt = 0
@@ -542,6 +552,15 @@ CONTAINS
          if (allocstat /= 0) then
             call error_mgr%report_error(error_memory_allocation, &
                'Failed to allocate DryDepIndex', rc, &
+               thisloc, 'Check available memory')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         allocate(this%WetDepIndex(max_species), stat=allocstat)
+         if (allocstat /= 0) then
+            call error_mgr%report_error(error_memory_allocation, &
+               'Failed to allocate WetDepIndex', rc, &
                thisloc, 'Check available memory')
             call error_mgr%pop_context()
             return
@@ -624,9 +643,13 @@ CONTAINS
       if (allocated(this%DustIndex)) deallocate(this%DustIndex)
       if (allocated(this%SeaSaltIndex)) deallocate(this%SeaSaltIndex)
       if (allocated(this%DryDepIndex)) deallocate(this%DryDepIndex)
+      if (allocated(this%WetDepIndex)) deallocate(this%WetDepIndex)
       if (allocated(this%AeroDryDepIndex)) deallocate(this%AeroDryDepIndex)
       if (allocated(this%SpeciesNames)) deallocate(this%SpeciesNames)
       if (allocated(this%ChemSpecies)) deallocate(this%ChemSpecies)
+      if (allocated(this%MieData)) deallocate(this%MieData)
+      if (allocated(this%MieNames)) deallocate(this%MieNames)
+      if (allocated(this%SpcMieMap)) deallocate(this%SpcMieMap)
 
       ! Clean up grid geometry pointer (nullify only, don't deallocate as we don't own it)
       if (associated(this%Grid)) then
@@ -639,6 +662,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesDryDep = 0
+      this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
       this%nSpeciesDust = 0
       this%nSpeciesSeaSalt = 0
@@ -714,6 +738,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesDryDep = 0
+      this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
       this%nSpeciesDust = 0
       this%nSpeciesSeaSalt = 0
@@ -726,6 +751,7 @@ CONTAINS
       if (allocated(this%DustIndex)) this%DustIndex = 0
       if (allocated(this%SeaSaltIndex)) this%SeaSaltIndex = 0
       if (allocated(this%DryDepIndex)) this%DryDepIndex = 0
+      if (allocated(this%WetDepIndex)) this%WetDepIndex = 0
       if (allocated(this%AeroDryDepIndex)) this%AeroDryDepIndex = 0
       if (allocated(this%SpeciesNames)) this%SpeciesNames = ''
 
@@ -769,6 +795,9 @@ CONTAINS
       if (allocated(this%DryDepIndex)) then
          memory_bytes = memory_bytes + size(this%DryDepIndex) * 4
       endif
+      if (allocated(this%WetDepIndex)) then
+         memory_bytes = memory_bytes + size(this%WetDepIndex) * 4
+      endif
       if (allocated(this%AeroDryDepIndex)) then
          memory_bytes = memory_bytes + size(this%AeroDryDepIndex) * 4
       endif
@@ -794,6 +823,7 @@ CONTAINS
       write(*,'(A,I0)') 'Sea salt species: ', this%nSpeciesSeaSalt
       write(*,'(A,I0)') 'Tracer species: ', this%nSpeciesTracer
       write(*,'(A,I0)') 'DryDep species: ', this%nSpeciesDryDep
+      write(*,'(A,I0)') 'WetDep species: ', this%nSpeciesWetDep
       write(*,'(A,L1)') 'Arrays allocated: ', this%is_allocated()
       write(*,'(A,I0,A)') 'Memory usage: ', this%get_memory_usage(), ' bytes'
       write(*,'(A)') '========================'
@@ -1033,6 +1063,92 @@ CONTAINS
 
       rc = cc_success
    end subroutine chemstate_set_all_concentrations
+
+   subroutine chemstate_init_mie_data(this, n_mie_files, mie_names, mie_full_paths, rc)
+      implicit none
+      class(ChemStateType), intent(inout) :: this
+      integer, intent(in) :: n_mie_files
+      character(len=30), intent(in) :: mie_names(:)
+      character(len=512), intent(in) :: mie_full_paths(:)
+      integer, intent(out) :: rc
+
+      integer :: i, j, local_rc
+      !integer :: channels(4) = [470, 550, 670, 870]  ! Example channels: 470, 550, 670, 870 nm
+      character(len=255) :: err_msg
+      character(len=255) :: this_loc
+
+      rc = cc_success
+      this_loc = ' -> at chemstate_init_mie_data (in core/chemstate_mod.F90)'
+
+      ! Allocate MieData and MieNames arrays
+      if (allocated(this%MieData)) deallocate(this%MieData)
+      if (allocated(this%MieNames)) deallocate(this%MieNames)
+
+      allocate(this%MieData(n_mie_files), stat=rc)
+      if (rc /= cc_success) then
+         err_msg = 'Error allocating MieData array'
+         call cc_error(err_msg, rc, this_loc)
+         return
+      end if
+
+      allocate(this%MieNames(n_mie_files), stat=rc)
+      if (rc /= cc_success) then
+         err_msg = 'Error allocating MieNames array'
+         call cc_error(err_msg, rc, this_loc)
+         return
+      end if
+
+      ! Copy Mie names and load Mie data files
+      do i = 1, n_mie_files
+         this%MieNames(i) = mie_names(i)
+
+         ! Initialize Mie data from file [470 550 670 870] nm for diagnostics
+         !this%MieData(i) = GOCART2G_Mie(trim(mie_full_paths(i)), channels*1.e-9, nmom=0, rc=local_rc) !This is for diagMie
+         this%MieData(i) = gocart2g_mie(trim(mie_full_paths(i)), rc=local_rc)
+         if (local_rc /= 0) then
+            err_msg = 'Error initializing Mie data for ' // trim(mie_names(i)) // &
+               ' from file: ' // trim(mie_full_paths(i))
+            rc = local_rc
+            call cc_error(err_msg, rc, this_loc)
+            return
+         end if
+      end do
+
+      ! Allocate and compute species-to-Mie mapping
+      if (allocated(this%SpcMieMap)) deallocate(this%SpcMieMap)
+      allocate(this%SpcMieMap(this%nSpecies), stat=rc)
+      if (rc /= cc_success) then
+         err_msg = 'Error allocating SpcMieMap array'
+         call cc_error(err_msg, rc, this_loc)
+         return
+      end if
+
+      ! Initialize mapping to zero (no Mie data)
+      this%SpcMieMap(:) = 0
+
+      ! Map species to Mie data based on species mie_name field
+      do i = 1, this%nSpecies
+         if (len_trim(this%ChemSpecies(i)%mie_name) > 0) then
+            ! Find matching Mie data
+            do j = 1, n_mie_files
+               if (trim(this%ChemSpecies(i)%mie_name) == trim(this%MieNames(j))) then
+                  this%SpcMieMap(i) = j
+                  exit
+               end if
+            end do
+
+            ! Warn if no matching Mie data found
+            if (this%SpcMieMap(i) == 0) then
+               err_msg = 'Warning: No Mie data found for species ' // &
+                  trim(this%ChemSpecies(i)%short_name) // ' with mie_name: ' // &
+                  trim(this%ChemSpecies(i)%mie_name)
+               call cc_warning(err_msg, rc, this_loc)
+            end if
+         end if
+      end do
+
+      rc = cc_success
+   end subroutine chemstate_init_mie_data
 
 end module chemstate_mod
 ```

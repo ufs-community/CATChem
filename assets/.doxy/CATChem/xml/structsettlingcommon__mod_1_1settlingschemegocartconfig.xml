@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structsettlingcommon__mod_1_1settlingschemegocartconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>settlingcommon_mod::settlingschemegocartconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1aa286e48a993dc613bd6d5eea2aa6c44e" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) settlingcommon_mod::settlingschemegocartconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="72" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a2fd3ec9f5708b60d3c1b5406af0a5864" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) settlingcommon_mod::settlingschemegocartconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::description</qualifiedname>
+        <initializer>= &apos;GOCART gravitational settling scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="73" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3eb2c540ba47d42bc56aa2bb0cd2a177" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) settlingcommon_mod::settlingschemegocartconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="74" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a53f9c3b01866056cb50782039b3983c6" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) settlingcommon_mod::settlingschemegocartconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="75" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a64467403a3b7706c72e2f4e0bdbf0a7a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical settlingcommon_mod::settlingschemegocartconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::affects_full_column</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="78" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1a5c1d67fd5bcfd28b4944484ac0134b" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) settlingcommon_mod::settlingschemegocartconfig::scale_factor</definition>
+        <argsstring></argsstring>
+        <name>scale_factor</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::scale_factor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="81" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a7311a2f3e957267a5df14dbfce2ad77b" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical settlingcommon_mod::settlingschemegocartconfig::simple_scheme</definition>
+        <argsstring></argsstring>
+        <name>simple_scheme</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::simple_scheme</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="82" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3efb5cfdd48f16697dd01e4c71355b51" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer settlingcommon_mod::settlingschemegocartconfig::swelling_method</definition>
+        <argsstring></argsstring>
+        <name>swelling_method</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::swelling_method</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="83" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a784c88e08509b7b5e8865071528d1bd2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical settlingcommon_mod::settlingschemegocartconfig::correction_maring</definition>
+        <argsstring></argsstring>
+        <name>correction_maring</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::correction_maring</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="84" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1ac7efc42e3122e963d2ddb717ff0acddb" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer settlingcommon_mod::settlingschemegocartconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="87" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a33450aca2b2c0e38c27899762287e534" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(7)</type>
+        <definition>character(len=32), dimension(7) settlingcommon_mod::settlingschemegocartconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="88" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3dccaae461105ee5866cc42f85174ae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public settlingcommon_mod::settlingschemegocartconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kindref="compound">settlingschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="91" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1ab3a27b8e16c45b55b1dde2ed4ce829" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public settlingcommon_mod::settlingschemegocartconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kindref="compound">settlingschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="92" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="92" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for gocart scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/SettlingCommon_Mod.F90" line="69" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="69" bodyend="93"/>
+    <listofallmembers>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a64467403a3b7706c72e2f4e0bdbf0a7a" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>affects_full_column</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a53f9c3b01866056cb50782039b3983c6" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>algorithm_type</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3eb2c540ba47d42bc56aa2bb0cd2a177" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>author</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a784c88e08509b7b5e8865071528d1bd2" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>correction_maring</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a2fd3ec9f5708b60d3c1b5406af0a5864" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>description</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1ab3a27b8e16c45b55b1dde2ed4ce829" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>finalize</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1ac7efc42e3122e963d2ddb717ff0acddb" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a33450aca2b2c0e38c27899762287e534" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>required_met_fields</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1a5c1d67fd5bcfd28b4944484ac0134b" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>scale_factor</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1aa286e48a993dc613bd6d5eea2aa6c44e" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>scheme_name</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a7311a2f3e957267a5df14dbfce2ad77b" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>simple_scheme</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3efb5cfdd48f16697dd01e4c71355b51" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>swelling_method</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3dccaae461105ee5866cc42f85174ae6" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

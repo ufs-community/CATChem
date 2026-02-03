@@ -7,7 +7,7 @@
     <innerclass refid="structconfigmanager__mod_1_1configpresettype" prot="public">configmanager_mod::configpresettype</innerclass>
     <innerclass refid="structconfigmanager__mod_1_1configschematype" prot="public">configmanager_mod::configschematype</innerclass>
     <innerclass refid="structconfigmanager__mod_1_1emissioncategorymapping" prot="public">configmanager_mod::emissioncategorymapping</innerclass>
-    <innerclass refid="structconfigmanager__mod_1_1emissionmappingconfig" prot="private">configmanager_mod::emissionmappingconfig</innerclass>
+    <innerclass refid="structconfigmanager__mod_1_1emissionmappingconfig" prot="public">configmanager_mod::emissionmappingconfig</innerclass>
     <innerclass refid="structconfigmanager__mod_1_1emisspeciesmappingentry" prot="public">configmanager_mod::emisspeciesmappingentry</innerclass>
     <innerclass refid="structconfigmanager__mod_1_1externalemisconfig" prot="private">configmanager_mod::externalemisconfig</innerclass>
     <innerclass refid="structconfigmanager__mod_1_1filepathconfig" prot="private">configmanager_mod::filepathconfig</innerclass>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="77" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="77" bodyend="77"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="78" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="78" bodyend="78"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconfigmanager__mod_1a2e7bd4033377b36f53ee166fdbe82308" prot="public" static="no" mutable="no">
         <type>integer, parameter, public</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="78" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="78" bodyend="78"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="79" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="79" bodyend="79"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconfigmanager__mod_1a6ba48734c0427b562229dfe3c9a224b6" prot="public" static="no" mutable="no">
         <type>integer, parameter, public</type>
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="79" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="79" bodyend="79"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="80" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -95,7 +95,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="365" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="366" bodyend="383"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="368" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="369" bodyend="386"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a94224590f656a7d04be027a6c8f59575" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="387" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="388" bodyend="403"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="390" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="391" bodyend="406"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1af8e5f342c4c2370df9f0d02234cd8eff" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -141,7 +141,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="407" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="408" bodyend="423"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="410" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="411" bodyend="426"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a945b33183213fc767a5778e3f0a2baa2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -168,7 +168,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="427" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="428" bodyend="479"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="430" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="431" bodyend="482"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a4b59137163a0579835dcae1624d3ee67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -199,7 +199,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="483" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="484" bodyend="562"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="486" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="487" bodyend="565"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a0c4ad9e987756db7e5a15004ce726819" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -226,7 +226,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="566" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="567" bodyend="582"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="569" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="570" bodyend="585"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a7dd39ccde02a10f3d08450ecebe6346a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -253,7 +253,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="586" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="587" bodyend="611"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="589" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="590" bodyend="614"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a2e8cd95fe189b98c06c7bbadd868a060" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -276,7 +276,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="619" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="620" bodyend="625"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="622" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="623" bodyend="628"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aea61acc599b2165011e1ac09148f5cf8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -303,7 +303,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="629" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="630" bodyend="644"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="632" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="633" bodyend="647"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a4244955aa0563dbb6705dae71c3bbcfc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -326,7 +326,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="652" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="653" bodyend="672"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="655" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="656" bodyend="675"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a44645d3c42e9d427c5a7fe46f99c4f70" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -349,7 +349,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="676" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="677" bodyend="700"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="679" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="680" bodyend="703"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1af69eecb1911ac0d85e20d59033cf5050" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -376,7 +376,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="704" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="705" bodyend="752"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="707" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="708" bodyend="755"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ad60a4eea72f9395c61491ac1e3987a0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -403,7 +403,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="756" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="757" bodyend="789"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="759" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="760" bodyend="792"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a661898134ef02189fbae2d98401267f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -426,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="793" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="794" bodyend="804"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="796" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="797" bodyend="807"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a49cccec980d9a4fb765f6c0a8a9eaf20" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -453,7 +453,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="808" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="809" bodyend="815"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="811" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="812" bodyend="818"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a02c230dee910fbdc3d63943a46a06c82" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -480,7 +480,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="819" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="820" bodyend="891"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="822" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="823" bodyend="894"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a73885e296763a1d7cfe864dffae24b48" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -503,7 +503,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="895" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="896" bodyend="911"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="898" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="899" bodyend="914"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a962863a792876c63cfae827ed1198065" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -538,7 +538,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="915" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="916" bodyend="936"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="918" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="919" bodyend="939"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a25513920d448f3778a8b855c99c4793c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -573,7 +573,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="940" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="941" bodyend="961"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="943" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="944" bodyend="964"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aff2c5014f9f32eb7077514b69e3aa061" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -608,7 +608,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="965" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="966" bodyend="990"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="968" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="969" bodyend="993"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a44857c0fd069e8b07baf14681aa47ce7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -643,7 +643,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="994" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="995" bodyend="1019"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="997" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="998" bodyend="1022"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1adf71d07274158331a0307998b4273509" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -678,7 +678,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1023" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1024" bodyend="1072"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1026" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1027" bodyend="1075"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a4660ebf013062783a4d2a822552db165" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -709,7 +709,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1076" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1077" bodyend="1110"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1079" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1080" bodyend="1113"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a0e3c3b10a580d29b92eb3be66e7fc1fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -728,7 +728,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1114" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1115" bodyend="1119"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1117" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1118" bodyend="1122"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ac6e25eca4f17987f9902cc69548aa56b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -747,7 +747,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1123" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1124" bodyend="1128"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1126" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1127" bodyend="1131"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a1ef540d546d818e718194a999eacbde3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -766,7 +766,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1132" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1133" bodyend="1137"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1135" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1136" bodyend="1140"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a00e3b011275a8fce9da7aa817c3912e8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -785,7 +785,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1141" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1142" bodyend="1146"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1144" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1145" bodyend="1149"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1acdcee977a9af73b99b509e329e602ca6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=255) function</type>
@@ -804,7 +804,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1150" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1151" bodyend="1155"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1153" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1154" bodyend="1158"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a3070606c0f88ef47d0197cb111dafe55" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=255) function</type>
@@ -823,7 +823,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1159" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1160" bodyend="1164"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1162" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1163" bodyend="1167"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a75c436332c70c8396285892c1b8ae037" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -842,7 +842,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1168" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1169" bodyend="1179"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1171" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1172" bodyend="1182"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a597361174bee8abaeed4a018d178d70e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -869,7 +869,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1183" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1184" bodyend="1214"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1186" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1187" bodyend="1217"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aec8e66733ebfb3857805a18973cf5ae5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -892,7 +892,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1218" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1219" bodyend="1224"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1221" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1222" bodyend="1227"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a3b5aa50378e38cabfd08f3cb1bbc2a0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -919,7 +919,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1228" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1229" bodyend="1248"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1231" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1232" bodyend="1251"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1abf26aa9dafad8730c30cf9441c80ed2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -946,7 +946,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1252" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1253" bodyend="1272"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1255" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1256" bodyend="1275"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a1cea35a74548d98e904983c9a8449bf5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -969,7 +969,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1280" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1281" bodyend="1294"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1283" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1284" bodyend="1300"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a72fb76c4e5091b1685d593f9abcf61d2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -992,7 +992,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1298" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1299" bodyend="1307"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1304" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1305" bodyend="1313"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aea03361826e0ee742707813ec8134dfa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -1019,7 +1019,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1311" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1312" bodyend="1375"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1317" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1318" bodyend="1381"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a4430c1c7cd2aaba4204f2e033eb9cc41" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1038,7 +1038,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1379" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1380" bodyend="1391"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1385" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1386" bodyend="1397"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a828b32a7fd9f73ae63a5ed8ede9e21fc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=:) function, allocatable</type>
@@ -1061,7 +1061,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1395" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1396" bodyend="1405"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1401" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1402" bodyend="1411"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ac2fe5e7c771b76d53734ebcf54d12fb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1088,7 +1088,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1409" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1410" bodyend="1424"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1415" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1416" bodyend="1430"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ab25487874a4a2bc5133d5f931ea1fee4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1111,7 +1111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1428" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1429" bodyend="1464"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1434" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1435" bodyend="1471"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1afb7590fc32bae165183816be7e6e27ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1197,7 +1197,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1479" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1480" bodyend="1646"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1486" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1487" bodyend="1668"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a8c131dbbc08a22f29644f2af014a6201" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1262,7 +1262,61 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1654" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1655" bodyend="1876"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="1676" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1677" bodyend="1974"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceconfigmanager__mod_1a359b257ab8e8d8f1635b2f1fa1859713" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine configmanager_mod::config_manager_get_mie_data</definition>
+        <argsstring>(this, chem_state, rc)</argsstring>
+        <name>config_manager_get_mie_data</name>
+        <qualifiedname>configmanager_mod::config_manager_get_mie_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get Mie data and initialize ChemState Mie arrays. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine reads the mie/files section from the configuration, loads the Mie data files, and initializes the ChemState Mie arrays.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ConfigManager object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chem_state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemState object to initialize with Mie data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="1985" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1986" bodyend="2051"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a7e4e25f33f28d15203bbcdc1352c040a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1293,7 +1347,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1880" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1881" bodyend="1903"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2055" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2056" bodyend="2078"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a31112a953e8547b29258d956ca95e91e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1332,7 +1386,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1907" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1909" bodyend="1948"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2082" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2084" bodyend="2123"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a70f5b61228406865cb188f3715d0ff35" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -1355,7 +1409,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1952" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1953" bodyend="1972"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2127" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2128" bodyend="2147"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ac4651f003ba066ca7ab91da80f6f5dd8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1382,7 +1436,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="1976" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="1977" bodyend="2037"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2151" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2152" bodyend="2212"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a45529ea9f86c2f4e7879ae4038edf833" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1423,7 +1477,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2042" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2043" bodyend="2228"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2217" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2218" bodyend="2403"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a5c2d64796ebf327e73e113baa36f3809" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
@@ -1512,12 +1566,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2240" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2241" bodyend="2443"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2415" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2416" bodyend="2618"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceconfigmanager__mod_1acc3eccd2d5fc99419d61493b0db1e0fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespaceconfigmanager__mod_1a88f44f08088bc28ddbff70bb80ec3277" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public configmanager_mod::discover_nested_yaml_section_items</definition>
-        <argsstring>(filename, section_path, item_names, n_items, rc)</argsstring>
+        <argsstring>(filename, section_path, item_names, n_items, rc, search_mode)</argsstring>
         <name>discover_nested_yaml_section_items</name>
         <qualifiedname>configmanager_mod::discover_nested_yaml_section_items</qualifiedname>
         <param>
@@ -1529,7 +1583,7 @@
           <defname>section_path</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(inout)</type>
+          <type>character(len=*), dimension(:), intent(inout)</type>
           <defname>item_names</defname>
         </param>
         <param>
@@ -1540,6 +1594,10 @@
           <type>integer, intent(out)</type>
           <defname>rc</defname>
         </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>search_mode</defname>
+        </param>
         <briefdescription>
 <para>Discover items in a nested YAML section (supports arbitrary depth paths) </para>
         </briefdescription>
@@ -1548,7 +1606,7 @@
 <para>Examples:<itemizedlist>
 <listitem><para>&quot;processes/extemis&quot; -&gt; finds anthro, point, fire, fengsha</para>
 </listitem><listitem><para>&quot;processes/extemis/anthro&quot; -&gt; finds activate, scale_factor, source_file, etc.</para>
-</listitem><listitem><para>&quot;simulation/grid/levels&quot; -&gt; finds any items under that path</para>
+</listitem><listitem><para>&quot;mie/files&quot; with mode &apos;key_value_pairs&apos; -&gt; finds &quot;SS: opticsBands_SS.v3_3.RRTMG.nc&quot;</para>
 </listitem></itemizedlist>
 </para>
 <para><parameterlist kind="param"><parameteritem>
@@ -1591,12 +1649,20 @@
 <para>Return code </para>
 </parameterdescription>
 </parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">search_mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional: &apos;section_headers&apos; (default) or &apos;key_value_pairs&apos; </para>
+</parameterdescription>
+</parameteritem>
 </parameterlist>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2461" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2462" bodyend="2573"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2637" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2638" bodyend="2768"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1abd73400c3a94b4a1f71166721094c606" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1623,7 +1689,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2577" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2578" bodyend="2604"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2772" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2773" bodyend="2799"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a53ce8bee633ae2f74d8c4d42e7ba513f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1674,7 +1740,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2608" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2610" bodyend="2658"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2803" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2805" bodyend="2853"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ae261e87cc18e1151c7f436c7f5773477" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1697,7 +1763,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2662" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2663" bodyend="2670"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2857" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2858" bodyend="2865"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a735add22e9048965d1aa6e556b882e31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1716,7 +1782,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2674" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2675" bodyend="2686"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2869" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2870" bodyend="2881"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a8638d6cdef76da8fb8aa9553e21e1cbc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1735,7 +1801,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2690" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2691" bodyend="2698"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2885" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2886" bodyend="2893"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a43385b28de97ee1afb418f6636965000" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1758,7 +1824,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2702" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2703" bodyend="2732"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2897" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2898" bodyend="2927"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a4614e0fb63e48ef194532a0cc910f4ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1777,7 +1843,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2736" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2737" bodyend="2751"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2931" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2932" bodyend="2946"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aaf8432b45f08396aea94492fd121b738" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1796,7 +1862,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2755" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2756" bodyend="2768"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2950" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2951" bodyend="2963"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aa32bb118efe41450272ed31bdafb6578" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1819,7 +1885,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2772" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2773" bodyend="2792"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2967" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2968" bodyend="2987"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a56faecd56865f3fe651b9ab51002c0d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1828,7 +1894,7 @@
         <name>emis_mapping_config_init</name>
         <qualifiedname>configmanager_mod::emis_mapping_config_init</qualifiedname>
         <param>
-          <type>class(emissionmappingconfig), intent(inout)</type>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emissionmappingconfig" kindref="compound">emissionmappingconfig</ref>), intent(inout)</type>
           <defname>this</defname>
         </param>
         <briefdescription>
@@ -1838,7 +1904,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2796" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2797" bodyend="2811"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="2991" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2992" bodyend="3006"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a1e913facc84c6ecd6b657d49f11602d6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1847,7 +1913,7 @@
         <name>emis_mapping_config_cleanup</name>
         <qualifiedname>configmanager_mod::emis_mapping_config_cleanup</qualifiedname>
         <param>
-          <type>class(emissionmappingconfig), intent(inout)</type>
+          <type>class(<ref refid="structconfigmanager__mod_1_1emissionmappingconfig" kindref="compound">emissionmappingconfig</ref>), intent(inout)</type>
           <defname>this</defname>
         </param>
         <briefdescription>
@@ -1857,7 +1923,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2815" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2816" bodyend="2829"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3010" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3011" bodyend="3024"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1aa0dd6daa2b4d4bdc29272953335e2133" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1892,7 +1958,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="2845" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="2846" bodyend="3140"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3040" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3041" bodyend="3335"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a038d60b5c1868c5e429293d6210ed2f7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1993,7 +2059,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="3152" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3154" bodyend="3224"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3347" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3349" bodyend="3435"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1acaba1aac2b397dcbeaa830a9224648e4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2058,7 +2124,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="3233" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3234" bodyend="3275"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3444" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3445" bodyend="3486"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1a9726b360efdac8d63444d1e08047607e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2085,7 +2151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="3278" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3279" bodyend="3316"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3489" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3490" bodyend="3527"/>
       </memberdef>
       <memberdef kind="function" id="namespaceconfigmanager__mod_1ae68bbd0b1bb23e77a455cf908cd3cdff" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2108,7 +2174,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="3320" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3321" bodyend="3351"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="3531" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="3532" bodyend="3562"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

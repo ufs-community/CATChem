@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_34df91cc26d24067840a7381fe21b817" kind="dir">
+    <compoundname>src/process/settling/schemes</compoundname>
+    <innerfile refid="_settling_scheme___g_o_c_a_r_t___mod_8_f90">SettlingScheme_GOCART_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/schemes/"/>
+  </compounddef>
+</doxygen>

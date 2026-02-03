@@ -388,6 +388,9 @@
         <label>chemstate_mod::chemstatetype</label>
         <link refid="structchemstate__mod_1_1chemstatetype"/>
         <childnode refid="5" relation="usage">
+          <edgelabel>miedata</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
           <edgelabel>chemspecies</edgelabel>
         </childnode>
         <childnode refid="3" relation="usage">
@@ -404,6 +407,9 @@
           <edgelabel>chem_state</edgelabel>
         </childnode>
       </node>
+      <node id="5">
+        <label>gocart2g_mie</label>
+      </node>
       <node id="3">
         <label>gridgeometry_mod::gridgeometrytype</label>
         <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
@@ -415,7 +421,7 @@
           <edgelabel>geometry</edgelabel>
         </childnode>
       </node>
-      <node id="5">
+      <node id="6">
         <label>species_mod::speciestype</label>
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>

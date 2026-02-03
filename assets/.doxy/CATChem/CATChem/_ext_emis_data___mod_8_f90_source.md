@@ -76,7 +76,8 @@ MODULE extemisdata_mod
       INTEGER                                   :: irec = 0
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)
       LOGICAL                                   :: is_active = .true.  
-      LOGICAL                                   :: gridded = .true.   
+      LOGICAL                                   :: gridded = .true.    
+      LOGICAL                                   :: diagnostic = .true.  
       REAL(fp)                                  :: global_scale = 1.0_fp 
       REAL(fp)                                  :: topfraction = -1.0_fp 
       CHARACTER(LEN=128)                        :: source_file = ''
@@ -161,6 +162,9 @@ CONTAINS
 
       if (allocated(this%emission_data)) deallocate(this%emission_data)
       allocate(this%emission_data(this%nx, this%ny, this%nz, this%n_times))
+
+      ! Initialize emission data to zero to avoid garbage values
+      this%emission_data = 0.0_fp
 
       this%current_time_idx = 1
       this%factors = 1.0_fp

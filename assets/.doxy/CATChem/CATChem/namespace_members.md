@@ -81,6 +81,7 @@
 * **chemstate\_get\_num\_species** ([**chemstate\_mod**](namespacechemstate__mod.md))
 * **chemstate\_get\_species** ([**chemstate\_mod**](namespacechemstate__mod.md))
 * **chemstate\_has\_species** ([**chemstate\_mod**](namespacechemstate__mod.md))
+* **chemstate\_init\_mie\_data** ([**chemstate\_mod**](namespacechemstate__mod.md))
 * **chemstate\_is\_allocated** ([**chemstate\_mod**](namespacechemstate__mod.md))
 * **chemstate\_print\_summary** ([**chemstate\_mod**](namespacechemstate__mod.md))
 * **chemstate\_reset** ([**chemstate\_mod**](namespacechemstate__mod.md))
@@ -113,6 +114,7 @@
 * **config\_manager\_get\_integer** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **config\_manager\_get\_logical** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **config\_manager\_get\_max\_species** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
+* **config\_manager\_get\_mie\_data** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **config\_manager\_get\_nemission\_categories** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **config\_manager\_get\_nemission\_species** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **config\_manager\_get\_nspecies** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
@@ -143,9 +145,7 @@
 * **cp** ([**constants**](namespaceconstants.md))
 * **cv** ([**constants**](namespaceconstants.md))
 * **create\_drydep\_process** ([**drydepprocesscreator\_mod**](namespacedrydepprocesscreator__mod.md))
-* **compute\_environmental\_response\_gocart** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
-* **compute\_gocart** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
-* **compute\_species\_scaling\_gocart** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
+* **compute\_gocart** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md), [**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md))
 * **compute\_wesely** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
 * **compute\_zhang** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **check\_species\_in\_mechanism** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
@@ -167,7 +167,7 @@
 * **coord\_lonlat** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **coord\_projected** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **cunningham\_correction\_factor** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
-* **calculate\_and\_update\_diagnostics** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **calculate\_and\_update\_diagnostics** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **create\_process** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **column\_process\_disable** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **column\_process\_enable** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
@@ -181,13 +181,12 @@
 * **compute\_environmental\_response\_geos12** ([**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md))
 * **compute\_geos12** ([**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md))
 * **compute\_species\_scaling\_geos12** ([**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md))
-* **compute\_environmental\_response\_gong03** ([**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md))
 * **compute\_gong03** ([**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md))
-* **compute\_species\_scaling\_gong03** ([**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md))
-* **compute\_environmental\_response\_gong97** ([**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
 * **compute\_gong97** ([**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
-* **compute\_species\_scaling\_gong97** ([**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
+* **create\_settling\_process** ([**settlingprocesscreator\_mod**](namespacesettlingprocesscreator__mod.md))
 * **create\_species\_database** ([**species\_mod**](namespacespecies__mod.md))
+* **calculate\_day\_of\_year** ([**timestate\_mod**](namespacetimestate__mod.md))
+* **calculate\_derived\_fields** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **calculate\_air\_density** ([**unitconversion\_mod**](namespaceunitconversion__mod.md), [**utilities\_mod**](namespaceutilities__mod.md))
 * **calculate\_molecular\_weight** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **calorie\_to\_j** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
@@ -227,6 +226,10 @@
 * **check\_array\_bounds** ([**utilities\_mod**](namespaceutilities__mod.md))
 * **convert\_pressure\_units** ([**utilities\_mod**](namespaceutilities__mod.md))
 * **convert\_temperature\_units** ([**utilities\_mod**](namespaceutilities__mod.md))
+* **create\_wetdep\_process** ([**wetdepprocesscreator\_mod**](namespacewetdepprocesscreator__mod.md))
+* **complete\_reevap** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **compute\_jacob** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **cwc** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## d
@@ -319,7 +322,6 @@
 * **drydep\_process\_finalize** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **drydep\_process\_load\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **drydep\_process\_validate** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
-* **default\_scaling** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md), [**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md), [**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md), [**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
 * **drycoeff** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
 * **dmid** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **decomp\_get\_local\_bounds** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
@@ -327,6 +329,9 @@
 * **decomp\_is\_local\_column** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **dew\_point** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **dry\_adiabatic\_lapse\_rate** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **default\_scaling** ([**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md), [**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md), [**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
+* **density\_ice** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **density\_liq** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## e
@@ -398,7 +403,7 @@
 * **flex\_validate\_mappings** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
 * **filter\_species\_by\_type** ([**chemspeciesutils\_mod**](namespacechemspeciesutils__mod.md))
 * **finalize\_drydep\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
-* **finalize\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **finalize\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
 * **finalize\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **finalize\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **field\_1d** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
@@ -409,7 +414,7 @@
 * **f4** ([**precision\_mod**](namespaceprecision__mod.md))
 * **f8** ([**precision\_mod**](namespaceprecision__mod.md))
 * **fp** ([**precision\_mod**](namespaceprecision__mod.md))
-* **finalize\_column\_processing** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **finalize\_column\_processing** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **factory\_create\_process** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **factory\_init** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **factory\_list\_available** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
@@ -419,12 +424,17 @@
 * **finalize\_gong03\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **finalize\_gong97\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **finalize\_seasalt\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **finalize\_settling\_config** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
+* **findklid** ([**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md))
 * **find\_species\_by\_name** ([**species\_mod**](namespacespecies__mod.md))
 * **foot\_to\_m** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **ft2\_to\_m2** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **ft3\_to\_m3** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **ft\_to\_m** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **fts\_to\_ms** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **finalize\_jacob\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **finalize\_wetdep\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **find\_species\_ind** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## g
@@ -440,7 +450,7 @@
 * **get\_tracer\_species\_list** ([**chemspeciesutils\_mod**](namespacechemspeciesutils__mod.md))
 * **g0** ([**constants**](namespaceconstants.md))
 * **g0\_100** ([**constants**](namespaceconstants.md))
-* **get\_active\_scheme\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **get\_active\_scheme\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **get\_drydep\_default\_config** ([**drydepprocesscreator\_mod**](namespacedrydepprocesscreator__mod.md))
 * **get\_seasalt\_bin\_boundaries** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **get\_validation\_summary** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
@@ -480,16 +490,20 @@
 * **grid\_type\_3d** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_type\_column** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **get\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
-* **get\_required\_diagnostic\_fields** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **get\_required\_met\_fields** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **get\_required\_diagnostic\_fields** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **get\_required\_met\_fields** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **get\_global\_registry** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
 * **global\_registry** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
 * **global\_registry\_initialized** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
 * **get\_seasalt\_scheme** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **get\_settling\_scheme** ([**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
+* **get\_wetdep\_scheme** ([**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **get\_seasalt\_default\_config** ([**seasaltprocesscreator\_mod**](namespaceseasaltprocesscreator__mod.md))
+* **get\_settling\_default\_config** ([**settlingprocesscreator\_mod**](namespacesettlingprocesscreator__mod.md))
 * **get\_state\_type\_name** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
 * **get\_cos\_sza** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **get\_current\_date** ([**timestate\_mod**](namespacetimestate__mod.md))
+* **get\_days\_in\_month** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **get\_doy** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **get\_julian\_date** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **get\_sza** ([**timestate\_mod**](namespacetimestate__mod.md))
@@ -500,6 +514,7 @@
 * **get\_timezone\_offset** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **gal\_to\_m3** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **gallon\_to\_m3** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **get\_wetdep\_default\_config** ([**wetdepprocesscreator\_mod**](namespacewetdepprocesscreator__mod.md))
 
 
 ## h
@@ -550,7 +565,7 @@
 * **instance\_setup\_run\_phases** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
 * **instance\_validate\_data** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
 * **instance\_validate\_field\_mappings** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
-* **int\_to\_string** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **int\_to\_string** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **idep\_igbp** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
 * **idep\_iolson** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md), [**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **idep\_noah** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
@@ -575,9 +590,10 @@
 * **initialize\_catchem** ([**init\_mod**](namespaceinit__mod.md))
 * **initialize\_core\_states** ([**init\_mod**](namespaceinit__mod.md))
 * **initialize\_processes** ([**init\_mod**](namespaceinit__mod.md))
-* **init\_column\_processing** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **init\_column\_processing** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **init\_process** ([**run\_mod**](namespacerun__mod.md))
 * **is\_global\_holiday** ([**timestate\_mod**](namespacetimestate__mod.md))
+* **is\_leap\_year** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **is\_us\_holiday** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **inch\_to\_m** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **inhg\_to\_pa** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
@@ -588,15 +604,19 @@
 ## k
 
 * **knot\_to\_ms** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **k\_min** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **kg\_to\_cm3\_ice** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **kg\_to\_cm3\_liq** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## l
 
 * **load\_species\_properties** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
-* **load\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
-* **load\_species\_from\_chem\_state** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **load\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
+* **load\_species\_from\_chem\_state** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **load\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **load\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **land** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
 * **lucindex\_gc** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **lucindex\_igbp** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **lucindex\_noah** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
@@ -607,6 +627,8 @@
 * **load\_gong97\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **lb\_to\_kg** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **lbf\_to\_n** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **load\_jacob\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **liq\_to\_gas\_ratio** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## m
@@ -653,7 +675,7 @@
 * **mpi\_netcdf\_available** ([**catchemnetcdf\_mod**](namespacecatchemnetcdf__mod.md))
 * **mwcarb** ([**constants**](namespaceconstants.md))
 * **max\_fields** ([**diagnosticinterface\_mod**](namespacediagnosticinterface__mod.md))
-* **map\_diagnostic\_species\_indices** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **map\_diagnostic\_species\_indices** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **mapping\_add** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
 * **mapping\_bidirectional** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
 * **mapping\_catchem\_to\_host** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
@@ -687,6 +709,7 @@
 * **metstate\_allocate\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_cleanup** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_deallocate\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_derive\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
@@ -750,6 +773,7 @@
 * **manager\_get\_grid\_manager** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **manager\_get\_memory\_usage** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **manager\_get\_met\_state\_ptr** ([**statemanager\_mod**](namespacestatemanager__mod.md))
+* **manager\_get\_time\_state\_ptr** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **manager\_is\_ready** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **manager\_print\_info** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **manager\_set\_config** ([**statemanager\_mod**](namespacestatemanager__mod.md))
@@ -759,6 +783,7 @@
 * **manager\_set\_name** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **mile\_to\_m** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **mph\_to\_ms** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **m\_to\_cm** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## n
@@ -806,6 +831,7 @@
 
 ## o
 
+* **ocean** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
 * **one** ([**precision\_mod**](namespaceprecision__mod.md))
 * **one\_dble** ([**precision\_mod**](namespaceprecision__mod.md))
 * **one\_real** ([**precision\_mod**](namespaceprecision__mod.md))
@@ -841,9 +867,9 @@
 * **psi\_m\_businger** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **psychrometric\_constant** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **parse\_drydep\_config** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
-* **process\_finalize** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **process\_init** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **process\_run** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **process\_finalize** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **process\_init** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **process\_run** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **process\_accumulate\_emissions** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **process\_activate** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **process\_apply\_emission\_scaling** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
@@ -870,7 +896,12 @@
 * **process\_validate\_physical\_ranges** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **process\_validate\_species\_availability** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **parse\_seasalt\_config** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **parse\_settling\_config** ([**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
+* **parse\_wetdep\_config** ([**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **print\_seasalt\_config\_summary** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **print\_settling\_config\_summary** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
+* **plid** ([**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md))
+* **prepmetvarsforgocart** ([**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md))
 * **populate\_virtual\_column** ([**statemanager\_mod**](namespacestatemanager__mod.md))
 * **pa\_to\_atm** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **pa\_to\_hpa** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
@@ -878,6 +909,13 @@
 * **ppb\_to\_ppmv** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **ppt\_to\_ppbv** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
 * **psi\_to\_pa** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
+* **print\_wetdep\_config\_summary** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **pdwn\_thr** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+
+
+## q
+
+* **qq\_thr** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## r
@@ -900,10 +938,10 @@
 * **relative\_humidity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **rae\_f4** ([**precision\_mod**](namespaceprecision__mod.md))
 * **rae\_f8** ([**precision\_mod**](namespaceprecision__mod.md))
-* **register\_and\_allocate\_diagnostics** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **run\_active\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **run\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
-* **run\_gocart\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
+* **register\_and\_allocate\_diagnostics** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **run\_active\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **run\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **run\_gocart\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
 * **run\_wesely\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **run\_zhang\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **register\_builtin\_processes** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
@@ -925,9 +963,15 @@
 * **run\_geos12\_scheme\_column** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
 * **run\_gong03\_scheme\_column** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
 * **run\_gong97\_scheme\_column** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **run\_jacob\_scheme\_column** ([**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **run\_emis** ([**run\_mod**](namespacerun__mod.md))
 * **run\_process** ([**run\_mod**](namespacerun__mod.md))
 * **register\_seasalt\_process** ([**seasaltprocesscreator\_mod**](namespaceseasaltprocesscreator__mod.md))
+* **register\_settling\_process** ([**settlingprocesscreator\_mod**](namespacesettlingprocesscreator__mod.md))
+* **register\_wetdep\_process** ([**wetdepprocesscreator\_mod**](namespacewetdepprocesscreator__mod.md))
+* **rainfrac** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **rainout** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **rainout\_loss** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## s
@@ -940,6 +984,7 @@
 * **schema\_validate\_scaling\_factors** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **schema\_validate\_species\_mapping** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **scale\_height** ([**constants**](namespaceconstants.md))
+* **sea\_ice** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md))
 * **small** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
 * **salt\_v** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **seasalt\_lower\_bin** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
@@ -959,9 +1004,14 @@
 * **stokes\_settling\_velocity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **set\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **set\_seasalt\_scheme** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
+* **set\_settling\_scheme** ([**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
+* **set\_wetdep\_scheme** ([**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **seasalt\_process\_finalize** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **seasalt\_process\_load\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **seasalt\_process\_validate** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **settling\_process\_finalize** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
+* **settling\_process\_load\_config** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
+* **settling\_process\_validate** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
 * **species\_cleanup** ([**species\_mod**](namespacespecies__mod.md))
 * **species\_copy** ([**species\_mod**](namespacespecies__mod.md))
 * **species\_get\_concentration** ([**species\_mod**](namespacespecies__mod.md))
@@ -977,8 +1027,8 @@
 * **species\_set\_concentration** ([**species\_mod**](namespacespecies__mod.md))
 * **species\_validate** ([**species\_mod**](namespacespecies__mod.md))
 * **state\_status\_error** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
-* **state\_status\_initialized** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
-* **state\_status\_uninitialized** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
+* **state\_status\_initialized** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md), [**timestate\_mod**](namespacetimestate__mod.md))
+* **state\_status\_uninitialized** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md), [**timestate\_mod**](namespacetimestate__mod.md))
 * **state\_status\_valid** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
 * **state\_type\_chem** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
 * **state\_type\_config** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
@@ -997,11 +1047,11 @@
 
 ## t
 
-* **t\_standard** ([**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md), [**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md), [**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md), [**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
 * **two\_thirds** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md), [**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **tiny\_** ([**precision\_mod**](namespaceprecision__mod.md))
 * **tiny\_dble** ([**precision\_mod**](namespaceprecision__mod.md))
 * **tiny\_real** ([**precision\_mod**](namespaceprecision__mod.md))
+* **t\_standard** ([**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md), [**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md), [**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md))
 * **timestate\_cleanup** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **timestate\_get\_memory\_usage** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **timestate\_get\_status** ([**timestate\_mod**](namespacetimestate__mod.md))
@@ -1044,7 +1094,7 @@
 * **validate\_atmospheric\_constants** ([**constants**](namespaceconstants.md), [**utilities\_mod**](namespaceutilities__mod.md))
 * **von\_karman** ([**constants**](namespaceconstants.md))
 * **validate\_drydep\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
-* **validate\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **validate\_gocart\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
 * **validate\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **validate\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **validate\_emission\_config** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
@@ -1063,6 +1113,7 @@
 * **validate\_gong03\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **validate\_gong97\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **validate\_seasalt\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
+* **validate\_settling\_config** ([**settlingcommon\_mod**](namespacesettlingcommon__mod.md))
 * **validate\_species** ([**species\_mod**](namespacespecies__mod.md))
 * **validator\_check\_nan\_values** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
 * **validator\_check\_negative\_values** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
@@ -1081,11 +1132,21 @@
 * **virtual\_column\_set\_chem\_field** ([**virtualcolumn\_mod**](namespacevirtualcolumn__mod.md))
 * **virtual\_column\_set\_emis\_field** ([**virtualcolumn\_mod**](namespacevirtualcolumn__mod.md))
 * **virtual\_met\_cleanup** ([**virtualcolumn\_mod**](namespacevirtualcolumn__mod.md))
+* **validate\_jacob\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **validate\_wetdep\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 
 
 ## w
 
 * **wind\_profile\_loglaw** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **wetdep\_process\_finalize** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **wetdep\_process\_load\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **wetdep\_process\_validate** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **washfrac\_aerosol** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **washfrac\_hno3** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **washfrac\_liq\_gas** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **washout** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
+* **washout\_loss** ([**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md))
 
 
 ## x

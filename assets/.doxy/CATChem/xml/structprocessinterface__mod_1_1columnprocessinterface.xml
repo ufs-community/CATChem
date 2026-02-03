@@ -5,6 +5,8 @@
     <basecompoundref refid="structprocessinterface__mod_1_1processinterface" prot="public" virt="non-virtual">processinterface_mod::processinterface</basecompoundref>
     <derivedcompoundref refid="structprocessdrydepinterface__mod_1_1processdrydepinterface" prot="public" virt="non-virtual">processdrydepinterface_mod::processdrydepinterface</derivedcompoundref>
     <derivedcompoundref refid="structprocessseasaltinterface__mod_1_1processseasaltinterface" prot="public" virt="non-virtual">processseasaltinterface_mod::processseasaltinterface</derivedcompoundref>
+    <derivedcompoundref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" prot="public" virt="non-virtual">processsettlinginterface_mod::processsettlinginterface</derivedcompoundref>
+    <derivedcompoundref refid="structprocesswetdepinterface__mod_1_1processwetdepinterface" prot="public" virt="non-virtual">processwetdepinterface_mod::processwetdepinterface</derivedcompoundref>
     <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="structprocessinterface__mod_1_1columnprocessinterface_1a27d3f5b7f289346768942c5b7b1f0aa8" prot="private" static="no" mutable="no">
         <type>logical</type>
@@ -858,6 +860,18 @@
       <node id="4">
         <label>processseasaltinterface_mod::processseasaltinterface</label>
         <link refid="structprocessseasaltinterface__mod_1_1processseasaltinterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>processsettlinginterface_mod::processsettlinginterface</label>
+        <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>processwetdepinterface_mod::processwetdepinterface</label>
+        <link refid="structprocesswetdepinterface__mod_1_1processwetdepinterface"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>

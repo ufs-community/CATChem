@@ -11,7 +11,7 @@
 
 module seasaltscheme_geos12_mod
 
-   use precision_mod, only: fp
+   use precision_mod, only: fp, zero
    use seasaltcommon_mod, only: seasaltschemegeos12config
    use constants, only: pi  !load the constants needed for this scheme
 
@@ -31,7 +31,6 @@ contains
       num_layers, &
       num_species, &
       params, &
-      delp, &
       frocean, &
       frseaice, &
       sst, &
@@ -46,14 +45,13 @@ contains
       seasalt_number_emission_total, &
       seasalt_mass_emission_per_bin, &
       seasalt_number_emission_per_bin, &
-      diagnostic_species_id &
+      diagnostic_species_id  &
       )
 
       ! Arguments
       integer, intent(in) :: num_layers
       integer, intent(in) :: num_species
       type(SeaSaltSchemeGEOS12Config), intent(in) :: params
-      real(fp), intent(in) :: delp(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: frocean  ! Surface field - scalar
       real(fp), intent(in) :: frseaice  ! Surface field - scalar
       real(fp), intent(in) :: sst  ! Surface field - scalar
@@ -71,100 +69,157 @@ contains
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
 
       ! Local variables
-      integer :: k, species_idx
+      integer :: k, species_idx, RC
       integer :: diag_idx  ! For diagnostic species indexing
       real(fp) :: base_emission_factor
       real(fp) :: environmental_factor
       real(fp) :: species_factor
 
+      logical :: do_seasalt
+      integer :: n, ir
+      integer, parameter :: nr = 10
+      real(fp), parameter    :: r80fac = 1.65
+      real(fp) :: DryRadius
+      real(fp) :: DeltaDryRadius
+      real(fp) :: rwet, drwet
+      real(fp) :: NumberEmissions
+      real(fp) :: MassEmissions
+      real(fp) :: mass_emission_flux(num_layers, num_species)
+      real(fp) :: numb_emission_flux(num_layers, num_species)
+      real(fp) :: aFac
+      real(fp) :: bFac
+      real(fp) :: scalefac
+      real(fp) :: rpow
+      real(fp) :: exppow
+      real(fp) :: wpow
+      real(fp) :: MassScaleFac
+      real(fp) :: gweibull
+      real(fp) :: fsstemis
+      real(fp) :: fhoppel
+      real(fp) :: scale
+
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
       ! Do not re-initialize them here.
+      rc = 0
+      mass_emission_flux = 0.0_fp
+      numb_emission_flux = 0.0_fp
+      massemissions = 0.0_fp
+      numberemissions = 0.0_fp
+      fsstemis = 1.0_fp
+      fhoppel = 1.0_fp
 
-      ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
-      do k = 1, num_layers
+      do_seasalt = .true. ! Default value for all cases
 
-         ! TODO: Replace this generic implementation with your scheme's algorithm
-         ! This is a placeholder that demonstrates the expected structure
+      ! Don't do Sea Salt over land
+      !----------------------------------------------------------------
+      scale = frocean - frseaice
+      if (scale <= 0.0_fp) then
+         do_seasalt = .false.
+      endif
 
-         ! Initialize environmental factors
-         environmental_factor = 1.0_fp
+      if (do_seasalt) then
+         ! GEOS 12 Params
+         !---------------
+         scalefac = 33.0e3_fp
+         rpow     = 3.45_fp
+         exppow   = 1.607_fp
+         wpow     = 3.41_fp - 1._fp
 
-         ! Apply scheme-specific environmental responses based on meteorological fields
-         ! Generic field usage (customize for your scheme)
-         ! TODO: Consider how DELP affects your emissions
-         ! environmental_factor = environmental_factor * some_function(delp(k))
-         ! Generic field usage (customize for your scheme)
-         ! TODO: Consider how FROCEAN affects your emissions
-         ! environmental_factor = environmental_factor * some_function(frocean(k))
-         ! Generic field usage (customize for your scheme)
-         ! TODO: Consider how FRSEAICE affects your emissions
-         ! environmental_factor = environmental_factor * some_function(frseaice(k))
-         ! Generic field usage (customize for your scheme)
-         ! TODO: Consider how SST affects your emissions
-         ! environmental_factor = environmental_factor * some_function(sst(k))
-         ! Generic field usage (customize for your scheme)
-         ! TODO: Consider how USTAR affects your emissions
-         ! environmental_factor = environmental_factor * some_function(ustar(k))
+         ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
+         do k = 1, num_layers
 
-         ! Apply to each species
-         do species_idx = 1, num_species
-            ! Base emission factor (customize this for species-specific emissions)
-            base_emission_factor = default_scaling
+            ! TODO: Replace this generic implementation with your scheme's algorithm
+            ! This is a placeholder that demonstrates the expected structure
+            ! Get Jeagle SST Correction
+            call jeaglesstcorrection(fsstemis, sst,1, rc)
+            if (rc /= 0) then
+               rc = -1
+               !print *, 'Error in jeagleSSTcorrection'
+               return
+            endif
 
-            ! Species-specific factor (customize based on species properties)
-            species_factor = 1.0_fp  ! TODO: Add species-specific scaling
+            scale = scale * fsstemis * params%scale_factor
 
-            ! Compute emission flux using your scheme's formula
-            ! This is a simple example - replace with your actual algorithm
-            species_tendencies(k, species_idx) = base_emission_factor * &
-               environmental_factor * &
-               species_factor * &
-               (1.0_fp + species_conc(k, species_idx))
+            ! Apply to each species
+            do n = 1, num_species
+               ! delta dry radius
+               !-----------------
+               deltadryradius = (species_upper_radius(n) - species_lower_radius(n) )/ nr
 
-            ! Ensure non-negative emissions
-            species_tendencies(k, species_idx) = max(0.0_fp, species_tendencies(k, species_idx))
+               ! Dry Radius Substep
+               !-------------------
+               dryradius = species_lower_radius(n) + 0.5_fp * deltadryradius
 
-            ! TODO: Update diagnostic fields here based on your scheme's requirements
-            ! Each process should implement custom diagnostic calculations
-            ! Example patterns:
-            if (present(seasalt_mass_emission_total)) then
-               ! Add your custom sea salt mass emission flux total calculation
-               seasalt_mass_emission_total = seasalt_mass_emission_total + species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
-            end if
-            if (present(seasalt_number_emission_total)) then
-               ! Add your custom sea salt number emission flux total calculation
-               seasalt_number_emission_total = seasalt_number_emission_total + species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
-            end if
+               ! Mass scale fcator
+               massscalefac = scalefac * 4._fp/3._fp*pi*species_density(n)*(dryradius**3._fp) * 1.e-18_fp
 
-            ! TODO: Update scheme-specific diagnostic fields here based on your scheme's requirements
-            ! Each scheme should implement custom diagnostic calculations
-            ! Example patterns:
-            ! Per-species diagnostic: only update for diagnostic species
-            if (present(seasalt_mass_emission_per_bin) .and. present(diagnostic_species_id)) then
-               ! Find position of this species in diagnostic_species_id array
-               do diag_idx = 1, size(diagnostic_species_id)
-                  if (diagnostic_species_id(diag_idx) == species_idx) then
-                     ! Add your custom sea salt mass emission flux per bin calculation
-                     seasalt_mass_emission_per_bin(diag_idx) = species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
-                     exit
-                  end if
-               end do
-            end if
-            ! Per-species diagnostic: only update for diagnostic species
-            if (present(seasalt_number_emission_per_bin) .and. present(diagnostic_species_id)) then
-               ! Find position of this species in diagnostic_species_id array
-               do diag_idx = 1, size(diagnostic_species_id)
-                  if (diagnostic_species_id(diag_idx) == species_idx) then
-                     ! Add your custom sea salt number emission flux per bin calculation
-                     seasalt_number_emission_per_bin(diag_idx) = species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
-                     exit
-                  end if
-               end do
-            end if
+               do ir = 1, nr ! SubSteps
+
+                  ! Effective Wet Radius in Sub Step
+                  rwet  = r80fac * dryradius
+
+                  ! Effective Delta Wet Radius
+                  drwet = r80fac * deltadryradius
+
+                  afac = 4.7_fp*(1._fp + 30._fp*rwet)**(-0.017_fp*rwet**(-1.44_fp))
+                  bfac = (0.380_fp-log10(rwet))/0.65_fp
+
+                  ! Number emissions flux (# m-2 s-1)
+                  numberemissions = numberemissions + seasaltemissiongong( rwet, drwet, ustar, scalefac, &
+                     afac, bfac, rpow, exppow, wpow )
+
+                  ! Mass emissions flux (kg m-2 s-1)
+                  massemissions = massemissions + seasaltemissiongong( rwet, drwet, ustar, massscalefac, &
+                     afac, bfac, rpow, exppow, wpow )
+
+                  dryradius = dryradius + deltadryradius
+
+               enddo ! ir loop
+
+               mass_emission_flux(k, n) = massemissions * scale
+               numb_emission_flux(k, n) = numberemissions * scale
+               ! Reset for next species
+               massemissions = 0.0_fp
+               numberemissions = 0.0_fp
+
+               ! Ensure non-negative emissions
+               species_tendencies(k, n) = max(0.0_fp, mass_emission_flux(k, n))
+
+               ! TODO: Update diagnostic fields here based on your scheme's requirements
+               ! Each process should implement custom diagnostic calculations
+               ! Example patterns:
+               if (present(seasalt_mass_emission_total)) then
+                  seasalt_mass_emission_total = seasalt_mass_emission_total + mass_emission_flux(k, n)
+               end if
+               if (present(seasalt_number_emission_total)) then
+                  seasalt_number_emission_total = seasalt_number_emission_total + numb_emission_flux(k, n)
+               end if
+               if (present(seasalt_mass_emission_per_bin) .and. present(diagnostic_species_id)) then
+                  ! Find position of this species in diagnostic_species_id array
+                  do diag_idx = 1, size(diagnostic_species_id)
+                     if (diagnostic_species_id(diag_idx) == n) then
+                        ! Add your custom sea salt mass emission flux per bin calculation
+                        seasalt_mass_emission_per_bin(diag_idx) = mass_emission_flux(k, n)
+                        exit
+                     end if
+                  end do
+               end if
+               if (present(seasalt_number_emission_per_bin) .and. present(diagnostic_species_id)) then
+                  ! Find position of this species in diagnostic_species_id array
+                  do diag_idx = 1, size(diagnostic_species_id)
+                     if (diagnostic_species_id(diag_idx) == n) then
+                        ! Add your custom sea salt mass emission flux per bin calculation
+                        seasalt_number_emission_per_bin(diag_idx) = numb_emission_flux(k, n)
+                        exit
+                     end if
+                  end do
+               end if
+            end do
+
          end do
 
-      end do
+      end if ! do_seasalt
 
    end subroutine compute_geos12
 
@@ -200,6 +255,70 @@ contains
       end select
 
    end function compute_species_scaling_geos12
+
+   pure subroutine jeaglesstcorrection(fsstemis, sst, sstFlag, rc)
+
+      ! !USES:
+      implicit NONE
+
+      ! !INPUT/OUTPUT PARAMETERS:
+      real(fp), intent(inout) :: fsstemis     !
+      real(fp), intent(in)  :: sst  ! surface temperature (K)
+      integer, intent(in) :: sstFlag
+
+      ! !OUTPUT PARAMETERS:
+      integer, optional, intent(out) :: rc
+      !EOP
+
+      ! !Local Variables
+      real(fp) :: tskin_c
+      !EOP
+      !-------------------------------------------------------------------------
+      !  Begin...
+      rc = -1 ! Error code
+      fsstemis = 1.0_fp
+
+      fsstemis = zero
+      tskin_c  = sst - 273.15_fp
+      if (sstflag .eq. 1) then
+         fsstemis = max(0.0_fp,(0.3_fp + 0.1_fp*tskin_c - 0.0076_fp*tskin_c**2 + 0.00021_fp*tskin_c**3))
+      else
+         ! temperature range (0, 36) C
+         tskin_c = max(-0.1_fp, tskin_c)
+         tskin_c = min(36.0_fp, tskin_c)
+
+         fsstemis = (-1.107211_fp -0.010681_fp * tskin_c -0.002276_fp * tskin_c**2.0_fp &
+            + 60.288927_fp*1.0_fp/(40.0_fp - tskin_c))
+         fsstemis = max(0.0_fp, fsstemis)
+         fsstemis = min(7.0_fp, fsstemis)
+      endif
+
+      rc = 0
+   end subroutine jeaglesstcorrection
+
+   pure function seasaltemissiongong ( r, dr, w, scalefac, aFac, bFac, rpow, exppow, wpow )
+
+      real(fp), intent(in) :: r
+      real(fp), intent(in) :: dr
+      real(fp), intent(in) :: w
+      real(fp), intent(in) :: scalefac
+      real(fp), intent(in) :: aFac
+      real(fp), intent(in) :: bFac
+      real(fp), intent(in) :: rpow
+      real(fp), intent(in) :: exppow
+      real(fp), intent(in) :: wpow
+      real(fp)             :: SeasaltEmissionGong
+
+      !  Initialize
+      seasaltemissiongong = 0.
+
+      !  Particle size distribution function
+      seasaltemissiongong = scalefac * 1.373_fp*r**(-afac)*(1._fp+0.057_fp*r**rpow) &
+         *10._fp**(exppow*exp(-bfac**2._fp))*dr
+      !  Apply wind speed function
+      seasaltemissiongong = w**wpow * seasaltemissiongong
+
+   end function seasaltemissiongong
 
 end module seasaltscheme_geos12_mod
 ```

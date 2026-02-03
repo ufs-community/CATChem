@@ -197,7 +197,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="115" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="116" bodyend="121"/>
+        <location file="src/core/met_utilities_mod.F90" line="115" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="116" bodyend="123"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a6dccadc38394ff70bbba7f30a2b1788a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -228,7 +228,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="128" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="129" bodyend="131"/>
+        <location file="src/core/met_utilities_mod.F90" line="130" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="131" bodyend="133"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a63ee14f426910209013d4838cdca9e4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -259,7 +259,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="137" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="138" bodyend="140"/>
+        <location file="src/core/met_utilities_mod.F90" line="139" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="140" bodyend="142"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1acb60d649dad9396e41565561eab8c1ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -290,7 +290,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="146" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="147" bodyend="149"/>
+        <location file="src/core/met_utilities_mod.F90" line="148" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="149" bodyend="151"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a3f43c4e19d8a250df9f4612fbce91c11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -308,7 +308,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="154" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="155" bodyend="156"/>
+        <location file="src/core/met_utilities_mod.F90" line="156" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="157" bodyend="158"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a4543b06184565f68ec2f61a2ee294324" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -375,7 +375,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="165" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="166" bodyend="172"/>
+        <location file="src/core/met_utilities_mod.F90" line="167" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="168" bodyend="174"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1ad5298d69360d52cc9d1cb7ec7e8984a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -442,7 +442,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="181" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="182" bodyend="188"/>
+        <location file="src/core/met_utilities_mod.F90" line="183" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="184" bodyend="190"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a0bea4ab5831eb7518203ba689c161f9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -485,7 +485,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="195" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="196" bodyend="202"/>
+        <location file="src/core/met_utilities_mod.F90" line="197" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="198" bodyend="204"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1aeab7a0768c91a73f622cf47daab0ff58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function, public</type>
@@ -516,7 +516,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="208" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="209" bodyend="217"/>
+        <location file="src/core/met_utilities_mod.F90" line="210" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="211" bodyend="219"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1af3afbff7b7f0ea9c6dbd63638a50e217" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -559,7 +559,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="224" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="225" bodyend="229"/>
+        <location file="src/core/met_utilities_mod.F90" line="226" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="227" bodyend="231"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1aac3dac8f002b921acddac21a98d8ae52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -590,7 +590,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="235" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="236" bodyend="238"/>
+        <location file="src/core/met_utilities_mod.F90" line="237" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="238" bodyend="240"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1aeebf30076eb3b2022724a8ffc27a9ebb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -633,7 +633,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="245" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="246" bodyend="248"/>
+        <location file="src/core/met_utilities_mod.F90" line="247" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="248" bodyend="250"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a3ca3136c2b998f6bc8e9da2313e644b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -688,7 +688,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="256" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="257" bodyend="263"/>
+        <location file="src/core/met_utilities_mod.F90" line="258" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="259" bodyend="265"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a34e0818acb85fd19d8c06826345e9f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -731,7 +731,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="271" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="272" bodyend="274"/>
+        <location file="src/core/met_utilities_mod.F90" line="273" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="274" bodyend="276"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a2f308f9baff58fbfe863697bad4c453c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -762,7 +762,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="280" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="281" bodyend="287"/>
+        <location file="src/core/met_utilities_mod.F90" line="282" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="283" bodyend="289"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a9dd08effc73bd158055346a4573fbd36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -793,7 +793,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="293" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="294" bodyend="300"/>
+        <location file="src/core/met_utilities_mod.F90" line="295" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="296" bodyend="302"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1af69e46819854b0a24aac904714fad9c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -848,7 +848,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="309" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="310" bodyend="313"/>
+        <location file="src/core/met_utilities_mod.F90" line="311" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="312" bodyend="315"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a0cba4b3ae93ac11cfbabf9f43227eb67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -915,7 +915,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="323" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="324" bodyend="327"/>
+        <location file="src/core/met_utilities_mod.F90" line="325" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="326" bodyend="329"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a757d9f44a967bd3406d50567b4eb6223" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -958,7 +958,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="334" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="335" bodyend="337"/>
+        <location file="src/core/met_utilities_mod.F90" line="336" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="337" bodyend="339"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1acd5969ebe2634d7aa54388a3e0d9c938" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1025,7 +1025,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="346" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="347" bodyend="349"/>
+        <location file="src/core/met_utilities_mod.F90" line="348" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="349" bodyend="351"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a0daaa32d29631f17ef236af1ce893bb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1092,7 +1092,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="358" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="359" bodyend="361"/>
+        <location file="src/core/met_utilities_mod.F90" line="360" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="361" bodyend="363"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a00427bdb71513d4bbdefe2a64aa53d69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1171,7 +1171,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="371" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="372" bodyend="374"/>
+        <location file="src/core/met_utilities_mod.F90" line="373" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="374" bodyend="376"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a9920d37bcccca8ddf5df9b987684dcb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1214,7 +1214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="381" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="382" bodyend="388"/>
+        <location file="src/core/met_utilities_mod.F90" line="383" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="384" bodyend="390"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1aad21ca5868aaeb8dd0e653dfdc8ce68a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1269,7 +1269,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="396" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="397" bodyend="399"/>
+        <location file="src/core/met_utilities_mod.F90" line="398" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="399" bodyend="401"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1a823da7e7a42e7863929688e49ed1b440" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1348,7 +1348,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="410" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="411" bodyend="417"/>
+        <location file="src/core/met_utilities_mod.F90" line="412" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="413" bodyend="419"/>
       </memberdef>
       <memberdef kind="function" id="namespacemet__utilities__mod_1aa17d66e45313657afb2d8d45010babc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
@@ -1391,7 +1391,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/met_utilities_mod.F90" line="425" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="426" bodyend="429"/>
+        <location file="src/core/met_utilities_mod.F90" line="427" column="1" bodyfile="src/core/met_utilities_mod.F90" bodystart="428" bodyend="431"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

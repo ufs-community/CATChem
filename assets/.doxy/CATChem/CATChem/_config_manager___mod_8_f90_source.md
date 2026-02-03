@@ -34,6 +34,7 @@ module configmanager_mod
    public :: processconfigtype   ! Process configuration type
    public :: emissioncategorymapping  ! Emission category mapping structure
    public :: emisspeciesmappingentry  ! Individual emission species mapping
+   public :: emissionmappingconfig
    public :: discover_yaml_section_items
    public :: discover_nested_yaml_section_items
    public :: config_strategy_strict, config_strategy_permissive, config_strategy_fallback
@@ -69,6 +70,7 @@ module configmanager_mod
    type :: filepathconfig
       character(len=255) :: Emission_File = ''
       character(len=255) :: Species_File = ''
+      character(len=255) :: Mie_Directory = ''
       character(len=255) :: Input_Directory = './'
       character(len=255) :: Output_Directory = './'
    end type filepathconfig
@@ -245,6 +247,7 @@ module configmanager_mod
       procedure :: get_nemission_species => config_manager_get_nemission_species
       procedure :: get_species_file => config_manager_get_species_file
       procedure :: get_emission_file => config_manager_get_emission_file
+      procedure :: get_mie_data => config_manager_get_mie_data
 
       ! State integration
       !procedure :: apply_to_container => config_manager_apply_to_container
@@ -1183,6 +1186,9 @@ contains
       ! Initialize emission mapping
       call this%emission_mapping%init()
 
+      ! Initialize emission mapping
+      call this%emission_mapping%init()
+
    end subroutine config_data_init
 
    subroutine config_data_cleanup(this, rc)
@@ -1334,6 +1340,7 @@ contains
 
       ! Parse file paths
       call yaml_get(this%yaml_data, 'diagnostics/output/directory', this%config_data%file_paths%Output_Directory, rc, './')
+      call yaml_get(this%yaml_data, 'mie/directory', this%config_data%file_paths%Mie_Directory, rc, './')
       call yaml_get(this%yaml_data, 'simulation/species_filename', this%config_data%file_paths%Species_File, rc, '')
       call yaml_get(this%yaml_data, 'simulation/emission_filename', this%config_data%file_paths%Emission_File, rc, '')
 
@@ -1478,13 +1485,18 @@ contains
             endif
          endif
 
+         if (chem_state%ChemSpecies(i)%is_wetdep) then
+            chem_state%nSpeciesWetDep = chem_state%nSpeciesWetDep + 1
+            chem_state%WetDepIndex(chem_state%nSpeciesWetDep) = species_index
+         endif
+
          if (chem_state%ChemSpecies(i)%is_tracer) then
             chem_state%nSpeciesTracer = chem_state%nSpeciesTracer + 1
             chem_state%TracerIndex(chem_state%nSpeciesTracer) = species_index
          endif
 
          !print species info as a test
-         ! write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
+         write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
          ! write(*, '(A,A)') 'Description: ', chem_state%ChemSpecies(i)%description
          ! write(*, *) 'lower radius: ', chem_state%ChemSpecies(i)%lower_radius
          ! write(*, *) 'upper radius: ', chem_state%ChemSpecies(i)%upper_radius
@@ -1496,6 +1508,7 @@ contains
          ! write(*, *) 'is sea salt: ', chem_state%ChemSpecies(i)%is_seasalt
          ! write(*, *) 'is dry deposition: ', chem_state%ChemSpecies(i)%is_drydep
          ! write(*, *) 'is tracer: ', chem_state%ChemSpecies(i)%is_tracer
+         write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
 
       enddo
 
@@ -1509,8 +1522,17 @@ contains
       write(*, '(A,I0)') '  Dust species: ', chem_state%nSpeciesDust
       write(*, '(A,I0)') '  Sea salt species: ', chem_state%nSpeciesSeaSalt
       write(*, '(A,I0)') '  Dry deposition species: ', chem_state%nSpeciesDryDep
+      write(*, '(A,I0)') '  Wet deposition species: ', chem_state%nSpeciesWetDep
       write(*, '(A,I0)') '  Aerosol dry deposition species: ', chem_state%nSpeciesAeroDryDep
       write(*, '(A,I0)') '  Tracer species: ', chem_state%nSpeciesTracer
+
+      ! Initialize Mie data if configuration is available
+      call this%get_mie_data(chem_state, rc)
+      if (rc /= cc_success) then
+         write(*, '(A)') 'WARNING: Mie data initialization failed or skipped'
+         ! Don't fail the overall species loading for Mie issues
+         rc = cc_success
+      end if
 
       ! Return optional output parameters
       if (present(num_species)) then
@@ -1530,10 +1552,11 @@ contains
       character(len=256) :: field_path
       character(len=64) :: species_name
       real(fp) :: temp_real  ! Using project-wide fp precision
+      real(fp), allocatable :: temp_real_array(:)  ! Using project-wide fp precision
       logical :: temp_logical
       character(len=256) :: temp_string
       integer :: yaml_rc  ! Separate return code for YAML operations
-      integer :: i, j  ! Loop variables for debugging
+      integer :: i, j, actual_size  ! Loop variables for debugging
 
       rc = cc_success
 
@@ -1572,6 +1595,13 @@ contains
       call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
       if (yaml_rc == 0) then
          species%description = trim(adjustl(temp_string))
+      endif
+
+      ! Load mie name (optional)
+      write(field_path, '(A,A)') trim(species_path), '/mie_name'
+      call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
+      if (yaml_rc == 0) then
+         species%mie_name = trim(adjustl(temp_string))
       endif
 
       ! Load molecular weight (optional, but important) - use safe conversion for numeric values
@@ -1666,6 +1696,66 @@ contains
          species%dd_DvzMinVal_land = missing
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/henry_k0'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_k0 = temp_real
+      else
+         species%henry_k0 = missing
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/henry_cr'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_cr = temp_real
+      else
+         species%henry_cr = missing
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/henry_pKa'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%henry_pKa = temp_real
+      else
+         species%henry_pKa = 0.0_fp  ! Default to 0.0 if not specified
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_retfactor'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_retfactor = temp_real
+      else
+         species%wd_retfactor = missing
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_LiqAndGas'
+      call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_LiqAndGas = temp_logical
+      else
+         species%wd_LiqAndGas = missing_bool
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_convfacI2G'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_convfacI2G = temp_real
+      else
+         species%wd_convfacI2G = missing
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/wd_rainouteff'
+      allocate(temp_real_array(10))  ! Assume max size of 10 for temporary array
+      success = yaml_get_real_array(yaml_root, trim(field_path), temp_real_array, actual_size)
+      if (success .and. actual_size > 0) then
+         species%wd_rainouteff(1:actual_size) = temp_real_array(1:actual_size)
+         deallocate(temp_real_array)
+      else
+         ! Return missing array
+         species%wd_rainouteff(:) = missing
+         deallocate(temp_real_array)
+      endif
+
       ! Load type flags (with proper default handling)
       write(field_path, '(A,A)') trim(species_path), '/is_gas'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
@@ -1715,6 +1805,14 @@ contains
          species%is_drydep = missing_bool
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/is_wetdep'
+      call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
+      if (yaml_rc == 0) then
+         species%is_wetdep = temp_logical
+      else
+         species%is_wetdep = missing_bool
+      endif
+
       write(field_path, '(A,A)') trim(species_path), '/is_photolysis'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
@@ -1743,6 +1841,75 @@ contains
          ', seasalt=', species%is_seasalt, ')'
 
    end subroutine load_species_properties
+
+   subroutine config_manager_get_mie_data(this, chem_state, rc)
+      use chemstate_mod, only: chemstatetype
+      implicit none
+      class(ConfigManagerType), intent(in) :: this
+      type(ChemStateType), intent(inout) :: chem_state
+      integer, intent(out) :: rc
+
+      ! Temporary variables for file information
+      integer :: n_mie_files
+      character(len=30) :: mie_names(100)
+      character(len=255) :: mie_filenames(100)
+      character(len=512) :: mie_full_paths(100)
+      character(len=320) :: key_value_pairs(100)  ! key:value entries
+      integer :: i, colon_pos
+      character(len=255) :: mie_dir
+      character(len=320) :: trimmed_entry
+
+      rc = cc_success
+      n_mie_files = 0
+
+      ! Get Mie directory
+      mie_dir = this%config_data%file_paths%Mie_Directory
+      if (len_trim(mie_dir) == 0) then
+         mie_dir = './'
+      end if
+
+      ! Discover key:value pairs in mie/files section using modified function
+      call discover_nested_yaml_section_items(this%config_file, 'mie/files', key_value_pairs, n_mie_files, rc, 'key_value_pairs')
+
+      if (rc /= cc_success .or. n_mie_files == 0) then
+         write(*, '(A)') 'WARNING: No Mie files found in configuration. Skipping Mie data initialization.'
+         rc = cc_success  ! Don't fail, just skip Mie initialization
+         return
+      end if
+
+      ! Parse each key:value pair inline (reusing existing colon parsing logic)
+      do i = 1, n_mie_files
+         trimmed_entry = trim(key_value_pairs(i))
+
+         ! Find the colon separator (reusing existing pattern)
+         colon_pos = index(trimmed_entry, ':')
+         if (colon_pos == 0) then
+            rc = cc_failure
+            return
+         end if
+
+         ! Extract Mie name (before colon) and filename (after colon)
+         mie_names(i) = trim(trimmed_entry(1:colon_pos-1))
+         mie_filenames(i) = trim(adjustl(trimmed_entry(colon_pos+1:)))
+
+         ! Construct full path
+         if (trim(mie_dir) == './') then
+            mie_full_paths(i) = trim(mie_filenames(i))
+         else
+            mie_full_paths(i) = trim(mie_dir) // trim(mie_filenames(i))
+         end if
+      end do
+
+      ! Initialize Mie data in ChemState directly
+      call chem_state%init_mie_data(n_mie_files, mie_names(1:n_mie_files), mie_full_paths(1:n_mie_files), rc)
+
+      if (rc == cc_success) then
+         write(*, '(A,I0,A)') 'INFO: Successfully initialized Mie data with ', n_mie_files, ' files'
+      else
+         write(*, '(A)') 'ERROR: Failed to initialize Mie data in ChemState'
+      end if
+
+   end subroutine config_manager_get_mie_data
 
    subroutine config_manager_find_category_mapping(this, category_name, category_mapping, rc)
       implicit none
@@ -2296,17 +2463,19 @@ contains
 
    end subroutine discover_yaml_section_items
 
-   subroutine discover_nested_yaml_section_items(filename, section_path, item_names, n_items, rc)
+   subroutine discover_nested_yaml_section_items(filename, section_path, item_names, n_items, rc, search_mode)
       implicit none
       character(len=*), intent(in) :: filename
       character(len=*), intent(in) :: section_path
-      character(len=64), intent(inout) :: item_names(:)
+      character(len=*), intent(inout) :: item_names(:)
       integer, intent(out) :: n_items
       integer, intent(out) :: rc
+      character(len=*), optional, intent(in) :: search_mode
 
       integer :: unit_num, io_stat, colon_pos, indent_level
       character(len=256) :: line, trimmed_line, field_name, content_after_colon
       integer :: line_number, target_indent
+      character(len=20) :: mode
 
       ! Path navigation variables
       character(len=64) :: path_components(10)  ! Support up to 10 levels deep
@@ -2318,6 +2487,13 @@ contains
       n_items = 0
       line_number = 0
       target_indent = -1
+
+      ! Set search mode (default to section headers for backward compatibility)
+      if (present(search_mode)) then
+         mode = trim(search_mode)
+      else
+         mode = 'section_headers'
+      end if
 
       ! Initialize path tracking
       current_depth = 0
@@ -2376,14 +2552,24 @@ contains
                if (indent_level > target_indent) then
                   ! Check if this is a direct child (first level below target)
                   if (indent_level == target_indent + 2) then
-                     ! Only add items that don't have a scalar value after the colon (i.e., are nodes)
                      content_after_colon = adjustl(trimmed_line(colon_pos+1:))
-                     if (len_trim(content_after_colon) == 0) then
-                        ! Nothing after colon - this is a node
-                        if (n_items < size(item_names)) then
-                           n_items = n_items + 1
-                           item_names(n_items) = trim(field_name)
-                           !write(*, '(A,A)') 'INFO: Discovered field in file: ', trim(field_name)
+
+                     ! Handle different search modes
+                     if (trim(mode) == 'key_value_pairs') then
+                        ! Look for entries WITH content after colon (key:value pairs)
+                        if (len_trim(content_after_colon) > 0) then
+                           if (n_items < size(item_names)) then
+                              n_items = n_items + 1
+                              item_names(n_items) = trim(trimmed_line)  ! Store full line
+                           endif
+                        endif
+                     else
+                        ! Default: look for entries WITHOUT content after colon (section headers)
+                        if (len_trim(content_after_colon) == 0) then
+                           if (n_items < size(item_names)) then
+                              n_items = n_items + 1
+                              item_names(n_items) = trim(field_name)  ! Store just field name
+                           endif
                         endif
                      endif
                   endif
@@ -2965,8 +3151,8 @@ contains
       integer, intent(in) :: local_priority
       integer, intent(out) :: rc
 
-      character(len=256) :: process_path, temp_string
-      logical :: temp_logical, success
+      character(len=256) :: process_path, temp_string, gas_scheme, aero_scheme
+      logical :: temp_logical, success, gas_success, aero_success
       integer :: temp_integer, local_rc
 
       rc = cc_success
@@ -3023,8 +3209,24 @@ contains
       if (success) then
          process_config%scheme = trim(temp_string)
       else
-         write(*,'(A,A,A)') 'Warning: Scheme of process "', trim(process_name), '" is not defined!'
-         process_config%scheme = 'default'
+         ! Try to read separate gas_scheme and aero_scheme
+         gas_success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/gas_scheme', gas_scheme)
+         aero_success = yaml_get_string(config_mgr%yaml_data, trim(process_path) // '/aero_scheme', aero_scheme)
+
+         if (gas_success .and. aero_success) then
+            ! Combine gas and aero schemes
+            process_config%scheme = trim(gas_scheme) // ' (gas) & ' // trim(aero_scheme) // ' (aero)'
+         elseif (gas_success) then
+            ! Only gas scheme found
+            process_config%scheme = trim(gas_scheme) // ' (gas)'
+         elseif (aero_success) then
+            ! Only aero scheme found
+            process_config%scheme = trim(aero_scheme) // ' (aero)'
+         else
+            ! No scheme configuration found
+            write(*,'(A,A,A)') 'Warning: Scheme of process "', trim(process_name), '" is not defined!'
+            process_config%scheme = 'default'
+         endif
       endif
 
    end subroutine populate_process_config

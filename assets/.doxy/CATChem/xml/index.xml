@@ -366,6 +366,7 @@
     <member refid="structchemstate__mod_1_1chemstatetype_1a829f30ed5fc6e3d40fe78102bdb3f082" kind="variable"><name>nspeciesaero</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1ae792336a026b8f3430c5b92e47ea6996" kind="variable"><name>nspeciesaerodrydep</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1ac72ab2c9c01c2572ac9bb2c37723e380" kind="variable"><name>nspeciesdrydep</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1ad6f08fd46bddfbe08008ecefc46779a4" kind="variable"><name>nspecieswetdep</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1a9df9a9db4d94f30dc67ac428ecf2a350" kind="variable"><name>nspeciestracer</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1a3e41fcac80b385e47aff59bb3a1e2885" kind="variable"><name>nspeciesdust</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1af5cd1f06d26d429e72975d65fa842ead" kind="variable"><name>nspeciesseasalt</name></member>
@@ -377,7 +378,11 @@
     <member refid="structchemstate__mod_1_1chemstatetype_1ad3c61fba845ccf8eea8d00cdee61a2be" kind="variable"><name>dustindex</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1ab18e842883467663e0affcb032f3c777" kind="variable"><name>seasaltindex</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1ae99d71e3b01f5565476429b2590414a5" kind="variable"><name>drydepindex</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1a071f38e3bc218ad8a008ebc8c17cc303" kind="variable"><name>wetdepindex</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1abe9801b0a00bd7cb501ab1bf6cbd11a6" kind="variable"><name>speciesnames</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1afc1bf8ae10d3bcd8bcd08130418e7ee4" kind="variable"><name>miedata</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1adc625978e27a0567aa601ae2f400d1e8" kind="variable"><name>mienames</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1ab44c69c239b03df8777e2481e1a457b3" kind="variable"><name>spcmiemap</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1accbd386dace4c75e9114377a3e75d208" kind="variable"><name>chemspecies</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1a0e84f1da3a6efbdeced72a7b5032658f" kind="variable"><name>grid</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1ab43a3b0ff23262d3381064f85fe47fd0" kind="function"><name>init</name></member>
@@ -399,6 +404,7 @@
     <member refid="structchemstate__mod_1_1chemstatetype_1a4af9a82fa12897a73b52fdddf3118105" kind="function"><name>set_all_concentrations</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1a3ae49906239ca88cfc649ebb0223fe49" kind="function"><name>has_species</name></member>
     <member refid="structchemstate__mod_1_1chemstatetype_1a7e4e141a303e00c01e0a3c94d9843dc8" kind="function"><name>get_dimensions</name></member>
+    <member refid="structchemstate__mod_1_1chemstatetype_1ad957a63bd23c46b11c9bdc049f5d2948" kind="function"><name>init_mie_data</name></member>
   </compound>
   <compound refid="interfaceprocessinterface__mod_1_1column__finalize__interface" kind="interface"><name>processinterface_mod::column_finalize_interface</name>
     <member refid="interfaceprocessinterface__mod_1_1column__finalize__interface_1a3faca216f0b734a33b80f168f4933eda" kind="function"><name>column_finalize_interface</name></member>
@@ -525,6 +531,7 @@
     <member refid="structconfigmanager__mod_1_1configmanagertype_1a733b0543fc63cd6977e24a8213e0e70a" kind="function"><name>get_nemission_species</name></member>
     <member refid="structconfigmanager__mod_1_1configmanagertype_1ada3a0f15fc23f857319b4e532b6cd0f7" kind="function"><name>get_species_file</name></member>
     <member refid="structconfigmanager__mod_1_1configmanagertype_1a06d8dbed890907347aee0bb289e381bc" kind="function"><name>get_emission_file</name></member>
+    <member refid="structconfigmanager__mod_1_1configmanagertype_1a6fddd23b9d4e8265afa980c653cbf280" kind="function"><name>get_mie_data</name></member>
     <member refid="structconfigmanager__mod_1_1configmanagertype_1a59f6154b72bbbaf53f462ea19aef49aa" kind="function"><name>load_and_init_species</name></member>
     <member refid="structconfigmanager__mod_1_1configmanagertype_1a6e563d7fa8e459823f37a49ccaca0cd8" kind="function"><name>load_emission_config</name></member>
     <member refid="structconfigmanager__mod_1_1configmanagertype_1a86c7a1d57b630b98d9bae288ca830792" kind="function"><name>load_emission_mapping</name></member>
@@ -735,7 +742,7 @@
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a6420dc089c246985a2f94abe5c5c2d1a" kind="variable"><name>scale_factor</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa327a00316f47dbafd0b6487708c9aa8" kind="variable"><name>resuspension</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a7cea08537430552dc0ef1ddaaf4a975a" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a3d5b2661b8c2161fbe56fb8e55e04325" kind="variable"><name>required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0ac83d08c0b217811533103d232f3625" kind="function"><name>validate</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ae5a580d73cae7c80a51dc0e5a8f36fe1" kind="function"><name>finalize</name></member>
   </compound>
@@ -750,7 +757,7 @@
     <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a6c746e27be78bd6d1ff0a18c5d1457c5" kind="variable"><name>co2_level</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a5b63cd989d517b9c925b2ba766c63f65" kind="variable"><name>co2_reference</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa70c4edc9a7b646974fc709635596e19" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae613700fc88dc379036747a60de3f77a" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a3b5d92d16592839c9027f138942bab8a" kind="variable"><name>required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa0a1bee6a1c2e0e0ecc726a4c933e875" kind="function"><name>validate</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a0f079d6e62e4900166a7f2cd6d7782bf" kind="function"><name>finalize</name></member>
   </compound>
@@ -762,7 +769,7 @@
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ad8a912a205cfa5897b1136a1b1301219" kind="variable"><name>affects_full_column</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1afb384a741e6dfb3083377d865548d398" kind="variable"><name>scale_factor</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2bbff822beb6c562eaa514320885c906" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1ac35dc3e1a8363a8fe2595da98dc87250" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a04ae21fe4a7002611b30067e03f31c9c" kind="variable"><name>required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2cf11dcdb5b76147a6a348c40d723220" kind="function"><name>validate</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a7c750a1149c53487e7540a5370102a96" kind="function"><name>finalize</name></member>
   </compound>
@@ -862,6 +869,7 @@
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a0a9b0e11b32789e959b6eb3fa2e7847d" kind="variable"><name>fields</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5090e517d421453560679fb61bd0c1ef" kind="variable"><name>is_active</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9f1555075caf1972d29c0fc423bda75f" kind="variable"><name>gridded</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1ae962286ec05e6d57f902c4f3c4df6e79" kind="variable"><name>diagnostic</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a8abe8f8332b23a202a2bf1ca0bd98c5a" kind="variable"><name>global_scale</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1af7fc28920b5fa2e189d83d4c41338672" kind="variable"><name>topfraction</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1adb068646c28681b5cfaaa091ac09ccd6" kind="variable"><name>source_file</name></member>
@@ -1021,6 +1029,7 @@
   <compound refid="structconfigmanager__mod_1_1filepathconfig" kind="type"><name>configmanager_mod::filepathconfig</name>
     <member refid="structconfigmanager__mod_1_1filepathconfig_1a43da7e6c61f7224155303bb3fc2d2582" kind="variable"><name>emission_file</name></member>
     <member refid="structconfigmanager__mod_1_1filepathconfig_1a791e716911da21e73915332dbfd7ba0f" kind="variable"><name>species_file</name></member>
+    <member refid="structconfigmanager__mod_1_1filepathconfig_1a7a4e8b7c6661997e22b654c05e36d50b" kind="variable"><name>mie_directory</name></member>
     <member refid="structconfigmanager__mod_1_1filepathconfig_1a7d1218a26746d4a706de2e192ed86fd8" kind="variable"><name>input_directory</name></member>
     <member refid="structconfigmanager__mod_1_1filepathconfig_1aa66cdbf21e9bc072abe4faf314850550" kind="variable"><name>output_directory</name></member>
   </compound>
@@ -1192,6 +1201,7 @@
     <member refid="structmetstate__mod_1_1metstatetype_1a3b7d3f288f521e3df49caaaaf32b1215" kind="variable"><name>nsoil</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1aad9aa4f142aa10fa105e51725838594a" kind="variable"><name>nsoiltype</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a05750350cb1e7a0747db6ca85a5b75e9" kind="variable"><name>soilm</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1ac952d9b5345953c8bbe0714dcd76ac1e" kind="variable"><name>soilt</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a498b982b58f01fe520567e127db8f3ee" kind="variable"><name>frlanduse</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a20187324f30847ce1a9e7b956f6fb19f" kind="variable"><name>frsoil</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a687b3ff20b993fbb2f4d15884e876393" kind="variable"><name>frlai</name></member>
@@ -1219,6 +1229,10 @@
     <member refid="structmetstate__mod_1_1metstatetype_1a8741a1977dbb1bbb6ec6e08de95ed121" kind="variable"><name>frz0</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a2e71b7a2f9e56018b3032ba261b90138" kind="variable"><name>pblh</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1ac0ae785f3aa20371b67e367014a55f95" kind="variable"><name>salinity</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1ab744bbdcf344cc527b2c2dad699d0d52" kind="variable"><name>cmm</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1a23cff14176403197454a34863efd3bfc" kind="variable"><name>oro</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1acf8e879ceb311348485fa0355180d31f" kind="variable"><name>rca</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1a440e11c3646a8e8b96d4d7b77c06a5f5" kind="variable"><name>wca</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a7ac2ab926987c39bd66a6014e3708570" kind="variable"><name>f_of_pbl</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1abe1468c01a9d66c8557b3644573c96fa" kind="variable"><name>f_under_pbltop</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a582928c3e07721d786f387b34a8d0f0d" kind="variable"><name>obk</name></member>
@@ -1234,6 +1248,7 @@
     <member refid="structmetstate__mod_1_1metstatetype_1a815c60b96fac454335139d912504a72a" kind="variable"><name>precanv</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1ae17f0e363df4409dfb6deb0223a05c7c" kind="variable"><name>preccon</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1ae537f955ead359a824a1df1bb50e7c0a" kind="variable"><name>preclsc</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1a259119f9c10568f0b8dfb8e9e9a12ebb" kind="variable"><name>reevapls</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1ae068547233207c96f8db35e4ca17b604" kind="variable"><name>qi</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1aa940823eeeffdcd9e90493faaf542faa" kind="variable"><name>ql</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a85b81c715898edf8d1048a2c1033788c" kind="variable"><name>pficu</name></member>
@@ -1269,6 +1284,7 @@
     <member refid="structmetstate__mod_1_1metstatetype_1aba1b375a0cff47dbb1f556c9b6b1d511" kind="variable"><name>rh</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1ac3b72cd4489da9e298f7f204f0d13cac" kind="variable"><name>sphu</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1af53ad75a96ab61f2a634ba4c41ecd657" kind="variable"><name>airden</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1a7b1b967fb68e0c5c054d27fa4c2bae57" kind="variable"><name>airden_dry</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a76e985f23b732e6c3085acb898a1c5a3" kind="variable"><name>airnumden</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a68ab864aacd8c0a85acfbff37a76f66e" kind="variable"><name>mairden</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a79442ccc1c6a8b149a1ec8c7630612f0" kind="variable"><name>avgw</name></member>
@@ -1320,6 +1336,7 @@
     <member refid="structmetstate__mod_1_1metstatetype_1adde21c178abff17d5f2def3389ef1f2e" kind="function"><name>metstate_set_field_3d_int</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1afbb5e0d083943a477ed45a379d1ab00a" kind="function"><name>metstate_set_field_3d_logical</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a09ab60ccf24810992c679dab5c00ec18" kind="function"><name>set_multiple_fields</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1a27870695571c3815bc702b4474201dee" kind="function"><name>derive_field</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a6889949631c64726e2eaaf3ca41f1dcf" kind="function"><name>allocate_field</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1adb4079dae647c870d2044f3fbb047217" kind="function"><name>deallocate_field</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1af24499eabedb28d9ac378f8745921811" kind="function"><name>allocate_arrays</name></member>
@@ -1401,6 +1418,9 @@
     <member refid="structconfigmanager__mod_1_1processconfigtype_1a976ba772ec3cd1c5d96b37667ebddf53" kind="variable"><name>timing</name></member>
     <member refid="structconfigmanager__mod_1_1processconfigtype_1abbe112b0686a7d8946e9322575fa8bc3" kind="variable"><name>subcycling</name></member>
   </compound>
+  <compound refid="structprocessmanager__mod_1_1processcontainertype" kind="type"><name>processmanager_mod::processcontainertype</name>
+    <member refid="structprocessmanager__mod_1_1processcontainertype_1af785fa5407a8745589400d63f2250857" kind="variable"><name>item</name></member>
+  </compound>
   <compound refid="interfaceprocessregistry__mod_1_1processcreatorinterface" kind="interface"><name>processregistry_mod::processcreatorinterface</name>
     <member refid="interfaceprocessregistry__mod_1_1processcreatorinterface_1a9531f2e50f7977bd26051e3af7b734d4" kind="function"><name>processcreatorinterface</name></member>
   </compound>
@@ -1476,7 +1496,7 @@
     <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" kind="function"><name>process_column</name></member>
   </compound>
   <compound refid="structprocessmanager__mod_1_1processmanagertype" kind="type"><name>processmanager_mod::processmanagertype</name>
-    <member refid="structprocessmanager__mod_1_1processmanagertype_1a7186743b53e846851a15c6242401e06d" kind="variable"><name>processes</name></member>
+    <member refid="structprocessmanager__mod_1_1processmanagertype_1a49d29e91cd4b515fec8fbc8d14f8fa84" kind="variable"><name>processes</name></member>
     <member refid="structprocessmanager__mod_1_1processmanagertype_1aa679c705a6fa7a796172bb8e80eecf65" kind="variable"><name>num_processes</name></member>
     <member refid="structprocessmanager__mod_1_1processmanagertype_1a0752b4bbc4cc5bcd8ad3c6288ca7fb0a" kind="variable"><name>max_processes</name></member>
     <member refid="structprocessmanager__mod_1_1processmanagertype_1a485fa72f5d242e92a73ea8eb088ab249" kind="variable"><name>factory</name></member>
@@ -1557,6 +1577,56 @@
     <member refid="structprocessseasaltinterface__mod_1_1processseasaltinterface_1a3544ebd5e3bac228f9ff7d6a5089b212" kind="function"><name>run_geos12_scheme_column</name></member>
     <member refid="structprocessseasaltinterface__mod_1_1processseasaltinterface_1ad10f36f5199fa3c975590f6ff813a280" kind="function"><name>register_and_allocate_diagnostics</name></member>
     <member refid="structprocessseasaltinterface__mod_1_1processseasaltinterface_1aefd2c96030435e111aef59b98fdf0582" kind="function"><name>calculate_and_update_diagnostics</name></member>
+  </compound>
+  <compound refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kind="type"><name>processsettlinginterface_mod::processsettlinginterface</name>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a29cd9503b63a8d16bedebd767473a6dd" kind="variable"><name>process_config</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6d80d8b95c86c8aaebe72d1a46ba8ed2" kind="variable"><name>chem_state</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1abbb6768277815deaf54e039a6c02dfc9" kind="variable"><name>met_state</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a79c7c36d8d8ca49d322bc50ab0d0aaf5" kind="variable"><name>diag_settling_velocity_per_species_per_level_idx</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4536aff6b7f1057d5bbdcfc85187fd59" kind="variable"><name>diag_settling_flux_per_species_idx</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af659b64a0a9aa973a5f653cca3d3a2ee" kind="variable"><name>column_settling_velocity_per_species_per_level</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a9e51107c788f5641a649dc5eda317af5" kind="variable"><name>column_settling_flux_per_species</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a83edf52d5ceff446bbdf95412706b3c2" kind="function"><name>init</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a361f549537a0296163a795e99245779d" kind="function"><name>run</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a92fe5301db2179c1debcd97ce773cfd8" kind="function"><name>finalize</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ac4af1e5369bdafd5e3d7e050c93aa728" kind="function"><name>parse_process_config</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1adfc985427425c6b332d900ba68d94687" kind="function"><name>init_column_processing</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ab6f98f1b168d83af45c87782c90888e0" kind="function"><name>run_column</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ad34d02254cd9d5b46880ab85525419ad" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4737b5b75a98af7cd9000631082fbf95" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af10505ae91013033d78bcd08288670ef" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a680db19d0e30757706af5e20ea066f05" kind="function"><name>set_scheme</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a1f5bffd7ead41acd0cbdbdd85ec9eb38" kind="function"><name>get_scheme</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1aaae2214d5b36a9bba40f8090a0cd9aed" kind="function"><name>register_diagnostics</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4678f2cea3d41b7750eb06047b2326c1" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a12691c172bb5780038df10f51d2d3bdb" kind="function"><name>run_gocart_scheme_column</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6414bc958f3fdde6c02556307ce495ab" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a8622c9dac3a12f72da7eddef6e6ecafd" kind="function"><name>calculate_and_update_diagnostics</name></member>
+  </compound>
+  <compound refid="structprocesswetdepinterface__mod_1_1processwetdepinterface" kind="type"><name>processwetdepinterface_mod::processwetdepinterface</name>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a3d71f1d53c0232a483ea73021c4bcc9d" kind="variable"><name>process_config</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a3be3c2e535ca0d721499c169cee34af4" kind="variable"><name>chem_state</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1abf368690ca141ade83bb3f98f3dcaa88" kind="variable"><name>met_state</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a774cec0bef8f3653dd2b32f95b2ee66d" kind="variable"><name>diag_wetdep_mass_per_species_per_level_idx</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a9df61a80e895edf54fccdff5a860d8c2" kind="variable"><name>diag_wetdep_flux_per_species_per_level_idx</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a76ac450b963a141009a09dc683b6bc9a" kind="variable"><name>column_wetdep_mass_per_species_per_level</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1ae7caef12e594850e0e430684be1ecb13" kind="variable"><name>column_wetdep_flux_per_species_per_level</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a5c5a3ffcd8386fccb8955b8f400f3d38" kind="function"><name>init</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a7895840e9ed95092854dc33cb55b0294" kind="function"><name>run</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1ae3ced222ca8d0b1f566ca61a3bac55a0" kind="function"><name>finalize</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1ac8746919f928326aeb49be7c23fa33e2" kind="function"><name>parse_process_config</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1ae3ce46a222165e5db4bca0192c5e03ff" kind="function"><name>init_column_processing</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a9b665225eae72552bc898604c3a77ef8" kind="function"><name>run_column</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a2cedb99ab73696c40b92f8066feda13a" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a4b042613ad5f1f1f87784ceef66836ad" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a558789fa4b38abe5963401290ecfacb3" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1aa31dcbc46dbca55443f328ba6205bf34" kind="function"><name>set_scheme</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1afc6f633fde3e27716285ab763859e441" kind="function"><name>get_scheme</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1af2c73578970062e4083a2a6ec56fe7da" kind="function"><name>register_diagnostics</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a05c67a85a4aa927ff685b87d90d6c820" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a4a7d29e481d97285064a9c91d77e9408" kind="function"><name>run_jacob_scheme_column</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a355e35da1608ba2e0446ea020d18e1f5" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1aa0eb1011e564f32fcd055f18371ae97a" kind="function"><name>calculate_and_update_diagnostics</name></member>
   </compound>
   <compound refid="interfaceprecision__mod_1_1rae" kind="interface"><name>precision_mod::rae</name>
     <member refid="interfaceprecision__mod_1_1rae_1a26052abd88e32c79dcca3c615ab1427b" kind="function"><name>rae_f4</name></member>
@@ -1672,6 +1742,56 @@
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1adee98f9d109ce63edb7d57ca8cf99c01" kind="function"><name>validate</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a9a34911ed62242c4e5d13dede61cc7e1" kind="function"><name>finalize</name></member>
   </compound>
+  <compound refid="structsettlingcommon__mod_1_1settlingconfig" kind="type"><name>settlingcommon_mod::settlingconfig</name>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a678ff4ef866e915892b94a3ed820eaf9" kind="variable"><name>scheme</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a63f66996b7b278da221b3c4dcded287c" kind="variable"><name>is_active</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1ab3f43f2ec08536b5d3139024da0c2e02" kind="variable"><name>diagnostics</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a87c0f96b4abd71954d1004b09583cca5" kind="variable"><name>n_diagnostic_species</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1adac70a993c9733118f8e1a5cb26913d8" kind="variable"><name>diagnostic_species</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a7bf9d134a584a79acb5ff88a3a4fcc46" kind="variable"><name>diagnostic_species_id</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a27b547e53d9e62a0db07ce2b0c1cb26d" kind="variable"><name>dt_min</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a208889b8965b1318237000f703a46017" kind="variable"><name>dt_max</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a56ba6c1595e97a5c6f361373f1872e39" kind="variable"><name>n_species</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1ac05cdb177f3accb123bac02729b4b617" kind="variable"><name>species_names</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1ac294b6ba584fcef5e2a6ff40a920e5cc" kind="variable"><name>species_indices</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a8fa5bc5165b1f4e6158c878ac3ecf240" kind="variable"><name>species_density</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a040d7439097c68f7a7a879c4bba765dd" kind="variable"><name>species_mie_map</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a4fa9a48900a2f91f1ea3fc00f8b14705" kind="variable"><name>species_radius</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a3144e3e236bd4deb5ca5982312d77817" kind="variable"><name>output_diagnostics</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a5e917bbd2bfccd310a2209d3f825b670" kind="variable"><name>diagnostic_frequency</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a462d6fdddccc7932bdb98ae1b5c18a97" kind="function"><name>validate</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a4c1ca55c7ecdaa68412b02eebd42cb82" kind="function"><name>finalize</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingconfig_1a53e43ac03de2caf90273657ea1502bdb" kind="function"><name>print_summary</name></member>
+  </compound>
+  <compound refid="structsettlingcommon__mod_1_1settlingprocessconfig" kind="type"><name>settlingcommon_mod::settlingprocessconfig</name>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a491dc1083e55d04e9f823c8a8a496a08" kind="variable"><name>process_name</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a5588c42ea3e9db35c6f4af0cdaf22dcf" kind="variable"><name>process_version</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a389543ab61c8dc6cf88f5d4fd5e5490b" kind="variable"><name>is_active</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a0ce467ded7ea274d8f3e0fe489d49194" kind="variable"><name>settling_config</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a135e3c57c89205991dd9539147e8f9eb" kind="variable"><name>gocart_config</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1ad64656a0533381fd68acc67ec0d2043c" kind="function"><name>load_from_config</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1ae2c1502250eea87fb8a331bd16679035" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a905a10bff4cfe6b4f34d7ad76561f23a" kind="function"><name>validate</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a74ca1c4f7abdabbb242ed6dabff26d85" kind="function"><name>finalize</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1a9a3ea75877cc40955aeb763cf5bf9eb3" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1ad9e125ff0f87916f0230cbe69a2b8ed7" kind="function"><name>load_gocart_config</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingprocessconfig_1afea46676111f7fdb9274ebfc9ad62462" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kind="type"><name>settlingcommon_mod::settlingschemegocartconfig</name>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1aa286e48a993dc613bd6d5eea2aa6c44e" kind="variable"><name>scheme_name</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a2fd3ec9f5708b60d3c1b5406af0a5864" kind="variable"><name>description</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3eb2c540ba47d42bc56aa2bb0cd2a177" kind="variable"><name>author</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a53f9c3b01866056cb50782039b3983c6" kind="variable"><name>algorithm_type</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a64467403a3b7706c72e2f4e0bdbf0a7a" kind="variable"><name>affects_full_column</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1a5c1d67fd5bcfd28b4944484ac0134b" kind="variable"><name>scale_factor</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a7311a2f3e957267a5df14dbfce2ad77b" kind="variable"><name>simple_scheme</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3efb5cfdd48f16697dd01e4c71355b51" kind="variable"><name>swelling_method</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a784c88e08509b7b5e8865071528d1bd2" kind="variable"><name>correction_maring</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1ac7efc42e3122e963d2ddb717ff0acddb" kind="variable"><name>n_required_met_fields</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a33450aca2b2c0e38c27899762287e534" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3dccaae461105ee5866cc42f85174ae6" kind="function"><name>validate</name></member>
+    <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1ab3a27b8e16c45b55b1dde2ed4ce829" kind="function"><name>finalize</name></member>
+  </compound>
   <compound refid="structspecies__mod_1_1speciesmanagertype" kind="type"><name>species_mod::speciesmanagertype</name>
     <member refid="structspecies__mod_1_1speciesmanagertype_1a6de464619facfdfe70759f1619a1459a" kind="variable"><name>species_db</name></member>
     <member refid="structspecies__mod_1_1speciesmanagertype_1a5f47fc9935584f097ac460488249e989" kind="variable"><name>num_species</name></member>
@@ -1694,6 +1814,7 @@
     <member refid="structspecies__mod_1_1speciestype_1a8c264cce53699ffcb46853be0a694c80" kind="variable"><name>is_tracer</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a72c40d0d2c88b0428beb1fdeeb1abb67" kind="variable"><name>is_advected</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a6ff2c00d11dd1460cd8ebab2e32b4dd2" kind="variable"><name>is_drydep</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a468d74af2ad7d21fe289385c43e8c829" kind="variable"><name>is_wetdep</name></member>
     <member refid="structspecies__mod_1_1speciestype_1ae28816681721c043e7f270fed18f0a6a" kind="variable"><name>is_photolysis</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a636a8576a7dde76ea25036b02462ce86" kind="variable"><name>is_gocart_aero</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a02b97732eb95721b67677a2898a7f23b" kind="variable"><name>is_dust</name></member>
@@ -1709,6 +1830,14 @@
     <member refid="structspecies__mod_1_1speciestype_1a518e468c35d1b584a9526a04345aa657" kind="variable"><name>dd_dvzaersnow</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a9f4a74e6be9c7cddd70723f8efb0987b" kind="variable"><name>dd_dvzminval_snow</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a92cdeb0e9ff5ca7a213dc85fd48794c5" kind="variable"><name>dd_dvzminval_land</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1aa8ed608f1cf0f3b985b8684e4786258d" kind="variable"><name>henry_k0</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1af88c0d71cee9ab0947ae0f9af53962d9" kind="variable"><name>henry_cr</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a789db533ef2258a0ecdadae05045fabe" kind="variable"><name>henry_pka</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a26aaa6ae2ce509f2b19bf2d18aa20088" kind="variable"><name>wd_retfactor</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a51dbea0e0caf99aa6e8d4d2f9fd73abf" kind="variable"><name>wd_liqandgas</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a685e9d2b12e6dfefaceaab4d8ee45338" kind="variable"><name>wd_convfaci2g</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a97d4bb5fa2e2f9a66dfe9a4926075dd4" kind="variable"><name>wd_rainouteff</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a96875d4738ef4b082591953496a0b07e" kind="variable"><name>mie_name</name></member>
     <member refid="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" kind="variable"><name>backgroundvv</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a9133ba1e9bc04616dff46121b41d4221" kind="variable"><name>species_index</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a255661e560792422d0021da2175384b9" kind="variable"><name>drydep_index</name></member>
@@ -1726,6 +1855,7 @@
   </compound>
   <compound refid="structstatemanager__mod_1_1statemanagertype" kind="type"><name>statemanager_mod::statemanagertype</name>
     <member refid="structstatemanager__mod_1_1statemanagertype_1aad90e54d5fbb4667c8bc9a9ca59af3ea" kind="variable"><name>met_state</name></member>
+    <member refid="structstatemanager__mod_1_1statemanagertype_1a4934b2e5e792365439b4ae042528a03f" kind="variable"><name>time_state</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" kind="variable"><name>chem_state</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1aaffd4fbf9810e6b4d646fc5d1e60ac2f" kind="variable"><name>error_mgr</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a5145521a12957b0a49bc2ddba5a56e86" kind="variable"><name>config</name></member>
@@ -1734,6 +1864,7 @@
     <member refid="structstatemanager__mod_1_1statemanagertype_1a01d344cd536e313362f34832655b8f0b" kind="variable"><name>is_initialized</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1ab9ad4fe2de3021f23089139a54a0fe9a" kind="variable"><name>is_configured</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a14e13916158558d793b84263d9457fae" kind="variable"><name>name</name></member>
+    <member refid="structstatemanager__mod_1_1statemanagertype_1a502368bc04ecde7ac787a19336a4dd2c" kind="variable"><name>tstep</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a2d6cb04c3f430b99686febfc8ce6be80" kind="function"><name>init</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1ae450427d0b8912d93928e4902c6b3700" kind="function"><name>cleanup</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a5e1e322876a5893ba2b3ddf3b86a467b" kind="function"><name>finalize</name></member>
@@ -1742,6 +1873,7 @@
     <member refid="structstatemanager__mod_1_1statemanagertype_1aba1a5c21b957052228b41a867f949cbf" kind="function"><name>get_config_ptr</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a97f855b77c342965ab3f38750066ece7" kind="function"><name>set_config</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a90211c01235b1f81225da9e0ee320690" kind="function"><name>get_met_state_ptr</name></member>
+    <member refid="structstatemanager__mod_1_1statemanagertype_1aecfe57f24e106524641c76081064f7d1" kind="function"><name>get_time_state_ptr</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a6e9028cd5b0601e872a4d7ec603346ff" kind="function"><name>get_chem_state_ptr</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1a2878cb419f6a06394196f8c7755c6a1e" kind="function"><name>get_error_manager</name></member>
     <member refid="structstatemanager__mod_1_1statemanagertype_1aaaced62385697b1be8bdd460bbf37d43" kind="function"><name>get_grid_manager</name></member>
@@ -1780,12 +1912,12 @@
     <member refid="structtimestate__mod_1_1timestatetype_1a51b7a74db1dc506281938f433a8533e1" kind="variable"><name>julian_date</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1afb51ab63bd9c15e7b10bc934a1cef50e" kind="variable"><name>doy</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1af0040ffba7d2ec326c8ad01032c511d6" kind="function"><name>get_sza</name></member>
-    <member refid="structtimestate__mod_1_1timestatetype_1a100fa5db046d5546a40935c57c58a48d" kind="function"><name>get_cos_sza</name></member>
+    <member refid="structtimestate__mod_1_1timestatetype_1aac2cb2c8fefbf21c9bfb7383d3fc59b4" kind="function"><name>get_cos_sza</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a9c353cf614d902a6d016809a7b414e6b" kind="function"><name>get_timestep</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a9a23f042865cde930066c9c9b792bc2f" kind="function"><name>get_current_date</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a236ec9b0d6e25d9b7efe3f8b36e6345d" kind="function"><name>get_julian_date</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a370002a530b0f09d6d692e305d9f115f" kind="function"><name>get_doy</name></member>
-    <member refid="structtimestate__mod_1_1timestatetype_1a5cd03a396934ac679a688b21652cc30c" kind="function"><name>init</name></member>
+    <member refid="structtimestate__mod_1_1timestatetype_1af9cb06f91ed683af47e471ad41a36f15" kind="function"><name>init</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a984fbcd39441582fbfce8f73cefb0a3c" kind="function"><name>validate</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1ac5ee4d5e210d9b9333ab7bbe88d69012" kind="function"><name>cleanup</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a29826126023be093caefbedd046b5906" kind="function"><name>reset</name></member>
@@ -1797,6 +1929,7 @@
     <member refid="structtimestate__mod_1_1timestatetype_1a5d77c9bbee0fa03fcb0819cf45a47d2d" kind="function"><name>get_time_human</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1ac8eaa1d0d50ac12c3d8490814f8399ee" kind="function"><name>get_time_compact</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1a6a3cd3c061a87936b75e6d736749509f" kind="function"><name>get_timezone_offset</name></member>
+    <member refid="structtimestate__mod_1_1timestatetype_1a2eedafa4666b4b0269db4452dee5aafb" kind="function"><name>calculate_derived_fields</name></member>
   </compound>
   <compound refid="structunitconversion__mod_1_1unitconvertertype" kind="type"><name>unitconversion_mod::unitconvertertype</name>
     <member refid="structunitconversion__mod_1_1unitconvertertype_1a24f39959e7aba91a4b81bdef73c3e266" kind="variable"><name>temperature</name></member>
@@ -1849,6 +1982,61 @@
     <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a6043e3302a739631ddacfc0b8c478e73" kind="function"><name>get_dimensions</name></member>
     <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a075175db967db808954e2d6b8634a975" kind="function"><name>is_initialized</name></member>
     <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1addddc01aa8c5429a14cdeae76ee838c5" kind="function"><name>cleanup</name></member>
+  </compound>
+  <compound refid="structwetdepcommon__mod_1_1wetdepconfig" kind="type"><name>wetdepcommon_mod::wetdepconfig</name>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1af1c87e2e4156ca1369c3baba9e27c6e6" kind="variable"><name>scheme</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a7b5c22c1dce00954101643cc2d4eda39" kind="variable"><name>is_active</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a3cb1160e7a98b536a01fd10b86bc4b17" kind="variable"><name>diagnostics</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a269fc98a05b3f74da36006d469147a53" kind="variable"><name>n_diagnostic_species</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a2eda5d1744b130b48dc99b50d69dfefb" kind="variable"><name>diagnostic_species</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a8c4262f5dafbec2e7b18793be70f2081" kind="variable"><name>diagnostic_species_id</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a05750e2d4abd7a9ae28d7299e07faac2" kind="variable"><name>dt_min</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a1ce7e7cae774cbb4df63b3ab39b62865" kind="variable"><name>dt_max</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a80b2cd5760f284df1e3334f0ee57a966" kind="variable"><name>n_species</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1ad387486c599ef5209c92b2eff7ab90f5" kind="variable"><name>species_names</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1af3670703e5a6749fbd80d044c9f7c7ad" kind="variable"><name>species_indices</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a9944c9bfbab230528c7a58b124a76732" kind="variable"><name>species_henry_cr</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1aa4db1e0cecc8dbfdfb5b629dc761cbd8" kind="variable"><name>species_henry_k0</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1ae4a342fe8ed2f2ccb3e9ca0587bd7f99" kind="variable"><name>species_henry_pka</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1ae7504534485a9acc5cc01c6fa3d0cae2" kind="variable"><name>species_is_aerosol</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a398fed07e4d336b9f199ec5b8c939dd6" kind="variable"><name>species_mw_g</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a3549a65b17d1a0865b62bdc0ee01a3b5" kind="variable"><name>species_radius</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a8ef7c3cefd98b015e2fd2ccaf1d414c8" kind="variable"><name>species_wd_liqandgas</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1af2d0ebef1e07de1d3146b2f5da4f46ed" kind="variable"><name>species_wd_convfaci2g</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a712d43317822e30a1177e3631614c0f1" kind="variable"><name>species_wd_rainouteff</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a154b845ec927de7d614f60c698aa9b72" kind="variable"><name>species_wd_retfactor</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a6c448d6f7c2fb8154d62aa83504ec63d" kind="variable"><name>output_diagnostics</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a9642b4a81b43d7da59a7664dca658a3a" kind="variable"><name>diagnostic_frequency</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a83975e17b5734d61eed9c05e6dffb4a9" kind="function"><name>validate</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a003ba823b94825c9af8454860c33d149" kind="function"><name>finalize</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a16d3ee27a67cbbfeca5d56365e598a3e" kind="function"><name>print_summary</name></member>
+  </compound>
+  <compound refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kind="type"><name>wetdepcommon_mod::wetdepprocessconfig</name>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1ac9615e5f8d49f40a13daaea78fc8d8a5" kind="variable"><name>process_name</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a463aeb21e10100c953757deb4fcf18f6" kind="variable"><name>process_version</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a6db0adaa7c21cecbd124bd90ea0c3a08" kind="variable"><name>is_active</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a07655526e5ff3fffc76242ad5b50ada7" kind="variable"><name>wetdep_config</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a84b8876d5ee4ec3e0ad42ae62fb0e1dd" kind="variable"><name>jacob_config</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1ad2fc9948125693b880491bd2f34b3607" kind="function"><name>load_from_config</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a4ab363817ecb73631214e0bd6372ccde" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1aba1f23b9ac6265e31048acd79f3fcd16" kind="function"><name>validate</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1aed46f834f0fd8111a5b09bbb49a33a41" kind="function"><name>finalize</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1adb7090a490a928166831fd7d409ab3b2" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1575e13d4623315c2d70a63723cbce12" kind="function"><name>load_jacob_config</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a744fe334308e65c87855f40adfff225c" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kind="type"><name>wetdepcommon_mod::wetdepschemejacobconfig</name>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a16690ad20995067988b52008581e91e6" kind="variable"><name>scheme_name</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7a1e68de03b952d996484f86656227d7" kind="variable"><name>description</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1aab8d01b9e48026aa7a632b0868dbc534" kind="variable"><name>author</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a70c8da892dfe6a298c6feb9551dc67ef" kind="variable"><name>algorithm_type</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" kind="variable"><name>affects_full_column</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" kind="variable"><name>scale_factor</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a9c644720bc6669580cfdaa05d990b253" kind="variable"><name>radius_threshold</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a361b7882ced5fde798b1b25d7b8c1415" kind="variable"><name>n_required_met_fields</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1ae45321fda598963adc17760a4ea165e3" kind="function"><name>validate</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7edfee8399405578460919ebff16bc99" kind="function"><name>finalize</name></member>
   </compound>
   <compound refid="interfaceyaml__interface__mod_1_1yaml__get" kind="interface"><name>yaml_interface_mod::yaml_get</name>
     <member refid="interfaceyaml__interface__mod_1_1yaml__get_1ae98727d5435ffbbb01d783913af86a72" kind="function"><name>yaml_get_string_generic</name></member>
@@ -2113,6 +2301,7 @@
     <member refid="namespacechemstate__mod_1a7c5472a4c7c0ae896f80b5887e502dd0" kind="function"><name>chemstate_get_dimensions</name></member>
     <member refid="namespacechemstate__mod_1aaad3a3881392997af115c2f69659a2ef" kind="function"><name>chemstate_get_all_concentrations</name></member>
     <member refid="namespacechemstate__mod_1ac42c24a0f92cebf2ce2f2e7596fc2a94" kind="function"><name>chemstate_set_all_concentrations</name></member>
+    <member refid="namespacechemstate__mod_1a7958aaac877004d5edb20d2f7fa1ed39" kind="function"><name>chemstate_init_mie_data</name></member>
   </compound>
   <compound refid="namespacecolumninterface__mod" kind="namespace"><name>columninterface_mod</name>
     <member refid="namespacecolumninterface__mod_1aa52872c6f82c163eb574b24a86df907f" kind="function"><name>column_view_init</name></member>
@@ -2179,13 +2368,14 @@
     <member refid="namespaceconfigmanager__mod_1ab25487874a4a2bc5133d5f931ea1fee4" kind="function"><name>parse_config_data</name></member>
     <member refid="namespaceconfigmanager__mod_1afb7590fc32bae165183816be7e6e27ac" kind="function"><name>config_manager_load_and_init_species</name></member>
     <member refid="namespaceconfigmanager__mod_1a8c131dbbc08a22f29644f2af014a6201" kind="function"><name>load_species_properties</name></member>
+    <member refid="namespaceconfigmanager__mod_1a359b257ab8e8d8f1635b2f1fa1859713" kind="function"><name>config_manager_get_mie_data</name></member>
     <member refid="namespaceconfigmanager__mod_1a7e4e25f33f28d15203bbcdc1352c040a" kind="function"><name>config_manager_find_category_mapping</name></member>
     <member refid="namespaceconfigmanager__mod_1a31112a953e8547b29258d956ca95e91e" kind="function"><name>config_manager_apply_emission_mapping</name></member>
     <member refid="namespaceconfigmanager__mod_1a70f5b61228406865cb188f3715d0ff35" kind="function"><name>config_manager_get_emission_mapping_for_category</name></member>
     <member refid="namespaceconfigmanager__mod_1ac4651f003ba066ca7ab91da80f6f5dd8" kind="function"><name>config_manager_load_emission_config</name></member>
     <member refid="namespaceconfigmanager__mod_1a45529ea9f86c2f4e7879ae4038edf833" kind="function"><name>config_manager_load_emission_mapping</name></member>
     <member refid="namespaceconfigmanager__mod_1a5c2d64796ebf327e73e113baa36f3809" kind="function"><name>discover_yaml_section_items</name></member>
-    <member refid="namespaceconfigmanager__mod_1acc3eccd2d5fc99419d61493b0db1e0fc" kind="function"><name>discover_nested_yaml_section_items</name></member>
+    <member refid="namespaceconfigmanager__mod_1a88f44f08088bc28ddbff70bb80ec3277" kind="function"><name>discover_nested_yaml_section_items</name></member>
     <member refid="namespaceconfigmanager__mod_1abd73400c3a94b4a1f71166721094c606" kind="function"><name>parse_yaml_path</name></member>
     <member refid="namespaceconfigmanager__mod_1a53ce8bee633ae2f74d8c4d42e7ba513f" kind="function"><name>update_flexible_path_tracking</name></member>
     <member refid="namespaceconfigmanager__mod_1ae261e87cc18e1151c7f436c7f5773477" kind="function"><name>config_manager_update_runtime_from_configs</name></member>
@@ -2346,17 +2536,17 @@
     <member refid="namespacedrydepprocesscreator__mod_1ac2f9d9b192e05ff09d874382edc8db38" kind="function"><name>get_drydep_default_config</name></member>
   </compound>
   <compound refid="namespacedrydepscheme__gocart__mod" kind="namespace"><name>drydepscheme_gocart_mod</name>
-    <member refid="namespacedrydepscheme__gocart__mod_1aaa6cc1f377d5ebc7c287d153b2d0fda8" kind="variable"><name>t_standard</name></member>
-    <member refid="namespacedrydepscheme__gocart__mod_1a13322735f6129243ea09e6eb66b174b9" kind="variable"><name>default_scaling</name></member>
-    <member refid="namespacedrydepscheme__gocart__mod_1a0e612ebeaeb0b1745e0b6596b011a896" kind="function"><name>compute_gocart</name></member>
-    <member refid="namespacedrydepscheme__gocart__mod_1a5d4ecee956d099d25c78cef5929501e5" kind="function"><name>compute_environmental_response_gocart</name></member>
-    <member refid="namespacedrydepscheme__gocart__mod_1a003b01bbc4e05d4e0091a4687632ac46" kind="function"><name>compute_species_scaling_gocart</name></member>
+    <member refid="namespacedrydepscheme__gocart__mod_1a1c8df74b7ac13bc852ce0679d5087b48" kind="variable"><name>ocean</name></member>
+    <member refid="namespacedrydepscheme__gocart__mod_1aa88a4589edb5ae5d0153a0a5d14eb5ee" kind="variable"><name>land</name></member>
+    <member refid="namespacedrydepscheme__gocart__mod_1a59798a68610fbdf53c21ac6148229778" kind="variable"><name>sea_ice</name></member>
+    <member refid="namespacedrydepscheme__gocart__mod_1a3b8125152f1a6a60e25722e264ff4f3d" kind="function"><name>compute_gocart</name></member>
+    <member refid="group__core__modules_1gaf3456b2605a4a5fe70dd90e0c147c83e" kind="function"><name>prepmetvarsforgocart</name></member>
   </compound>
   <compound refid="namespacedrydepscheme__wesely__mod" kind="namespace"><name>drydepscheme_wesely_mod</name>
-    <member refid="namespacedrydepscheme__wesely__mod_1a5ef53f48834fb6008ab0d0b950743261" kind="variable"><name>ndrydtype</name></member>
+    <member refid="namespacedrydepscheme__wesely__mod_1a60cb235b695425941e96acd5095f1d07" kind="variable"><name>ndrydtype</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1a3b6af5344df09fbc441008ef5849cfa0" kind="variable"><name>two_thirds</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1a90cf72577940e38bf062eae0f49e90da" kind="variable"><name>small</name></member>
-    <member refid="namespacedrydepscheme__wesely__mod_1ae41eeb52f113a110b83c2a3933fd3931" kind="variable"><name>iwater</name></member>
+    <member refid="namespacedrydepscheme__wesely__mod_1a5095f8894aaf6c1c2725b8750a44d0f9" kind="variable"><name>iwater</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1aa0aafa8e3c9c0f5687a0a1e580a1c071" kind="variable"><name>idrydtype</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1ac7529544a42f4a0a4ea8fac7831bca3f" kind="variable"><name>irac</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1acae9a380afb725728e79d378b27ad395" kind="variable"><name>irclo</name></member>
@@ -2371,7 +2561,7 @@
     <member refid="namespacedrydepscheme__wesely__mod_1a726f87d6475f42e4fd43e8a90994839e" kind="variable"><name>idep_iolson</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1a9919e626d89a1a362881f7e6071ba9dc" kind="variable"><name>idep_noah</name></member>
     <member refid="namespacedrydepscheme__wesely__mod_1af697503e84e719ad1c894de5cd4f1547" kind="variable"><name>idep_igbp</name></member>
-    <member refid="namespacedrydepscheme__wesely__mod_1ac7e948c0721c7b669342663879bbbc2e" kind="function"><name>compute_wesely</name></member>
+    <member refid="namespacedrydepscheme__wesely__mod_1ab8633a099148022a0439d006c919e57e" kind="function"><name>compute_wesely</name></member>
     <member refid="group__catchem__drydep__process_1ga6380a3370497f140feea8ff34401b70e" kind="function"><name>wesely_rc_gas</name></member>
     <member refid="group__catchem__drydep__process_1gaa3d5face8db3f60cb03a315fcb2622ee" kind="function"><name>oceano3</name></member>
     <member refid="group__catchem__drydep__process_1gac7ba09a2e67a21b80280220bf8fb5375" kind="function"><name>k0k1_aprox</name></member>
@@ -2392,7 +2582,7 @@
     <member refid="namespacedrydepscheme__zhang__mod_1a3be5336c702550fbc0b4957cb9566202" kind="variable"><name>seasalt_upper_bin</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1af373efa5ca25af4f5b359c5e2db6b2c0" kind="variable"><name>dmid</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1a460c3ae5c7840eabc28fcd9e321f5d25" kind="variable"><name>salt_v</name></member>
-    <member refid="namespacedrydepscheme__zhang__mod_1a8e394283c65463b81d368143ff13796b" kind="function"><name>compute_zhang</name></member>
+    <member refid="namespacedrydepscheme__zhang__mod_1a64be0aa29e1e02713cb97710f8f3ddee" kind="function"><name>compute_zhang</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1a0eccc87f49cc807efdb55b39078336ca" kind="function"><name>get_seasalt_bin_boundaries</name></member>
     <member refid="group__catchem__drydep__process_1ga309028e0827b2371d5bbdae3ca9fca4b" kind="function"><name>aero_sfcrsii</name></member>
     <member refid="group__catchem__drydep__process_1gaa78bfe87f992c4ec644049efc0b3ee94" kind="function"><name>new_diam_den</name></member>
@@ -2651,6 +2841,7 @@
     <member refid="namespacemetstate__mod_1ab6c5e919099bf802c1509d9b8a4e0508" kind="function"><name>metstate_set_field_3d_real</name></member>
     <member refid="namespacemetstate__mod_1ad8c86b1fe5313cd2277c33c4bf6a9e96" kind="function"><name>metstate_set_field_3d_int</name></member>
     <member refid="namespacemetstate__mod_1a038177c77cc9989fa44ae3be6a914684" kind="function"><name>metstate_set_field_3d_logical</name></member>
+    <member refid="namespacemetstate__mod_1adaadae5b0129dc77f98de284cab15d81" kind="function"><name>metstate_derive_field</name></member>
   </compound>
   <compound refid="namespaceprecision__mod" kind="namespace"><name>precision_mod</name>
     <member refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kind="variable"><name>f4</name></member>
@@ -2687,7 +2878,7 @@
     <member refid="namespaceprocessdrydepinterface__mod_1a5aa31fcdc81877167af4d75594e6ac3f" kind="function"><name>run_gocart_scheme_column</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1aaf6eaa6554cad3b78f8f1d0f9d40db67" kind="function"><name>run_zhang_scheme_column</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1ab47acde97b71b0e4c8517de035aaecd9" kind="function"><name>get_required_met_fields</name></member>
-    <member refid="namespaceprocessdrydepinterface__mod_1accb9bf19c9935532c5ff2c3694bc9a95" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocessdrydepinterface__mod_1a4857b3f2a7e1963cc7b4e241a56bf971" kind="function"><name>get_required_diagnostic_fields</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1a4a0d1bb88fc56ac810ea974b5e24ebcc" kind="function"><name>register_and_allocate_diagnostics</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1a8d87bb4666eb28864dbb844d43d18b78" kind="function"><name>calculate_and_update_diagnostics</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1ac0e0cefe1e11158d16543ff98737374d" kind="function"><name>set_drydep_scheme</name></member>
@@ -2712,7 +2903,7 @@
     <member refid="namespaceprocessinterface__mod_1a00f96e55ed679b69e2dd6cf796153f51" kind="function"><name>process_set_timestep</name></member>
     <member refid="namespaceprocessinterface__mod_1a354a41d7131474f8ceb72ee041f2ce85" kind="function"><name>process_get_timestep</name></member>
     <member refid="namespaceprocessinterface__mod_1aee53a7f058dc640c3d72d8fefa12ad72" kind="function"><name>process_get_required_met_fields</name></member>
-    <member refid="namespaceprocessinterface__mod_1a87c16e7e66ca85d084a4e7ed63263926" kind="function"><name>process_get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocessinterface__mod_1a86ab5f90dc7a59e3895f27e5f12a48fe" kind="function"><name>process_get_required_diagnostic_fields</name></member>
     <member refid="namespaceprocessinterface__mod_1a0d1cb0894a766aac6eb0b41d28dbbdec" kind="function"><name>process_register_diagnostics</name></member>
     <member refid="namespaceprocessinterface__mod_1a58acf19ca9e8b6150fa0d654c74f4855" kind="function"><name>process_update_diagnostics</name></member>
     <member refid="namespaceprocessinterface__mod_1abf113f2287834b5ab7ac38d965ab2977" kind="function"><name>process_register_diagnostic_field</name></member>
@@ -2787,11 +2978,45 @@
     <member refid="namespaceprocessseasaltinterface__mod_1a4292228f022242e4fd1f5e6ae5399ef6" kind="function"><name>run_gong03_scheme_column</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1a167f65d98d1728feafe026a777509f75" kind="function"><name>run_geos12_scheme_column</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1a2e23472acd950cd548bae30d6b0995c2" kind="function"><name>get_required_met_fields</name></member>
-    <member refid="namespaceprocessseasaltinterface__mod_1ab4b2bebbfe43118c372c98d6f7de9909" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocessseasaltinterface__mod_1a28147a7649bb097a952d7b430e3d4436" kind="function"><name>get_required_diagnostic_fields</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1a64aa2fae00805af538d4392ffe4dd318" kind="function"><name>register_and_allocate_diagnostics</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1a9ad74213c6844b38282bb4c0ab3f3c7a" kind="function"><name>calculate_and_update_diagnostics</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1afb7a4a388016d0cb41a22579f8509931" kind="function"><name>set_seasalt_scheme</name></member>
     <member refid="namespaceprocessseasaltinterface__mod_1a63ab118a1d0226c787765ad26757d0de" kind="function"><name>get_seasalt_scheme</name></member>
+  </compound>
+  <compound refid="namespaceprocesssettlinginterface__mod" kind="namespace"><name>processsettlinginterface_mod</name>
+    <member refid="namespaceprocesssettlinginterface__mod_1ae88cd6a18795862416ba267b1c8a5fed" kind="function"><name>process_init</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a8e7c00c08a2167cd9c43e1ef76aa86ba" kind="function"><name>process_run</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1aed6d9dcd74d974a2ef35e022ed5507bd" kind="function"><name>process_finalize</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1aa7abceca7b2056a5d7b3df9bae968381" kind="function"><name>parse_settling_config</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a10889339b0fdb7c78a66c43407dd29e5" kind="function"><name>init_column_processing</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a56b7c4266112b176b8ffb7a2ec63f698" kind="function"><name>run_column</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a7b3b4fa30a4411508843ae7914710199" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1af931d0eacb706b6105a0d6d55ba8048f" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a41e15f8a2df66c995f5620dc7bf6e206" kind="function"><name>run_gocart_scheme_column</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a82fa763f7d6360d811b3776d334936f4" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1ac3aff16830343d1d699c3c462a0a0e2b" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1ac19b75914efaadc5400ac046351efa6c" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a4deb73f3ef6d5fb75e63addee3ac4d5a" kind="function"><name>calculate_and_update_diagnostics</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1a4096c3e8f8e785656c22a57bc3efd2f4" kind="function"><name>set_settling_scheme</name></member>
+    <member refid="namespaceprocesssettlinginterface__mod_1ae9450d6c915aa7220f080f962c42f382" kind="function"><name>get_settling_scheme</name></member>
+  </compound>
+  <compound refid="namespaceprocesswetdepinterface__mod" kind="namespace"><name>processwetdepinterface_mod</name>
+    <member refid="namespaceprocesswetdepinterface__mod_1a6e9681839b6c46b09bcc809ae41ee847" kind="function"><name>process_init</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1adc1f52eafb09abd388b30aabe6525d12" kind="function"><name>process_run</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1ae1773e8652c62f2d776f4bab4d2ca7c4" kind="function"><name>process_finalize</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1aa96265ab8a1a8009f4d20fe1710bfd19" kind="function"><name>parse_wetdep_config</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a4d3815e8751a2212f5f75600cdf386aa" kind="function"><name>init_column_processing</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a1fa7a62819180e608caef4841c2d5287" kind="function"><name>run_column</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a3e9c4e422acacc5912b995afcf0ace59" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a5322921d2b728b4f97d32fc8f92a9361" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1ac665daeeeb296e5d15018665f94bb375" kind="function"><name>run_jacob_scheme_column</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a1090aa44b1f77aa3403f7e96b804d00b" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a2927157f9cd3c80b1022d24a1ef56d0b" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a24bc8be5829cbe2384d418bbf751ff55" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1ac8b7e8d8ada95b74674c0e40036c85a6" kind="function"><name>calculate_and_update_diagnostics</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a31ba6129b12a5a0c694a00f538cba5bb" kind="function"><name>set_wetdep_scheme</name></member>
+    <member refid="namespaceprocesswetdepinterface__mod_1a5ab20f5a47dca90e053f033efcf7ca63" kind="function"><name>get_wetdep_scheme</name></member>
   </compound>
   <compound refid="namespacerun__mod" kind="namespace"><name>run_mod</name>
     <member refid="namespacerun__mod_1a17eeb168e33e9275f55b6288bf67b92b" kind="function"><name>run_process</name></member>
@@ -2833,7 +3058,6 @@
     <member refid="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" kind="function"><name>compute_species_scaling_geos12</name></member>
     <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
-    <member refid="namespaceseasaltscheme__geos12__mod_1aee6cc9d9a3d06cfc290520aa75c69714" kind="function"><name>compute_geos12</name></member>
   </compound>
   <compound refid="namespaceseasaltscheme__gong03__mod" kind="namespace"><name>seasaltscheme_gong03_mod</name>
     <member refid="namespaceseasaltscheme__gong03__mod_1ac25aa661a74d1b26ee9f919f4520f941" kind="variable"><name>t_standard</name></member>
@@ -2843,9 +3067,6 @@
     <member refid="group__catchem__seasalt__process_1ga55b0406d4268801b93ab5661d70c9678" kind="function"><name>seasaltemissiongong</name></member>
     <member refid="group__catchem__seasalt__process_1gafc8b2b984c59ea821ef30355745b6160" kind="function"><name>weibulldistribution</name></member>
     <member refid="group__catchem__seasalt__process_1ga8a90e72660415d70d1f254a9d877c684" kind="function"><name>igamma</name></member>
-    <member refid="namespaceseasaltscheme__gong03__mod_1abc2ff53efc22a267fc34918f285d6f72" kind="function"><name>compute_gong03</name></member>
-    <member refid="namespaceseasaltscheme__gong03__mod_1aa858d1674da0c8b216f21f909cd96ead" kind="function"><name>compute_environmental_response_gong03</name></member>
-    <member refid="namespaceseasaltscheme__gong03__mod_1a4130a126d12088e0e420547163d7e819" kind="function"><name>compute_species_scaling_gong03</name></member>
   </compound>
   <compound refid="namespaceseasaltscheme__gong97__mod" kind="namespace"><name>seasaltscheme_gong97_mod</name>
     <member refid="namespaceseasaltscheme__gong97__mod_1a4ee68051d41f9ee28db0e4b0311c5a00" kind="variable"><name>t_standard</name></member>
@@ -2855,9 +3076,32 @@
     <member refid="group__catchem__seasalt__process_1ga629c594ab4c0dc374f9799f34e758a34" kind="function"><name>seasaltemissiongong</name></member>
     <member refid="group__catchem__seasalt__process_1ga41b7c404993f8068fa1c4d37786a3262" kind="function"><name>weibulldistribution</name></member>
     <member refid="group__catchem__seasalt__process_1gab334b8771060f7410897538e6ce9faa7" kind="function"><name>igamma</name></member>
-    <member refid="namespaceseasaltscheme__gong97__mod_1a1102d45c53559233f1b3a0a9b9e147cc" kind="function"><name>compute_gong97</name></member>
-    <member refid="namespaceseasaltscheme__gong97__mod_1a46670841ad30c13fd075440635fdbcaf" kind="function"><name>compute_environmental_response_gong97</name></member>
-    <member refid="namespaceseasaltscheme__gong97__mod_1a90047608f93a5000ccd9b826388c711e" kind="function"><name>compute_species_scaling_gong97</name></member>
+  </compound>
+  <compound refid="namespacesettlingcommon__mod" kind="namespace"><name>settlingcommon_mod</name>
+    <member refid="namespacesettlingcommon__mod_1a5d0c3333bdae1047708c8158d6bad6f2" kind="function"><name>validate_settling_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1a9bb5268164edea35588e25e5701ed11e" kind="function"><name>print_settling_config_summary</name></member>
+    <member refid="namespacesettlingcommon__mod_1ade22538b093e15e506b2489131634c79" kind="function"><name>finalize_settling_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1acb8a255550c1cc2fa9688dc41e924f4f" kind="function"><name>validate_gocart_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1a4d959061045cbca847a039e106edfbfa" kind="function"><name>finalize_gocart_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1a03e7312ca49b9d48667a6c5261568ec3" kind="function"><name>int_to_string</name></member>
+    <member refid="namespacesettlingcommon__mod_1a934a5569c22ef39a2aa552f4f1c412b3" kind="function"><name>settling_process_load_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1a200bb9c89a5e7ae0ecf90e29b759b5b2" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="namespacesettlingcommon__mod_1a5b7823944764bdd5183d83e065a7ba4a" kind="function"><name>load_gocart_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1aac544a1eedadbbac3436469119eda754" kind="function"><name>settling_process_validate</name></member>
+    <member refid="namespacesettlingcommon__mod_1a3269206e3bce79755e1b40ab0cf64211" kind="function"><name>settling_process_finalize</name></member>
+    <member refid="namespacesettlingcommon__mod_1a63340e2e85b7138830fd708eb27e4655" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="namespacesettlingcommon__mod_1aba63e80bb3706dc819823a6c4a97af51" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="namespacesettlingprocesscreator__mod" kind="namespace"><name>settlingprocesscreator_mod</name>
+    <member refid="namespacesettlingprocesscreator__mod_1a8cdd5a52ad4c7368c156add3d5a4a797" kind="function"><name>create_settling_process</name></member>
+    <member refid="namespacesettlingprocesscreator__mod_1a1d440bb2c0bcd8cbac2b38bed6ce9814" kind="function"><name>register_settling_process</name></member>
+    <member refid="namespacesettlingprocesscreator__mod_1a280db54c78d2c2c79bb05a8428b460ed" kind="function"><name>get_settling_default_config</name></member>
+  </compound>
+  <compound refid="namespacesettlingscheme__gocart__mod" kind="namespace"><name>settlingscheme_gocart_mod</name>
+    <member refid="namespacesettlingscheme__gocart__mod_1ade9bc9ff435d9e6dbdba666f8963d8da" kind="variable"><name>plid</name></member>
+    <member refid="namespacesettlingscheme__gocart__mod_1aaeb4e16db9b09d9273320b3dd90d09ca" kind="function"><name>compute_gocart</name></member>
+    <member refid="namespacesettlingscheme__gocart__mod_1a3c2f3947823b2d9471df855507c7402c" kind="function"><name>findklid</name></member>
+    <member refid="namespacesettlingscheme__gocart__mod_1a91c8cecc4f6dc0432e15436d530c79b7" kind="function"><name>prepmetvarsforgocart</name></member>
   </compound>
   <compound refid="namespacespecies__mod" kind="namespace"><name>species_mod</name>
     <member refid="namespacespecies__mod_1aed701ca0f99d8f9447111523d0026166" kind="variable"><name>missing_vv</name></member>
@@ -2918,6 +3162,7 @@
     <member refid="namespacestatemanager__mod_1a6eefa5358f395e4f9437a5da0d8c1b0a" kind="function"><name>manager_get_config_ptr</name></member>
     <member refid="namespacestatemanager__mod_1add63f65421b4a1eae9bfb8bdc05ebf8a" kind="function"><name>manager_set_config</name></member>
     <member refid="namespacestatemanager__mod_1aec70da433883c069e1cc922acead1d0c" kind="function"><name>manager_get_met_state_ptr</name></member>
+    <member refid="namespacestatemanager__mod_1ab291d63f0aafdc1e442ad6ff8cd25893" kind="function"><name>manager_get_time_state_ptr</name></member>
     <member refid="namespacestatemanager__mod_1aa112482d74c153ade8037b06998171e2" kind="function"><name>manager_get_chem_state_ptr</name></member>
     <member refid="namespacestatemanager__mod_1ad8098d48568e024773c56c87b2fe8d92" kind="function"><name>manager_get_error_manager</name></member>
     <member refid="namespacestatemanager__mod_1a3b7f4844fbd9942f11f913b04c4181c9" kind="function"><name>manager_get_grid_manager</name></member>
@@ -2940,13 +3185,15 @@
     <member refid="namespacestatemanager__mod_1a5fe01d9e0896096c35c4a3918aa6100f" kind="function"><name>allocate_met_field</name></member>
   </compound>
   <compound refid="namespacetimestate__mod" kind="namespace"><name>timestate_mod</name>
+    <member refid="namespacetimestate__mod_1aab718d4e73453c52c7e6be2a26c946a8" kind="variable"><name>state_status_uninitialized</name></member>
+    <member refid="namespacetimestate__mod_1a47d8e8f67c7244d42936d2142a27adcb" kind="variable"><name>state_status_initialized</name></member>
+    <member refid="namespacetimestate__mod_1a30f158b84774a230829bd9b75c1a5dc0" kind="function"><name>get_cos_sza</name></member>
     <member refid="namespacetimestate__mod_1acd97df36e5c9ec3c7d29742a3e2876b6" kind="function"><name>get_sza</name></member>
-    <member refid="namespacetimestate__mod_1ae51794ec0cab311836fab0f98040360e" kind="function"><name>get_cos_sza</name></member>
     <member refid="namespacetimestate__mod_1ab6f609d433551aea1c0ed53836a470cd" kind="function"><name>get_timestep</name></member>
     <member refid="namespacetimestate__mod_1ab57be13f6431ef9f5a7a0c0f720a80f9" kind="function"><name>get_current_date</name></member>
     <member refid="namespacetimestate__mod_1a51da21920195ad8771ceb1ee1e2b86c5" kind="function"><name>get_julian_date</name></member>
     <member refid="namespacetimestate__mod_1a518432fd6c36e13d6b3b763fca2fb36c" kind="function"><name>get_doy</name></member>
-    <member refid="namespacetimestate__mod_1adfd52a8f2200b45362354b70ad6667fb" kind="function"><name>timestate_init</name></member>
+    <member refid="namespacetimestate__mod_1a2541be67db1e6758caff1bf27d9a01e9" kind="function"><name>timestate_init</name></member>
     <member refid="namespacetimestate__mod_1a04d68590bd35d542596e6a4820052658" kind="function"><name>timestate_validate</name></member>
     <member refid="namespacetimestate__mod_1a34d94bfc5ee31c32e69270a3581bb8fd" kind="function"><name>timestate_cleanup</name></member>
     <member refid="namespacetimestate__mod_1a54d4537bfbffa36e9bc7683464d492c6" kind="function"><name>timestate_reset</name></member>
@@ -2960,6 +3207,10 @@
     <member refid="namespacetimestate__mod_1a9dcfa807be186def268584b6db2ea135" kind="function"><name>get_time_human</name></member>
     <member refid="namespacetimestate__mod_1af8464fdaa69074e24bc9b157c707d33b" kind="function"><name>get_time_compact</name></member>
     <member refid="namespacetimestate__mod_1aa3904b5fbb5c904eaf6dbbde512f8a30" kind="function"><name>get_timezone_offset</name></member>
+    <member refid="namespacetimestate__mod_1af520582fe7dfec0051c449118301ec8a" kind="function"><name>calculate_derived_fields</name></member>
+    <member refid="namespacetimestate__mod_1ae77f05c8c7b3eaee9e1344188b2bc2ce" kind="function"><name>get_days_in_month</name></member>
+    <member refid="namespacetimestate__mod_1a404663942e0e3f43f2ba7fe3cd1a11b3" kind="function"><name>is_leap_year</name></member>
+    <member refid="namespacetimestate__mod_1a051713008039e7bf3418ff045a10b0bf" kind="function"><name>calculate_day_of_year</name></member>
   </compound>
   <compound refid="namespaceunitconversion__mod" kind="namespace"><name>unitconversion_mod</name>
     <member refid="namespaceunitconversion__mod_1a58f37cbb9d9c3d33c4ae05cf6c04dab7" kind="variable"><name>standard_temp</name></member>
@@ -3051,6 +3302,49 @@
     <member refid="namespacevirtualcolumn__mod_1ac185b850773c7dc466aded78a7d06f88" kind="function"><name>virtual_column_get_dimensions</name></member>
     <member refid="namespacevirtualcolumn__mod_1a9b7448b585773382e2011b12920952b3" kind="function"><name>virtual_column_is_initialized</name></member>
     <member refid="namespacevirtualcolumn__mod_1a80859351a555a20df7ae9100de80b010" kind="function"><name>virtual_column_cleanup</name></member>
+  </compound>
+  <compound refid="namespacewetdepcommon__mod" kind="namespace"><name>wetdepcommon_mod</name>
+    <member refid="namespacewetdepcommon__mod_1a151eaf78960e313cde034592531430e9" kind="function"><name>validate_wetdep_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1aa7a04bae347f059935438d7f9db38180" kind="function"><name>print_wetdep_config_summary</name></member>
+    <member refid="namespacewetdepcommon__mod_1a3073bff4fd4c9cb535947dd9566a3c68" kind="function"><name>finalize_wetdep_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1a2f665f4f799df3d6bdba57227af9e84a" kind="function"><name>validate_jacob_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1abe6ffa039d47c011f5065e18571c09c8" kind="function"><name>finalize_jacob_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1a17bbdef2fb3e1186d4b9ebfc60f37ad5" kind="function"><name>int_to_string</name></member>
+    <member refid="namespacewetdepcommon__mod_1a691d25bcc1abcdf9defcf910d62a0e9b" kind="function"><name>wetdep_process_load_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1ac4d1df5caba78b0200656d3d900a50ae" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="namespacewetdepcommon__mod_1a9c03a4dfea005f7f36a5db7aaa42815c" kind="function"><name>load_jacob_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1a3db4bfe95d215ca77821f005f4a87d44" kind="function"><name>wetdep_process_validate</name></member>
+    <member refid="namespacewetdepcommon__mod_1a80c5fcae0b2323d6a51f739ba1dfc819" kind="function"><name>wetdep_process_finalize</name></member>
+    <member refid="namespacewetdepcommon__mod_1a64d3b38fad9af16785759a30e7ff614d" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="namespacewetdepcommon__mod_1a9fb5ac5fc2cdf1ab764b1bd18b2de803" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="namespacewetdepprocesscreator__mod" kind="namespace"><name>wetdepprocesscreator_mod</name>
+    <member refid="namespacewetdepprocesscreator__mod_1a5dc53da7cc72cac4449e62f2e3cdc6cb" kind="function"><name>create_wetdep_process</name></member>
+    <member refid="namespacewetdepprocesscreator__mod_1a287e8d918c705e0bbda8eecbf183579a" kind="function"><name>register_wetdep_process</name></member>
+    <member refid="namespacewetdepprocesscreator__mod_1a7866782b6c6ecb11fbf3aa1c42d861d6" kind="function"><name>get_wetdep_default_config</name></member>
+  </compound>
+  <compound refid="namespacewetdepscheme__jacob__mod" kind="namespace"><name>wetdepscheme_jacob_mod</name>
+    <member refid="namespacewetdepscheme__jacob__mod_1ac5947d6f015d9b42281efb070147f0da" kind="variable"><name>density_ice</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1ac971ca63339ab5aa13b2e210a1650429" kind="variable"><name>density_liq</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aa29137311198ee6d4e1120416364281c" kind="variable"><name>m_to_cm</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aaa7bf24087aca48711b905afe6360a17" kind="variable"><name>kg_to_cm3_liq</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1ad80a875108072a750fe7b1fcda571df8" kind="variable"><name>kg_to_cm3_ice</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a0d59fa8a35b3bdfb140b929dd69c0efc" kind="variable"><name>qq_thr</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a10fa8a67c0c1d8ec1e1ff060efb7b459" kind="variable"><name>pdwn_thr</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a584e7ab53259275436d62f80e695666f" kind="variable"><name>k_min</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a283ce186368e5460d57ae4ebbbe2d16f" kind="variable"><name>cwc</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aa000bda136b406ffc27eeac128d5a17b" kind="function"><name>compute_jacob</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1af307da7d5e4119228d08c898d565d3a9" kind="function"><name>find_species_ind</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1ae1714cc88cf0808f25bb60f24af2bcf9" kind="function"><name>rainout</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aeace337974ab33c9edd078b02706d19d" kind="function"><name>washout</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a78e3462f1160a2f85e70b7d5955ed828" kind="function"><name>rainfrac</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a3474f3af4fb555b60da841cba80e5192" kind="function"><name>liq_to_gas_ratio</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aabdac1bad6bd731152117d4052edabbf" kind="function"><name>washfrac_aerosol</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1aa3a5e4c4e27f9e1e3a5c007e260d3ad8" kind="function"><name>washfrac_hno3</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1ac18ce2a4d102e591cca3d026d3ff31d3" kind="function"><name>washfrac_liq_gas</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a50c5047734777471251b34ef0d9d4d21" kind="function"><name>rainout_loss</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a00ee288c6af55128362fa686b6eac853" kind="function"><name>washout_loss</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1ae9afb1ac4fc9fc90e634ff50939f4a0e" kind="function"><name>complete_reevap</name></member>
   </compound>
   <compound refid="namespaceyaml__interface__mod" kind="namespace"><name>yaml_interface_mod</name>
     <member refid="namespaceyaml__interface__mod_1afeb325811318d4ec78e035130b798137" kind="function"><name>yaml_load_file</name></member>
@@ -3181,11 +3475,7 @@
   </compound>
   <compound refid="_dry_dep_scheme___g_o_c_a_r_t___mod_8_f90" kind="file"><name>DryDepScheme_GOCART_Mod.F90</name>
   </compound>
-  <compound refid="_dry_dep_scheme___w_e_s_e_l_y___mod_01copy_8_f90" kind="file"><name>DryDepScheme_WESELY_Mod copy.F90</name>
-  </compound>
   <compound refid="_dry_dep_scheme___w_e_s_e_l_y___mod_8_f90" kind="file"><name>DryDepScheme_WESELY_Mod.F90</name>
-  </compound>
-  <compound refid="_dry_dep_scheme___z_h_a_n_g___mod_01copy_8_f90" kind="file"><name>DryDepScheme_ZHANG_Mod copy.F90</name>
   </compound>
   <compound refid="_dry_dep_scheme___z_h_a_n_g___mod_8_f90" kind="file"><name>DryDepScheme_ZHANG_Mod.F90</name>
   </compound>
@@ -3202,21 +3492,53 @@
   </compound>
   <compound refid="_process_sea_salt_interface___mod_8_f90" kind="file"><name>ProcessSeaSaltInterface_Mod.F90</name>
   </compound>
-  <compound refid="_sea_salt_scheme___g_e_o_s12___mod_01copy_8_f90" kind="file"><name>SeaSaltScheme_GEOS12_Mod copy.F90</name>
-  </compound>
   <compound refid="_sea_salt_scheme___g_e_o_s12___mod_8_f90" kind="file"><name>SeaSaltScheme_GEOS12_Mod.F90</name>
   </compound>
-  <compound refid="_sea_salt_scheme___g_o_n_g03___mod_01copy_8_f90" kind="file"><name>SeaSaltScheme_GONG03_Mod copy.F90</name>
-  </compound>
   <compound refid="_sea_salt_scheme___g_o_n_g03___mod_8_f90" kind="file"><name>SeaSaltScheme_GONG03_Mod.F90</name>
-  </compound>
-  <compound refid="_sea_salt_scheme___g_o_n_g97___mod_01copy_8_f90" kind="file"><name>SeaSaltScheme_GONG97_Mod copy.F90</name>
   </compound>
   <compound refid="_sea_salt_scheme___g_o_n_g97___mod_8_f90" kind="file"><name>SeaSaltScheme_GONG97_Mod.F90</name>
   </compound>
   <compound refid="_sea_salt_common___mod_8_f90" kind="file"><name>SeaSaltCommon_Mod.F90</name>
   </compound>
   <compound refid="_sea_salt_process_creator___mod_8_f90" kind="file"><name>SeaSaltProcessCreator_Mod.F90</name>
+  </compound>
+  <compound refid="settling__example_8_f90" kind="file"><name>settling_example.F90</name>
+    <member refid="settling__example_8_f90_1ac7278f660f212e092f0f3abaaecfa61e" kind="function"><name>settling_example</name></member>
+    <member refid="settling__example_8_f90_1a24a8c8aae885ac37497672f535f93074" kind="function"><name>__settling_example_f90__</name></member>
+    <member refid="settling__example_8_f90_1aab1110897c9fcec7df7408679f427e5b" kind="function"><name>setup_chemical_species</name></member>
+    <member refid="settling__example_8_f90_1aa0151a3cbd89db7e0fb31d46e027a2ee" kind="function"><name>setup_meteorological_fields</name></member>
+    <member refid="settling__example_8_f90_1a4e024b4018e8e99d7f2c6fdc52b7ae68" kind="function"><name>initialize_test_meteorology</name></member>
+    <member refid="settling__example_8_f90_1acbbd9854830cdd104c30fdc214b0dd1f" kind="function"><name>load_configuration</name></member>
+    <member refid="settling__example_8_f90_1af88faf78c88245138a002a70d08363cb" kind="function"><name>setup_initial_conditions</name></member>
+    <member refid="settling__example_8_f90_1a231b4b0c6701b86ba2ec68edb5c2de19" kind="function"><name>print_process_info</name></member>
+    <member refid="settling__example_8_f90_1ac1a85278c5f99e01c363678aea07f3d0" kind="function"><name>print_diagnostic_summary</name></member>
+  </compound>
+  <compound refid="_process_settling_interface___mod_8_f90" kind="file"><name>ProcessSettlingInterface_Mod.F90</name>
+  </compound>
+  <compound refid="_settling_scheme___g_o_c_a_r_t___mod_8_f90" kind="file"><name>SettlingScheme_GOCART_Mod.F90</name>
+  </compound>
+  <compound refid="_settling_common___mod_8_f90" kind="file"><name>SettlingCommon_Mod.F90</name>
+  </compound>
+  <compound refid="_settling_process_creator___mod_8_f90" kind="file"><name>SettlingProcessCreator_Mod.F90</name>
+  </compound>
+  <compound refid="wetdep__example_8_f90" kind="file"><name>wetdep_example.F90</name>
+    <member refid="wetdep__example_8_f90_1a8ffe66acc6201a402a74091eef07a5b4" kind="function"><name>wetdep_example</name></member>
+    <member refid="wetdep__example_8_f90_1a625062d57314c4dca3a1851c5d233b40" kind="function"><name>__wetdep_example_f90__</name></member>
+    <member refid="wetdep__example_8_f90_1a7c8be379f6fd0c515df6740328966471" kind="function"><name>setup_chemical_species</name></member>
+    <member refid="wetdep__example_8_f90_1a710d8d0e4bee3e1968e37a93e0f909fb" kind="function"><name>setup_meteorological_fields</name></member>
+    <member refid="wetdep__example_8_f90_1a7cf195a621309c8269a341182913b18c" kind="function"><name>initialize_test_meteorology</name></member>
+    <member refid="wetdep__example_8_f90_1a963e3590094a8e731680bf833e38cc72" kind="function"><name>load_configuration</name></member>
+    <member refid="wetdep__example_8_f90_1ae321032038492afe3763af86a8932c34" kind="function"><name>setup_initial_conditions</name></member>
+    <member refid="wetdep__example_8_f90_1a7be24b482bc02ce31f632c590b86f1b9" kind="function"><name>print_process_info</name></member>
+    <member refid="wetdep__example_8_f90_1aec937d8497503159a8c86e35c8408bb1" kind="function"><name>print_diagnostic_summary</name></member>
+  </compound>
+  <compound refid="_process_wet_dep_interface___mod_8_f90" kind="file"><name>ProcessWetDepInterface_Mod.F90</name>
+  </compound>
+  <compound refid="_wet_dep_scheme___j_a_c_o_b___mod_8_f90" kind="file"><name>WetDepScheme_JACOB_Mod.F90</name>
+  </compound>
+  <compound refid="_wet_dep_common___mod_8_f90" kind="file"><name>WetDepCommon_Mod.F90</name>
+  </compound>
+  <compound refid="_wet_dep_process_creator___mod_8_f90" kind="file"><name>WetDepProcessCreator_Mod.F90</name>
   </compound>
   <compound refid="group__catchem" kind="group"><name>catchem</name>
   </compound>
@@ -3227,6 +3549,7 @@
     <member refid="group__core__modules_1ga0f4bed4ec5273e84346e57d9d2c0cb92" kind="function"><name>chemstate_init</name></member>
     <member refid="group__core__modules_1ga87ab277c6a17ccfee5e2831aba7895cd" kind="function"><name>cc_warning</name></member>
     <member refid="group__core__modules_1ga07c7634132d8b5cc9561f69d070df2ae" kind="function"><name>cc_checkvar</name></member>
+    <member refid="group__core__modules_1gaf3456b2605a4a5fe70dd90e0c147c83e" kind="function"><name>prepmetvarsforgocart</name></member>
   </compound>
   <compound refid="group__process__modules" kind="group"><name>process_modules</name>
   </compound>
@@ -3268,6 +3591,10 @@
   </compound>
   <compound refid="dir_5a4ade9a2f1be2d214cab82786bd5e96" kind="dir"><name>src/process/seasalt/examples</name>
   </compound>
+  <compound refid="dir_ccadb5b29918b194ae5ca60f91721c2d" kind="dir"><name>src/process/settling/examples</name>
+  </compound>
+  <compound refid="dir_ff6af94d37dffecf82cfd346b98504fd" kind="dir"><name>src/process/wetdep/examples</name>
+  </compound>
   <compound refid="dir_805a0af995e93a362739e98abd740eb2" kind="dir"><name>src/external</name>
   </compound>
   <compound refid="dir_c0cd66d8ddae4fc5bc5dc2f24e29763b" kind="dir"><name>src/process</name>
@@ -3276,9 +3603,17 @@
   </compound>
   <compound refid="dir_ec083b49fedbd640552af85049fd7226" kind="dir"><name>src/process/seasalt/schemes</name>
   </compound>
+  <compound refid="dir_34df91cc26d24067840a7381fe21b817" kind="dir"><name>src/process/settling/schemes</name>
+  </compound>
+  <compound refid="dir_8ca87c5e2f5cf830ab1a41055168a46b" kind="dir"><name>src/process/wetdep/schemes</name>
+  </compound>
   <compound refid="dir_3e6fd2e121e43ca7d4114b6c0b4e05b6" kind="dir"><name>src/process/seasalt</name>
   </compound>
+  <compound refid="dir_1a0bba2ffdf6e6637fcb76856471cb75" kind="dir"><name>src/process/settling</name>
+  </compound>
   <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>src</name>
+  </compound>
+  <compound refid="dir_8b9a0ce556ea4a65f6920dfb49dcd69d" kind="dir"><name>src/process/wetdep</name>
   </compound>
   <compound refid="dir_d0b1a67acd809cff502adc02c61e9ebd" kind="dir"><name>src/external/yaml_interface</name>
   </compound>

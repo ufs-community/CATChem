@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="185" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="185" bodyend="185"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="187" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="187" bodyend="187"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1ac06683a3e4aced63dadbf04b99c41b9f" prot="public" static="no" mutable="no">
         <type>type(filepathconfig)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="186" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="186" bodyend="186"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="188" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="188" bodyend="188"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a7521a2d1f0913e82deb24fb71911c6a3" prot="public" static="no" mutable="no">
         <type>type(externalemisconfig)</type>
@@ -46,10 +46,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="187" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="187" bodyend="187"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="189" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="189" bodyend="189"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a7026f8b86c5f1eb74d9602eb711ce7b1" prot="public" static="no" mutable="no">
-        <type>type(emissionmappingconfig)</type>
+        <type>type(<ref refid="structconfigmanager__mod_1_1emissionmappingconfig" kindref="compound">emissionmappingconfig</ref>)</type>
         <definition>type(emissionmappingconfig) configmanager_mod::configdatatype::emission_mapping</definition>
         <argsstring></argsstring>
         <name>emission_mapping</name>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="188" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="188" bodyend="188"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="190" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="190" bodyend="190"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a4c6d689a1641b51ef8941a2e170173ec" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -77,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="191" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="191" bodyend="191"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="193" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="193" bodyend="193"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1ac1a307ff46b2938ad00f0173377ef99a" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="192" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="192" bodyend="192"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="194" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="194" bodyend="194"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a081a13120d002e0fa98046f4ce79dc25" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -109,7 +109,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="193" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="193" bodyend="193"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="195" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="195" bodyend="195"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a19e52705d6177f03c2096fed09621fda" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -125,7 +125,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="194" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="194" bodyend="194"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="196" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="196" bodyend="196"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a0686bc492ea8907be4a5c4436db698f7" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structconfigmanager__mod_1_1processconfigtype" kindref="compound">processconfigtype</ref>), dimension(:), allocatable</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="196" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="196" bodyend="196"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="198" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="198" bodyend="198"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a36e88a94df53a0b6399eb99b0ff4f0c6" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structconfigmanager__mod_1_1runphasetype" kindref="compound">runphasetype</ref>), dimension(:), allocatable</type>
@@ -155,7 +155,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="197" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="197" bodyend="197"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="199" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="199" bodyend="199"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="201" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="201" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="203" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="203" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configdatatype_1a1589f1909540c46127e135c9d4dd91d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -203,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="202" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="202" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="204" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="204" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configdatatype_1ac8e85d8ceca3aaa7318ea320531775ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -230,7 +230,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="203" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="203" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="205" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="205" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configdatatype_1a4ad6d4277dec82c07108441cb52c8909" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -249,7 +249,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="206" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="206" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="208" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="208" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configdatatype_1ac6cb6715d05f373c6138f945cbf833ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -272,7 +272,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="207" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="207" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="209" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="209" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1configdatatype_1a715a1adb63953650e26d4360dbd0d3fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -299,7 +299,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="208" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="208" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="210" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="210" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -348,6 +348,7 @@
       </node>
       <node id="5">
         <label>configmanager_mod::emissionmappingconfig</label>
+        <link refid="structconfigmanager__mod_1_1emissionmappingconfig"/>
         <childnode refid="6" relation="usage">
           <edgelabel>categories</edgelabel>
         </childnode>
@@ -377,7 +378,7 @@
         <label>configmanager_mod::runtimeconfig</label>
       </node>
     </collaborationgraph>
-    <location file="src/core/ConfigManager_Mod.F90" line="182" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="182" bodyend="210"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="184" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="184" bodyend="212"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1configdatatype_1a1589f1909540c46127e135c9d4dd91d7" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>cleanup</name></member>
       <member refid="structconfigmanager__mod_1_1configdatatype_1a4c6d689a1641b51ef8941a2e170173ec" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>config_version</name></member>

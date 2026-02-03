@@ -14,6 +14,7 @@ module statemanager_mod
    use error_mod, only: cc_success, cc_failure, errormanagertype
    use configmanager_mod, only: configmanagertype
    use metstate_mod, only: metstatetype
+   use timestate_mod, only: timestatetype
    use chemstate_mod, only: chemstatetype
    use gridmanager_mod, only: gridmanagertype
    use diagnosticmanager_mod, only: diagnosticmanagertype
@@ -58,6 +59,7 @@ module statemanager_mod
 
       ! Core state objects
       type(MetStateType),   allocatable :: met_state
+      type(TimeStateType),  allocatable :: time_state
       type(ChemStateType),  allocatable :: chem_state
       type(ErrorManagerType)            :: error_mgr
 
@@ -70,6 +72,7 @@ module statemanager_mod
       logical :: is_initialized = .false.              
       logical :: is_configured = .false.               
       character(len=256) :: name = ''
+      real(fp), public :: tstep = 0.0_fp               
 
    contains
       ! Basic lifecycle (called by CATChemCore)
@@ -83,6 +86,7 @@ module statemanager_mod
       procedure :: get_config_ptr => manager_get_config_ptr
       procedure :: set_config => manager_set_config
       procedure :: get_met_state_ptr => manager_get_met_state_ptr
+      procedure :: get_time_state_ptr => manager_get_time_state_ptr
       procedure :: get_chem_state_ptr => manager_get_chem_state_ptr
       procedure :: get_error_manager => manager_get_error_manager
       procedure :: get_grid_manager => manager_get_grid_manager
@@ -136,6 +140,8 @@ contains
 
       if (.not. allocated(this%met_state)) allocate(this%met_state)
 
+      if (.not. allocated(this%time_state)) allocate(this%time_state)
+
       if (.not. allocated(this%chem_state)) allocate(this%chem_state)
 
       this%is_initialized = .true.
@@ -144,18 +150,28 @@ contains
    end subroutine manager_init
 
    subroutine manager_cleanup(this, rc)
-      class(StateManagerType), intent(inout) :: this
+      class(StateManagerType), intent(inout), target :: this
       integer, intent(out) :: rc
 
-      integer :: config_rc, met_rc, chem_rc
+      integer :: config_rc, met_rc, time_rc, chem_rc
+      type(ErrorManagerType), pointer :: error_mgr_ptr
 
       rc = cc_success
+
+      ! Get pointer to error manager for cleanup calls
+      error_mgr_ptr => this%get_error_manager()
 
       ! Clean up and deallocate state objects - call their cleanup procedures first!
       if (allocated(this%met_state)) then
          call this%met_state%cleanup('ALL', met_rc)
          if (met_rc /= cc_success) rc = met_rc  ! Don't stop cleanup on error
          deallocate(this%met_state)
+      end if
+
+      if (allocated(this%time_state)) then
+         call this%time_state%cleanup(error_mgr_ptr, time_rc)
+         if (time_rc /= cc_success) rc = time_rc  ! Don't stop cleanup on error
+         deallocate(this%time_state)
       end if
 
       if (allocated(this%chem_state)) then
@@ -174,6 +190,7 @@ contains
       this%is_initialized = .false.
       this%is_configured = .false.
       this%name = ''
+      this%tstep = 0.0_fp
 
    end subroutine manager_cleanup
 
@@ -184,6 +201,7 @@ contains
       ready = this%is_initialized .and. this%is_configured .and. &
          associated(this%config) .and. &
          allocated(this%met_state) .and. &
+         allocated(this%time_state) .and. &
          allocated(this%chem_state)
    end function manager_is_ready
 
@@ -225,6 +243,17 @@ contains
          nullify(met_ptr)
       endif
    end function manager_get_met_state_ptr
+
+   function manager_get_time_state_ptr(this) result(time_ptr)
+      class(StateManagerType), intent(inout), target :: this
+      type(TimeStateType), pointer :: time_ptr
+
+      if (allocated(this%time_state)) then
+         time_ptr => this%time_state
+      else
+         nullify(time_ptr)
+      endif
+   end function manager_get_time_state_ptr
 
    function manager_get_chem_state_ptr(this) result(chem_ptr)
       class(StateManagerType), intent(inout), target :: this
@@ -377,7 +406,7 @@ contains
             if (associated(this%chem_state%ChemSpecies(ispec)%conc)) then
                do k = 1, nlev
                   ! Get modified concentration from virtual column
-                  chem_value = virtual_col%get_chem_field(k, ispec)
+                  chem_value = virtual_col%get_chem_field(ispec, k)
                   ! Apply back to the 3D concentration array
                   this%chem_state%ChemSpecies(ispec)%conc(grid_i, grid_j, k) = chem_value
                end do
@@ -451,6 +480,7 @@ contains
       write(*,'(A,L1)') 'Initialized: ', this%is_initialized
       write(*,'(A,L1)') 'Config manager associated: ', associated(this%config)
       write(*,'(A,L1)') 'Met state allocated: ', allocated(this%met_state)
+      write(*,'(A,L1)') 'Time state allocated: ', allocated(this%time_state)
       write(*,'(A,L1)') 'Chem state allocated: ', allocated(this%chem_state)
       write(*,'(A)') '================================='
 
@@ -472,6 +502,7 @@ contains
 
       if (associated(this%config)) memory_bytes = memory_bytes + 1024_8
       if (allocated(this%met_state)) memory_bytes = memory_bytes + 102400_8
+      if (allocated(this%time_state)) memory_bytes = memory_bytes + 32_8
       if (allocated(this%chem_state)) memory_bytes = memory_bytes + 1048576_8
    end function manager_get_memory_usage
 

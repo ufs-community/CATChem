@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="155" column="1" bodyfile="src/core/species_mod.F90" bodystart="155" bodyend="155"/>
+        <location file="src/core/species_mod.F90" line="169" column="1" bodyfile="src/core/species_mod.F90" bodystart="169" bodyend="169"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -99,7 +99,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="169" column="1" bodyfile="src/core/species_mod.F90" bodystart="170" bodyend="218"/>
+        <location file="src/core/species_mod.F90" line="183" column="1" bodyfile="src/core/species_mod.F90" bodystart="184" bodyend="252"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1ad449ecf587c7bd53414468905edf44dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -141,7 +141,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="228" column="1" bodyfile="src/core/species_mod.F90" bodystart="229" bodyend="297"/>
+        <location file="src/core/species_mod.F90" line="262" column="1" bodyfile="src/core/species_mod.F90" bodystart="263" bodyend="331"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1af93f180c9994bb98a3c3e6dd450821e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -207,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="308" column="1" bodyfile="src/core/species_mod.F90" bodystart="309" bodyend="335"/>
+        <location file="src/core/species_mod.F90" line="342" column="1" bodyfile="src/core/species_mod.F90" bodystart="343" bodyend="369"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a91c4cea5fba2a9da60f036a612312a38" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -249,7 +249,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="344" column="1" bodyfile="src/core/species_mod.F90" bodystart="345" bodyend="353"/>
+        <location file="src/core/species_mod.F90" line="378" column="1" bodyfile="src/core/species_mod.F90" bodystart="379" bodyend="389"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1ac7d957180f814ba05bb94cef24428463" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -303,7 +303,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="363" column="1" bodyfile="src/core/species_mod.F90" bodystart="364" bodyend="384"/>
+        <location file="src/core/species_mod.F90" line="399" column="1" bodyfile="src/core/species_mod.F90" bodystart="400" bodyend="420"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a543216a2c4014a4195151757e5be0a11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -369,7 +369,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="395" column="1" bodyfile="src/core/species_mod.F90" bodystart="396" bodyend="421"/>
+        <location file="src/core/species_mod.F90" line="431" column="1" bodyfile="src/core/species_mod.F90" bodystart="432" bodyend="457"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1aab09aca8b3b95e8178b57abced80280d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function, public</type>
@@ -411,7 +411,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="430" column="1" bodyfile="src/core/species_mod.F90" bodystart="431" bodyend="437"/>
+        <location file="src/core/species_mod.F90" line="466" column="1" bodyfile="src/core/species_mod.F90" bodystart="467" bodyend="473"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a2f4381f67079384f650e8a90be01218c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function, public</type>
@@ -477,7 +477,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="448" column="1" bodyfile="src/core/species_mod.F90" bodystart="449" bodyend="469"/>
+        <location file="src/core/species_mod.F90" line="484" column="1" bodyfile="src/core/species_mod.F90" bodystart="485" bodyend="505"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a821d982714b3c619b8d44f6913a2ffce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
@@ -519,7 +519,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="478" column="1" bodyfile="src/core/species_mod.F90" bodystart="479" bodyend="489"/>
+        <location file="src/core/species_mod.F90" line="514" column="1" bodyfile="src/core/species_mod.F90" bodystart="515" bodyend="525"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a4178c4045a0b8a79b9dab407de41f428" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -575,7 +575,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="501" column="1" bodyfile="src/core/species_mod.F90" bodystart="502" bodyend="524"/>
+        <location file="src/core/species_mod.F90" line="537" column="1" bodyfile="src/core/species_mod.F90" bodystart="538" bodyend="560"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1aedf8b111cf16559229be389f23a7e7ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -629,7 +629,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="534" column="1" bodyfile="src/core/species_mod.F90" bodystart="535" bodyend="585"/>
+        <location file="src/core/species_mod.F90" line="570" column="1" bodyfile="src/core/species_mod.F90" bodystart="571" bodyend="641"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1adbf7a6d073eb19c49643466ae10d4f0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -659,7 +659,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="594" column="1" bodyfile="src/core/species_mod.F90" bodystart="595" bodyend="617"/>
+        <location file="src/core/species_mod.F90" line="650" column="1" bodyfile="src/core/species_mod.F90" bodystart="651" bodyend="681"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1af96e6851e54a8cc884834d1826e804bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -713,7 +713,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="628" column="1" bodyfile="src/core/species_mod.F90" bodystart="629" bodyend="658"/>
+        <location file="src/core/species_mod.F90" line="692" column="1" bodyfile="src/core/species_mod.F90" bodystart="693" bodyend="722"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1abe31f77dc01d599c7a40698f6654b52f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -755,7 +755,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="668" column="1" bodyfile="src/core/species_mod.F90" bodystart="669" bodyend="694"/>
+        <location file="src/core/species_mod.F90" line="732" column="1" bodyfile="src/core/species_mod.F90" bodystart="733" bodyend="758"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a36999f88526a3beb7d839fe07a18a270" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -809,7 +809,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="705" column="1" bodyfile="src/core/species_mod.F90" bodystart="706" bodyend="727"/>
+        <location file="src/core/species_mod.F90" line="769" column="1" bodyfile="src/core/species_mod.F90" bodystart="770" bodyend="791"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1a37721ea6f4b96c40cfbae520b858ac7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -851,7 +851,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="736" column="1" bodyfile="src/core/species_mod.F90" bodystart="737" bodyend="756"/>
+        <location file="src/core/species_mod.F90" line="800" column="1" bodyfile="src/core/species_mod.F90" bodystart="801" bodyend="820"/>
       </memberdef>
       <memberdef kind="function" id="namespacespecies__mod_1ad0980873f400da01455f40206b8751ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -881,7 +881,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="765" column="1" bodyfile="src/core/species_mod.F90" bodystart="766" bodyend="788"/>
+        <location file="src/core/species_mod.F90" line="829" column="1" bodyfile="src/core/species_mod.F90" bodystart="830" bodyend="852"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

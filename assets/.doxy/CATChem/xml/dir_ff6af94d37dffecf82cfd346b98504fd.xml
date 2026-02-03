@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_ff6af94d37dffecf82cfd346b98504fd" kind="dir">
+    <compoundname>src/process/wetdep/examples</compoundname>
+    <innerfile refid="wetdep__example_8_f90">wetdep_example.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/examples/"/>
+  </compounddef>
+</doxygen>

@@ -3,13 +3,45 @@
   <compounddef id="namespacetimestate__mod" kind="namespace" language="Fortran">
     <compoundname>timestate_mod</compoundname>
     <innerclass refid="structtimestate__mod_1_1timestatetype" prot="public">timestate_mod::timestatetype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacetimestate__mod_1aab718d4e73453c52c7e6be2a26c946a8" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter timestate_mod::state_status_uninitialized</definition>
+        <argsstring></argsstring>
+        <name>state_status_uninitialized</name>
+        <qualifiedname>timestate_mod::state_status_uninitialized</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="14" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacetimestate__mod_1a47d8e8f67c7244d42936d2142a27adcb" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter timestate_mod::state_status_initialized</definition>
+        <argsstring></argsstring>
+        <name>state_status_initialized</name>
+        <qualifiedname>timestate_mod::state_status_initialized</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="15" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="15" bodyend="15"/>
+      </memberdef>
+    </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacetimestate__mod_1acd97df36e5c9ec3c7d29742a3e2876b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacetimestate__mod_1a30f158b84774a230829bd9b75c1a5dc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real function</type>
-        <definition>real function timestate_mod::get_sza</definition>
-        <argsstring>(this, lat, lon)</argsstring>
-        <name>get_sza</name>
-        <qualifiedname>timestate_mod::get_sza</qualifiedname>
+        <definition>real function timestate_mod::get_cos_sza</definition>
+        <argsstring>(this, lat, lon, mid_timestep)</argsstring>
+        <name>get_cos_sza</name>
+        <qualifiedname>timestate_mod::get_cos_sza</qualifiedname>
         <param>
           <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
           <defname>this</defname>
@@ -22,6 +54,10 @@
           <type>real, intent(in)</type>
           <defname>lon</defname>
         </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>mid_timestep</defname>
+        </param>
         <briefdescription>
 <para>Compute solar zenith angle (degrees) using latitude, longitude, and time of day. </para>
         </briefdescription>
@@ -29,14 +65,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="49" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="50" bodyend="91"/>
+        <location file="src/core/TimeState_Mod.F90" line="53" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="54" bodyend="106"/>
       </memberdef>
-      <memberdef kind="function" id="namespacetimestate__mod_1ae51794ec0cab311836fab0f98040360e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacetimestate__mod_1acd97df36e5c9ec3c7d29742a3e2876b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real function</type>
-        <definition>real function timestate_mod::get_cos_sza</definition>
+        <definition>real function timestate_mod::get_sza</definition>
         <argsstring>(this, lat, lon)</argsstring>
-        <name>get_cos_sza</name>
-        <qualifiedname>timestate_mod::get_cos_sza</qualifiedname>
+        <name>get_sza</name>
+        <qualifiedname>timestate_mod::get_sza</qualifiedname>
         <param>
           <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(in)</type>
           <defname>this</defname>
@@ -56,7 +92,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="95" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="96" bodyend="98"/>
+        <location file="src/core/TimeState_Mod.F90" line="110" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="111" bodyend="116"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1ab6f609d433551aea1c0ed53836a470cd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real function</type>
@@ -75,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="102" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="103" bodyend="104"/>
+        <location file="src/core/TimeState_Mod.F90" line="120" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="121" bodyend="122"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1ab57be13f6431ef9f5a7a0c0f720a80f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -106,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="108" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="109" bodyend="113"/>
+        <location file="src/core/TimeState_Mod.F90" line="126" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="127" bodyend="131"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a51da21920195ad8771ceb1ee1e2b86c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real function</type>
@@ -125,7 +161,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="117" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="118" bodyend="119"/>
+        <location file="src/core/TimeState_Mod.F90" line="135" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="136" bodyend="137"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a518432fd6c36e13d6b3b763fca2fb36c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -144,17 +180,45 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="123" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="124" bodyend="125"/>
+        <location file="src/core/TimeState_Mod.F90" line="141" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="142" bodyend="143"/>
       </memberdef>
-      <memberdef kind="function" id="namespacetimestate__mod_1adfd52a8f2200b45362354b70ad6667fb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacetimestate__mod_1a2541be67db1e6758caff1bf27d9a01e9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
         <definition>subroutine timestate_mod::timestate_init</definition>
-        <argsstring>(this, error_mgr, rc)</argsstring>
+        <argsstring>(this, year, month, day, hour, minute, second, timestep, error_mgr, rc)</argsstring>
         <name>timestate_init</name>
         <qualifiedname>timestate_mod::timestate_init</qualifiedname>
         <param>
           <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>day</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>hour</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>minute</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>second</defname>
+        </param>
+        <param>
+          <type>real, intent(in), optional</type>
+          <defname>timestep</defname>
         </param>
         <param>
           <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
@@ -165,13 +229,13 @@
           <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Initialize TimeStateType. </para>
+<para>Initialize TimeStateType Sets default values, calculates derived quantities (Julian date, DOY), and validates the initial time configuration. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="129" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="130" bodyend="136"/>
+        <location file="src/core/TimeState_Mod.F90" line="149" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="150" bodyend="192"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a04d68590bd35d542596e6a4820052658" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -192,13 +256,13 @@
           <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Validate TimeStateType. </para>
+<para>Validate TimeStateType Checks that all time components are within valid ranges and that derived quantities are consistent. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="140" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="141" bodyend="147"/>
+        <location file="src/core/TimeState_Mod.F90" line="198" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="199" bodyend="286"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a34d94bfc5ee31c32e69270a3581bb8fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -219,13 +283,14 @@
           <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Cleanup TimeStateType. </para>
+<para>Cleanup TimeStateType Resets all time state variables to uninitialized values. </para>
         </briefdescription>
         <detaileddescription>
+<para>This prepares the object for deallocation or reinitialization. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="151" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="152" bodyend="158"/>
+        <location file="src/core/TimeState_Mod.F90" line="292" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="293" bodyend="315"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a54d4537bfbffa36e9bc7683464d492c6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -246,13 +311,13 @@
           <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Reset TimeStateType. </para>
+<para>Reset TimeStateType Resets time state to default values (Jan 1, 2000, 00:00:00) and recalculates derived quantities. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="162" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="163" bodyend="169"/>
+        <location file="src/core/TimeState_Mod.F90" line="321" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="322" bodyend="345"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1abfffc945a0675df7376fd1dcfafe0261" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -265,13 +330,13 @@
           <defname>this</defname>
         </param>
         <briefdescription>
-<para>Get status of TimeStateType. </para>
+<para>Get status of TimeStateType Returns initialized status if all time components are valid. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="173" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="174" bodyend="176"/>
+        <location file="src/core/TimeState_Mod.F90" line="350" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="351" bodyend="361"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a64bafaaa720c9bf7d02155f4748299e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer(8) function</type>
@@ -284,13 +349,13 @@
           <defname>this</defname>
         </param>
         <briefdescription>
-<para>Get memory usage of TimeStateType. </para>
+<para>Get memory usage of TimeStateType Returns estimated memory usage in bytes for the time state object. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="180" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="181" bodyend="183"/>
+        <location file="src/core/TimeState_Mod.F90" line="366" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="367" bodyend="374"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1acd6d2f57c5d82a0a9e4fa365c00793bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -313,7 +378,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="187" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="188" bodyend="194"/>
+        <location file="src/core/TimeState_Mod.F90" line="378" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="379" bodyend="385"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a819aa4e287d7775cd9b4e327e02394f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -326,13 +391,13 @@
           <defname>this</defname>
         </param>
         <briefdescription>
-<para>Is TimeStateType ready? </para>
+<para>Is TimeStateType ready? Returns true if the time state is properly initialized and valid. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="198" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="199" bodyend="201"/>
+        <location file="src/core/TimeState_Mod.F90" line="390" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="391" bodyend="394"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a85a056720812087d93c5f484dd8b2600" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function, public</type>
@@ -355,7 +420,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="205" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="206" bodyend="207"/>
+        <location file="src/core/TimeState_Mod.F90" line="398" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="399" bodyend="400"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a8007761799beabd541935af025a819bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function, public</type>
@@ -379,7 +444,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="211" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="212" bodyend="213"/>
+        <location file="src/core/TimeState_Mod.F90" line="404" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="405" bodyend="406"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a0916b40e3e7efcf1e8e6335d5291ffbf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure character(len=25) function</type>
@@ -398,7 +463,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="217" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="218" bodyend="221"/>
+        <location file="src/core/TimeState_Mod.F90" line="410" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="411" bodyend="414"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1a9dcfa807be186def268584b6db2ea135" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure character(len=25) function</type>
@@ -417,7 +482,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="225" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="226" bodyend="229"/>
+        <location file="src/core/TimeState_Mod.F90" line="418" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="419" bodyend="422"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1af8464fdaa69074e24bc9b157c707d33b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure character(len=16) function</type>
@@ -436,7 +501,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="233" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="234" bodyend="237"/>
+        <location file="src/core/TimeState_Mod.F90" line="426" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="427" bodyend="430"/>
       </memberdef>
       <memberdef kind="function" id="namespacetimestate__mod_1aa3904b5fbb5c904eaf6dbbde512f8a30" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure integer function</type>
@@ -459,7 +524,189 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/TimeState_Mod.F90" line="241" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="242" bodyend="246"/>
+        <location file="src/core/TimeState_Mod.F90" line="434" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="435" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacetimestate__mod_1af520582fe7dfec0051c449118301ec8a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine timestate_mod::calculate_derived_fields</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>calculate_derived_fields</name>
+        <qualifiedname>timestate_mod::calculate_derived_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate derived fields (Julian date, DOY) from date components. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>TimeStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="446" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="447" bodyend="478"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacetimestate__mod_1ae77f05c8c7b3eaee9e1344188b2bc2ce" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure integer function</type>
+        <definition>pure integer function timestate_mod::get_days_in_month</definition>
+        <argsstring>(month, year)</argsstring>
+        <name>get_days_in_month</name>
+        <qualifiedname>timestate_mod::get_days_in_month</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>year</defname>
+        </param>
+        <briefdescription>
+<para>Get number of days in a given month, accounting for leap years. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">month</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Month (1-12) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">year</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Year </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Number of days in the month </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="485" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="486" bodyend="496"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacetimestate__mod_1a404663942e0e3f43f2ba7fe3cd1a11b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure logical function</type>
+        <definition>pure logical function timestate_mod::is_leap_year</definition>
+        <argsstring>(year)</argsstring>
+        <name>is_leap_year</name>
+        <qualifiedname>timestate_mod::is_leap_year</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>year</defname>
+        </param>
+        <briefdescription>
+<para>Check if a year is a leap year. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">year</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Year to check </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if leap year, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="502" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="503" bodyend="506"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacetimestate__mod_1a051713008039e7bf3418ff045a10b0bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure integer function</type>
+        <definition>pure integer function timestate_mod::calculate_day_of_year</definition>
+        <argsstring>(year, month, day)</argsstring>
+        <name>calculate_day_of_year</name>
+        <qualifiedname>timestate_mod::calculate_day_of_year</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>day</defname>
+        </param>
+        <briefdescription>
+<para>Calculate day of year from month and day. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">year</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Year </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">month</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Month (1-12) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">day</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Day of month </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Day of year (1-366) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/TimeState_Mod.F90" line="514" column="1" bodyfile="src/core/TimeState_Mod.F90" bodystart="515" bodyend="530"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

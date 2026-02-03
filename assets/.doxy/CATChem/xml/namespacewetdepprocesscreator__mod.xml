@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacewetdepprocesscreator__mod" kind="namespace" language="Fortran">
+    <compoundname>wetdepprocesscreator_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacewetdepprocesscreator__mod_1a5dc53da7cc72cac4449e62f2e3cdc6cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public wetdepprocesscreator_mod::create_wetdep_process</definition>
+        <argsstring>(process, rc)</argsstring>
+        <name>create_wetdep_process</name>
+        <qualifiedname>wetdepprocesscreator_mod::create_wetdep_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a new wetdep process instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This factory function creates and returns a new instance of the wetdep process. The process is not initialized - the caller must call the init() method with appropriate configuration.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">process</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Allocated process instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="35" column="1" bodyfile="src/process/wetdep/WetDepProcessCreator_Mod.F90" bodystart="36" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepprocesscreator__mod_1a287e8d918c705e0bbda8eecbf183579a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public wetdepprocesscreator_mod::register_wetdep_process</definition>
+        <argsstring>(process_mgr, rc)</argsstring>
+        <name>register_wetdep_process</name>
+        <qualifiedname>wetdepprocesscreator_mod::register_wetdep_process</qualifiedname>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>process_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register the wetdep process with a ProcessManager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine registers the wetdep process with a ProcessManager&apos;s factory. This is the correct way to register processes for use in applications and integration tests.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">process_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessManager to register with </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="64" column="1" bodyfile="src/process/wetdep/WetDepProcessCreator_Mod.F90" bodystart="65" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepprocesscreator__mod_1a7866782b6c6ecb11fbf3aa1c42d861d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public wetdepprocesscreator_mod::get_wetdep_default_config</definition>
+        <argsstring>(config_data)</argsstring>
+        <name>get_wetdep_default_config</name>
+        <qualifiedname>wetdepprocesscreator_mod::get_wetdep_default_config</qualifiedname>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>config_data</defname>
+        </param>
+        <briefdescription>
+<para>Get default configuration for wetdep process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function returns a default configuration string that can be used to initialize the wetdep process with reasonable defaults.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">config_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Default configuration string </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="88" column="1" bodyfile="src/process/wetdep/WetDepProcessCreator_Mod.F90" bodystart="89" bodyend="112"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

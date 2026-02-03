@@ -795,27 +795,30 @@
         <childnode refid="13" relation="usage">
           <edgelabel>state_mgr</edgelabel>
         </childnode>
-        <childnode refid="18" relation="usage">
+        <childnode refid="20" relation="usage">
           <edgelabel>grid_mgr</edgelabel>
         </childnode>
-        <childnode refid="20" relation="usage">
+        <childnode refid="22" relation="usage">
           <edgelabel>diag_mgr</edgelabel>
         </childnode>
-        <childnode refid="24" relation="usage">
+        <childnode refid="26" relation="usage">
           <edgelabel>process_mgr</edgelabel>
         </childnode>
       </node>
-      <node id="14">
+      <node id="15">
         <label>chemstate_mod::chemstatetype</label>
         <link refid="structchemstate__mod_1_1chemstatetype"/>
-        <childnode refid="15" relation="usage">
+        <childnode refid="16" relation="usage">
+          <edgelabel>miedata</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
           <edgelabel>chemspecies</edgelabel>
         </childnode>
-        <childnode refid="16" relation="usage">
+        <childnode refid="18" relation="usage">
           <edgelabel>grid</edgelabel>
         </childnode>
       </node>
-      <node id="26">
+      <node id="28">
         <label>columninterface_mod::columnprocessortype</label>
         <link refid="structcolumninterface__mod_1_1columnprocessortype"/>
       </node>
@@ -864,6 +867,7 @@
       </node>
       <node id="7">
         <label>configmanager_mod::emissionmappingconfig</label>
+        <link refid="structconfigmanager__mod_1_1emissionmappingconfig"/>
         <childnode refid="8" relation="usage">
           <edgelabel>categories</edgelabel>
         </childnode>
@@ -892,68 +896,71 @@
       <node id="4">
         <label>configmanager_mod::runtimeconfig</label>
       </node>
-      <node id="23">
+      <node id="25">
         <label>diagnosticinterface_mod::diagnosticdatatype</label>
         <link refid="structdiagnosticinterface__mod_1_1diagnosticdatatype"/>
       </node>
-      <node id="22">
+      <node id="24">
         <label>diagnosticinterface_mod::diagnosticfieldtype</label>
         <link refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype"/>
-        <childnode refid="23" relation="usage">
+        <childnode refid="25" relation="usage">
           <edgelabel>data</edgelabel>
         </childnode>
       </node>
-      <node id="21">
+      <node id="23">
         <label>diagnosticinterface_mod::diagnosticregistrytype</label>
         <link refid="structdiagnosticinterface__mod_1_1diagnosticregistrytype"/>
-        <childnode refid="22" relation="usage">
+        <childnode refid="24" relation="usage">
           <edgelabel>fields</edgelabel>
         </childnode>
       </node>
-      <node id="20">
+      <node id="22">
         <label>diagnosticmanager_mod::diagnosticmanagertype</label>
         <link refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype"/>
-        <childnode refid="21" relation="usage">
+        <childnode refid="23" relation="usage">
           <edgelabel>process_registries</edgelabel>
         </childnode>
       </node>
-      <node id="17">
+      <node id="19">
         <label>error_mod::errormanagertype</label>
         <link refid="structerror__mod_1_1errormanagertype"/>
       </node>
       <node id="16">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="18">
         <label>gridgeometry_mod::gridgeometrytype</label>
         <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
       </node>
-      <node id="19">
+      <node id="21">
         <label>gridmanager_mod::griddecompositiontype</label>
         <link refid="structgridmanager__mod_1_1griddecompositiontype"/>
       </node>
-      <node id="18">
+      <node id="20">
         <label>gridmanager_mod::gridmanagertype</label>
         <link refid="structgridmanager__mod_1_1gridmanagertype"/>
-        <childnode refid="19" relation="usage">
+        <childnode refid="21" relation="usage">
           <edgelabel>decomp</edgelabel>
         </childnode>
-        <childnode refid="17" relation="usage">
+        <childnode refid="19" relation="usage">
           <edgelabel>error_mgr</edgelabel>
         </childnode>
       </node>
-      <node id="25">
+      <node id="27">
         <label>processfactory_mod::processfactorytype</label>
         <link refid="structprocessfactory__mod_1_1processfactorytype"/>
       </node>
-      <node id="24">
+      <node id="26">
         <label>processmanager_mod::processmanagertype</label>
         <link refid="structprocessmanager__mod_1_1processmanagertype"/>
-        <childnode refid="25" relation="usage">
+        <childnode refid="27" relation="usage">
           <edgelabel>factory</edgelabel>
         </childnode>
-        <childnode refid="26" relation="usage">
+        <childnode refid="28" relation="usage">
           <edgelabel>column_processor</edgelabel>
         </childnode>
       </node>
-      <node id="15">
+      <node id="17">
         <label>species_mod::speciestype</label>
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>
@@ -961,20 +968,27 @@
         <label>statemanager_mod::statemanagertype</label>
         <link refid="structstatemanager__mod_1_1statemanagertype"/>
         <childnode refid="14" relation="usage">
+          <edgelabel>time_state</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
           <edgelabel>chem_state</edgelabel>
         </childnode>
-        <childnode refid="17" relation="usage">
+        <childnode refid="19" relation="usage">
           <edgelabel>error_mgr</edgelabel>
         </childnode>
         <childnode refid="2" relation="usage">
           <edgelabel>config</edgelabel>
         </childnode>
-        <childnode refid="18" relation="usage">
+        <childnode refid="20" relation="usage">
           <edgelabel>grid_mgr</edgelabel>
         </childnode>
-        <childnode refid="20" relation="usage">
+        <childnode refid="22" relation="usage">
           <edgelabel>diag_mgr</edgelabel>
         </childnode>
+      </node>
+      <node id="14">
+        <label>timestate_mod::timestatetype</label>
+        <link refid="structtimestate__mod_1_1timestatetype"/>
       </node>
     </collaborationgraph>
     <location file="src/core/CATChemCore_Mod.F90" line="62" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="62" bodyend="119"/>

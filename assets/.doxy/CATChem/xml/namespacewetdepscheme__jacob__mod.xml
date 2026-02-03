@@ -1,0 +1,2441 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacewetdepscheme__jacob__mod" kind="namespace" language="Fortran">
+    <compoundname>wetdepscheme_jacob_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1ac5947d6f015d9b42281efb070147f0da" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::density_ice</definition>
+        <argsstring></argsstring>
+        <name>density_ice</name>
+        <qualifiedname>wetdepscheme_jacob_mod::density_ice</qualifiedname>
+        <initializer>= 917.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="43" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1ac971ca63339ab5aa13b2e210a1650429" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::density_liq</definition>
+        <argsstring></argsstring>
+        <name>density_liq</name>
+        <qualifiedname>wetdepscheme_jacob_mod::density_liq</qualifiedname>
+        <initializer>= 1.e+03_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="44" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1aa29137311198ee6d4e1120416364281c" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::m_to_cm</definition>
+        <argsstring></argsstring>
+        <name>m_to_cm</name>
+        <qualifiedname>wetdepscheme_jacob_mod::m_to_cm</qualifiedname>
+        <initializer>= 100.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="45" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1aaa7bf24087aca48711b905afe6360a17" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::kg_to_cm3_liq</definition>
+        <argsstring></argsstring>
+        <name>kg_to_cm3_liq</name>
+        <qualifiedname>wetdepscheme_jacob_mod::kg_to_cm3_liq</qualifiedname>
+        <initializer>= m_to_cm / density_liq</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="46" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1ad80a875108072a750fe7b1fcda571df8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::kg_to_cm3_ice</definition>
+        <argsstring></argsstring>
+        <name>kg_to_cm3_ice</name>
+        <qualifiedname>wetdepscheme_jacob_mod::kg_to_cm3_ice</qualifiedname>
+        <initializer>= m_to_cm / density_ice</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="47" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1a0d59fa8a35b3bdfb140b929dd69c0efc" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::qq_thr</definition>
+        <argsstring></argsstring>
+        <name>qq_thr</name>
+        <qualifiedname>wetdepscheme_jacob_mod::qq_thr</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="48" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1a10fa8a67c0c1d8ec1e1ff060efb7b459" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::pdwn_thr</definition>
+        <argsstring></argsstring>
+        <name>pdwn_thr</name>
+        <qualifiedname>wetdepscheme_jacob_mod::pdwn_thr</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="49" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1a584e7ab53259275436d62f80e695666f" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::k_min</definition>
+        <argsstring></argsstring>
+        <name>k_min</name>
+        <qualifiedname>wetdepscheme_jacob_mod::k_min</qualifiedname>
+        <initializer>= 1.e-04_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="50" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacewetdepscheme__jacob__mod_1a283ce186368e5460d57ae4ebbbe2d16f" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter wetdepscheme_jacob_mod::cwc</definition>
+        <argsstring></argsstring>
+        <name>cwc</name>
+        <qualifiedname>wetdepscheme_jacob_mod::cwc</qualifiedname>
+        <initializer>= 1.e-06_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="51" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="51" bodyend="51"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aa000bda136b406ffc27eeac128d5a17b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public wetdepscheme_jacob_mod::compute_jacob</definition>
+        <argsstring>(num_layers, num_species, params, airden_dry, mairden, pedge, pfilsan, pfllsan, reevapls, t, tstep, species_is_aerosol, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
+        <name>compute_jacob</name>
+        <qualifiedname>wetdepscheme_jacob_mod::compute_jacob</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kindref="compound">wetdepschemejacobconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>airden_dry</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>mairden</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers+1), intent(in)</type>
+          <defname>pedge</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers+1), intent(in)</type>
+          <defname>pfilsan</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers+1), intent(in)</type>
+          <defname>pfllsan</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>reevapls</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), intent(in)</type>
+          <defname>species_is_aerosol</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(in)</type>
+          <defname>species_short_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_henry_cr</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_henry_k0</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_henry_pka</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_wd_retfactor</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), intent(in)</type>
+          <defname>species_wd_liqandgas</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_wd_convfaci2g</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>species_wd_rainouteff</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), optional</type>
+          <defname>wetdep_mass_per_species_per_level</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), optional</type>
+          <defname>wetdep_flux_per_species_per_level</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for jacob scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing Jacob et al. [2000] wet deposition scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">airden_dry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>AIRDEN_DRY field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mairden</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MAIRDEN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pedge</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PEDGE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pfilsan</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PFILSAN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pfllsan</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PFLLSAN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reevapls</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>REEVAPLS field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>T field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_is_aerosol</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species is_aerosol property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_short_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species short_name property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_henry_cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species henry_cr property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_henry_k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species henry_k0 property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_henry_pKa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species henry_pKa property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_wd_retfactor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species wd_retfactor property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_wd_LiqAndGas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species wd_LiqAndGas property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_wd_convfacI2G</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species wd_convfacI2G property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_wd_rainouteff</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species wd_rainouteff property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_mw_g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species mw_g property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [mol/mol] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">wetdep_mass_per_species_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet deposition mass loss per species per level [kg/m2] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">wetdep_flux_per_species_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet deposition flux per species per level [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">wetdep_mass_per_species_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet deposition mass loss per species per level [kg/m2] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">wetdep_flux_per_species_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet deposition flux per species per level [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="91" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="120" bodyend="448"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1af307da7d5e4119228d08c898d565d3a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function wetdepscheme_jacob_mod::find_species_ind</definition>
+        <argsstring>(speciesnames, species_name)</argsstring>
+        <name>find_species_ind</name>
+        <qualifiedname>wetdepscheme_jacob_mod::find_species_ind</qualifiedname>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>speciesnames</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+<para>Find species index by name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="458" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="459" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae1714cc88cf0808f25bb60f24af2bcf9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::rainout</definition>
+        <argsstring>(is_aero, efficiency, wd_lidandgas, k0, cr, pka, cnvi2g, retfac, f, k, dt, tk, c_h2o, cldice, cldliq, spc, lossfrac, so2, h2o2)</argsstring>
+        <name>rainout</name>
+        <qualifiedname>wetdepscheme_jacob_mod::rainout</qualifiedname>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_aero</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(3), intent(in)</type>
+          <defname>efficiency</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>wd_lidandgas</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pka</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cnvi2g</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>retfac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>c_h2o</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cldice</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cldliq</defname>
+        </param>
+        <param>
+          <type>character(len = 20), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>lossfrac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>so2</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>h2o2</defname>
+        </param>
+        <briefdescription>
+<para>Computes RAINFRAC, the fraction of soluble species lost to rainout events in precipitation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>is_aero</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerosol rainout flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>efficiency</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature-dependent scale factor for rainout fraction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>wd_LidAndGas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ice-to-gas ratio is computed by co-condensation? </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pKa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cnvI2G</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Conversion factor from ice to gas ratio if wd_LidAndGas is true </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>retfac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Retention factor of species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipiting [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rainout rate constant [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>time step [s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c_h2o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mix ratio of H2O [cm3 H2O/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cldice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precipitable cloud ice mixing ratio [cm3 ice/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cldliq</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precipitable cloud liquid mixing ratio [cm3 H2O/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to rainout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SO2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO2 concentration [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>H2O2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>H2O2 concentration [kg/kg]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">is_aero</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerosol rainout flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">efficiency</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature-dependent scale factor for rainout fraction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wd_lidandgas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ice-to-gas ratio is computed by co-condensation? </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pka</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cnvi2g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Conversion factor from ice to gas ratio if wd_LidAndGas is true </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">retfac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Retention factor of species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipiting [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rainout rate constant [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>time step [s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">c_h2o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mix ratio of H2O [cm3 H2O/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cldice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precipitable cloud ice mixing ratio [cm3 ice/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cldliq</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precipitable cloud liquid mixing ratio [cm3 H2O/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to rainout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">so2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO2 concentration [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">h2o2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>H2O2 concentration [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="504" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="505" bodyend="622"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aeace337974ab33c9edd078b02706d19d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::washout</definition>
+        <argsstring>(radius, f, tk, qdwn, dz, dt, spc, is_aero, k0, cr, pka, wtune, radius_thr, washfrac, kin, so2, h2o2)</argsstring>
+        <name>washout</name>
+        <qualifiedname>wetdepscheme_jacob_mod::washout</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radius</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>qdwn</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dz</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>character(len = 20), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>is_aero</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pka</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wtune</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radius_thr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>washfrac</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>kin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>so2</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>h2o2</defname>
+        </param>
+        <briefdescription>
+<para>Computes WASHFRAC, the fraction of soluble species lost to washout events in precipitation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle radius (um) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>qdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of grid box [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>is_aero</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerosol washout flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pKa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>wtune</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Washout tuning factor; newly added in GOCART version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>radius_thr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fine/coarse particle radius threshold (um); using 1.0 um for now </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>washfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Kinetic process flag [kinetic or equilibrium] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SO2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO2 concentration [kg/kg] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>H2O2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>H2O2 concentration [kg/kg]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle radius (um) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">qdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of grid box [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">is_aero</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aerosol washout flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pka</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wtune</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Washout tuning factor; newly added in GOCART version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">radius_thr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fine/coarse particle radius threshold (um); using 1.0 um for now </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">washfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Kinetic process flag [kinetic or equilibrium] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">h2o2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>H2O2 conc [kg/kg] TODO: conc&apos;s after aqueous rxns are applied. These are computed </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">so2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO2 conc [kg/kg] in the sulfate chemistry module and passed here (not considered by now) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="649" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="650" bodyend="757"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a78e3462f1160a2f85e70b7d5955ed828" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function wetdepscheme_jacob_mod::rainfrac</definition>
+        <argsstring>(f, k, dt)</argsstring>
+        <name>rainfrac</name>
+        <qualifiedname>wetdepscheme_jacob_mod::rainfrac</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+<para>Computes the fraction of species lost to rainout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipiting [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rainout rate constant [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>time step [s]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipiting [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rainout rate constant [1/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>time step [s] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="769" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="770" bodyend="778"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a3474f3af4fb555b60da841cba80e5192" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function wetdepscheme_jacob_mod::liq_to_gas_ratio</definition>
+        <argsstring>(k0, cr, pka, tk, qliq)</argsstring>
+        <name>liq_to_gas_ratio</name>
+        <qualifiedname>wetdepscheme_jacob_mod::liq_to_gas_ratio</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pka</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>qliq</defname>
+        </param>
+        <briefdescription>
+<para>Computes the ratio L2G = Cliq / Cgas, which is the mixing ratio of species in the liquid phase, divided by the mixing ratio of species in the gas phase. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pKa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>qliq</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Liquid water content [cm3 H2O/cm3 air]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pka</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">qliq</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Liquid water content [cm3 H2O/cm3 air] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="793" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="794" bodyend="817"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aabdac1bad6bd731152117d4052edabbf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function wetdepscheme_jacob_mod::washfrac_aerosol</definition>
+        <argsstring>(radius, f, tk, pdwn, dt, tuning, radius_fine)</argsstring>
+        <name>washfrac_aerosol</name>
+        <qualifiedname>wetdepscheme_jacob_mod::washfrac_aerosol</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radius</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pdwn</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tuning</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radius_fine</defname>
+        </param>
+        <briefdescription>
+<para>Computes the fraction of soluble aerosol species lost to washout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Particle radius (um) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Washout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tuning</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Washout tuning factor; newly added in GOCART version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>radius_fine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fine particle radius threshold (um); using 1.0 um for now</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>particle radius (um) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>washout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tuning</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Washout tuning factor; newly added in GOCART version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">radius_fine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fine particle radius threshold (um); using 1.0 um for now </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="833" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="834" bodyend="875"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aa3a5e4c4e27f9e1e3a5c007e260d3ad8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function wetdepscheme_jacob_mod::washfrac_hno3</definition>
+        <argsstring>(f, tk, pdwn, dt)</argsstring>
+        <name>washfrac_hno3</name>
+        <qualifiedname>wetdepscheme_jacob_mod::washfrac_hno3</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pdwn</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+<para>Computes the fraction of HNO3 species lost to washout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep (s)</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precip rate thru bottom of grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep of washout event (s) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="888" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="889" bodyend="906"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ac18ce2a4d102e591cca3d026d3ff31d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::washfrac_liq_gas</definition>
+        <argsstring>(f, tk, pdwn, dz, dt, k0, cr, pka, washfrac, kin)</argsstring>
+        <name>washfrac_liq_gas</name>
+        <qualifiedname>wetdepscheme_jacob_mod::washfrac_liq_gas</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tk</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pdwn</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dz</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>k0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pka</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>washfrac</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>kin</defname>
+        </param>
+        <briefdescription>
+<para>Computes the fraction of soluble liquid/gas phase species lost to washout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box (K) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of grid box [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep of washout event (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pKa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>washfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Kinetic process flag [kinetic or equilibrium]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of grid box that is precipitating [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature in grid box [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precip rate thru bottom of grid box (cm3 (H2O) / cm2 (air) / s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of grid box [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestep of washout event (s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">k0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s solubility constant [M/atm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s volatility constant [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pka</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Henry&apos;s pH correction factor [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">washfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Kinetic process flag [kinetic or equilibrium] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="925" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="926" bodyend="976"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a50c5047734777471251b34ef0d9d4d21" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::rainout_loss</definition>
+        <argsstring>(k, lossfrac, conc, dconc)</argsstring>
+        <name>rainout_loss</name>
+        <qualifiedname>wetdepscheme_jacob_mod::rainout_loss</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lossfrac</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>dconc</defname>
+        </param>
+        <briefdescription>
+<para>Computes the concentrations of species lost to rainout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Concentration loss [kg/m2]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraction of species lost to rainout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration loss kg/m2 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="989" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="990" bodyend="1019"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a00ee288c6af55128362fa686b6eac853" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::washout_loss</definition>
+        <argsstring>(k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, so4)</argsstring>
+        <name>washout_loss</name>
+        <qualifiedname>wetdepscheme_jacob_mod::washout_loss</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>lossfrac</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>kin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f_washout</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>f_rainout</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>pdwn</defname>
+        </param>
+        <param>
+          <type>real(fp)</type>
+          <defname>reevap</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>delz_cm</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>dconc</defname>
+        </param>
+        <param>
+          <type>character(len = 20), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>so4</defname>
+        </param>
+        <briefdescription>
+<para>Computes the concentrations of species lost to washout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraction of species lost to washout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>kinetic process flag [kinetic or equilibrium] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f_washout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>washout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>f_rainout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rainout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>downward flux of precipitation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>reevap</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precip forming or evaporating [cm3 (h2o)/cm3 (air)] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>delz_cm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vertical grid spacing [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration loss kg/m2 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SO4</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO4 concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">lossfrac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraction of species lost to rainout [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>kinetic process flag [kinetic or equilibrium] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f_washout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>washout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f_rainout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rainout fraction [unitless] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdwn</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>downward flux of precipitation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>reevap</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precip forming or evaporating [cm3 (h2o)/cm3 (air)] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delz_cm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vertical grid spacing [cm] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration loss kg/m2 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">so4</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO4 concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1040" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1041" bodyend="1130"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae9afb1ac4fc9fc90e634ff50939f4a0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepscheme_jacob_mod::complete_reevap</definition>
+        <argsstring>(k, conc, dconc, spc, so4)</argsstring>
+        <name>complete_reevap</name>
+        <qualifiedname>wetdepscheme_jacob_mod::complete_reevap</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>dconc</defname>
+        </param>
+        <param>
+          <type>character(len = 20), intent(in)</type>
+          <defname>spc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout)</type>
+          <defname>so4</defname>
+        </param>
+        <briefdescription>
+<para>Computes the re-evaporation all of the soluble species back into the atmosphere. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration loss [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SO4</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO4 concentration [kg/m2]</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>layer index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">dconc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>concentration loss kg/m2 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">so4</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO4 concentration [kg/m2] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1144" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1145" bodyend="1174"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="29" column="1"/>
+  </compounddef>
+</doxygen>

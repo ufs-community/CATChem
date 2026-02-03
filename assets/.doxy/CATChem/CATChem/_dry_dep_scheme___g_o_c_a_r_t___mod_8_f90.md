@@ -104,7 +104,7 @@ INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
 
 
 
-Generated on: 2025-11-14T22:58:26.525574 Author: Wei Li & Lacey Holland Reference: Allison et al. [2024] Benchmarking GOCART-2G in GEOS 
+Generated on: 2025-11-14T22:58:26.525574 Author: Wei Li & Lacey Holland Reference: Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS) Allison B. Collow, Peter R. Colarco, Arlindo M. da Silva, Virginie Buchard, Huisheng Bian, M Chin, Sampa Das, Ravi Govindaraju, Dongchul Kim, and Valentina Aquila, Geosci. Model Development, 17, 14431468, 2024 [https://doi.org/10.5194/gmd-17-1443-2024](https://doi.org/10.5194/gmd-17-1443-2024) 
 
 
     

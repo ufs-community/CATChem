@@ -23,7 +23,8 @@ MODULE metstate_mod
    USE error_mod
    USE precision_mod
    USE gridgeometry_mod
-   ! USE TimeState_Mod, only: TimeStateType
+   USE met_utilities_mod
+   USE timestate_mod, only: timestatetype
 
 
 
@@ -102,6 +103,7 @@ MODULE metstate_mod
       INTEGER                      :: nSOIL
       INTEGER                      :: nSOILTYPE
       REAL(fp), ALLOCATABLE        :: SOILM(:,:,:)
+      REAL(fp), ALLOCATABLE        :: SOILT(:,:,:)
       REAL(fp), ALLOCATABLE        :: FRLANDUSE(:,:,:)
       REAL(fp), ALLOCATABLE        :: FRSOIL(:,:,:)
       REAL(fp), ALLOCATABLE        :: FRLAI(:,:,:)
@@ -131,6 +133,10 @@ MODULE metstate_mod
       REAL(fp), ALLOCATABLE        :: FRZ0(:,:,:)
       REAL(fp), ALLOCATABLE        :: PBLH(:,:)
       REAL(fp), ALLOCATABLE        :: SALINITY(:,:)
+      REAL(fp), ALLOCATABLE        :: CMM(:,:)
+      REAL(fp), ALLOCATABLE        :: ORO(:,:)
+      REAL(fp), ALLOCATABLE        :: RCA(:,:)
+      REAL(fp), ALLOCATABLE        :: WCA(:,:)          ! canopy water amount [kg/m2]
       ! 3D volumetric fields (3D: nx, ny, nz)
       REAL(fp), ALLOCATABLE        :: F_OF_PBL(:,:,:)
       REAL(fp), ALLOCATABLE        :: F_UNDER_PBLTOP(:,:,:)
@@ -148,6 +154,7 @@ MODULE metstate_mod
       REAL(fp), ALLOCATABLE        :: PRECANV(:,:)
       REAL(fp), ALLOCATABLE        :: PRECCON(:,:)
       REAL(fp), ALLOCATABLE        :: PRECLSC(:,:)
+      real(fp), ALLOCATABLE        :: REEVAPLS(:,:,:)
       ! 3D cloud and precipitation arrays
       REAL(fp), ALLOCATABLE        :: QI(:,:,:)
       REAL(fp), ALLOCATABLE        :: QL(:,:,:)
@@ -186,6 +193,7 @@ MODULE metstate_mod
       REAL(fp), ALLOCATABLE        :: RH(:,:,:)
       REAL(fp), ALLOCATABLE        :: SPHU(:,:,:)
       REAL(fp), ALLOCATABLE        :: AIRDEN(:,:,:)
+      REAL(fp), ALLOCATABLE        :: AIRDEN_DRY(:,:,:)
       REAL(fp), ALLOCATABLE        :: AIRNUMDEN(:,:,:)
       REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)
       REAL(fp), ALLOCATABLE        :: AVGW(:,:,:)
@@ -239,6 +247,7 @@ MODULE metstate_mod
       procedure, public :: metstate_set_field_3d_int
       procedure, public :: metstate_set_field_3d_logical
       procedure, public :: set_multiple_fields => metstate_set_multiple_fields
+      procedure, public :: derive_field => metstate_derive_field
       procedure :: allocate_field => metstate_allocate_field
       procedure :: deallocate_field => metstate_deallocate_field
       procedure, private :: allocate_arrays => allocate_metstate_arrays
@@ -1080,6 +1089,380 @@ CONTAINS
 
 ! Include the auto-generated multiple fields interface
 #include "metstate_multiple_fields_interface.inc"
+
+   subroutine metstate_derive_field(this, field_name, error_mgr, time_state, rc)
+      use error_mod, only: errormanagertype, cc_success, cc_failure, error_invalid_input, error_not_found
+      use constants, only: g0, rd, rdg0, airmw, h2omw
+
+      implicit none
+      class(MetStateType), intent(inout) :: this
+      character(len=*), intent(in) :: field_name
+      type(ErrorManagerType), pointer, intent(inout) :: error_mgr
+      type(TimeStateType), pointer,intent(inout) :: time_state
+      integer, intent(out) :: rc
+
+      character(len=256) :: thisLoc
+      integer :: nx, ny, nz, i, j, k, nlanduse
+      real(fp) :: airden
+      real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
+      real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
+
+      thisloc = 'metstate_derive_field (in core/metstate_mod.F90)'
+      call error_mgr%push_context('metstate_derive_field', 'deriving field: ' // trim(field_name))
+
+      rc = cc_success
+      call this%get_dimensions(nx, ny, nz)
+
+      select case (trim(adjustl(field_name)))
+
+       case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
+         ! Calculate dry air density from pressure and temperature
+         ! ρ = P / (R_specific * T) where R_specific = R / MW
+         if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'PMID and T fields required for MAIRDEN/AIRDEN calculation', rc, &
+               thisloc, 'Ensure pressure and temperature are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate MAIRDEN if not already allocated
+         if (.not. allocated(this%MAIRDEN) .or. .not. allocated(this%AIRDEN)) then
+            call error_mgr%report_error(rc, 'MAIRDEN/AIRDEN fields need to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate dry air density: ρ = P / (R_dry * T)
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  this%MAIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
+                  this%AIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
+               enddo
+            enddo
+         enddo
+
+       case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
+         ! Calculate dry air density from pressure and temperature
+         ! ρ = P / (R_specific * T) where R_specific = R / MW
+         if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'PMID and T fields required for AIRDEN_DRY calculation', rc, &
+               thisloc, 'Ensure pressure and temperature are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate AIRDEN_DRY if not already allocated
+         if (.not. allocated(this%AIRDEN_DRY) .or. .not. allocated(this%PMID_DRY) .or. &
+            .not. allocated(this%PEDGE_DRY) .or. .not. allocated(this%DELP_DRY)) then
+            call error_mgr%report_error(rc, 'AIRDEN_DRY/PMID_DRY/PEDGE_DRY/DELP_DRY fields need to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate dry air density: ρ = P / (R_dry * T)
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  avgw = airmw * this%QV(i,j,k) / ( h2omw * (1.0e+0_fp - this%QV(i,j,k)) )
+                  xh2o = avgw / (1.0e+0_fp + avgw)
+                  this%PMID_DRY(i, j, k) = this%PMID(i, j, k) * ( 1.e+0_fp - xh2o )
+                  this%AIRDEN_DRY(i, j, k) = this%PMID_DRY(i, j, k) / rd / this%T(i, j, k)
+                  this%PEDGE_DRY(i, j, k) = this%PEDGE(i, j, k) * ( 1.e+0_fp - xh2o )
+                  if (k == nz) then
+                     this%PEDGE_DRY(i, j, k+1) = this%PEDGE(i, j, k+1) * ( 1.e+0_fp - xh2o )
+                  end if
+                  this%DELP_DRY(i, j, k) = this%PEDGE_DRY(i, j, k) - this%PEDGE_DRY(i, j, k+1)
+               enddo
+            enddo
+         enddo
+
+       case ('RH', 'rh')
+         ! Calculate virtual temperature from temperature and humidity
+         if (.not. allocated(this%T) .or. .not. allocated(this%QV) .or. .not. allocated(this%PMID)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'T, PMID and QV fields required for RH calculation', rc, &
+               thisloc, 'Ensure temperature, pressure and humidity are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate RH if not already allocated
+         if (.not. allocated(this%RH)) then
+            call error_mgr%report_error(rc, 'RH field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate relative humidity from met_utility module
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  this%RH(i, j, k) = relative_humidity(this%T(i, j, k), this%QV(i, j, k), this%PMID(i, j, k))
+               enddo
+            enddo
+         enddo
+
+       case ('TV', 'tv')
+         ! Calculate virtual temperature from temperature and humidity
+         if (.not. allocated(this%T) .or. .not. allocated(this%QV)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'T and QV fields required for TV calculation', rc, &
+               thisloc, 'Ensure temperature and humidity are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate TV if not already allocated
+         if (.not. allocated(this%TV)) then
+            call error_mgr%report_error(rc, 'TV field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate virtual temperature: Tv = T * (1 + 0.608 * qv)
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  this%TV(i, j, k) = this%T(i, j, k) * (1.0_fp + 0.608_fp * this%QV(i, j, k))
+               enddo
+            enddo
+         enddo
+
+       case ('OBK', 'obk')
+         ! Calculate OBK from sensible heat flux and air density
+         if (.not. allocated(this%HFLUX) .or. .not. allocated(this%AIRDEN) .or. .not. allocated(this%TS) .or. &
+            .not. allocated(this%USTAR)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'TS, USTAR, AIRDEN and HFLUX fields required for OBK calculation', rc, &
+               thisloc, 'Ensure temperature, ustar, air density, and sensible heat flux are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate OBK if not already allocated
+         if (.not. allocated(this%OBK)) then
+            call error_mgr%report_error(rc, 'OBK field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate OBK from met_utility module
+         do j = 1, ny
+            do i = 1, nx
+               airden = this%PMID(i, j, 1) / rd / this%T(i, j, 1)
+               !!!! Note we cannot use this%AIRDEN here because it may not be calculated yet
+               this%OBK(i, j) = monin_obukhov_length(this%USTAR(i, j), this%TS(i, j), this%HFLUX(i, j), airden)
+            enddo
+         enddo
+
+       case ('SUNCOS', 'suncos')
+         ! Calculate SUNCOS
+         if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'LAT and LON fields required for SUNCOS calculation', rc, &
+               thisloc, 'Ensure latitude and longitude are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate OBK if not already allocated
+         if (.not. allocated(this%SUNCOS)) then
+            call error_mgr%report_error(rc, 'SUNCOS field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate OBK from met_utility module
+         do j = 1, ny
+            do i = 1, nx
+               !make sure lat[-90 - 90] and lon[-180 - 180] are in degrees
+               this%SUNCOS(i, j) = time_state%get_cos_sza(this%LAT(i, j), this%LON(i, j))
+            enddo
+         enddo
+
+       case ('SUNCOSmid', 'suncosmid')
+         ! Calculate SUNCOSmid
+         if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'LAT and LON fields required for SUNCOSmid calculation', rc, &
+               thisloc, 'Ensure latitude and longitude are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate OBK if not already allocated
+         if (.not. allocated(this%SUNCOSmid)) then
+            call error_mgr%report_error(rc, 'SUNCOSmid field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate OBK from met_utility module
+         do j = 1, ny
+            do i = 1, nx
+               !make sure lat[-90 - 90] and lon[-180 - 180] are in degrees
+               this%SUNCOSmid(i, j) = time_state%get_cos_sza(this%LAT(i, j), this%LON(i, j), .true.)
+            enddo
+         enddo
+
+       case ('DELP', 'delp')
+         ! Calculate box height from geopotential heights
+         if (.not. allocated(this%PEDGE)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'PEDGE field required for DELP calculation', rc, &
+               thisloc, 'Ensure pressure edges are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate BXHEIGHT if not already allocated
+         if (.not. allocated(this%DELP)) then
+            call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate box height as difference between edge heights
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  ! lower edge - upper edge
+                  this%DELP(i, j, k) = this%PEDGE(i, j, k) - this%PEDGE(i, j, k+1)
+               enddo
+            enddo
+         enddo
+
+       case ('BXHEIGHT', 'bxheight')
+         ! Calculate box height from geopotential heights
+         if (.not. allocated(this%PEDGE)) then
+            call error_mgr%report_error(error_invalid_input, &
+               'PEDGE field required for BXHEIGHT calculation', rc, &
+               thisloc, 'Ensure pressure edges are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Allocate BXHEIGHT if not already allocated
+         if (.not. allocated(this%BXHEIGHT)) then
+            call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisloc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Calculate box height as difference between edge heights
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  ! Refer to https://github.com/geoschem/geos-chem/GeosCore/calc_met_mod.F90
+                  this%BXHEIGHT(i, j, k) = rdg0 * virtual_temperature(this%T(i, j, k), this%QV(i, j, k)) * &
+                     log(this%PEDGE(i, j, k) / this%PEDGE(i, j, k+1))
+               enddo
+            enddo
+         enddo
+
+       case ('SST', 'sst')
+         this%SST(:,:) = this%TS(:,:)  !just copy TS to SST
+
+       case ('TSKIN', 'tskin')
+         this%TSKIN(:,:) = this%TS(:,:)  !just copy TS to TSKIN
+
+       case ('Z0H', 'z0h')
+         this%Z0H(:,:) = this%Z0(:,:)  !just copy Z0 to Z0H
+
+       case ('CLDFRC', 'cldfrc')
+         this%CLDFRC(:,:) = this%CLDF(:,:, 1)  !just copy surface CLDF to CLDFRC
+
+       case ('IsLand', 'island', 'ISLAND')
+         do j = 1, ny
+            do i = 1, nx
+               this%IsLand(i, j) = ( abs(this%LWI(i, j) - 1.0_fp) < 0.5_fp ) ! Land if LWI = 1.0
+            enddo
+         enddo
+
+       case ('IsIce', 'isice', 'ISICE')
+         do j = 1, ny
+            do i = 1, nx
+               this%IsIce(i, j) = ( abs(this%LWI(i, j) - 2.0_fp) < 0.5_fp ) ! Ice if LWI = 2.0
+            enddo
+         enddo
+
+       case ('IsWater', 'iswater', 'ISWATER')
+         do j = 1, ny
+            do i = 1, nx
+               this%IsWater(i, j) = ( abs(this%LWI(i, j) - 0.0_fp) < 0.5_fp ) ! sea if LWI = 0.0
+            enddo
+         enddo
+
+       case ('IsSnow', 'issnow', 'ISSNOW')
+         do j = 1, ny
+            do i = 1, nx
+               !geos-chem has a different method: https://github.com/geoschem/geos-chem/GeosCore/calc_met_mod.F90#L324
+               this%IsSnow(i, j) = ( this%FRSNO(i, j) >= 0.5_fp ) ! Snow fraction is read in
+            enddo
+         enddo
+
+       case ('LUCNAME', 'lucname')
+         this%LUCNAME = 'NOAH'
+       case ('nLNDTYPE', 'nlndtype', 'NLNDTYPE')
+         nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
+         this%nLNDTYPE(:,:) = nlanduse  !manually set to 20 for now; not sure if NUOPC can get it
+       case ('FRLANDUSE', 'frlanduse')
+         !Note that FRLANDUSE is not allocated yet in met_sate%init phase because we don't know nlanduse yet
+         nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
+         if (.not. allocated(this%FRLANDUSE)) allocate(this%FRLANDUSE(nx, ny, nlanduse))
+         this%FRLANDUSE(:,:,:) = 0.0_fp
+         do j = 1, ny
+            do i = 1, nx
+               do k = 1, nlanduse
+                  if (this%DLUSE(i, j) == k) this%FRLANDUSE(i, j, k) = 1.0_fp
+                  !We receive DLUSE = 0 over water but it should be 17th type
+                  if (this%DLUSE(i, j) == 0 .and. k == 17) this%FRLANDUSE(i, j, k) = 1.0_fp
+               enddo
+            enddo
+         enddo
+       case ('ILAND', 'iland')
+         !Note that ILAND is not allocated yet in met_sate%init phase because we don't know nlanduse yet
+         nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
+         if (.not. allocated(this%ILAND)) allocate(this%ILAND(nx, ny, nlanduse))
+         this%ILAND(:,:,:) = 0
+         do j = 1, ny
+            do i = 1, nx
+               do k = 1, nlanduse
+                  this%ILAND(i, j, k) = k
+               enddo
+            enddo
+         enddo
+       case ('FRLAI', 'frlai')
+         !Note that FRLAI is not allocated yet in met_sate%init phase because we don't know nlanduse yet
+         nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
+         if (.not. allocated(this%FRLAI)) allocate(this%FRLAI(nx, ny, nlanduse))
+         this%FRLAI(:,:,:) = 0.0_fp
+         do j = 1, ny
+            do i = 1, nx
+               do k = 1, nlanduse
+                  if (this%DLUSE(i, j) == k) this%FRLAI(i, j, k) = this%LAI(i, j) !TODO: should times fraclanduse but here is 1.0
+               enddo
+               this%FRLAI(i, j, 15:17) = 0.0 !manually give index 15(snow and ice), 16(barren), 17(water) zeros
+            enddo
+         enddo
+       case ('SALINITY', 'salinity')
+         this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
+
+       case ('REEVAPLS', 'reevapls')
+         this%REEVAPLS(:,:,:) = 0.0_fp  !set to zero for now because I did not find data from GFS. This will overestimate the washout of aerosols.
+
+       case default
+         call error_mgr%report_error(error_not_found, &
+            'Unknown derived field: ' // trim(field_name), rc, &
+            thisloc, 'Supported fields: AIRDEN,  TV,  BXHEIGHT')
+         rc = cc_failure
+      end select
+
+      call error_mgr%pop_context()
+   end subroutine metstate_derive_field
 
 END MODULE metstate_mod
 ```

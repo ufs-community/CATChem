@@ -2,6 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="namespaceprocessmanager__mod" kind="namespace" language="Fortran">
     <compoundname>processmanager_mod</compoundname>
+    <innerclass refid="structprocessmanager__mod_1_1processcontainertype" prot="private">processmanager_mod::processcontainertype</innerclass>
     <innerclass refid="structprocessmanager__mod_1_1processmanagertype" prot="public">processmanager_mod::processmanagertype</innerclass>
     <sectiondef kind="func">
       <memberdef kind="function" id="namespaceprocessmanager__mod_1aa003b0eaa3d455d39cab4bbd58854725" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
@@ -25,7 +26,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="59" bodyend="76"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="64" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="65" bodyend="82"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1af161b80d6cd96de971d55b9e8e2ae5e4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -56,7 +57,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="80" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="81" bodyend="128"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="86" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="87" bodyend="159"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a2f6bc4d594e46589d9fdd6398aecf712" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -83,7 +84,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="132" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="133" bodyend="172"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="163" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="164" bodyend="203"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a540d6bcd856959963e882fbe40e880fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -110,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="176" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="177" bodyend="227"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="207" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="208" bodyend="261"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a51ab528a3740f3d805ec5c79ec93e40a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -141,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="231" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="232" bodyend="280"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="265" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="266" bodyend="316"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1abb1b376d6864f7b490b28e924ab5e45b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +173,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="284" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="285" bodyend="304"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="320" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="321" bodyend="340"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a193b6f0dc93f25c81aa5739f9d08a6da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -199,7 +200,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="308" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="309" bodyend="326"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="344" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="345" bodyend="362"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a93136b94389081c467efba1298b0e13d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -234,7 +235,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="330" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="331" bodyend="410"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="366" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="367" bodyend="447"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a691c11fab36f77b851cb8835a59aea26" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -265,7 +266,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="414" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="415" bodyend="457"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="451" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="452" bodyend="494"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a84323ed81fecebcdbe94ce942db2e1a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -292,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="461" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="462" bodyend="467"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="498" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="499" bodyend="504"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a7862fcb966ea2f6bc11e012fc8d16d27" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -319,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="471" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="472" bodyend="479"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="508" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="509" bodyend="516"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1af1dfe64f8d1cee4404b76eed6070c9d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -346,7 +347,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="483" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="484" bodyend="490"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="520" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="521" bodyend="527"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1a8f609c4bed6adb4a4d967afeae878876" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -369,7 +370,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="494" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="495" bodyend="513"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="531" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="532" bodyend="550"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1af370d3b1dfa0567c00d1f4a444483888" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -396,7 +397,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="517" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="518" bodyend="528"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="554" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="555" bodyend="565"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1ab7bb3c94f13ac980a055eb83c1215769" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -486,7 +487,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="542" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="543" bodyend="550"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="579" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="580" bodyend="587"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessmanager__mod_1af6bf0aa526e0010a1456de99c42c0fc8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -540,7 +541,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessManager_Mod.F90" line="562" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="563" bodyend="627"/>
+        <location file="src/core/ProcessManager_Mod.F90" line="599" column="1" bodyfile="src/core/ProcessManager_Mod.F90" bodystart="600" bodyend="678"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

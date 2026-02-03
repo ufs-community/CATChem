@@ -97,8 +97,8 @@ module drydepcommon_mod
       real(fp) :: co2_reference = 380.0  ! Reference CO2 level for stomatal conductance adjustment
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 19
-      character(len=32) :: required_met_fields(19)
+      integer :: n_required_met_fields = 21
+      character(len=32) :: required_met_fields(21)
 
    contains
       procedure, public :: validate => validate_wesely_config
@@ -123,8 +123,8 @@ module drydepcommon_mod
       logical :: resuspension = .false.  ! Apply resuspension for dry deposition
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 12
-      character(len=32) :: required_met_fields(12)
+      integer :: n_required_met_fields = 13
+      character(len=32) :: required_met_fields(13)
 
    contains
       procedure, public :: validate => validate_gocart_config
@@ -148,8 +148,8 @@ module drydepcommon_mod
       real(fp) :: scale_factor = 1.0  ! Dry deposition velocity scale factor
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 13
-      character(len=32) :: required_met_fields(13)
+      integer :: n_required_met_fields = 15
+      character(len=32) :: required_met_fields(15)
 
    contains
       procedure, public :: validate => validate_zhang_config

@@ -307,7 +307,6 @@ contains
       ! Local variables for scheme calculation
       type(VirtualMetType), pointer :: met => null()  ! Pointer to meteorological data
       ! Meteorological fields
-      real(fp), allocatable :: delp(:)
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
       real(fp), allocatable :: sst(:)
@@ -344,7 +343,6 @@ contains
       allocate(species_conc(1, n_species))
       allocate(species_tendencies(1, n_species))
       ! Allocate meteorological field arrays based on field type and process configuration
-      allocate(delp(1))  ! Surface level only
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
@@ -362,7 +360,6 @@ contains
       ! Now allocate categorical fields using the met pointer dimensions
 
       ! Extract required fields from met pointer based on field type and processing mode
-      delp(1) = met%DELP(1)  ! Surface level only
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
@@ -395,7 +392,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong97_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -418,7 +414,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong97_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -436,20 +431,23 @@ contains
       ! Apply tendencies back to virtual column based on tendency_mode
       ! Surface-only processing - apply tendencies to surface level only
       do i = 1, n_species
-         ! Additive tendency (default): new_conc = conc + dqa
-         ! where dqa = tendency * dt * g0 / DELP(1) for surface
+         ! Additive tendency: convert emission flux to concentration change
+         ! Step 1: Convert to mass mixing ratio change (kg/kg)
          dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-         ! Apply unit conversion for emission processes
-         ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-         ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
+
+         ! Step 2: Convert to final concentration units
+         ! For gas species: convert kg/kg to ppmv
+         ! For aerosol species: convert kg/kg to ug/kg
          if (this%chem_state%ChemSpecies(species_indices(i))%is_gas) then
             converter = airmw / this%chem_state%ChemSpecies(species_indices(i))%mw_g * 1.0e6_fp
          else
             converter = 1.0e9_fp
          end if
          dqa = dqa * converter
+
          call column%set_chem_field(1, species_indices(i), &
             species_conc(1, i) + dqa)
+
       end do
 
    end subroutine run_gong97_scheme_column
@@ -462,7 +460,6 @@ contains
       ! Local variables for scheme calculation
       type(VirtualMetType), pointer :: met => null()  ! Pointer to meteorological data
       ! Meteorological fields
-      real(fp), allocatable :: delp(:)
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
       real(fp), allocatable :: sst(:)
@@ -499,7 +496,6 @@ contains
       allocate(species_conc(1, n_species))
       allocate(species_tendencies(1, n_species))
       ! Allocate meteorological field arrays based on field type and process configuration
-      allocate(delp(1))  ! Surface level only
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
@@ -517,7 +513,6 @@ contains
       ! Now allocate categorical fields using the met pointer dimensions
 
       ! Extract required fields from met pointer based on field type and processing mode
-      delp(1) = met%DELP(1)  ! Surface level only
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
@@ -550,7 +545,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong03_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -573,7 +567,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong03_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -591,20 +584,23 @@ contains
       ! Apply tendencies back to virtual column based on tendency_mode
       ! Surface-only processing - apply tendencies to surface level only
       do i = 1, n_species
-         ! Additive tendency (default): new_conc = conc + dqa
-         ! where dqa = tendency * dt * g0 / DELP(1) for surface
+         ! Additive tendency: convert emission flux to concentration change
+         ! Step 1: Convert to mass mixing ratio change (kg/kg)
          dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-         ! Apply unit conversion for emission processes
-         ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-         ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
+
+         ! Step 2: Convert to final concentration units
+         ! For gas species: convert kg/kg to ppmv
+         ! For aerosol species: convert kg/kg to ug/kg
          if (this%chem_state%ChemSpecies(species_indices(i))%is_gas) then
             converter = airmw / this%chem_state%ChemSpecies(species_indices(i))%mw_g * 1.0e6_fp
          else
             converter = 1.0e9_fp
          end if
          dqa = dqa * converter
+
          call column%set_chem_field(1, species_indices(i), &
             species_conc(1, i) + dqa)
+
       end do
 
    end subroutine run_gong03_scheme_column
@@ -617,7 +613,6 @@ contains
       ! Local variables for scheme calculation
       type(VirtualMetType), pointer :: met => null()  ! Pointer to meteorological data
       ! Meteorological fields
-      real(fp), allocatable :: delp(:)
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
       real(fp), allocatable :: sst(:)
@@ -653,7 +648,6 @@ contains
       allocate(species_conc(1, n_species))
       allocate(species_tendencies(1, n_species))
       ! Allocate meteorological field arrays based on field type and process configuration
-      allocate(delp(1))  ! Surface level only
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
@@ -670,7 +664,6 @@ contains
       ! Now allocate categorical fields using the met pointer dimensions
 
       ! Extract required fields from met pointer based on field type and processing mode
-      delp(1) = met%DELP(1)  ! Surface level only
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
@@ -702,7 +695,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%geos12_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -724,7 +716,6 @@ contains
             n_levels, &
             n_species, &
             this%process_config%geos12_config, &
-            delp, &
             frocean(1), &
             frseaice(1), &
             sst(1), &
@@ -741,20 +732,23 @@ contains
       ! Apply tendencies back to virtual column based on tendency_mode
       ! Surface-only processing - apply tendencies to surface level only
       do i = 1, n_species
-         ! Additive tendency (default): new_conc = conc + dqa
-         ! where dqa = tendency * dt * g0 / DELP(1) for surface
+         ! Additive tendency: convert emission flux to concentration change
+         ! Step 1: Convert to mass mixing ratio change (kg/kg)
          dqa = species_tendencies(1, i) * this%get_timestep() * g0 / met%DELP(1)
-         ! Apply unit conversion for emission processes
-         ! For gas species: convert kg/kg to ppmv (converter = AIRMW / mw_g * 1.0e6)
-         ! For aerosol species: convert kg/kg to ug/kg (converter = 1.0e9)
+
+         ! Step 2: Convert to final concentration units
+         ! For gas species: convert kg/kg to ppmv
+         ! For aerosol species: convert kg/kg to ug/kg
          if (this%chem_state%ChemSpecies(species_indices(i))%is_gas) then
             converter = airmw / this%chem_state%ChemSpecies(species_indices(i))%mw_g * 1.0e6_fp
          else
             converter = 1.0e9_fp
          end if
          dqa = dqa * converter
+
          call column%set_chem_field(1, species_indices(i), &
             species_conc(1, i) + dqa)
+
       end do
 
    end subroutine run_geos12_scheme_column
@@ -845,7 +839,7 @@ contains
 
    function get_required_diagnostic_fields(this) result(field_names)
       class(ProcessSeaSaltInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=64), allocatable :: field_names(:)
 
       allocate(field_names(2))
       field_names(1) = 'seasalt_mass_emission_total'
@@ -864,7 +858,6 @@ contains
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(DiagnosticRegistryType), pointer :: registry
       type(GridManagerType), pointer :: grid_mgr
-      character(len=32) :: selected_scheme
       character(len=256) :: field_name  ! For constructing species-specific field names
       integer :: i  ! Loop variable for diagnostic species
       integer :: nx, ny, nz
@@ -900,6 +893,7 @@ contains
       dims_3d_species = [nx, ny, n_species]
 
       ! Register seasalt_mass_emission_total
+      ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, 'seasalt_mass_emission_total', &
          'Sea salt mass emission flux total', &
          'kg/m2/s', diag_real_2d, &
@@ -907,6 +901,7 @@ contains
       if (rc /= cc_success) return
 
       ! Register seasalt_number_emission_total
+      ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, 'seasalt_number_emission_total', &
          'Sea salt number emission flux total', &
          'kg/m2/s', diag_real_2d, &
@@ -914,14 +909,12 @@ contains
       if (rc /= cc_success) return
 
       ! Get selected scheme(s)
-      selected_scheme = trim(this%process_config%seasalt_config%scheme)
-
       ! Register scheme-specific diagnostics based on selected scheme
-      select case (selected_scheme)
+      select case (trim(this%process_config%seasalt_config%scheme))
 
        case ('gong97')
          ! Register gong97-specific diagnostics
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -935,7 +928,7 @@ contains
          end if
          if (rc /= cc_success) return
 
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
@@ -951,7 +944,7 @@ contains
 
        case ('gong03')
          ! Register gong03-specific diagnostics
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -965,7 +958,7 @@ contains
          end if
          if (rc /= cc_success) return
 
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
@@ -981,7 +974,7 @@ contains
 
        case ('geos12')
          ! Register geos12-specific diagnostics
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -995,7 +988,7 @@ contains
          end if
          if (rc /= cc_success) return
 
-         ! Register individual 2D fields for each diagnostic species
+         ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
@@ -1034,8 +1027,7 @@ contains
       this%column_seasalt_number_emission_total = 0.0_fp
 
       ! Allocate scheme-specific diagnostics
-      selected_scheme = trim(this%process_config%seasalt_config%scheme)
-      select case (selected_scheme)
+      select case (trim(this%process_config%seasalt_config%scheme))
        case ('gong97')
          ! Scheme-specific diagnostics for gong97
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
@@ -1109,12 +1101,10 @@ contains
          i_col, j_col, container, rc)
       if (rc /= cc_success) return
       ! Update scheme-specific diagnostic fields based on active scheme
-      selected_scheme = trim(this%process_config%seasalt_config%scheme)
-
-      select case (selected_scheme)
+      select case (trim(this%process_config%seasalt_config%scheme))
        case ("gong97")
          ! Scheme-specific diagnostics for gong97
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -1125,7 +1115,7 @@ contains
                if (rc /= cc_success) return
             end do
          end if
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
@@ -1138,7 +1128,7 @@ contains
          end if
        case ("gong03")
          ! Scheme-specific diagnostics for gong03
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -1149,7 +1139,7 @@ contains
                if (rc /= cc_success) return
             end do
          end if
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
@@ -1162,7 +1152,7 @@ contains
          end if
        case ("geos12")
          ! Scheme-specific diagnostics for geos12
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
@@ -1173,7 +1163,7 @@ contains
                if (rc /= cc_success) return
             end do
          end if
-         ! Update individual fields for each diagnostic species
+         ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &

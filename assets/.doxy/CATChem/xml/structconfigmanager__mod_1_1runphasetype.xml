@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="229" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="229" bodyend="229"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="231" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="231" bodyend="231"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1abdb851b9eee45120bc086f3007f4dfb9" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="230" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="230" bodyend="230"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="232" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="232" bodyend="232"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1ad5cba80744d6fa417d83b95c03578e77" prot="public" static="no" mutable="no">
         <type>character(len=32)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="231" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="231" bodyend="231"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="233" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="233" bodyend="233"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1a3880eb57d6998b31ce8ad688307dc6fd" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="232" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="232" bodyend="232"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="234" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="234" bodyend="234"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1aa5cf157a1fc0546a673189db06c03350" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="233" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="233" bodyend="233"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="235" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="235" bodyend="235"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runphasetype_1aea635807f0bc4363c7fed6c8986c2818" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structconfigmanager__mod_1_1processconfigtype" kindref="compound">processconfigtype</ref>), dimension(:), allocatable</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="234" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="234" bodyend="234"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="236" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="236" bodyend="236"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -112,7 +112,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/ConfigManager_Mod.F90" line="228" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="228" bodyend="235"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="230" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="230" bodyend="237"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1runphasetype_1abdb851b9eee45120bc086f3007f4dfb9" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>description</name></member>
       <member refid="structconfigmanager__mod_1_1runphasetype_1ad5cba80744d6fa417d83b95c03578e77" prot="public" virt="non-virtual"><scope>configmanager_mod::runphasetype</scope><name>frequency</name></member>

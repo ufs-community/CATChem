@@ -50,12 +50,17 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
 * **namespace** [**processregistry\_mod**](namespaceprocessregistry__mod.md)     
     * **interface** [**processcreatorinterface**](interfaceprocessregistry__mod_1_1processcreatorinterface.md) _Function pointer interface for process creators._     
 * **namespace** [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md) _Process for computing sea salt aerosol emissions over ocean surfaces._     
+* **namespace** [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md) _Process for computing gravitational settling of aerosol species._     
+* **namespace** [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md) _Process for computing wet deposition of gas and aerosol species._     
 * **namespace** [**run\_mod**](namespacerun__mod.md)     
 * **namespace** [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md)     
 * **namespace** [**seasaltprocesscreator\_mod**](namespaceseasaltprocesscreator__mod.md)     
 * **namespace** [**seasaltscheme\_geos12\_mod**](namespaceseasaltscheme__geos12__mod.md)     
 * **namespace** [**seasaltscheme\_gong03\_mod**](namespaceseasaltscheme__gong03__mod.md)     
 * **namespace** [**seasaltscheme\_gong97\_mod**](namespaceseasaltscheme__gong97__mod.md)     
+* **namespace** [**settlingcommon\_mod**](namespacesettlingcommon__mod.md)     
+* **namespace** [**settlingprocesscreator\_mod**](namespacesettlingprocesscreator__mod.md)     
+* **namespace** [**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md)     
 * **namespace** [**species\_mod**](namespacespecies__mod.md)     
 * **namespace** [**state\_interface\_mod**](namespacestate__interface__mod.md)     
 * **namespace** [**state\_mod**](namespacestate__mod.md) 
@@ -64,6 +69,9 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
 * **namespace** [**unitconversion\_mod**](namespaceunitconversion__mod.md)     
 * **namespace** [**utilities\_mod**](namespaceutilities__mod.md)     
 * **namespace** [**virtualcolumn\_mod**](namespacevirtualcolumn__mod.md)     
+* **namespace** [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md)     
+* **namespace** [**wetdepprocesscreator\_mod**](namespacewetdepprocesscreator__mod.md)     
+* **namespace** [**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md)     
 * **namespace** [**yaml\_interface\_mod**](namespaceyaml__interface__mod.md)     
     * **interface** [**yaml\_get**](interfaceyaml__interface__mod_1_1yaml__get.md) _Generic interface for getting values from YAML This allows uniform syntax: call yaml\_get(node, key, value, rc) for any supported data type._     
     * **interface** [**yaml\_get\_array**](interfaceyaml__interface__mod_1_1yaml__get__array.md) _Generic interface for getting arrays from YAML This allows uniform syntax: call yaml\_get\_array(node, key, values, rc) for any supported array type._     

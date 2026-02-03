@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_8ca87c5e2f5cf830ab1a41055168a46b" kind="dir">
+    <compoundname>src/process/wetdep/schemes</compoundname>
+    <innerfile refid="_wet_dep_scheme___j_a_c_o_b___mod_8_f90">WetDepScheme_JACOB_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/schemes/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_ccadb5b29918b194ae5ca60f91721c2d" kind="dir">
+    <compoundname>src/process/settling/examples</compoundname>
+    <innerfile refid="settling__example_8_f90">settling_example.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/examples/"/>
+  </compounddef>
+</doxygen>

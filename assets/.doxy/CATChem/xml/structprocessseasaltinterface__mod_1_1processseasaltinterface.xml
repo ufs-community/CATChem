@@ -669,20 +669,26 @@
         <label>chemstate_mod::chemstatetype</label>
         <link refid="structchemstate__mod_1_1chemstatetype"/>
         <childnode refid="10" relation="usage">
-          <edgelabel>chemspecies</edgelabel>
+          <edgelabel>miedata</edgelabel>
         </childnode>
         <childnode refid="11" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
           <edgelabel>grid</edgelabel>
         </childnode>
       </node>
-      <node id="11">
+      <node id="10">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="12">
         <label>gridgeometry_mod::gridgeometrytype</label>
         <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
       </node>
-      <node id="12">
+      <node id="13">
         <label>metstate_mod::metstatetype</label>
         <link refid="structmetstate__mod_1_1metstatetype"/>
-        <childnode refid="11" relation="usage">
+        <childnode refid="12" relation="usage">
           <edgelabel>geometry</edgelabel>
         </childnode>
       </node>
@@ -707,7 +713,7 @@
         <childnode refid="9" relation="usage">
           <edgelabel>chem_state</edgelabel>
         </childnode>
-        <childnode refid="12" relation="usage">
+        <childnode refid="13" relation="usage">
           <edgelabel>met_state</edgelabel>
         </childnode>
       </node>
@@ -743,7 +749,7 @@
         <label>seasaltcommon_mod::seasaltschemegong97config</label>
         <link refid="structseasaltcommon__mod_1_1seasaltschemegong97config"/>
       </node>
-      <node id="10">
+      <node id="11">
         <label>species_mod::speciestype</label>
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>

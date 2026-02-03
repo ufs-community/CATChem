@@ -1,0 +1,307 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacesettlingcommon__mod" kind="namespace" language="Fortran">
+    <compoundname>settlingcommon_mod</compoundname>
+    <innerclass refid="structsettlingcommon__mod_1_1settlingconfig" prot="public">settlingcommon_mod::settlingconfig</innerclass>
+    <innerclass refid="structsettlingcommon__mod_1_1settlingprocessconfig" prot="public">settlingcommon_mod::settlingprocessconfig</innerclass>
+    <innerclass refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" prot="public">settlingcommon_mod::settlingschemegocartconfig</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a5d0c3333bdae1047708c8158d6bad6f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::validate_settling_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_settling_config</name>
+        <qualifiedname>settlingcommon_mod::validate_settling_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingconfig" kindref="compound">settlingconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate settling configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="126" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="127" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a9bb5268164edea35588e25e5701ed11e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::print_settling_config_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_settling_config_summary</name>
+        <qualifiedname>settlingcommon_mod::print_settling_config_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingconfig" kindref="compound">settlingconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="158" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="159" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1ade22538b093e15e506b2489131634c79" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::finalize_settling_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_settling_config</name>
+        <qualifiedname>settlingcommon_mod::finalize_settling_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingconfig" kindref="compound">settlingconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize settling configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="172" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="173" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1acb8a255550c1cc2fa9688dc41e924f4f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::validate_gocart_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_gocart_config</name>
+        <qualifiedname>settlingcommon_mod::validate_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kindref="compound">settlingschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="210" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="211" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a4d959061045cbca847a039e106edfbfa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::finalize_gocart_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_gocart_config</name>
+        <qualifiedname>settlingcommon_mod::finalize_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" kindref="compound">settlingschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="219" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="220" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a03e7312ca49b9d48667a6c5261568ec3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=32) function, public</type>
+        <definition>character(len=32) function, public settlingcommon_mod::int_to_string</definition>
+        <argsstring>(int_val)</argsstring>
+        <name>int_to_string</name>
+        <qualifiedname>settlingcommon_mod::int_to_string</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>int_val</defname>
+        </param>
+        <briefdescription>
+<para>Convert integer to string (utility function) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="229" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="230" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a934a5569c22ef39a2aa552f4f1c412b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::settling_process_load_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>settling_process_load_config</name>
+        <qualifiedname>settlingcommon_mod::settling_process_load_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="241" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="242" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a200bb9c89a5e7ae0ecf90e29b759b5b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::load_species_from_chem_state</definition>
+        <argsstring>(this, chem_state, error_handler)</argsstring>
+        <name>load_species_from_chem_state</name>
+        <qualifiedname>settlingcommon_mod::load_species_from_chem_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load species from ChemState This function is used for dynamic species discovery (by_metadata or all_species) For &apos;all_species&apos; mode: loads all species using nSpecies and SpeciesIndex For &apos;by_metadata&apos; mode: loads species by type using nSpeciesSettling and SettlingIndex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="314" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="315" bodyend="399"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a5b7823944764bdd5183d83e065a7ba4a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::load_gocart_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_gocart_config</name>
+        <qualifiedname>settlingcommon_mod::load_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load gocart scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="404" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="405" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1aac544a1eedadbbac3436469119eda754" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::settling_process_validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>settling_process_validate</name>
+        <qualifiedname>settlingcommon_mod::settling_process_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="430" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="431" bodyend="443"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a3269206e3bce79755e1b40ab0cf64211" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::settling_process_finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>settling_process_finalize</name>
+        <qualifiedname>settlingcommon_mod::settling_process_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="447" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="448" bodyend="452"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1a63340e2e85b7138830fd708eb27e4655" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class(*) function, allocatable</type>
+        <definition>class(*) function, allocatable settlingcommon_mod::get_active_scheme_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>settlingcommon_mod::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="456" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="457" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingcommon__mod_1aba63e80bb3706dc819823a6c4a97af51" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingcommon_mod::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>settlingcommon_mod::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="472" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="473" bodyend="527"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/SettlingCommon_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

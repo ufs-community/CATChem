@@ -1539,6 +1539,18 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="5">
+        <label>processsettlinginterface_mod::processsettlinginterface</label>
+        <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>processwetdepinterface_mod::processwetdepinterface</label>
+        <link refid="structprocesswetdepinterface__mod_1_1processwetdepinterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
     </inheritancegraph>
     <location file="src/core/ProcessInterface_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="33" bodyend="85"/>
     <listofallmembers>

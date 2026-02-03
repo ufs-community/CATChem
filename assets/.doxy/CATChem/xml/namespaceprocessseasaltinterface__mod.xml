@@ -251,7 +251,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="343" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="344" bodyend="495"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="343" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="344" bodyend="493"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a4292228f022242e4fd1f5e6ae5399ef6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -278,7 +278,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="499" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="500" bodyend="651"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="497" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="498" bodyend="647"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a167f65d98d1728feafe026a777509f75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -305,7 +305,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="655" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="656" bodyend="802"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="651" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="652" bodyend="796"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a2e23472acd950cd548bae30d6b0995c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=32) function, dimension(:), allocatable</type>
@@ -324,11 +324,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="808" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="809" bodyend="887"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="802" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="803" bodyend="881"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1ab4b2bebbfe43118c372c98d6f7de9909" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processseasaltinterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a28147a7649bb097a952d7b430e3d4436" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=64) function, dimension(:), allocatable</type>
+        <definition>character(len=64) function, dimension(:), allocatable processseasaltinterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processseasaltinterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -343,7 +343,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="891" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="892" bodyend="898"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="885" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="886" bodyend="892"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a64aa2fae00805af538d4392ffe4dd318" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -370,7 +370,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="903" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="904" bodyend="1124"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="897" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="898" bodyend="1116"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a9ad74213c6844b38282bb4c0ab3f3c7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -402,7 +402,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1132" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1133" bodyend="1239"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1124" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1125" bodyend="1229"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1afb7a4a388016d0cb41a22579f8509931" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -444,7 +444,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1250" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1251" bodyend="1255"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1240" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1241" bodyend="1245"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a63ab118a1d0226c787765ad26757d0de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=64) function</type>
@@ -476,7 +476,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1265" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1266" bodyend="1270"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1255" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1256" bodyend="1260"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -485,7 +485,7 @@
     <detaileddescription>
 <para>This module provides the seasalt process interface for the CATChem library. The interface leverages CATChem&apos;s core infrastructure for data marshaling and process management. All algorithmic calculations are performed in separate scheme modules.</para>
 <para>DIAGNOSTIC INTERFACE: The compute_scheme functions support optional diagnostic parameters. When diagnostics are enabled in the configuration, these parameters are passed to capture emission/tendency data. When diagnostics are disabled, the scheme calls use the original interface without diagnostics. This approach maintains backward compatibility while providing flexible diagnostic capabilities.</para>
-<para>This code was generated by the CATChem Process Generator. Generation date: 2025-11-14T23:01:21.180443 Configuration: seasalt</para>
+<para>This code was generated by the CATChem Process Generator. Generation date: 2025-12-15T16:09:09.402672 Configuration: seasalt</para>
 <para><simplesect kind="author"><para>CATChem Process Generator </para>
 </simplesect>
 <simplesect kind="version"><para>1.0.0 </para>

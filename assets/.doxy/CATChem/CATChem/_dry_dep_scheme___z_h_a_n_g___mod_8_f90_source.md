@@ -11,7 +11,7 @@
 
 module drydepscheme_zhang_mod
 
-   use precision_mod, only: fp, rae
+   use precision_mod, only: fp, rae, f8
    use error_mod, only: cc_success, cc_error
    use drydepcommon_mod, only: drydepschemezhangconfig
    use constants, only: pi, avo, von_karman, rstarg, g0, boltz  !load the constants needed for this scheme
@@ -190,7 +190,7 @@ contains
       real(fp), intent(in) :: species_mw_g(num_species)  ! Species mw_g property
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
       real(fp), intent(in) :: species_density(num_species)  ! Species density property
-      character(len=255), intent(in) :: species_short_name(num_species)  ! Species short_name property
+      character(len=32), intent(in) :: species_short_name(num_species)  ! Species short_name property
       real(fp), intent(in) :: species_dd_hstar(num_species)  ! Species dd_hstar property
       real(fp), intent(in) :: species_dd_DvzAerSnow(num_species)  ! Species dd_DvzAerSnow property
       real(fp), intent(in) :: species_dd_DvzMinVal_snow(num_species)  ! Species dd_DvzMinVal_snow property
@@ -671,7 +671,8 @@ contains
 
       ! Over oceans the RH in the viscous sublayer is set to 98%,
       ! following Lewis and Schwartz (2004)
-      IF (luc == 14) THEN
+      !I added condition when RHBL=1 to avoid DIAM = infinity issue in the New_DIAM_DEN subroutine later for SO4 (Wei Li)
+      IF (luc == 14 .or. rae(rhbl, 1.0_fp)) THEN
          rhbl = 0.98_fp
       ENDIF
 
@@ -833,10 +834,12 @@ contains
          r1 = 1.e+0_fp
       ELSE
          r1 = exp( -1e+0_fp * sqrt( st ) )
+         r1 = max( tiny(r1), r1 ) !avoid R1 = 0 when ST is large under very low TEMP and AA < 0 (Wei Li)
       ENDIF
 
       !add error check here to make sure RS below is not a infinite value
       IF (rae(r1, 0.0_fp) .or. rae(ustar, 0.0_fp)) THEN
+         !write(*,*) 'DEBUG INFO: SPC=', trim(SPC), LUC, USTAR, R1, ST, AA, VTS, CONST, DEN, DIAM, RHBL, RHB, AIRVS
          errmsg = 'USTAR or R1 is zero. Check met field or diameter (in m) of aerosol is too big.'
          CALL cc_error( errmsg, rc, thisloc )
          RETURN
@@ -881,7 +884,7 @@ contains
       REAL(fp),  PARAMETER  :: A2       = -4.28e-5_fp
       REAL(fp),  PARAMETER  :: A3       =  2.52e-6_fp
       REAL(fp),  PARAMETER  :: A4       = -2.35e-8_fp
-      REAL(fp),  PARAMETER  :: EPSI     =  1.0e-4_fp
+      REAL(f8),  PARAMETER  :: EPSI     =  1.0e-4_f8 !!!Note we changed it fp to f8 otherwise the do while loop may not converge
 
       ! parameters for assumed size distribution of accumulation and coarse
       ! mode sea salt aerosols, as described in Jaegle et al. (ACP, 11, 2011)
@@ -897,8 +900,8 @@ contains
       !local variables
       real(fp)    :: FAC1, FAC2  !Exponential factors for hygroscopic growth
       real(fp)    :: RUM         !Radius of dry particle in micronmeters [um]
-      REAL(fp)    :: RATIO_R     !Ratio dry over wet radii
-      REAL(fp)    :: DEN0, DEN1, WTP
+      REAL(f8)    :: RATIO_R     !Ratio dry over wet radii
+      REAL(f8)    :: DEN0, DEN1, WTP, DEN_f8
       integer     :: I          !Loop index
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
@@ -915,8 +918,8 @@ contains
 
          ! SIA (TODO: keep this for now and need to be consistent with real species names in the future)
          !IF ( K == idd_NIT .or. K == idd_NH4 .or. K == idd_SO4 ) THEN
-         IF ( spc == 'NIT' .or. spc == 'NH4' .or. spc == 'SO4' .or. &
-            spc == 'nit' .or. spc == 'nh4' .or. spc == 'so4' ) THEN
+         IF ( spc == 'NIT' .or. spc == 'NH4' .or. spc == 'SO4' .or. spc == 'ASO4J' .or. &
+            spc == 'nit' .or. spc == 'nh4' .or. spc == 'so4' .or. spc == 'aso4j' ) THEN
             ! Efflorescence transitions
             IF (rhbl .LT. 0.35) THEN
                ! DIAM is not changed
@@ -992,37 +995,40 @@ contains
          ! Above density calculation is chemically unsound because it ignores chemical solvation.
          ! Iteratively solve Tang et al., 1997 equation 5 to calculate density of wet aerosol (kg/m3)
          ! Redefine RATIO_R
-         ratio_r = rdry / rwet
+         ratio_r = real(rdry / rwet, f8)
 
          ! Assume an initial density of 1000 kg/m3
-         den0 = den !assign initial DEN to DEN0
-         den  = 1000.e+0_fp
-         den1 = 0.e+0_fp !initialize
+         den0 = real(den, f8) !assign initial DEN to DEN0
+         den_f8  = 1000.e+0_f8
+         den1 = 0.e+0_f8 !initialize
          i = 0 !initialize loop index
          !Note that if RH is too low, the loop will not converge and will run forever
-         DO WHILE ( abs( den1-den ) .gt. epsi )
+         DO WHILE ( abs( den1-den_f8 ) .gt. epsi )
             ! First calculate weight percent of aerosol (kg_RH=0.8/kg_wet)
-            wtp    = 100.e+0_fp * den0/den * ratio_r**3.e+0_fp
+            wtp    = 100.e+0_f8 * den0/den_f8 * ratio_r**3
             ! Then calculate density of wet aerosol using equation 5
             ! in Tang et al., 1997 [kg/m3]
-            den1   = ( 0.9971e+0_fp + (a1 * wtp) + (a2 * wtp**2) + &
-               (a3 * wtp**3) + (a4 * wtp**4) ) * 1000.e+0_fp
+            den1   = ( 0.9971e+0_f8 + (a1 * wtp) + (a2 * wtp**2) + &
+               (a3 * wtp**3) + (a4 * wtp**4) ) * 1000.e+0_f8
 
             ! Now calculate new weight percent using above density calculation
-            wtp    = 100.e+0_fp * den0/den1 * ratio_r**3.e+0_fp
+            wtp    = 100.e+0_f8 * den0/den1 * ratio_r**3
             ! Now recalculate new wet density [kg/m3]
-            den   = ( 0.9971e+0_fp + (a1 * wtp) + (a2 * wtp**2) + &
-               (a3 * wtp**3) + (a4 * wtp**4) ) * 1000.e+0_fp
+            den_f8   = ( 0.9971e+0_f8 + (a1 * wtp) + (a2 * wtp**2) + &
+               (a3 * wtp**3) + (a4 * wtp**4) ) * 1000.e+0_f8
 
             ! add some protection against infinite loop
             i = i+1
             IF ( i .GT. 500 ) THEN
+               !write(*,*) 'Test NEW_DIAM_DEN output: ', trim(SPC), RHBL, RDRY, RWET, DIAM, DEN0, DEN,DEN1
                errmsg = 'Error in calculating new density for sea salt aerosol due to very low RH input!'
                CALL cc_error( errmsg, rc, thisloc )
                RETURN
             ENDIF
 
          ENDDO
+         ! Convert back to fp
+         den = real(den_f8, fp)
       ENDIF
 
    END SUBROUTINE new_diam_den

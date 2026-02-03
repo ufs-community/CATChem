@@ -1,0 +1,737 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structprocesssettlinginterface__mod_1_1processsettlinginterface" kind="type" language="Fortran" prot="public">
+    <compoundname>processsettlinginterface_mod::processsettlinginterface</compoundname>
+    <basecompoundref refid="structprocessinterface__mod_1_1columnprocessinterface" prot="public" virt="non-virtual">processinterface_mod::columnprocessinterface</basecompoundref>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a29cd9503b63a8d16bedebd767473a6dd" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structsettlingcommon__mod_1_1settlingprocessconfig" kindref="compound">settlingprocessconfig</ref>), public</type>
+        <definition>type(settlingprocessconfig), public processsettlinginterface_mod::processsettlinginterface::process_config</definition>
+        <argsstring></argsstring>
+        <name>process_config</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::process_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="57" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6d80d8b95c86c8aaebe72d1a46ba8ed2" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), pointer</type>
+        <definition>type(chemstatetype), pointer processsettlinginterface_mod::processsettlinginterface::chem_state</definition>
+        <argsstring></argsstring>
+        <name>chem_state</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::chem_state</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="60" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1abbb6768277815deaf54e039a6c02dfc9" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), pointer</type>
+        <definition>type(metstatetype), pointer processsettlinginterface_mod::processsettlinginterface::met_state</definition>
+        <argsstring></argsstring>
+        <name>met_state</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::met_state</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="61" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a79c7c36d8d8ca49d322bc50ab0d0aaf5" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer processsettlinginterface_mod::processsettlinginterface::diag_settling_velocity_per_species_per_level_idx</definition>
+        <argsstring></argsstring>
+        <name>diag_settling_velocity_per_species_per_level_idx</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::diag_settling_velocity_per_species_per_level_idx</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="65" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4536aff6b7f1057d5bbdcfc85187fd59" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer processsettlinginterface_mod::processsettlinginterface::diag_settling_flux_per_species_idx</definition>
+        <argsstring></argsstring>
+        <name>diag_settling_flux_per_species_idx</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::diag_settling_flux_per_species_idx</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="66" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af659b64a0a9aa973a5f653cca3d3a2ee" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable processsettlinginterface_mod::processsettlinginterface::column_settling_velocity_per_species_per_level</definition>
+        <argsstring></argsstring>
+        <name>column_settling_velocity_per_species_per_level</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::column_settling_velocity_per_species_per_level</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="71" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a9e51107c788f5641a649dc5eda317af5" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable processsettlinginterface_mod::processsettlinginterface::column_settling_flux_per_species</definition>
+        <argsstring></argsstring>
+        <name>column_settling_flux_per_species</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::column_settling_flux_per_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="72" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a83edf52d5ceff446bbdf95412706b3c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::init</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the settling process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Leverages ProcessInterface base class for common initialization tasks. Only handles process-specific configuration and scheme setup. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="78" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a361f549537a0296163a795e99245779d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::run</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>run</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::run</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run the settling process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method implements the main ProcessInterface run method. For ColumnProcessInterface processes, the actual column iteration is handled by ProcessManager, so this method serves as a placeholder for any 3D operations that might be needed before or after column processing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="79" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a92fe5301db2179c1debcd97ce773cfd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize the settling process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="80" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ac4af1e5369bdafd5e3d7e050c93aa728" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::parse_process_config</definition>
+        <argsstring>(this, state_manager, error_manager, rc)</argsstring>
+        <name>parse_process_config</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::parse_process_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_manager</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Parse process configuration using unified approach This function bridges the ConfigManager YAML structure to process-specific configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="81" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1adfc985427425c6b332d900ba68d94687" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::init_column_processing</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>init_column_processing</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::init_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize column processing for settling. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method sets up the column processing infrastructure for the process. The base class ColumnProcessInterface handles the actual column virtualization. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="84" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ab6f98f1b168d83af45c87782c90888e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::run_column</definition>
+        <argsstring>(this, column, container, rc)</argsstring>
+        <name>run_column</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::run_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Process a single virtual column for settling. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the core column processing method where the actual atmospheric process calculations happen for a single column. The base class handles column virtualization and calls this method for each virtual column. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="85" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ad34d02254cd9d5b46880ab85525419ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::finalize_column_processing</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize_column_processing</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::finalize_column_processing</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize column processing for settling. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Clean up any column processing resources. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="86" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4737b5b75a98af7cd9000631082fbf95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::get_required_met_fields</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_required_met_fields</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::get_required_met_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get required meteorological fields for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="89" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af10505ae91013033d78bcd08288670ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::get_required_diagnostic_fields</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_required_diagnostic_fields</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::get_required_diagnostic_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get required diagnostic fields for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="90" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a680db19d0e30757706af5e20ea066f05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::set_scheme</definition>
+        <argsstring>(this, scheme_name)</argsstring>
+        <name>set_scheme</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::set_scheme</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>scheme_name</defname>
+        </param>
+        <briefdescription>
+<para>Set the active scheme (for testing purposes) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method allows tests to override the scheme configuration to test different schemes programmatically.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessSettlingInterface instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scheme_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scheme name to set </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="93" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a1f5bffd7ead41acd0cbdbdd85ec9eb38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::get_scheme</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_scheme</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::get_scheme</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get the current active scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method allows retrieval of the current scheme for testing and verification purposes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessSettlingInterface instance </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The current scheme name </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="94" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1aaae2214d5b36a9bba40f8090a0cd9aed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure processsettlinginterface_mod::processsettlinginterface::register_diagnostics</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>register_diagnostics</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::register_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register diagnostic fields with the DiagnosticManager and allocate diagnostic storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="101" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4678f2cea3d41b7750eb06047b2326c1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processsettlinginterface_mod::processsettlinginterface::run_active_scheme_column</definition>
+        <argsstring>(this, column, rc)</argsstring>
+        <name>run_active_scheme_column</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::run_active_scheme_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run the active scheme for a single virtual column. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method adapts the existing scheme methods to work with virtual columns instead of state manager column indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="97" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a12691c172bb5780038df10f51d2d3bdb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processsettlinginterface_mod::processsettlinginterface::run_gocart_scheme_column</definition>
+        <argsstring>(this, column, rc)</argsstring>
+        <name>run_gocart_scheme_column</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::run_gocart_scheme_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run the gocart scheme for a single virtual column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="98" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6414bc958f3fdde6c02556307ce495ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processsettlinginterface_mod::processsettlinginterface::register_and_allocate_diagnostics</definition>
+        <argsstring>(this, container, rc)</argsstring>
+        <name>register_and_allocate_diagnostics</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::register_and_allocate_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register diagnostic fields with the DiagnosticManager and allocate diagnostic storage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="102" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a8622c9dac3a12f72da7eddef6e6ecafd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processsettlinginterface_mod::processsettlinginterface::calculate_and_update_diagnostics</definition>
+        <argsstring>(this, column, container, rc)</argsstring>
+        <name>calculate_and_update_diagnostics</name>
+        <qualifiedname>processsettlinginterface_mod::processsettlinginterface::calculate_and_update_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate and update all diagnostic fields for this process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>With the new flexible column-level design, diagnostics are calculated directly by the science schemes for each column and passed to this method for aggregation or output. This approach uses dimension inference to reduce 2D-&gt;scalar and 3D-&gt;1D for column processing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="103" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main settling process interface type - extends core ColumnProcessInterface !! This type leverages CATChem&apos;s core ColumnProcessInterface infrastructure for column virtualization, focusing only on process-specific configuration and scheme management. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>All boilerplate infrastructure and column processing is handled by the base class. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>processinterface_mod::columnprocessinterface</label>
+        <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>processinterface_mod::processinterface</label>
+        <link refid="structprocessinterface__mod_1_1processinterface"/>
+      </node>
+      <node id="1">
+        <label>processsettlinginterface_mod::processsettlinginterface</label>
+        <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="7">
+        <label>chemstate_mod::chemstatetype</label>
+        <link refid="structchemstate__mod_1_1chemstatetype"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>miedata</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>grid</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="10">
+        <label>gridgeometry_mod::gridgeometrytype</label>
+        <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
+      </node>
+      <node id="11">
+        <label>metstate_mod::metstatetype</label>
+        <link refid="structmetstate__mod_1_1metstatetype"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>processinterface_mod::columnprocessinterface</label>
+        <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>processinterface_mod::processinterface</label>
+        <link refid="structprocessinterface__mod_1_1processinterface"/>
+      </node>
+      <node id="1">
+        <label>processsettlinginterface_mod::processsettlinginterface</label>
+        <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>process_config</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>chem_state</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>met_state</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>settlingcommon_mod::settlingconfig</label>
+        <link refid="structsettlingcommon__mod_1_1settlingconfig"/>
+      </node>
+      <node id="4">
+        <label>settlingcommon_mod::settlingprocessconfig</label>
+        <link refid="structsettlingcommon__mod_1_1settlingprocessconfig"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>settling_config</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>gocart_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>settlingcommon_mod::settlingschemegocartconfig</label>
+        <link refid="structsettlingcommon__mod_1_1settlingschemegocartconfig"/>
+      </node>
+      <node id="9">
+        <label>species_mod::speciestype</label>
+        <link refid="structspecies__mod_1_1speciestype"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="53" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="53" bodyend="105"/>
+    <listofallmembers>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>accumulate_emissions</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>activate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a03de1e9dbb9ac11422314e2f5a35898a" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>apply_emission_scaling</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa7d419cc2e40ae2fdf8873cb0663979f" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>apply_tendency</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a8622c9dac3a12f72da7eddef6e6ecafd" prot="private" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>calculate_and_update_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7074b14a820348304ce2f175c61f3c32" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>calculate_column_integrals</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0073988041bd832da3aed2c70a0ba094" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>check_mass_conservation</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6d80d8b95c86c8aaebe72d1a46ba8ed2" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>chem_state</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a6f1fc6a3a8378d13363b690c13cc1d65" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>column_batch_size</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a9e51107c788f5641a649dc5eda317af5" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>column_settling_flux_per_species</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af659b64a0a9aa973a5f653cca3d3a2ee" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>column_settling_velocity_per_species_per_level</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>convert_concentration_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>convert_flux_units</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>deactivate</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>description</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4536aff6b7f1057d5bbdcfc85187fd59" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>diag_settling_flux_per_species_idx</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a79c7c36d8d8ca49d322bc50ab0d0aaf5" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>diag_settling_velocity_per_species_per_level_idx</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a4fd168b0e470e14d71726a007e91b4fc" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>disable_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>dt</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a5d1a6fe011017c901abea2b4028d7fca" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>enable_column_processing</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a92fe5301db2179c1debcd97ce773cfd8" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>finalize</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>finalize</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ad34d02254cd9d5b46880ab85525419ad" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>finalize_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a380c53ab546514c345075f9b219e0405" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>finalize_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1adfdf795ec9e0f405e388940a349cbe59" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_column_batch_size</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_name</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1af10505ae91013033d78bcd08288670ef" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_required_diagnostic_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_required_diagnostic_fields</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4737b5b75a98af7cd9000631082fbf95" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a1f5bffd7ead41acd0cbdbdd85ec9eb38" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_scheme</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>get_version</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a83edf52d5ceff446bbdf95412706b3c2" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>init</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a07fa2dd16cefbff358d53d6f5caa6d21" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>init</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1adfc985427425c6b332d900ba68d94687" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>init_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a6536f84b09e537bb2bf64d006fb85a7d" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>init_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>is_active</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a24841d91911cc51474f7ebe320809e4c" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>is_column_processing_enabled</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>is_initialized</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>is_ready</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1abbb6768277815deaf54e039a6c02dfc9" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>met_state</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>name</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ac4af1e5369bdafd5e3d7e050c93aa728" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>parse_process_config</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>process_column</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a29cd9503b63a8d16bedebd767473a6dd" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>process_config</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a6414bc958f3fdde6c02556307ce495ab" prot="private" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>register_and_allocate_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>register_diagnostic_field</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1aaae2214d5b36a9bba40f8090a0cd9aed" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>register_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>register_diagnostics</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a361f549537a0296163a795e99245779d" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ad9f91407f116f0132f911f86ad79b617" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a4678f2cea3d41b7750eb06047b2326c1" prot="private" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run_active_scheme_column</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1ab6f98f1b168d83af45c87782c90888e0" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a1d4326a7c6f7f53476ae1f522cca2976" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run_column</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a12691c172bb5780038df10f51d2d3bdb" prot="private" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>run_gocart_scheme_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1ae1bcaf8d46ea1edc26d5bcc089638339" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>set_column_batch_size</name></member>
+      <member refid="structprocesssettlinginterface__mod_1_1processsettlinginterface_1a680db19d0e30757706af5e20ea066f05" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>set_scheme</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac8b2e542df97a721b4f588934be5e3f1" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>set_timestep</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ab2371a427fb673428cae8910dbdc5ccc" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>supports_column_processing</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1ac92b486fe04e944cc790cc4fc0a6772c" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_1d_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a950098f6ace2e3244c043408d5ca90cb" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_2d_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1aba30f438634301617133f7d7e9206ca5" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a855429c48ec202574c360acc957fa179" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a19ace2f1f76af8e32d47e5167a9597da" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_column_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0128b392b36390b94ef7714337f2d972" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_diagnostics</name></member>
+      <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a0547b7e33883ccd9fe1b1049e8441cd4" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>update_scalar_diagnostic_column</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>validate_config</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>validate_physical_ranges</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>validate_species_availability</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" virt="non-virtual"><scope>processsettlinginterface_mod::processsettlinginterface</scope><name>version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

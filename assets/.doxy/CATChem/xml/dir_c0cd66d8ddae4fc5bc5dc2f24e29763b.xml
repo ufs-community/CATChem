@@ -4,6 +4,8 @@
     <compoundname>src/process</compoundname>
     <innerdir refid="dir_57fb5aa14ddb2cd518a6d90b65ffd000">src/process/drydep</innerdir>
     <innerdir refid="dir_3e6fd2e121e43ca7d4114b6c0b4e05b6">src/process/seasalt</innerdir>
+    <innerdir refid="dir_1a0bba2ffdf6e6637fcb76856471cb75">src/process/settling</innerdir>
+    <innerdir refid="dir_8b9a0ce556ea4a65f6920dfb49dcd69d">src/process/wetdep</innerdir>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

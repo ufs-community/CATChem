@@ -54,9 +54,7 @@ Here is a list of all files with brief descriptions:
                 * **file** [**drydep\_example.F90**](drydep__example_8_f90.md) _Example usage of drydep process._     
             * **dir** [**schemes**](dir_5a3c86e36f17958630366ebc2b7ca21b.md)     
                 * **file** [**DryDepScheme\_GOCART\_Mod.F90**](_dry_dep_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART-2G aerosol dry deposition scheme._     
-                * **file** [**DryDepScheme\_WESELY\_Mod copy.F90**](_dry_dep_scheme___w_e_s_e_l_y___mod_01copy_8_f90.md)     
                 * **file** [**DryDepScheme\_WESELY\_Mod.F90**](_dry_dep_scheme___w_e_s_e_l_y___mod_8_f90.md) _Wesely 1989 gas dry deposition scheme._     
-                * **file** [**DryDepScheme\_ZHANG\_Mod copy.F90**](_dry_dep_scheme___z_h_a_n_g___mod_01copy_8_f90.md)     
                 * **file** [**DryDepScheme\_ZHANG\_Mod.F90**](_dry_dep_scheme___z_h_a_n_g___mod_8_f90.md) _Zhang et al._     
         * **dir** [**seasalt**](dir_3e6fd2e121e43ca7d4114b6c0b4e05b6.md)     
             * **file** [**ProcessSeaSaltInterface\_Mod.F90**](_process_sea_salt_interface___mod_8_f90.md)     
@@ -65,10 +63,23 @@ Here is a list of all files with brief descriptions:
             * **dir** [**examples**](dir_5a4ade9a2f1be2d214cab82786bd5e96.md)     
                 * **file** [**seasalt\_example.F90**](seasalt__example_8_f90.md) _Example usage of seasalt process._     
             * **dir** [**schemes**](dir_ec083b49fedbd640552af85049fd7226.md)     
-                * **file** [**SeaSaltScheme\_GEOS12\_Mod copy.F90**](_sea_salt_scheme___g_e_o_s12___mod_01copy_8_f90.md)     
                 * **file** [**SeaSaltScheme\_GEOS12\_Mod.F90**](_sea_salt_scheme___g_e_o_s12___mod_8_f90.md) _GEOS-Chem 2012 sea salt emission scheme with observational constraints._     
-                * **file** [**SeaSaltScheme\_GONG03\_Mod copy.F90**](_sea_salt_scheme___g_o_n_g03___mod_01copy_8_f90.md)     
                 * **file** [**SeaSaltScheme\_GONG03\_Mod.F90**](_sea_salt_scheme___g_o_n_g03___mod_8_f90.md) _Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment._     
-                * **file** [**SeaSaltScheme\_GONG97\_Mod copy.F90**](_sea_salt_scheme___g_o_n_g97___mod_01copy_8_f90.md)     
                 * **file** [**SeaSaltScheme\_GONG97\_Mod.F90**](_sea_salt_scheme___g_o_n_g97___mod_8_f90.md) _Gong 1997 sea salt emission scheme._     
+        * **dir** [**settling**](dir_1a0bba2ffdf6e6637fcb76856471cb75.md)     
+            * **file** [**ProcessSettlingInterface\_Mod.F90**](_process_settling_interface___mod_8_f90.md)     
+            * **file** [**SettlingCommon\_Mod.F90**](_settling_common___mod_8_f90.md) _Common types and utilities for settling process._     
+            * **file** [**SettlingProcessCreator\_Mod.F90**](_settling_process_creator___mod_8_f90.md) _Factory for creating settling process instances._     
+            * **dir** [**examples**](dir_ccadb5b29918b194ae5ca60f91721c2d.md)     
+                * **file** [**settling\_example.F90**](settling__example_8_f90.md) _Example usage of settling process._     
+            * **dir** [**schemes**](dir_34df91cc26d24067840a7381fe21b817.md)     
+                * **file** [**SettlingScheme\_GOCART\_Mod.F90**](_settling_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART gravitational settling scheme._     
+        * **dir** [**wetdep**](dir_8b9a0ce556ea4a65f6920dfb49dcd69d.md)     
+            * **file** [**ProcessWetDepInterface\_Mod.F90**](_process_wet_dep_interface___mod_8_f90.md)     
+            * **file** [**WetDepCommon\_Mod.F90**](_wet_dep_common___mod_8_f90.md) _Common types and utilities for wetdep process._     
+            * **file** [**WetDepProcessCreator\_Mod.F90**](_wet_dep_process_creator___mod_8_f90.md) _Factory for creating wetdep process instances._     
+            * **dir** [**examples**](dir_ff6af94d37dffecf82cfd346b98504fd.md)     
+                * **file** [**wetdep\_example.F90**](wetdep__example_8_f90.md) _Example usage of wetdep process._     
+            * **dir** [**schemes**](dir_8ca87c5e2f5cf830ab1a41055168a46b.md)     
+                * **file** [**WetDepScheme\_JACOB\_Mod.F90**](_wet_dep_scheme___j_a_c_o_b___mod_8_f90.md) _Jacob et al._     
 
