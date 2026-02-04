@@ -220,7 +220,7 @@ contains
                      line=__LINE__,  file=__FILE__,  rcToReturn=rc))  return  ! bail out
 
                   call ESMF_LogWrite(trim(pName)//': reading emission for '//trim(ext_emis_data%categories(i)%category_name)//&
-                     " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc) 
+                     " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc)
 
                   ! Read new emission data
                   ext_emis_data%categories(i) % irec = ext_emis_data%categories(i) % irec + 1 !time slice one timestep forward
@@ -253,7 +253,7 @@ contains
       nullify(config_manager, met_state, chem_state) ! Clean up pointers
 
       call ESMF_LogWrite(trim(pName)//': Emission data updated', &
-         ESMF_LOGMSG_INFO, rc=localrc) 
+         ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_update
 
@@ -294,7 +294,7 @@ contains
          return
       end if
 
-      !open file (Note: although AQMIO_Read can open file in its source code, it gives zeros for some reason. 
+      !open file (Note: although AQMIO_Read can open file in its source code, it gives zeros for some reason.
       !           So we have to open it here first.)
       call AQMIO_Open(IO, filename, iomode="read", iofmt=AQMIO_FMT_NETCDF, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -343,7 +343,7 @@ contains
       !!not sure why this write will crash the model
       write(msg, '(A,A,A)') trim(pName), ': Successfully read emission data for category ', &
          trim(category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc) 
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_read
 
@@ -533,13 +533,13 @@ contains
 
             do j = 1, ny
                do i = 1, nx
-                     do k = 1, nz
-                        if (emission_flux(i,j,k) > 0.0_fp) then
-                           ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
-                           ! Step 2: Convert to kg/kg or ppmv using converter calculated above
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
-                        end if
-                     end do
+                  do k = 1, nz
+                     if (emission_flux(i,j,k) > 0.0_fp) then
+                        ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
+                        ! Step 2: Convert to kg/kg or ppmv using converter calculated above
+                        species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                     end if
+                  end do
                end do
             end do
 
@@ -612,7 +612,7 @@ contains
          ! Loop through all fields in this category
          do ifield = 1, ext_emis_data%categories(icat)%n_fields
             field_name = trim(ext_emis_data%categories(icat)%fields(ifield)%field_name)
-            
+
             if (.not. ext_emis_data%categories(icat)%fields(ifield)%diagnostic) cycle
             if (.not. ext_emis_data%categories(icat)%fields(ifield)%is_loaded) cycle
             if (.not. allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data)) cycle
