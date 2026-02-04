@@ -123,6 +123,9 @@ contains
          return
       end if
 
+      ! Enable global emission diagnostics - read from configuration or default to true
+      call config_manager%get_logical('processes/extemis/global_diagnostics', ext_emis_data%diagnostic, localrc, .true.)
+
       ! Initialize parallel timing storage for categories
       n_category_timings = config_manager%config_data%emission_mapping%n_categories
       if (allocated(category_timings)) deallocate(category_timings)
@@ -130,12 +133,6 @@ contains
 
       ! Populate emission categories from already-loaded configuration
       do icat = 1, config_manager%config_data%emission_mapping%n_categories
-
-         !debug
-         write(msg, '(A,A,A)') trim(pName), ': Populate category ', &
-            trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
-         !end debug
 
          if (config_manager%config_data%emission_mapping%categories(icat)%is_active) then
             call catchem_emis_populate_category(ext_emis_data, &
@@ -151,13 +148,6 @@ contains
 
             ! Initialize timing information for this category
             category_timings(icat)%category_name = config_manager%config_data%emission_mapping%categories(icat)%category_name
-
-            !debug: Check what we're accessing from ext_emis_data
-            write(msg, '(A,A,I0,A,A)') trim(pName), ': Accessing ext_emis_data%categories(', icat, &
-               ') with name: "', trim(ext_emis_data%categories(icat)%category_name)//'"'
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
-            !end debug
-
             category_timings(icat)%frequency = trim(ext_emis_data%categories(icat)%frequency)  ! Get frequency from parsed category
             category_timings(icat)%current_record = 0
             category_timings(icat)%needs_update = .false.
@@ -230,7 +220,7 @@ contains
                      line=__LINE__,  file=__FILE__,  rcToReturn=rc))  return  ! bail out
 
                   call ESMF_LogWrite(trim(pName)//': reading emission for '//trim(ext_emis_data%categories(i)%category_name)//&
-                     " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc)
+                     " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc) 
 
                   ! Read new emission data
                   ext_emis_data%categories(i) % irec = ext_emis_data%categories(i) % irec + 1 !time slice one timestep forward
@@ -263,7 +253,7 @@ contains
       nullify(config_manager, met_state, chem_state) ! Clean up pointers
 
       call ESMF_LogWrite(trim(pName)//': Emission data updated', &
-         ESMF_LOGMSG_INFO, rc=localrc)
+         ESMF_LOGMSG_INFO, rc=localrc) 
 
    end subroutine catchem_emis_update
 
@@ -304,6 +294,12 @@ contains
          return
       end if
 
+      !open file (Note: although AQMIO_Read can open file in its source code, it gives zeros for some reason. 
+      !           So we have to open it here first.)
+      call AQMIO_Open(IO, filename, iomode="read", iofmt=AQMIO_FMT_NETCDF, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+
       do ifield = 1, category%n_fields
          !create field to receive data
          esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
@@ -312,8 +308,8 @@ contains
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
 
          !read data into field
-         call AQMIO_Read(IO, (/ esmf_field /), fileName=filename, timeSlice=category % irec, &
-            iofmt=AQMIO_FMT_NETCDF, rc=localrc)
+         call AQMIO_Read(IO, (/ esmf_field /), fieldNameList=(/ trim(category%fields(ifield)%field_name) /), &
+            timeSlice=category % irec, iofmt=AQMIO_FMT_NETCDF, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
             ! Clean up field before returning
@@ -332,6 +328,7 @@ contains
 
          !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
          category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)  !assuming 2D data for now
+         category%fields(ifield)%is_loaded = .true.   !set to true; otherwise diagnostics will not be saved.
 
          ! Clean up ESMF field after data transfer
          call ESMF_FieldDestroy(esmf_field, rc=localrc)
@@ -343,9 +340,10 @@ contains
 
       end do
 
+      !!not sure why this write will crash the model
       write(msg, '(A,A,A)') trim(pName), ': Successfully read emission data for category ', &
          trim(category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc) 
 
    end subroutine catchem_emis_read
 
@@ -535,13 +533,13 @@ contains
 
             do j = 1, ny
                do i = 1, nx
-                  if (emission_flux(i,j,k) > 0.0_fp) then
                      do k = 1, nz
-                        ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
-                        ! Step 2: Convert to kg/kg or ppmv using converter calculated above
-                        species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                        if (emission_flux(i,j,k) > 0.0_fp) then
+                           ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
+                           ! Step 2: Convert to kg/kg or ppmv using converter calculated above
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                        end if
                      end do
-                  end if
                end do
             end do
 
@@ -613,12 +611,14 @@ contains
 
          ! Loop through all fields in this category
          do ifield = 1, ext_emis_data%categories(icat)%n_fields
+            field_name = trim(ext_emis_data%categories(icat)%fields(ifield)%field_name)
+            
             if (.not. ext_emis_data%categories(icat)%fields(ifield)%diagnostic) cycle
             if (.not. ext_emis_data%categories(icat)%fields(ifield)%is_loaded) cycle
             if (.not. allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data)) cycle
 
             field_name = trim(ext_emis_data%categories(icat)%fields(ifield)%field_name)
-            field_name = "Emis_" // trim(category_name) // trim(field_name)  ! Prefix for diagnostics
+            field_name = "emis_" // trim(category_name) // "_" // trim(field_name)  ! Prefix for diagnostics
             description = trim(ext_emis_data%categories(icat)%fields(ifield)%long_name)
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
 
@@ -933,7 +933,7 @@ contains
       rc = CC_SUCCESS
 
       ! Initialize new category
-      call new_category%init(category_mapping%category_name, category_mapping%n_emission_species, &
+      call new_category%init(category_mapping%category_name, 0, & !category_mapping%n_emission_species, &
          'Emission category: '//trim(category_mapping%category_name), localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to initialize category'
@@ -1031,12 +1031,6 @@ contains
 
       rc = CC_SUCCESS
 
-      !debug: Check what category name we received
-      write(msg, '(A,A,A)') trim(pName), ': Received category with name: "', &
-         trim(category%category_name)//'"'
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-      !end debug
-
       ! Find the category index in timing storage
       cat_idx = 0
       if (allocated(category_timings)) then
@@ -1100,9 +1094,9 @@ contains
       ! Store timing interval
       category_timings(cat_idx)%time_interval = timeInterval
 
-      write(msg, '(A,A,A,A,A)') trim(pName), ': Created alarm ', trim(category%category_name)//"_alarm", &
-         ' for category ', trim(category%category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      !write(msg, '(A,A,A,A,A)') trim(pName), ': Created alarm ', trim(category%category_name)//"_alarm", &
+      !   ' for category ', trim(category%category_name)
+      !call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_setup_timing
 

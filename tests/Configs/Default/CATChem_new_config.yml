@@ -89,17 +89,17 @@ processes:
     anthro:
       activate: true
       scale_factor: 1.0
-      source_file: "anthro_emis.nc"
+      source_file: "INPUT/NEXUS_Expt.nc"
       format: "netcdf"
       gridded: true
       frequency: "hourly"
       diagnostics: true
-      diag_list: [NO, SO2, CO]
+      diag_list: [NO, SO2, POC, PSO4]
     point:
       activate: true
       scale_factor: 1.0
       topfraction: -1.0
-      source_file: "point_emis.nc"
+      source_file: "INPUT/PT.nc"
       format: "netcdf"
       gridded: false
       frequency: "hourly"
@@ -111,7 +111,7 @@ processes:
       stack_temperature: STKTK
       stack_velocity:    STKVE
       diagnostics: true
-      diag_list: [NO, SO2, CO]
+      diag_list: [NO, SO2, POC, PSO4]
     fire:
       activate: true
       scale_factor: 1.0

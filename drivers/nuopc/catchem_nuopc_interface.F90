@@ -403,6 +403,11 @@ contains
       errmsg = ''
 
       ! Update extemission data first
+      ! Initialize AQMIO component if not done
+      if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
+         cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
+         if (rc /= CC_SUCCESS) return
+      end if
       state_mgr => cc_wrap%catchem_model%get_state_manager()
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
