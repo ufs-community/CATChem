@@ -44,6 +44,8 @@ module Constants
    !! \brief Constants related to atmospheric composition and properties
    !! \{
    REAL(fp), PARAMETER, PUBLIC :: Cp = 1.0046e+3_fp                !< Specific heat of dry air at constant pressure [J/kg/K]
+   REAL(fp), PARAMETER, PUBLIC :: Cpd = 1.00416e+3_fp              !< Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART
+   REAL(fp), PARAMETER, PUBLIC :: Cpm = 1.00464e+3_fp              !< Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART
    REAL(fp), PARAMETER, PUBLIC :: Cv = 7.1760e+2_fp                !< Specific heat of dry air at constant volume [J/kg/K]
    REAL(fp), PARAMETER, PUBLIC :: AIRMW = 28.9644_fp               !< Average molecular weight of dry air [g/mol]
    REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.016_fp                !< Molecular weight of water [g/mol]

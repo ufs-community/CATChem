@@ -1617,6 +1617,11 @@ contains
             chem_state%WetDepIndex(chem_state%nSpeciesWetDep) = species_index
          endif
 
+         if (chem_state%ChemSpecies(i)%is_photolysis) then
+            chem_state%nSpeciesPhotolysis = chem_state%nSpeciesPhotolysis + 1
+            chem_state%PhotolysisIndex(chem_state%nSpeciesPhotolysis) = species_index
+         endif
+
          if (chem_state%ChemSpecies(i)%is_tracer) then
             chem_state%nSpeciesTracer = chem_state%nSpeciesTracer + 1
             chem_state%TracerIndex(chem_state%nSpeciesTracer) = species_index
@@ -1646,6 +1651,7 @@ contains
       write(*, '(A,I0,A)') 'INFO: Successfully initialized ChemState with ', list_size, ' species'
       write(*, '(A,I0)') '  Gas species: ', chem_state%nSpeciesGas
       write(*, '(A,I0)') '  Aerosol species: ', chem_state%nSpeciesAero
+      write(*, '(A,I0)') '  Photolysis species: ', chem_state%nSpeciesPhotolysis
       write(*, '(A,I0)') '  Dust species: ', chem_state%nSpeciesDust
       write(*, '(A,I0)') '  Sea salt species: ', chem_state%nSpeciesSeaSalt
       write(*, '(A,I0)') '  Dry deposition species: ', chem_state%nSpeciesDryDep
@@ -1958,6 +1964,7 @@ contains
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%BackgroundVV = temp_real
+         species%conc = species%BackgroundVV  ! Initialize concentration to background
       else
          species%BackgroundVV = MISSING
       endif

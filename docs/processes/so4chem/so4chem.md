@@ -1,0 +1,173 @@
+# SO4chem Process
+
+**Process Type:** Chemistry
+**Description:** Process for computing chemical production of sulfate from SO2 oxidation
+**Author:** Wei Li
+**Generated:** 2026-02-11T13:30:17.419277
+
+## Overview
+
+The SO4chem process implements Process for computing chemical production of sulfate from SO2 oxidation. This process provides a modular, extensible framework for chemistry calculations within the CATChem chemical transport model.
+
+## Available Schemes
+
+### GOCART Scheme
+
+**Name:** `gocart`
+**Description:** GOCART SO2 to SO4 production scheme
+**Author:** Wei Li
+**Reference:** GOCART2G process library SulfateChemDriver function
+#### Parameters
+
+| Parameter | Default | Range | Description |
+|-----------|---------|--------|-------------|
+| `update_so2` | True |  -  | whether to update SO2 concentration based on chemical production/loss |
+
+#### Required Meteorological Fields
+
+- `T` - Meteorological field required for scheme computation
+- `CLDF` - Meteorological field required for scheme computation
+- `DELP` - Meteorological field required for scheme computation
+- `TSTEP` - Meteorological field required for scheme computation
+- `AIRDEN` - Meteorological field required for scheme computation
+- `PMID` - Meteorological field required for scheme computation
+- `Z` - Meteorological field required for scheme computation
+- `Z0H` - Meteorological field required for scheme computation
+- `USTAR` - Meteorological field required for scheme computation
+- `PBLH` - Meteorological field required for scheme computation
+- `HFLUX` - Meteorological field required for scheme computation
+- `LWI` - Meteorological field required for scheme computation
+- `LAT` - Meteorological field required for scheme computation
+- `LON` - Meteorological field required for scheme computation
+
+
+
+## Process Interface
+
+### Species
+
+The so4chem process operates on the following chemical species:
+
+- `h2o2`
+- `oh`
+- `no3`
+- `dms`
+- `so2`
+- `so4`
+- `msa`
+
+### Required Inputs
+
+
+
+### Process Diagnostics
+
+| Diagnostic | Units | Description |
+|------------|-------|-------------|
+| `Production_rate_per_species_per_level` | kg/kg/s | Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level |
+
+## Usage
+
+### Basic Integration
+
+```fortran
+use SO4chemProcessCreator_Mod
+use SO4chemCommon_Mod
+
+! Create process instance
+type(SO4chemProcess_t) :: process
+call create_so4chem_process(process, config_data)
+
+! Use process in model time step
+call process%run(state, dt)
+```
+
+### Scheme Selection
+
+The process supports multiple schemes. Select your desired scheme:
+
+```fortran
+! Use GOCART scheme
+process%scheme_name = "gocart"
+```
+
+## Implementation Details
+
+### Pure Science Kernels
+
+Each scheme is implemented as a pure science kernel with no infrastructure dependencies:
+
+```fortran
+! GOCART scheme
+pure subroutine compute_gocart( &
+   num_layers, num_species, params, &
+   T, &   CLDF, &   DELP, &   TSTEP, &   AIRDEN, &   PMID, &   Z, &   Z0H, &   USTAR, &   PBLH, &   HFLUX, &   LWI, &   LAT, &   LON, &
+   species_conc, emission_flux)
+```
+
+### Host Model Responsibilities
+
+The host model (CATChem infrastructure) handles:
+
+- Parameter initialization and validation
+- Input array validation and error handling
+- Memory management and array allocation
+- Integration with model time stepping
+- Diagnostic output management
+
+## Configuration
+
+### YAML Configuration Example
+
+```yaml
+processes:
+  so4chem:
+    enabled: true
+    scheme: "gocart"
+    parameters:
+      update_so2: True
+    diagnostics:
+      enabled: true
+      output_frequency: "daily"
+```
+
+## Technical Specifications
+
+- **Parallelization:** Column
+- **Memory Requirements:** Low
+- **Timestep Dependency:** Independent
+- **Multiphase Support:** No
+- **Size Bin Support:** No
+- **Vectorization:** Supported
+
+## Files Generated
+
+### Source Code
+- `src/process/so4chem/ProcessSO4chemInterface_Mod.F90` - Main process interface
+- `src/process/so4chem/SO4chemCommon_Mod.F90` - Common types and parameters
+- `src/process/so4chem/SO4chemProcessCreator_Mod.F90` - Process factory
+- `src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90` - GOCART SO2 to SO4 production scheme
+
+### Tests
+- `tests/process/so4chem/unit/` - Unit tests
+- `tests/process/so4chem/integration/` - Integration tests
+
+### Documentation
+- `docs/processes/so4chem/so4chem.md` - This documentation
+
+## Contributing
+
+When modifying or extending this process:
+
+1. **Science Changes:** Modify the scheme modules in `schemes/`
+2. **Interface Changes:** Update the main interface module
+3. **New Schemes:** Add new scheme modules and update the creator
+4. **Tests:** Add corresponding unit and integration tests
+5. **Documentation:** Update this documentation file
+
+## References
+
+- GOCART: GOCART2G process library SulfateChemDriver function
+
+---
+*This documentation was automatically generated by the CATChem Process Generator on 2026-02-11T13:30:17.419277*

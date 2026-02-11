@@ -28,12 +28,17 @@ module Process{{ config.class_name }}Interface_Mod
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, DiagnosticDataType
    use VirtualColumn_Mod, only: VirtualColumnType, VirtualMetType
-   use Constants, only: g0, AIRMW  ! Gravitational acceleration for tendency physics and air molecular weight for unit conversion
+{% if all_required_constants and all_required_constants|length > 0 %}
+   use Constants, only: {{ all_required_constants | join(', ') }}{% if all_required_constants|length == 0 %}g0, AIRMW{% endif %}  ! Required constants for scheme calculations
+{% endif %}
 
    ! Core utilities (leverage existing infrastructure)
    use ConfigManager_Mod, only: ConfigManagerType
    use ChemState_Mod, only: ChemStateType
    use MetState_Mod, only: MetStateType
+{% if needs_time_state %}
+   use TimeState_Mod, only: TimeStateType
+{% endif %}
 
    ! Common utilities - unified configuration
    use {{ config.class_name }}Common_Mod, only: {{ config.class_name }}ProcessConfig
@@ -68,6 +73,9 @@ module Process{{ config.class_name }}Interface_Mod
       ! Process utilities (leverage core infrastructure)
       type(ChemStateType), pointer :: chem_state => null()
       type(MetStateType), pointer :: met_state => null()
+{% if needs_time_state %}
+      type(TimeStateType), pointer :: time_state => null()
+{% endif %}
       ! Note: state_manager pointer removed as it was never used
 
 {% if config.diagnostics %}
@@ -196,10 +204,16 @@ contains
       ! Get state pointers from container (needed for species loading)
       this%chem_state => container%get_chem_state_ptr()
       this%met_state => container%get_met_state_ptr()
+{% if needs_time_state %}
+      this%time_state => container%get_time_state_ptr()
+{% endif %}
 
 {% if config.species %}
       ! Load species from explicit list (from species_filter)
       call this%process_config%load_species_from_list(this%chem_state, error_manager, rc)
+      if (rc /= CC_SUCCESS) then
+         return
+      end if
 {% elif config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
       ! Load species from emission mapping configuration with index resolution
       call this%process_config%load_species_from_emission_mapping(container%get_config_ptr(), error_manager, this%chem_state)
@@ -743,7 +757,15 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
             n_species_mapping, &
 {% endif %}
-            this%process_config%{{ scheme.name }}_config{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+            this%process_config%{{ scheme.name }}_config{% if scheme.required_constants and scheme.required_constants|length > 0 %}, &
+{% for constant in scheme.required_constants %}
+            {{ constant }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme.required_time_parameters and scheme.required_time_parameters|length > 0 %}, &
+{% for time_param in scheme.required_time_parameters %}
+            this%time_state%{{ time_param }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
 {% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}
@@ -807,7 +829,15 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
             n_species_mapping, &
 {% endif %}
-            this%process_config%{{ scheme.name }}_config{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+            this%process_config%{{ scheme.name }}_config{% if scheme.required_constants and scheme.required_constants|length > 0 %}, &
+{% for constant in scheme.required_constants %}
+            {{ constant }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme.required_time_parameters and scheme.required_time_parameters|length > 0 %}, &
+{% for time_param in scheme.required_time_parameters %}
+            this%time_state%{{ time_param }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
 {% for field in scheme_met_fields %}
 {% if field is string %}
 {% set field_name = field %}

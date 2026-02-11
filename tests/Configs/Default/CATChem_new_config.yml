@@ -158,7 +158,7 @@ processes:
   drydep:
     activate: true
     diagnostics: true
-    diag_species: [so2, aso4j, seas1, seas3, seas5]
+    diag_species: [so2, so4, seas1, seas3, seas5]
     gas_scheme: 'wesely'
     aero_scheme: 'zhang'
     wesely:
@@ -171,7 +171,7 @@ processes:
   wetdep:
     activate: true
     diagnostics: true
-    diag_species: [so2, aso4j, seas1, seas3, seas5]
+    diag_species: [so2, so4, seas1, seas3, seas5]
     scheme: 'jacob'
     jacob:
       scale_factor: 1.0
@@ -179,10 +179,17 @@ processes:
   settling:
     activate: true
     diagnostics: true
-    diag_species: [aso4j, seas1, seas3, seas5]
+    diag_species: [so4, seas1, seas3, seas5]
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+  so4chem:
+    activate: true
+    diagnostics: true
+    diag_species: [so2, so4]  #only msa, so2 and so4 for gocart now
+    scheme: 'gocart'
+    gocart:
+      update_so2: true #whether to update SO2 concentration based on chemical production/loss

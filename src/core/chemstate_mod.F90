@@ -46,10 +46,13 @@ module ChemState_Mod
    !! \param nSpecies: The total number of species.
    !! \param nSpeciesGas: The number of gas species.
    !! \param nSpeciesAero: The number of aerosol species.
+   !! \param nSpeciesPhotolysis: The number of photolysis species.
    !! \param nSpeciesDust: The number of dust species.
    !! \param nSpeicesSeaSalt: The number of sea salt species.
    !! \param SpeciesIndex: An array containing the total species index.
    !! \param AeroIndex: An array containing the aerosol species index.
+   !! \param PhotolysisIndex: An array containing the photolysis species index.
+   !! \param AeroDryDepIndex: An array containing the aerosol dry deposition species index.
    !! \param GasIndex: An array containing the gas species index.
    !! \param DustIndex: An array containing the dust species index.
    !! \param SeaSaltIndex: An array containing the sea salt species index.
@@ -69,6 +72,7 @@ module ChemState_Mod
       INTEGER              :: nSpecies          ! Total Number of Species
       INTEGER              :: nSpeciesGas       ! Number of Gas Species
       INTEGER              :: nSpeciesAero      ! Number of Aerosol Species
+      INTEGER              :: nSpeciesPhotolysis      ! Number of Photolysis Species
       INTEGER              :: nSpeciesAeroDryDep ! Number of Aerosol Species for Dry Dep
       INTEGER              :: nSpeciesDryDep    ! Number of DryDep Species
       INTEGER              :: nSpeciesWetDep    ! Number of WetDep Species
@@ -79,6 +83,7 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: TracerIndex(:)    ! Tracer Species Index
       INTEGER, ALLOCATABLE :: AeroIndex(:)      ! Aerosol Species Index
       INTEGER, ALLOCATABLE :: AeroDryDepIndex(:) ! Aerosol DryDep Species Index
+      INTEGER, ALLOCATABLE :: PhotolysisIndex(:) ! Photolysis Species Index
       INTEGER, ALLOCATABLE :: GasIndex(:)       ! Gas Species Index
       INTEGER, ALLOCATABLE :: DustIndex(:)      ! Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   ! SeaSalt Species Index
@@ -169,6 +174,7 @@ CONTAINS
       ! Initialize to zero before counting species
       ChemState%nSpeciesAero = 0
       ChemState%nSpeciesAeroDryDep = 0
+      ChemState%nSpeciesPhotolysis = 0
       ChemState%nSpeciesDryDep = 0
       ChemState%nSpeciesWetDep = 0
       ChemState%nSpeciesDust = 0
@@ -199,6 +205,9 @@ CONTAINS
          if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true. .and. &
             ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
             ChemState%nSpeciesAeroDryDep = ChemState%nSpeciesAeroDryDep + 1
+         endif
+         if (ChemState%ChemSpecies(i)%is_photolysis .eqv. .true.) then
+            ChemState%nSpeciesPhotolysis = ChemState%nSpeciesPhotolysis + 1
          endif
          if (ChemState%ChemSpecies(i)%is_wetdep .eqv. .true.) then
             ChemState%nSpeciesWetDep = ChemState%nSpeciesWetDep + 1
@@ -559,6 +568,7 @@ CONTAINS
       this%nSpeciesGas = 0
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
+      this%nSpeciesPhotolysis = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -655,6 +665,15 @@ CONTAINS
             return
          endif
 
+         allocate(this%PhotolysisIndex(max_species), stat=allocStat)
+         if (allocStat /= 0) then
+            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
+               'Failed to allocate PhotolysisIndex', rc, &
+               thisLoc, 'Check available memory')
+            call error_mgr%pop_context()
+            return
+         endif
+
          allocate(this%SpeciesNames(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
@@ -726,6 +745,7 @@ CONTAINS
       if (allocated(this%DryDepIndex)) deallocate(this%DryDepIndex)
       if (allocated(this%WetDepIndex)) deallocate(this%WetDepIndex)
       if (allocated(this%AeroDryDepIndex)) deallocate(this%AeroDryDepIndex)
+      if (allocated(this%PhotolysisIndex)) deallocate(this%PhotolysisIndex)
       if (allocated(this%SpeciesNames)) deallocate(this%SpeciesNames)
       if (allocated(this%ChemSpecies)) deallocate(this%ChemSpecies)
       if (allocated(this%MieData)) deallocate(this%MieData)
@@ -742,6 +762,7 @@ CONTAINS
       this%nSpeciesGas = 0
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
+      this%nSpeciesPhotolysis = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -820,6 +841,7 @@ CONTAINS
       this%nSpeciesGas = 0
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
+      this%nSpeciesPhotolysis = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -836,6 +858,7 @@ CONTAINS
       if (allocated(this%DryDepIndex)) this%DryDepIndex = 0
       if (allocated(this%WetDepIndex)) this%WetDepIndex = 0
       if (allocated(this%AeroDryDepIndex)) this%AeroDryDepIndex = 0
+      if (allocated(this%PhotolysisIndex)) this%PhotolysisIndex = 0
       if (allocated(this%SpeciesNames)) this%SpeciesNames = ''
 
    end subroutine chemstate_reset
@@ -904,6 +927,7 @@ CONTAINS
       write(*,'(A,A)') 'State: ', trim(this%State)
       write(*,'(A,I0)') 'Total species: ', this%nSpecies
       write(*,'(A,I0)') 'Gas species: ', this%nSpeciesGas
+      write(*,'(A,I0)') 'Photolysis species: ', this%nSpeciesPhotolysis
       write(*,'(A,I0)') 'Aerosol species: ', this%nSpeciesAero
       write(*,'(A,I0)') 'Dust species: ', this%nSpeciesDust
       write(*,'(A,I0)') 'Sea salt species: ', this%nSpeciesSeaSalt

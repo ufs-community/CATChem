@@ -513,12 +513,13 @@ contains
 {% if config.species %}
    !> Load species from explicit list (from species_filter)
    !! This function is used when explicit species are provided via species_filter
-   subroutine load_species_from_list(this, chem_state, error_handler)
+   subroutine load_species_from_list(this, chem_state, error_handler, rc)
       use ChemState_Mod, only: ChemStateType
 
       class({{ config.class_name }}ProcessConfig), intent(inout) :: this
       type(ChemStateType), pointer, intent(in) :: chem_state
       type(ErrorManagerType), intent(inout) :: error_handler
+      integer, intent(inout) :: rc
 
       integer :: i, species_idx
       character(len=32) :: species_name
@@ -527,7 +528,7 @@ contains
       ! Explicit species list from configuration
       character(len=32), parameter :: EXPLICIT_SPECIES({{ config.species|length }}) = [ &
 {% for species in config.species %}
-         "{{ species }}"{{ ", &" if not loop.last else " ]" }}
+         {{ species | fortran_string(32) }}{{ ", &" if not loop.last else " ]" }}
 {% endfor %}
 
       if (.not. associated(chem_state)) then
@@ -548,9 +549,11 @@ contains
       end if
 {% if all_required_species_properties %}
 {% for prop in all_required_species_properties %}
+{% if prop != 'short_name' %}
       if (allocated(this%{{ config.name }}_config%species_{{ prop }})) then
          deallocate(this%{{ config.name }}_config%species_{{ prop }})
       end if
+{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -591,7 +594,7 @@ contains
 
          if (.not. found) then
             call error_handler%report_error(ERROR_INVALID_STATE, &
-               "Species not found in ChemState: " // trim(species_name))
+               "Species not found in ChemState: " // trim(species_name), rc)
             return
          end if
       end do

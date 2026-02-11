@@ -349,11 +349,11 @@ contains
 {%- if required_met_fields and ('U10M' in required_met_fields or 'V10M' in required_met_fields or 'USTAR' in required_met_fields) %}
 {{- sep.value }}wind_speed = 8.0_fp + 2.0_fp * cos(lat * 3.14159_fp / 180.0_fp)  ! 6-10 m/s
 {%- set sep.value = '\n            ' %}
-{%- if required_met_fields and 'U10M' in required_met_fields %}
+{%- if required_met_fields and ('U10M' in required_met_fields or 'USTAR' in required_met_fields) %}
 {{- sep.value -}} met_state%U10M(i,j) = -wind_speed * 0.8_fp         ! Easterly trade winds
 {%- set sep.value = '\n            ' %}
 {%- endif %}
-{%- if required_met_fields and 'V10M' in required_met_fields %}
+{%- if required_met_fields and ('V10M' in required_met_fields or 'USTAR' in required_met_fields) %}
 {{- sep.value -}} met_state%V10M(i,j) = wind_speed * 0.3_fp          ! Slight northerly component
 {%- set sep.value = '\n            ' %}
 {%- endif %}

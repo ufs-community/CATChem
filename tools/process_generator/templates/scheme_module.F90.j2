@@ -25,7 +25,6 @@ module {{ config.class_name }}Scheme_{{ scheme.class_name }}_Mod
 
    use precision_mod, only: fp
    use {{ config.class_name }}Common_Mod, only: {{ config.class_name }}Scheme{{ scheme.class_name }}Config
-   use Constants, only: PI  !load the constants needed for this scheme
 {% if scheme.required_species_properties and 'mie_map' in scheme.required_species_properties %}
    use GOCART2G_MieMod, only: GOCART2G_Mie  ! For Mie data in {{ scheme.name }} scheme
 {% endif %}
@@ -53,6 +52,16 @@ contains
    !! @param[in]  params         Scheme parameters (pre-validated by host)
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
    !! @param[in]  n_species_mapping Number of chemical species per emission species (num_species)
+{% endif %}
+{% if scheme.required_constants and scheme.required_constants|length > 0 %}
+{% for constant in scheme.required_constants %}
+   !! @param[in]  {{ constant }}    Required constant from Constants module
+{% endfor %}
+{% endif %}
+{% if scheme.required_time_parameters and scheme.required_time_parameters|length > 0 %}
+{% for time_param in scheme.required_time_parameters %}
+   !! @param[in]  {{ time_param }}    Time parameter from TimeState ({{ time_param }})
+{% endfor %}
 {% endif %}
 {% set scheme_met_fields = scheme|scheme_only_met_fields %}
 {% for field in scheme_met_fields %}
@@ -87,6 +96,8 @@ contains
 {% if diag_dims == 'auto' %}
 {% if 'per_species_per_level' in diag_name %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers, num_species)
+{% elif 'per_level' in diag_name or 'level' in diag_name %}
+   !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_layers)
 {% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
    !! @param[inout] {{ diag_name }}    {{ diag_desc }} [{{ diag_units }}] (num_species)
 {% else %}
@@ -139,7 +150,15 @@ contains
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
       n_species_mapping, &
 {% endif %}
-      params{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
+      params{% if scheme.required_constants and scheme.required_constants|length > 0 %}, &
+{% for constant in scheme.required_constants %}
+      {{ constant }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme.required_time_parameters and scheme.required_time_parameters|length > 0 %}, &
+{% for time_param in scheme.required_time_parameters %}
+      {{ time_param }}{% if not loop.last %}, &
+{% endif %}
+{% endfor %}{% endif %}{% if scheme_met_fields and scheme_met_fields|length > 0 %}, &
 {% for field in scheme_met_fields %}
 {% if field is string %}
       {{ field | lower | replace('-', '_') | replace('.', '_') }}{% if not loop.last %}, &
@@ -174,6 +193,16 @@ contains
       integer, intent(in) :: n_species_mapping(num_species)  ! Number of chem species per emission species
 {% endif %}
       type({{ config.class_name }}Scheme{{ scheme.class_name }}Config), intent(in) :: params
+{% if scheme.required_constants and scheme.required_constants|length > 0 %}
+{% for constant in scheme.required_constants %}
+      real(fp), intent(in) :: {{ constant }}  ! Required constant from Constants module
+{% endfor %}
+{% endif %}
+{% if scheme.required_time_parameters and scheme.required_time_parameters|length > 0 %}
+{% for time_param in scheme.required_time_parameters %}
+      integer, intent(in) :: {{ time_param }}  ! Time parameter from TimeState
+{% endfor %}
+{% endif %}
 {% if scheme_met_fields and scheme_met_fields|length > 0 %}
 {% for field in scheme_met_fields %}
 {% if field is string %}
@@ -247,6 +276,8 @@ contains
 {% if diag_dims == 'auto' %}
 {% if 'per_species_per_level' in diag_name %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:,:)
+{% elif 'per_level' in diag_name or 'level' in diag_name %}
+      real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% elif 'per_species' in diag_name or 'per_bin' in diag_name %}
       real(fp), intent(inout), optional :: {{ diag_name }}(:)
 {% else %}
@@ -330,7 +361,7 @@ contains
 {% elif field == "solar_zenith_angle" %}
          ! Light response (customize for your scheme)
          environmental_factor = environmental_factor * &
-                               max(0.0_fp, cos({{ field | lower | replace('-', '_') | replace('.', '_') }}(k) * PI / 180.0_fp))
+                               max(0.0_fp, cos({{ field | lower | replace('-', '_') | replace('.', '_') }}(k) * {% if 'PI' in (scheme.required_constants or []) %}PI{% else %}3.141592653589793_fp{% endif %} / 180.0_fp))
 {% elif field == "leaf_area_index" %}
          ! Vegetation response (customize for your scheme)
          environmental_factor = environmental_factor * &
@@ -348,7 +379,7 @@ contains
 {% elif field.name == "solar_zenith_angle" or "solar" in field.name.lower() %}
          ! Light response (customize for your scheme)
          environmental_factor = environmental_factor * &
-                               max(0.0_fp, cos({{ field.variable_name }}{% if field.dimensions != "scalar" %}(k){% endif %} * PI / 180.0_fp))
+                               max(0.0_fp, cos({{ field.variable_name }}{% if field.dimensions != "scalar" %}(k){% endif %} * {% if 'PI' in (scheme.required_constants or []) %}PI{% else %}3.141592653589793_fp{% endif %} / 180.0_fp))
 {% elif field.name == "leaf_area_index" or "lai" in field.name.lower() %}
          ! Vegetation response (customize for your scheme)
          environmental_factor = environmental_factor * &

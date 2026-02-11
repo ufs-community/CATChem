@@ -1,0 +1,135 @@
+# Example configuration for so4chem process
+# Generated on: 2026-02-11T13:30:17.522520
+# Author: Wei Li
+
+process:
+  name: "so4chem"
+  version: "1.0.0"
+  description: "Process for computing chemical production of sulfate from SO2 oxidation"
+  active_scheme: ""
+  is_active: true
+
+  # Time stepping configuration
+  dt_min: 1.0      # Minimum time step (seconds)
+  dt_max: 3600.0   # Maximum time step (seconds)
+
+# Species configuration
+species:
+  - name: "h2o2"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "oh"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "no3"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "dms"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "so2"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "so4"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+  - name: "msa"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
+
+
+
+# Scheme configurations
+schemes:
+  gocart:
+    description: "GOCART SO2 to SO4 production scheme"
+    author: "Wei Li"
+    algorithm_type: "explicit"
+
+    # Scheme-specific parameters
+    parameters:
+      update_so2: True  # whether to update SO2 concentration based on chemical production/loss
+
+    # Required meteorological fields for this scheme
+    required_met_fields:
+      - "T"
+      - "CLDF"
+      - "DELP"
+      - "TSTEP"
+      - "AIRDEN"
+      - "PMID"
+      - "Z"
+      - "Z0H"
+      - "USTAR"
+      - "PBLH"
+      - "HFLUX"
+      - "LWI"
+      - "LAT"
+      - "LON"
+
+    # Scheme-specific diagnostic configuration
+    diagnostics:
+
+
+# Diagnostic configuration
+diagnostics:
+  # Global diagnostic settings
+  output_frequency: 3600.0  # seconds
+  output_diagnostics: true
+
+  # Individual diagnostic controls
+  Production_rate_per_species_per_level:
+    description: "Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level"
+    units: "kg/kg/s"
+    output: true
+
+
+# Performance and optimization settings
+performance:
+  parallelization: "column"
+  memory_optimization: "low"
+  vectorization: true
+
+
+# Input/output configuration
+io:
+  # Input data sources
+  input_data:
+    reaction_rates: "/path/to/reaction/rates.nc"
+    photolysis_rates: "/path/to/photolysis/rates.nc"
+
+  # Output configuration
+  output_data:
+    base_directory: "/path/to/output"
+    file_prefix: "so4chem_"
+    compression: true
+
+# Quality control and validation
+quality_control:
+  enable_bounds_checking: true
+  enable_conservation_checks: true
+  enable_mass_balance_checks: false
+
+  # Value limits
+  limits:
+    max_concentration: 1.0e-6  # kg/kg
+    min_concentration: 0.0
+
+# Debugging and logging
+debug:
+  level: "info"  # debug, info, warning, error
+  output_file: "so4chem_debug.log"
+  flush_frequency: 100  # Flush log every N time steps
+
+  # Debug-specific outputs
+  debug_outputs:
+    intermediate_variables: false
+    conservation_diagnostics: false
+    timing_information: true

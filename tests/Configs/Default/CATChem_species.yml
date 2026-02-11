@@ -39,8 +39,19 @@ h2o2:
   wd_retfactor: 5.0e-2
   wd_LiqAndGas: true
   wd_convfacI2G: 4.36564e-1
-aso4j:       #This is to match CMAQ name to use the restart file. so4 is used in GEOS-Chem.
-  name: aso4j
+oh:
+  name: oh
+  description: Hydroxyl radical
+  is_gas: true
+  mw_g: 17.01
+no3:
+  name: no3
+  description: Nitrate radical
+  is_gas: true
+  is_photolysis: true
+  mw_g: 62.01
+so4:       #This is to match CMAQ name to use the restart file. so4 is used in GEOS-Chem.
+  name: so4
   description: sulfate
   is_aerosol: true
   is_drydep: true
@@ -68,6 +79,11 @@ dms:
   henry_k0: 0.48
   henry_cr: 3100.0
   mie_name: SU
+msa:
+  name: msa
+  description: methanesulphonic acid
+  is_gas: true   #gocart treat it as a gas while GEOS-Chem as aerosol
+  mw_g: 96.10
 bc1:
   name: bc1
   description: BC1

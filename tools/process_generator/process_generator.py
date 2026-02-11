@@ -345,6 +345,8 @@ class SchemeConfig:
     parameters: Dict[str, Any] = field(default_factory=dict)
     required_met_fields: List[str] = field(default_factory=list)
     required_species_properties: List[str] = field(default_factory=list)
+    required_constants: List[str] = field(default_factory=list)
+    required_time_parameters: List[str] = field(default_factory=list)
     scheme_diagnostics: List[Dict[str, str]] = field(default_factory=list)
     algorithm_type: str = "explicit"
     affects_full_column: bool = False  # Whether scheme affects full atmospheric column
@@ -557,8 +559,10 @@ class ProcessGenerator:
 
     @staticmethod
     def _fortran_string(s: str, length: int = 64) -> str:
-        """Format string for Fortran character declaration."""
-        return f"'{s}'"
+        """Format string for Fortran character declaration with proper padding."""
+        # Pad or truncate string to exact length for array constructors
+        padded = s[:length].ljust(length)
+        return f"'{padded}'"
 
     @staticmethod
     def _fortran_boolean(b: bool) -> str:
@@ -1134,6 +1138,54 @@ class ProcessGenerator:
         """Get schemes that apply to aerosol species."""
         return [scheme for scheme in config.schemes if scheme.gas_or_aero in ['aero', 'both']]
 
+    def get_all_required_constants(self, config: ProcessConfig) -> List[str]:
+        """Collect all unique required constants from all schemes.
+
+        Args:
+            config: ProcessConfig object containing schemes
+
+        Returns:
+            List of unique constant names required by all schemes
+        """
+        all_constants = set()
+        for scheme in config.schemes:
+            if scheme.required_constants:
+                all_constants.update(scheme.required_constants)
+
+        # Return sorted list for consistent ordering
+        return sorted(list(all_constants))
+
+    def has_required_time_parameters(self, config: ProcessConfig) -> bool:
+        """Check if any scheme requires time parameters.
+
+        Args:
+            config: ProcessConfig object containing schemes
+
+        Returns:
+            True if any scheme has required_time_parameters, False otherwise
+        """
+        for scheme in config.schemes:
+            if scheme.required_time_parameters:
+                return True
+        return False
+
+    def get_all_required_time_parameters(self, config: ProcessConfig) -> List[str]:
+        """Collect all unique required time parameters from all schemes.
+
+        Args:
+            config: ProcessConfig object containing schemes
+
+        Returns:
+            List of unique time parameter names required by all schemes
+        """
+        all_time_params = set()
+        for scheme in config.schemes:
+            if scheme.required_time_parameters:
+                all_time_params.update(scheme.required_time_parameters)
+
+        # Return sorted list for consistent ordering
+        return sorted(list(all_time_params))
+
     def _load_filtered_species(self, species_filter: Dict[str, Any]) -> List[str]:
         """Load species based on filter criteria.
 
@@ -1267,6 +1319,13 @@ class ProcessGenerator:
         # Collect all unique required species properties from all schemes
         all_required_species_properties = self.get_all_required_species_properties(config)
 
+        # Collect all unique required constants from all schemes
+        all_required_constants = self.get_all_required_constants(config)
+
+        # Check if any scheme requires time parameters
+        needs_time_state = self.has_required_time_parameters(config)
+        all_required_time_parameters = self.get_all_required_time_parameters(config)
+
         # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
 
@@ -1276,6 +1335,9 @@ class ProcessGenerator:
         content = template.render(
             config=config,
             all_required_species_properties=all_required_species_properties,
+            all_required_constants=all_required_constants,
+            needs_time_state=needs_time_state,
+            all_required_time_parameters=all_required_time_parameters,
             field_classifier=field_classifier,
             generation_date=datetime.now().isoformat(),
             version=config.version,
@@ -1371,6 +1433,9 @@ class ProcessGenerator:
                 content = template.render(
                     config=config_dict,
                     scheme=scheme_dict,
+                    all_required_constants=self.get_all_required_constants(config),
+                    needs_time_state=self.has_required_time_parameters(config),
+                    all_required_time_parameters=self.get_all_required_time_parameters(config),
                     field_classifier=field_classifier,
                     timestamp=datetime.now().isoformat()
                 )

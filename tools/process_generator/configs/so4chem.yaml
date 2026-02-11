@@ -1,0 +1,102 @@
+name: "so4chem"
+description: "Process for computing chemical production of sulfate from SO2 oxidation"
+class_name: "SO4chem"
+process_type: "chemistry"
+author: "Wei Li"
+
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "source" #is not doing anything now
+  tendency_mode: "replacement" #additive or multiplicative or replacement;
+  species_filter:
+    #type: "all_species"
+    #type: "by_metadata"
+    #metadata_flags:
+    #  - "is_aerosol"  # Filter for species with is_aerosol=true property
+    type: "by_list"
+    species_list:
+      - "h2o2"
+      - "oh"
+      - "no3"
+      - "dms"
+      - "so2"          
+      - "so4"     
+      - "msa"
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "independent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
+  memory_requirements: "low" #is not doing anything now
+
+#required_met_fields: [] #used for other purpose, such as unit conversion
+
+schemes:
+  gocart:
+    name: "gocart"
+    class_name: "GOCART"
+    description: "GOCART SO2 to SO4 production scheme"
+    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "GOCART2G process library SulfateChemDriver function"
+    author: "Wei Li"
+
+    required_met_fields: #needed for scheme calculations
+      - T
+      - CLDF
+      - DELP
+      - TSTEP
+      - AIRDEN
+      - PMID
+      - Z
+      - Z0H
+      - USTAR
+      - PBLH
+      - HFLUX
+      - LWI
+      - LAT
+      - LON
+
+
+    required_species_properties:
+      - mw_g
+      - short_name
+
+    required_constants:
+      - g0
+      - Cpd
+      - AVO
+      - VON_KARMAN
+      - AIRMW
+      - PI
+    
+    required_time_parameters:
+      - year
+      - month
+      - day
+      - hour
+      - minute
+      - second
+
+
+    parameters:
+      update_so2:
+        default: true
+        description: "whether to update SO2 concentration based on chemical production/loss"
+
+    diagnostics:
+      - name: "PSO4_from_gaseous_SO2_per_level"
+        description: "sulfate production rate from gaseous SO2 per level"
+        units: "kg/kg/s"
+      - name: "PSO4_from_aqueous_SO2_per_level"
+        description: "sulfate production rate from aqueous SO2 per level"
+        units: "kg/kg/s"
+
+
+diagnostics:
+  - name: "Production_rate_per_species_per_level"
+    description: "Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level"
+    units: "kg/kg/s"
+
