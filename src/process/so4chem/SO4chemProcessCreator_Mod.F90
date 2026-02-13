@@ -75,7 +75,7 @@ contains
          description='Process for computing chemical production of sulfate from SO2 oxidation', &
          creator=create_so4chem_process, &
          rc=rc &
-      )
+         )
 
    end subroutine register_so4chem_process
 

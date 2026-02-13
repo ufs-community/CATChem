@@ -26,16 +26,16 @@
 #   - LAT
 #   - LON
 
-
 # Scheme validation targets
-add_custom_target(validate_gocart_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating gocart scheme implementation"
-    COMMENT "Validating gocart scheme"
+add_custom_target(
+  validate_gocart_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating gocart scheme implementation"
+  COMMENT "Validating gocart scheme"
 )
 
 # Combined validation target
-add_custom_target(validate_all_schemes
-    DEPENDS
-        validate_gocart_scheme
-    COMMENT "Validating all so4chem schemes"
+add_custom_target(
+  validate_all_schemes
+  DEPENDS validate_gocart_scheme
+  COMMENT "Validating all so4chem schemes"
 )

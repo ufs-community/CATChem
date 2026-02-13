@@ -19,8 +19,8 @@ process_behavior:
       - "oh"
       - "no3"
       - "dms"
-      - "so2"          
-      - "so4"     
+      - "so2"
+      - "so4"
       - "msa"
   gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
   tendency_calculation: "rates" #is not doing anything now
@@ -71,7 +71,7 @@ schemes:
       - VON_KARMAN
       - AIRMW
       - PI
-    
+
     required_time_parameters:
       - year
       - month
@@ -99,4 +99,3 @@ diagnostics:
   - name: "Production_rate_per_species_per_level"
     description: "Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level"
     units: "kg/kg/s"
-

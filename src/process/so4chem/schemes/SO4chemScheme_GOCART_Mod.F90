@@ -121,7 +121,7 @@ contains
       PSO4_from_gaseous_SO2_per_level, &
       PSO4_from_aqueous_SO2_per_level, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -167,11 +167,11 @@ contains
       integer :: diag_idx  ! For diagnostic species indexing
       integer :: species_idx
       integer :: nDMS= -1, nSO2= -1, nSO4= -1, nMSA= -1 ! index position of sulfates
-      integer :: nOH= -1, nNO3= -1, nH2O2= -1 ! index position of oxidants 
+      integer :: nOH= -1, nNO3= -1, nH2O2= -1 ! index position of oxidants
       integer :: nymd, nhms   !YYYYMMDD, HHMMSS time formats
       real(fp), allocatable :: latRad(:,:), lonRad(:,:)
       real(fp) :: fMassMSA, fMassDMS, fMassSO2, fMassSO4 ! gram molecular weights of species
-      real(fp) :: rad2deg,  deg2rad  ! PI cannnot be used here
+      real(fp) :: rad2deg,  deg2rad  ! PI cannot be used here
       ! Local Variables
       real(fp), pointer :: GOCART_tmpu(:,:,:)
       real(fp), pointer :: GOCART_rhoa(:,:,:)
@@ -247,7 +247,7 @@ contains
          else if (species_short_name(species_idx) == 'H2O2' .or. species_short_name(species_idx) == 'h2o2') then
             nH2O2 = species_idx
          end if
-      end do 
+      end do
 
       if (nSO2 == -1 .or. nSO4 == -1 .or. nDMS == -1 .or. nMSA == -1 .or. nOH == -1 .or. nNO3 == -1 .or. nH2O2 == -1) then
          errMsg = 'Error in compute_gocart: SO2, SO4, DMS, MSA, OH, NO3, and H2O2 must be present in species list.'
@@ -258,15 +258,15 @@ contains
 
       !allocate arrays
       allocate(oh_clim(1,1,num_layers), h2o2_clim(1,1,num_layers), no3_clim(1,1,num_layers), &
-               xoh(1,1,num_layers), xno3(1,1,num_layers), xh2o2(1,1,num_layers), &
-               dms(1,1,num_layers), so2(1,1,num_layers), so4(1,1,num_layers), msa(1,1,num_layers), &
-               SU_dep(1, 1, num_species), SU_PSO2(1, 1), SU_PMSA(1, 1), SU_PSO4(1, 1), SU_PSO4g(1, 1), SU_PSO4aq(1, 1), &
-               pso2(1, 1, num_layers), pmsa(1, 1, num_layers), pso4(1, 1, num_layers), pso4g(1, 1, num_layers), &
-               pso4aq(1, 1, num_layers), drydepfrequency(1, 1), latRad(1,1), lonRad(1,1))
+         xoh(1,1,num_layers), xno3(1,1,num_layers), xh2o2(1,1,num_layers), &
+         dms(1,1,num_layers), so2(1,1,num_layers), so4(1,1,num_layers), msa(1,1,num_layers), &
+         SU_dep(1, 1, num_species), SU_PSO2(1, 1), SU_PMSA(1, 1), SU_PSO4(1, 1), SU_PSO4g(1, 1), SU_PSO4aq(1, 1), &
+         pso2(1, 1, num_layers), pmsa(1, 1, num_layers), pso4(1, 1, num_layers), pso4g(1, 1, num_layers), &
+         pso4aq(1, 1, num_layers), drydepfrequency(1, 1), latRad(1,1), lonRad(1,1))
 
 
       !retrieve climatology fields; remember to reverse the vertical layer (TODO: double check the input files for this)
-      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state. 
+      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
       no3_clim(1,1,:) = species_conc(num_layers:1:-1, nNO3)
       h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2)
       ! Initialize some variables for the first time
@@ -310,12 +310,12 @@ contains
          GOCART_PRESS,    &
          GOCART_HFLUX,    &
          GOCART_Z0H)
-      
+
       !update oxidants based on climatology and diurnal cycle
       xoh = 0.0_fp; xno3 = 0.0_fp; xh2o2 = xh2o2_init
       latRad(1,1) = lat * deg2rad; lonRad(1,1) = lon * deg2rad
       call SulfateUpdateOxidants(nymd, nhms, lonRad, latRad, GOCART_rhoa, num_layers, tstep, nymd_last, &
-            undefval, rad2deg, AVO, PI, AIRMW, oh_clim, no3_clim, h2o2_clim, xoh, xno3, xh2o2, recycle_h2o2, RC)
+         undefval, rad2deg, AVO, PI, AIRMW, oh_clim, no3_clim, h2o2_clim, xoh, xno3, xh2o2, recycle_h2o2, RC)
 
       if (RC /= 0) then
          ErrMsg = 'Error in compute_gocart: Failed in updating oxidants in GOCART So4chem process.'
@@ -346,9 +346,9 @@ contains
 
       !call GOCART sulfate chemistry driver
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
-      nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
-      GOCART_rhoa, GOCART_HGHTE, GOCART_USTAR, GOCART_HFLUX, GOCART_LWI, GOCART_PBLH, GOCART_Z0H, SU_dep, SU_PSO2, SU_PMSA, SU_PSO4, SU_PSO4g, &
-      SU_PSO4aq, pso2, pmsa, pso4, pso4g, pso4aq, drydepfrequency, RC)
+         nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
+         GOCART_rhoa, GOCART_HGHTE, GOCART_USTAR, GOCART_HFLUX, GOCART_LWI, GOCART_PBLH, GOCART_Z0H, SU_dep, SU_PSO2, SU_PMSA, SU_PSO4, SU_PSO4g, &
+         SU_PSO4aq, pso2, pmsa, pso4, pso4g, pso4aq, drydepfrequency, RC)
 
       if (RC /= 0) then
          ErrMsg = 'Error in compute_gocart: Failed in GOCART sulfate chemistry driver.'
@@ -358,7 +358,7 @@ contains
       end if
 
       !assign to output tendencies; remember to reverse the vertical layer back to original order
-      if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here. 
+      if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
          species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1)
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1)
@@ -371,17 +371,17 @@ contains
          do diag_idx = 1, size(diagnostic_species_id)
             if (diagnostic_species_id(diag_idx) == nMSA) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
-               Production_rate_per_species_per_level(:, diag_idx) = pmsa(1,1,num_layers:1:-1) 
+               Production_rate_per_species_per_level(:, diag_idx) = pmsa(1,1,num_layers:1:-1)
                exit
             end if
             if (diagnostic_species_id(diag_idx) == nSO2) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
-               Production_rate_per_species_per_level(:, diag_idx) = pso2(1,1,num_layers:1:-1) 
+               Production_rate_per_species_per_level(:, diag_idx) = pso2(1,1,num_layers:1:-1)
                exit
             end if
             if (diagnostic_species_id(diag_idx) == nSO4) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
-               Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1) 
+               Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1)
                exit
             end if
          end do
@@ -390,12 +390,12 @@ contains
       if (present(PSO4_from_gaseous_SO2_per_level)) then
          PSO4_from_gaseous_SO2_per_level = PSO4g(1,1,num_layers:1:-1)
       end if
-      
+
       if (present(PSO4_from_aqueous_SO2_per_level)) then
          PSO4_from_aqueous_SO2_per_level = PSO4aq(1,1,num_layers:1:-1)
       end if
-      
-      
+
+
       !cleanup pointers
       if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)
       if (associated(GOCART_RHOA)) nullify(GOCART_RHOA)
@@ -432,7 +432,7 @@ contains
    ! SCHEME-SPECIFIC HELPER SUBROUTINES
    ! =======================================================================
    ! Add your custom scientific algorithms here as pure functions/subroutines
-  
+
    !>
    !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
    !!

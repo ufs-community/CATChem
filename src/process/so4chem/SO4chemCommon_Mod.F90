@@ -13,7 +13,7 @@ module SO4chemCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -141,7 +141,7 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'gocart' .and. &
-          .true.) then
+         .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -163,7 +163,7 @@ contains
 
    end subroutine print_so4chem_config_summary
 
-      !> Finalize so4chem configuration
+   !> Finalize so4chem configuration
    subroutine finalize_so4chem_config(this)
       class(SO4chemConfig), intent(inout) :: this
 
@@ -262,7 +262,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/so4chem/diag_species", this%so4chem_config%diagnostic_species, &
-                                    rc, default_values=["All"])
+         rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%so4chem_config%diagnostic_species(1))
@@ -285,9 +285,9 @@ contains
       ! Load scheme-specific configuration from master YAML
       scheme_name = trim(this%so4chem_config%scheme)
       select case (scheme_name)
-      case ('gocart')
+       case ('gocart')
          call this%load_gocart_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown so4chem scheme: " // trim(scheme_name), rc)
          return
@@ -388,7 +388,7 @@ contains
 
       ! Load scheme parameters directly from processes/so4chem/gocart/ in master YAML
       call config_manager%get_logical("processes/so4chem/gocart/update_so2", &
-           this%gocart_config%update_so2, rc, .true.)
+         this%gocart_config%update_so2, rc, .true.)
       if (rc /= CC_SUCCESS) this%gocart_config%update_so2 = .true.
 
 
@@ -406,7 +406,7 @@ contains
 
       ! Validate scheme-specific config
       select case (trim(this%so4chem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          call this%gocart_config%validate(error_handler)
       end select
 
@@ -427,9 +427,9 @@ contains
       class(*), allocatable :: scheme_config
 
       select case (trim(this%so4chem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          allocate(scheme_config, source=this%gocart_config)
-      case default
+       case default
          ! Return null
       end select
 
@@ -451,7 +451,7 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%so4chem_config%n_diagnostic_species == 1 .and. &
-          trim(this%so4chem_config%diagnostic_species(1)) == "All") then
+         trim(this%so4chem_config%diagnostic_species(1)) == "All") then
 
          ! Deallocate and reallocate for all species
          if (allocated(this%so4chem_config%diagnostic_species_id)) deallocate(this%so4chem_config%diagnostic_species_id)
@@ -487,8 +487,8 @@ contains
 
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-                  trim(this%so4chem_config%diagnostic_species(i)), &
-                  "' not found in process species list"
+               trim(this%so4chem_config%diagnostic_species(i)), &
+               "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             return
          end if

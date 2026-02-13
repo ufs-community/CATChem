@@ -233,7 +233,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -325,9 +325,9 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%so4chem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -511,7 +511,7 @@ contains
             this%process_config%so4chem_config%species_names, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -520,7 +520,7 @@ contains
          do i = 1, n_species
             ! Replacement tendency: new_conc = tendency (tendency is the new value)
             call column%set_chem_field(k, species_indices(i), &
-                                      species_tendencies(k, i))
+               species_tendencies(k, i))
          end do
       end do
 
@@ -544,7 +544,7 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%so4chem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          scheme_count = 14
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'T'
@@ -561,7 +561,7 @@ contains
          scheme_fields(12) = 'LWI'
          scheme_fields(13) = 'LAT'
          scheme_fields(14) = 'LON'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -662,11 +662,11 @@ contains
       if (this%process_config%so4chem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%so4chem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'Production_rate_', &
-                  trim(this%process_config%so4chem_config%diagnostic_species(i))
+               trim(this%process_config%so4chem_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level', &
-                                                'kg/kg/s', DIAG_REAL_3D, &
-                                                'so4chem', dims_3d_levels, rc=rc)
+               'Production rate (DMS to SO2, DMS to MSA, SO2 to SO4) per species per level', &
+               'kg/kg/s', DIAG_REAL_3D, &
+               'so4chem', dims_3d_levels, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -676,23 +676,23 @@ contains
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%so4chem_config%scheme))
 
-      case ('gocart')
+       case ('gocart')
          ! Register gocart-specific diagnostics
          ! Register single 3D field for level-only diagnostics
          call this%register_diagnostic_field(registry, 'PSO4_from_gaseous_SO2_per_level', &
-                                             'sulfate production rate from gaseous SO2 per level', &
-                                             'kg/kg/s', DIAG_REAL_3D, &
-                                             'so4chem', dims_3d_levels, rc=rc)
+            'sulfate production rate from gaseous SO2 per level', &
+            'kg/kg/s', DIAG_REAL_3D, &
+            'so4chem', dims_3d_levels, rc=rc)
          if (rc /= CC_SUCCESS) return
 
          ! Register single 3D field for level-only diagnostics
          call this%register_diagnostic_field(registry, 'PSO4_from_aqueous_SO2_per_level', &
-                                             'sulfate production rate from aqueous SO2 per level', &
-                                             'kg/kg/s', DIAG_REAL_3D, &
-                                             'so4chem', dims_3d_levels, rc=rc)
+            'sulfate production rate from aqueous SO2 per level', &
+            'kg/kg/s', DIAG_REAL_3D, &
+            'so4chem', dims_3d_levels, rc=rc)
          if (rc /= CC_SUCCESS) return
 
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
 
@@ -716,7 +716,7 @@ contains
 
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%so4chem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          ! Scheme-specific diagnostics for gocart
          ! 1D diagnostic: levels only
          if (nz > 0) then
@@ -728,7 +728,7 @@ contains
             allocate(this%column_PSO4_from_aqueous_SO2_per_level(nz))
          end if
          if (allocated(this%column_PSO4_from_aqueous_SO2_per_level)) this%column_PSO4_from_aqueous_SO2_per_level = 0.0_fp
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
@@ -763,26 +763,26 @@ contains
       if (this%process_config%so4chem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%so4chem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'Production_rate_', &
-                  trim(this%process_config%so4chem_config%diagnostic_species(i))
+               trim(this%process_config%so4chem_config%diagnostic_species(i))
             call this%update_1d_diagnostic_column(trim(field_name), &
-                                                 this%column_Production_rate_per_species_per_level(:,i), &
-                                                 i_col, j_col, container, rc)
+               this%column_Production_rate_per_species_per_level(:,i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%so4chem_config%scheme))
-      case ("gocart")
+       case ("gocart")
          ! Scheme-specific diagnostics for gocart
          ! 1D diagnostic field (level-only)
          call this%update_1d_diagnostic_column('PSO4_from_gaseous_SO2_per_level', &
-                                             this%column_PSO4_from_gaseous_SO2_per_level, &
-                                             i_col, j_col, container, rc)
+            this%column_PSO4_from_gaseous_SO2_per_level, &
+            i_col, j_col, container, rc)
          if (rc /= CC_SUCCESS) return
          ! 1D diagnostic field (level-only)
          call this%update_1d_diagnostic_column('PSO4_from_aqueous_SO2_per_level', &
-                                             this%column_PSO4_from_aqueous_SO2_per_level, &
-                                             i_col, j_col, container, rc)
+            this%column_PSO4_from_aqueous_SO2_per_level, &
+            i_col, j_col, container, rc)
          if (rc /= CC_SUCCESS) return
       end select
 
