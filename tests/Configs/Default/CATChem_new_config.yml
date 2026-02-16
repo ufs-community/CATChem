@@ -112,6 +112,26 @@ processes:
       stack_velocity:    STKVE
       diagnostics: true
       diag_list: [NO, SO2, POC, PSO4]
+    gmi:
+      activate: true
+      scale_factor: 1.0
+      source_file: "INPUT/gmi_oh_ch4_h2o2_no3.x144_y91_z64_t12.2006_C983.nc"
+      format: "netcdf"
+      gridded: true
+      is_2d: false
+      frequency: "monthly"
+      diagnostics: true
+      diag_list: [oh, h2o2]
+    dms:
+      activate: true
+      scale_factor: 1.0
+      source_file: "INPUT/DMSclim_sfcconcentration.x360_y181_t12.Lana2011_C983.nc4"
+      format: "netcdf"
+      gridded: true
+      is_2d: true
+      frequency: "monthly"
+      diagnostics: true
+      diag_list: [dms]
     fire:
       activate: true
       scale_factor: 1.0

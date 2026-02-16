@@ -224,7 +224,7 @@ contains
 
                   ! Read new emission data
                   ext_emis_data%categories(i) % irec = ext_emis_data%categories(i) % irec + 1 !time slice one timestep forward
-                  call catchem_emis_read(ext_emis_data%categories(i), IO, grid, localrc)
+                  call catchem_emis_read(ext_emis_data%categories(i), IO, grid, met_state%NLEVS, localrc)
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
                         trim(ext_emis_data%categories(i)%category_name)
@@ -265,12 +265,13 @@ contains
    !! \param[inout] ext_emis_data External emission data container
    !! \param[in] category_name Name of emission category to read
    !! \param[out] rc Return code
-   subroutine catchem_emis_read(category, IO, grid, rc)
+   subroutine catchem_emis_read(category, IO, grid, nlev, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
       type(ESMF_GridComp), intent(inout) :: IO
       type(ESMF_Grid), intent(in) :: grid
+      integer, intent(in) :: nlev
       integer, intent(out) :: rc
 
       ! Local variables
@@ -279,6 +280,7 @@ contains
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
+      real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
       character(len=*), parameter :: pName = 'catchem_emis_read'
 
       rc = CC_SUCCESS
@@ -302,10 +304,17 @@ contains
 
       do ifield = 1, category%n_fields
          !create field to receive data
-         esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
-            typekind=ESMF_TYPEKIND_R4, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         if (category%is_2d) then
+            esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
+               typekind=ESMF_TYPEKIND_R4, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         else !3D field
+            esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
+               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev/), rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         end if
 
          !read data into field
          call AQMIO_Read(IO, (/ esmf_field /), fieldNameList=(/ trim(category%fields(ifield)%field_name) /), &
@@ -317,17 +326,30 @@ contains
             return  ! bail out
          end if
 
-         !get data pointer and assign to emission field array
-         call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-            ! Clean up field before returning
-            call ESMF_FieldDestroy(esmf_field, rc=localrc)
-            return  ! bail out
+         if (category%is_2d) then
+            !get data pointer and assign to emission field array
+            call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
+               ! Clean up field before returning
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               return  ! bail out
+            end if
+            !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
+            category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)  !assuming 2D data for now
+         else !3D field
+            !get data pointer and assign to emission field array
+            call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
+               ! Clean up field before returning
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               return  ! bail out
+            end if
+            !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
+            category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)  !assuming 3D data for now
          end if
 
-         !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
-         category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)  !assuming 2D data for now
          category%fields(ifield)%is_loaded = .true.   !set to true; otherwise diagnostics will not be saved.
 
          ! Clean up ESMF field after data transfer
@@ -337,7 +359,7 @@ contains
 
          ! Nullify pointer for safety
          field_data_2d => null()
-
+         field_data_3d => null()
       end do
 
       !!not sure why this write will crash the model
@@ -424,6 +446,8 @@ contains
       real(fp) :: converter
 
       rc = CC_SUCCESS
+
+      if (trim(category%category_name) == 'gmi')  return ! Skip GMI oxidants unit conversion (they are in mol/mol volume mixing ratio)
 
       ! Get dimensions
       nx = size(met_state%DELP, 1)
@@ -535,9 +559,14 @@ contains
                do i = 1, nx
                   do k = 1, nz
                      if (emission_flux(i,j,k) > 0.0_fp) then
-                        ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
-                        ! Step 2: Convert to kg/kg or ppmv using converter calculated above
-                        species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                        if (category_name == 'dms' .and. field_name == 'dms') then
+                           ! Special case for DMS read in with nmol/L ==> kg/kg
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * chem_state%ChemSpecies(species_idx)%mw_g * 1.0e-9_fp / met_state%AIRDEN(i,j,k)
+                        else
+                           ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
+                           ! Step 2: Convert to kg/kg or ppmv using converter calculated above
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                        end if
                      end if
                   end do
                end do
@@ -880,6 +909,7 @@ contains
       call config_manager%get_string(trim(config_path)//'/format', category%format, localrc, '')
       call config_manager%get_string(trim(config_path)//'/frequency', category%frequency, localrc, '')
       call config_manager%get_logical(trim(config_path)//'/gridded', category%gridded, localrc, .true.)
+      call config_manager%get_logical(trim(config_path)//'/is_2d', category%is_2d, localrc, .true.)
       call config_manager%get_logical(trim(config_path)//'/diagnostics', category%diagnostic, localrc, .false.)
       call config_manager%get_real(trim(config_path)//'/scale_factor', category%global_scale, localrc, 1.0_fp)
 

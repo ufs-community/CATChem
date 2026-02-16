@@ -104,6 +104,7 @@ MODULE ExtEmisData_Mod
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)           !< Emission fields array
       LOGICAL                                   :: is_active = .true.  !< Category enabled/disabled
       LOGICAL                                   :: gridded = .true.    !< Is this a gridded emission category
+      LOGICAL                                   :: is_2d = .true.         !< Is this a 2D or 3D emission category
       LOGICAL                                   :: diagnostic = .true.  !< Enable diagnostic output for this category?
       REAL(fp)                                  :: global_scale = 1.0_fp !< Global scaling factor
       REAL(fp)                                  :: topfraction = -1.0_fp !< Top fraction for plumerise
