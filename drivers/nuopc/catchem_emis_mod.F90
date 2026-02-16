@@ -347,7 +347,11 @@ contains
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
-            category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)  !assuming 3D data for now
+            if (category_name == 'gmi') then
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev:1:-1), fp)  !reverse vertical level
+            else
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)  !assuming 3D data for now
+            end if
          end if
 
          category%fields(ifield)%is_loaded = .true.   !set to true; otherwise diagnostics will not be saved.
@@ -652,7 +656,7 @@ contains
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
 
             ! Write field based on whether it's gridded (2D) or not (3D)
-            if (ext_emis_data%categories(icat)%gridded) then
+            if (ext_emis_data%categories(icat)%gridded .and. ext_emis_data%categories(icat)%is_2d) then
                ! 2D gridded emission field
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
