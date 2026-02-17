@@ -150,6 +150,7 @@ if(BUILD_NUOPC)
       $<TARGET_FILE:CATChem_process_drydep>
       $<TARGET_FILE:CATChem_process_wetdep>
       $<TARGET_FILE:CATChem_process_settling>
+      $<TARGET_FILE:CATChem_process_so4chem>
       $<TARGET_FILE:CATChem_core>
       $<TARGET_FILE:yaml_interface>
       $<TARGET_FILE:catchem_utilities>
