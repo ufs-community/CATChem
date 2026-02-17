@@ -1057,7 +1057,7 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc, cat_idx
+      integer :: localrc, cat_idx,  curr_month
       type(ESMF_Time) :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
       character(len=EMIS_MAXSTR) ::  msg
@@ -1117,7 +1117,18 @@ contains
          line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
 
       ! -- set input time record according to start type (startup/continue)
-      category % irec = int( (currTime - startTime) / timeInterval )
+      ! Handle monthly frequency specially due to varying month lengths
+      if (trim(frequency) == "monthly") then
+         ! Calculate actual number of months between start and current time
+         call ESMF_TimeGet(currTime, mm=curr_month, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         ! For monthly frequency, set irec to month number (0-based)
+         category % irec = max(0, curr_month -1)
+      else
+         ! For other frequencies, use simple interval division
+         category % irec = int( (currTime - startTime) / timeInterval )
+      end if
 
       category_timings(cat_idx)%alarm = ESMF_AlarmCreate(clock, ringTime=startTime, &
          ringInterval=timeInterval, name=trim(category%category_name)//"_alarm", rc=localrc)
