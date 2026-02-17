@@ -48,6 +48,7 @@ module CATChem_API
    use DryDepProcessCreator_Mod, only: register_drydep_process
    use WetDepProcessCreator_Mod, only: register_wetdep_process
    use SettlingProcessCreator_Mod, only: register_settling_process
+   use so4ChemProcessCreator_Mod, only: register_so4chem_process
 
    implicit none
    private
@@ -372,6 +373,13 @@ contains
          if (rc /= CC_SUCCESS) then
             call this%error_manager%push_context('model_register_process', 'registering settling process')
             call this%error_manager%report_error(1014, 'Failed to register settling process', rc)
+            call this%error_manager%pop_context()
+         endif
+      case ('so4chem')
+         call register_so4chem_process(process_mgr, rc)
+         if (rc /= CC_SUCCESS) then
+            call this%error_manager%push_context('model_register_process', 'registering so4chem process')
+            call this%error_manager%report_error(1014, 'Failed to register so4chem process', rc)
             call this%error_manager%pop_context()
          endif
          ! case ('chemistry')

@@ -18,8 +18,29 @@ anthro:
     long_name: "Primary Sulfate"
     units: "kg/m2/s"
     scale: [1.0]
-    map: ["aso4j"]    #will be changed to SO4 later
-
+    map: ["so4"]    #will be changed to SO4 later
+gmi:
+  oh:
+    long_name: "Hydroxyl Radical"
+    units: "mol/mol"
+    scale: [1.0]
+    map: ["oh"]
+  h2o2:
+    long_name: "Hydrogen Peroxide"
+    units: "mol/mol"
+    scale: [1.0]
+    map: ["h2o2"]
+  no3:
+    long_name: "Nitrate Radical"
+    units: "mol/mol"
+    scale: [1.0]
+    map: ["no3"]
+dms:
+  dms:
+    long_name: "Dimethyl Sulfide"
+    units: "nmol/l"
+    scale: [1.0]
+    map: ["dms"]
 # point:
 #   NO:
 #     long_name: "Nitrogen Oxide"

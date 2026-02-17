@@ -10,6 +10,7 @@ target_link_libraries(${_lib} PUBLIC CATChem_process_seasalt)
 target_link_libraries(${_lib} PUBLIC CATChem_process_drydep)
 target_link_libraries(${_lib} PUBLIC CATChem_process_wetdep)
 target_link_libraries(${_lib} PUBLIC CATChem_process_settling)
+target_link_libraries(${_lib} PUBLIC CATChem_process_so4chem)
 # target_link_libraries(${_lib} PUBLIC CATChem_process_chem)
 set_target_properties(
   ${_lib}

@@ -71,6 +71,7 @@ run_phases:
       settling
       drydep
       wetdep
+      so4chem
   # test2:
   #   description: "Test phase 2"
   #   processes:
