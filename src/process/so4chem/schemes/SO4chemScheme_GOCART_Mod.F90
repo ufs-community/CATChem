@@ -266,8 +266,8 @@ contains
 
 
       !retrieve climatology fields; remember to reverse the vertical layer (TODO: double check the input files for this)
-      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
-      no3_clim(1,1,:) = species_conc(num_layers:1:-1, nNO3)
+      oh_clim(1,1,:) = 1.0e8_fp !species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
+      no3_clim(1,1,:) = 1.0e8_fp !species_conc(num_layers:1:-1, nNO3)
       h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2)
       ! Initialize some variables for the first time
       if (firsttime) then
@@ -344,6 +344,11 @@ contains
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
 
+      !debug
+      write(*,*) 'GOCART chemistry driver input:', 'nymd=', nymd, 'nhms=', nhms, &
+         'dms=', dms(1,1,num_layers), 'so2=', so2(1,1,num_layers), 'so4=', so4(1,1,num_layers), 'msa=', msa(1,1,num_layers), &
+         'oh=', xoh(1,1,num_layers), 'no3=', xno3(1,1,num_layers), 'h2o2=', xh2o2(1,1,num_layers)
+
       !call GOCART sulfate chemistry driver
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
          nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
@@ -356,6 +361,11 @@ contains
          write(*,'(A)') trim(ErrMsg)
          return
       end if
+
+      !debug
+      write(*,*) 'GOCART chemistry driver output:', 'dryfre=', drydepfrequency, &
+         'dms=', dms(1,1,num_layers), 'so2=', so2(1,1,num_layers), 'so4=', so4(1,1,num_layers), 'msa=', msa(1,1,num_layers), &
+         'pmsa=', pmsa(1,1,num_layers), 'pso2=', pso2(1,1,num_layers), 'pso4=', pso4(1,1,num_layers), 'pso4g=', pso4g(1,1,num_layers), 'pso4aq=', pso4aq(1,1,num_layers)
 
       !assign to output tendencies; remember to reverse the vertical layer back to original order
       if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
@@ -381,7 +391,8 @@ contains
             end if
             if (diagnostic_species_id(diag_idx) == nSO4) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
-               Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1)
+               !Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1)
+               Production_rate_per_species_per_level(:, diag_idx) = PSO4g(1,1,num_layers:1:-1) + PSO4aq(1,1,num_layers:1:-1)
                exit
             end if
          end do
