@@ -79,6 +79,7 @@ module ChemState_Mod
       INTEGER              :: nSpeciesTracer    ! Number of Tracer Species
       INTEGER              :: nSpeciesDust      ! Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   ! Number of SeaSalt Species
+      INTEGER              :: nSpeciesAdvect    ! Number of Advected Species
       INTEGER, ALLOCATABLE :: SpeciesIndex(:)   ! Total Species Index
       INTEGER, ALLOCATABLE :: TracerIndex(:)    ! Tracer Species Index
       INTEGER, ALLOCATABLE :: AeroIndex(:)      ! Aerosol Species Index
@@ -89,6 +90,7 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   ! SeaSalt Species Index
       INTEGER, ALLOCATABLE :: DryDepIndex(:)   ! DryDep Species Index
       INTEGER, ALLOCATABLE :: WetDepIndex(:)   ! WetDep Species Index
+      INTEGER, ALLOCATABLE :: AdvectIndex(:)   ! Advected Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  ! Species Names
       type(GOCART2G_Mie), ALLOCATABLE :: MieData(:) ! Mie data for aerosols
       CHARACTER(len=50), ALLOCATABLE :: MieNames(:) ! Mie species names
@@ -175,6 +177,7 @@ CONTAINS
       ChemState%nSpeciesAero = 0
       ChemState%nSpeciesAeroDryDep = 0
       ChemState%nSpeciesPhotolysis = 0
+      ChemState%nSpeciesAdvect = 0
       ChemState%nSpeciesDryDep = 0
       ChemState%nSpeciesWetDep = 0
       ChemState%nSpeciesDust = 0
@@ -208,6 +211,9 @@ CONTAINS
          endif
          if (ChemState%ChemSpecies(i)%is_photolysis .eqv. .true.) then
             ChemState%nSpeciesPhotolysis = ChemState%nSpeciesPhotolysis + 1
+         endif
+         if (ChemState%ChemSpecies(i)%is_advected .eqv. .true.) then
+            ChemState%nSpeciesAdvect = ChemState%nSpeciesAdvect + 1
          endif
          if (ChemState%ChemSpecies(i)%is_wetdep .eqv. .true.) then
             ChemState%nSpeciesWetDep = ChemState%nSpeciesWetDep + 1
@@ -569,6 +575,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesPhotolysis = 0
+      this%nSpeciesAdvect = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -674,6 +681,15 @@ CONTAINS
             return
          endif
 
+         allocate(this%AdvectIndex(max_species), stat=allocStat)
+         if (allocStat /= 0) then
+            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
+               'Failed to allocate AdvectIndex', rc, &
+               thisLoc, 'Check available memory')
+            call error_mgr%pop_context()
+            return
+         endif
+
          allocate(this%SpeciesNames(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
@@ -746,6 +762,7 @@ CONTAINS
       if (allocated(this%WetDepIndex)) deallocate(this%WetDepIndex)
       if (allocated(this%AeroDryDepIndex)) deallocate(this%AeroDryDepIndex)
       if (allocated(this%PhotolysisIndex)) deallocate(this%PhotolysisIndex)
+      if (allocated(this%AdvectIndex)) deallocate(this%AdvectIndex)
       if (allocated(this%SpeciesNames)) deallocate(this%SpeciesNames)
       if (allocated(this%ChemSpecies)) deallocate(this%ChemSpecies)
       if (allocated(this%MieData)) deallocate(this%MieData)
@@ -763,6 +780,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesPhotolysis = 0
+      this%nSpeciesAdvect = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -842,6 +860,7 @@ CONTAINS
       this%nSpeciesAero = 0
       this%nSpeciesAeroDryDep = 0
       this%nSpeciesPhotolysis = 0
+      this%nSpeciesAdvect = 0
       this%nSpeciesDryDep = 0
       this%nSpeciesWetDep = 0
       this%nSpeciesTracer = 0
@@ -859,6 +878,7 @@ CONTAINS
       if (allocated(this%WetDepIndex)) this%WetDepIndex = 0
       if (allocated(this%AeroDryDepIndex)) this%AeroDryDepIndex = 0
       if (allocated(this%PhotolysisIndex)) this%PhotolysisIndex = 0
+      if (allocated(this%AdvectIndex)) this%AdvectIndex = 0
       if (allocated(this%SpeciesNames)) this%SpeciesNames = ''
 
    end subroutine chemstate_reset
@@ -909,6 +929,12 @@ CONTAINS
       if (allocated(this%AeroDryDepIndex)) then
          memory_bytes = memory_bytes + size(this%AeroDryDepIndex) * 4
       endif
+      if (allocated(this%AdvectIndex)) then
+         memory_bytes = memory_bytes + size(this%AdvectIndex) * 4
+      endif
+      if (allocated(this%PhotolysisIndex)) then
+         memory_bytes = memory_bytes + size(this%PhotolysisIndex) * 4
+      endif
       if (allocated(this%SpeciesNames)) then
          memory_bytes = memory_bytes + size(this%SpeciesNames) * 50  ! character arrays
       endif
@@ -928,6 +954,7 @@ CONTAINS
       write(*,'(A,I0)') 'Total species: ', this%nSpecies
       write(*,'(A,I0)') 'Gas species: ', this%nSpeciesGas
       write(*,'(A,I0)') 'Photolysis species: ', this%nSpeciesPhotolysis
+      write(*,'(A,I0)') 'Advect species: ', this%nSpeciesAdvect
       write(*,'(A,I0)') 'Aerosol species: ', this%nSpeciesAero
       write(*,'(A,I0)') 'Dust species: ', this%nSpeciesDust
       write(*,'(A,I0)') 'Sea salt species: ', this%nSpeciesSeaSalt

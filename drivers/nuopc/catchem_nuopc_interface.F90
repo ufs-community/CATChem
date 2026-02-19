@@ -851,6 +851,7 @@ contains
             !map NUOPC tracer index to CATChem species index
             v_cc = cc_wrap%tracer_map%nuopc_to_cc(v)
             if (v_cc <= 0) cycle !if not a species in CATChem, go to next cycle
+            if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
             !unit conversion
             if (chem_state%ChemSpecies(v_cc)%is_gas) then
                !unit_conv = 28.9644  / chem_state%ChemSpecies(v_cc)%mw_g * 1.0e-3  ! convert from ug/kg to ppm for gases
@@ -1017,6 +1018,7 @@ contains
          ! Reverse vertical layers
          do v = 1, nv
             v_cc = cc_wrap%tracer_map%nuopc_to_cc(v)
+            if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
             if (v_cc > 0) then
                cc_diag_data = chem_state%ChemSpecies(v_cc)%conc
                if (chem_state%ChemSpecies(v_cc)%is_gas) then

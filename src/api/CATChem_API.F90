@@ -375,7 +375,7 @@ contains
             call this%error_manager%report_error(1014, 'Failed to register settling process', rc)
             call this%error_manager%pop_context()
          endif
-      case ('so4chem')
+       case ('so4chem')
          call register_so4chem_process(process_mgr, rc)
          if (rc /= CC_SUCCESS) then
             call this%error_manager%push_context('model_register_process', 'registering so4chem process')

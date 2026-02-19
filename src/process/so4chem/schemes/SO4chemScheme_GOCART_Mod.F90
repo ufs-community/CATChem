@@ -266,8 +266,8 @@ contains
 
 
       !retrieve climatology fields; remember to reverse the vertical layer (TODO: double check the input files for this)
-      oh_clim(1,1,:) = 1.0e8_fp !species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
-      no3_clim(1,1,:) = 1.0e8_fp !species_conc(num_layers:1:-1, nNO3)
+      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
+      no3_clim(1,1,:) = species_conc(num_layers:1:-1, nNO3)
       h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2)
       ! Initialize some variables for the first time
       if (firsttime) then
@@ -345,7 +345,7 @@ contains
       fMassSO4 = species_mw_g(nSO4)
 
       !debug
-      write(*,*) 'GOCART chemistry driver input:', 'nymd=', nymd, 'nhms=', nhms, &
+      write(*,*) 'GOCART chemistry driver input:', 'nymd=', nymd, 'nhms=', nhms, 'lat=', lat, 'lon=', lon, &
          'dms=', dms(1,1,num_layers), 'so2=', so2(1,1,num_layers), 'so4=', so4(1,1,num_layers), 'msa=', msa(1,1,num_layers), &
          'oh=', xoh(1,1,num_layers), 'no3=', xno3(1,1,num_layers), 'h2o2=', xh2o2(1,1,num_layers)
 
@@ -373,7 +373,7 @@ contains
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1)
       species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1)
-      species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1)
+      !species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) !!!TODO: DMS is not updated for now since it is read in through monthly files. We should uncommont this once the emission is in.
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
@@ -382,18 +382,14 @@ contains
             if (diagnostic_species_id(diag_idx) == nMSA) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
                Production_rate_per_species_per_level(:, diag_idx) = pmsa(1,1,num_layers:1:-1)
-               exit
             end if
             if (diagnostic_species_id(diag_idx) == nSO2) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
                Production_rate_per_species_per_level(:, diag_idx) = pso2(1,1,num_layers:1:-1)
-               exit
             end if
             if (diagnostic_species_id(diag_idx) == nSO4) then
                ! Add your custom production rate (dms to so2, dms to msa, so2 to so4) per species per level calculation
-               !Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1)
-               Production_rate_per_species_per_level(:, diag_idx) = PSO4g(1,1,num_layers:1:-1) + PSO4aq(1,1,num_layers:1:-1)
-               exit
+               Production_rate_per_species_per_level(:, diag_idx) = pso4(1,1,num_layers:1:-1)
             end if
          end do
       end if
