@@ -62,7 +62,7 @@ theme:
     - toc.integrate
 
   # Logo and favicon
-  logo: ../data/CATChem_logo.png
+  logo: "../data/CATChem_logo.png"
 
   # Fonts
   font:
