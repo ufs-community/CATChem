@@ -209,9 +209,9 @@ contains
       !some clock variables for oxidants updates
       logical, save :: firsttime = .true.
       integer, save :: nymd_last = -1  ! NYMD of last H2O2 update
-      real(fp), save :: tstep_counter = 0.0_fp ! counter (in seconds) for tracking when to update H2O2 based on 3-hourly climatology
+      integer, save :: nhms_last_recycle = -1  ! NHMS of last H2O2 recycle
       real(fp), allocatable, save :: xh2o2_init(:,:,:) ! initial H2O2 from last time step
-      logical :: recycle_h2o2  = .false.
+      logical :: recycle_h2o2 
       !error information
       integer :: RC
       character(len=256) :: errMsg
@@ -266,12 +266,15 @@ contains
 
 
       !retrieve climatology fields; remember to reverse the vertical layer (TODO: double check the input files for this)
-      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH)  !TODO: the unit is not in kg/kg and it should not be exchanged with NUOPC although it is in the chem_state.
-      no3_clim(1,1,:) = species_conc(num_layers:1:-1, nNO3)
-      h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2)
+      oh_clim(1,1,:) = species_conc(num_layers:1:-1, nOH) * 1.0e-6_fp !change from ppm to mol/mol.
+      no3_clim(1,1,:) = species_conc(num_layers:1:-1, nNO3) * 1.0e-6_fp !change from ppm to mol/mol.
+      h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2) * 1.0e-6_fp !change from ppm to mol/mol.
       ! Initialize some variables for the first time
       if (firsttime) then
          nymd_last = nymd
+         ! First time, set initial recycle time
+         nhms_last_recycle = nhms
+         !allocate and initialize xh2o2_init to climatology for the first time step
          if (.not. allocated(xh2o2_init)) then
             allocate(xh2o2_init(1,1,num_layers))
          end if
@@ -279,11 +282,19 @@ contains
          firsttime = .false.
       end if
 
-      !update tstep_counter
-      tstep_counter = tstep_counter + tstep
-      if (tstep_counter >= 10800) then
+      !update nymd_last. This is important for H2O2 reading because the SulfateUpdateOxidants below will check this, although
+      !I think that is a bug in that function. We have to force nymd_last = nymd_current here.
+      if (nymd /= nymd_last) then
+         nymd_last = nymd
+         nhms_last_recycle = nhms  !reset recycle timer when day changes
+      end if
+
+      recycle_h2o2 = .false.
+      !check if first time step or 3 hours have passed since last H2O2 recycle using actual time
+      !firsttime will be false after the firt grid point of the first time step. That is why we need to check first time step here too.
+      if ((nhms == nhms_last_recycle) .or. (nhms - nhms_last_recycle >= 30000)) then
+         nhms_last_recycle = nhms
          recycle_h2o2 = .true.
-         tstep_counter = 0
       end if
 
       ! transform data for GOCART DryDeposition call
@@ -344,11 +355,6 @@ contains
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
 
-      !debug
-      write(*,*) 'GOCART chemistry driver input:', 'nymd=', nymd, 'nhms=', nhms, 'lat=', lat, 'lon=', lon, &
-         'dms=', dms(1,1,num_layers), 'so2=', so2(1,1,num_layers), 'so4=', so4(1,1,num_layers), 'msa=', msa(1,1,num_layers), &
-         'oh=', xoh(1,1,num_layers), 'no3=', xno3(1,1,num_layers), 'h2o2=', xh2o2(1,1,num_layers)
-
       !call GOCART sulfate chemistry driver
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
          nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
@@ -362,18 +368,17 @@ contains
          return
       end if
 
-      !debug
-      write(*,*) 'GOCART chemistry driver output:', 'dryfre=', drydepfrequency, &
-         'dms=', dms(1,1,num_layers), 'so2=', so2(1,1,num_layers), 'so4=', so4(1,1,num_layers), 'msa=', msa(1,1,num_layers), &
-         'pmsa=', pmsa(1,1,num_layers), 'pso2=', pso2(1,1,num_layers), 'pso4=', pso4(1,1,num_layers), 'pso4g=', pso4g(1,1,num_layers), 'pso4aq=', pso4aq(1,1,num_layers)
-
       !assign to output tendencies; remember to reverse the vertical layer back to original order
       if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
          species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1)
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1)
       species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1)
-      !species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) !!!TODO: DMS is not updated for now since it is read in through monthly files. We should uncommont this once the emission is in.
+      species_tendencies(:, nDMS) = species_conc(:, nDMS) !!!TODO: DMS is unchanged for now since it is read in through monthly files. 
+      species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
+      species_tendencies(:, nNO3) = species_conc(:, nNO3)
+      species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
+      
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
@@ -404,32 +409,32 @@ contains
 
 
       !cleanup pointers
-      if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)
-      if (associated(GOCART_RHOA)) nullify(GOCART_RHOA)
-      if (associated(GOCART_HGHTE)) nullify(GOCART_HGHTE)
-      if (associated(GOCART_DELP)) nullify(GOCART_DELP)
-      if (associated(GOCART_cloud)) nullify(GOCART_cloud)
-      if (associated(GOCART_PRESS)) nullify(GOCART_PRESS)
-      if (associated(GOCART_LWI)) nullify(GOCART_LWI)
-      if (associated(GOCART_USTAR)) nullify(GOCART_USTAR)
-      if (associated(GOCART_LWI)) nullify(GOCART_LWI)
-      if (associated(GOCART_HFLUX)) nullify(GOCART_HFLUX)
-      if (associated(GOCART_Z0H)) nullify(GOCART_Z0H)
-      if (associated(SU_dep)) nullify(SU_dep)
-      if (associated(SU_PSO2)) nullify(SU_PSO2)
-      if (associated(SU_PMSA)) nullify(SU_PMSA)
-      if (associated(SU_PSO4)) nullify(SU_PSO4)
-      if (associated(SU_PSO4g)) nullify(SU_PSO4g)
-      if (associated(SU_PSO4aq)) nullify(SU_PSO4aq)
-      if (associated(pso2)) nullify(pso2)
-      if (associated(pmsa)) nullify(pmsa)
-      if (associated(pso4)) nullify(pso4)
-      if (associated(pso4g)) nullify(pso4g)
-      if (associated(pso4aq)) nullify(pso4aq)
-      if (associated(msa)) nullify(msa)
-      if (associated(oh_clim)) nullify(oh_clim)
-      if (associated(no3_clim)) nullify(no3_clim)
-      if (associated(h2o2_clim)) nullify(h2o2_clim)
+      if (associated(GOCART_TMPU)) deallocate(GOCART_TMPU)
+      if (associated(GOCART_RHOA)) deallocate(GOCART_RHOA)
+      if (associated(GOCART_HGHTE)) deallocate(GOCART_HGHTE)
+      if (associated(GOCART_DELP)) deallocate(GOCART_DELP)
+      if (associated(GOCART_cloud)) deallocate(GOCART_cloud)
+      if (associated(GOCART_PRESS)) deallocate(GOCART_PRESS)
+      if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
+      if (associated(GOCART_USTAR)) deallocate(GOCART_USTAR)
+      if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
+      if (associated(GOCART_HFLUX)) deallocate(GOCART_HFLUX)
+      if (associated(GOCART_Z0H)) deallocate(GOCART_Z0H)
+      if (associated(SU_dep)) deallocate(SU_dep)
+      if (associated(SU_PSO2)) deallocate(SU_PSO2)
+      if (associated(SU_PMSA)) deallocate(SU_PMSA)
+      if (associated(SU_PSO4)) deallocate(SU_PSO4)
+      if (associated(SU_PSO4g)) deallocate(SU_PSO4g)
+      if (associated(SU_PSO4aq)) deallocate(SU_PSO4aq)
+      if (associated(pso2)) deallocate(pso2)
+      if (associated(pmsa)) deallocate(pmsa)
+      if (associated(pso4)) deallocate(pso4)
+      if (associated(pso4g)) deallocate(pso4g)
+      if (associated(pso4aq)) deallocate(pso4aq)
+      if (associated(msa)) deallocate(msa)
+      if (associated(oh_clim)) deallocate(oh_clim)
+      if (associated(no3_clim)) deallocate(no3_clim)
+      if (associated(h2o2_clim)) deallocate(h2o2_clim)
       !cleanup array allocations
       deallocate( xoh, xno3, xh2o2, dms, so2, so4, drydepfrequency, latRad, lonRad)
 

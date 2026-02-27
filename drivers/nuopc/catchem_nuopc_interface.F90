@@ -660,6 +660,7 @@ contains
       !type(cc_wrap_type), pointer :: cc_wrap
       real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
       real(ESMF_KIND_R8), pointer :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
+      real(fp), allocatable :: cc_conc(:,:,:,:)
       real(fp), pointer :: column_ptr(:) !catchem met column pointer to get vertical dimension for nz+1 variables
       real(ESMF_KIND_R8) :: unit_conv
       integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index
@@ -821,6 +822,20 @@ contains
          ! Allocate fptr4d_rev with the same dimensions as fptr4d
          allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
          fptr4d_rev = 0.0_fp  ! Initialize to zero
+         !get original concentrations from CATChem. 
+         !This is because some species in CATChem may not go through advection and should keep their values.
+         call chem_state%get_all_concentrations(cc_conc, rc)
+         if (rc /= CC_SUCCESS) then
+            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+               msg="CATChem tracer array is not retrieved successfully for: " // trim(field_map%catchem_var), &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            if (allocated(cc_conc)) deallocate(cc_conc)  ! Clean up before returning
+            return  ! bail out
+         end if
+         !assign to fptr4d_rev 
+         fptr4d_rev = real(cc_conc, ESMF_KIND_R8) 
+         !debug
+         write(*,*) '!!!!!!!!!!!Test transfer array fptr4d_rev:', sum(fptr4d_rev(:,:,:,:))
 
          ! Reverse vertical layers
          do v = 1, nv
@@ -844,6 +859,7 @@ contains
                      msg="Met field is not set successfully for: QV", &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)
                   deallocate(fptr4d_rev)  ! Clean up before returning
+                  if (allocated(cc_conc)) deallocate(cc_conc)
                   return  ! bail out
                end if
             end if
@@ -875,14 +891,16 @@ contains
          call chem_state%set_all_concentrations(real(fptr4d_rev, fp), rc)
          if (rc /= CC_SUCCESS) then
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-               msg="Tracer array is not retrieved successfully for: " // trim(field_map%catchem_var), &
+               msg="CATChem tracer array is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
             deallocate(fptr4d_rev)  ! Clean up before returning
+            if (allocated(cc_conc)) deallocate(cc_conc)
             return  ! bail out
          end if
 
          ! Clean up allocated memory
          deallocate(fptr4d_rev)
+         if (allocated(cc_conc)) deallocate(cc_conc)
 
        case default
          call ESMF_LogWrite("Unknown field mapping dimension for: " // trim(field_map%catchem_var), &

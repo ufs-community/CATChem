@@ -417,6 +417,11 @@ contains
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * AIRMW / species_mw_g(species_idx) * 1.0e6_fp
             end if
 
+            !!!!!!!!TODO: do not run wetdep on H2O2 since it is read from climatology files for now
+            if (species_idx == h2o2_id) then
+               species_tendencies(k, species_idx) = species_conc(k, species_idx)
+            end if  
+
             ! Update diagnostic fields here based on your scheme's requirements
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(wetdep_mass_per_species_per_level) .and. present(diagnostic_species_id)) then

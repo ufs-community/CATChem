@@ -251,18 +251,18 @@ contains
       end do
 
       !cleanup pointers
-      if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)
-      if (associated(GOCART_RHOA)) nullify(GOCART_RHOA)
-      if (associated(GOCART_HGHTE)) nullify(GOCART_HGHTE)
-      if (associated(GOCART_U10)) nullify(GOCART_U10)
-      if (associated(GOCART_V10)) nullify(GOCART_V10)
-      if (associated(GOCART_FRACLAKE)) nullify(GOCART_FRACLAKE)
-      if (associated(GOCART_GWETTOP)) nullify(GOCART_GWETTOP)
-      if (associated(GOCART_LWI)) nullify(GOCART_LWI)
-      if (associated(GOCART_USTAR)) nullify(GOCART_USTAR)
-      if (associated(GOCART_LWI)) nullify(GOCART_LWI)
-      if (associated(GOCART_HFLUX)) nullify(GOCART_HFLUX)
-      if (associated(GOCART_Z0H)) nullify(GOCART_Z0H)
+      if (associated(GOCART_TMPU)) deallocate(GOCART_TMPU)
+      if (associated(GOCART_RHOA)) deallocate(GOCART_RHOA)
+      if (associated(GOCART_HGHTE)) deallocate(GOCART_HGHTE)
+      if (associated(GOCART_U10)) deallocate(GOCART_U10)
+      if (associated(GOCART_V10)) deallocate(GOCART_V10)
+      if (associated(GOCART_FRACLAKE)) deallocate(GOCART_FRACLAKE)
+      if (associated(GOCART_GWETTOP)) deallocate(GOCART_GWETTOP)
+      if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
+      if (associated(GOCART_USTAR)) deallocate(GOCART_USTAR)
+      if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
+      if (associated(GOCART_HFLUX)) deallocate(GOCART_HFLUX)
+      if (associated(GOCART_Z0H)) deallocate(GOCART_Z0H)
 
    end subroutine compute_gocart
 

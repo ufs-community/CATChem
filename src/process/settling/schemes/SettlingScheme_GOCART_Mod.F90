@@ -258,15 +258,15 @@ contains
       end do
 
       !cleanup pointers
-      if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)
-      if (associated(GOCART_RHOA)) nullify(GOCART_RHOA)
-      if (associated(GOCART_HGHTE)) nullify(GOCART_HGHTE)
-      if (associated(GOCART_RH)) nullify(GOCART_RH)
-      if (associated(GOCART_PRESS)) nullify(GOCART_PRESS)
-      if (associated(GOCART_DELP)) nullify(GOCART_DELP)
-      if (associated(SD)) nullify(SD)
-      if (associated(fluxout)) nullify(fluxout)
-      if (associated(fluxout_temp)) nullify(fluxout_temp)
+      if (associated(GOCART_TMPU)) deallocate(GOCART_TMPU)
+      if (associated(GOCART_RHOA)) deallocate(GOCART_RHOA)
+      if (associated(GOCART_HGHTE)) deallocate(GOCART_HGHTE)
+      if (associated(GOCART_RH)) deallocate(GOCART_RH)
+      if (associated(GOCART_PRESS)) deallocate(GOCART_PRESS)
+      if (associated(GOCART_DELP)) deallocate(GOCART_DELP)
+      if (associated(SD)) deallocate(SD)
+      if (associated(fluxout)) deallocate(fluxout)
+      if (associated(fluxout_temp)) deallocate(fluxout_temp)
 
    end subroutine compute_gocart
 

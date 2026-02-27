@@ -42,6 +42,7 @@ module catchem_emis_mod
    use ChemState_Mod, only: ChemStateType
    use MetState_Mod, only: MetStateType
    use ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
+   use Constants, only: AIRMW, AVO
 
    implicit none
    private
@@ -451,8 +452,6 @@ contains
 
       rc = CC_SUCCESS
 
-      if (trim(category%category_name) == 'gmi')  return ! Skip GMI oxidants unit conversion (they are in mol/mol volume mixing ratio)
-
       ! Get dimensions
       nx = size(met_state%DELP, 1)
       ny = size(met_state%DELP, 2)
@@ -566,6 +565,15 @@ contains
                         if (category_name == 'dms' .and. field_name == 'dms') then
                            ! Special case for DMS read in with nmol/L ==> kg/kg
                            species_tendency(i,j,k) = emission_flux(i,j,k) * chem_state%ChemSpecies(species_idx)%mw_g * 1.0e-9_fp / met_state%AIRDEN(i,j,k)
+                        else if (trim(category_name) == 'gmi') then
+                           if (trim(field_name) == 'oh' .or. trim(field_name) == 'OH') then
+                              ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).
+                              ! convert from #/cm3 to ppm to keep consistent with other species units 
+                              species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / met_state%AIRDEN(i,j,k) * 1.e3
+                           else
+                              ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
+                              species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor * 1.e6_fp
+                           end if
                         else
                            ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
                            ! Step 2: Convert to kg/kg or ppmv using converter calculated above
