@@ -211,7 +211,7 @@ contains
       integer, save :: nymd_last = -1  ! NYMD of last H2O2 update
       integer, save :: nhms_last_recycle = -1  ! NHMS of last H2O2 recycle
       real(fp), allocatable, save :: xh2o2_init(:,:,:) ! initial H2O2 from last time step
-      logical :: recycle_h2o2 
+      logical :: recycle_h2o2
       !error information
       integer :: RC
       character(len=256) :: errMsg
@@ -291,7 +291,7 @@ contains
 
       recycle_h2o2 = .false.
       !check if first time step or 3 hours have passed since last H2O2 recycle using actual time
-      !firsttime will be false after the firt grid point of the first time step. That is why we need to check first time step here too.
+      !firsttime will be false after the first grid point of the first time step. That is why we need to check first time step here too.
       if ((nhms == nhms_last_recycle) .or. (nhms - nhms_last_recycle >= 30000)) then
          nhms_last_recycle = nhms
          recycle_h2o2 = .true.
@@ -374,11 +374,11 @@ contains
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1)
       species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1)
-      species_tendencies(:, nDMS) = species_conc(:, nDMS) !!!TODO: DMS is unchanged for now since it is read in through monthly files. 
+      species_tendencies(:, nDMS) = species_conc(:, nDMS) !!!TODO: DMS is unchanged for now since it is read in through monthly files.
       species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
       species_tendencies(:, nNO3) = species_conc(:, nNO3)
       species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
-      
+
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
