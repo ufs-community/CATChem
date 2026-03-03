@@ -830,7 +830,7 @@ contains
          ! Allocate fptr4d_rev with the same dimensions as fptr4d
          allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
          fptr4d_rev = 0.0_fp  ! Initialize to zero
-         !get original concentrations from CATChem. 
+         !get original concentrations from CATChem.
          !This is because some species in CATChem may not go through advection and should keep their values.
          call chem_state%get_all_concentrations(cc_conc, rc)
          if (rc /= CC_SUCCESS) then
@@ -840,8 +840,10 @@ contains
             if (allocated(cc_conc)) deallocate(cc_conc)  ! Clean up before returning
             return  ! bail out
          end if
-         !assign to fptr4d_rev 
-         fptr4d_rev = real(cc_conc, ESMF_KIND_R8) 
+         !assign to fptr4d_rev
+         fptr4d_rev = real(cc_conc, ESMF_KIND_R8)
+         !debug
+         write(*,*) '!!!!!!!!!!!Test transfer array fptr4d_rev:', sum(fptr4d_rev(:,:,:,:))
 
          ! Reverse vertical layers
          do v = 1, nv

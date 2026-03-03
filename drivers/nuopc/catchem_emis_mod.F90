@@ -569,7 +569,7 @@ contains
                         else if (trim(category_name) == 'gmi') then
                            if (trim(field_name) == 'oh' .or. trim(field_name) == 'OH') then
                               ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).
-                              ! convert from #/cm3 to ppm to keep consistent with other species units 
+                              ! convert from #/cm3 to ppm to keep consistent with other species units
                               species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / met_state%AIRDEN(i,j,k) * 1.e3
                            else
                               ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
