@@ -89,6 +89,10 @@ module ConfigManager_Mod
       logical :: DryRun = .false.                    !< Is this a dry run?
       character(len=255) :: SimulationName = ''      !< Name of the simulation
       logical :: DiagEnabled = .false.               !< Was diagnostic output requested?
+      integer :: CompressLev = 0                     !< Compression level for output NC files (0-9)
+      integer :: output_frequency = 3600             !< Default: 1 hour in seconds
+      character(len=32), allocatable :: diag_species(:)  ! User-defined species for concentration diagnostics
+      integer :: n_diag_species = 0                  !< Number of species in diag_species array
       logical :: VerboseRequested = .false.          !< Was verbose output requested?
       character(len=10) :: VerboseOnCores = 'root'   !< Which cores should produce verbose output
       logical :: Verbose = .false.                   !< Should verbose output be produced?
@@ -111,6 +115,7 @@ module ConfigManager_Mod
       character(len=255) :: Mie_Directory = ''        !< Path to Mie optics data directory
       character(len=255) :: Input_Directory = './'   !< Input data directory
       character(len=255) :: Output_Directory = './'  !< Output data directory
+      character(len=255) :: Output_Prefix = 'catchem_diag'  !< Output file prefix
    end type FilePathConfig
 
 
@@ -1453,8 +1458,33 @@ contains
       call safe_yaml_get_logical(this%yaml_data, 'diagnostics/output/enabled', this%config_data%runtime%DiagEnabled, local_rc)
       if (local_rc /= 0) this%config_data%runtime%DiagEnabled = .false.  ! default value
 
+      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/compress_lev', this%config_data%runtime%CompressLev, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%CompressLev = 0  ! default value
+
+      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/compress_lev', this%config_data%runtime%CompressLev, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%CompressLev = 0  ! default value
+
+      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/frequency', this%config_data%runtime%Output_Frequency, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%Output_Frequency = 3600  ! default value
+
+      call this%get_array('diagnostics/output/diag_list', this%config_data%runtime%diag_species, local_rc, default_values=["All"])
+      if (local_rc /= 0) then
+         ! Default to all species if not specified
+         allocate(this%config_data%runtime%diag_species(1))
+         this%config_data%runtime%diag_species(1) = "All"
+         this%config_data%runtime%n_diag_species = 1
+      else
+         ! Set the count based on the returned array size
+         if (allocated(this%config_data%runtime%diag_species)) then
+            this%config_data%runtime%n_diag_species = size(this%config_data%runtime%diag_species)
+         else
+            this%config_data%runtime%n_diag_species = 0
+         end if
+      end if
+
       ! Parse file paths
       call yaml_get(this%yaml_data, 'diagnostics/output/directory', this%config_data%file_paths%Output_Directory, rc, './')
+      call yaml_get(this%yaml_data, 'diagnostics/output/prefix', this%config_data%file_paths%Output_Prefix, rc, 'catchem_diag')
       call yaml_get(this%yaml_data, 'mie/directory', this%config_data%file_paths%Mie_Directory, rc, './')
       call yaml_get(this%yaml_data, 'simulation/species_filename', this%config_data%file_paths%Species_File, rc, '')
       call yaml_get(this%yaml_data, 'simulation/emission_filename', this%config_data%file_paths%Emission_File, rc, '')

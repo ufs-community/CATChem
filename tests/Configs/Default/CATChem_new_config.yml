@@ -34,10 +34,12 @@ timesteps:
 diagnostics:
   output:
     enabled: true
-    directory: "./output/diagnostics"
+    directory: "./output"
     prefix: "catchem_diag"
-    frequency: 1  # timesteps
-    format: "netcdf"
+    frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
+    format: "netcdf" #only format supported now
+    compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
+    diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5]  #list of species to output; empty list for all species
   collection:
     enabled: true
     buffer_size: 1000
@@ -67,17 +69,17 @@ run_phases:
   test1:
     description: "Test phase 1"
     processes:
-      seasalt
-      settling
-      drydep
-      wetdep
-      so4chem
+      - seasalt
+      - settling
+      - drydep
+      - so4chem
+      - wetdep
   # test2:
   #   description: "Test phase 2"
   #   processes:
-  #     dust
-  #     drydep
-  #     #wetdep
+  #    - dust
+  #    - drydep
+  #    - wetdep
 
 #============================================================================
 # Settings for CATChem processes

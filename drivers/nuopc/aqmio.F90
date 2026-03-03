@@ -402,7 +402,7 @@ contains
          cmode = NF90_WRITE
          fmode = "write"
        case ("c", "create")
-         cmode = NF90_CLOBBER
+         cmode = ior(NF90_CLOBBER, NF90_NETCDF4)
          create = .true.
        case default
          call ESMF_LogSetError(ESMF_RC_ARG_WRONG, &
@@ -721,12 +721,13 @@ contains
 
 !------------------------------------------------------------------------------
 
-   subroutine AQMIO_Write(IOComp, fieldList, fieldNameList, timeSlice, &
+   subroutine AQMIO_Write(IOComp, fieldList, fieldNameList, timeSlice, compressLev, &
       fileName, filePath, iofmt, rc)
       type(ESMF_GridComp),   intent(inout)         :: IOComp
       type(ESMF_Field),      intent(in)            :: fieldList(:)
       character(len=*),      intent(in),  optional :: fieldNameList(:)
       integer,               intent(in),  optional :: timeSlice
+      integer,               intent(in),  optional :: compressLev
       character(len=*),      intent(in),  optional :: fileName
       character(len=*),      intent(in),  optional :: filePath
       integer,               intent(in),  optional :: iofmt
@@ -794,8 +795,13 @@ contains
 
       if (present(fieldNameList)) then
          do item = 1, size(fieldList)
-            call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
-               variableName=fieldNameList(item), timeSlice=timeSlice, rc=localrc)
+            if (present(compressLev)) then 
+               call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
+                  variableName=fieldNameList(item), timeSlice=timeSlice, compressLev=compressLev, rc=localrc)
+            else 
+               call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
+                  variableName=fieldNameList(item), timeSlice=timeSlice, rc=localrc)
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, &
                file=__FILE__, &
@@ -803,8 +809,13 @@ contains
          end do
       else
          do item = 1, size(fieldList)
-            call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
-               timeSlice=timeSlice, rc=localrc)
+            if (present(compressLev)) then 
+               call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
+                  timeSlice=timeSlice, compressLev=compressLev, rc=localrc)
+            else 
+               call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
+                  timeSlice=timeSlice, rc=localrc)
+            end if 
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, &
                file=__FILE__, &
@@ -1009,12 +1020,13 @@ contains
 ! Private methods below
 !------------------------------------------------------------------------------
 
-   subroutine AQMIO_FieldAccess(IOComp, field, action, variableName, timeSlice, rc)
+   subroutine AQMIO_FieldAccess(IOComp, field, action, variableName, timeSlice, compressLev, rc)
       type(ESMF_GridComp),   intent(in)            :: IOComp
       type(ESMF_Field),      intent(in)            :: field
       character(len=*),      intent(in)            :: action
       character(len=*),      intent(in),  optional :: variableName
       integer,               intent(in),  optional :: timeSlice
+      integer,               intent(in),  optional :: compressLev
       integer,               intent(out), optional :: rc
 
       ! -- local variables
@@ -1167,12 +1179,21 @@ contains
                   file=__FILE__, &
                   rcToReturn=rc)) return  ! bail out
              case('w','write')
-               call AQMIO_FieldWrite(is % IO, field, &
-                  minIndexPDe(:,de), maxIndexPDe(:,de), &
-                  minIndexPTile(:,tile), maxIndexPTile(:,tile), &
-                  ungriddedLBound=ungriddedLBound, ungriddedUBound=ungriddedUBound, &
-                  variableName=variableName, timeSlice=timeSlice, localDe=localDe, &
-                  rc=localrc)
+               if (present(compressLev)) then
+                  call AQMIO_FieldWrite(is % IO, field, &
+                     minIndexPDe(:,de), maxIndexPDe(:,de), &
+                     minIndexPTile(:,tile), maxIndexPTile(:,tile), &
+                     ungriddedLBound=ungriddedLBound, ungriddedUBound=ungriddedUBound, &
+                     variableName=variableName, timeSlice=timeSlice, localDe=localDe, compressLev=compressLev, &
+                     rc=localrc)
+               else 
+                  call AQMIO_FieldWrite(is % IO, field, &
+                     minIndexPDe(:,de), maxIndexPDe(:,de), &
+                     minIndexPTile(:,tile), maxIndexPTile(:,tile), &
+                     ungriddedLBound=ungriddedLBound, ungriddedUBound=ungriddedUBound, &
+                     variableName=variableName, timeSlice=timeSlice, localDe=localDe, &
+                     rc=localrc)
+               end if
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, &
                   file=__FILE__, &
@@ -2167,7 +2188,7 @@ contains
 
    subroutine AQMIO_FieldWrite(IO, field, &
       minIndexPDe, maxIndexPDe, minIndexPTile, maxIndexPTile, &
-      ungriddedLBound, ungriddedUBound, variableName, timeSlice, localDe, rc)
+      ungriddedLBound, ungriddedUBound, variableName, timeSlice, localDe, compressLev, rc)
       type(ioData),          intent(in)            :: IO
       type(ESMF_Field),      intent(in)            :: field
       integer, dimension(:), intent(in)            :: minIndexPDe
@@ -2179,6 +2200,7 @@ contains
       character(len=*),      intent(in),  optional :: variableName
       integer,               intent(in),  optional :: timeSlice
       integer,               intent(in),  optional :: localDe
+      integer,               intent(in),  optional :: compressLev
       integer,               intent(out), optional :: rc
 
       ! -- local variables
@@ -2436,8 +2458,13 @@ contains
 
             ncStatus = nf90_inq_varid(IO % IOLayout(lde) % ncid, trim(fieldName), varId)
             if (ncStatus == NF90_ENOTVAR) then
-               call AQMIO_VariableCreate(IO % IOLayout(lde), field, present(timeSlice), &
-                  varId=varId, rc=localrc)
+               if (present(compressLev)) then
+                  call AQMIO_VariableCreate(IO % IOLayout(lde), field, present(timeSlice), &
+                     varId=varId, compressLev=compressLev, rc=localrc)
+               else
+                  call AQMIO_VariableCreate(IO % IOLayout(lde), field, present(timeSlice), &
+                     varId=varId, rc=localrc)
+               end if
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, &
                   file=__FILE__, &
@@ -2693,7 +2720,7 @@ contains
          staggerlocList(ESMF_STAGGERLOC_CENTER % staggerloc) = .true.
       end if
 
-      ncStatus = nf90_create(trim(fullName), NF90_CLOBBER, ncid)
+      ncStatus = nf90_create(trim(fullName), ior(NF90_CLOBBER, NF90_NETCDF4), ncid)
       if (ncStatus /= NF90_NOERR) then
          call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
             msg="NetCDF error", &
@@ -2990,11 +3017,12 @@ contains
 !------------------------------------------------------------------------------
 
 #if HAVE_NETCDF
-   subroutine AQMIO_VariableCreate(IOLayout, field, unlimited, varId, rc)
+   subroutine AQMIO_VariableCreate(IOLayout, field, unlimited, varId, CompressLev,rc)
       type(AQMIOLayout), intent(in)            :: IOLayout
       type(ESMF_Field),  intent(in)            :: field
       logical,           intent(in)            :: unlimited
       integer,           intent(out), optional :: varId
+      integer,           intent(in),  optional :: CompressLev
       integer,           intent(out), optional :: rc
 
       ! -- local variables
@@ -3200,6 +3228,28 @@ contains
          return  ! bail out
       end if
 
+      ! -- Enable compression for NetCDF4 format (lossless)
+      ! deflate_level: 0=no compression, 9=max compression, 6=good balance
+      if (present(CompressLev)) then
+         if (CompressLev < 0 .or. CompressLev > 9) then
+            call ESMF_LogSetError(ESMF_RC_ARG_WRONG, &
+               msg="CompressLev must be between 0 and 9", &
+               line=__LINE__, &
+               file=__FILE__, &
+               rcToReturn=rc)
+            return  ! bail out
+         end if
+         ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=CompressLev)
+      else
+         ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=0)
+      end if 
+      if (ncStatus /= NF90_NOERR) then
+         ! Compression failure is not fatal - continue without compression
+         ! This handles cases where NetCDF4 is not available
+         call ESMF_LogWrite("Warning: Could not enable compression for variable: "//trim(fieldName), &
+            ESMF_LOGMSG_WARNING)
+      end if
+
       deallocate(dimIds, stat=stat)
       if (ESMF_LogFoundDeallocError(statusToCheck=stat, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, &
@@ -3255,7 +3305,7 @@ contains
       ncStatus = nf90_enddef(IOLayout % ncid)
       if (ncStatus /= NF90_NOERR) then
          call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
-            msg="Error ending NetCDF define mode", &
+            msg="Error ending NetCDF define mode: "//nf90_strerror(ncStatus), &
             line=__LINE__, &
             file=__FILE__, &
             rcToReturn=rc)
@@ -3515,7 +3565,7 @@ contains
 
       ! Create or open file
       if (.not. file_exists) then
-         localrc = nf90_create(trim(filename), NF90_CLOBBER, ncid)
+         localrc = nf90_create(trim(filename), ior(NF90_CLOBBER, NF90_NETCDF4), ncid)
       else
          localrc = nf90_open(trim(filename), NF90_WRITE, ncid)
       end if

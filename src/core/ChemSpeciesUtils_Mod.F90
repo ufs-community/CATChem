@@ -190,11 +190,9 @@ contains
       integer, intent(out) :: rc
 
       type(ErrorManagerType), pointer :: error_mgr
-      character(len=256) :: message
       integer :: i
 
       rc = CC_SUCCESS
-      error_mgr => container%get_error_manager()
 
       call get_species_indices(container, process_species, species_mapping, rc)
       if (rc /= CC_SUCCESS) return
@@ -202,9 +200,8 @@ contains
       ! Check for unmapped species and warn
       do i = 1, size(species_mapping)
          if (species_mapping(i) == 0) then
-            write(message, '(A,A,A)') 'Process species "', trim(process_species(i)), &
-               '" not found in chemical mechanism'
-            call CC_Warning(message, rc, 'create_species_mapping')
+            write(*, '(A,A,A)') 'CC_Warning: Process species "', trim(process_species(i)), &
+               '" not found in chemical mechanism at create_species_mapping'
          end if
       end do
 

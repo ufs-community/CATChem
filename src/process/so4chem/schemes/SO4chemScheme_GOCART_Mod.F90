@@ -195,11 +195,11 @@ contains
       real(fp), dimension(:,:,:), allocatable :: dms, so2, so4 !kg/kg
       real(fp), pointer, dimension(:,:,:) :: msa  !kg/kg
       real(fp), pointer, dimension(:,:,:) :: SU_dep  ! Sulfate Dry Deposition All Bins [kg/m2/s]
-      real(fp), pointer, dimension(:,:) :: SU_PSO2 ! vertical sum of SO2 Prod from DMS oxidation [kg/kg/s]
-      real(fp), pointer, dimension(:,:) :: SU_PMSA ! vertical sum of MSA Prod from DMS oxidation [kg/kg/s]
-      real(fp), pointer, dimension(:,:) :: SU_PSO4 ! vertical sum of SO4 Prod from all SO2 oxidation [kg/kg/s]
-      real(fp), pointer, dimension(:,:) :: SU_PSO4g ! vertical sum of SO4 Prod from gaseous SO2 oxidation [kg/kg/s]
-      real(fp), pointer, dimension(:,:) :: SU_PSO4aq ! vertical sum of SO4 Prod from aqueous SO2 oxidation [kg/kg/s]
+      real(fp), pointer, dimension(:,:) :: SU_PSO2 ! vertical sum of SO2 Prod from DMS oxidation [kg/m2/s]
+      real(fp), pointer, dimension(:,:) :: SU_PMSA ! vertical sum of MSA Prod from DMS oxidation [kg/m2/s]
+      real(fp), pointer, dimension(:,:) :: SU_PSO4 ! vertical sum of SO4 Prod from all SO2 oxidation [kg/m2/s]
+      real(fp), pointer, dimension(:,:) :: SU_PSO4g ! vertical sum of SO4 Prod from gaseous SO2 oxidation [kg/m2/s]
+      real(fp), pointer, dimension(:,:) :: SU_PSO4aq ! vertical sum of SO4 Prod from aqueous SO2 oxidation [kg/m2/s]
       real(fp), pointer, dimension(:,:,:) :: pso2  ! SO2 Prod from DMS oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pmsa  ! MSA Prod from DMS oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pso4  ! SO4 Prod from all SO2 oxidation [kg/kg/s]
@@ -346,14 +346,15 @@ contains
       end if
 
       !retrieve sulfate species concentrations
-      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS)
-      so2(1,1,:) = species_conc(num_layers:1:-1, nSO2)
-      so4(1,1,:) = species_conc(num_layers:1:-1, nSO4)
-      msa(1,1,:) = species_conc(num_layers:1:-1, nMSA)
       fMassMSA = species_mw_g(nMSA)
       fMassDMS = species_mw_g(nDMS)
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
+      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg 
+      so2(1,1,:) = species_conc(num_layers:1:-1, nSO2) * 1.0e-6_fp * fMassSO2 / AIRMW  ! ppm ==> kg/kg
+      so4(1,1,:) = species_conc(num_layers:1:-1, nSO4) * 1.0e-9_fp  !ug/kg ==> kg/kg
+      msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
+ 
 
       !call GOCART sulfate chemistry driver
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
@@ -370,11 +371,13 @@ contains
 
       !assign to output tendencies; remember to reverse the vertical layer back to original order
       if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
-         species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1)
+         species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassSO2  ! kg/kg ==> ppm 
+      else 
+         species_tendencies(:, nSO2) = species_conc(:, nSO2)  !keep SO2 unchanged.
       end if
-      species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1)
-      species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1)
-      species_tendencies(:, nDMS) = species_conc(:, nDMS) !!!TODO: DMS is unchanged for now since it is read in through monthly files. 
+      species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1) * 1.0e9_fp  !kg/kg ==> ug/kg
+      species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassMSA  ! kg/kg ==> ppm
+      species_tendencies(:, nDMS) = species_conc(:, nDMS)  !kg/kg ==> ug/kg !!!TODO: DMS is unchanged for now since it is read in through monthly files. 
       species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
       species_tendencies(:, nNO3) = species_conc(:, nNO3)
       species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
