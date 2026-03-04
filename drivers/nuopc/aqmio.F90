@@ -795,10 +795,10 @@ contains
 
       if (present(fieldNameList)) then
          do item = 1, size(fieldList)
-            if (present(compressLev)) then 
+            if (present(compressLev)) then
                call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
                   variableName=fieldNameList(item), timeSlice=timeSlice, compressLev=compressLev, rc=localrc)
-            else 
+            else
                call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
                   variableName=fieldNameList(item), timeSlice=timeSlice, rc=localrc)
             end if
@@ -809,13 +809,13 @@ contains
          end do
       else
          do item = 1, size(fieldList)
-            if (present(compressLev)) then 
+            if (present(compressLev)) then
                call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
                   timeSlice=timeSlice, compressLev=compressLev, rc=localrc)
-            else 
+            else
                call AQMIO_FieldAccess(IOComp, fieldList(item), "write", &
                   timeSlice=timeSlice, rc=localrc)
-            end if 
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, &
                file=__FILE__, &
@@ -1186,7 +1186,7 @@ contains
                      ungriddedLBound=ungriddedLBound, ungriddedUBound=ungriddedUBound, &
                      variableName=variableName, timeSlice=timeSlice, localDe=localDe, compressLev=compressLev, &
                      rc=localrc)
-               else 
+               else
                   call AQMIO_FieldWrite(is % IO, field, &
                      minIndexPDe(:,de), maxIndexPDe(:,de), &
                      minIndexPTile(:,tile), maxIndexPTile(:,tile), &
@@ -3242,7 +3242,7 @@ contains
          ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=CompressLev)
       else
          ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=0)
-      end if 
+      end if
       if (ncStatus /= NF90_NOERR) then
          ! Compression failure is not fatal - continue without compression
          ! This handles cases where NetCDF4 is not available

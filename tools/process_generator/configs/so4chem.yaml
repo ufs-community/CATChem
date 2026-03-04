@@ -22,6 +22,7 @@ process_behavior:
       - "so2"
       - "so4"
       - "msa"
+      - "dms_in"
   gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
   tendency_calculation: "rates" #is not doing anything now
   timestep_dependency: "independent" #is not doing anything now
@@ -58,6 +59,8 @@ schemes:
       - LWI
       - LAT
       - LON
+      - U10M  #U10M and V10M are for DMS emissions calculation
+      - V10M
 
 
     required_species_properties:
@@ -93,6 +96,9 @@ schemes:
       - name: "PSO4_from_aqueous_SO2_per_level"
         description: "sulfate production rate from aqueous SO2 per level"
         units: "kg/kg/s"
+      - name: "DMS_emission_flux"
+        description: "DMS emission flux at the surface"
+        units: "kg/m2/s"
 
 
 diagnostics:

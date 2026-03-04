@@ -1,5 +1,5 @@
 # SO4chem Process CMakeLists.txt
-# Generated on: 2026-02-11T13:30:17.237668
+# Generated on: 2026-03-03T18:15:44.467807
 # Author: Wei Li
 # Description: Process for computing chemical production of sulfate from SO2 oxidation
 
@@ -130,7 +130,7 @@ message(STATUS "Configured SO4chem process:")
 message(STATUS "  Process type: chemistry")
 message(STATUS "  Number of schemes: 1")
 message(STATUS "  Default scheme: ")
-message(STATUS "  Number of species: 7")
+message(STATUS "  Number of species: 8")
 message(STATUS "  Has size bins: No")
 message(STATUS "  Multiphase: No")
 message(STATUS "  Generate tests: Yes")

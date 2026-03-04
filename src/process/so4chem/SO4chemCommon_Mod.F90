@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! so4chem process and its schemes.
 !!
-!! Generated on: 2026-02-11T13:30:17.068776
+!! Generated on: 2026-03-03T18:15:44.287860
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -79,8 +79,8 @@ module SO4chemCommon_Mod
       logical :: update_so2 = .true.  ! whether to update SO2 concentration based on chemical production/loss
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 14
-      character(len=32) :: required_met_fields(14)
+      integer :: n_required_met_fields = 16
+      character(len=32) :: required_met_fields(16)
 
    contains
       procedure, public :: validate => validate_gocart_config
@@ -310,14 +310,15 @@ contains
       logical :: found
 
       ! Explicit species list from configuration
-      character(len=32), parameter :: EXPLICIT_SPECIES(7) = [ &
+      character(len=32), parameter :: EXPLICIT_SPECIES(8) = [ &
          'h2o2                            ', &
          'oh                              ', &
          'no3                             ', &
          'dms                             ', &
          'so2                             ', &
          'so4                             ', &
-         'msa                             ' ]
+         'msa                             ', &
+         'dms_in                          ' ]
 
       if (.not. associated(chem_state)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
@@ -326,7 +327,7 @@ contains
       end if
 
       ! Set number of species from explicit list
-      this%so4chem_config%n_species = 7
+      this%so4chem_config%n_species = 8
 
       ! Deallocate existing arrays if allocated
       if (allocated(this%so4chem_config%species_names)) then

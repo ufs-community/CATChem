@@ -82,6 +82,11 @@ dms:
   henry_k0: 0.48
   henry_cr: 3100.0
   mie_name: SU
+dms_in:
+  name: dms_in
+  description: Dimethyl sulfide in ocean water (climatology for emissions calculation)
+  mw_g: 62.13
+  radius: 8.7e-2
 msa:
   name: msa
   description: methanesulphonic acid

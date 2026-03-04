@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the so4chem process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2026-02-11T13:30:17.367945
+!! Generated on: 2026-03-03T18:15:44.599765
 
 program test_so4chem_integration
    use precision_mod, only: fp

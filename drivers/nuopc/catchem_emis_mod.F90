@@ -563,9 +563,8 @@ contains
                   do k = 1, nz
                      if (emission_flux(i,j,k) > 0.0_fp) then
                         if (category_name == 'dms' .and. field_name == 'dms') then
-                           ! Special case for DMS read in with nmol/L ==> ug/kg (Note: this is in water, not in air, so we use water density for conversion.)
-                           !species_tendency(i,j,k) = emission_flux(i,j,k) * chem_state%ChemSpecies(species_idx)%mw_g / met_state%AIRDEN(i,j,k)
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * chem_state%ChemSpecies(species_idx)%mw_g / 1000.0_fp  ! convert from nmol/L to ug/kg using water density ~1000 kg/m3
+                           ! Special case for DMS read in with nmol/L unit (Note: this is in water)
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor
                         else if (trim(category_name) == 'gmi') then
                            if (trim(field_name) == 'oh' .or. trim(field_name) == 'OH') then
                               ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).

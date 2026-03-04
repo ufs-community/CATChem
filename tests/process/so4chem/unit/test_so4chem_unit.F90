@@ -3,7 +3,7 @@
 !!
 !! This file contains unit tests for the so4chem process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2026-02-11T13:30:17.270404
+!! Generated on: 2026-03-03T18:15:44.509567
 
 program test_so4chem_unit
    use testing_mod, only: assert, assert_close

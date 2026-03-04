@@ -1,5 +1,5 @@
 # SO4chem Schemes CMakeLists.txt
-# Generated on: 2026-02-11T13:30:17.252161
+# Generated on: 2026-03-03T18:15:44.490796
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -25,6 +25,8 @@
 #   - LWI
 #   - LAT
 #   - LON
+#   - U10M
+#   - V10M
 
 # Scheme validation targets
 add_custom_target(

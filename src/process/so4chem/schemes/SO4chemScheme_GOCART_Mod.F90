@@ -25,7 +25,7 @@ module SO4chemScheme_GOCART_Mod
    use precision_mod, only: fp, rae
    use SO4chemCommon_Mod, only: SO4chemSchemeGOCARTConfig
    use error_mod, only: CC_SUCCESS, CC_Error
-   use GOCART2G_Process, only: SulfateUpdateOxidants, SulfateChemDriver
+   use GOCART2G_Process, only: SulfateUpdateOxidants, SulfateChemDriver, DMSemission
 
    implicit none
    private
@@ -71,7 +71,9 @@ contains
    !! @param[in]  pmid    PMID field [appropriate units]
    !! @param[in]  t    T field [appropriate units]
    !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  u10m    U10M field [appropriate units]
    !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
    !! @param[in]  z    Z field [appropriate units]
    !! @param[in]  z0h    Z0H field [appropriate units]
    !! @param[in]  species_mw_g    Species mw_g property
@@ -82,6 +84,7 @@ contains
    !! @param[inout] PSO4_from_gaseous_SO2_per_level    sulfate production rate from gaseous SO2 per level [kg/kg/s] (num_layers)
    !! @param[inout] PSO4_from_aqueous_SO2_per_level    sulfate production rate from aqueous SO2 per level [kg/kg/s] (num_layers)
    !! @param[inout] PSO2_from_DMS_per_level    SO2 production rate from DMS per level [kg/kg/s] (num_layers)
+   !! @param[inout] DMS_emission_flux    DMS emission flux at the surface [kg/m2/s]
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_gocart( &
       num_layers, &
@@ -110,7 +113,9 @@ contains
       pmid, &
       t, &
       tstep, &
+      u10m, &
       ustar, &
+      v10m, &
       z, &
       z0h, &
       species_mw_g, &
@@ -120,6 +125,7 @@ contains
       Production_rate_per_species_per_level, &
       PSO4_from_gaseous_SO2_per_level, &
       PSO4_from_aqueous_SO2_per_level, &
+      DMS_emission_flux, &
       diagnostic_species_id &
       )
 
@@ -150,7 +156,9 @@ contains
       real(fp), intent(in) :: pmid(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
+      real(fp), intent(in) :: u10m  ! Surface field - scalar
       real(fp), intent(in) :: ustar  ! Surface field - scalar
+      real(fp), intent(in) :: v10m  ! Surface field - scalar
       real(fp), intent(in) :: z(num_layers+1)  ! Edge field - requires nz+1 dimensions
       real(fp), intent(in) :: z0h  ! Surface field - scalar
       real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
@@ -160,13 +168,14 @@ contains
       real(fp), intent(inout), optional :: Production_rate_per_species_per_level(:,:)
       real(fp), intent(inout), optional :: PSO4_from_gaseous_SO2_per_level(:)
       real(fp), intent(inout), optional :: PSO4_from_aqueous_SO2_per_level(:)
+      real(fp), intent(inout), optional :: DMS_emission_flux
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
 
       ! Local variables
       integer :: klid = 1 !since the layer is reversed, we give 1 here, which is the top layer
       integer :: diag_idx  ! For diagnostic species indexing
       integer :: species_idx
-      integer :: nDMS= -1, nSO2= -1, nSO4= -1, nMSA= -1 ! index position of sulfates
+      integer :: nDMS= -1, nSO2= -1, nSO4= -1, nMSA= -1, nDMS_IN= -1 ! index position of sulfates
       integer :: nOH= -1, nNO3= -1, nH2O2= -1 ! index position of oxidants
       integer :: nymd, nhms   !YYYYMMDD, HHMMSS time formats
       real(fp), allocatable :: latRad(:,:), lonRad(:,:)
@@ -184,13 +193,15 @@ contains
       real(fp), pointer :: GOCART_PBLH(:,:)
       real(fp), pointer :: GOCART_HFLUX(:,:)
       real(fp), pointer :: GOCART_Z0H(:,:)
+      real(fp), pointer :: GOCART_U10M(:,:)
+      real(fp), pointer :: GOCART_V10M(:,:)
       !some chem variables to be populated
       !Monthly climatology of these three oxidenats from GMI is read in and we store them in chem_state arrays.
       real(fp), pointer, dimension(:,:,:) :: oh_clim    !volume mixing ratio
       real(fp), pointer, dimension(:,:,:) :: h2o2_clim  ![# cm-3]
       real(fp), pointer, dimension(:,:,:) :: no3_clim   ![# cm-3]
       !OH and NO3 will go through diurnal variation scaling based on solar zenith angle, while H2O2 is reset to
-      !climatology every three hours
+      !climatology every three hours and every new day
       real(fp), dimension(:,:,:), allocatable :: xoh, xno3, xh2o2   !kg/kg
       real(fp), dimension(:,:,:), allocatable :: dms, so2, so4 !kg/kg
       real(fp), pointer, dimension(:,:,:) :: msa  !kg/kg
@@ -200,12 +211,14 @@ contains
       real(fp), pointer, dimension(:,:) :: SU_PSO4 ! vertical sum of SO4 Prod from all SO2 oxidation [kg/m2/s]
       real(fp), pointer, dimension(:,:) :: SU_PSO4g ! vertical sum of SO4 Prod from gaseous SO2 oxidation [kg/m2/s]
       real(fp), pointer, dimension(:,:) :: SU_PSO4aq ! vertical sum of SO4 Prod from aqueous SO2 oxidation [kg/m2/s]
+      real(fp), pointer, dimension(:,:,:) :: SU_emis   ! DMS emissions in kg/m2/s
       real(fp), pointer, dimension(:,:,:) :: pso2  ! SO2 Prod from DMS oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pmsa  ! MSA Prod from DMS oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pso4  ! SO4 Prod from all SO2 oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pso4g  ! SO4 Prod from gaseous SO2 oxidation [kg/kg/s]
       real(fp), pointer, dimension(:,:,:) :: pso4aq  ! SO4 Prod from aqueous SO2 oxidation [kg/kg/s]
       real(fp), dimension(:,:), allocatable :: drydepfrequency
+      real(fp), dimension(:,:), allocatable :: dmso_conc !DMS source concentration in ocean water [nmol/L]
       !some clock variables for oxidants updates
       logical, save :: firsttime = .true.
       integer, save :: nymd_last = -1  ! NYMD of last H2O2 update
@@ -238,6 +251,8 @@ contains
             nSO4 = species_idx
          else if (species_short_name(species_idx) == 'DMS' .or. species_short_name(species_idx) == 'dms') then
             nDMS = species_idx
+         else if (species_short_name(species_idx) == 'DMS_IN' .or. species_short_name(species_idx) == 'dms_in') then
+            nDMS_IN = species_idx
          else if (species_short_name(species_idx) == 'MSA' .or. species_short_name(species_idx) == 'msa') then
             nMSA = species_idx
          else if (species_short_name(species_idx) == 'OH' .or. species_short_name(species_idx) == 'oh') then
@@ -260,9 +275,9 @@ contains
       allocate(oh_clim(1,1,num_layers), h2o2_clim(1,1,num_layers), no3_clim(1,1,num_layers), &
          xoh(1,1,num_layers), xno3(1,1,num_layers), xh2o2(1,1,num_layers), &
          dms(1,1,num_layers), so2(1,1,num_layers), so4(1,1,num_layers), msa(1,1,num_layers), &
-         SU_dep(1, 1, num_species), SU_PSO2(1, 1), SU_PMSA(1, 1), SU_PSO4(1, 1), SU_PSO4g(1, 1), SU_PSO4aq(1, 1), &
+         SU_dep(1, 1, num_species), SU_emis(1, 1, num_species), SU_PSO2(1, 1), SU_PMSA(1, 1), SU_PSO4(1, 1), SU_PSO4g(1, 1), SU_PSO4aq(1, 1), &
          pso2(1, 1, num_layers), pmsa(1, 1, num_layers), pso4(1, 1, num_layers), pso4g(1, 1, num_layers), &
-         pso4aq(1, 1, num_layers), drydepfrequency(1, 1), latRad(1,1), lonRad(1,1))
+         pso4aq(1, 1, num_layers), drydepfrequency(1, 1), latRad(1,1), lonRad(1,1), dmso_conc(1,1))
 
 
       !retrieve climatology fields; remember to reverse the vertical layer (TODO: double check the input files for this)
@@ -309,6 +324,8 @@ contains
          pblh,            &
          pmid,            &
          hflux,           &
+         u10m,            &
+         v10m,            &
          z0h,             &
          GOCART_tmpu,     &
          GOCART_RHOA,     &
@@ -320,6 +337,8 @@ contains
          GOCART_PBLH,     &
          GOCART_PRESS,    &
          GOCART_HFLUX,    &
+         GOCART_U10M,    &
+         GOCART_V10M,    &
          GOCART_Z0H)
 
       !update oxidants based on climatology and diurnal cycle
@@ -350,11 +369,22 @@ contains
       fMassDMS = species_mw_g(nDMS)
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
-      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg 
+      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg
       so2(1,1,:) = species_conc(num_layers:1:-1, nSO2) * 1.0e-6_fp * fMassSO2 / AIRMW  ! ppm ==> kg/kg
       so4(1,1,:) = species_conc(num_layers:1:-1, nSO4) * 1.0e-9_fp  !ug/kg ==> kg/kg
       msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
- 
+
+      !run DMS emission scheme
+      dmso_conc = species_conc(1, nDMS_IN) !in [nmol/L]
+      SU_emis = 0.0_fp
+      call DMSemission (num_layers, tstep, g0, GOCART_TMPU, GOCART_U10M, GOCART_V10M, GOCART_LWI, &
+         GOCART_DELP, fMassDMS, DMSO_CONC, dms, SU_emis, ndms, rc)
+      if (RC /= 0) then
+         ErrMsg = 'Error in compute_gocart: Failed in GOCART DMSemission.'
+         !call CC_Error(trim(ErrMsg), RC, thisLoc)
+         write(*,'(A)') trim(ErrMsg)
+         return
+      end if
 
       !call GOCART sulfate chemistry driver
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
@@ -371,17 +401,17 @@ contains
 
       !assign to output tendencies; remember to reverse the vertical layer back to original order
       if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
-         species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassSO2  ! kg/kg ==> ppm 
-      else 
+         species_tendencies(:, nSO2) = so2(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassSO2  ! kg/kg ==> ppm
+      else
          species_tendencies(:, nSO2) = species_conc(:, nSO2)  !keep SO2 unchanged.
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1) * 1.0e9_fp  !kg/kg ==> ug/kg
       species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassMSA  ! kg/kg ==> ppm
-      species_tendencies(:, nDMS) = species_conc(:, nDMS)  !kg/kg ==> ug/kg !!!TODO: DMS is unchanged for now since it is read in through monthly files. 
+      species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) * 1.0e9_fp  ! kg/kg ==> ug/kg
+      species_tendencies(:, nDMS_IN) = species_conc(:, nDMS_IN)  !Note: DMS in ocean is unchanged since it is read in through monthly files.
       species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
       species_tendencies(:, nNO3) = species_conc(:, nNO3)
       species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
-
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
@@ -410,6 +440,10 @@ contains
          PSO4_from_aqueous_SO2_per_level = PSO4aq(1,1,num_layers:1:-1)
       end if
 
+      if (present(DMS_emission_flux)) then
+         DMS_emission_flux = SU_emis(1,1,nDMS)
+      end if
+
 
       !cleanup pointers
       if (associated(GOCART_TMPU)) deallocate(GOCART_TMPU)
@@ -422,6 +456,8 @@ contains
       if (associated(GOCART_USTAR)) deallocate(GOCART_USTAR)
       if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
       if (associated(GOCART_HFLUX)) deallocate(GOCART_HFLUX)
+      if (associated(GOCART_U10M)) deallocate(GOCART_U10M)
+      if (associated(GOCART_V10M)) deallocate(GOCART_V10M)
       if (associated(GOCART_Z0H)) deallocate(GOCART_Z0H)
       if (associated(SU_dep)) deallocate(SU_dep)
       if (associated(SU_PSO2)) deallocate(SU_PSO2)
@@ -429,6 +465,7 @@ contains
       if (associated(SU_PSO4)) deallocate(SU_PSO4)
       if (associated(SU_PSO4g)) deallocate(SU_PSO4g)
       if (associated(SU_PSO4aq)) deallocate(SU_PSO4aq)
+      if (associated(SU_emis)) deallocate(SU_emis)
       if (associated(pso2)) deallocate(pso2)
       if (associated(pmsa)) deallocate(pmsa)
       if (associated(pso4)) deallocate(pso4)
@@ -439,7 +476,7 @@ contains
       if (associated(no3_clim)) deallocate(no3_clim)
       if (associated(h2o2_clim)) deallocate(h2o2_clim)
       !cleanup array allocations
-      deallocate( xoh, xno3, xh2o2, dms, so2, so4, drydepfrequency, latRad, lonRad)
+      deallocate( xoh, xno3, xh2o2, dms, so2, so4, drydepfrequency, latRad, lonRad, dmso_conc)
 
    end subroutine compute_gocart
 
@@ -479,6 +516,8 @@ contains
       pblh,            &
       pmid,            &
       hflux,           &
+      u10m,            &
+      v10m,            &
       z0h,             &
       GOCART_tmpu,     &
       GOCART_RHOA,     &
@@ -490,6 +529,8 @@ contains
       GOCART_PBLH,     &
       GOCART_PRESS,    &
       GOCART_HFLUX,    &
+      GOCART_U10M,    &
+      GOCART_V10M,    &
       GOCART_Z0H)
 
 
@@ -508,6 +549,8 @@ contains
       REAL(fp),  intent(in), target               :: ustar                                 ! friction speed [m/sec]
       REAL(fp),  intent(in), target              :: pblh                                  ! PBL height [m]
       REAL(fp),  intent(in), target              :: hflux                                 ! sfc. sens. heat flux [W m-2]
+      REAL(fp),  intent(in), target              :: u10m                                  ! 10m wind speed [m/sec]
+      REAL(fp),  intent(in), target              :: v10m                                  ! 10m wind speed [m/sec]
       REAL(fp),  intent(in), target              :: z0h                                   ! rough height, sens. heat [m]
 
       ! INPUT/OUTPUTS
@@ -521,6 +564,8 @@ contains
       REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)               !< friction speed [m/sec]
       REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)                !< PBL height [m]
       REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
+      REAL(fp), intent(inout), pointer :: GOCART_U10M(:,:)               !< 10m wind speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_V10M(:,:)               !< 10m wind speed [m/sec]
       REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
 
       ! OUTPUTS - Add error handling back in late
@@ -539,6 +584,8 @@ contains
       allocate(GOCART_USTAR(1, 1))
       allocate(GOCART_PBLH(1, 1))
       allocate(GOCART_HFLUX(1, 1))
+      allocate(GOCART_U10M(1, 1))
+      allocate(GOCART_V10M(1, 1))
       allocate(GOCART_Z0H(1, 1))
 
       !Note: GOCART scheme expects vertical levels in reverse order (top to bottom)
@@ -555,6 +602,8 @@ contains
       ! friction speed [m/sec]
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
+      GOCART_U10M = u10m       ! 10m wind speed [m/sec]
+      GOCART_V10M = v10m       ! 10m wind speed [m/sec]
       GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
 
 

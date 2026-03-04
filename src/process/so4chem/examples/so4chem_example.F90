@@ -4,7 +4,7 @@
 !! This program demonstrates how to use the so4chem process
 !! in a standalone application or host model integration.
 !!
-!! Generated on: 2026-02-11T13:30:17.458111
+!! Generated on: 2026-03-03T18:15:44.689495
 !! Author: Wei Li
 
 program so4chem_example
@@ -45,7 +45,7 @@ program so4chem_example
    write(output_unit, '(A)') ""
 
    ! Step 1: Initialize state manager
-   call state_manager%init(n_levels, n_columns, 7, rc)
+   call state_manager%init(n_levels, n_columns, 8, rc)
    if (rc /= CC_SUCCESS) then
       write(error_unit, *) 'ERROR: Failed to initialize state manager'
       stop 1
@@ -196,6 +196,8 @@ subroutine setup_chemical_species(state_manager, error_handler)
    if (error_handler%has_error()) return
    call state_manager%add_species('msa', error_handler)
    if (error_handler%has_error()) return
+   call state_manager%add_species('dms_in', error_handler)
+   if (error_handler%has_error()) return
 
    ! Initialize species concentrations
    call state_manager%allocate_species_arrays(error_handler)
@@ -318,6 +320,14 @@ subroutine setup_initial_conditions(state_manager, error_handler)
       do i_lev = 1, n_levels
          initial_concentration = 1.0e-9_fp  ! Default initial concentration
          call state_manager%set_species_concentration('msa', &
+            i_col, i_lev, initial_concentration, error_handler)
+         if (error_handler%has_error()) return
+      end do
+   end do
+   do i_col = 1, n_columns
+      do i_lev = 1, n_levels
+         initial_concentration = 1.0e-9_fp  ! Default initial concentration
+         call state_manager%set_species_concentration('dms_in', &
             i_col, i_lev, initial_concentration, error_handler)
          if (error_handler%has_error()) return
       end do

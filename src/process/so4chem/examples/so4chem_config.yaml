@@ -1,5 +1,5 @@
 # Example configuration for so4chem process
-# Generated on: 2026-02-11T13:30:17.522520
+# Generated on: 2026-03-03T18:15:44.713003
 # Author: Wei Li
 
 process:
@@ -43,6 +43,10 @@ species:
     molecular_weight: 1.0  # g/mol (update with actual values)
     properties:
       is_chemistry: true
+  - name: "dms_in"
+    molecular_weight: 1.0  # g/mol (update with actual values)
+    properties:
+      is_chemistry: true
 
 
 
@@ -73,6 +77,8 @@ schemes:
       - "LWI"
       - "LAT"
       - "LON"
+      - "U10M"
+      - "V10M"
 
     # Scheme-specific diagnostic configuration
     diagnostics:
