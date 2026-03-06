@@ -842,8 +842,6 @@ contains
          end if
          !assign to fptr4d_rev
          fptr4d_rev = real(cc_conc, ESMF_KIND_R8)
-         !debug
-         write(*,*) '!!!!!!!!!!!Test transfer array fptr4d_rev:', sum(fptr4d_rev(:,:,:,:))
 
          ! Reverse vertical layers
          do v = 1, nv
