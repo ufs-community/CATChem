@@ -40,7 +40,7 @@ dms:
     long_name: "Dimethyl Sulfide"
     units: "nmol/l"
     scale: [1.0]
-    map: ["dms"]
+    map: ["dms_in"]
 # point:
 #   NO:
 #     long_name: "Nitrogen Oxide"
