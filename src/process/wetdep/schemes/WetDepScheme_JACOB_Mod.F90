@@ -363,7 +363,7 @@ contains
                   if ( f_rainout > zero ) then
                      ! -- washout from precipitation entering from the top
                      qdwn = pdwn(km1)
-                     !TODO: is reevap available in GFS? We calcualte it for now in met_state module.
+                     !TODO: is reevap available in GFS? We calculate it for now in met_state module.
                      reevap(k) = max(reevap(k), 0e+0_fp)
                   else
                      ! -- washout from precipitation leaving through the bottom

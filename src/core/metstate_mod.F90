@@ -1214,7 +1214,7 @@ CONTAINS
 
       character(len=256) :: thisLoc
       integer :: nx, ny, nz, i, j, k, nlanduse
-      real(fp) :: airden, rh, air_mass 
+      real(fp) :: airden, rh, air_mass
       real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
       real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
       !some variables used for reevaporation calculations
@@ -1596,12 +1596,12 @@ CONTAINS
                      ! Mixed phase - linear interpolation
                      frac_liq = (this%T(i,j,k) - T_ice) / (T_liq - T_ice)
                      C_evap   = frac_liq * C_evap_liq + &
-                                 (1. - frac_liq) * C_evap_ice
+                        (1. - frac_liq) * C_evap_ice
                   else
                      ! Pure ice
                      C_evap = C_evap_ice
                   endif
-                  ! 4. SUNDQVIST RH TERM
+                  ! 4. SUNDQVIST (1988) RH TERM
                   RH_term = MAX(0., 1. - RH/b0)   ! dimensionless
 
                   ! 5. LIQUID EVAPORATION
@@ -1611,8 +1611,8 @@ CONTAINS
                      ! kg/m²/s version: C_evap * RH_term * sqrt(flux) * air_mass
                      ! kg/kg/s version: air_mass cancels → simpler
                      reevap_liq = C_evap_liq              &
-                                 * RH_term                 &   ! dimensionless
-                                 * sqrt(flux_liq)              ! (kg/m²/s)^0.5
+                        * RH_term                 &   ! dimensionless
+                        * sqrt(flux_liq)              ! (kg/m²/s)^0.5
 
                      ! Physical constraint: cannot exceed available flux
                      ! Convert flux to kg/kg/s for comparison
@@ -1626,8 +1626,8 @@ CONTAINS
                   !    Only above T_ice threshold
                   if(flux_ice .gt. 0. .and. this%T(i,j,k) .gt. T_ice) then
                      reevap_ice = C_evap_ice              &
-                                 * RH_term                 &
-                                 * sqrt(flux_ice)
+                        * RH_term                 &
+                        * sqrt(flux_ice)
 
                      reevap_ice = MIN(reevap_ice, flux_ice/air_mass)
                      reevap_ice = MAX(0., reevap_ice)
@@ -1641,7 +1641,7 @@ CONTAINS
                   ! Final safety constraint
                   this%REEVAPLS(i,j,k) = MAX(0., this%REEVAPLS(i,j,k))
                   this%REEVAPLS(i,j,k) = MIN(this%REEVAPLS(i,j,k), flux_tot/air_mass)
-   
+
                enddo
             enddo
          enddo
