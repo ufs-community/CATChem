@@ -87,6 +87,12 @@ contains
 {% endif %}
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}
+   !! Persistent state variables (per-column):
+{% for var in all_persistent_state_variables[scheme.name] %}
+   !! @param[inout] {{ var.clean_name }}    {{ var.description }}
+{% endfor %}
+{% endif %}
 {% if config.diagnostics %}
 {% for diag in config.diagnostics %}
 {% set diag_name = diag['name'] if diag is mapping else diag %}
@@ -144,7 +150,8 @@ contains
 {% if config.diagnostics or scheme.scheme_diagnostics %}
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
 {% endif %}
-   pure subroutine compute_{{ scheme.name }}( &
+{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}   subroutine compute_{{ scheme.name }}( &{% else %}   pure subroutine compute_{{ scheme.name }}( &{% endif %}
+
       num_layers, &
       num_species, &
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
@@ -180,7 +187,8 @@ contains
 {% endif %}
       species_conc, &
       species_tendencies{% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}, &
-      is_gas{% endif %}{% if config.diagnostics %}{% for diag in config.diagnostics %}, &
+      is_gas{% endif %}{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}{% for var in all_persistent_state_variables[scheme.name] %}, &
+      {{ var.clean_name }}{% endfor %}{% endif %}{% if config.diagnostics %}{% for diag in config.diagnostics %}, &
       {{ diag['name'] if diag is mapping else diag }}{% endfor %}{% endif %}{% if scheme.scheme_diagnostics %}{% for diag in scheme.scheme_diagnostics %}, &
       {{ diag['name'] if diag is mapping else diag }}{% endfor %}{% endif %}{% if config.diagnostics or scheme.scheme_diagnostics %}, &
       diagnostic_species_id{% endif %} &
@@ -266,6 +274,13 @@ contains
       real(fp), intent(in) :: species_conc(num_layers, num_species)
 {% endif %}
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
+{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}
+
+      ! Per-column persistent state variables
+{% for var in all_persistent_state_variables[scheme.name] %}
+      {{ var.fortran_type }}, intent(inout){% if var.is_allocatable %}, allocatable{% endif %} :: {{ var.clean_name }}{% if var.dimensions %}{{ var.dimensions }}{% endif %}  ! {{ var.description }}
+{% endfor %}
+{% endif %}
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
       logical, intent(in) :: is_gas(num_species)  ! Species type flags (true=gas, false=aerosol)
 {% endif %}

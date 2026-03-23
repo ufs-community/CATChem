@@ -80,6 +80,11 @@ contains
    !! @param[in]  species_short_name    Species short_name property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! Persistent state variables (per-column):
+   !! @param[inout] firsttime    flag for first time step
+   !! @param[inout] nymd_last    last day of H2O2 update
+   !! @param[inout] nhms_last_recycle    last time step of H2O2 recycle
+   !! @param[inout] xh2o2_init    H2O2 column initialization
    !! @param[inout] PSO4_from_SO2_per_level    total sulfate production rate from SO2 per level [kg/kg/s] (num_layers)
    !! @param[inout] PSO4_from_gaseous_SO2_per_level    sulfate production rate from gaseous SO2 per level [kg/kg/s] (num_layers)
    !! @param[inout] PSO4_from_aqueous_SO2_per_level    sulfate production rate from aqueous SO2 per level [kg/kg/s] (num_layers)
@@ -122,6 +127,10 @@ contains
       species_short_name, &
       species_conc, &
       species_tendencies, &
+      firsttime, &
+      nymd_last, &
+      nhms_last_recycle, &
+      xh2o2_init, &
       Production_rate_per_species_per_level, &
       PSO4_from_gaseous_SO2_per_level, &
       PSO4_from_aqueous_SO2_per_level, &
@@ -165,6 +174,11 @@ contains
       character(len=32), intent(in) :: species_short_name(:)  ! Species short_name property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
+      ! Per-column persistent state variables
+      logical, intent(inout) :: firsttime  ! flag for first time step
+      integer, intent(inout) :: nymd_last  ! last day of H2O2 update
+      integer, intent(inout) :: nhms_last_recycle  ! last time step of H2O2 recycle
+      real(fp), intent(inout), allocatable :: xh2o2_init(:)  ! H2O2 column initialization
       real(fp), intent(inout), optional :: Production_rate_per_species_per_level(:,:)
       real(fp), intent(inout), optional :: PSO4_from_gaseous_SO2_per_level(:)
       real(fp), intent(inout), optional :: PSO4_from_aqueous_SO2_per_level(:)
@@ -219,11 +233,8 @@ contains
       real(fp), pointer, dimension(:,:,:) :: pso4aq  ! SO4 Prod from aqueous SO2 oxidation [kg/kg/s]
       real(fp), dimension(:,:), allocatable :: drydepfrequency
       real(fp), dimension(:,:), allocatable :: dmso_conc !DMS source concentration in ocean water [nmol/L]
-      !some clock variables for oxidants updates
-      logical, save :: firsttime = .true.
-      integer, save :: nymd_last = -1  ! NYMD of last H2O2 update
-      integer, save :: nhms_last_recycle = -1  ! NHMS of last H2O2 recycle
-      real(fp), allocatable, save :: xh2o2_init(:,:,:) ! initial H2O2 from last time step
+      ! h2o2_init is reused from last time step
+      real(fp), allocatable :: xh2o2_init_gocart(:,:,:) ! initial H2O2 from last time step
       logical :: recycle_h2o2
       !error information
       integer :: RC
@@ -273,7 +284,7 @@ contains
 
       !allocate arrays
       allocate(oh_clim(1,1,num_layers), h2o2_clim(1,1,num_layers), no3_clim(1,1,num_layers), &
-         xoh(1,1,num_layers), xno3(1,1,num_layers), xh2o2(1,1,num_layers), &
+         xoh(1,1,num_layers), xno3(1,1,num_layers), xh2o2(1,1,num_layers), xh2o2_init_gocart(1,1,num_layers), &
          dms(1,1,num_layers), so2(1,1,num_layers), so4(1,1,num_layers), msa(1,1,num_layers), &
          SU_dep(1, 1, num_species), SU_emis(1, 1, num_species), SU_PSO2(1, 1), SU_PMSA(1, 1), SU_PSO4(1, 1), SU_PSO4g(1, 1), SU_PSO4aq(1, 1), &
          pso2(1, 1, num_layers), pmsa(1, 1, num_layers), pso4(1, 1, num_layers), pso4g(1, 1, num_layers), &
@@ -291,9 +302,9 @@ contains
          nhms_last_recycle = nhms
          !allocate and initialize xh2o2_init to climatology for the first time step
          if (.not. allocated(xh2o2_init)) then
-            allocate(xh2o2_init(1,1,num_layers))
+            allocate(xh2o2_init(num_layers))
          end if
-         xh2o2_init = h2o2_clim  ! initialize H2O2 to climatology at first time step
+         xh2o2_init = h2o2_clim(1,1,:)  ! initialize H2O2 to climatology at first time step
          firsttime = .false.
       end if
 
@@ -306,7 +317,6 @@ contains
 
       recycle_h2o2 = .false.
       !check if first time step or 3 hours have passed since last H2O2 recycle using actual time
-      !firsttime will be false after the first grid point of the first time step. That is why we need to check first time step here too.
       if ((nhms == nhms_last_recycle) .or. (nhms - nhms_last_recycle >= 30000)) then
          nhms_last_recycle = nhms
          recycle_h2o2 = .true.
@@ -342,7 +352,7 @@ contains
          GOCART_Z0H)
 
       !update oxidants based on climatology and diurnal cycle
-      xoh = 0.0_fp; xno3 = 0.0_fp; xh2o2 = xh2o2_init
+      xoh = 0.0_fp; xno3 = 0.0_fp; xh2o2_init_gocart(1,1,:)= xh2o2_init; xh2o2 = xh2o2_init_gocart
       latRad(1,1) = lat * deg2rad; lonRad(1,1) = lon * deg2rad
       call SulfateUpdateOxidants(nymd, nhms, lonRad, latRad, GOCART_rhoa, num_layers, tstep, nymd_last, &
          undefval, rad2deg, AVO, PI, AIRMW, oh_clim, no3_clim, h2o2_clim, xoh, xno3, xh2o2, recycle_h2o2, RC)
@@ -392,7 +402,7 @@ contains
       !This is to ensure dry deposition does not run twice for SO2 and SO4
       GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
-         nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
+         nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init_gocart, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
          GOCART_rhoa, GOCART_HGHTE, GOCART_USTAR, GOCART_HFLUX, GOCART_LWI, GOCART_PBLH, GOCART_Z0H, SU_dep, SU_PSO2, SU_PMSA, SU_PSO4, SU_PSO4g, &
          SU_PSO4aq, pso2, pmsa, pso4, pso4g, pso4aq, drydepfrequency, RC)
 
@@ -402,6 +412,9 @@ contains
          write(*,'(A)') trim(ErrMsg)
          return
       end if
+
+      !save H2O2 initialization for next time step
+      xh2o2_init = xh2o2_init_gocart(1,1,:)
 
       !assign to output tendencies; remember to reverse the vertical layer back to original order
       if (params%update_so2) then !since the chem driver has drydep in it, not sure if we should update so2 chem array here.
@@ -458,7 +471,6 @@ contains
       if (associated(GOCART_PRESS)) deallocate(GOCART_PRESS)
       if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
       if (associated(GOCART_USTAR)) deallocate(GOCART_USTAR)
-      if (associated(GOCART_LWI)) deallocate(GOCART_LWI)
       if (associated(GOCART_HFLUX)) deallocate(GOCART_HFLUX)
       if (associated(GOCART_U10M)) deallocate(GOCART_U10M)
       if (associated(GOCART_V10M)) deallocate(GOCART_V10M)
@@ -480,7 +492,7 @@ contains
       if (associated(no3_clim)) deallocate(no3_clim)
       if (associated(h2o2_clim)) deallocate(h2o2_clim)
       !cleanup array allocations
-      deallocate( xoh, xno3, xh2o2, dms, so2, so4, drydepfrequency, latRad, lonRad, dmso_conc)
+      deallocate( xoh, xno3, xh2o2, xh2o2_init_gocart, dms, so2, so4, drydepfrequency, latRad, lonRad, dmso_conc)
 
    end subroutine compute_gocart
 
@@ -509,7 +521,7 @@ contains
    !!
    !! \ingroup core_modules
    !!!>
-   pure subroutine PrepMetVarsForGOCART(km,              &
+   subroutine PrepMetVarsForGOCART(km,              &
       tmpu,            &
       rhoa,            &
       hghte,           &

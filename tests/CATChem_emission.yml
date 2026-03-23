@@ -22,7 +22,7 @@ anthro:
 gmi:
   oh:
     long_name: "Hydroxyl Radical"
-    units: "mol/mol"
+    units: "molec/cm3"
     scale: [1.0]
     map: ["oh"]
   h2o2:
@@ -40,7 +40,7 @@ dms:
     long_name: "Dimethyl Sulfide"
     units: "nmol/l"
     scale: [1.0]
-    map: ["dms"]
+    map: ["dms_in"]
 # point:
 #   NO:
 #     long_name: "Nitrogen Oxide"

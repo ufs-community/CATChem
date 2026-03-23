@@ -30,7 +30,7 @@ program test_VirtualColumn
    lon = -120.0_fp
    area = 1000000.0_fp  ! 1 km²
 
-   call virtual_col%init(nlev, nspec_chem, nspec_emis, i, j, lat, lon, area, rc)
+   call virtual_col%init(nlev, nspec_chem, nspec_emis, i, j, i*j, lat, lon, area, rc)
    call assert(rc == 0, "Virtual column initialization should succeed")
 
    write(*,*) 'Test 1 passed!'

@@ -1300,9 +1300,6 @@ contains
       ! Initialize emission mapping
       call this%emission_mapping%init()
 
-      ! Initialize emission mapping
-      call this%emission_mapping%init()
-
    end subroutine config_data_init
 
    !> \brief Clean up configuration data
@@ -1457,9 +1454,6 @@ contains
 
       call safe_yaml_get_logical(this%yaml_data, 'diagnostics/output/enabled', this%config_data%runtime%DiagEnabled, local_rc)
       if (local_rc /= 0) this%config_data%runtime%DiagEnabled = .false.  ! default value
-
-      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/compress_lev', this%config_data%runtime%CompressLev, local_rc)
-      if (local_rc /= 0) this%config_data%runtime%CompressLev = 0  ! default value
 
       call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/compress_lev', this%config_data%runtime%CompressLev, local_rc)
       if (local_rc /= 0) this%config_data%runtime%CompressLev = 0  ! default value

@@ -34,10 +34,12 @@ timesteps:
 diagnostics:
   output:
     enabled: true
-    directory: "./output/diagnostics"
+    directory: "./output"
     prefix: "catchem_diag"
-    frequency: 1  # timesteps
-    format: "netcdf"
+    frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
+    format: "netcdf" #only format supported now
+    compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
+    diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5]  #list of species to output; empty list for all species
   collection:
     enabled: true
     buffer_size: 1000
@@ -67,17 +69,17 @@ run_phases:
   test1:
     description: "Test phase 1"
     processes:
-      seasalt
-      #settling
-      #drydep
-      #wetdep
-      #so4chem
+      - seasalt
+      # - settling
+      # - drydep
+      # - so4chem
+      # - wetdep
   # test2:
   #   description: "Test phase 2"
   #   processes:
-  #     dust
-  #     drydep
-  #     #wetdep
+  #    - dust
+  #    - drydep
+  #    - wetdep
 
 #============================================================================
 # Settings for CATChem processes
@@ -95,12 +97,12 @@ processes:
       gridded: true
       frequency: "hourly"
       diagnostics: true
-      diag_list: [NO, SO2, CO]
+      diag_list: [NO, SO2, POC, PSO4]
     point:
       activate: true
       scale_factor: 1.0
       topfraction: -1.0
-      source_file: "point_emis.nc"
+      source_file: "INPUT/PT.nc"
       format: "netcdf"
       gridded: false
       frequency: "hourly"
@@ -112,7 +114,27 @@ processes:
       stack_temperature: STKTK
       stack_velocity:    STKVE
       diagnostics: true
-      diag_list: [NO, SO2, CO]
+      diag_list: [NO, SO2, POC, PSO4]
+    gmi:
+      activate: true
+      scale_factor: 1.0
+      source_file: "INPUT/gmi_oh_ch4_h2o2_no3.x144_y91_z64_t12.2006_C983.nc"
+      format: "netcdf"
+      gridded: true
+      is_2d: false
+      frequency: "monthly"
+      diagnostics: true
+      diag_list: [oh, h2o2]
+    dms:
+      activate: true
+      scale_factor: 1.0
+      source_file: "INPUT/DMSclim_sfcconcentration.x360_y181_t12.Lana2011_C983.nc4"
+      format: "netcdf"
+      gridded: true
+      is_2d: true
+      frequency: "monthly"
+      diagnostics: true
+      diag_list: [dms]
     fire:
       activate: true
       scale_factor: 1.0

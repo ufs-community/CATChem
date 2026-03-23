@@ -83,6 +83,19 @@ schemes:
       - minute
       - second
 
+    persistent_state_variables:   #state variables that persist across time steps, such as for storing intermediate results or cumulative values
+      - name: "firsttime"
+        description: "flag for first time step"
+        default: true
+      - name: "nymd_last"
+        description: "last day of H2O2 update"
+        default: -1
+      - name: "nhms_last_recycle"
+        description: "last time step of H2O2 recycle"
+        default: -1
+      - name: "xh2o2_init(:)"
+        description: "H2O2 column initialization"
+        default: 0.0
 
     parameters:
       update_so2:

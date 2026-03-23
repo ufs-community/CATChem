@@ -562,23 +562,26 @@ contains
                do i = 1, nx
                   do k = 1, nz
                      if (emission_flux(i,j,k) > 0.0_fp) then
-                        if (category_name == 'dms' .and. field_name == 'dms') then
+                        select case (trim(category%fields(ifield)%units))
+                         case('nmol/l', 'nmol/L', 'NMOL/L')
                            ! Special case for DMS read in with nmol/L unit (Note: this is in water)
                            species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor
-                        else if (trim(category_name) == 'gmi') then
-                           if (trim(field_name) == 'oh' .or. trim(field_name) == 'OH') then
-                              ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).
-                              ! convert from #/cm3 to ppm to keep consistent with other species units
-                              species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / met_state%AIRDEN(i,j,k) * 1.e3
-                           else
-                              ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
-                              species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor * 1.e6_fp
-                           end if
-                        else
+                         case ('1/cm3', '1/cm^3', '#/cm3', 'molec/cm3')
+                           ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).
+                           ! convert from #/cm3 to ppm to keep consistent with other species units
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / met_state%AIRDEN(i,j,k) * 1.e3
+                         case ('mol/mol', 'MOL/MOL')
+                           ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
+                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor * 1.e6_fp
+                         case ('kg/m2/s', 'KG/M2/S')
                            ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
                            ! Step 2: Convert to ug/kg or ppmv using converter calculated above
                            species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
-                        end if
+                         case default
+                           write(msg, '(A,A,A)') trim(pName), ': Unrecognized emission field units: ', &
+                              trim(category%fields(ifield)%units)
+                           call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+                        end select
                      end if
                   end do
                end do
@@ -1065,7 +1068,8 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc, cat_idx,  curr_month
+      integer :: localrc, cat_idx
+      integer :: curr_month, curr_year, start_month, start_year
       type(ESMF_Time) :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
       character(len=EMIS_MAXSTR) ::  msg
@@ -1105,7 +1109,7 @@ contains
          call ESMF_TimeIntervalSet(timeInterval, d=7, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case ("monthly")
+       case ("monthly", "yearmonth")
          call ESMF_TimeIntervalSet(timeInterval, mm=1, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
@@ -1133,6 +1137,14 @@ contains
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          ! For monthly frequency, set irec to month number (0-based)
          category % irec = max(0, curr_month -1)
+      else if (trim(frequency) == "yearmonth") then
+         ! Calculate actual number of yearmonths between start and current time
+         call ESMF_TimeGet(currTime, yy=curr_year, mm=curr_month, rc=localrc)
+         call ESMF_TimeGet(startTime, yy=start_year, mm=start_month, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         ! For yearmonth frequency, set irec to yearmonth number (0-based)
+         category % irec = max(0, curr_month -1) + (curr_year - start_year) * 12
       else
          ! For other frequencies, use simple interval division
          category % irec = int( (currTime - startTime) / timeInterval )

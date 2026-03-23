@@ -232,6 +232,11 @@ contains
       call this%process_config%validate(container, error_manager)
       ! Note: validate doesn't return rc, but error_manager tracks errors
 
+{% if has_persistent_state_variables %}
+      ! Initialize persistent state arrays for column processing
+      call this%process_config%initialize_persistent_state(container%get_grid_manager())
+{% endif %}
+
 {% if config.diagnostics %}
       ! Register diagnostics for this process (only if diagnostics enabled)
       call this%register_diagnostics(container, rc)
@@ -811,7 +816,8 @@ contains
 {% endif %}
             species_conc, &
             species_tendencies{% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}, &
-            this%process_config%{{ config.name }}_config%is_gas{% endif %}{% if config.diagnostics or scheme.scheme_diagnostics %}, &
+            this%process_config%{{ config.name }}_config%is_gas{% endif %}{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}{% for var in all_persistent_state_variables[scheme.name] %}, &
+            this%process_config%{{ scheme.name }}_persistent_state(column%column_id)%{{ var.clean_name }}{% endfor %}{% endif %}{% if config.diagnostics or scheme.scheme_diagnostics %}, &
 {% for diagnostic in config.diagnostics %}
             this%column_{{ diagnostic.name }}{% if not loop.last or scheme.scheme_diagnostics %}, &
 {% endif %}
@@ -883,7 +889,8 @@ contains
 {% endif %}
             species_conc, &
             species_tendencies{% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}, &
-            this%process_config%{{ config.name }}_config%is_gas{% endif %} &
+            this%process_config%{{ config.name }}_config%is_gas{% endif %}{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}{% for var in all_persistent_state_variables[scheme.name] %}, &
+            this%process_config%{{ scheme.name }}_persistent_state(column%column_id)%{{ var.clean_name }}{% endfor %}{% endif %} &
          )
       end if
 
