@@ -190,11 +190,11 @@ contains
       integer, intent(out) :: rc
 
       type(ErrorManagerType), pointer :: error_mgr
-      character(len=256) :: message 
+      character(len=256) :: message
       integer :: i
 
       rc = CC_SUCCESS
-      error_mgr => container%get_error_manager() 
+      error_mgr => container%get_error_manager()
 
       call get_species_indices(container, process_species, species_mapping, rc)
       if (rc /= CC_SUCCESS) return

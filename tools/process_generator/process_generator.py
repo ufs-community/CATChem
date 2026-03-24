@@ -390,7 +390,6 @@ class ProcessConfig:
     memory_requirements: str = "low"
     generate_tests: bool = True
     generate_docs: bool = True
-    generate_examples: bool = True
     output_dir: str = ""
     src_base_dir: str = "src/process"
 
@@ -1357,9 +1356,6 @@ class ProcessGenerator:
         if config.generate_docs:
             self._generate_documentation(docs_dir, config)
 
-        if config.generate_examples:
-            self._generate_examples(process_dir, config)
-
         logger.info(f"Process generation complete: {process_dir}")
 
     def _create_directory_structure(self, process_dir: Path, test_dir: Path, docs_dir: Path, config: ProcessConfig) -> None:
@@ -1383,10 +1379,6 @@ class ProcessGenerator:
         # Documentation directories
         if config.generate_docs:
             directories.append(docs_dir)
-
-        # Examples in process directory
-        if config.generate_examples:
-            directories.append(process_dir / "examples")
 
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
@@ -1637,35 +1629,7 @@ class ProcessGenerator:
 
         logger.info(f"Generated documentation in: {docs_dir}")
 
-    def _generate_examples(self, process_dir: Path, config: ProcessConfig) -> None:
-        """Generate example files."""
-        logger.info("Generating examples")
 
-        examples_dir = process_dir / "examples"
-
-        # Basic usage example
-        example_template = self.env.get_template('example_usage.F90.j2')
-        example_content = example_template.render(
-            config=config,
-            timestamp=datetime.now().isoformat()
-        )
-
-        example_file = examples_dir / f"{config.name}_example.F90"
-        with open(example_file, 'w') as f:
-            f.write(example_content)
-
-        # Configuration example
-        config_template = self.env.get_template('example_config.yaml.j2')
-        config_content = config_template.render(
-            config=config,
-            timestamp=datetime.now().isoformat()
-        )
-
-        config_file = examples_dir / f"{config.name}_config.yaml"
-        with open(config_file, 'w') as f:
-            f.write(config_content)
-
-        logger.info(f"Generated examples in: {examples_dir}")
 
     def generate_template_config(self, process_type: str = "emission") -> Dict[str, Any]:
         """Generate a template configuration for a given process type.
@@ -1720,8 +1684,7 @@ class ProcessGenerator:
                     }
                 ],
                 "generate_tests": True,
-                "generate_docs": True,
-                "generate_examples": True
+                "generate_docs": True
             },
 
             "chemistry": {
@@ -1764,8 +1727,7 @@ class ProcessGenerator:
                 "timestep_dependency": "dependent",
                 "parallelization": "column",
                 "generate_tests": True,
-                "generate_docs": True,
-                "generate_examples": True
+                "generate_docs": True
             }
         }
 

@@ -28,7 +28,7 @@ h2o2:
   name: h2o2
   description: Hydrogen peroxide
   is_gas: true
-  is_drydep: false   #turn off for now due to climatology reading from GOCART inputs. 
+  is_drydep: false   #turn off for now due to climatology reading from GOCART inputs.
   is_wetdep: true
   is_advected: false
   dd_f0: 1.0
