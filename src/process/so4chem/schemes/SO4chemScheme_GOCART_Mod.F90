@@ -398,6 +398,7 @@ contains
 
       !call GOCART sulfate chemistry driver
       !force dz to be a big value (negative will not work depending on compiler) at the surface to make drydep frequency equal zero.
+      !https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/Process_Library/GOCART2G_Process.F90#L3124
       !Five functions need to be customized here if we want to turn it off compleltely.
       !This is to ensure dry deposition does not run twice for SO2 and SO4
       GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
