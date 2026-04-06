@@ -78,7 +78,7 @@ contains
    !! @param[in]  z0h    Z0H field [appropriate units]
    !! @param[in]  species_mw_g    Species mw_g property
    !! @param[in]  species_short_name    Species short_name property
-   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! Persistent state variables (per-column):
    !! @param[inout] firsttime    flag for first time step
@@ -211,9 +211,9 @@ contains
       real(fp), pointer :: GOCART_V10M(:,:)
       !some chem variables to be populated
       !Monthly climatology of these three oxidenats from GMI is read in and we store them in chem_state arrays.
-      real(fp), pointer, dimension(:,:,:) :: oh_clim    !volume mixing ratio
-      real(fp), pointer, dimension(:,:,:) :: h2o2_clim  ![# cm-3]
-      real(fp), pointer, dimension(:,:,:) :: no3_clim   ![# cm-3]
+      real(fp), pointer, dimension(:,:,:) :: oh_clim    !volume mixing ratio [mol/mol]
+      real(fp), pointer, dimension(:,:,:) :: h2o2_clim  !volume mixing ratio [mol/mol]
+      real(fp), pointer, dimension(:,:,:) :: no3_clim   !volume mixing ratio [mol/mol]
       !OH and NO3 will go through diurnal variation scaling based on solar zenith angle, while H2O2 is reset to
       !climatology every three hours and every new day
       real(fp), dimension(:,:,:), allocatable :: xoh, xno3, xh2o2   !kg/kg
@@ -385,7 +385,7 @@ contains
       msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
 
       !run DMS emission scheme
-      dmso_conc = species_conc(1, nDMS_IN) !in [nmol/L]
+      dmso_conc = species_conc(1, nDMS_IN) !in [nmol/L]. Note this is a special unit case since it is not atmospheric composition.
       SU_emis = 0.0_fp
       call DMSemission (num_layers, tstep, g0, GOCART_TMPU, GOCART_U10M, GOCART_V10M, GOCART_LWI, &
          GOCART_DELP, fMassDMS, DMSO_CONC, dms, SU_emis, ndms, rc)

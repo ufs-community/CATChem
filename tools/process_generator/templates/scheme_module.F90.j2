@@ -85,7 +85,7 @@ contains
 {% endif %}
 {% endfor %}
 {% endif %}
-   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
 {% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}
    !! Persistent state variables (per-column):
