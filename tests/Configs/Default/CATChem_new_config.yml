@@ -182,7 +182,7 @@ processes:
   drydep:
     activate: true
     diagnostics: true
-    diag_species: [so2, so4, seas1, seas3, seas5]
+    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
     gas_scheme: 'wesely'
     aero_scheme: 'zhang'
     wesely:
@@ -195,7 +195,7 @@ processes:
   wetdep:
     activate: true
     diagnostics: true
-    diag_species: [so2, so4, seas1, seas3, seas5]
+    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
     scheme: 'jacob'
     jacob:
       scale_factor: 1.0
@@ -203,7 +203,7 @@ processes:
   settling:
     activate: true
     diagnostics: true
-    diag_species: [so4, seas1, seas3, seas5]
+    diag_species: [so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
