@@ -265,7 +265,7 @@ contains
                if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
                   ! Add your custom conversion mass from hydrophobic to hydrophilic per species per level calculation
                   PhobicToPhilic_mass_per_species_per_level(:, diag_idx) = delq(num_layers:1:-1) !flip the layers [kg/kg]
-                  !exit !commont out to give the same value for both phobic and philic species in this case of conversion between the two
+                  !exit !comment out to give the same value for both phobic and philic species in this case of conversion between the two
                end if
             end do
          end if
@@ -277,7 +277,7 @@ contains
                if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
                   ! Add your custom conversion flux from hydrophobic to hydrophilic per species calculation
                   PhobicToPhilic_flux_per_species(diag_idx) = flux_toPhilic(1,1) !column total flux [kg/m2/s]
-                  !exit !commont out to give the same value for both phobic and philic species in this case of conversion between the two
+                  !exit !comment out to give the same value for both phobic and philic species in this case of conversion between the two
                end if
             end do
          end if
@@ -309,7 +309,7 @@ contains
                curr_idx = phobic_species_idx
             else
                curr_idx = philic_species_idx
-            end if         
+            end if
 
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(Production_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
