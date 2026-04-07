@@ -12,8 +12,23 @@ anthro:
   POC:
     long_name: "Primary Organic Carbon"
     units: "kg/m2/s"
-    scale: [0.8, 0.2] #random fraction; need to look for real values
+    scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
     map: ["oc1", "oc2"]
+  TERP:
+    long_name: "Terpenes"
+    units: "kg/m2/s"
+    scale: [0.09]
+    map: ["oc2"]     #0.05 x 1.8; Note: biogenic terpenes are assumed to be emitted as hydrophilic OC with 5% conversion rate
+  ISOP:
+    long_name: "Isoprene"
+    units: "kg/m2/s"
+    scale: [0.054]
+    map: ["oc2"]     #0.03 x 1.8; Note: biogenic isoprene is assumed to be emitted as hydrophilic OC with 3% conversion rate
+  PEC:
+    long_name: "Primary Elemental Carbon"
+    units: "kg/m2/s"
+    scale: [0.8, 0.2] # 0.8/0.2 is the fraction of hydrophobic/hydrophilic; 1.8 is not used for BC
+    map: ["bc1", "bc2"]
   PSO4:
     long_name: "Primary Sulfate"
     units: "kg/m2/s"

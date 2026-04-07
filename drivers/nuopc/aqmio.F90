@@ -3241,7 +3241,7 @@ contains
          end if
          ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=CompressLev)
       else
-         ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=1, deflate=1, deflate_level=0)
+         ncStatus = nf90_def_var_deflate(IOLayout % ncid, lvarId, shuffle=0, deflate=0, deflate_level=0)
       end if
       if (ncStatus /= NF90_NOERR) then
          ! Compression failure is not fatal - continue without compression

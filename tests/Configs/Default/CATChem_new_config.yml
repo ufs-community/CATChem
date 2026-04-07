@@ -73,6 +73,7 @@ run_phases:
       - settling
       - drydep
       - so4chem
+      - carbchem
       - wetdep
   # test2:
   #   description: "Test phase 2"
@@ -216,3 +217,10 @@ processes:
     scheme: 'gocart'
     gocart:
       update_so2: true #whether to update SO2 concentration based on chemical production/loss
+  carbchem:
+    activate: true
+    diagnostics: true
+    diag_species: [oc1,oc2,bc1,bc2]  #no brown carbon for now
+    scheme: 'gocart'
+    gocart:
+      time_days_hydrophobic_to_hydrophilic: 2.5  # Rate of conversion of hydrophobic to hydrophilic [days]

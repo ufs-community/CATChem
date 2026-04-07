@@ -1930,6 +1930,14 @@ contains
          deallocate(temp_real_array)
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/t_chem_loss'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_convfacI2G = temp_real
+      else
+         species%wd_convfacI2G = MISSING
+      endif
+
       ! Load type flags (with proper default handling)
       write(field_path, '(A,A)') trim(species_path), '/is_gas'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
