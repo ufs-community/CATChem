@@ -89,7 +89,7 @@ contains
       PhobicToPhilic_mass_per_species_per_level, &
       PhobicToPhilic_flux_per_species, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -127,7 +127,7 @@ contains
       real(fp), pointer, dimension(:,:,:)  :: fluxout  !Mass lost by chemistry [kg/m^2/s]
       logical, allocatable :: sepcies_computed(:) !track species have been computed or not
       real(fp), pointer :: tChemLoss(:) ! tChemLoss for each bin [days]
-      real(fp), allocatable :: qUpdate(:), delq(:)  !intermedieat varaibles for diagnostics 
+      real(fp), allocatable :: qUpdate(:), delq(:)  !intermediate variables for diagnostics
       integer :: nymd, nhms   !YYYYMMDD, HHMMSS time formats
       character(len=3) :: cdow  ! Character day of week
       integer :: idow  ! Integer day of week
@@ -141,7 +141,7 @@ contains
 
       !allocate some arrays
       allocate(flux_toPhilic(1,1), sepcies_computed(num_species), intPtr_phobic_philic(1,1, num_layers,nbins), &
-               tChemLoss(nbins), fluxout(1,1,nbins), qUpdate(num_layers), delq(num_layers))
+         tChemLoss(nbins), fluxout(1,1,nbins), qUpdate(num_layers), delq(num_layers))
       flux_toPhilic = 0.0_fp ! Initialize to zero
       sepcies_computed = .false. ! Initialize to false
       reset_con = .false.
@@ -158,7 +158,7 @@ contains
       !   --------------------------------------------------
       idow = Chem_UtilIdow(nymd)
       if ( (nhms==0) .and. (idow == myDOW) ) then
-         reset_con = .true. 
+         reset_con = .true.
          cdow = Chem_UtilCdow(nymd)
          intPtr_phobic_philic = tiny(1.0_fp) ! avoid division by zero
          write(*, '(A, I8, I8)') 'Note: Carbon '//cdow//' tracer being reset to zero on ', nymd, nhms
@@ -183,64 +183,64 @@ contains
 
          ! Identify corresponding hydrophobic and hydrophilic species indices for this species
          select case (species_short_name(species_idx))
-            case('oc1', 'OC1')  ! Example short names for OC species - used in gocart 
-               phobic_species_idx = species_idx
-               ! Find corresponding hydrophilic species index
-               philic_species_idx = max(find_species_ind(species_short_name, 'oc2'), find_species_ind(species_short_name, 'OC2'))  
-               if (philic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophilic species found for OC1 species in GOCART scheme.'
-                  return 
-               end if
-            case('bc1', 'BC1')  ! Example short names for BC species - used in gocart
-               phobic_species_idx = species_idx
-               ! Find corresponding hydrophilic species index
-               philic_species_idx = max(find_species_ind(species_short_name, 'bc2'), find_species_ind(species_short_name, 'BC2'))  
-               if (philic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophilic species found for BC1 species in GOCART scheme.'
-                  return 
-               end if
-            case('br1', 'BR1')  ! Example short names for brown carbon species - used in gocart
-               phobic_species_idx = species_idx
-               ! Find corresponding hydrophilic species index
-               philic_species_idx = max(find_species_ind(species_short_name, 'br2'), find_species_ind(species_short_name, 'Br2'))  
-               if (philic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophilic species found for BR1 species in GOCART scheme.'
-                  return 
-               end if
-            case('oc2', 'OC2')  ! Example short names for OC species - used in gocart 
-               philic_species_idx = species_idx
-               ! Find corresponding hydrophobic species index
-               phobic_species_idx = max(find_species_ind(species_short_name, 'oc1'), find_species_ind(species_short_name, 'OC1'))  
-               if (phobic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophobic species found for OC2 species in GOCART scheme.'
-                  return 
-               end if
-            case('bc2', 'BC2')  ! Example short names for BC species - used in gocart
-               philic_species_idx = species_idx
-               ! Find corresponding hydrophobic species index
-               phobic_species_idx = max(find_species_ind(species_short_name, 'bc1'), find_species_ind(species_short_name, 'BC1'))  
-               if (phobic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophobic species found for BC2 species in GOCART scheme.'
-                  return 
-               end if
-            case('br2', 'BR2')  ! Example short names for brown carbon species - used in gocart
-               philic_species_idx = species_idx
-               ! Find corresponding hydrophobic species index
-               phobic_species_idx = max(find_species_ind(species_short_name, 'br1'), find_species_ind(species_short_name, 'Br1'))  
-               if (phobic_species_idx == 0) then
-                  write (*,'(A)') 'Error: No corresponding hydrophobic species found for BR2 species in GOCART scheme.'
-                  return 
-               end if
-            case default
-               cycle  ! Skip species that are not BC or OC in this example
+          case('oc1', 'OC1')  ! Example short names for OC species - used in gocart
+            phobic_species_idx = species_idx
+            ! Find corresponding hydrophilic species index
+            philic_species_idx = max(find_species_ind(species_short_name, 'oc2'), find_species_ind(species_short_name, 'OC2'))
+            if (philic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophilic species found for OC1 species in GOCART scheme.'
+               return
+            end if
+          case('bc1', 'BC1')  ! Example short names for BC species - used in gocart
+            phobic_species_idx = species_idx
+            ! Find corresponding hydrophilic species index
+            philic_species_idx = max(find_species_ind(species_short_name, 'bc2'), find_species_ind(species_short_name, 'BC2'))
+            if (philic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophilic species found for BC1 species in GOCART scheme.'
+               return
+            end if
+          case('br1', 'BR1')  ! Example short names for brown carbon species - used in gocart
+            phobic_species_idx = species_idx
+            ! Find corresponding hydrophilic species index
+            philic_species_idx = max(find_species_ind(species_short_name, 'br2'), find_species_ind(species_short_name, 'Br2'))
+            if (philic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophilic species found for BR1 species in GOCART scheme.'
+               return
+            end if
+          case('oc2', 'OC2')  ! Example short names for OC species - used in gocart
+            philic_species_idx = species_idx
+            ! Find corresponding hydrophobic species index
+            phobic_species_idx = max(find_species_ind(species_short_name, 'oc1'), find_species_ind(species_short_name, 'OC1'))
+            if (phobic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophobic species found for OC2 species in GOCART scheme.'
+               return
+            end if
+          case('bc2', 'BC2')  ! Example short names for BC species - used in gocart
+            philic_species_idx = species_idx
+            ! Find corresponding hydrophobic species index
+            phobic_species_idx = max(find_species_ind(species_short_name, 'bc1'), find_species_ind(species_short_name, 'BC1'))
+            if (phobic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophobic species found for BC2 species in GOCART scheme.'
+               return
+            end if
+          case('br2', 'BR2')  ! Example short names for brown carbon species - used in gocart
+            philic_species_idx = species_idx
+            ! Find corresponding hydrophobic species index
+            phobic_species_idx = max(find_species_ind(species_short_name, 'br1'), find_species_ind(species_short_name, 'Br1'))
+            if (phobic_species_idx == 0) then
+               write (*,'(A)') 'Error: No corresponding hydrophobic species found for BR2 species in GOCART scheme.'
+               return
+            end if
+          case default
+            cycle  ! Skip species that are not BC or OC in this example
          end select
 
          !get concentration for this species after flipping vertical levels for gocart
          if (.not. reset_con) then
             intPtr_phobic_philic(1,1,:, 1) = species_conc(num_layers:1:-1, phobic_species_idx) * 1.0e-9_fp !ug/kg ==> kg/kg
             intPtr_phobic_philic(1,1,:, 2) = species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp !ug/kg ==> kg/kg
-         end if 
- 
+         end if
+
          !Ad Hoc transfer of hydrophobic to hydrophilic aerosols
          !Rate controlled in RC file; tConvPhobicToPhilic < 0 means no transfer
          call phobicToPhilic (intPtr_phobic_philic(:,:,:,1), intPtr_phobic_philic(:,:,:,2), flux_toPhilic, &
@@ -258,17 +258,17 @@ contains
          delq = max(0.0_fp, intPtr_phobic_philic(1,1,:,1) - qUpdate)
 
          ! Per-species-per-level diagnostic: 2D array (levels, species)
-            if (present(PhobicToPhilic_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
-               ! Find position of this species in diagnostic_species_id array
-               do diag_idx = 1, size(diagnostic_species_id)
-                  !note we give the same valuers to phobic and philic species in this case of conversion between the two
-                  if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
-                     ! Add your custom conversion mass from hydrophobic to hydrophilic per species per level calculation
-                     PhobicToPhilic_mass_per_species_per_level(:, diag_idx) = delq(num_layers:1:-1) !flip the layers [kg/kg]
-                     exit
-                  end if
-               end do
-            end if
+         if (present(PhobicToPhilic_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
+            ! Find position of this species in diagnostic_species_id array
+            do diag_idx = 1, size(diagnostic_species_id)
+               !note we give the same valuers to phobic and philic species in this case of conversion between the two
+               if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
+                  ! Add your custom conversion mass from hydrophobic to hydrophilic per species per level calculation
+                  PhobicToPhilic_mass_per_species_per_level(:, diag_idx) = delq(num_layers:1:-1) !flip the layers [kg/kg]
+                  exit
+               end if
+            end do
+         end if
          ! Per-species diagnostic: only update for diagnostic species
          if (present(PhobicToPhilic_flux_per_species) .and. present(diagnostic_species_id)) then
             ! Find position of this species in diagnostic_species_id array
@@ -285,13 +285,13 @@ contains
          !Ad Hoc chemical destruction of carbon
          !This applies a simple exponential decay to both hydrophobic and
          ! hydrophilic modes with the time constant tChemLoss (e-folding time in days)
-         
+
          !retrieve tChemLoss for this species
          tChemLoss(1) = species_t_chem_loss(phobic_species_idx)
          tChemLoss(2) = species_t_chem_loss(philic_species_idx)
          do n = 1, nbins
             call carbonChemLoss (num_layers, klid, n, tstep, g0, GOCART_DELP, &
-                                 tChemLoss(n), intPtr_phobic_philic(:, :, :, n), fluxout, RC)
+               tChemLoss(n), intPtr_phobic_philic(:, :, :, n), fluxout, RC)
             if (RC /= 0) then
                ErrMsg = 'Error in compute_gocart: Failed in GOCART carbonChemLoss.'
                !call CC_Error(trim(ErrMsg), RC, thisLoc)
@@ -335,8 +335,8 @@ contains
          species_tendencies(:, philic_species_idx) =  intPtr_phobic_philic(1,1,num_layers:1:-1,2) * 1.0e9_fp  ! kg/kg ==> ug/kg
 
          !set computed species to true
-         sepcies_computed(phobic_species_idx) = .true. 
-         sepcies_computed(philic_species_idx) = .true. 
+         sepcies_computed(phobic_species_idx) = .true.
+         sepcies_computed(philic_species_idx) = .true.
 
       end do ! End of loop over species
 

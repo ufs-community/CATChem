@@ -235,7 +235,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -327,9 +327,9 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%carbchem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -454,7 +454,7 @@ contains
             this%process_config%carbchem_config%species_names, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -463,7 +463,7 @@ contains
          do i = 1, n_species
             ! Replacement tendency: new_conc = tendency (tendency is the new value)
             call column%set_chem_field(k, species_indices(i), &
-                                      species_tendencies(k, i))
+               species_tendencies(k, i))
          end do
       end do
 
@@ -487,14 +487,14 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%carbchem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          scheme_count = 4
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'DELP'
          scheme_fields(2) = 'TSTEP'
          scheme_fields(3) = 'AIRDEN'
          scheme_fields(4) = 'PMID'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -600,11 +600,11 @@ contains
       if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%carbchem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'Production_mass_', &
-                  trim(this%process_config%carbchem_config%diagnostic_species(i))
+               trim(this%process_config%carbchem_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Production mass (negative for loss) per species per level', &
-                                                'kg/kg', DIAG_REAL_3D, &
-                                                'carbchem', dims_3d_levels, rc=rc)
+               'Production mass (negative for loss) per species per level', &
+               'kg/kg', DIAG_REAL_3D, &
+               'carbchem', dims_3d_levels, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -614,17 +614,17 @@ contains
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%carbchem_config%scheme))
 
-      case ('gocart')
+       case ('gocart')
          ! Register gocart-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'loss_flux_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'chemical loss flux per species', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'carbchem', dims_2d, rc=rc)
+                  'chemical loss flux per species', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'carbchem', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -634,11 +634,11 @@ contains
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'PhobicToPhilic_mass_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'conversion mass from hydrophobic to hydrophilic per species per level', &
-                                                   'kg/kg', DIAG_REAL_3D, &
-                                                   'carbchem', dims_3d_levels, rc=rc)
+                  'conversion mass from hydrophobic to hydrophilic per species per level', &
+                  'kg/kg', DIAG_REAL_3D, &
+                  'carbchem', dims_3d_levels, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -648,17 +648,17 @@ contains
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'PhobicToPhilic_flux_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'conversion flux from hydrophobic to hydrophilic per species', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'carbchem', dims_2d, rc=rc)
+                  'conversion flux from hydrophobic to hydrophilic per species', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'carbchem', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
 
@@ -683,7 +683,7 @@ contains
 
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%carbchem_config%scheme))
-      case ('gocart')
+       case ('gocart')
          ! Scheme-specific diagnostics for gocart
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
@@ -700,7 +700,7 @@ contains
             allocate(this%column_PhobicToPhilic_flux_per_species(this%process_config%carbchem_config%n_diagnostic_species))
          end if
          if (allocated(this%column_PhobicToPhilic_flux_per_species)) this%column_PhobicToPhilic_flux_per_species = 0.0_fp
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
@@ -735,25 +735,25 @@ contains
       if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%carbchem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'Production_mass_', &
-                  trim(this%process_config%carbchem_config%diagnostic_species(i))
+               trim(this%process_config%carbchem_config%diagnostic_species(i))
             call this%update_1d_diagnostic_column(trim(field_name), &
-                                                 this%column_Production_mass_per_species_per_level(:,i), &
-                                                 i_col, j_col, container, rc)
+               this%column_Production_mass_per_species_per_level(:,i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%carbchem_config%scheme))
-      case ("gocart")
+       case ("gocart")
          ! Scheme-specific diagnostics for gocart
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'loss_flux_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_loss_flux_per_species(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_loss_flux_per_species(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -761,10 +761,10 @@ contains
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'PhobicToPhilic_mass_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%update_1d_diagnostic_column(trim(field_name), &
-                                                    this%column_PhobicToPhilic_mass_per_species_per_level(:,i), &
-                                                    i_col, j_col, container, rc)
+                  this%column_PhobicToPhilic_mass_per_species_per_level(:,i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -772,10 +772,10 @@ contains
          if (this%process_config%carbchem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%carbchem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'PhobicToPhilic_flux_', &
-                     trim(this%process_config%carbchem_config%diagnostic_species(i))
+                  trim(this%process_config%carbchem_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_PhobicToPhilic_flux_per_species(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_PhobicToPhilic_flux_per_species(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if

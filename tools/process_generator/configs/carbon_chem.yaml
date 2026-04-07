@@ -54,7 +54,7 @@ schemes:
       - g0
 
     required_time_parameters: #Chem_UtilIdow is using these parameters but it is not used because myDOW is -1 all the time
-      - year      
+      - year
       - month
       - day
       - hour
