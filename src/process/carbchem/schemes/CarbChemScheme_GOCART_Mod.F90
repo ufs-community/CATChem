@@ -118,7 +118,7 @@ contains
 
       ! Local variables
       integer :: n, species_idx, phobic_species_idx, philic_species_idx
-      integer :: klid, diag_idx  ! For diagnostic species indexing
+      integer :: klid, diag_idx, curr_idx  ! For diagnostic species indexing
       real(fp), pointer :: GOCART_RHOA(:,:,:)
       real(fp), pointer :: GOCART_DELP(:,:,:)
       real(fp), pointer :: GOCART_PRESS(:,:,:)
@@ -241,6 +241,11 @@ contains
             intPtr_phobic_philic(1,1,:, 2) = species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp !ug/kg ==> kg/kg
          end if
 
+         !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
+         qUpdate = intPtr_phobic_philic(1,1,:,1)*exp(-tstep/(params%time_days_hydrophobic_to_hydrophilic*86400.0_fp))
+         qUpdate = max(qUpdate,1.0e-32_fp)
+         delq = max(0.0_fp, intPtr_phobic_philic(1,1,:,1) - qUpdate)
+
          !Ad Hoc transfer of hydrophobic to hydrophilic aerosols
          !Rate controlled in RC file; tConvPhobicToPhilic < 0 means no transfer
          call phobicToPhilic (intPtr_phobic_philic(:,:,:,1), intPtr_phobic_philic(:,:,:,2), flux_toPhilic, &
@@ -252,11 +257,6 @@ contains
             return
          end if
 
-         !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
-         qUpdate = intPtr_phobic_philic(1,1,:,1)*exp(-tstep/(params%time_days_hydrophobic_to_hydrophilic*86400.0_fp))
-         qUpdate = max(qUpdate,1.0e-32_fp)
-         delq = max(0.0_fp, intPtr_phobic_philic(1,1,:,1) - qUpdate)
-
          ! Per-species-per-level diagnostic: 2D array (levels, species)
          if (present(PhobicToPhilic_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
             ! Find position of this species in diagnostic_species_id array
@@ -265,7 +265,7 @@ contains
                if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
                   ! Add your custom conversion mass from hydrophobic to hydrophilic per species per level calculation
                   PhobicToPhilic_mass_per_species_per_level(:, diag_idx) = delq(num_layers:1:-1) !flip the layers [kg/kg]
-                  exit
+                  !exit !commont out to give the same value for both phobic and philic species in this case of conversion between the two
                end if
             end do
          end if
@@ -277,19 +277,24 @@ contains
                if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
                   ! Add your custom conversion flux from hydrophobic to hydrophilic per species calculation
                   PhobicToPhilic_flux_per_species(diag_idx) = flux_toPhilic(1,1) !column total flux [kg/m2/s]
-                  exit
+                  !exit !commont out to give the same value for both phobic and philic species in this case of conversion between the two
                end if
             end do
          end if
 
-         !Ad Hoc chemical destruction of carbon
-         !This applies a simple exponential decay to both hydrophobic and
-         ! hydrophilic modes with the time constant tChemLoss (e-folding time in days)
-
          !retrieve tChemLoss for this species
          tChemLoss(1) = species_t_chem_loss(phobic_species_idx)
          tChemLoss(2) = species_t_chem_loss(philic_species_idx)
+
+         !Ad Hoc chemical destruction of carbon
+         !This applies a simple exponential decay to both hydrophobic and
+         ! hydrophilic modes with the time constant tChemLoss (e-folding time in days)
          do n = 1, nbins
+            !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
+            qUpdate = intPtr_phobic_philic(1, 1, :, n)*exp(-tstep/(tChemLoss(n)*86400.0_fp))
+            qUpdate = max(qUpdate,1.e-32_fp)
+            delq = max(0.0_fp,intPtr_phobic_philic(1, 1, :, n)-qUpdate)
+
             call carbonChemLoss (num_layers, klid, n, tstep, g0, GOCART_DELP, &
                tChemLoss(n), intPtr_phobic_philic(:, :, :, n), fluxout, RC)
             if (RC /= 0) then
@@ -299,16 +304,18 @@ contains
                return
             end if
 
-            !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
-            qUpdate = intPtr_phobic_philic(1, 1, :, n)*exp(-tstep/(tChemLoss(n)*86400.0_fp))
-            qUpdate = max(qUpdate,1.e-32_fp)
-            delq = max(0.0_fp,intPtr_phobic_philic(1, 1, :, n)-qUpdate)
+            !get current index for diagnostics
+            if (n == 1) then
+               curr_idx = phobic_species_idx
+            else
+               curr_idx = philic_species_idx
+            end if         
 
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(Production_mass_per_species_per_level) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)
-                  if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
+                  if (diagnostic_species_id(diag_idx) == curr_idx) then
                      ! Add your custom production mass (negative for loss) per species per level calculation
                      Production_mass_per_species_per_level(:, diag_idx) = -delq(num_layers:1:-1) !turns to negative since it is always loss here
                      exit
@@ -320,7 +327,7 @@ contains
             if (present(loss_flux_per_species) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)
-                  if (diagnostic_species_id(diag_idx) == phobic_species_idx .or. diagnostic_species_id(diag_idx) == philic_species_idx) then
+                  if (diagnostic_species_id(diag_idx) == curr_idx) then
                      ! Add your custom chemical loss flux per species calculation
                      loss_flux_per_species(diag_idx) = fluxout(1,1,n) !column total flux [kg/m2/s]
                      exit

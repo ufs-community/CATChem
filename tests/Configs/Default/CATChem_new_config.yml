@@ -39,7 +39,7 @@ diagnostics:
     frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
     format: "netcdf" #only format supported now
     compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
-    diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5]  #list of species to output; empty list for all species
+    diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5, bc1, bc2, oc1, oc2]  #list of species to output; empty list for all species
   collection:
     enabled: true
     buffer_size: 1000
