@@ -87,7 +87,14 @@ module SO4chemCommon_Mod
       procedure, public :: finalize => finalize_gocart_config
    end type SO4chemSchemeGOCARTConfig
 
-   ! gocart scheme uses local variables only - no persistent state type needed
+   !> Persistent state type for gocart scheme
+   !! Contains variables that persist across time steps for each column
+   type :: SO4chemGOCARTPersistentState
+      logical :: firsttime  ! flag for first time step
+      integer :: nymd_last  ! last day of H2O2 update
+      integer :: nhms_last_recycle  ! last time step of H2O2 recycle
+      real(fp), allocatable :: xh2o2_init(:)  ! H2O2 column initialization
+   end type SO4chemGOCARTPersistentState
 
 
    !> Unified process configuration type that bridges ConfigManager and process-specific configs
@@ -105,11 +112,16 @@ module SO4chemCommon_Mod
       ! Scheme configurations
       type(SO4chemSchemeGOCARTConfig) :: gocart_config
 
+      ! Persistent state arrays for column processing
+      type(SO4chemGocartPersistentState), allocatable :: gocart_persistent_state(:)  ! Per-column state for gocart scheme
+      integer :: total_columns = 0  ! Total number of columns for state allocation
+
    contains
       procedure, public :: load_from_config => so4chem_process_load_config
       procedure, public :: load_species_from_list => load_species_from_list
       procedure, public :: validate => so4chem_process_validate
       procedure, public :: finalize => so4chem_process_finalize
+      procedure, public :: initialize_persistent_state => so4chem_initialize_persistent_state
       procedure, public :: get_active_scheme_config => get_active_scheme_config
       procedure, public :: load_gocart_config
       procedure, public :: map_diagnostic_species_indices
@@ -416,11 +428,49 @@ contains
    !> Finalize unified process configuration
    subroutine so4chem_process_finalize(this)
       class(SO4chemProcessConfig), intent(inout) :: this
+      integer :: i
+
+      ! Deallocate persistent state arrays
+      if (allocated(this%gocart_persistent_state)) then
+         ! Deallocate allocatable components in each column
+         do i = 1, size(this%gocart_persistent_state)
+            if (allocated(this%gocart_persistent_state(i)%xh2o2_init)) then
+               deallocate(this%gocart_persistent_state(i)%xh2o2_init)
+            end if
+         end do
+         deallocate(this%gocart_persistent_state)
+      end if
 
       call this%so4chem_config%finalize()
       call this%gocart_config%finalize()
 
    end subroutine so4chem_process_finalize
+
+   !> Initialize persistent state arrays for column processing
+   subroutine so4chem_initialize_persistent_state(this, grid_manager)
+      use GridManager_Mod, only: GridManagerType
+      class(SO4chemProcessConfig), intent(inout) :: this
+      type(GridManagerType), intent(in) :: grid_manager
+
+      integer :: i
+
+      ! Get total number of columns from GridManager
+      this%total_columns = grid_manager%get_total_columns()
+
+      ! Allocate persistent state arrays for each scheme that needs them
+      if (.not. allocated(this%gocart_persistent_state)) then
+         allocate(this%gocart_persistent_state(this%total_columns))
+
+         ! Initialize each column's state with default values
+         do i = 1, this%total_columns
+            this%gocart_persistent_state(i)%firsttime = .true.
+            this%gocart_persistent_state(i)%nymd_last = -1
+            this%gocart_persistent_state(i)%nhms_last_recycle = -1
+            ! xh2o2_init is allocatable - will be allocated when needed
+         end do
+      end if
+
+   end subroutine so4chem_initialize_persistent_state
 
    !> Get active scheme configuration (polymorphic return)
    function get_active_scheme_config(this) result(scheme_config)

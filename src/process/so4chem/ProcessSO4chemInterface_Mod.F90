@@ -158,6 +158,9 @@ contains
       call this%process_config%validate(container, error_manager)
       ! Note: validate doesn't return rc, but error_manager tracks errors
 
+      ! Initialize persistent state arrays for column processing
+      call this%process_config%initialize_persistent_state(container%get_grid_manager())
+
       ! Register diagnostics for this process (only if diagnostics enabled)
       call this%register_diagnostics(container, rc)
       if (rc /= CC_SUCCESS) then
@@ -481,6 +484,10 @@ contains
             this%process_config%so4chem_config%species_names, &
             species_conc, &
             species_tendencies, &
+            this%process_config%gocart_persistent_state(column%column_id)%firsttime, &
+            this%process_config%gocart_persistent_state(column%column_id)%nymd_last, &
+            this%process_config%gocart_persistent_state(column%column_id)%nhms_last_recycle, &
+            this%process_config%gocart_persistent_state(column%column_id)%xh2o2_init, &
             this%column_Production_rate_per_species_per_level, &
             this%column_PSO4_from_gaseous_SO2_per_level, &
             this%column_PSO4_from_aqueous_SO2_per_level, &
@@ -523,7 +530,11 @@ contains
             species_mw_g, &
             this%process_config%so4chem_config%species_names, &
             species_conc, &
-            species_tendencies &
+            species_tendencies, &
+            this%process_config%gocart_persistent_state(column%column_id)%firsttime, &
+            this%process_config%gocart_persistent_state(column%column_id)%nymd_last, &
+            this%process_config%gocart_persistent_state(column%column_id)%nhms_last_recycle, &
+            this%process_config%gocart_persistent_state(column%column_id)%xh2o2_init &
             )
       end if
 

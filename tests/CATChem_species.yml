@@ -30,6 +30,7 @@ h2o2:
   is_gas: true
   is_drydep: true
   is_wetdep: true
+  is_advected: false
   dd_f0: 1.0
   dd_hstar: 5.0e+7
   mw_g: 34.02
@@ -43,12 +44,14 @@ oh:
   name: oh
   description: Hydroxyl radical
   is_gas: true
+  is_advected: false
   mw_g: 17.01
 no3:
   name: no3
   description: Nitrate radical
   is_gas: true
   is_photolysis: true
+  is_advected: false
   mw_g: 62.01
 so4:       #This is to match CMAQ name to use the restart file. so4 is used in GEOS-Chem.
   name: so4
@@ -79,6 +82,11 @@ dms:
   henry_k0: 0.48
   henry_cr: 3100.0
   mie_name: SU
+dms_in:
+  name: dms_in
+  description: Dimethyl sulfide in ocean water (climatology for emissions calculation)
+  mw_g: 62.13
+  radius: 8.7e-2
 msa:
   name: msa
   description: methanesulphonic acid

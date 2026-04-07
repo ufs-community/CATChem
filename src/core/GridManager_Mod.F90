@@ -135,6 +135,7 @@ module GridManager_Mod
       procedure :: next => iterator_next
       procedure :: get_current_column => iterator_get_current_column
       procedure :: get_current_indices => iterator_get_current_indices
+      procedure :: get_current_column_id => iterator_get_current_column_id
       procedure :: reset => iterator_reset
    end type ColumnIteratorType
 
@@ -460,6 +461,14 @@ contains
       i = this%current_i
       j = this%current_j
    end subroutine iterator_get_current_indices
+
+   !> \brief Get current column index
+   subroutine iterator_get_current_column_id(this, column_id)
+      class(ColumnIteratorType), intent(in) :: this
+      integer, intent(out) :: column_id
+
+      column_id = this%current_column
+   end subroutine iterator_get_current_column_id
 
    !> \brief Reset iterator to beginning
    subroutine iterator_reset(this)

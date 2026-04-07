@@ -1218,7 +1218,7 @@ CONTAINS
       real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
       real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
       !some variables used for reevaporation calculations
-      real(fp) :: flux_liq, flux_ice, flux_tot, reevap_liq, reevap_ice,C_evap, C_evap_mixed,RH_term, frac_liq
+      real(fp) :: flux_liq, flux_ice, flux_tot, reevap_liq, reevap_ice,C_evap,RH_term, frac_liq
       real(fp), parameter :: C_evap_liq = 2.0e-5_fp  ! liquid evap coefficient
       real(fp), parameter :: C_evap_ice = 0.5e-5_fp  ! ice sublimation coefficient
       real(fp), parameter :: b0         = 0.9_fp     ! Sundqvist RH threshold
@@ -1610,7 +1610,7 @@ CONTAINS
                   if(flux_liq .gt. 0.) then
                      ! kg/m²/s version: C_evap * RH_term * sqrt(flux) * air_mass
                      ! kg/kg/s version: air_mass cancels → simpler
-                     reevap_liq = C_evap_liq              &
+                     reevap_liq = C_evap          &
                         * RH_term                 &   ! dimensionless
                         * sqrt(flux_liq)              ! (kg/m²/s)^0.5
 
@@ -1625,7 +1625,7 @@ CONTAINS
                   ! 6. ICE SUBLIMATION
                   !    Only above T_ice threshold
                   if(flux_ice .gt. 0. .and. this%T(i,j,k) .gt. T_ice) then
-                     reevap_ice = C_evap_ice              &
+                     reevap_ice = C_evap          &
                         * RH_term                 &
                         * sqrt(flux_ice)
 

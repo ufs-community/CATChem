@@ -348,6 +348,7 @@ class SchemeConfig:
     required_constants: List[str] = field(default_factory=list)
     required_time_parameters: List[str] = field(default_factory=list)
     scheme_diagnostics: List[Dict[str, str]] = field(default_factory=list)
+    persistent_state_variables: List[Dict[str, Any]] = field(default_factory=list)
     algorithm_type: str = "explicit"
     affects_full_column: bool = False  # Whether scheme affects full atmospheric column
     scheme_type: str = ""  # Optional legacy field
@@ -389,7 +390,6 @@ class ProcessConfig:
     memory_requirements: str = "low"
     generate_tests: bool = True
     generate_docs: bool = True
-    generate_examples: bool = True
     output_dir: str = ""
     src_base_dir: str = "src/process"
 
@@ -568,6 +568,40 @@ class ProcessGenerator:
     def _fortran_boolean(b: bool) -> str:
         """Convert boolean to Fortran logical."""
         return ".true." if b else ".false."
+
+    @staticmethod
+    def _infer_state_variable_type(default_value: Any, name: str) -> str:
+        """Infer Fortran type from default value and variable name."""
+        if isinstance(default_value, bool):
+            return "logical"
+        elif isinstance(default_value, int):
+            return "integer"
+        elif isinstance(default_value, (float, int)):
+            return "real(fp)"
+        elif name.endswith('(:)') or '(:)' in name:
+            # Array variable - infer base type from default
+            if isinstance(default_value, bool):
+                return "logical"
+            elif isinstance(default_value, int):
+                return "integer"
+            else:
+                return "real(fp)"
+        else:
+            return "real(fp)"  # Default to real
+
+    @staticmethod
+    def _get_state_variable_dimensions(name: str) -> str:
+        """Get array dimensions from variable name."""
+        if '(:)' in name:
+            # Extract dimensions - for now support (:) which means allocatable 1D
+            return "(:)"
+        else:
+            return ""  # Scalar
+
+    @staticmethod
+    def _clean_state_variable_name(name: str) -> str:
+        """Clean variable name by removing dimension specifications."""
+        return name.replace('(:)', '').strip()
 
     def _infer_diagnostic_type(self, diagnostic: Dict[str, Any], config: ProcessConfig, scheme_config: SchemeConfig = None) -> str:
         """Infer diagnostic data type from configuration and context."""
@@ -1010,6 +1044,29 @@ class ProcessGenerator:
         if errors:
             raise ProcessValidationError("\n".join(errors))
 
+    def has_persistent_state_variables(self, config: ProcessConfig) -> bool:
+        """Check if any scheme has persistent state variables."""
+        for scheme in config.schemes:
+            if scheme.persistent_state_variables:
+                return True
+        return False
+
+    def get_all_persistent_state_variables(self, config: ProcessConfig) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all persistent state variables organized by scheme."""
+        all_variables = {}
+        for scheme in config.schemes:
+            if scheme.persistent_state_variables:
+                processed_vars = []
+                for var in scheme.persistent_state_variables:
+                    processed_var = var.copy()
+                    processed_var['clean_name'] = self._clean_state_variable_name(var['name'])
+                    processed_var['fortran_type'] = self._infer_state_variable_type(var.get('default'), var['name'])
+                    processed_var['dimensions'] = self._get_state_variable_dimensions(var['name'])
+                    processed_var['is_allocatable'] = '(:)' in var['name']
+                    processed_vars.append(processed_var)
+                all_variables[scheme.name] = processed_vars
+        return all_variables
+
     def load_config(self, config_path: Union[str, Path]) -> ProcessConfig:
         """Load and validate process configuration from YAML file.
 
@@ -1186,6 +1243,29 @@ class ProcessGenerator:
         # Return sorted list for consistent ordering
         return sorted(list(all_time_params))
 
+    def has_persistent_state_variables(self, config: ProcessConfig) -> bool:
+        """Check if any scheme has persistent state variables."""
+        for scheme in config.schemes:
+            if scheme.persistent_state_variables:
+                return True
+        return False
+
+    def get_all_persistent_state_variables(self, config: ProcessConfig) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all persistent state variables organized by scheme."""
+        all_variables = {}
+        for scheme in config.schemes:
+            if scheme.persistent_state_variables:
+                processed_vars = []
+                for var in scheme.persistent_state_variables:
+                    processed_var = var.copy()
+                    processed_var['clean_name'] = self._clean_state_variable_name(var['name'])
+                    processed_var['fortran_type'] = self._infer_state_variable_type(var.get('default'), var['name'])
+                    processed_var['dimensions'] = self._get_state_variable_dimensions(var['name'])
+                    processed_var['is_allocatable'] = '(:)' in var['name']
+                    processed_vars.append(processed_var)
+                all_variables[scheme.name] = processed_vars
+        return all_variables
+
     def _load_filtered_species(self, species_filter: Dict[str, Any]) -> List[str]:
         """Load species based on filter criteria.
 
@@ -1276,9 +1356,6 @@ class ProcessGenerator:
         if config.generate_docs:
             self._generate_documentation(docs_dir, config)
 
-        if config.generate_examples:
-            self._generate_examples(process_dir, config)
-
         logger.info(f"Process generation complete: {process_dir}")
 
     def _create_directory_structure(self, process_dir: Path, test_dir: Path, docs_dir: Path, config: ProcessConfig) -> None:
@@ -1302,10 +1379,6 @@ class ProcessGenerator:
         # Documentation directories
         if config.generate_docs:
             directories.append(docs_dir)
-
-        # Examples in process directory
-        if config.generate_examples:
-            directories.append(process_dir / "examples")
 
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
@@ -1339,6 +1412,8 @@ class ProcessGenerator:
             needs_time_state=needs_time_state,
             all_required_time_parameters=all_required_time_parameters,
             field_classifier=field_classifier,
+            has_persistent_state_variables=self.has_persistent_state_variables(config),
+            all_persistent_state_variables=self.get_all_persistent_state_variables(config),
             generation_date=datetime.now().isoformat(),
             version=config.version,
             timestamp=datetime.now().isoformat()
@@ -1368,6 +1443,8 @@ class ProcessGenerator:
             config=config,
             all_required_species_properties=all_required_species_properties,
             field_classifier=field_classifier,
+            has_persistent_state_variables=self.has_persistent_state_variables(config),
+            all_persistent_state_variables=self.get_all_persistent_state_variables(config),
             generation_date=datetime.now().isoformat(),
             version=config.version,
             timestamp=datetime.now().isoformat(),
@@ -1437,6 +1514,8 @@ class ProcessGenerator:
                     needs_time_state=self.has_required_time_parameters(config),
                     all_required_time_parameters=self.get_all_required_time_parameters(config),
                     field_classifier=field_classifier,
+                    has_persistent_state_variables=self.has_persistent_state_variables(config),
+                    all_persistent_state_variables=self.get_all_persistent_state_variables(config),
                     timestamp=datetime.now().isoformat()
                 )
                 logger.info(f"Template rendered successfully, content length: {len(content)}")
@@ -1550,35 +1629,7 @@ class ProcessGenerator:
 
         logger.info(f"Generated documentation in: {docs_dir}")
 
-    def _generate_examples(self, process_dir: Path, config: ProcessConfig) -> None:
-        """Generate example files."""
-        logger.info("Generating examples")
 
-        examples_dir = process_dir / "examples"
-
-        # Basic usage example
-        example_template = self.env.get_template('example_usage.F90.j2')
-        example_content = example_template.render(
-            config=config,
-            timestamp=datetime.now().isoformat()
-        )
-
-        example_file = examples_dir / f"{config.name}_example.F90"
-        with open(example_file, 'w') as f:
-            f.write(example_content)
-
-        # Configuration example
-        config_template = self.env.get_template('example_config.yaml.j2')
-        config_content = config_template.render(
-            config=config,
-            timestamp=datetime.now().isoformat()
-        )
-
-        config_file = examples_dir / f"{config.name}_config.yaml"
-        with open(config_file, 'w') as f:
-            f.write(config_content)
-
-        logger.info(f"Generated examples in: {examples_dir}")
 
     def generate_template_config(self, process_type: str = "emission") -> Dict[str, Any]:
         """Generate a template configuration for a given process type.
@@ -1633,8 +1684,7 @@ class ProcessGenerator:
                     }
                 ],
                 "generate_tests": True,
-                "generate_docs": True,
-                "generate_examples": True
+                "generate_docs": True
             },
 
             "chemistry": {
@@ -1677,8 +1727,7 @@ class ProcessGenerator:
                 "timestep_dependency": "dependent",
                 "parallelization": "column",
                 "generate_tests": True,
-                "generate_docs": True,
-                "generate_examples": True
+                "generate_docs": True
             }
         }
 

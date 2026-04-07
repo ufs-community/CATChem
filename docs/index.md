@@ -1,6 +1,6 @@
 # CATChem Library and Modeling Component
 
-![CATChem_logo](../data/CATChem_logo.png){: width="35%", align="right"}
+![CATChem_logo](diagrams/CATChem_logo.png){: width="35%", align="right"}
 CATChem (Configurable ATmospheric Chemistry) is a library and modeling component that includes all chemical and aerosol processes needed to perform atmospheric chemistry and composition simulations within a model through a flexible, easy to modify, and well-documented infrastructure. CATChem will include the following processes: chemical kinetics, aerosols, photolysis, wet deposition, dry deposition, connections to emissions, and connection to physics schemes. CATChem is integrated into NOAA’s Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. UFS-Chem is a modern, high-performance atmospheric chemistry model designed for operational and research applications including weather, air quality, and smoke forecasting. Built with modern Fortran and designed for scalability, CATChem provides sophisticated atmospheric chemistry capabilities as an open-source community project.
 
 ## ✨ Key Features

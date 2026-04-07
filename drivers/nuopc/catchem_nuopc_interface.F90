@@ -297,6 +297,13 @@ contains
       cc_wrap%field_config = field_config
       ! Set the process-local grid variable
       cc_wrap%grid = input_grid
+
+      ! Initialize AQMIO component if not done
+      if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
+         cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
+         if (rc /= CC_SUCCESS) return
+      end if
+
       ! Set time information if provided
       if (present(stopTime)) then
          cc_wrap%endTime = stopTime
@@ -411,11 +418,6 @@ contains
       errmsg = ''
 
       ! Update extemission data first
-      ! Initialize AQMIO component if not done
-      if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
-         cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
-         if (rc /= CC_SUCCESS) return
-      end if
       state_mgr => cc_wrap%catchem_model%get_state_manager()
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
@@ -1042,8 +1044,8 @@ contains
          ! Reverse vertical layers
          do v = 1, nv
             v_cc = cc_wrap%tracer_map%nuopc_to_cc(v)
-            if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
             if (v_cc > 0) then
+               if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
                cc_diag_data = chem_state%ChemSpecies(v_cc)%conc
                if (chem_state%ChemSpecies(v_cc)%is_gas) then
                   !unit_conv = 1.0e3 * chem_state%ChemSpecies(v_cc)%mw_g /28.9644  ! convert from ppm to ug/kg for gases
@@ -1130,12 +1132,6 @@ contains
          rc = CC_FAILURE
          write(*,'(A)') 'Error: grid not initialized.'
          return
-      end if
-
-      ! Initialize AQMIO component if not done
-      if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
-         cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
-         if (rc /= CC_SUCCESS) return
       end if
 
       ! Generate filename for current time
@@ -1273,9 +1269,9 @@ contains
       character(len=*), intent(in) :: field_name
       integer, intent(in) :: data_type
       real(fp), intent(in) :: scalar_value
-      real(fp), pointer, intent(in) :: array_1d_ptr(:)
-      real(fp), pointer, intent(in) :: array_2d_ptr(:,:)
-      real(fp), pointer, intent(in) :: array_3d_ptr(:,:,:)
+      real(fp), pointer, optional, intent(in) :: array_1d_ptr(:)
+      real(fp), pointer, optional, intent(in) :: array_2d_ptr(:,:)
+      real(fp), pointer, optional, intent(in) :: array_3d_ptr(:,:,:)
       character(len=*), intent(in) :: description
       character(len=*), intent(in) :: units
       character(len=*), intent(in) :: filename
@@ -1295,6 +1291,10 @@ contains
       ! Create appropriate ESMF field based on data type
       select case (data_type)
        case (DIAG_REAL_2D)
+         if (.not. present(array_2d_ptr)) then
+            rc = CC_FAILURE
+            return
+         end if
          if (.not. associated(array_2d_ptr)) then
             rc = CC_FAILURE
             return
@@ -1325,6 +1325,10 @@ contains
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
        case (DIAG_REAL_3D)
+         if (.not. present(array_3d_ptr)) then
+            rc = CC_FAILURE
+            return
+         end if
          if (.not. associated(array_3d_ptr)) then
             rc = CC_FAILURE
             return
@@ -1559,15 +1563,15 @@ contains
 
                ! Write the converted aerosol data
                call write_diagnostic_field(cc_wrap, field_name, DIAG_REAL_3D, 0.0_fp, &
-                  null(), null(), converted_conc, &
-                  trim(description), trim(units_str), filename, rc)
+                  array_3d_ptr=converted_conc, description = trim(description), &
+                  units = trim(units_str), filename = filename, rc = rc)
 
                deallocate(converted_conc)
             else
                ! Write gas data directly (already in ppm)
                call write_diagnostic_field(cc_wrap, field_name, DIAG_REAL_3D, 0.0_fp, &
-                  null(), null(), conc_data, &
-                  trim(description), trim(units_str), filename, rc)
+                  array_3d_ptr=conc_data, description = trim(description), &
+                  units = trim(units_str), filename = filename, rc = rc)
             end if
 
             if (rc /= CC_SUCCESS) then

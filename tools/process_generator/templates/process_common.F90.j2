@@ -138,7 +138,17 @@ module {{ config.class_name }}Common_Mod
       procedure, public :: finalize => finalize_{{ scheme.name }}_config
    end type {{ config.class_name }}Scheme{{ scheme.class_name }}Config
 
+{% if has_persistent_state_variables and scheme.name in all_persistent_state_variables %}
+   !> Persistent state type for {{ scheme.name }} scheme
+   !! Contains variables that persist across time steps for each column
+   type :: {{ config.class_name }}{{ scheme.class_name }}PersistentState
+{% for var in all_persistent_state_variables[scheme.name] %}
+      {{ var.fortran_type }}{% if var.is_allocatable %}, allocatable{% endif %} :: {{ var.clean_name }}{% if var.dimensions %}{{ var.dimensions }}{% endif %}  ! {{ var.description }}
+{% endfor %}
+   end type {{ config.class_name }}{{ scheme.class_name }}PersistentState
+{% else %}
    ! {{ scheme.name }} scheme uses local variables only - no persistent state type needed
+{% endif %}
 
 {% endfor %}
 
@@ -170,6 +180,14 @@ module {{ config.class_name }}Common_Mod
 {% endfor %}
 {% endif %}
 
+{% if has_persistent_state_variables %}
+      ! Persistent state arrays for column processing
+{% for scheme_name, variables in all_persistent_state_variables.items() %}
+      type({{ config.class_name }}{{ scheme_name | title }}PersistentState), allocatable :: {{ scheme_name }}_persistent_state(:)  ! Per-column state for {{ scheme_name }} scheme
+{% endfor %}
+      integer :: total_columns = 0  ! Total number of columns for state allocation
+{% endif %}
+
    contains
       procedure, public :: load_from_config => {{ config.name }}_process_load_config
 {% if config.species %}
@@ -181,6 +199,9 @@ module {{ config.class_name }}Common_Mod
 {% endif %}
       procedure, public :: validate => {{ config.name }}_process_validate
       procedure, public :: finalize => {{ config.name }}_process_finalize
+{% if has_persistent_state_variables %}
+      procedure, public :: initialize_persistent_state => {{ config.name }}_initialize_persistent_state
+{% endif %}
       procedure, public :: get_active_scheme_config => get_active_scheme_config
 {% for scheme in config.schemes %}
       procedure, public :: load_{{ scheme.name }}_config
@@ -1026,6 +1047,28 @@ contains
    !> Finalize unified process configuration
    subroutine {{ config.name }}_process_finalize(this)
       class({{ config.class_name }}ProcessConfig), intent(inout) :: this
+{% if has_persistent_state_variables %}
+      integer :: i
+{% endif %}
+
+{% if has_persistent_state_variables %}
+      ! Deallocate persistent state arrays
+{% for scheme_name, variables in all_persistent_state_variables.items() %}
+      if (allocated(this%{{ scheme_name }}_persistent_state)) then
+{% for var in variables %}
+{% if var.is_allocatable %}
+         ! Deallocate allocatable components in each column
+         do i = 1, size(this%{{ scheme_name }}_persistent_state)
+            if (allocated(this%{{ scheme_name }}_persistent_state(i)%{{ var.clean_name }})) then
+               deallocate(this%{{ scheme_name }}_persistent_state(i)%{{ var.clean_name }})
+            end if
+         end do
+{% endif %}
+{% endfor %}
+         deallocate(this%{{ scheme_name }}_persistent_state)
+      end if
+{% endfor %}
+{% endif %}
 
       call this%{{ config.name }}_config%finalize()
 {% for scheme in config.schemes %}
@@ -1033,6 +1076,44 @@ contains
 {% endfor %}
 
    end subroutine {{ config.name }}_process_finalize
+
+{% if has_persistent_state_variables %}
+   !> Initialize persistent state arrays for column processing
+   subroutine {{ config.name }}_initialize_persistent_state(this, grid_manager)
+      use GridManager_Mod, only: GridManagerType
+      class({{ config.class_name }}ProcessConfig), intent(inout) :: this
+      type(GridManagerType), intent(in) :: grid_manager
+
+      integer :: i
+
+      ! Get total number of columns from GridManager
+      this%total_columns = grid_manager%get_total_columns()
+
+      ! Allocate persistent state arrays for each scheme that needs them
+{% for scheme_name, variables in all_persistent_state_variables.items() %}
+      if (.not. allocated(this%{{ scheme_name }}_persistent_state)) then
+         allocate(this%{{ scheme_name }}_persistent_state(this%total_columns))
+
+         ! Initialize each column's state with default values
+         do i = 1, this%total_columns
+{% for var in variables %}
+{% if var.fortran_type == 'logical' %}
+            this%{{ scheme_name }}_persistent_state(i)%{{ var.clean_name }} = {% if var.default %}.true.{% else %}.false.{% endif %}
+
+{% elif var.fortran_type == 'integer' %}
+            this%{{ scheme_name }}_persistent_state(i)%{{ var.clean_name }} = {{ var.default | default(-1) }}
+{% elif var.is_allocatable %}
+            ! {{ var.clean_name }} is allocatable - will be allocated when needed
+{% else %}
+            this%{{ scheme_name }}_persistent_state(i)%{{ var.clean_name }} = {{ var.default | default('0.0_fp') }}
+{% endif %}
+{% endfor %}
+         end do
+      end if
+{% endfor %}
+
+   end subroutine {{ config.name }}_initialize_persistent_state
+{% endif %}
 
    !> Get active scheme configuration (polymorphic return)
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
