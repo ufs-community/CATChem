@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [gfortran-12, gfortran-13, gfortran-14]
+        compiler: [gfortran-13, gfortran-14]
     defaults:
       run:
         shell: bash -l {0}
