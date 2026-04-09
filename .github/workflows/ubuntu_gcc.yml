@@ -1,6 +1,10 @@
 name: CI (GNU spack-stack)
-on: [push, pull_request, workflow_dispatch]
 
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
 
 # Use custom shell with -l so .bash_profile is sourced
 # without having to do it in manually every step
@@ -45,9 +49,8 @@ jobs:
       - name: install-dependencies-with-spack
         if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
-          git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git --branch release/2.1 --depth 1
+          git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git --branch spack-stack-1.9.3 --depth 1
           source spack/share/spack/setup-env.sh
-          export SPACK_STACK_DIR="${PWD}/spack"
           sed "s/\[oneapi, gcc@13.13, apple-clang@14\]/\[gcc@13\]/g" catchem/ci/spack.yaml > spack_ci.yaml
           spack env create catchem-env spack_ci.yaml
           spack env activate catchem-env
