@@ -1,4 +1,4 @@
-name: CI
+name: CI (GNU)
 
 on:
   push:
@@ -24,21 +24,26 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get Intel compilers with APT
-        if: matrix.compiler == 'ifort'
-        uses: fortran-lang/setup-fortran@v1
-        with:
-          compiler: intel-classic
-          version: "2021.9"  # oneAPI 2023.1.0
-
       - name: Install dependencies
-        if: ${{ startsWith(matrix.compiler, 'gfortran') }}
-        run: sudo apt-get update && sudo apt-get install -y libnetcdf-dev libnetcdff-dev
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
+
+      - name: Fetch pre-built ESMF
+        run: |
+          esmf=8.8.1-gcc-13-mpiuni
+
+          ESMF_DIR=$HOME/esmf/$esmf
+          mkdir -p $ESMF_DIR
+          cd $ESMF_DIR
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.10/${esmf}.tar.gz
+          tar xzvf ${esmf}.tar.gz
+
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
 
       - name: Build
         run: |
           cmake -B $BUILD_DIR
-          cmake --build $BUILD_DIR
+          cmake --build $BUILD_DIR -j2
         env:
           FC: ${{ matrix.compiler }}
 

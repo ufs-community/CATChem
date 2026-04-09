@@ -1,4 +1,4 @@
-name: GCC Linux Build and Test
+name: CI (GNU spack-stack)
 on: [push, pull_request, workflow_dispatch]
 
 
