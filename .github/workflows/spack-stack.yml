@@ -1,4 +1,4 @@
-name: CI (GNU spack-stack)
+name: CI (spack-stack)
 
 on:
   push:
@@ -14,9 +14,6 @@ defaults:
 
 env:
   cache_key: gcc
-  CC: gcc-13
-  FC: gfortran-13
-  CXX: g++-13
 
 # The jobs are split into:
 # 1. a dependency build step (setup), and
@@ -27,6 +24,7 @@ env:
 
 jobs:
   setup:
+    # NOTE: this can take quite a while if the cache misses.
     runs-on: ubuntu-24.04
 
     steps:
@@ -83,17 +81,16 @@ jobs:
             spack
             ~/.spack
           key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('catchem/ci/spack.yaml') }}
-      - name: Ensure HTTPS and Git dependencies
-        id: ensure-https-and-git
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git ca-certificates libcurl4-openssl-dev gfortran-13 g++-13 gcc-13
+
       - name: build
         run: |
           source spack/share/spack/setup-env.sh
           spack env activate catchem-env
           export CC=mpicc
           export FC=mpif90
+          export OMPI_CC=gcc-13
+          export OMPI_FC=gfortran-13
+          export OMPI_CXX=g++-13
           cd catchem
           mkdir -p build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=../install -DBUILD_NUOPC=ON ..
