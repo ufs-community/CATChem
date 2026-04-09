@@ -107,7 +107,7 @@ bc1:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
-  t_chem_loss: 1.0  #Rate of chemical destruction of carbon species [days]; Note GOCART2G is using -1.0, which I think is not correct since that would lead to chemloss=0 all the time.
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: BC
 bc2:
   name: bc2
@@ -124,7 +124,7 @@ bc2:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
-  t_chem_loss: 1.0  #Rate of chemical destruction of carbon species [days]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: BC
 oc1:
   name: oc1
@@ -141,7 +141,7 @@ oc1:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
-  t_chem_loss: 1.0  #Rate of chemical destruction of carbon species [days]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: OC
 oc2:
   name: oc2
@@ -158,7 +158,7 @@ oc2:
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
-  t_chem_loss: 1.0  #Rate of chemical destruction of carbon species [days]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: OC
 dust1:
   name: dust1
