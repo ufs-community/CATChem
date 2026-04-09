@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [gfortran-13, gfortran-14]
+        gcc-version: ["13"]
     defaults:
       run:
         shell: bash -l {0}
@@ -31,7 +31,7 @@ jobs:
 
       - name: Fetch pre-built ESMF
         run: |
-          esmf=8.8.1-gcc-13-mpi
+          esmf=8.8.1-gcc-${{ matrix.gcc-version }}-mpi
 
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
@@ -47,7 +47,9 @@ jobs:
           cmake --build $BUILD_DIR -j2
         env:
           FC: mpifort
-          OMPI_FC: ${{ matrix.compiler }}
+          OMPI_FC: gfortran-${{ matrix.gcc-version }}
+          CC: gcc-${{ matrix.gcc-version }}
+          CXX: g++-${{ matrix.gcc-version }}
 
       - name: Test
         run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
