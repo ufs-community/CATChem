@@ -27,10 +27,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y
           libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
+          libopenmpi-dev openmpi-bin
 
       - name: Fetch pre-built ESMF
         run: |
-          esmf=8.8.1-gcc-13-mpiuni
+          esmf=8.8.1-gcc-13-mpi
 
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
@@ -38,14 +39,15 @@ jobs:
           wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.10/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
-          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk" >> "$GITHUB_ENV"
 
       - name: Build
         run: |
-          cmake -B $BUILD_DIR
+          cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
           cmake --build $BUILD_DIR -j2
         env:
-          FC: ${{ matrix.compiler }}
+          FC: mpifort
+          OMPI_FC: ${{ matrix.compiler }}
 
       - name: Test
         run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
