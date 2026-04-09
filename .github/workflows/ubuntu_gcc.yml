@@ -29,7 +29,7 @@ jobs:
       - name: checkout  # this is to get the ci/spack.yaml file
         uses: actions/checkout@v6
         with:
-            path: catchem
+          path: catchem
 
       # Cache spack, compiler and dependencies
       - name: cache-env
@@ -69,8 +69,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v6
         with:
-            path: catchem
-            submodules: recursive
+          path: catchem
+          submodules: recursive
 
       - name: cache-env
         id: cache-env
