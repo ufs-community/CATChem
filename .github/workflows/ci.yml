@@ -1,0 +1,102 @@
+name: CI (GNU)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  BUILD_DIR: build
+
+jobs:
+  build-and-test:
+    name: Build and test (${{ matrix.gcc-version }}${{ matrix.nuopc && ', NUOPC' || '' }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc-version: ["13"]
+        nuopc: [true, false]
+        include:
+          - gcc-version: "14"
+            nuopc: false
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        if: ${{ !matrix.nuopc }}
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev
+
+      - name: Install dependencies (NUOPC)
+        if: matrix.nuopc
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
+          libopenmpi-dev openmpi-bin
+
+      - name: Fetch pre-built ESMF (NUOPC)
+        if: matrix.nuopc
+        run: |
+          esmf=8.8.1-gcc-${{ matrix.gcc-version }}-mpi
+
+          ESMF_DIR=$HOME/esmf/$esmf
+          mkdir -p $ESMF_DIR
+          cd $ESMF_DIR
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.10/${esmf}.tar.gz
+          tar xzvf ${esmf}.tar.gz
+
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk" >> "$GITHUB_ENV"
+
+      - name: Configure
+        if: ${{ !matrix.nuopc }}
+        run: cmake -B $BUILD_DIR -DBUILD_NUOPC=OFF
+        env:
+          FC: gfortran-${{ matrix.gcc-version }}
+          CC: gcc-${{ matrix.gcc-version }}
+          CXX: g++-${{ matrix.gcc-version }}
+
+      - name: Configure (NUOPC)
+        if: matrix.nuopc
+        run: cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
+        env:
+          FC: mpifort
+          OMPI_FC: gfortran-${{ matrix.gcc-version }}
+          CC: gcc-${{ matrix.gcc-version }}
+          CXX: g++-${{ matrix.gcc-version }}
+
+      - name: Build
+        run: cmake --build $BUILD_DIR -j2
+
+      - name: Test
+        run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
+
+  build-and-test_jcsda-docker:
+    runs-on: ubuntu-latest
+    name: Build and test (JCSDA docker image)
+    container: jcsda/docker-gnu-openmpi-dev:1.9
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Configure and build
+        run: |
+          source /opt/spack-environment/activate.sh
+          cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
+          cmake --build $BUILD_DIR -j2
+
+      - name: Test
+        run: |
+          source /opt/spack-environment/activate.sh
+          ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
