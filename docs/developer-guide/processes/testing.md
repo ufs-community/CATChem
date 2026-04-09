@@ -535,17 +535,17 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [gcc-9, gcc-10, gcc-11]
+        compiler: ["12", "13", "14"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
 
     - name: Install dependencies
       run: |
-        sudo apt-get install gfortran-${{ matrix.compiler }} cmake netcdf-bin libnetcdf-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev
 
     - name: Build
       run: |
