@@ -52,8 +52,7 @@ jobs:
           sed "s/\[oneapi, gcc@13.13, apple-clang@14\]/\[gcc@13\]/g" catchem/ci/spack.yaml > spack_ci.yaml
           spack env create catchem-env spack_ci.yaml
           spack env activate catchem-env
-          sudo apt update
-          sudo apt install -y cmake gfortran-13 g++-13 gcc-13 libgomp1
+          sudo apt-get update && sudo apt-get install -y libgomp1
           spack compiler find
           spack external find
           # Ensure MPI with Fortran and OpenMP-capable toolchain
@@ -88,9 +87,9 @@ jobs:
           spack env activate catchem-env
           export CC=mpicc
           export FC=mpif90
-          export OMPI_CC=gcc-13
-          export OMPI_FC=gfortran-13
-          export OMPI_CXX=g++-13
+          export MPICH_CC=gcc-13
+          export MPICH_FC=gfortran-13
+          export MPICH_CXX=g++-13
           cd catchem
           mkdir -p build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=../install -DBUILD_NUOPC=ON ..

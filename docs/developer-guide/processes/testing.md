@@ -538,14 +538,14 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [gcc-12, gcc-13, gcc-14]
+        compiler: ["12", "13", "14"]
 
     steps:
     - uses: actions/checkout@v6
 
     - name: Install dependencies
       run: |
-        sudo apt-get install gfortran-${{ matrix.compiler }} cmake netcdf-bin libnetcdf-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev
 
     - name: Build
       run: |
