@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  BUILD_DIR: build
+
 jobs:
   build-and-test:
     name: Build and test (${{ matrix.gcc-version }}${{ matrix.nuopc && ', NUOPC' || '' }})
@@ -21,8 +24,6 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-    env:
-      BUILD_DIR: build
 
     steps:
       - uses: actions/checkout@v6
@@ -75,3 +76,27 @@ jobs:
 
       - name: Test
         run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
+
+  build-and-test_jcsda-docker:
+    runs-on: ubuntu-latest
+    name: Build and test (JCSDA docker image)
+    container: jcsda/docker-gnu-openmpi-dev:1.9
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Configure and build
+        run: |
+          source /opt/spack-environment/activate.sh
+          cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
+          cmake --build $BUILD_DIR -j2
+
+      - name: Test
+        run: |
+          source /opt/spack-environment/activate.sh
+          ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
