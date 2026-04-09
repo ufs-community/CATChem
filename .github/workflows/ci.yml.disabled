@@ -9,10 +9,10 @@ on:
 jobs:
   build:
     name: Build and test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [gfortran-10, gfortran-11, gfortran-12]
+        compiler: [gfortran-12, gfortran-13, gfortran-14]
     defaults:
       run:
         shell: bash -l {0}
@@ -20,12 +20,12 @@ jobs:
       BUILD_DIR: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
       - name: Get Intel compilers with APT
-        if: ${{ matrix.compiler == 'ifort' }}
+        if: matrix.compiler == 'ifort'
         uses: fortran-lang/setup-fortran@v1
         with:
           compiler: intel-classic
