@@ -47,6 +47,7 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
+          export SPACK_STACK_DIR="${PWD}/spack"
           sed "s/\[oneapi, gcc@13.13, apple-clang@14\]/\[gcc@13\]/g" catchem/ci/spack.yaml > spack_ci.yaml
           spack env create catchem-env spack_ci.yaml
           spack env activate catchem-env
