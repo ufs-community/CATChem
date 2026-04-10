@@ -1,5 +1,3 @@
-include(CTest)
-
 add_compile_options(${_catchem_compiler_options})
 
 add_library(testing testing_mod.f90)
