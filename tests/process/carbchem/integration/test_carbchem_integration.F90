@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the carbchem process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2026-03-29T14:20:16.465719
+!! Generated on: 2026-04-10T16:46:37.972585
 
 program test_carbchem_integration
    use precision_mod, only: fp

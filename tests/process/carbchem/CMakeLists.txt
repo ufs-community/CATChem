@@ -1,7 +1,5 @@
 # CMakeLists.txt for carbchem process tests
-# Generated on: 2026-03-29T14:20:16.488731
-
-cmake_minimum_required(VERSION 3.12)
+# Generated on: 2026-04-10T16:46:38.008528
 
 # Test executables
 set(

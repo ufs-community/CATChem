@@ -1,5 +1,5 @@
 # CarbChem Process CMakeLists.txt
-# Generated on: 2026-03-29T14:20:16.372227
+# Generated on: 2026-04-10T16:46:37.829974
 # Author: Wei Li
 # Description: Process for computing chemical production and loss of carbon species
 
@@ -70,17 +70,7 @@ install(
 )
 
 # Add subdirectories
-if(BUILD_TESTING)
-  # Add tests subdirectory - tests are located in tests/process/carbchem/
-  set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/carbchem")
-  if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
-    add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
-  endif()
-endif()
-
-if(BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
+# Note: tests are registered via tests/CMakeLists.txt (tests/process/carbchem/)
 
 # Documentation
 if(BUILD_DOCUMENTATION)
@@ -135,4 +125,4 @@ message(STATUS "  Has size bins: No")
 message(STATUS "  Multiphase: No")
 message(STATUS "  Generate tests: Yes")
 message(STATUS "  Generate docs: Yes")
-message(STATUS "  Generate examples: Yes")
+message(STATUS "  Generate examples: No")

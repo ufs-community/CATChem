@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! carbchem process and its schemes.
 !!
-!! Generated on: 2026-03-29T14:20:16.231465
+!! Generated on: 2026-04-10T16:46:37.664483
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -104,6 +104,7 @@ module CarbChemCommon_Mod
 
       ! Scheme configurations
       type(CarbChemSchemeGOCARTConfig) :: gocart_config
+
 
    contains
       procedure, public :: load_from_config => carbchem_process_load_config
@@ -413,10 +414,12 @@ contains
    subroutine carbchem_process_finalize(this)
       class(CarbChemProcessConfig), intent(inout) :: this
 
+
       call this%carbchem_config%finalize()
       call this%gocart_config%finalize()
 
    end subroutine carbchem_process_finalize
+
 
    !> Get active scheme configuration (polymorphic return)
    function get_active_scheme_config(this) result(scheme_config)

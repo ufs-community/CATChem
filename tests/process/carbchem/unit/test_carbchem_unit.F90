@@ -3,7 +3,7 @@
 !!
 !! This file contains unit tests for the carbchem process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2026-03-29T14:20:16.397206
+!! Generated on: 2026-04-10T16:46:37.876857
 
 program test_carbchem_unit
    use testing_mod, only: assert, assert_close
