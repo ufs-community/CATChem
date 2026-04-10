@@ -446,3 +446,6 @@ add_test(
 #     LINKER_LANGUAGE Fortran
 #)
 #add_test(NAME test_chem COMMAND test_chem)
+
+# Process-specific tests - binaries land in build/tests/process/<name>/
+add_subdirectory(process/drydep)
