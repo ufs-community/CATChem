@@ -39,7 +39,7 @@ set_target_properties(
 )
 
 #
-# MICM Fortran API - using submodule v0.11.1.4
+# MUSICA Fortran API
 #
 
 # Set MUSICA build options before adding the subdirectory
@@ -52,7 +52,7 @@ set_target_properties(
 # set(MUSICA_ENABLE_MICM ON)
 # set(MUSICA_ENABLE_TUVX ON)
 
-# # Add MUSICA as a subdirectory (from submodule v0.11.1.4)
+# # Add MUSICA as a subdirectory
 # add_subdirectory(musica)
 
 #
