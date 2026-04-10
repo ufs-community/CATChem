@@ -1,5 +1,3 @@
-include(CTest)
-
 add_compile_options(${_catchem_compiler_options})
 
 add_library(testing testing_mod.f90)
@@ -446,3 +444,13 @@ add_test(
 #     LINKER_LANGUAGE Fortran
 #)
 #add_test(NAME test_chem COMMAND test_chem)
+
+# Process-specific tests - binaries land in build/tests/process/<name>/
+file(GLOB _process_test_dirs LIST_DIRECTORIES true process/*)
+foreach(_dir ${_process_test_dirs})
+  if(IS_DIRECTORY "${_dir}" AND EXISTS "${_dir}/CMakeLists.txt")
+    get_filename_component(_process_name ${_dir} NAME)
+    message(STATUS "Found process tests: ${_process_name}")
+    add_subdirectory(${_dir})
+  endif()
+endforeach()

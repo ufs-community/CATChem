@@ -70,14 +70,7 @@ install(
 )
 
 # Add subdirectories
-if(BUILD_TESTING)
-  # Add tests subdirectory - tests are located in tests/process/so4chem/
-  set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/so4chem")
-  if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
-    add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
-  endif()
-endif()
-
+# Note: tests are registered via tests/CMakeLists.txt (tests/process/so4chem/)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()

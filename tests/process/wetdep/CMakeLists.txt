@@ -1,8 +1,6 @@
 # CMakeLists.txt for wetdep process tests
 # Generated on: 2025-12-15T16:30:33.913416
 
-cmake_minimum_required(VERSION 3.12)
-
 # Test executables
 set(
   TEST_SOURCES

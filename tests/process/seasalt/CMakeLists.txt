@@ -1,8 +1,6 @@
 # CMakeLists.txt for seasalt process tests
 # Generated on: 2025-11-14T23:01:21.936351
 
-cmake_minimum_required(VERSION 3.12)
-
 # Test executables
 set(
   TEST_SOURCES

@@ -70,14 +70,7 @@ install(
 )
 
 # Add subdirectories
-if(BUILD_TESTING)
-  # Add tests subdirectory - tests are located in tests/process/seasalt/
-  set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/seasalt")
-  if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
-    add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
-  endif()
-endif()
-
+# Note: tests are registered via tests/CMakeLists.txt (tests/process/seasalt/)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
