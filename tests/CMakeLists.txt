@@ -449,3 +449,7 @@ add_test(
 
 # Process-specific tests - binaries land in build/tests/process/<name>/
 add_subdirectory(process/drydep)
+add_subdirectory(process/seasalt)
+add_subdirectory(process/settling)
+add_subdirectory(process/so4chem)
+add_subdirectory(process/wetdep)

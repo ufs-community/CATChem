@@ -65,14 +65,7 @@ install(
 )
 
 # Add subdirectories
-if(BUILD_TESTING)
-  # Add tests subdirectory - tests are located in tests/process/wetdep/
-  set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/wetdep")
-  if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
-    add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
-  endif()
-endif()
-
+# Note: tests are registered via tests/CMakeLists.txt (tests/process/wetdep/)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
