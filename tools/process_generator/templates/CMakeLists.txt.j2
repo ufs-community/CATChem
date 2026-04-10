@@ -89,16 +89,7 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/include/
 )
 
 # Add subdirectories
-{% if config.generate_tests %}
-if(BUILD_TESTING)
-    # Add tests subdirectory - tests are located in tests/process/{{ config.name }}/
-    set(TESTS_DIR "${CMAKE_SOURCE_DIR}/tests/process/{{ config.name }}")
-    if(EXISTS "${TESTS_DIR}/CMakeLists.txt")
-        add_subdirectory("${TESTS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/tests")
-    endif()
-endif()
-{% endif %}
-
+# Note: tests are registered via tests/CMakeLists.txt (tests/process/{{ config.name }}/)
 {% if config.generate_examples %}
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)

@@ -1,8 +1,6 @@
 # CMakeLists.txt for so4chem process tests
 # Generated on: 2026-03-03T18:15:44.634976
 
-cmake_minimum_required(VERSION 3.12)
-
 # Test executables
 set(
   TEST_SOURCES

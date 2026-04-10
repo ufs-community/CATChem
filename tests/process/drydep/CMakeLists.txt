@@ -1,8 +1,6 @@
 # CMakeLists.txt for drydep process tests
 # Generated on: 2025-11-14T22:58:26.755635
 
-cmake_minimum_required(VERSION 3.12)
-
 # Test executables
 set(
   TEST_SOURCES

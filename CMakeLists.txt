@@ -9,6 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Option to build NUOPC cap (defaults to OFF)
 option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 
+# Option to disable tests
+option(BUILD_TESTING "Build tests" ON)
+
 include(CMakePrintHelpers)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -104,11 +107,13 @@ if(BUILD_NUOPC)
   endif()
 endif()
 
-# Enable testing for standalone builds
-enable_testing()
-
 add_subdirectory(src)
-add_subdirectory(tests)
+
+# Enable testing for standalone builds
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 if(BUILD_NUOPC)
   add_subdirectory(drivers/nuopc)
