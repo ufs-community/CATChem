@@ -448,8 +448,11 @@ add_test(
 #add_test(NAME test_chem COMMAND test_chem)
 
 # Process-specific tests - binaries land in build/tests/process/<name>/
-add_subdirectory(process/drydep)
-add_subdirectory(process/seasalt)
-add_subdirectory(process/settling)
-add_subdirectory(process/so4chem)
-add_subdirectory(process/wetdep)
+file(GLOB _process_test_dirs LIST_DIRECTORIES true process/*)
+foreach(_dir ${_process_test_dirs})
+  if(IS_DIRECTORY "${_dir}" AND EXISTS "${_dir}/CMakeLists.txt")
+    get_filename_component(_process_name ${_dir} NAME)
+    message(STATUS "Found process tests: ${_process_name}")
+    add_subdirectory(${_dir})
+  endif()
+endforeach()
