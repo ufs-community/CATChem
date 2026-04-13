@@ -236,9 +236,11 @@ contains
          end select
 
          !get concentration for this species after flipping vertical levels for gocart
+         ! Unit conversion: model state [ug/kg] -> GOCART internal [kg/kg] (multiply by 1e-9)
+         ! Vertical flip: model convention (surface=1) -> GOCART convention (top=1)
          if (.not. reset_con) then
-            intPtr_phobic_philic(1,1,:, 1) = species_conc(num_layers:1:-1, phobic_species_idx) * 1.0e-9_fp !ug/kg ==> kg/kg
-            intPtr_phobic_philic(1,1,:, 2) = species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp !ug/kg ==> kg/kg
+            intPtr_phobic_philic(1,1,:, 1) = species_conc(num_layers:1:-1, phobic_species_idx) * 1.0e-9_fp ! [ug/kg] -> [kg/kg]
+            intPtr_phobic_philic(1,1,:, 2) = species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp ! [ug/kg] -> [kg/kg]
          end if
 
          !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
@@ -337,9 +339,11 @@ contains
 
          end do
 
-         ! Assign back to species tendencies after flipping vertical levels back to model convention
-         species_tendencies(:, phobic_species_idx) =  intPtr_phobic_philic(1,1,num_layers:1:-1,1) * 1.0e9_fp  ! kg/kg ==> ug/kg
-         species_tendencies(:, philic_species_idx) =  intPtr_phobic_philic(1,1,num_layers:1:-1,2) * 1.0e9_fp  ! kg/kg ==> ug/kg
+         ! Unit conversion: GOCART internal [kg/kg] -> model state [ug/kg] (multiply by 1e9)
+         ! Vertical flip: GOCART convention (top=1) -> model convention (surface=1)
+         ! Note: 1e-9 (input) and 1e9 (output) are symmetric, preserving mass consistency
+         species_tendencies(:, phobic_species_idx) =  intPtr_phobic_philic(1,1,num_layers:1:-1,1) * 1.0e9_fp  ! [kg/kg] -> [ug/kg]
+         species_tendencies(:, philic_species_idx) =  intPtr_phobic_philic(1,1,num_layers:1:-1,2) * 1.0e9_fp  ! [kg/kg] -> [ug/kg]
 
          !set computed species to true
          sepcies_computed(phobic_species_idx) = .true.

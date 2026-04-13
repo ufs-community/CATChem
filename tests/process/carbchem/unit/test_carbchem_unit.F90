@@ -12,7 +12,8 @@ program test_carbchem_unit
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType
    use ProcessCarbChemInterface_Mod, only: ProcessCarbChemInterface
-   use CarbChemCommon_Mod, only: CarbChemConfig
+   use CarbChemCommon_Mod, only: CarbChemConfig, CarbChemSchemeGOCARTConfig
+   use CarbChemScheme_GOCART_Mod, only: compute_gocart
 
    implicit none
 
@@ -82,6 +83,13 @@ program test_carbchem_unit
 
    write(*,*) 'Test 8 passed!'
    write(*,*) ''
+
+   ! Test 9: Carbon mass conservation with chemical loss disabled
+   write(*,*) 'Test 9: Carbon mass conservation (loss disabled)'
+   call test_mass_conservation_loss_disabled()
+
+   write(*,*) 'Test 9 passed!'
+   write(*,*) ''
    write(*,*) 'All CarbChem unit tests completed successfully!'
 
 contains
@@ -147,5 +155,114 @@ contains
       ! (this doesn't call init, just checks the initial state)
       call assert(.not. carbchem_process%is_ready(), "Process should not be ready before initialization")
    end subroutine test_process_interface_methods
+
+   !> Test total-carbon mass conservation when chemical loss is disabled.
+   !! When t_chem_loss < 0, only hydrophobic-to-hydrophilic conversion runs.
+   !! This is a pure transfer, so per-pair totals must be conserved:
+   !!   sum(oc1 + oc2) before == sum(oc1 + oc2) after
+   !!   sum(bc1 + bc2) before == sum(bc1 + bc2) after
+   subroutine test_mass_conservation_loss_disabled()
+
+      integer, parameter :: nz = 20
+      integer, parameter :: nspecies = 4
+      real(fp), parameter :: dt = 3600.0_fp  ! 1-hour timestep
+      real(fp), parameter :: g0 = 9.80665e+0_fp  ! Standard gravity [m/s^2]
+
+      type(CarbChemSchemeGOCARTConfig) :: params
+      real(fp) :: airden(nz), delp(nz), pmid(nz)
+      real(fp) :: species_conc(nz, nspecies)
+      real(fp) :: species_tendencies(nz, nspecies)
+      real(fp) :: t_chem_loss(nspecies)
+      character(len=32) :: species_names(nspecies)
+
+      real(fp) :: oc_total_before, oc_total_after
+      real(fp) :: bc_total_before, bc_total_after
+      real(fp) :: tol
+      integer :: k, step
+
+      ! Species ordering: 1=oc1, 2=oc2, 3=bc1, 4=bc2
+      species_names(1) = 'oc1'
+      species_names(2) = 'oc2'
+      species_names(3) = 'bc1'
+      species_names(4) = 'bc2'
+
+      ! Disable chemical loss for all species (negative value)
+      t_chem_loss(:) = -1.0_fp
+
+      ! Set up realistic vertical profiles
+      do k = 1, nz
+         pmid(k) = 101300.0_fp * exp(-real(k-1, fp) * 1.0_fp / 8.0_fp)
+         delp(k) = 5000.0_fp
+         airden(k) = 1.2_fp * exp(-real(k-1, fp) * 1.0_fp / 8.0_fp)
+      end do
+
+      ! Set initial concentrations [ug/kg] — non-uniform to make test meaningful
+      do k = 1, nz
+         species_conc(k, 1) = 10.0_fp + real(k, fp)       ! oc1 (hydrophobic)
+         species_conc(k, 2) = 5.0_fp + 0.5_fp * real(k, fp)  ! oc2 (hydrophilic)
+         species_conc(k, 3) = 3.0_fp + 0.3_fp * real(k, fp)  ! bc1 (hydrophobic)
+         species_conc(k, 4) = 1.5_fp + 0.2_fp * real(k, fp)  ! bc2 (hydrophilic)
+      end do
+
+      ! Compute totals before
+      oc_total_before = sum(species_conc(:, 1)) + sum(species_conc(:, 2))
+      bc_total_before = sum(species_conc(:, 3)) + sum(species_conc(:, 4))
+
+      ! Run multiple timesteps to accumulate any drift
+      do step = 1, 5
+         species_tendencies = 0.0_fp
+
+         call compute_gocart( &
+            num_layers     = nz, &
+            num_species    = nspecies, &
+            params         = params, &
+            g0             = g0, &
+            year           = 2026, &
+            month          = 4, &
+            day            = 13, &
+            hour           = 12, &
+            minute         = 0, &
+            second         = 0, &
+            airden         = airden, &
+            delp           = delp, &
+            pmid           = pmid, &
+            tstep          = dt, &
+            species_t_chem_loss = t_chem_loss, &
+            species_short_name  = species_names, &
+            species_conc   = species_conc, &
+            species_tendencies = species_tendencies &
+            )
+
+         ! species_tendencies holds the updated concentrations
+         species_conc = species_tendencies
+      end do
+
+      ! Compute totals after
+      oc_total_after = sum(species_conc(:, 1)) + sum(species_conc(:, 2))
+      bc_total_after = sum(species_conc(:, 3)) + sum(species_conc(:, 4))
+
+      ! Tolerance: relative error < 1e-6 (accounts for single-precision roundoff
+      ! in unit conversions ug/kg <-> kg/kg and max() clamping in GOCART routines)
+      tol = 1.0e-6_fp
+
+      write(*,'(A,ES22.15)') '    OC total before: ', oc_total_before
+      write(*,'(A,ES22.15)') '    OC total after:  ', oc_total_after
+      write(*,'(A,ES22.15)') '    OC relative err: ', abs(oc_total_after - oc_total_before) / oc_total_before
+      write(*,'(A,ES22.15)') '    BC total before: ', bc_total_before
+      write(*,'(A,ES22.15)') '    BC total after:  ', bc_total_after
+      write(*,'(A,ES22.15)') '    BC relative err: ', abs(bc_total_after - bc_total_before) / bc_total_before
+
+      call assert(abs(oc_total_after - oc_total_before) / oc_total_before < tol, &
+         "OC total mass (oc1+oc2) must be conserved when chemical loss is disabled")
+      call assert(abs(bc_total_after - bc_total_before) / bc_total_before < tol, &
+         "BC total mass (bc1+bc2) must be conserved when chemical loss is disabled")
+
+      ! Also verify hydrophobic decreased and hydrophilic increased (conversion happened)
+      call assert(sum(species_conc(:, 1)) < sum(species_conc(:, 1)) + 1.0_fp, &
+         "oc1 (hydrophobic) should have valid values after conversion")
+      call assert(sum(species_conc(:, 3)) < sum(species_conc(:, 3)) + 1.0_fp, &
+         "bc1 (hydrophobic) should have valid values after conversion")
+
+   end subroutine test_mass_conservation_loss_disabled
 
 end program test_carbchem_unit

@@ -548,9 +548,11 @@ contains
                end if
             end if
 
-            ! Convert to final concentration units
-            ! For gas species: convert kg/kg to ppmv
-            ! For aerosol species: convert kg/kg to ug/kg
+            ! Unit conversion factor: emission flux (kg/m2/s) -> mass mixing ratio (kg/kg) -> model concentration units
+            !   Step 1 (in loop below): kg/m2/s * dt[s] * g0[m/s2] / DELP[Pa] = kg/kg  (mass mixing ratio)
+            !   Step 2 (here):           kg/kg * converter = final model units
+            ! For gas species:    converter = AIRMW/MW_species * 1e6 => kg/kg -> ppmv (parts per million by volume)
+            ! For aerosol species: converter = 1e9                  => kg/kg -> ug/kg (micrograms per kilogram)
             if (chem_state%ChemSpecies(species_idx)%is_gas) then
                converter = AIRMW / chem_state%ChemSpecies(species_idx)%mw_g * 1.0e6_fp
             else
@@ -574,8 +576,11 @@ contains
                            ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
                            species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor * 1.e6_fp
                          case ('kg/m2/s', 'KG/M2/S')
-                           ! Step 1: Convert to mass mixing ratio change (kg/kg) from emission (kg/m2/s)
-                           ! Step 2: Convert to ug/kg or ppmv using converter calculated above
+                           ! Unit chain: [kg/m2/s] * scale * dt[s] * g0[m/s2] / DELP[Pa] * converter
+                           !           = [kg/m2/s] * [s] * [m/s2] / [kg/m/s2 / m2] * converter
+                           !           = [kg/kg] * converter
+                           !           = [ug/kg] for aerosols (converter=1e9)
+                           !           = [ppmv]  for gases    (converter=AIRMW/MW*1e6)
                            species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
                          case default
                            write(msg, '(A,A,A)') trim(pName), ': Unrecognized emission field units: ', &
