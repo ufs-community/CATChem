@@ -70,10 +70,10 @@ run_phases:
     description: "Test phase 1"
     processes:
       - seasalt
+      - carbchem
       - settling
       - drydep
       - so4chem
-      - carbchem
       - wetdep
   # test2:
   #   description: "Test phase 2"
