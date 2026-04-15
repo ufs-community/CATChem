@@ -185,6 +185,7 @@ contains
 
       ! Local variables
       type(ConfigManagerType),pointer :: config_manager
+      type(ErrorManagerType), pointer :: error_manager
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
       integer :: localrc, i
@@ -196,6 +197,7 @@ contains
 
       ! Get managers from state manager
       config_manager => state_manager%get_config_ptr()
+      error_manager => state_manager%get_error_manager()
       met_state => state_manager%get_met_state_ptr()
       chem_state => state_manager%get_chem_state_ptr()
 
@@ -241,7 +243,7 @@ contains
                   category_timings(i)%needs_update = .false.  ! Reset until next alarm
 
                   ! Apply emissions to chemical state
-                  call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, chem_state, met_state, dt, localrc)
+                  call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
                         trim(ext_emis_data%categories(i)%category_name)
@@ -422,7 +424,7 @@ contains
    !! \param[in] met_state Meteorological state for unit conversion
    !! \param[in] dt Time step [s]
    !! \param[out] rc Return code
-   subroutine catchem_emis_apply(category, icat, global_scale, config_manager, chem_state, met_state, dt, rc)
+   subroutine catchem_emis_apply(category, icat, global_scale, config_manager, error_manager, chem_state, met_state, dt, rc)
       use Constants, only: g0, AIRMW  ! Gravitational acceleration and air molecular weight
       implicit none
 
@@ -430,6 +432,7 @@ contains
       integer, intent(in) :: icat !category index in the ext_emis_data
       real(fp), intent(in) :: global_scale
       type(ConfigManagerType), intent(in) :: config_manager
+      type(ErrorManagerType), intent(in) :: error_manager
       type(ChemStateType), intent(inout) :: chem_state
       type(MetStateType), intent(in) :: met_state
       real(fp), intent(in) :: dt
@@ -538,6 +541,21 @@ contains
             ! Get species index from mapping (or lookup if fallback was used)
             species_idx = species_index
             if (species_idx <= 0) then
+               !check if this is to map to metstate variable since we read in some met variables from emissin reading too.
+               if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
+                  ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
+                  if (category%is_2d) then
+                     call met_state%set_field(trim(mapped_species_name), emission_flux(:,:,1), error_manager, localrc)
+                  else
+                     call met_state%set_field(trim(mapped_species_name), emission_flux, error_manager, localrc)
+                  end if
+                  if (localrc /= CC_SUCCESS) then
+                     write(msg, '(A,A)') trim(pName), ': Failed to set met_state'
+                     call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+                     rc = CC_FAILURE
+                  end if
+                  cycle !do not move to chemstate below
+               end if
                ! Fallback case - need to lookup species index
                species_idx = chem_state%find_species(trim(mapped_species_name))
                if (species_idx <= 0) then

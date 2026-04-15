@@ -56,6 +56,33 @@ dms:
     units: "nmol/l"
     scale: [1.0]
     map: ["dms_in"]
+dust:
+  clayfrac:
+    long_name: "Clay Fraction"
+    units: "1"
+    scale: [1.0]
+    map: ["MET_CLAYFRAC"]
+  sandfrac:
+    long_name: "Sand Fraction"
+    units: "1"
+    scale: [1.0]
+    map: ["MET_SANDFRAC"]
+  sep:
+    long_name: "Sediment Supply Map"
+    units: "1"
+    scale: [1.0]
+    map: ["MET_SSM"]
+  uthres:
+    long_name: "Friction Velocity Threshold"
+    units: "m/s"
+    scale: [1.0]
+    map: ["MET_USTAR_THRESHOLD"]
+fengsha:
+    albedo_drag:
+    long_name: "Drag Partition"
+    units: "1"
+    scale: [1.0]
+    map: ["MET_RDRAG"]
 # point:
 #   NO:
 #     long_name: "Nitrogen Oxide"

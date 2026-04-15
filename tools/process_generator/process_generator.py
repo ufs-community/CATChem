@@ -382,6 +382,7 @@ class ProcessConfig:
     default_scheme: str = ""
     required_met_fields: List[str] = field(default_factory=list)
     optional_met_fields: List[str] = field(default_factory=list)
+    required_constants: List[str] = field(default_factory=list)
     required_chem_fields: List[str] = field(default_factory=list)
     diagnostics: List[Dict[str, str]] = field(default_factory=list)
     diagnostic_species: List[str] = field(default_factory=lambda: ["All"])  # Default to all species for diagnostics
@@ -465,6 +466,10 @@ class ProcessGenerator:
         self.env.filters['infer_diagnostic_type'] = self._infer_diagnostic_type
         self.env.filters['infer_diagnostic_properties'] = self._infer_diagnostic_properties
         self.env.filters['analyze_required_dimensions'] = self._analyze_required_dimensions
+        self.env.filters['fortran_array_constructor'] = self._fortran_array_constructor
+
+        # Add custom tests
+        self.env.tests['list_type'] = lambda val: isinstance(val, list)
 
         # Add a filter to get all required met fields for a scheme
         def get_all_met_fields_filter(scheme):
@@ -568,6 +573,26 @@ class ProcessGenerator:
     def _fortran_boolean(b: bool) -> str:
         """Convert boolean to Fortran logical."""
         return ".true." if b else ".false."
+
+    @staticmethod
+    def _fortran_array_constructor(values, suffix: str = '_fp') -> str:
+        """Convert a Python list to a Fortran array constructor string.
+
+        Examples:
+            [1.0, 2.0, 3.0] -> '(/ 1.0_fp, 2.0_fp, 3.0_fp /)'
+            [1, 2, 3]       -> '(/ 1, 2, 3 /)'
+        """
+        if not isinstance(values, list) or len(values) == 0:
+            return '0.0' + suffix
+        # Detect element type from first element
+        if all(isinstance(v, bool) for v in values):
+            items = ['.true.' if v else '.false.' for v in values]
+        elif all(isinstance(v, int) and not isinstance(v, bool) for v in values):
+            items = [str(v) for v in values]
+        else:
+            # Treat as real
+            items = [str(v) + suffix for v in values]
+        return '(/ ' + ', '.join(items) + ' /)'
 
     @staticmethod
     def _infer_state_variable_type(default_value: Any, name: str) -> str:
@@ -1205,6 +1230,10 @@ class ProcessGenerator:
             List of unique constant names required by all schemes
         """
         all_constants = set()
+        # Collect process-level required constants
+        if config.required_constants:
+            all_constants.update(config.required_constants)
+        # Collect scheme-level required constants
         for scheme in config.schemes:
             if scheme.required_constants:
                 all_constants.update(scheme.required_constants)

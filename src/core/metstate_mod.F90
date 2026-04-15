@@ -1522,6 +1522,14 @@ CONTAINS
             enddo
          enddo
 
+       case ('FRLANDIC', 'frlandic')
+         this%FRLANDIC(:,:) = 0.0_fp !set to zero if IsIce is false
+         do j = 1, ny
+            do i = 1, nx
+               if (abs(this%LWI(i, j) - 2.0_fp) < 0.5_fp) this%FRLANDIC(i, j) = 1.0_fp
+            enddo
+         enddo
+
        case ('LUCNAME', 'lucname')
          this%LUCNAME = 'NOAH'
        case ('nLNDTYPE', 'nlndtype', 'NLNDTYPE')
@@ -1566,6 +1574,8 @@ CONTAINS
                this%FRLAI(i, j, 15:17) = 0.0 !manually give index 15(snow and ice), 16(barren), 17(water) zeros
             enddo
          enddo
+       case ('CLAYFRAC', 'clayfrac', 'SANDFRAC', 'sandfrac', 'SSM', 'ssm', 'RDRAG', 'rdrag', 'USTAR_THRESHOLD', 'ustar_threshold')
+         !place holder. These are read in from emission read module for now. Here is to make sure required_met is all set.
        case ('SALINITY', 'salinity')
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
 

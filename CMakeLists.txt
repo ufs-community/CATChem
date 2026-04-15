@@ -152,6 +152,7 @@ if(BUILD_NUOPC)
     PRIVATE
       $<TARGET_FILE:CATChem>
       $<TARGET_FILE:CATChem_process_seasalt>
+      $<TARGET_FILE:CATChem_process_dust>
       $<TARGET_FILE:CATChem_process_drydep>
       $<TARGET_FILE:CATChem_process_wetdep>
       $<TARGET_FILE:CATChem_process_settling>

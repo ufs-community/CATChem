@@ -70,6 +70,7 @@ run_phases:
     description: "Test phase 1"
     processes:
       - seasalt
+      - dust
       - carbchem
       - settling
       - drydep
@@ -147,17 +148,26 @@ processes:
       plume_rise: "sofiev"
       diagnostics: true
       diag_list: [NO, SO2, CO]
-    fengsha:
+    dust:
       activate: true
-      species: ["CLAYF", "SANDF", "DRAG", "UTHR"]
-      units: ["1", "1", "1", "1"]
-      scale_factor: [1.0, 1.0, 1.0, 1.0]
-      source_file: "fengsha_emis.nc"
+      scale_factor: 1.0
+      source_file: "INPUT/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
       format: "netcdf"
       gridded: true
+      is_2d: true
       frequency: "static"
       diagnostics: true
-      diag_list: []
+      diag_list: [sep]
+    fengsha:
+      activate: true
+      scale_factor: 1.0
+      source_file: "INPUT/FENGSHA_2022_NESDIS_inputs_13km_rdrag_v3.2.nc"
+      format: "netcdf"
+      gridded: true
+      is_2d: true
+      frequency: "monthly"
+      diagnostics: true
+      diag_list: [albedo_drag]
   seasalt:
     activate: true
     diagnostics: true
@@ -173,12 +183,21 @@ processes:
       scale_factor: 1.0
   dust:
     activate: true
-    scheme_opt: 1
-    dust_drag_opt: 1
-    dust_moist_opt: 1
-    dust_horizflux_opt: 1
-    dust_alpha: 1.0
-    dust_beta: 1.0
+    diagnostics: true
+    diag_species: []
+    scheme: 'fengsha'
+    fengsha:
+      alpha: 0.20
+      gamma: 1.0
+      drylimit_factor: 1.2
+      moist_correction_factor: 1.0
+      kvhmax: 0.0002
+      drag_option: 1
+      horizflux_option: 1
+      moist_option: 1
+      distribution_option: 1
+    ginoux:
+      Ch_DU: [1.0, 1.0, 1.0, 1.0, 1.0]
   drydep:
     activate: true
     diagnostics: true
