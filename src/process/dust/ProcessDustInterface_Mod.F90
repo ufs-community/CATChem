@@ -238,7 +238,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -330,11 +330,11 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%dust_config%scheme))
-      case ('fengsha')
+       case ('fengsha')
          call this%run_fengsha_scheme_column(column, rc)
-      case ('ginoux')
+       case ('ginoux')
          call this%run_ginoux_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -514,7 +514,7 @@ contains
             species_upper_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -535,7 +535,7 @@ contains
          dqa = dqa * converter
 
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) + dqa)
+            species_conc(1, i) + dqa)
 
       end do
 
@@ -677,7 +677,7 @@ contains
             species_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -698,7 +698,7 @@ contains
          dqa = dqa * converter
 
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) + dqa)
+            species_conc(1, i) + dqa)
 
       end do
 
@@ -723,7 +723,7 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%dust_config%scheme))
-      case ('fengsha')
+       case ('fengsha')
          scheme_count = 15
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'USTAR'
@@ -741,7 +741,7 @@ contains
          scheme_fields(13) = 'RDRAG'
          scheme_fields(14) = 'SSM'
          scheme_fields(15) = 'USTAR_THRESHOLD'
-      case ('ginoux')
+       case ('ginoux')
          scheme_count = 9
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FRLAKE'
@@ -753,7 +753,7 @@ contains
          scheme_fields(7) = 'U10M'
          scheme_fields(8) = 'V10M'
          scheme_fields(9) = 'SSM'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -856,9 +856,9 @@ contains
       ! Register dust_emission_total
       ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, 'dust_emission_total', &
-                                          'Total dust emissions for all bins', &
-                                          'kg/m2/s', DIAG_REAL_2D, &
-                                          'dust', dims_2d, rc=rc)
+         'Total dust emissions for all bins', &
+         'kg/m2/s', DIAG_REAL_2D, &
+         'dust', dims_2d, rc=rc)
       if (rc /= CC_SUCCESS) return
 
       ! Register dust_emission_per_bin
@@ -866,11 +866,11 @@ contains
       if (this%process_config%dust_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%dust_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'dust_emission_', &
-                  trim(this%process_config%dust_config%diagnostic_species(i))
+               trim(this%process_config%dust_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Dust emission flux per bin', &
-                                                'kg/m2/s', DIAG_REAL_2D, &
-                                                'dust', dims_2d, rc=rc)
+               'Dust emission flux per bin', &
+               'kg/m2/s', DIAG_REAL_2D, &
+               'dust', dims_2d, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -880,46 +880,46 @@ contains
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%dust_config%scheme))
 
-      case ('fengsha')
+       case ('fengsha')
          ! Register fengsha-specific diagnostics
          ! Register single field for scalar diagnostics
          call this%register_diagnostic_field(registry, 'dust_horizontal_flux', &
-                                             'Total horizontal flux - Q', &
-                                             'kg/m2/s', DIAG_REAL_2D, &
-                                             'dust', dims_2d, rc=rc)
+            'Total horizontal flux - Q', &
+            'kg/m2/s', DIAG_REAL_2D, &
+            'dust', dims_2d, rc=rc)
          if (rc /= CC_SUCCESS) return
 
          ! Register single field for scalar diagnostics
          call this%register_diagnostic_field(registry, 'dust_moisture_correction', &
-                                             'Moisture Correction - H', &
-                                             '1.0', DIAG_REAL_2D, &
-                                             'dust', dims_2d, rc=rc)
+            'Moisture Correction - H', &
+            '1.0', DIAG_REAL_2D, &
+            'dust', dims_2d, rc=rc)
          if (rc /= CC_SUCCESS) return
 
          ! Register single field for scalar diagnostics
          call this%register_diagnostic_field(registry, 'dust_effective_threshold', &
-                                             'Effective Dust threshold friction velocity: u_thres * H / R', &
-                                             'm/s', DIAG_REAL_2D, &
-                                             'dust', dims_2d, rc=rc)
+            'Effective Dust threshold friction velocity: u_thres * H / R', &
+            'm/s', DIAG_REAL_2D, &
+            'dust', dims_2d, rc=rc)
          if (rc /= CC_SUCCESS) return
 
-      case ('ginoux')
+       case ('ginoux')
          ! Register ginoux-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%dust_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%dust_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'utar_threshold_', &
-                     trim(this%process_config%dust_config%diagnostic_species(i))
+                  trim(this%process_config%dust_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Friction velocity threshold per bin to initiate dust emission', &
-                                                   'm/s', DIAG_REAL_2D, &
-                                                   'dust', dims_2d, rc=rc)
+                  'Friction velocity threshold per bin to initiate dust emission', &
+                  'm/s', DIAG_REAL_2D, &
+                  'dust', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
 
@@ -949,7 +949,7 @@ contains
 
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%dust_config%scheme))
-      case ('fengsha')
+       case ('fengsha')
          ! Scheme-specific diagnostics for fengsha
          ! Scalar diagnostic
          allocate(this%column_dust_horizontal_flux)
@@ -960,14 +960,14 @@ contains
          ! Scalar diagnostic
          allocate(this%column_dust_effective_threshold)
          this%column_dust_effective_threshold = 0.0_fp
-      case ('ginoux')
+       case ('ginoux')
          ! Scheme-specific diagnostics for ginoux
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%dust_config%n_diagnostic_species > 0) then
             allocate(this%column_utar_threshold_per_bin(this%process_config%dust_config%n_diagnostic_species))
          end if
          if (allocated(this%column_utar_threshold_per_bin)) this%column_utar_threshold_per_bin = 0.0_fp
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
@@ -1000,49 +1000,49 @@ contains
       ! Update common diagnostic fields (used by all schemes)
       ! Scalar diagnostic field
       call this%update_scalar_diagnostic_column('dust_emission_total', &
-                                              this%column_dust_emission_total, &
-                                              i_col, j_col, container, rc)
+         this%column_dust_emission_total, &
+         i_col, j_col, container, rc)
       if (rc /= CC_SUCCESS) return
       ! Update individual species diagnostic fields (species-only diagnostics)
       if (this%process_config%dust_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%dust_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'dust_emission_', &
-                  trim(this%process_config%dust_config%diagnostic_species(i))
+               trim(this%process_config%dust_config%diagnostic_species(i))
             call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                    this%column_dust_emission_per_bin(i), &
-                                                    i_col, j_col, container, rc)
+               this%column_dust_emission_per_bin(i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%dust_config%scheme))
-      case ("fengsha")
+       case ("fengsha")
          ! Scheme-specific diagnostics for fengsha
          ! Scalar diagnostic field
          call this%update_scalar_diagnostic_column('dust_horizontal_flux', &
-                                                 this%column_dust_horizontal_flux, &
-                                                 i_col, j_col, container, rc)
+            this%column_dust_horizontal_flux, &
+            i_col, j_col, container, rc)
          if (rc /= CC_SUCCESS) return
          ! Scalar diagnostic field
          call this%update_scalar_diagnostic_column('dust_moisture_correction', &
-                                                 this%column_dust_moisture_correction, &
-                                                 i_col, j_col, container, rc)
+            this%column_dust_moisture_correction, &
+            i_col, j_col, container, rc)
          if (rc /= CC_SUCCESS) return
          ! Scalar diagnostic field
          call this%update_scalar_diagnostic_column('dust_effective_threshold', &
-                                                 this%column_dust_effective_threshold, &
-                                                 i_col, j_col, container, rc)
+            this%column_dust_effective_threshold, &
+            i_col, j_col, container, rc)
          if (rc /= CC_SUCCESS) return
-      case ("ginoux")
+       case ("ginoux")
          ! Scheme-specific diagnostics for ginoux
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%dust_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%dust_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'utar_threshold_', &
-                     trim(this%process_config%dust_config%diagnostic_species(i))
+                  trim(this%process_config%dust_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_utar_threshold_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_utar_threshold_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if

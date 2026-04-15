@@ -85,7 +85,7 @@ contains
       dust_emission_per_bin, &
       utar_threshold_per_bin, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -130,21 +130,21 @@ contains
       ! Don't do dust over frozen soil
       !--------------------------------
       if (TSKIN <= 273.15_fp) then
-          skip = .true.
+         skip = .true.
       endif
 
       ! Don't do dust if surface is wet
       !--------------------------------
       if (gwettop >= 0.5_fp) then
-          skip = .true.
+         skip = .true.
       endif
 
       ! Skip computation if criteria not met
       if (skip) then
-         return  
+         return
       end if
 
-      ! get the scaling factor following Ginoux et al. (2001) 
+      ! get the scaling factor following Ginoux et al. (2001)
       ! Note the GOCART2G version does not have the SSM factor
       ginoux_scaling = (1 - frlake) * (1 - frsno) * SSM
 
@@ -172,7 +172,7 @@ contains
 
             species_tendencies(k, species_idx) = max(0.0_fp, emission_temp)
 
-            ! Update scheme-specific diagnostic fields 
+            ! Update scheme-specific diagnostic fields
             ! Per-species diagnostic: only update for diagnostic species
             if (present(dust_emission_total)) then
                ! Add your custom total dust emissions for all bins calculation
@@ -190,7 +190,7 @@ contains
                end do
             end if
 
-            ! Update scheme-specific diagnostic fields 
+            ! Update scheme-specific diagnostic fields
             if (present(utar_threshold_per_bin) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)

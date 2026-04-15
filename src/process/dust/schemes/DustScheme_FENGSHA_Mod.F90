@@ -107,7 +107,7 @@ contains
       dust_moisture_correction, &
       dust_effective_threshold, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -161,38 +161,38 @@ contains
       skip = (LWI /= 1)  !land = 1, water = 0, ice = 2
 
       select case(params%drag_option)
-         case(2)  ! Darmenova scheme
-           if (.not. skip) then
-              skip = (gvf < 0.0_fp) .or. (gvf >= VEG_THRESH) .or. &
-                    (rdrag > MAX_RDRAG)
-           endif
-         case(3)  ! Leung scheme
-           if (.not. skip) then
-              skip = (gvf < 0.0_fp) .or. (lai >= VEG_THRESH)
-           endif
-         case default
-           if (.not. skip) skip = (rdrag < 0.0_fp)
+       case(2)  ! Darmenova scheme
+         if (.not. skip) then
+            skip = (gvf < 0.0_fp) .or. (gvf >= VEG_THRESH) .or. &
+               (rdrag > MAX_RDRAG)
+         endif
+       case(3)  ! Leung scheme
+         if (.not. skip) then
+            skip = (gvf < 0.0_fp) .or. (lai >= VEG_THRESH)
+         endif
+       case default
+         if (.not. skip) skip = (rdrag < 0.0_fp)
       end select
 
       if (.not. skip) then
          skip = (SSM < SSM_THRESH) .or. &
-                (clayfrac < 0.0_fp) .or. (sandfrac < 0.0_fp)
+            (clayfrac < 0.0_fp) .or. (sandfrac < 0.0_fp)
       endif
 
       ! Don't do dust over frozen soil
       !--------------------------------
       if (TSKIN <= 273.15_fp) then
-          skip = .true.
+         skip = .true.
       endif
 
       ! Skip computation if criteria not met
       if (skip) then
-         return  
+         return
       end if
 
       ! Calculate land fraction (TODO: I am confused why not just use 1 - frlake - frsno, but I will follow the original code for now)
       fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frlake)) * &
-                 max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
+         max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
 
       ! Compute vertical-to-horizontal mass flux ratio
       ! B.Marticorena, G.Bergametti, J.Geophys.Res., 1995
@@ -211,21 +211,21 @@ contains
       ! 4: MB95 Drag Partition
       !----------------------------
       select case(params%drag_option)
-         case(1)
-            R = rdrag
-         case(2)
-            call DarmenovaDragPartition(rdrag, gvf, VEG_THRESH, R)
-         case(3)
-            call LeungDragPartition(rdrag, lai, gvf, VEG_THRESH, R)
-         case(4)
-            call MB95_DragPartition(z0, R)
+       case(1)
+         R = rdrag
+       case(2)
+         call DarmenovaDragPartition(rdrag, gvf, VEG_THRESH, R)
+       case(3)
+         call LeungDragPartition(rdrag, lai, gvf, VEG_THRESH, R)
+       case(4)
+         call MB95_DragPartition(z0, R)
       end select
 
       ! compute moisture correction factor
       select case(params%moist_option)
-         case(1)
-            call Fecan_SoilMoisture(clayfrac, sandfrac, gwettop * params%moist_correction_factor, params%drylimit_factor, h)
-         !case(2) !The existing function need volumn water content, not GWETTOP. Not to use it for now. 
+       case(1)
+         call Fecan_SoilMoisture(clayfrac, sandfrac, gwettop * params%moist_correction_factor, params%drylimit_factor, h)
+         !case(2) !The existing function need volume water content, not GWETTOP. Not to use it for now.
          !   call Zhao_SoilMoisture(clayfrac, sandfrac, SSM, h)
       end select
 
@@ -235,12 +235,12 @@ contains
       ! 3: Kawamura 1964 / Webb 2020
       !----------------------------------
       select case (params%horizflux_option)
-         case(1)
-            call White_HorizFlux(ustar, ustar_threshold, h, R, q)
-         case(2)
-            call Draxler_HorizFlux(ustar, ustar_threshold, h, R, q)
-         case(3)
-            call Kawamura_HorizFlux(ustar, ustar_threshold, h, R, q)
+       case(1)
+         call White_HorizFlux(ustar, ustar_threshold, h, R, q)
+       case(2)
+         call Draxler_HorizFlux(ustar, ustar_threshold, h, R, q)
+       case(3)
+         call Kawamura_HorizFlux(ustar, ustar_threshold, h, R, q)
       end select
 
       ! Calculate total emissions potential
@@ -251,12 +251,12 @@ contains
       ! get distribution of dust and map total emissions to species bins
       !--------------------------------
       select case (params%distribution_option)
-         case(1)
-            call KokDistribution(species_radius, species_lower_radius, species_upper_radius, distribution)
+       case(1)
+         call KokDistribution(species_radius, species_lower_radius, species_upper_radius, distribution)
          !case(2) !not implemented yet
          !   call MengDistribution(species_radius, species_lower_radius, species_upper_radius, distribution)
       end select
-      
+
       ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
       do k = 1, num_layers
 
@@ -273,7 +273,7 @@ contains
             ! Example patterns:
             if (present(dust_emission_total)) then
                ! Add your custom total dust emissions for all bins calculation
-               dust_emission_total = dust_emission_total + species_tendencies(k, species_idx) 
+               dust_emission_total = dust_emission_total + species_tendencies(k, species_idx)
             end if
             ! Per-species diagnostic: only update for diagnostic species
             if (present(dust_emission_per_bin) .and. present(diagnostic_species_id)) then
@@ -362,7 +362,7 @@ contains
       do n = 1, nbins
          dist(n) = dist(n) / dvol
       end do
-      
+
    end subroutine KokDistribution
 
    !>
@@ -437,7 +437,7 @@ contains
    end function calc_drag_partition
 
    !>
-   !! Calculates the double drag parition  from Darmenova et al. 2009
+   !! Calculates the double drag partition  from Darmenova et al. 2009
    !! DESCRIPTION: Computes the drag partition according to
    !!              Darmenova, K. et al. 2009 Dust emission parameterization scheme
    !!              regions in Central and East Asia, JGR Atmospheres, 114, D14201
@@ -445,21 +445,21 @@ contains
    ! !REVISION HISTORY:
    ! 27Jun2024 B.Baker/NOAA    - Original implementation
    ! DD MMM YYYY Author  - Refactored for improved structure
-   !                                   
+   !
    subroutine DarmenovaDragPartition(Lc, vegfrac, thresh, dragpartition)
-         
-   ! !USES:
+
+      ! !USES:
       implicit NONE
 
-   ! !INPUT PARAMETERS:
+      ! !INPUT PARAMETERS:
       real(fp), intent(in) :: Lc       ! Roughness length
       real(fp), intent(in) :: vegfrac  ! Vegetative fraction [0-1]
       real(fp), intent(in) :: thresh   ! Threshold for vegetation fraction
       real(fp), intent(out) :: dragpartition  ! Output drag partition
 
-   !-------------------------------------------------------------------------
+      !-------------------------------------------------------------------------
 
-   ! !CONSTANTS:
+      ! !CONSTANTS:
       real(fp), parameter :: DRAG_MIN = 1.0e-3_fp  ! Minimum allowable drag partition
       real(fp), parameter :: sigb = 1.0_fp         ! Bare surface sigma
       real(fp), parameter :: mb = 0.5_fp           ! Bare surface m
@@ -468,7 +468,7 @@ contains
       real(fp), parameter :: mv = 0.16_fp          ! Vegetation m
       real(fp), parameter :: Betav = 202.0_fp      ! Vegetation Beta
 
-   ! !LOCAL VARIABLES:
+      ! !LOCAL VARIABLES:
       real(fp) :: Lc_veg        ! Vegetation roughness length
       real(fp) :: Lc_bare       ! Bare surface roughness length
       real(fp) :: feff_bare     ! Bare surface drag partition
@@ -724,7 +724,7 @@ contains
    !>
    !! \brief Computes White Horizontal Flux (used in GOCART2G)
    !!
-   !! White, B. R. (1979). Soil transport by winds on Mars and Earth. 
+   !! White, B. R. (1979). Soil transport by winds on Mars and Earth.
    !! JGR: Solid Earth, 84(B8), 4643–4651. https://doi.org/10.1029/JB084iB08p04643
    !!
    !! \param ustar friction velocity

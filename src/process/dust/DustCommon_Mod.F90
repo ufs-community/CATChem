@@ -13,7 +13,7 @@ module DustCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -182,8 +182,8 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'fengsha' .and. &
-          trim(this%scheme) /= 'ginoux' .and. &
-          .true.) then
+         trim(this%scheme) /= 'ginoux' .and. &
+         .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -205,7 +205,7 @@ contains
 
    end subroutine print_dust_config_summary
 
-      !> Finalize dust configuration
+   !> Finalize dust configuration
    subroutine finalize_dust_config(this)
       class(DustConfig), intent(inout) :: this
 
@@ -331,7 +331,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/dust/diag_species", this%dust_config%diagnostic_species, &
-                                    rc, default_values=["All"])
+         rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%dust_config%diagnostic_species(1))
@@ -354,11 +354,11 @@ contains
       ! Load scheme-specific configuration from master YAML
       scheme_name = trim(this%dust_config%scheme)
       select case (scheme_name)
-      case ('fengsha')
+       case ('fengsha')
          call this%load_fengsha_config(config_manager, error_handler)
-      case ('ginoux')
+       case ('ginoux')
          call this%load_ginoux_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown dust scheme: " // trim(scheme_name), rc)
          return
@@ -436,7 +436,7 @@ contains
       ! Get species names using the indices
       do i = 1, this%dust_config%n_species
          if (this%dust_config%species_indices(i) > 0 .and. &
-             this%dust_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
+            this%dust_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%dust_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%dust_config%species_indices(i)))
          else
@@ -468,31 +468,31 @@ contains
 
       ! Load scheme parameters directly from processes/dust/fengsha/ in master YAML
       call config_manager%get_real("processes/dust/fengsha/alpha", &
-           this%fengsha_config%alpha, rc, 0.2_fp)
+         this%fengsha_config%alpha, rc, 0.2_fp)
       if (rc /= CC_SUCCESS) this%fengsha_config%alpha = 0.2_fp
       call config_manager%get_real("processes/dust/fengsha/gamma", &
-           this%fengsha_config%gamma, rc, 1.0_fp)
+         this%fengsha_config%gamma, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%fengsha_config%gamma = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/drylimit_factor", &
-           this%fengsha_config%drylimit_factor, rc, 1.0_fp)
+         this%fengsha_config%drylimit_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%fengsha_config%drylimit_factor = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/moist_correction_factor", &
-           this%fengsha_config%moist_correction_factor, rc, 1.0_fp)
+         this%fengsha_config%moist_correction_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%fengsha_config%moist_correction_factor = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/kvhmax", &
-           this%fengsha_config%kvhmax, rc, 0.0002_fp)
+         this%fengsha_config%kvhmax, rc, 0.0002_fp)
       if (rc /= CC_SUCCESS) this%fengsha_config%kvhmax = 0.0002_fp
       call config_manager%get_integer("processes/dust/fengsha/drag_option", &
-           this%fengsha_config%drag_option, rc, 1)
+         this%fengsha_config%drag_option, rc, 1)
       if (rc /= CC_SUCCESS) this%fengsha_config%drag_option = 1
       call config_manager%get_integer("processes/dust/fengsha/horizflux_option", &
-           this%fengsha_config%horizflux_option, rc, 1)
+         this%fengsha_config%horizflux_option, rc, 1)
       if (rc /= CC_SUCCESS) this%fengsha_config%horizflux_option = 1
       call config_manager%get_integer("processes/dust/fengsha/moist_option", &
-           this%fengsha_config%moist_option, rc, 1)
+         this%fengsha_config%moist_option, rc, 1)
       if (rc /= CC_SUCCESS) this%fengsha_config%moist_option = 1
       call config_manager%get_integer("processes/dust/fengsha/distribution_option", &
-           this%fengsha_config%distribution_option, rc, 1)
+         this%fengsha_config%distribution_option, rc, 1)
       if (rc /= CC_SUCCESS) this%fengsha_config%distribution_option = 1
 
 
@@ -511,7 +511,7 @@ contains
       block
          real(fp), allocatable :: temp_array(:)
          call config_manager%get_real_array("processes/dust/ginoux/Ch_DU", &
-              temp_array, rc)
+            temp_array, rc)
          if (rc == CC_SUCCESS .and. allocated(temp_array)) then
             this%ginoux_config%Ch_DU(1:min(size(temp_array), size(this%ginoux_config%Ch_DU))) = &
                temp_array(1:min(size(temp_array), size(this%ginoux_config%Ch_DU)))
@@ -535,9 +535,9 @@ contains
 
       ! Validate scheme-specific config
       select case (trim(this%dust_config%scheme))
-      case ('fengsha')
+       case ('fengsha')
          call this%fengsha_config%validate(error_handler)
-      case ('ginoux')
+       case ('ginoux')
          call this%ginoux_config%validate(error_handler)
       end select
 
@@ -561,11 +561,11 @@ contains
       class(*), allocatable :: scheme_config
 
       select case (trim(this%dust_config%scheme))
-      case ('fengsha')
+       case ('fengsha')
          allocate(scheme_config, source=this%fengsha_config)
-      case ('ginoux')
+       case ('ginoux')
          allocate(scheme_config, source=this%ginoux_config)
-      case default
+       case default
          ! Return null
       end select
 
@@ -587,7 +587,7 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%dust_config%n_diagnostic_species == 1 .and. &
-          trim(this%dust_config%diagnostic_species(1)) == "All") then
+         trim(this%dust_config%diagnostic_species(1)) == "All") then
 
          ! Deallocate and reallocate for all species
          if (allocated(this%dust_config%diagnostic_species_id)) deallocate(this%dust_config%diagnostic_species_id)
@@ -623,8 +623,8 @@ contains
 
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-                  trim(this%dust_config%diagnostic_species(i)), &
-                  "' not found in process species list"
+               trim(this%dust_config%diagnostic_species(i)), &
+               "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             !return !do not return and the diagnostics for this unspecified species will be zero in the output
          end if

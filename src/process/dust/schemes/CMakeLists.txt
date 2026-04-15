@@ -40,21 +40,21 @@
 #   - V10M
 #   - SSM
 
-
 # Scheme validation targets
-add_custom_target(validate_fengsha_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating fengsha scheme implementation"
-    COMMENT "Validating fengsha scheme"
+add_custom_target(
+  validate_fengsha_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating fengsha scheme implementation"
+  COMMENT "Validating fengsha scheme"
 )
-add_custom_target(validate_ginoux_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating ginoux scheme implementation"
-    COMMENT "Validating ginoux scheme"
+add_custom_target(
+  validate_ginoux_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating ginoux scheme implementation"
+  COMMENT "Validating ginoux scheme"
 )
 
 # Combined validation target
-add_custom_target(validate_all_schemes
-    DEPENDS
-        validate_fengsha_scheme
-        validate_ginoux_scheme
-    COMMENT "Validating all dust schemes"
+add_custom_target(
+  validate_all_schemes
+  DEPENDS validate_fengsha_scheme validate_ginoux_scheme
+  COMMENT "Validating all dust schemes"
 )
