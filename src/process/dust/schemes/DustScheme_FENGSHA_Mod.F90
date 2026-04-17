@@ -171,12 +171,14 @@ contains
             skip = (gvf < 0.0_fp) .or. (lai >= VEG_THRESH)
          endif
        case default
-         if (.not. skip) skip = (rdrag < 0.0_fp)
+         if (.not. skip) skip = (rdrag < 0.001_fp)
       end select
 
       if (.not. skip) then
          skip = (SSM < SSM_THRESH) .or. &
-            (clayfrac < 0.0_fp) .or. (sandfrac < 0.0_fp)
+            (clayfrac <= 0.0_fp) .or. (sandfrac <= 0.0_fp) .or. &
+            (clayfrac > 1.0_fp) .or. (sandfrac > 1.0_fp) .or. &
+            (clayfrac /= clayfrac) .or. (sandfrac /= sandfrac) ! check for NaNs
       endif
 
       ! Don't do dust over frozen soil
@@ -292,15 +294,15 @@ contains
       ! save other species independent diagnostics
       if (present(dust_horizontal_flux)) then
          ! Add your custom total horizontal flux - q calculation
-         dust_horizontal_flux = q
+         dust_horizontal_flux = q 
       end if
       if (present(dust_moisture_correction)) then
          ! Add your custom moisture correction - h calculation
-         dust_moisture_correction = H
+         dust_moisture_correction = SSM !H
       end if
       if (present(dust_effective_threshold)) then
          ! Add your custom effective dust threshold friction velocity: u_thres * h / r calculation
-         dust_effective_threshold = ustar_threshold * H / R
+         dust_effective_threshold = clayfrac !ustar_threshold * H / R
       end if
 
    end subroutine compute_fengsha

@@ -432,9 +432,9 @@ contains
       integer, intent(in) :: icat !category index in the ext_emis_data
       real(fp), intent(in) :: global_scale
       type(ConfigManagerType), intent(in) :: config_manager
-      type(ErrorManagerType), intent(in) :: error_manager
+      type(ErrorManagerType), pointer, intent(inout) :: error_manager
       type(ChemStateType), intent(inout) :: chem_state
-      type(MetStateType), intent(in) :: met_state
+      type(MetStateType), intent(inout) :: met_state
       real(fp), intent(in) :: dt
       integer, intent(out) :: rc
 
@@ -542,12 +542,14 @@ contains
             species_idx = species_index
             if (species_idx <= 0) then
                !check if this is to map to metstate variable since we read in some met variables from emissin reading too.
+               !In the emission map yaml file, if the mapped_species_name starts with "MET_" or "met_", we will treat it as a met variable 
+               !and set the met state instead of chem state. The rest of the name after "MET_" should match the field name in met state.
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
                   if (category%is_2d) then
-                     call met_state%set_field(trim(mapped_species_name), emission_flux(:,:,1), error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1), error_manager, localrc)
                   else
-                     call met_state%set_field(trim(mapped_species_name), emission_flux, error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux, error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A)') trim(pName), ': Failed to set met_state'

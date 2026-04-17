@@ -1277,6 +1277,8 @@ contains
       real(ESMF_KIND_R8),    dimension(:,:),   pointer     :: fp2d_r8 => null()
       real(ESMF_KIND_R8),    dimension(:,:,:), pointer     :: fp3d_r8 => null()
       character(len=ESMF_MAXSTR) :: fieldName, dataSetName
+      character(len=ESMF_MAXSTR) :: dimName
+      integer :: timeDimLen
       type(ESMF_TypeKind_Flag) :: typekind
       type(ESMF_VM) :: vm
 
@@ -1395,59 +1397,77 @@ contains
             elemStart = 1
             elemCount = 1
 
-            if (uid == -1) then
+            ! Get variable dimension IDs (needed for both unlimited and fixed time dims)
+            allocate(dimids(ndims), stat=localrc)
+            if (ESMF_LogFoundAllocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, &
+               file=__FILE__, &
+               rcToReturn=rc)) return  ! bail out
+            ncStatus = nf90_inquire_variable(IO % IOLayout(lde) % ncid, varId, dimIds=dimids)
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+                  msg="NetCDF error inquiring dimIds for "//trim(fieldName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               deallocate(dimids)
+               return
+            end if
+
+            if (uid /= -1 .and. dimids(ndims) == uid) then
+               ! Variable has unlimited time dimension as its last dim
+               if (present(timeSlice)) elemStart(ndims) = timeSlice
+               ndims = ndims - 1
+            else
+               ! No unlimited dim, or variable's last dim is not the unlimited dim.
+               ! Check if the last dimension is a fixed-size time dimension
+               ! by looking at its name (time, Time, month, etc.) or simply
+               ! checking if timeSlice is requested and the last dim can hold it.
                if (present(timeSlice)) then
-                  if (timeSlice == 1) then
-                     call ESMF_LogWrite("No time record found in "//trim(dataSetName) &
-                        // " - proceed only for first time step", &
+                  dimName = ''
+                  ncStatus = nf90_inquire_dimension(IO % IOLayout(lde) % ncid, &
+                     dimids(ndims), name=dimName, len=timeDimLen)
+                  if (ncStatus == NF90_NOERR .and. &
+                     (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
+                      index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                      index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                      index(dimName,'Record') > 0)) then
+                     ! Found a fixed time dimension by name
+                     if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
+                        elemStart(ndims) = timeSlice
+                        ndims = ndims - 1
+                     else
+                        call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
+                           msg="timeSlice out of range for fixed time dim in "//trim(fieldName), &
+                           line=__LINE__, &
+                           file=__FILE__, &
+                           rcToReturn=rc)
+                        deallocate(dimids)
+                        return  ! bail out
+                     end if
+                  else if (timeSlice == 1) then
+                     ! No recognizable time dimension, allow only first slice
+                     call ESMF_LogWrite("No time dimension found for "//trim(fieldName) &
+                        //" in "//trim(dataSetName) &
+                        //" - proceed only for first time step", &
                         ESMF_LOGMSG_WARNING, rc=localrc)
-                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)) return  ! bail out
                   else
                      call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found in "//dataSetName, &
+                        msg="No time record found for variable "//trim(fieldName), &
                         line=__LINE__, &
                         file=__FILE__, &
                         rcToReturn=rc)
+                     deallocate(dimids)
                      return  ! bail out
                   end if
                end if
-            else
-               allocate(dimids(ndims), stat=localrc)
-               if (ESMF_LogFoundAllocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, &
-                  file=__FILE__, &
-                  rcToReturn=rc)) return  ! bail out
-               ncStatus = nf90_inquire_variable(IO % IOLayout(lde) % ncid, varId, dimIds=dimids)
-               if (ncStatus /= NF90_NOERR) then
-                  call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
-                     msg="NetCDF error", &
-                     line=__LINE__, &
-                     file=__FILE__, &
-                     rcToReturn=rc)
-                  return
-               end if
-               if (dimids(ndims) == uid) then
-                  if (present(timeSlice)) elemStart(ndims) = timeSlice
-                  ndims = ndims - 1
-               else
-                  if (present(timeSlice)) then
-                     call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found for variable "//fieldName, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)
-                     return  ! bail out
-                  end if
-               end if
-               deallocate(dimids, stat=localrc)
-               if (ESMF_LogFoundDeallocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, &
-                  file=__FILE__, &
-                  rcToReturn=rc)) return  ! bail out
             end if
+
+            deallocate(dimids, stat=localrc)
+            if (ESMF_LogFoundDeallocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, &
+               file=__FILE__, &
+               rcToReturn=rc)) return  ! bail out
 
             if (klen > 1) then
                if (rank /= ndims) localrc = ESMF_RC_ARG_INCOMP
@@ -1751,6 +1771,8 @@ contains
       real(ESMF_KIND_R4),    dimension(:),     allocatable :: buf
       real(ESMF_KIND_R4),    dimension(:),     pointer     :: fp
       character(len=ESMF_MAXSTR) :: dataSetName
+      character(len=ESMF_MAXSTR) :: dimName
+      integer :: timeDimLen
       type(ESMF_VM)         :: vm
       type(ioWrapper)       :: is
       type(ioData), pointer :: IO
@@ -1846,36 +1868,47 @@ contains
                return
             end if
 
-            if (uid == -1) then
+            if (uid /= -1 .and. dimids(ndims) == uid) then
+               ! Variable has unlimited time dimension as its last dim
+               if (present(timeSlice)) elemStart(ndims) = timeSlice
+               ndims = ndims - 1
+            else
+               ! No unlimited dim, or variable's last dim is not the unlimited dim.
+               ! Check if the last dimension is a fixed-size time dimension.
                if (present(timeSlice)) then
-                  if (timeSlice == 1) then
-                     call ESMF_LogWrite("No time record found in "//trim(dataSetName) &
-                        // " - proceed only for first time step", &
+                  dimName = ''
+                  ncStatus = nf90_inquire_dimension(IO % IOLayout(lde) % ncid, &
+                     dimids(ndims), name=dimName, len=timeDimLen)
+                  if (ncStatus == NF90_NOERR .and. &
+                     (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
+                      index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                      index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                      index(dimName,'Record') > 0)) then
+                     ! Found a fixed time dimension by name
+                     if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
+                        elemStart(ndims) = timeSlice
+                        ndims = ndims - 1
+                     else
+                        call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
+                           msg="timeSlice out of range for fixed time dim in "//trim(variableName), &
+                           line=__LINE__, &
+                           file=__FILE__, &
+                           rcToReturn=rc)
+                        deallocate(dimids)
+                        return  ! bail out
+                     end if
+                  else if (timeSlice == 1) then
+                     call ESMF_LogWrite("No time dimension found for "//trim(variableName) &
+                        //" in "//trim(dataSetName) &
+                        //" - proceed only for first time step", &
                         ESMF_LOGMSG_WARNING, rc=localrc)
-                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)) return  ! bail out
                   else
                      call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found in "//dataSetName, &
+                        msg="No time record found for variable "//trim(variableName), &
                         line=__LINE__, &
                         file=__FILE__, &
                         rcToReturn=rc)
-                     return  ! bail out
-                  end if
-               end if
-            else
-               if (dimids(ndims) == uid) then
-                  if (present(timeSlice)) elemStart(ndims) = timeSlice
-                  ndims = ndims - 1
-               else
-                  if (present(timeSlice)) then
-                     call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found for variable "// variableName, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)
+                     deallocate(dimids)
                      return  ! bail out
                   end if
                end if

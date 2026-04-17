@@ -151,7 +151,7 @@ processes:
     dust:
       activate: true
       scale_factor: 1.0
-      source_file: "INPUT/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
+      source_file: "INPUT/FENGSHA_2022_NESDIS_inputs_13km_v3.2.nc"
       format: "netcdf"
       gridded: true
       is_2d: true
