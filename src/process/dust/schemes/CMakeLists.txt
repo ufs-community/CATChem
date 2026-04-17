@@ -1,5 +1,5 @@
 # Dust Schemes CMakeLists.txt
-# Generated on: 2026-04-15T15:36:52.046331
+# Generated on: 2026-04-17T13:57:10.293014
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -15,7 +15,7 @@
 #   - USTAR
 #   - TSKIN
 #   - AIRDEN
-#   - GWETTOP
+#   - SOILM
 #   - Z0
 #   - GVF
 #   - LWI

@@ -17,7 +17,7 @@
 !! - Memory management and array allocation
 !! - Integration with host model time stepping
 !!
-!! Generated on: 2026-04-15T15:36:52.027009
+!! Generated on: 2026-04-17T13:57:10.254102
 !! Author: Barry Baker & Wei Li
 !! Reference: Ginoux et al. [2001]
 module DustScheme_GINOUX_Mod

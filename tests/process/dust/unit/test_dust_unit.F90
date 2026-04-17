@@ -3,7 +3,7 @@
 !!
 !! This file contains unit tests for the dust process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2026-04-15T15:36:52.065621
+!! Generated on: 2026-04-17T13:57:10.327748
 
 program test_dust_unit
    use testing_mod, only: assert, assert_close

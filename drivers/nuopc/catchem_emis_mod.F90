@@ -542,7 +542,7 @@ contains
             species_idx = species_index
             if (species_idx <= 0) then
                !check if this is to map to metstate variable since we read in some met variables from emissin reading too.
-               !In the emission map yaml file, if the mapped_species_name starts with "MET_" or "met_", we will treat it as a met variable 
+               !In the emission map yaml file, if the mapped_species_name starts with "MET_" or "met_", we will treat it as a met variable
                !and set the met state instead of chem state. The rest of the name after "MET_" should match the field name in met state.
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.

@@ -1429,9 +1429,9 @@ contains
                      dimids(ndims), name=dimName, len=timeDimLen)
                   if (ncStatus == NF90_NOERR .and. &
                      (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
-                      index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
-                      index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
-                      index(dimName,'Record') > 0)) then
+                     index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                     index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                     index(dimName,'Record') > 0)) then
                      ! Found a fixed time dimension by name
                      if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
                         elemStart(ndims) = timeSlice
@@ -1881,9 +1881,9 @@ contains
                      dimids(ndims), name=dimName, len=timeDimLen)
                   if (ncStatus == NF90_NOERR .and. &
                      (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
-                      index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
-                      index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
-                      index(dimName,'Record') > 0)) then
+                     index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                     index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                     index(dimName,'Record') > 0)) then
                      ! Found a fixed time dimension by name
                      if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
                         elemStart(ndims) = timeSlice

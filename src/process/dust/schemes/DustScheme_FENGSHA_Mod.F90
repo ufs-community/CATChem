@@ -17,7 +17,7 @@
 !! - Memory management and array allocation
 !! - Integration with host model time stepping
 !!
-!! Generated on: 2026-04-15T15:36:52.023783
+!! Generated on: 2026-04-17T13:57:10.251187
 !! Author: Barry Baker & Wei Li
 !! Reference: Zhang et al. 2022
 module DustScheme_FENGSHA_Mod
@@ -55,11 +55,11 @@ contains
    !! @param[in]  frlake    FRLAKE field [appropriate units]
    !! @param[in]  frsno    FRSNO field [appropriate units]
    !! @param[in]  gvf    GVF field [appropriate units]
-   !! @param[in]  gwettop    GWETTOP field [appropriate units]
    !! @param[in]  lai    LAI field [appropriate units]
    !! @param[in]  lwi    LWI field [appropriate units]
    !! @param[in]  rdrag    RDRAG field [appropriate units]
    !! @param[in]  sandfrac    SANDFRAC field [appropriate units]
+   !! @param[in]  soilm    SOILM field [appropriate units]
    !! @param[in]  ssm    SSM field [appropriate units]
    !! @param[in]  tskin    TSKIN field [appropriate units]
    !! @param[in]  ustar    USTAR field [appropriate units]
@@ -86,11 +86,11 @@ contains
       frlake, &
       frsno, &
       gvf, &
-      gwettop, &
       lai, &
       lwi, &
       rdrag, &
       sandfrac, &
+      soilm, &
       ssm, &
       tskin, &
       ustar, &
@@ -119,11 +119,11 @@ contains
       real(fp), intent(in) :: frlake  ! Surface field - scalar
       real(fp), intent(in) :: frsno  ! Surface field - scalar
       real(fp), intent(in) :: gvf  ! Surface field - scalar
-      real(fp), intent(in) :: gwettop  ! Surface field - scalar
       real(fp), intent(in) :: lai  ! Surface field - scalar
       integer, intent(in) :: lwi  ! Surface field - scalar
       real(fp), intent(in) :: rdrag  ! Surface field - scalar
       real(fp), intent(in) :: sandfrac  ! Surface field - scalar
+      real(fp), intent(in) :: soilm(:)  ! variable dimension array
       real(fp), intent(in) :: ssm  ! Surface field - scalar
       real(fp), intent(in) :: tskin  ! Surface field - scalar
       real(fp), intent(in) :: ustar  ! Surface field - scalar
@@ -226,7 +226,7 @@ contains
       ! compute moisture correction factor
       select case(params%moist_option)
        case(1)
-         call Fecan_SoilMoisture(clayfrac, sandfrac, gwettop * params%moist_correction_factor, params%drylimit_factor, h)
+         call Fecan_SoilMoisture(clayfrac, sandfrac, soilm(1) * params%moist_correction_factor, params%drylimit_factor, h)
          !case(2) !The existing function need volume water content, not GWETTOP. Not to use it for now.
          !   call Zhao_SoilMoisture(clayfrac, sandfrac, SSM, h)
       end select
@@ -294,7 +294,7 @@ contains
       ! save other species independent diagnostics
       if (present(dust_horizontal_flux)) then
          ! Add your custom total horizontal flux - q calculation
-         dust_horizontal_flux = q 
+         dust_horizontal_flux = q
       end if
       if (present(dust_moisture_correction)) then
          ! Add your custom moisture correction - h calculation

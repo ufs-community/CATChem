@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the dust process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2026-04-15T15:36:52.150724
+!! Generated on: 2026-04-17T13:57:10.414629
 
 program test_dust_integration
    use precision_mod, only: fp
@@ -196,6 +196,9 @@ contains
       call grid_mgr%get_shape(nx, ny, nz)
 
       ! Allocate categorical arrays with standard dimensions
+      if (.not. allocated(met_state%SOILM)) then
+         allocate(met_state%SOILM(nx, ny, 4))  ! nsoil=4 soil layers
+      end if
 
       ! Set realistic conditions for dust processes
       do j = 1, ny
@@ -235,6 +238,15 @@ contains
          end do
       end do
 
+      ! Set up some arrays with special dimensions (nx, ny, ncat)
+      do j = 1, ny
+         do i = 1, nx
+            ! Soil moisture in each layer - realistic profile
+            do k = 1, size(met_state%SOILM, 3)  ! nsoil layers
+               met_state%SOILM(i,j,k) = 0.35_fp - 0.06_fp * real(k-1, fp)  ! Decreasing with depth: 0.35, 0.29, 0.23...
+            end do
+         end do
+      end do
 
 
       ! Set up DELP (pressure difference between levels) for emission unit conversion
