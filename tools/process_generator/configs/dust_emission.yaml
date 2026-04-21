@@ -107,7 +107,7 @@ schemes:
         default: 1
         min: 1
         max: 2
-        description: "Moisture parameterization: 1 - Fecan, 2 - Zhao (not implemented yet)"
+        description: "Moisture parameterization: 1 - Fecan, 2 - Zhao"
       distribution_option:
         default: 1
         min: 1

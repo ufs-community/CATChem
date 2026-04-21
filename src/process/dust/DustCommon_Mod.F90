@@ -87,7 +87,7 @@ module DustCommon_Mod
       real(fp) :: kvhmax = 0.0002  ! Maximum vertical to horizontal flux ratio
       integer :: drag_option = 1  ! Drag Partition Option: 1 - use input drag, 2 - Darmenova, 3 - Leung 2022, 4 - MB95
       integer :: horizflux_option = 1  ! Horizontal flux option: 1 - White (1979), 2 - Draxler (2001), 3 - Kawamura (1964)
-      integer :: moist_option = 1  ! Moisture parameterization: 1 - Fecan, 2 - Zhao (not implemented yet)
+      integer :: moist_option = 1  ! Moisture parameterization: 1 - Fecan, 2 - Zhao
       integer :: distribution_option = 1  ! Dust Distribution option: 1 - Kok 2011, 2 - Meng 2022 (not implemented yet)
 
       ! Required meteorological fields

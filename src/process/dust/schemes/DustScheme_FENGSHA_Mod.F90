@@ -158,6 +158,7 @@ contains
       alpha_grav = params%alpha / max(g0, SMALL)
 
       ! Skip criteria evaluation
+      skip = .false.
       skip = (LWI /= 1)  !land = 1, water = 0, ice = 2
 
       select case(params%drag_option)
@@ -192,9 +193,11 @@ contains
          return
       end if
 
-      ! Calculate land fraction (TODO: I am confused why not just use 1 - frlake - frsno, but I will follow the original code for now)
-      fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frlake)) * &
-         max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
+      ! Calculate land fraction (TODO: I am using 1 - frlake - frsno, not following GOCART below)
+      ! fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frlake)) * &
+      !    max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
+
+      fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frsno - frlake))  ! my calculation
 
       ! Compute vertical-to-horizontal mass flux ratio
       ! B.Marticorena, G.Bergametti, J.Geophys.Res., 1995
@@ -227,8 +230,8 @@ contains
       select case(params%moist_option)
        case(1)
          call Fecan_SoilMoisture(clayfrac, sandfrac, soilm(1) * params%moist_correction_factor, params%drylimit_factor, h)
-         !case(2) !The existing function need volume water content, not GWETTOP. Not to use it for now.
-         !   call Zhao_SoilMoisture(clayfrac, sandfrac, SSM, h)
+       case(2) 
+         call Zhao_SoilMoisture(soilm(1), h)
       end select
 
       ! Compute the Horizontal Mass Flux
@@ -238,16 +241,36 @@ contains
       !----------------------------------
       select case (params%horizflux_option)
        case(1)
-         call White_HorizFlux(ustar, ustar_threshold, h, R, q)
+         call White_HorizFlux(ustar, ustar_threshold, R, h, q)
        case(2)
-         call Draxler_HorizFlux(ustar, ustar_threshold, h, R, q)
+         call Draxler_HorizFlux(ustar, ustar_threshold, R, h, q)
        case(3)
-         call Kawamura_HorizFlux(ustar, ustar_threshold, h, R, q)
+         call Kawamura_HorizFlux(ustar, ustar_threshold, R, h, q)
       end select
 
       ! Calculate total emissions potential
       FengshaScale = alpha_grav * fracland * (ssm ** params%gamma) * airden(1)
       total_emissions = FengshaScale * h_to_v_ratio * q
+
+      !debug only
+      ! if (total_emissions > 1.0e-5_fp) then
+      !    write(*,'(A,F12.8)') 'Debug: Total Emissions = ', total_emissions
+      !    write(*,'(A,F12.8)') 'Debug: Total Fengsha Scale = ', FengshaScale
+      !    write(*,'(A,F12.8)') 'Debug: h_to_v_ratio = ', h_to_v_ratio
+      !    write(*,'(A,F12.8)') 'Debug: q = ', q
+      !    write(*,'(A,F12.8)') 'Debug: ustar = ', ustar
+      !    write(*,'(A,F12.8)') 'Debug: ustar_threshold = ', ustar_threshold
+      !    write(*,'(A,F12.8)') 'Debug: h = ', h
+      !    write(*,'(A,F12.8)') 'Debug: R = ', R
+      !    write(*,'(A,F12.8)') 'Debug: clayfrac = ', clayfrac
+      !    write(*,'(A,F12.8)') 'Debug: sandfrac = ', sandfrac
+      !    write(*,'(A,F12.8)') 'Debug: soilm = ', soilm(1)
+      !    write(*,'(A,F12.8)') 'Debug: fracland = ', fracland
+      !    write(*,'(A,F12.8)') 'Debug: airden = ', airden(1)
+      !    write(*,'(A,F12.8)') 'Debug: ssm = ', ssm
+      !    write(*,'(A,F12.8)') 'Debug: alpha_grav = ', alpha_grav
+      ! end if
+
 
 
       ! get distribution of dust and map total emissions to species bins
@@ -294,15 +317,15 @@ contains
       ! save other species independent diagnostics
       if (present(dust_horizontal_flux)) then
          ! Add your custom total horizontal flux - q calculation
-         dust_horizontal_flux = q
+         dust_horizontal_flux = soilm(1)  !q
       end if
       if (present(dust_moisture_correction)) then
          ! Add your custom moisture correction - h calculation
-         dust_moisture_correction = SSM !H
+         dust_moisture_correction = H
       end if
       if (present(dust_effective_threshold)) then
          ! Add your custom effective dust threshold friction velocity: u_thres * h / r calculation
-         dust_effective_threshold = clayfrac !ustar_threshold * H / R
+         dust_effective_threshold = LWI !ustar_threshold * H / R
       end if
 
    end subroutine compute_fengsha
@@ -386,7 +409,7 @@ contains
       !-----------
       real(fp), intent(in)  :: clay                      !< Fractional Clay Content
       real(fp), intent(in)  :: sand                      !< Fractional Sand Content
-      real(fp), intent(in)  :: volumetric_soil_moisture  !< volumetric soil moisture fraction [1]
+      real(fp), intent(in)  :: volumetric_soil_moisture  !< volumetric soil moisture fraction [m3 / m3]
       real(fp), intent(in)  :: b                         ! drylimit factor from Zender 2003
       real(fp), intent(out) :: H                         !< Soil Moisture attenuation factor for dust emission [1]
 
@@ -426,6 +449,40 @@ contains
       H = sqrt(1.0_fp + 1.21_fp * max(0._fp, gravimetric_soil_moisture - DryLimit)**0.68_fp)
 
    end subroutine Fecan_SoilMoisture
+
+   !>
+   !! \brief Computes the soil moisture attenuation factor for dust emission
+   !!
+   !! Zhao, T. L., S. L. Gong, X. Y. Zhang, A. Abdel-Mawgoud, and Y. P. Shao (2006),
+   !! An assessment of dust emission schemes in modeling east Asian dust storms,
+   !! J. Geophys. Res., 111, D05S90, doi:10.1029/2004JD005746.
+   !!
+   !! \param volumetric_soil_moisture Volumetric soil moisture
+   !! \param H Soil moisture attenuation factor for dust emission
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
+   subroutine Zhao_SoilMoisture( volumetric_soil_moisture, H)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)  :: volumetric_soil_moisture  !< Volumetric soil moisture [m3 m-3]
+      real(fp), intent(out) :: H                         !< Soil Moisture attenuation factor for dust emission [1]
+
+      ! Initialize
+      H = 0.0_fp
+
+      !--------------------------------------------
+      ! Compute attenuation factor
+      !--------------------------------------------
+      if (volumetric_soil_moisture <= 0.03_fp) THEN
+         H = exp(22.7_fp * volumetric_soil_moisture)
+      else
+         H = exp(93.5_fp * volumetric_soil_moisture - 2.029_fp)
+      endif
+
+      return
+
+   end subroutine Zhao_SoilMoisture
 
 
    function calc_drag_partition(sig, m, Beta, Lc) result(feff)

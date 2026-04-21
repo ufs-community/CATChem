@@ -10,7 +10,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 
 # Option to disable tests
-option(BUILD_TESTING "Build tests" ON)
+# Default ON for standalone builds, OFF when built as a submodule
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  option(BUILD_TESTING "Build tests" ON)
+else()
+  option(BUILD_TESTING "Build tests" OFF)
+endif()
 
 include(CMakePrintHelpers)
 
