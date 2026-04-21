@@ -146,7 +146,9 @@ contains
 
       ! get the scaling factor following Ginoux et al. (2001)
       ! Note the GOCART2G version does not have the SSM factor
-      ginoux_scaling = (1 - frlake) * (1 - frsno) * SSM
+      !Note not using (1 - frlake) * (1 - frsno) as GOCART
+      !ginoux_scaling = (1 - frlake) * (1 - frsno) * SSM
+      ginoux_scaling = min(1.0_fp, max(0.0_fp, 1.0_fp - frlake - frsno) ) * SSM
 
       ! get 10m mean wind speed
       w10m = sqrt(U10M ** 2 + V10M ** 2)
@@ -166,8 +168,11 @@ contains
             ! Compute emission flux
             if (w10m .gt. u_thresh) then
                emission_temp = ginoux_scaling * w10m ** 2 * max(0.0_fp,(w10m - u_thresh) )  ! kg/m2/s
-               !Note Chu_DU is 1.0 all the time. It is used in GOCART2G for the conversion from du_src
-               emission_temp = emission_temp * params%Ch_DU(species_idx)
+               !TODO: Note Chu_DU is used in GOCART2G for the conversion from du_src
+               !The Chu_DU list in GOCART goes through the Chem_UtilResVal function, after which all bins have the 
+               !same value before the 1e-9 conversion.
+               !we do not have du_src input and use SSM instead in ginoux_scaling calculation above. 
+               emission_temp = emission_temp * params%Ch_DU(species_idx) * 1.0e-9
             endif
 
             species_tendencies(k, species_idx) = max(0.0_fp, emission_temp)

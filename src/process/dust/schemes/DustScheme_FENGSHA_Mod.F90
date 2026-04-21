@@ -253,7 +253,7 @@ contains
       total_emissions = FengshaScale * h_to_v_ratio * q
 
       !debug only
-      ! if (total_emissions > 1.0e-5_fp) then
+      ! if (total_emissions > 0.0_fp) then
       !    write(*,'(A,F12.8)') 'Debug: Total Emissions = ', total_emissions
       !    write(*,'(A,F12.8)') 'Debug: Total Fengsha Scale = ', FengshaScale
       !    write(*,'(A,F12.8)') 'Debug: h_to_v_ratio = ', h_to_v_ratio
@@ -265,12 +265,12 @@ contains
       !    write(*,'(A,F12.8)') 'Debug: clayfrac = ', clayfrac
       !    write(*,'(A,F12.8)') 'Debug: sandfrac = ', sandfrac
       !    write(*,'(A,F12.8)') 'Debug: soilm = ', soilm(1)
+      !    write(*,'(A,F12.8)') 'Debug: LAI = ', LAI
       !    write(*,'(A,F12.8)') 'Debug: fracland = ', fracland
       !    write(*,'(A,F12.8)') 'Debug: airden = ', airden(1)
       !    write(*,'(A,F12.8)') 'Debug: ssm = ', ssm
       !    write(*,'(A,F12.8)') 'Debug: alpha_grav = ', alpha_grav
       ! end if
-
 
 
       ! get distribution of dust and map total emissions to species bins
@@ -317,7 +317,7 @@ contains
       ! save other species independent diagnostics
       if (present(dust_horizontal_flux)) then
          ! Add your custom total horizontal flux - q calculation
-         dust_horizontal_flux = soilm(1)  !q
+         dust_horizontal_flux = q
       end if
       if (present(dust_moisture_correction)) then
          ! Add your custom moisture correction - h calculation
@@ -325,7 +325,7 @@ contains
       end if
       if (present(dust_effective_threshold)) then
          ! Add your custom effective dust threshold friction velocity: u_thres * h / r calculation
-         dust_effective_threshold = LWI !ustar_threshold * H / R
+         dust_effective_threshold = ustar_threshold * H / R
       end if
 
    end subroutine compute_fengsha

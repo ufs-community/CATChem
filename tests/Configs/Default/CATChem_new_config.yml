@@ -197,7 +197,7 @@ processes:
       moist_option: 1
       distribution_option: 1
     ginoux:
-      Ch_DU: [1.0, 1.0, 1.0, 1.0, 1.0]
+      Ch_DU: [0.07, 0.07, 0.07, 0.07, 0.07]
   drydep:
     activate: true
     diagnostics: true
