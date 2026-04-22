@@ -8,8 +8,7 @@ program test_Precision
 
    implicit none
 
-   real(fp) :: test_val
-   real(f4) :: test_f4
+   real(fp) :: test_f4
    real(f8) :: test_f8
    logical :: result
 

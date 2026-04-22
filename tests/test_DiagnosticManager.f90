@@ -6,9 +6,8 @@ program test_DiagnosticManager
    use testing_mod, only: assert, assert_close
    use DiagnosticManager_Mod
    use StateManager_Mod, only: StateManagerType
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
+   use Error_Mod, only: CC_SUCCESS, ErrorManagerType
    use GridManager_Mod, only: GridManagerType
-   use Precision_Mod, only: fp
 
    implicit none
 
@@ -17,7 +16,6 @@ program test_DiagnosticManager
    type(ErrorManagerType) :: error_mgr
    type(GridManagerType) :: grid_mgr
    integer :: rc
-   logical :: is_ready
 
    write(*,*) 'Testing DiagnosticManager module...'
    write(*,*) ''

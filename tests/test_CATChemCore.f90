@@ -5,7 +5,7 @@
 program test_CATChemCore
    use testing_mod, only: assert, assert_close
    use CATChemCore_Mod
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType, ERROR_PROCESS_INITIALIZATION
+   use Error_Mod, only: CC_SUCCESS, ErrorManagerType
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType
    use ProcessManager_Mod, only: ProcessManagerType

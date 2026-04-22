@@ -273,22 +273,18 @@ contains
       type(ESMF_Info) :: tracerInfo
       type(ESMF_Field), pointer :: fieldList(:)
       type(ESMF_Clock)          :: clock
-      type(ESMF_Time)           :: currTime, startTime, stopTime
+      type(ESMF_Time)           :: startTime, stopTime
       type(ESMF_TimeInterval)   :: timeStep
       real(ESMF_KIND_R8), dimension(:,:), pointer :: coord
       real(ESMF_KIND_R8), dimension(:,:), allocatable :: lon
       real(ESMF_KIND_R8), dimension(:,:), allocatable :: lat
       type(ESMF_CoordSys_Flag)   :: coordSys
-      character(len=*), parameter :: routine = 'InitializeP2'
       real(ESMF_KIND_R8), parameter :: rad_to_deg = 180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
       real(ESMF_KIND_R8) :: convet_unit
-      character(len=512) :: errmsg
       integer :: localPet, petCount
-      integer :: im, jm  ! Grid dimensions
       integer :: item, coord_item, rank, localDeCount, numLevels, localDe, localrc, stat
       integer, dimension(2) :: lb, ub
       logical :: has_tracer_array
-      type(CATChem_InternalState) :: is
 
       rc = ESMF_SUCCESS
       has_tracer_array = .false.

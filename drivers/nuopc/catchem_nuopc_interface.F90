@@ -190,7 +190,6 @@ contains
       type(StateManagerType), pointer :: state_mgr
       type(ConfigManagerType), pointer :: config_manager
       type(MetStateType), pointer :: met_state
-      type(ChemStateType), pointer :: chem_state
       integer :: nx, ny, num_processes, stat
       integer(ESMF_KIND_I8) :: tstep_seconds
       character(len=128), allocatable :: tracer_names(:) !< NUOPC tracer name
@@ -1094,11 +1093,9 @@ contains
       type(DiagnosticManagerType), pointer :: diag_mgr => null()
       type(ESMF_Time) :: time_on_file
       character(len=64), allocatable :: process_list(:)
-      character(len=64), allocatable :: field_names(:)
-      integer :: num_processes, num_fields, i, j
+      integer :: num_processes, i
       logical :: time_to_write
       character(len=256) :: filename
-      character(len=*), parameter :: routine = 'catchem_diagnostics_write'
 
       rc = CC_SUCCESS
 
@@ -1684,7 +1681,6 @@ contains
 
       !type(cc_wrap_type), pointer :: cc_wrap
       type(ESMF_Time) :: next_output_time
-      type(ESMF_Time) :: next_time
 
       rc = CC_SUCCESS
       time_to_write = .false.
