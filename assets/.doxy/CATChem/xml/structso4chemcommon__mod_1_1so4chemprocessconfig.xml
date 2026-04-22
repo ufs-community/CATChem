@@ -1,0 +1,357 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structso4chemcommon__mod_1_1so4chemprocessconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>so4chemcommon_mod::so4chemprocessconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a3fafbb2975c653fdf5b35ee4253728ab" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) so4chemcommon_mod::so4chemprocessconfig::process_name</definition>
+        <argsstring></argsstring>
+        <name>process_name</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::process_name</qualifiedname>
+        <initializer>= &apos;so4chem&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="105" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a68a8ba1f5e50d1b8f3782b0ab859be8a" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) so4chemcommon_mod::so4chemprocessconfig::process_version</definition>
+        <argsstring></argsstring>
+        <name>process_version</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::process_version</qualifiedname>
+        <initializer>= &apos;1.0.0&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="106" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a7be16394c341cb639eb40973e1e74551" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemprocessconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="107" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1aaa4bb3a82c3892bacbbd7f0e81a3c370" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structso4chemcommon__mod_1_1so4chemconfig" kindref="compound">so4chemconfig</ref>)</type>
+        <definition>type(so4chemconfig) so4chemcommon_mod::so4chemprocessconfig::so4chem_config</definition>
+        <argsstring></argsstring>
+        <name>so4chem_config</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::so4chem_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="110" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a65ccc32f98f2064c3a7c0cf15ec8b991" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" kindref="compound">so4chemschemegocartconfig</ref>)</type>
+        <definition>type(so4chemschemegocartconfig) so4chemcommon_mod::so4chemprocessconfig::gocart_config</definition>
+        <argsstring></argsstring>
+        <name>gocart_config</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::gocart_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="113" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a27274dd7623017f725ad3168c53be6d5" prot="public" static="no" mutable="no">
+        <type>type(so4chemgocartpersistentstate), dimension(:), allocatable</type>
+        <definition>type(so4chemgocartpersistentstate), dimension(:), allocatable so4chemcommon_mod::so4chemprocessconfig::gocart_persistent_state</definition>
+        <argsstring></argsstring>
+        <name>gocart_persistent_state</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::gocart_persistent_state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="116" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1af9d694c483233b29c6a7a47624a53c07" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer so4chemcommon_mod::so4chemprocessconfig::total_columns</definition>
+        <argsstring></argsstring>
+        <name>total_columns</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::total_columns</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="117" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a8f7d6a75c10e8b5ba25abdb0f2c4783b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::load_from_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_from_config</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::load_from_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="120" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1ad0778278025c3fec8a4471b8f5a03f40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::load_species_from_list</definition>
+        <argsstring>(this, chem_state, error_handler, rc)</argsstring>
+        <name>load_species_from_list</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::load_species_from_list</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load species from explicit list (from species_filter) This function is used when explicit species are provided via species_filter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="121" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a5d5d68619b8f38800ca377b89ad242d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="122" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a5ad07a35744c76e305f229681b3b449c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="123" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1aadbac001b24f2210036775ec8583b2df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::initialize_persistent_state</definition>
+        <argsstring>(this, grid_manager)</argsstring>
+        <name>initialize_persistent_state</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::initialize_persistent_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), intent(in)</type>
+          <defname>grid_manager</defname>
+        </param>
+        <briefdescription>
+<para>Initialize persistent state arrays for column processing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="124" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a7b852722855ecaa7ec18f18a6695e767" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::get_active_scheme_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="125" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a1363b4a7a33bddce2c49b99b17823582" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::load_gocart_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_gocart_config</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::load_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load gocart scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="126" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemprocessconfig_1a6cd541f0f8035469dd8a33ed9fb2021f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemprocessconfig::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>so4chemcommon_mod::so4chemprocessconfig::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemprocessconfig" kindref="compound">so4chemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="127" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="127" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Unified process configuration type that bridges ConfigManager and process-specific configs This is the main configuration type that ProcessInterface should use. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>so4chemcommon_mod::so4chemconfig</label>
+        <link refid="structso4chemcommon__mod_1_1so4chemconfig"/>
+      </node>
+      <node id="4">
+        <label>so4chemcommon_mod::so4chemgocartpersistentstate</label>
+      </node>
+      <node id="1">
+        <label>so4chemcommon_mod::so4chemprocessconfig</label>
+        <link refid="structso4chemcommon__mod_1_1so4chemprocessconfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>so4chem_config</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>gocart_config</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>gocart_persistent_state</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>so4chemcommon_mod::so4chemschemegocartconfig</label>
+        <link refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="102" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="102" bodyend="128"/>
+    <listofallmembers>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a5ad07a35744c76e305f229681b3b449c" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>finalize</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a7b852722855ecaa7ec18f18a6695e767" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>get_active_scheme_config</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a65ccc32f98f2064c3a7c0cf15ec8b991" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>gocart_config</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a27274dd7623017f725ad3168c53be6d5" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>gocart_persistent_state</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1aadbac001b24f2210036775ec8583b2df" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>initialize_persistent_state</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a7be16394c341cb639eb40973e1e74551" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>is_active</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a8f7d6a75c10e8b5ba25abdb0f2c4783b" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>load_from_config</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a1363b4a7a33bddce2c49b99b17823582" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>load_gocart_config</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1ad0778278025c3fec8a4471b8f5a03f40" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>load_species_from_list</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a6cd541f0f8035469dd8a33ed9fb2021f" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>map_diagnostic_species_indices</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a3fafbb2975c653fdf5b35ee4253728ab" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>process_name</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a68a8ba1f5e50d1b8f3782b0ab859be8a" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>process_version</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1aaa4bb3a82c3892bacbbd7f0e81a3c370" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>so4chem_config</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1af9d694c483233b29c6a7a47624a53c07" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>total_columns</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemprocessconfig_1a5d5d68619b8f38800ca377b89ad242d6" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemprocessconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -316,9 +316,9 @@ contains
       this%diag_mgr => diag_mgr_ptr
    end subroutine manager_set_diagnostic_manager
 
-   subroutine manager_create_virtual_column(this, i, j, virtual_col, rc)
+   subroutine manager_create_virtual_column(this, i, j, column_id, virtual_col, rc)
       class(StateManagerType), intent(inout), target :: this
-      integer, intent(in) :: i, j
+      integer, intent(in) :: i, j, column_id
       type(VirtualColumnType), intent(out) :: virtual_col
       integer, intent(out) :: rc
 
@@ -368,7 +368,7 @@ contains
       endif
 
       ! Initialize the virtual column data container
-      call virtual_col%init(nlev, nspec_chem, nspec_emis, i, j, lat, lon, area, rc)
+      call virtual_col%init(nlev, nspec_chem, nspec_emis, i, j, column_id, lat, lon, area, rc)
       if (rc /= cc_success) return
 
       ! Populate with data from 3D grid

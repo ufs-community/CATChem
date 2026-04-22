@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="119" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="119" bodyend="119"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="124" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="124" bodyend="124"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="120" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="120" bodyend="120"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="125" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="125" bodyend="125"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1af6775f95edc0bd048ce06865fd7696aa" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -49,7 +49,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="121" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="121" bodyend="121"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="126" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="126" bodyend="126"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1aa2b8ac78c3c9eab77f0eaf65b46202f2" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -65,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="122" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="122" bodyend="122"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="127" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="127" bodyend="127"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1ac2eefe3fe493285697f334a86c40174c" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="123" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="123" bodyend="123"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="128" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="128" bodyend="128"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -89,7 +89,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ConfigManager_Mod.F90" line="118" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="118" bodyend="124"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="123" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="123" bodyend="129"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1a78bff6233b1329e7bc0ecc50994e4bfa" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>activate</name></member>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>config_file</name></member>

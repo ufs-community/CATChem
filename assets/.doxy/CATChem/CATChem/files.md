@@ -50,8 +50,6 @@ Here is a list of all files with brief descriptions:
             * **file** [**DryDepCommon\_Mod.F90**](_dry_dep_common___mod_8_f90.md) _Common types and utilities for drydep process._     
             * **file** [**DryDepProcessCreator\_Mod.F90**](_dry_dep_process_creator___mod_8_f90.md) _Factory for creating drydep process instances._     
             * **file** [**ProcessDryDepInterface\_Mod.F90**](_process_dry_dep_interface___mod_8_f90.md)     
-            * **dir** [**examples**](dir_3740d38ba4ad4417edd3d1220f13e03f.md)     
-                * **file** [**drydep\_example.F90**](drydep__example_8_f90.md) _Example usage of drydep process._     
             * **dir** [**schemes**](dir_5a3c86e36f17958630366ebc2b7ca21b.md)     
                 * **file** [**DryDepScheme\_GOCART\_Mod.F90**](_dry_dep_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART-2G aerosol dry deposition scheme._     
                 * **file** [**DryDepScheme\_WESELY\_Mod.F90**](_dry_dep_scheme___w_e_s_e_l_y___mod_8_f90.md) _Wesely 1989 gas dry deposition scheme._     
@@ -60,8 +58,6 @@ Here is a list of all files with brief descriptions:
             * **file** [**ProcessSeaSaltInterface\_Mod.F90**](_process_sea_salt_interface___mod_8_f90.md)     
             * **file** [**SeaSaltCommon\_Mod.F90**](_sea_salt_common___mod_8_f90.md) _Common types and utilities for seasalt process._     
             * **file** [**SeaSaltProcessCreator\_Mod.F90**](_sea_salt_process_creator___mod_8_f90.md) _Factory for creating seasalt process instances._     
-            * **dir** [**examples**](dir_5a4ade9a2f1be2d214cab82786bd5e96.md)     
-                * **file** [**seasalt\_example.F90**](seasalt__example_8_f90.md) _Example usage of seasalt process._     
             * **dir** [**schemes**](dir_ec083b49fedbd640552af85049fd7226.md)     
                 * **file** [**SeaSaltScheme\_GEOS12\_Mod.F90**](_sea_salt_scheme___g_e_o_s12___mod_8_f90.md) _GEOS-Chem 2012 sea salt emission scheme with observational constraints._     
                 * **file** [**SeaSaltScheme\_GONG03\_Mod.F90**](_sea_salt_scheme___g_o_n_g03___mod_8_f90.md) _Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment._     
@@ -70,16 +66,18 @@ Here is a list of all files with brief descriptions:
             * **file** [**ProcessSettlingInterface\_Mod.F90**](_process_settling_interface___mod_8_f90.md)     
             * **file** [**SettlingCommon\_Mod.F90**](_settling_common___mod_8_f90.md) _Common types and utilities for settling process._     
             * **file** [**SettlingProcessCreator\_Mod.F90**](_settling_process_creator___mod_8_f90.md) _Factory for creating settling process instances._     
-            * **dir** [**examples**](dir_ccadb5b29918b194ae5ca60f91721c2d.md)     
-                * **file** [**settling\_example.F90**](settling__example_8_f90.md) _Example usage of settling process._     
             * **dir** [**schemes**](dir_34df91cc26d24067840a7381fe21b817.md)     
                 * **file** [**SettlingScheme\_GOCART\_Mod.F90**](_settling_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART gravitational settling scheme._     
+        * **dir** [**so4chem**](dir_fb8fc0df5ebe1b02f5e46b98d91cbc63.md)     
+            * **file** [**ProcessSO4chemInterface\_Mod.F90**](_process_s_o4chem_interface___mod_8_f90.md)     
+            * **file** [**SO4chemCommon\_Mod.F90**](_s_o4chem_common___mod_8_f90.md) _Common types and utilities for so4chem process._     
+            * **file** [**SO4chemProcessCreator\_Mod.F90**](_s_o4chem_process_creator___mod_8_f90.md) _Factory for creating so4chem process instances._     
+            * **dir** [**schemes**](dir_429bccfa51a729cf5e11bef5cf73cbc7.md)     
+                * **file** [**SO4chemScheme\_GOCART\_Mod.F90**](_s_o4chem_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART SO2 to SO4 production scheme._     
         * **dir** [**wetdep**](dir_8b9a0ce556ea4a65f6920dfb49dcd69d.md)     
             * **file** [**ProcessWetDepInterface\_Mod.F90**](_process_wet_dep_interface___mod_8_f90.md)     
             * **file** [**WetDepCommon\_Mod.F90**](_wet_dep_common___mod_8_f90.md) _Common types and utilities for wetdep process._     
             * **file** [**WetDepProcessCreator\_Mod.F90**](_wet_dep_process_creator___mod_8_f90.md) _Factory for creating wetdep process instances._     
-            * **dir** [**examples**](dir_ff6af94d37dffecf82cfd346b98504fd.md)     
-                * **file** [**wetdep\_example.F90**](wetdep__example_8_f90.md) _Example usage of wetdep process._     
             * **dir** [**schemes**](dir_8ca87c5e2f5cf830ab1a41055168a46b.md)     
                 * **file** [**WetDepScheme\_JACOB\_Mod.F90**](_wet_dep_scheme___j_a_c_o_b___mod_8_f90.md) _Jacob et al._     
 

@@ -499,7 +499,7 @@ contains
                trim(this%settling_config%diagnostic_species(i)), &
                "' not found in process species list"
             call error_handler%report_error(error_not_found, error_msg, rc)
-            return
+            !return !do not return and the diagnostics for this unspecified species will be zero in the output
          end if
       end do
 

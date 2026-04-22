@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="109" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="109" bodyend="109"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="113" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="113" bodyend="113"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a791e716911da21e73915332dbfd7ba0f" prot="public" static="no" mutable="no">
         <type>character(len=255)</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="110" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="110" bodyend="110"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="114" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="114" bodyend="114"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a7a4e8b7c6661997e22b654c05e36d50b" prot="public" static="no" mutable="no">
         <type>character(len=255)</type>
@@ -49,7 +49,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="111" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="111" bodyend="111"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="115" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="115" bodyend="115"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a7d1218a26746d4a706de2e192ed86fd8" prot="public" static="no" mutable="no">
         <type>character(len=255)</type>
@@ -65,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="112" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="112" bodyend="112"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="116" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="116" bodyend="116"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1aa66cdbf21e9bc072abe4faf314850550" prot="public" static="no" mutable="no">
         <type>character(len=255)</type>
@@ -81,7 +81,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="113" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="113" bodyend="113"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="117" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1filepathconfig_1a1137aa101ec9b5d573529883901a0016" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) configmanager_mod::filepathconfig::output_prefix</definition>
+        <argsstring></argsstring>
+        <name>output_prefix</name>
+        <qualifiedname>configmanager_mod::filepathconfig::output_prefix</qualifiedname>
+        <initializer>= &apos;catchem_diag&apos;</initializer>
+        <briefdescription>
+<para>Output file prefix. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="118" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="118" bodyend="118"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -89,12 +105,13 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ConfigManager_Mod.F90" line="108" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="108" bodyend="114"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="112" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="112" bodyend="119"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1filepathconfig_1a43da7e6c61f7224155303bb3fc2d2582" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>emission_file</name></member>
       <member refid="structconfigmanager__mod_1_1filepathconfig_1a7d1218a26746d4a706de2e192ed86fd8" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>input_directory</name></member>
       <member refid="structconfigmanager__mod_1_1filepathconfig_1a7a4e8b7c6661997e22b654c05e36d50b" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>mie_directory</name></member>
       <member refid="structconfigmanager__mod_1_1filepathconfig_1aa66cdbf21e9bc072abe4faf314850550" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>output_directory</name></member>
+      <member refid="structconfigmanager__mod_1_1filepathconfig_1a1137aa101ec9b5d573529883901a0016" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>output_prefix</name></member>
       <member refid="structconfigmanager__mod_1_1filepathconfig_1a791e716911da21e73915332dbfd7ba0f" prot="public" virt="non-virtual"><scope>configmanager_mod::filepathconfig</scope><name>species_file</name></member>
     </listofallmembers>
   </compounddef>

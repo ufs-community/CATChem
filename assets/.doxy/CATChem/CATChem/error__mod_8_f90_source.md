@@ -216,18 +216,18 @@ CONTAINS
 
       ! Print error message to log
       message =  'CATChem ERROR: ' // trim( errmsg )
-      WRITE(*,'(a)') trim(message)
+      WRITE( 6, '(a)' ) trim(message)
 
       ! Print error location to log
       IF ( PRESENT( thisloc ) ) THEN
          message = 'ERROR LOCATION: ' // trim( thisloc )
-         WRITE( 6, '(a)' ) trim( thisloc )
+         WRITE( 6, '(a)' ) trim( message )
       ENDIF
 
       ! Print additional instructions to log
       IF ( PRESENT( instr ) ) THEN
          WRITE( 6, '(a)' )
-         WRITE(*,'(a)') trim(instr)
+         WRITE( 6, '(a)' ) trim(instr)
       ENDIF
 
       ! Separators
@@ -268,18 +268,18 @@ CONTAINS
 
       ! Print error message to log
       message =  'CATChem WARNING: ' // trim( warnmsg )
-      WRITE(*,'(a)') trim(message)
+      WRITE( 6, '(a)' ) trim(message)
 
       ! Print error location to log
       IF ( PRESENT( thisloc ) ) THEN
          message = 'WARNING LOCATION: ' // trim( thisloc )
-         WRITE( 6, '(a)' ) trim( thisloc )
+         WRITE( 6, '(a)' ) trim( message )
       ENDIF
 
       ! Print additional instructions to log
       IF ( PRESENT( instr ) ) THEN
          WRITE( 6, '(a)' )
-         WRITE(*,'(a)') trim(instr)
+         WRITE( 6, '(a)' ) trim(instr)
       ENDIF
 
       ! Separators

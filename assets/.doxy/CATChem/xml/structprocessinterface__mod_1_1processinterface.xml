@@ -1546,6 +1546,12 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </childnode>
       </node>
       <node id="6">
+        <label>processso4cheminterface_mod::processso4cheminterface</label>
+        <link refid="structprocessso4cheminterface__mod_1_1processso4cheminterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
         <label>processwetdepinterface_mod::processwetdepinterface</label>
         <link refid="structprocesswetdepinterface__mod_1_1processwetdepinterface"/>
         <childnode refid="2" relation="public-inheritance">

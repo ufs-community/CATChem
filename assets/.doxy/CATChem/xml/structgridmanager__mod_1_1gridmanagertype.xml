@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="148" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="148" bodyend="148"/>
+        <location file="src/core/GridManager_Mod.F90" line="149" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="149" bodyend="149"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="149" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="149" bodyend="149"/>
+        <location file="src/core/GridManager_Mod.F90" line="150" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="150" bodyend="150"/>
       </memberdef>
       <memberdef kind="variable" id="structgridmanager__mod_1_1gridmanagertype_1aae039d7460f433a0d508b2abd56075e7" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), pointer</type>
@@ -49,7 +49,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="150" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="150" bodyend="150"/>
+        <location file="src/core/GridManager_Mod.F90" line="151" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="151" bodyend="151"/>
       </memberdef>
       <memberdef kind="variable" id="structgridmanager__mod_1_1gridmanagertype_1a82ccf1a52e6c3e00f6c235ef021782e8" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -65,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="153" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="153" bodyend="153"/>
+        <location file="src/core/GridManager_Mod.F90" line="154" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="154" bodyend="154"/>
       </memberdef>
       <memberdef kind="variable" id="structgridmanager__mod_1_1gridmanagertype_1a18e37ebbaed2410705912fbb233d5475" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="154" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="154" bodyend="154"/>
+        <location file="src/core/GridManager_Mod.F90" line="155" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="155" bodyend="155"/>
       </memberdef>
       <memberdef kind="variable" id="structgridmanager__mod_1_1gridmanagertype_1a9d267e22f45b2961c2859374b4556f8d" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -97,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="157" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="157" bodyend="157"/>
+        <location file="src/core/GridManager_Mod.F90" line="158" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="158" bodyend="158"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -146,7 +146,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="161" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="161" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="162" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="162" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1a03eeb91260c5965e97daabec7a354a95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -165,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="162" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="162" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="163" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="163" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1aa0cc60ecf3586d25f2afe453de68d357" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -184,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="163" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="163" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="164" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="164" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1ae11d44b4bab8b0f423f5e67d0185e22b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -203,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="166" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="166" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="167" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="167" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1a51fb459ea8ed3809b485d91af03ebc3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -222,7 +222,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="167" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="167" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="168" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="168" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1ae629737ce51b6fc76dafbb1fa5c84542" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -241,7 +241,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="168" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="168" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="169" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="169" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1a91df25334cc28b7694bd94b35cd8a097" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -260,7 +260,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="169" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="169" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="170" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="170" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1a5d37dd389873eb3139ee8fbde56b7190" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -291,7 +291,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="170" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="170" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="171" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="171" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1afd6db46b9ffcee40ce067c2f7a0ee96e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -310,7 +310,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="173" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="173" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="174" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="174" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1aff4087c0553403d5be6ddec66e8917c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -337,7 +337,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="174" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="174" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="175" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="175" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1a2bf2384d7b06ad72ee475b51f66adc9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -364,7 +364,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="175" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="175" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="176" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="176" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1af913aee349794ad0d6a5764a861595fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -399,7 +399,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="176" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="176" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="177" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="177" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1ab5bb238cbf9cda6d0507e30c433914c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -442,7 +442,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="179" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="179" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="180" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="180" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1aced871336cdc150e22293f2ca85cfe22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -481,7 +481,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="180" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="180" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="181" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="181" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1ab74fb475e87c6f8949021cd73ad29db6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -508,7 +508,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="181" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="181" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="182" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="182" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1aff19840cf3684dd60bd84e7273cc31a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -527,7 +527,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="184" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="184" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="185" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="185" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structgridmanager__mod_1_1gridmanagertype_1ab14396463103c02843ae64ed158ce786" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -546,7 +546,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/GridManager_Mod.F90" line="185" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="185" bodyend="-1"/>
+        <location file="src/core/GridManager_Mod.F90" line="186" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="186" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -575,7 +575,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/GridManager_Mod.F90" line="145" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="145" bodyend="186"/>
+    <location file="src/core/GridManager_Mod.F90" line="146" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="146" bodyend="187"/>
     <listofallmembers>
       <member refid="structgridmanager__mod_1_1gridmanagertype_1a03eeb91260c5965e97daabec7a354a95" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridmanagertype</scope><name>cleanup</name></member>
       <member refid="structgridmanager__mod_1_1gridmanagertype_1ab5bb238cbf9cda6d0507e30c433914c8" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridmanagertype</scope><name>compute_distances</name></member>

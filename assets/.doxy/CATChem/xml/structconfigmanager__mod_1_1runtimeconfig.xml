@@ -131,6 +131,68 @@
         </inbodydescription>
         <location file="src/core/ConfigManager_Mod.F90" line="91" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="91" bodyend="91"/>
       </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a2222efb0d40436c27435178779ef75df" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::compresslev</definition>
+        <argsstring></argsstring>
+        <name>compresslev</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::compresslev</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Compression level for output NC files (0-9) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="92" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a30a21686b8da64aa7306293e3877b506" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::output_frequency</definition>
+        <argsstring></argsstring>
+        <name>output_frequency</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::output_frequency</qualifiedname>
+        <initializer>= 3600</initializer>
+        <briefdescription>
+<para>Default: 1 hour in seconds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="93" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a6ac10486485083fad906b6d818744c2f" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable configmanager_mod::runtimeconfig::diag_species</definition>
+        <argsstring></argsstring>
+        <name>diag_species</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::diag_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="94" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a664847963aa457bd6f25dc1cca377589" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer configmanager_mod::runtimeconfig::n_diag_species</definition>
+        <argsstring></argsstring>
+        <name>n_diag_species</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::n_diag_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of species in diag_species array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="95" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a9df7a321b6c61872a5160dc635a6f21c" prot="public" static="no" mutable="no">
         <type>logical</type>
         <definition>logical configmanager_mod::runtimeconfig::verboserequested</definition>
@@ -145,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="92" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="92" bodyend="92"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="96" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="96" bodyend="96"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1aee696fa583c7f8bfc1570d8190e9a213" prot="public" static="no" mutable="no">
         <type>character(len=10)</type>
@@ -161,7 +223,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="93" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="93" bodyend="93"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="97" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="97" bodyend="97"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4c10332440a75cd8d2405a6329300354" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -177,7 +239,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="94" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="94" bodyend="94"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="98" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="98" bodyend="98"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4a6ab31eff01004c83ea3b21b6835704" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -193,7 +255,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="97" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="97" bodyend="97"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="101" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="101" bodyend="101"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a076599744ec00584fd6b90502b020812" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -209,7 +271,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="98" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="98" bodyend="98"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="102" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="102" bodyend="102"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a4737c05962db7056d7944ce18fdcd492" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -225,7 +287,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="99" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="99" bodyend="99"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="103" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="103" bodyend="103"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a795f9c768333bd25aeed308403be21d7" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -241,7 +303,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="100" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="100" bodyend="100"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="104" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="104" bodyend="104"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a91b1e059cf347b085b8391bfc4bf3fcd" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -257,7 +319,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="101" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="101" bodyend="101"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="105" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="105" bodyend="105"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1abaf80178cefaf0c279803ea7406c1153" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -273,7 +335,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="102" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="102" bodyend="102"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="106" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="106" bodyend="106"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a0dce6d78f091e2494d38039cf4bc3f3b" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -289,7 +351,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="103" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="103" bodyend="103"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="107" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="107" bodyend="107"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1a62536e7f4edc64127ec6a7637dcc6f26" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -305,7 +367,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="104" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="104" bodyend="104"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="108" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="108" bodyend="108"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -313,14 +375,17 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ConfigManager_Mod.F90" line="83" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="83" bodyend="105"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="83" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="83" bodyend="109"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ae23d92c719aa71dacc1bad7a5840fba7" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>amiroot</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a2222efb0d40436c27435178779ef75df" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>compresslev</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a6ac10486485083fad906b6d818744c2f" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>diag_species</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad43abbd040a324346b17b1729b30be44" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>diagenabled</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a15f6d4dec3cce344313877f60c3f0910" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>dryrun</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad04ade4a51bb15f1e3c7b9a0f9414f67" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>ismpi</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a91b1e059cf347b085b8391bfc4bf3fcd" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>maxspecies</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1adeb01d9c1caea6f6b486b2744ecfeb7e" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>mpicomm</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a664847963aa457bd6f25dc1cca377589" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>n_diag_species</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a0dce6d78f091e2494d38039cf4bc3f3b" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nemissioncategories</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a62536e7f4edc64127ec6a7637dcc6f26" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nemissionspecies</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4a6ab31eff01004c83ea3b21b6835704" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nlevs</name></member>
@@ -329,6 +394,7 @@
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ac892155ef2c29b192d8ccaefa47d3cba" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>numcpus</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a076599744ec00584fd6b90502b020812" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>nx</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4737c05962db7056d7944ce18fdcd492" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>ny</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1a30a21686b8da64aa7306293e3877b506" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>output_frequency</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ae1ec4c303598cfaf8b567b4f555f571a" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>simulationname</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a3019204dcd280b621762f655ac21368c" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>thiscpu</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a4c10332440a75cd8d2405a6329300354" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>verbose</name></member>

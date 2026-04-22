@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="214" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="215" bodyend="259"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="215" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="216" bodyend="260"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1aaed1b44102f4c4dc7347c600f73d3ded" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -160,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="268" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="269" bodyend="300"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="269" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="270" bodyend="301"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a2f619ef2b9e4cf8478a0b23cc60de00a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -214,7 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="310" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="311" bodyend="338"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="311" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="312" bodyend="339"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a8129bae4eacfa9fef06d45b136dbe9bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -294,7 +294,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="351" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="352" bodyend="376"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="352" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="353" bodyend="377"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1abf2c343161ece233e0dcda49f9548a34" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -360,7 +360,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="388" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="389" bodyend="405"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="389" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="390" bodyend="406"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a61b3db1cc4fe2e3bce9b950ebd8e4915" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function, dimension(:,:), pointer</type>
@@ -416,7 +416,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="416" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="417" bodyend="430"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="417" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="418" bodyend="431"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1acb245f932090fc17b6bd6a8c99f4d760" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -494,7 +494,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="446" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="447" bodyend="481"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="447" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="448" bodyend="482"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a8efbfa9f22441b341432df7c11a922f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -536,7 +536,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="490" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="491" bodyend="525"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="491" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="492" bodyend="526"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1aaec81e4953c9586941192612dd18bbbc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -590,7 +590,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="535" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="536" bodyend="554"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="536" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="537" bodyend="555"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a17ecdc8f1dc217bd336cd8d69c8162a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -644,7 +644,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="564" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="565" bodyend="608"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="565" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="566" bodyend="609"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a4dc60cb4a95baba252d5dac2dcca0d6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -688,7 +688,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="619" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="620" bodyend="637"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="620" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="621" bodyend="638"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a31ca3ab69f87972fba9bb1965522b087" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -754,7 +754,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="652" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="653" bodyend="685"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="653" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="654" bodyend="686"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a45448ece2aa69678340616302c93d052" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -796,7 +796,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="694" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="695" bodyend="716"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="695" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="696" bodyend="717"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a080c1cebd75fc0f83a5fbad8d64febb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -850,7 +850,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="726" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="727" bodyend="745"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="727" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="728" bodyend="746"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a9a82e58c82df36052bdcf9c0c888e6cc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -904,7 +904,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="755" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="756" bodyend="800"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="756" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="757" bodyend="801"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a87bd99596a9506c5d4e12dcbaa01db7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -970,7 +970,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="812" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="813" bodyend="826"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="813" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="814" bodyend="827"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a9775cdc271c394af8dd950bbc5e18e9c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>type(<ref refid="structextemisdata__mod_1_1extemisfieldtype" kindref="compound">extemisfieldtype</ref>) function, pointer</type>
@@ -1014,7 +1014,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="836" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="837" bodyend="855"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="837" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="838" bodyend="856"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1a3feae91e6fb5ea04b38ca0de54f3ed5d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1094,7 +1094,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="868" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="869" bodyend="884"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="869" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="870" bodyend="885"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1ae2726da0a842e3515a4bd3ee258aa6fa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1148,7 +1148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="894" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="895" bodyend="912"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="895" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="896" bodyend="913"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1aeb03056b01e8991096cba87904244943" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer(kind=8) function</type>
@@ -1180,7 +1180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="921" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="922" bodyend="942"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="922" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="923" bodyend="943"/>
       </memberdef>
       <memberdef kind="function" id="namespaceextemisdata__mod_1ad234fb09afaa477a51a553d6f5000d00" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function, dimension(:,:), pointer</type>
@@ -1260,7 +1260,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ExtEmisData_Mod.F90" line="955" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="956" bodyend="985"/>
+        <location file="src/core/ExtEmisData_Mod.F90" line="956" column="1" bodyfile="src/core/ExtEmisData_Mod.F90" bodystart="957" bodyend="986"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

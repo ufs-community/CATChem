@@ -30,7 +30,6 @@
 
 | Type | Name |
 | ---: | :--- |
-| dir | [**examples**](dir_ff6af94d37dffecf82cfd346b98504fd.md) <br> |
 | dir | [**schemes**](dir_8ca87c5e2f5cf830ab1a41055168a46b.md) <br> |
 
 

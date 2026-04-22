@@ -80,6 +80,22 @@
         </inbodydescription>
         <location file="src/core/VirtualColumn_Mod.F90" line="41" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="41" bodyend="41"/>
       </memberdef>
+      <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a247ffb0e183f92c857d3cf249aa65203" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer virtualcolumn_mod::virtualcolumntype::column_id</definition>
+        <argsstring></argsstring>
+        <name>column_id</name>
+        <qualifiedname>virtualcolumn_mod::virtualcolumntype::column_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Unique column identifier. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/VirtualColumn_Mod.F90" line="42" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1abbca27d231d307a3fdee0f85806f5cf1" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
         <definition>real(fp) virtualcolumn_mod::virtualcolumntype::lat</definition>
@@ -94,7 +110,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="42" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="42" bodyend="42"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="43" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a9e3fccb7bb7d27e82bd32c4059179e11" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -110,7 +126,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="43" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="43" bodyend="43"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="44" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="44" bodyend="44"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a685945741d231370b85b68f942113692" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -126,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="44" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="44" bodyend="44"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="45" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="45" bodyend="45"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a488409bf64787377904ce4b7d0140354" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -142,7 +158,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="47" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="47" bodyend="47"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="48" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a9aae53959bde1207fc81efcb77bc6e6a" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -158,7 +174,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="48" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="48" bodyend="48"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="49" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="49" bodyend="49"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a5730a8cd3df8d5664c70c60061dbe5e9" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -174,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="49" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="49" bodyend="49"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="50" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="50" bodyend="50"/>
       </memberdef>
       <memberdef kind="variable" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a166a88851c8e23fa276bf1fae720ccc4" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -190,14 +206,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="52" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="52" bodyend="52"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="53" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="53" bodyend="53"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
-      <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a508940410c9d82047c7c37930bad47b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a92182d5043abf304153df5d858053127" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
         <definition>procedure virtualcolumn_mod::virtualcolumntype::init</definition>
-        <argsstring>(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, lat, lon, area, rc)</argsstring>
+        <argsstring>(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, column_id, lat, lon, area, rc)</argsstring>
         <name>init</name>
         <qualifiedname>virtualcolumn_mod::virtualcolumntype::init</qualifiedname>
         <param>
@@ -225,6 +241,10 @@
           <defname>grid_j</defname>
         </param>
         <param>
+          <type>integer, intent(in)</type>
+          <defname>column_id</defname>
+        </param>
+        <param>
           <type>real(fp), intent(in)</type>
           <defname>lat</defname>
         </param>
@@ -247,7 +267,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="55" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="55" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="56" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="56" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a936f0f885e598872a0255c7c4eda394f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -266,7 +286,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="56" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="56" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="57" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="57" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a9c2a5321206a9422d761a1018f9a0e44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -293,7 +313,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="57" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="57" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="58" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="58" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a8fcbe6c51375a08cd47601d4a01c0e0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -320,7 +340,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="58" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="58" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="59" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="59" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a83d3e18f8887093156cb6c9dcd94e68d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -351,7 +371,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="59" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="59" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="60" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="60" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1aa7c168c1abca4e75849c932b598c5e80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -382,7 +402,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="60" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="60" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="61" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="61" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a90d0196137b86dba5233a9b3990a1d67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -409,7 +429,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="61" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="61" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="62" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="62" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1ad86214fadec6af292868a41512e4db0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -440,7 +460,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="62" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="62" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="63" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="63" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a6043e3302a739631ddacfc0b8c478e73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -471,7 +491,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="63" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="63" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="64" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="64" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1a075175db967db808954e2d6b8634a975" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -490,7 +510,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="64" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="64" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="65" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="65" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structvirtualcolumn__mod_1_1virtualcolumntype_1addddc01aa8c5429a14cdeae76ee838c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -509,7 +529,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="65" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="65" bodyend="-1"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="66" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="66" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -532,11 +552,12 @@
         <label>virtualmettype</label>
       </node>
     </collaborationgraph>
-    <location file="src/core/VirtualColumn_Mod.F90" line="31" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="31" bodyend="66"/>
+    <location file="src/core/VirtualColumn_Mod.F90" line="31" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="31" bodyend="67"/>
     <listofallmembers>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a685945741d231370b85b68f942113692" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>area</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a546367d68c700e3c6789be257c64df88" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>chem_data</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1addddc01aa8c5429a14cdeae76ee838c5" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>cleanup</name></member>
+      <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a247ffb0e183f92c857d3cf249aa65203" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>column_id</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a582ab6d53f707a7979a07472d9930137" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>emis_data</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a9c2a5321206a9422d761a1018f9a0e44" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>get_chem_field</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a6043e3302a739631ddacfc0b8c478e73" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>get_dimensions</name></member>
@@ -546,7 +567,7 @@
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a90d0196137b86dba5233a9b3990a1d67" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>get_position</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a87ffac0b2c036221642947d1587c9e94" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>grid_i</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1addcf002cd37a9391251609d118361ea4" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>grid_j</name></member>
-      <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a508940410c9d82047c7c37930bad47b5" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>init</name></member>
+      <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a92182d5043abf304153df5d858053127" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>init</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a075175db967db808954e2d6b8634a975" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>is_initialized</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1a166a88851c8e23fa276bf1fae720ccc4" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>is_valid</name></member>
       <member refid="structvirtualcolumn__mod_1_1virtualcolumntype_1abbca27d231d307a3fdee0f85806f5cf1" prot="public" virt="non-virtual"><scope>virtualcolumn_mod::virtualcolumntype</scope><name>lat</name></member>

@@ -22,12 +22,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="77" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="78" bodyend="90"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="78" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="79" bodyend="91"/>
       </memberdef>
-      <memberdef kind="function" id="namespacevirtualcolumn__mod_1a123840889818adeed0e31d6779e4eb7b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacevirtualcolumn__mod_1aceddad8a8254ed5db254171e057bfd48" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
         <definition>subroutine virtualcolumn_mod::virtual_column_init</definition>
-        <argsstring>(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, lat, lon, area, rc)</argsstring>
+        <argsstring>(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, column_id, lat, lon, area, rc)</argsstring>
         <name>virtual_column_init</name>
         <qualifiedname>virtualcolumn_mod::virtual_column_init</qualifiedname>
         <param>
@@ -55,6 +55,10 @@
           <defname>grid_j</defname>
         </param>
         <param>
+          <type>integer, intent(in)</type>
+          <defname>column_id</defname>
+        </param>
+        <param>
           <type>real(fp), intent(in)</type>
           <defname>lat</defname>
         </param>
@@ -77,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="98" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="99" bodyend="147"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="99" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="100" bodyend="149"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a18108fdb8b66d10f87943999dc86186a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>type(virtualmettype) function, pointer</type>
@@ -96,7 +100,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="151" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="152" bodyend="155"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="153" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="154" bodyend="157"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1aca33542b6b59cdbb7bded34a153910b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -123,7 +127,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="159" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="160" bodyend="170"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="161" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="162" bodyend="172"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a25eecdb0988b70ec079ccde1ed2b1f45" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -150,7 +154,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="174" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="175" bodyend="185"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="176" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="177" bodyend="187"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a0e0ed0e1a5e1a9c3bec9dd79d699b78a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -181,7 +185,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="189" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="190" bodyend="198"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="191" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="192" bodyend="200"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a89b4802f60c96d27e2a5a067c7cc6412" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -212,7 +216,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="202" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="203" bodyend="211"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="204" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="205" bodyend="213"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a54819723803aec6e96e34bffd48cc6dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -239,7 +243,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="215" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="216" bodyend="220"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="217" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="218" bodyend="222"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1adde2b1b132cb75c2b0ab912791b82a01" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -270,7 +274,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="224" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="225" bodyend="230"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="226" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="227" bodyend="232"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1ac185b850773c7dc466aded78a7d06f88" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -301,7 +305,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="234" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="235" bodyend="240"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="236" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="237" bodyend="242"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a9b7448b585773382e2011b12920952b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -320,7 +324,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="244" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="245" bodyend="248"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="246" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="247" bodyend="250"/>
       </memberdef>
       <memberdef kind="function" id="namespacevirtualcolumn__mod_1a80859351a555a20df7ae9100de80b010" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -339,7 +343,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/VirtualColumn_Mod.F90" line="252" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="253" bodyend="275"/>
+        <location file="src/core/VirtualColumn_Mod.F90" line="254" column="1" bodyfile="src/core/VirtualColumn_Mod.F90" bodystart="255" bodyend="277"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

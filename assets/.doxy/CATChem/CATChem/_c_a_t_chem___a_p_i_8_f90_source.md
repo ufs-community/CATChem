@@ -29,6 +29,7 @@ module catchem_api
    use drydepprocesscreator_mod, only: register_drydep_process
    use wetdepprocesscreator_mod, only: register_wetdep_process
    use settlingprocesscreator_mod, only: register_settling_process
+   use so4chemprocesscreator_mod, only: register_so4chem_process
 
    implicit none
    private
@@ -339,6 +340,13 @@ contains
          if (rc /= cc_success) then
             call this%error_manager%push_context('model_register_process', 'registering settling process')
             call this%error_manager%report_error(1014, 'Failed to register settling process', rc)
+            call this%error_manager%pop_context()
+         endif
+       case ('so4chem')
+         call register_so4chem_process(process_mgr, rc)
+         if (rc /= cc_success) then
+            call this%error_manager%push_context('model_register_process', 'registering so4chem process')
+            call this%error_manager%report_error(1014, 'Failed to register so4chem process', rc)
             call this%error_manager%pop_context()
          endif
          ! case ('chemistry')

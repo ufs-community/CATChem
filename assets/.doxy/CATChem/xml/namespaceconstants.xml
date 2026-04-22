@@ -147,6 +147,38 @@
         </inbodydescription>
         <location file="src/core/constants.F90" line="46" column="1" bodyfile="src/core/constants.F90" bodystart="46" bodyend="46"/>
       </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a14c3a34cd7dac6959b0d7fb36c47f0a1" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::cpd</definition>
+        <argsstring></argsstring>
+        <name>cpd</name>
+        <qualifiedname>constants::cpd</qualifiedname>
+        <initializer>= 1.00416<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="47" column="1" bodyfile="src/core/constants.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1af8705acee7e3155837cfe54641c0d4e8" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public constants::cpm</definition>
+        <argsstring></argsstring>
+        <name>cpm</name>
+        <qualifiedname>constants::cpm</qualifiedname>
+        <initializer>= 1.00464<ref refid="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="48" column="1" bodyfile="src/core/constants.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1af89dfe26743309e7f478c7b094cade50" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
         <definition>real(fp), parameter, public constants::cv</definition>
@@ -161,7 +193,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="47" column="1" bodyfile="src/core/constants.F90" bodystart="47" bodyend="47"/>
+        <location file="src/core/constants.F90" line="49" column="1" bodyfile="src/core/constants.F90" bodystart="49" bodyend="49"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a87f7b874f3c65fe9bc2ec909417c09ab" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -177,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="48" column="1" bodyfile="src/core/constants.F90" bodystart="48" bodyend="48"/>
+        <location file="src/core/constants.F90" line="50" column="1" bodyfile="src/core/constants.F90" bodystart="50" bodyend="50"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a30bf6390266f8c4e10da291ae1d6d925" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -193,7 +225,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="49" column="1" bodyfile="src/core/constants.F90" bodystart="49" bodyend="49"/>
+        <location file="src/core/constants.F90" line="51" column="1" bodyfile="src/core/constants.F90" bodystart="51" bodyend="51"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1ab098fc41a0595549e89ddcfdd009932a" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -209,7 +241,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="50" column="1" bodyfile="src/core/constants.F90" bodystart="50" bodyend="50"/>
+        <location file="src/core/constants.F90" line="52" column="1" bodyfile="src/core/constants.F90" bodystart="52" bodyend="52"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1ae54bafc57083fdc414705a6a9d1b1b62" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -225,7 +257,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="51" column="1" bodyfile="src/core/constants.F90" bodystart="51" bodyend="51"/>
+        <location file="src/core/constants.F90" line="53" column="1" bodyfile="src/core/constants.F90" bodystart="53" bodyend="53"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a74c5ff3dcd6994fcb39b15fd0b12e82c" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -241,7 +273,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="52" column="1" bodyfile="src/core/constants.F90" bodystart="52" bodyend="52"/>
+        <location file="src/core/constants.F90" line="54" column="1" bodyfile="src/core/constants.F90" bodystart="54" bodyend="54"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1abcbbb645baed97285a55dabacbe84f61" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -257,7 +289,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="53" column="1" bodyfile="src/core/constants.F90" bodystart="53" bodyend="53"/>
+        <location file="src/core/constants.F90" line="55" column="1" bodyfile="src/core/constants.F90" bodystart="55" bodyend="55"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a6385280eb2d344638f2e0cc7313be67b" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -273,7 +305,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="54" column="1" bodyfile="src/core/constants.F90" bodystart="54" bodyend="54"/>
+        <location file="src/core/constants.F90" line="56" column="1" bodyfile="src/core/constants.F90" bodystart="56" bodyend="56"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a73191ef25504d56b2c4f8e7ccd452514" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -289,7 +321,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="55" column="1" bodyfile="src/core/constants.F90" bodystart="55" bodyend="55"/>
+        <location file="src/core/constants.F90" line="57" column="1" bodyfile="src/core/constants.F90" bodystart="57" bodyend="57"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a37bfc013076f7282cc5e93ae83dbe771" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -305,7 +337,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="56" column="1" bodyfile="src/core/constants.F90" bodystart="56" bodyend="56"/>
+        <location file="src/core/constants.F90" line="58" column="1" bodyfile="src/core/constants.F90" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a55cbf05d20ed645c35e1952d1156e4e5" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -321,7 +353,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="62" column="1" bodyfile="src/core/constants.F90" bodystart="62" bodyend="62"/>
+        <location file="src/core/constants.F90" line="64" column="1" bodyfile="src/core/constants.F90" bodystart="64" bodyend="64"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a6f3a66760a1ce06656deebed7485bf9a" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -337,7 +369,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="63" column="1" bodyfile="src/core/constants.F90" bodystart="63" bodyend="63"/>
+        <location file="src/core/constants.F90" line="65" column="1" bodyfile="src/core/constants.F90" bodystart="65" bodyend="65"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1ac3d5238f27746e844e042f3e8e66db8e" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -353,7 +385,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="64" column="1" bodyfile="src/core/constants.F90" bodystart="64" bodyend="64"/>
+        <location file="src/core/constants.F90" line="66" column="1" bodyfile="src/core/constants.F90" bodystart="66" bodyend="66"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a35633974876e0ca0ecc966b180f59d04" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -369,7 +401,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="70" column="1" bodyfile="src/core/constants.F90" bodystart="70" bodyend="70"/>
+        <location file="src/core/constants.F90" line="72" column="1" bodyfile="src/core/constants.F90" bodystart="72" bodyend="72"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a34729757e77eab6214ac7137c3d50bdd" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -385,7 +417,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="71" column="1" bodyfile="src/core/constants.F90" bodystart="71" bodyend="71"/>
+        <location file="src/core/constants.F90" line="73" column="1" bodyfile="src/core/constants.F90" bodystart="73" bodyend="73"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceconstants_1a16ae369028d783a95b8b98583de65daf" prot="public" static="no" mutable="no">
         <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), parameter, public</type>
@@ -401,7 +433,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="72" column="1" bodyfile="src/core/constants.F90" bodystart="72" bodyend="72"/>
+        <location file="src/core/constants.F90" line="74" column="1" bodyfile="src/core/constants.F90" bodystart="74" bodyend="74"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -433,7 +465,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="83" column="1" bodyfile="src/core/constants.F90" bodystart="84" bodyend="119"/>
+        <location file="src/core/constants.F90" line="85" column="1" bodyfile="src/core/constants.F90" bodystart="86" bodyend="121"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

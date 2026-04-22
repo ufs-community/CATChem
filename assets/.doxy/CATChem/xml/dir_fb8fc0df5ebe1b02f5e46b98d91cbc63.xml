@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_fb8fc0df5ebe1b02f5e46b98d91cbc63" kind="dir">
+    <compoundname>src/process/so4chem</compoundname>
+    <innerdir refid="dir_429bccfa51a729cf5e11bef5cf73cbc7">src/process/so4chem/schemes</innerdir>
+    <innerfile refid="_process_s_o4chem_interface___mod_8_f90">ProcessSO4chemInterface_Mod.F90</innerfile>
+    <innerfile refid="_s_o4chem_common___mod_8_f90">SO4chemCommon_Mod.F90</innerfile>
+    <innerfile refid="_s_o4chem_process_creator___mod_8_f90">SO4chemProcessCreator_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/"/>
+  </compounddef>
+</doxygen>

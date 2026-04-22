@@ -216,7 +216,7 @@ contains
          ! -- To convert from kg (H2O) / m3(air) / s to cm3 (H2O) / cm3 (air) / s, divide by the density of
          ! -- the precipitation (ice or liquid)
          qq(k) =  dqls_kgm3s / density_liq +  dqis_kgm3s / density_ice
-         reevap(k) = reevapls(k) * (airden_dry(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm2/s
+         reevap(k) = reevapls(k) * (airden_dry(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm3/s
 
          ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
          !pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
@@ -311,7 +311,7 @@ contains
                   if ( f_rainout > zero ) then
                      ! -- washout from precipitation entering from the top
                      qdwn = pdwn(km1)
-                     !TODO: is reevap available in GFS? Not used in GOCART version?
+                     !TODO: is reevap available in GFS? We calculate it for now in met_state module.
                      reevap(k) = max(reevap(k), 0e+0_fp)
                   else
                      ! -- washout from precipitation leaving through the bottom
@@ -363,6 +363,11 @@ contains
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp
             else
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * airmw / species_mw_g(species_idx) * 1.0e6_fp
+            end if
+
+            !!!!!!!!TODO: do not run wetdep on H2O2 since it is read from climatology files for now
+            if (species_idx == h2o2_id) then
+               species_tendencies(k, species_idx) = species_conc(k, species_idx)
             end if
 
             ! Update diagnostic fields here based on your scheme's requirements
@@ -897,7 +902,7 @@ contains
             ! Define ALPHA, the fraction of the raindrops that
             ! re-evaporate when falling from (I,J,L+1) to (I,J,L)
             if ( pdwn(km1) - zero > zero  ) then !avoid divide by zero
-               !TODO: is qq(k) right in here?
+               !TODO: is qq(k) right in here? We have our own calculations now
                !alpha = abs( qq(k) ) * delz_cm(k) / pdwn(km1)
                alpha = abs( reevap ) * delz_cm(k) / pdwn(km1)
             else

@@ -77,6 +77,7 @@ MODULE extemisdata_mod
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)
       LOGICAL                                   :: is_active = .true.  
       LOGICAL                                   :: gridded = .true.    
+      LOGICAL                                   :: is_2d = .true.         
       LOGICAL                                   :: diagnostic = .true.  
       REAL(fp)                                  :: global_scale = 1.0_fp 
       REAL(fp)                                  :: topfraction = -1.0_fp 

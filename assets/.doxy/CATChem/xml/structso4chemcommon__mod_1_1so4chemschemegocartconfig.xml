@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structso4chemcommon__mod_1_1so4chemschemegocartconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>so4chemcommon_mod::so4chemschemegocartconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a44b801ac7f43c394d2a302a5a5b3bc74" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) so4chemcommon_mod::so4chemschemegocartconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="70" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac7a590f0c9dff6ef10ff93673e15de0e" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) so4chemcommon_mod::so4chemschemegocartconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::description</qualifiedname>
+        <initializer>= &apos;GOCART SO2 to SO4 production scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="71" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac436c76ab67b63f23f7b836d2f81920c" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) so4chemcommon_mod::so4chemschemegocartconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="72" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a7db9df5c1d66ceed4c09bffc1f8f6ce2" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) so4chemcommon_mod::so4chemschemegocartconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="73" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac4a288f60417eec875efe0cc3046b954" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemschemegocartconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::affects_full_column</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="76" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1acf5953d14689f5bdec54c20c8c6ac561" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemschemegocartconfig::update_so2</definition>
+        <argsstring></argsstring>
+        <name>update_so2</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::update_so2</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="79" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a0962b31afe01c56501f503c0dd60a9cd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer so4chemcommon_mod::so4chemschemegocartconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="82" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a1595b2be52a1b8b31c561e531993c91e" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(16)</type>
+        <definition>character(len=32), dimension(16) so4chemcommon_mod::so4chemschemegocartconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="83" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1af3f99e8b2995dc1ab8c9bdaeb51e0eea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemschemegocartconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" kindref="compound">so4chemschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="86" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a66db1d152303d7323243e3c16d400bb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemschemegocartconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>so4chemcommon_mod::so4chemschemegocartconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" kindref="compound">so4chemschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="87" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for gocart scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="67" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="67" bodyend="88"/>
+    <listofallmembers>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac4a288f60417eec875efe0cc3046b954" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>affects_full_column</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a7db9df5c1d66ceed4c09bffc1f8f6ce2" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>algorithm_type</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac436c76ab67b63f23f7b836d2f81920c" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>author</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1ac7a590f0c9dff6ef10ff93673e15de0e" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>description</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a66db1d152303d7323243e3c16d400bb5" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>finalize</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a0962b31afe01c56501f503c0dd60a9cd" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a1595b2be52a1b8b31c561e531993c91e" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>required_met_fields</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1a44b801ac7f43c394d2a302a5a5b3bc74" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>scheme_name</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1acf5953d14689f5bdec54c20c8c6ac561" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>update_so2</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig_1af3f99e8b2995dc1ab8c9bdaeb51e0eea" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemschemegocartconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,666 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceso4chemscheme__gocart__mod" kind="namespace" language="Fortran">
+    <compoundname>so4chemscheme_gocart_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceso4chemscheme__gocart__mod_1ace1b79a1b4904c5479dad203840adfaf" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter so4chemscheme_gocart_mod::plid</definition>
+        <argsstring></argsstring>
+        <name>plid</name>
+        <qualifiedname>so4chemscheme_gocart_mod::plid</qualifiedname>
+        <initializer>= 0.01_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="37" column="1" bodyfile="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceso4chemscheme__gocart__mod_1aeaaa8e96a2d332b31cc67e3f3009eb36" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter so4chemscheme_gocart_mod::undefval</definition>
+        <argsstring></argsstring>
+        <name>undefval</name>
+        <qualifiedname>so4chemscheme_gocart_mod::undefval</qualifiedname>
+        <initializer>= 1.0e+15_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="38" column="1" bodyfile="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceso4chemscheme__gocart__mod_1a04aa909cd2b165faade5231b4f3bbb2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public so4chemscheme_gocart_mod::compute_gocart</definition>
+        <argsstring>(num_layers, num_species, params, g0, cpd, avo, von_karman, airmw, pi, year, month, day, hour, minute, second, airden, cldf, delp, hflux, lat, lon, lwi, pblh, pmid, t, tstep, u10m, ustar, v10m, z, z0h, species_mw_g, species_short_name, species_conc, species_tendencies, firsttime, nymd_last, nhms_last_recycle, xh2o2_init, production_rate_per_species_per_level, pso4_from_gaseous_so2_per_level, pso4_from_aqueous_so2_per_level, dms_emission_flux, diagnostic_species_id)</argsstring>
+        <name>compute_gocart</name>
+        <qualifiedname>so4chemscheme_gocart_mod::compute_gocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" kindref="compound">so4chemschemegocartconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>g0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>cpd</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>avo</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>von_karman</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>airmw</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pi</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>day</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>hour</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>minute</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>second</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>cldf</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>hflux</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>lwi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pblh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>t</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tstep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers+1), intent(in)</type>
+          <defname>z</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>z0h</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(in)</type>
+          <defname>species_short_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>logical, intent(inout)</type>
+          <defname>firsttime</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>nymd_last</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>nhms_last_recycle</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), allocatable</type>
+          <defname>xh2o2_init</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), optional</type>
+          <defname>production_rate_per_species_per_level</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>pso4_from_gaseous_so2_per_level</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>pso4_from_aqueous_so2_per_level</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>dms_emission_flux</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for gocart scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing GOCART SO2 to SO4 production scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">g0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Cpd</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">AVO</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">VON_KARMAN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">AIRMW</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">PI</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">year</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (year) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">month</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (month) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">day</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (day) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (hour) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">minute</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (minute) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">second</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time parameter from TimeState (second) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">airden</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>AIRDEN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cldf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CLDF field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DELP field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hflux</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>HFLUX field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LAT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lon</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LON field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lwi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LWI field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pblh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PBLH field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pmid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PMID field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>T field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tstep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time step [s] - retrieved from process interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>U10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>V10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z0h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Z0H field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_mw_g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species mw_g property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_short_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species short_name property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [ppm or ug/kg] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) Persistent state variables (per-column): </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">firsttime</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>flag for first time step </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">nymd_last</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>last day of H2O2 update </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">nhms_last_recycle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>last time step of H2O2 recycle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">xh2o2_init</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>H2O2 column initialization </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">PSO4_from_SO2_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>total sulfate production rate from SO2 per level [kg/kg/s] (num_layers) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">PSO4_from_gaseous_SO2_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>sulfate production rate from gaseous SO2 per level [kg/kg/s] (num_layers) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">PSO4_from_aqueous_SO2_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>sulfate production rate from aqueous SO2 per level [kg/kg/s] (num_layers) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">PSO2_from_DMS_per_level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SO2 production rate from DMS per level [kg/kg/s] (num_layers) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">DMS_emission_flux</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>DMS emission flux at the surface [kg/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="94" column="1" bodyfile="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" bodystart="140" bodyend="497"/>
+      </memberdef>
+      <member refid="group__core__modules_1ga4422d7cf6c32bffadb49d078d19fa747" kind="function"><name>prepmetvarsforgocart</name></member>
+      <memberdef kind="function" id="namespaceso4chemscheme__gocart__mod_1ab6df4d4fe0f3a9c460e4043608d65a57" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine so4chemscheme_gocart_mod::findklid</definition>
+        <argsstring>(klid, plid, ple, rc)</argsstring>
+        <name>findklid</name>
+        <qualifiedname>so4chemscheme_gocart_mod::findklid</qualifiedname>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>klid</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>plid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>ple</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>findKlid - Finds corresponding vertical index for defined pressure lid </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>klid </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>plid </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[IN]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ple </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[OUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rc <blockquote><para><zwj/> </para>
+</blockquote></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="637" column="1" bodyfile="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" bodystart="638" bodyend="687"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

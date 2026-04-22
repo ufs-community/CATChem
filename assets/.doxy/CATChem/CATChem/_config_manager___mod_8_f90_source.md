@@ -52,6 +52,10 @@ module configmanager_mod
       logical :: DryRun = .false.                    
       character(len=255) :: SimulationName = ''
       logical :: DiagEnabled = .false.               
+      integer :: CompressLev = 0
+      integer :: output_frequency = 3600
+      character(len=32), allocatable :: diag_species(:)  ! User-defined species for concentration diagnostics
+      integer :: n_diag_species = 0
       logical :: VerboseRequested = .false.          
       character(len=10) :: VerboseOnCores = 'root'
       logical :: Verbose = .false.                   
@@ -73,6 +77,7 @@ module configmanager_mod
       character(len=255) :: Mie_Directory = ''
       character(len=255) :: Input_Directory = './'
       character(len=255) :: Output_Directory = './'
+      character(len=255) :: Output_Prefix = 'catchem_diag'
    end type filepathconfig
 
 
@@ -1186,9 +1191,6 @@ contains
       ! Initialize emission mapping
       call this%emission_mapping%init()
 
-      ! Initialize emission mapping
-      call this%emission_mapping%init()
-
    end subroutine config_data_init
 
    subroutine config_data_cleanup(this, rc)
@@ -1338,8 +1340,30 @@ contains
       call safe_yaml_get_logical(this%yaml_data, 'diagnostics/output/enabled', this%config_data%runtime%DiagEnabled, local_rc)
       if (local_rc /= 0) this%config_data%runtime%DiagEnabled = .false.  ! default value
 
+      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/compress_lev', this%config_data%runtime%CompressLev, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%CompressLev = 0  ! default value
+
+      call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/frequency', this%config_data%runtime%Output_Frequency, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%Output_Frequency = 3600  ! default value
+
+      call this%get_array('diagnostics/output/diag_list', this%config_data%runtime%diag_species, local_rc, default_values=["All"])
+      if (local_rc /= 0) then
+         ! Default to all species if not specified
+         allocate(this%config_data%runtime%diag_species(1))
+         this%config_data%runtime%diag_species(1) = "All"
+         this%config_data%runtime%n_diag_species = 1
+      else
+         ! Set the count based on the returned array size
+         if (allocated(this%config_data%runtime%diag_species)) then
+            this%config_data%runtime%n_diag_species = size(this%config_data%runtime%diag_species)
+         else
+            this%config_data%runtime%n_diag_species = 0
+         end if
+      end if
+
       ! Parse file paths
       call yaml_get(this%yaml_data, 'diagnostics/output/directory', this%config_data%file_paths%Output_Directory, rc, './')
+      call yaml_get(this%yaml_data, 'diagnostics/output/prefix', this%config_data%file_paths%Output_Prefix, rc, 'catchem_diag')
       call yaml_get(this%yaml_data, 'mie/directory', this%config_data%file_paths%Mie_Directory, rc, './')
       call yaml_get(this%yaml_data, 'simulation/species_filename', this%config_data%file_paths%Species_File, rc, '')
       call yaml_get(this%yaml_data, 'simulation/emission_filename', this%config_data%file_paths%Emission_File, rc, '')
@@ -1490,13 +1514,23 @@ contains
             chem_state%WetDepIndex(chem_state%nSpeciesWetDep) = species_index
          endif
 
+         if (chem_state%ChemSpecies(i)%is_photolysis) then
+            chem_state%nSpeciesPhotolysis = chem_state%nSpeciesPhotolysis + 1
+            chem_state%PhotolysisIndex(chem_state%nSpeciesPhotolysis) = species_index
+         endif
+
+         if (chem_state%ChemSpecies(i)%is_advected) then
+            chem_state%nSpeciesAdvect = chem_state%nSpeciesAdvect + 1
+            chem_state%AdvectIndex(chem_state%nSpeciesAdvect) = species_index
+         endif
+
          if (chem_state%ChemSpecies(i)%is_tracer) then
             chem_state%nSpeciesTracer = chem_state%nSpeciesTracer + 1
             chem_state%TracerIndex(chem_state%nSpeciesTracer) = species_index
          endif
 
          !print species info as a test
-         write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
+         !write(*, '(A,A)') 'Species name: ', chem_state%ChemSpecies(i)%short_name
          ! write(*, '(A,A)') 'Description: ', chem_state%ChemSpecies(i)%description
          ! write(*, *) 'lower radius: ', chem_state%ChemSpecies(i)%lower_radius
          ! write(*, *) 'upper radius: ', chem_state%ChemSpecies(i)%upper_radius
@@ -1508,7 +1542,7 @@ contains
          ! write(*, *) 'is sea salt: ', chem_state%ChemSpecies(i)%is_seasalt
          ! write(*, *) 'is dry deposition: ', chem_state%ChemSpecies(i)%is_drydep
          ! write(*, *) 'is tracer: ', chem_state%ChemSpecies(i)%is_tracer
-         write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
+         !write(*, *) 'wd_rainouteff: ', chem_state%ChemSpecies(i)%wd_rainouteff
 
       enddo
 
@@ -1519,6 +1553,8 @@ contains
       write(*, '(A,I0,A)') 'INFO: Successfully initialized ChemState with ', list_size, ' species'
       write(*, '(A,I0)') '  Gas species: ', chem_state%nSpeciesGas
       write(*, '(A,I0)') '  Aerosol species: ', chem_state%nSpeciesAero
+      write(*, '(A,I0)') '  Photolysis species: ', chem_state%nSpeciesPhotolysis
+      write(*, '(A,I0)') '  Advected species: ', chem_state%nSpeciesAdvect
       write(*, '(A,I0)') '  Dust species: ', chem_state%nSpeciesDust
       write(*, '(A,I0)') '  Sea salt species: ', chem_state%nSpeciesSeaSalt
       write(*, '(A,I0)') '  Dry deposition species: ', chem_state%nSpeciesDryDep
@@ -1821,11 +1857,20 @@ contains
          species%is_photolysis = missing_bool
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/is_advected'
+      call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
+      if (yaml_rc == 0) then
+         species%is_advected = temp_logical
+      else
+         species%is_advected = .true. !set default to true
+      endif
+
       ! Load background concentration (optional)
       write(field_path, '(A,A)') trim(species_path), '/background_vv'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%BackgroundVV = temp_real
+         species%conc = species%BackgroundVV  ! Initialize concentration to background
       else
          species%BackgroundVV = missing
       endif
@@ -1834,11 +1879,11 @@ contains
       species%is_valid = .true.
 
       ! Print species information in a single line
-      write(*, '(A,A,A,F6.1,A,L1,A,L1,A,L1,A,L1,A)') &
+      write(*, '(A,A,A,F6.1,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
          'INFO: Loaded species "', trim(adjustl(species%short_name)), &
          '" (MW=', species%mw_g, ', gas=', species%is_gas, &
          ', aerosol=', species%is_aerosol, ', dust=', species%is_dust, &
-         ', seasalt=', species%is_seasalt, ')'
+         ', seasalt=', species%is_seasalt, ', advected=', species%is_advected, ')'
 
    end subroutine load_species_properties
 

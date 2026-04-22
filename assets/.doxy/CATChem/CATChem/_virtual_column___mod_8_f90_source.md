@@ -31,6 +31,7 @@ module virtualcolumn_mod
       ! Grid position and metadata
       integer :: grid_i = 0
       integer :: grid_j = 0
+      integer :: column_id = 0
       real(fp) :: lat = 0.0_fp                               
       real(fp) :: lon = 0.0_fp                               
       real(fp) :: area = 0.0_fp                              
@@ -83,10 +84,10 @@ contains
    ! VirtualColumnType Implementation
    !=========================================================================
 
-   subroutine virtual_column_init(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, lat, lon, area, rc)
+   subroutine virtual_column_init(this, nlev, nspec_chem, nspec_emis, grid_i, grid_j, column_id, lat, lon, area, rc)
       class(VirtualColumnType), intent(inout) :: this
       integer, intent(in) :: nlev, nspec_chem, nspec_emis
-      integer, intent(in) :: grid_i, grid_j
+      integer, intent(in) :: grid_i, grid_j, column_id
       real(fp), intent(in) :: lat, lon, area
       integer, intent(out) :: rc
 
@@ -100,6 +101,7 @@ contains
       ! Store position/metadata
       this%grid_i = grid_i
       this%grid_j = grid_j
+      this%column_id = column_id
       this%lat = lat
       this%lon = lon
       this%area = area

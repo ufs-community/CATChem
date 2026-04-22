@@ -1103,9 +1103,16 @@ CONTAINS
 
       character(len=256) :: thisLoc
       integer :: nx, ny, nz, i, j, k, nlanduse
-      real(fp) :: airden
+      real(fp) :: airden, rh, air_mass
       real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
       real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
+      !some variables used for reevaporation calculations
+      real(fp) :: flux_liq, flux_ice, flux_tot, reevap_liq, reevap_ice,C_evap,RH_term, frac_liq
+      real(fp), parameter :: C_evap_liq = 2.0e-5_fp  ! liquid evap coefficient
+      real(fp), parameter :: C_evap_ice = 0.5e-5_fp  ! ice sublimation coefficient
+      real(fp), parameter :: b0         = 0.9_fp     ! Sundqvist RH threshold
+      real(fp), parameter :: T_liq      = 273.15_fp  ! K - liquid threshold
+      real(fp), parameter :: T_ice      = 258.15_fp  ! K - ice threshold
 
       thisloc = 'metstate_derive_field (in core/metstate_mod.F90)'
       call error_mgr%push_context('metstate_derive_field', 'deriving field: ' // trim(field_name))
@@ -1452,7 +1459,81 @@ CONTAINS
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
 
        case ('REEVAPLS', 'reevapls')
-         this%REEVAPLS(:,:,:) = 0.0_fp  !set to zero for now because I did not find data from GFS. This will overestimate the washout of aerosols.
+         this%REEVAPLS(:,:,:) = 0.0_fp  !I did not find data from GFS. Try to calculate it here.
+         do k = 1, nz
+            do j = 1, ny
+               do i = 1, nx
+                  ! 1. GET PRECIPITATION FLUXES
+                  flux_liq = this%PFLLSAN(i,j,k)           ! kg/m²/s
+                  flux_ice = this%PFILSAN(i,j,k)           ! kg/m²/s
+                  flux_tot = flux_liq + flux_ice           ! kg/m²/s
+                  ! Skip if no precipitation
+                  if(flux_tot .le. 0.) cycle
+                  ! Skip if already saturated (no evaporation possible)
+                  rh = relative_humidity(this%T(i, j, k), this%QV(i, j, k), this%PMID(i, j, k))
+                  if(rh .ge. b0) cycle
+                  ! 2. LAYER THICKNESS AND AIR MASS
+                  ! lower edge - upper edge
+                  air_mass = (this%PEDGE(i, j, k) - this%PEDGE(i, j, k+1)) / g0
+                  if(air_mass .le. 0.0_fp) cycle
+                  ! 3. TEMPERATURE-DEPENDENT EVAPORATION COEFFICIENT Abel & Boutle (2012)
+                  if(this%T(i,j,k) .gt. t_liq) then
+                     ! Pure liquid
+                     c_evap = c_evap_liq
+
+                  else if(this%T(i,j,k) .gt. t_ice) then
+                     ! Mixed phase - linear interpolation
+                     frac_liq = (this%T(i,j,k) - t_ice) / (t_liq - t_ice)
+                     c_evap   = frac_liq * c_evap_liq + &
+                        (1. - frac_liq) * c_evap_ice
+                  else
+                     ! Pure ice
+                     c_evap = c_evap_ice
+                  endif
+                  ! 4. SUNDQVIST (1988) RH TERM
+                  rh_term = max(0., 1. - rh/b0)   ! dimensionless
+
+                  ! 5. LIQUID EVAPORATION
+                  !    kg/m²/s → kg/kg/s: divide by air_mass
+                  !    note: air_mass cancels with numerator
+                  if(flux_liq .gt. 0.) then
+                     ! kg/m²/s version: C_evap * RH_term * sqrt(flux) * air_mass
+                     ! kg/kg/s version: air_mass cancels → simpler
+                     reevap_liq = c_evap          &
+                        * rh_term                 &   ! dimensionless
+                        * sqrt(flux_liq)              ! (kg/m²/s)^0.5
+
+                     ! Physical constraint: cannot exceed available flux
+                     ! Convert flux to kg/kg/s for comparison
+                     reevap_liq = min(reevap_liq, flux_liq/air_mass)
+                     reevap_liq = max(0., reevap_liq)
+                  else
+                     reevap_liq = 0.
+                  endif
+
+                  ! 6. ICE SUBLIMATION
+                  !    Only above T_ice threshold
+                  if(flux_ice .gt. 0. .and. this%T(i,j,k) .gt. t_ice) then
+                     reevap_ice = c_evap          &
+                        * rh_term                 &
+                        * sqrt(flux_ice)
+
+                     reevap_ice = min(reevap_ice, flux_ice/air_mass)
+                     reevap_ice = max(0., reevap_ice)
+                  else
+                     reevap_ice = 0.
+                  endif
+
+                  ! 7. TOTAL REEVAPORATION IN kg/kg/s
+                  this%REEVAPLS(i,j,k) = reevap_liq + reevap_ice
+
+                  ! Final safety constraint
+                  this%REEVAPLS(i,j,k) = max(0., this%REEVAPLS(i,j,k))
+                  this%REEVAPLS(i,j,k) = min(this%REEVAPLS(i,j,k), flux_tot/air_mass)
+
+               enddo
+            enddo
+         enddo
 
        case default
          call error_mgr%report_error(error_not_found, &

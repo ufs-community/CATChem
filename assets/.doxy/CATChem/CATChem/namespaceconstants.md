@@ -42,6 +42,8 @@
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**cconst**](#variable-cconst)   = `2.99792458[**e**](namespaceconstants.md#variable-e)+8\_fp`<br>_Speed of light in vacuum [m/s]._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**consvap**](#variable-consvap)   = `6.1078[**e**](namespaceconstants.md#variable-e)+03\_fp / ( BOLTZ \* 1[**e**](namespaceconstants.md#variable-e)+7\_fp )`<br>_Condensation vapor pressure factor._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**cp**](#variable-cp)   = `1.0046[**e**](namespaceconstants.md#variable-e)+3\_fp`<br>_Specific heat of dry air at constant pressure [J/kg/K]._  |
+|  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**cpd**](#variable-cpd)   = `1.00416[**e**](namespaceconstants.md#variable-e)+3\_fp`<br>_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._  |
+|  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**cpm**](#variable-cpm)   = `1.00464[**e**](namespaceconstants.md#variable-e)+3\_fp`<br>_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**cv**](#variable-cv)   = `7.1760e+2\_fp`<br>_Specific heat of dry air at constant volume [J/kg/K]._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**e**](#variable-e)   = `2.718281828459045235360287471352\_fp`<br>_Euler's number (dimensionless)_  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**g0**](#variable-g0)   = `9.80665[**e**](namespaceconstants.md#variable-e)+0\_fp`<br>_Standard gravity acceleration [m/s^2]._  |
@@ -198,6 +200,34 @@ real(fp), parameter, public constants::consvap;
 _Specific heat of dry air at constant pressure [J/kg/K]._ 
 ```Fortran
 real(fp), parameter, public constants::cp;
+```
+
+
+
+
+<hr>
+
+
+
+### variable cpd 
+
+_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._ 
+```Fortran
+real(fp), parameter, public constants::cpd;
+```
+
+
+
+
+<hr>
+
+
+
+### variable cpm 
+
+_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._ 
+```Fortran
+real(fp), parameter, public constants::cpm;
 ```
 
 

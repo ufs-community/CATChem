@@ -221,15 +221,15 @@ contains
       end do
 
       !cleanup pointers
-      if (associated(gocart_tmpu)) nullify(gocart_tmpu)
-      if (associated(gocart_rhoa)) nullify(gocart_rhoa)
-      if (associated(gocart_hghte)) nullify(gocart_hghte)
-      if (associated(gocart_rh)) nullify(gocart_rh)
-      if (associated(gocart_press)) nullify(gocart_press)
-      if (associated(gocart_delp)) nullify(gocart_delp)
-      if (associated(sd)) nullify(sd)
-      if (associated(fluxout)) nullify(fluxout)
-      if (associated(fluxout_temp)) nullify(fluxout_temp)
+      if (associated(gocart_tmpu)) deallocate(gocart_tmpu); nullify(gocart_tmpu)
+      if (associated(gocart_rhoa)) deallocate(gocart_rhoa); nullify(gocart_rhoa)
+      if (associated(gocart_hghte)) deallocate(gocart_hghte); nullify(gocart_hghte)
+      if (associated(gocart_rh)) deallocate(gocart_rh); nullify(gocart_rh)
+      if (associated(gocart_press)) deallocate(gocart_press); nullify(gocart_press)
+      if (associated(gocart_delp)) deallocate(gocart_delp); nullify(gocart_delp)
+      if (associated(sd)) deallocate(sd); nullify(sd)
+      if (associated(fluxout)) deallocate(fluxout); nullify(fluxout)
+      if (associated(fluxout_temp)) deallocate(fluxout_temp); nullify(fluxout_temp)
 
    end subroutine compute_gocart
 

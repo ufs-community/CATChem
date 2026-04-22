@@ -67,7 +67,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="146" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="147" bodyend="207"/>
+        <location file="src/core/chemstate_mod.F90" line="153" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="154" bodyend="222"/>
       </memberdef>
       <memberdef kind="function" id="group__core__modules_1ga0f4bed4ec5273e84346e57d9d2c0cb92" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -310,7 +310,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/chemstate_mod.F90" line="539" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="540" bodyend="708"/>
+        <location file="src/core/chemstate_mod.F90" line="554" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="555" bodyend="743"/>
       </memberdef>
       <memberdef kind="function" id="group__core__modules_1ga87ab277c6a17ccfee5e2831aba7895cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
@@ -760,6 +760,349 @@
         <inbodydescription>
         </inbodydescription>
         <location file="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" line="294" column="1" bodyfile="src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90" bodystart="319" bodyend="389"/>
+      </memberdef>
+      <memberdef kind="function" id="group__core__modules_1ga4422d7cf6c32bffadb49d078d19fa747" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine so4chemscheme_gocart_mod::prepmetvarsforgocart</definition>
+        <argsstring>(km, tmpu, rhoa, hghte, cldfrc, delp, lwi, ustar, pblh, pmid, hflux, u10m, v10m, z0h, gocart_tmpu, gocart_rhoa, gocart_hghte, gocart_cloud, gocart_delp, gocart_lwi, gocart_ustar, gocart_pblh, gocart_press, gocart_hflux, gocart_u10m, gocart_v10m, gocart_z0h)</argsstring>
+        <name>prepmetvarsforgocart</name>
+        <qualifiedname>so4chemscheme_gocart_mod::prepmetvarsforgocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>km</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>tmpu</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>hghte</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>cldfrc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>lwi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>pblh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>hflux</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), target</type>
+          <defname>z0h</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_tmpu</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_hghte</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_cloud</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_delp</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_lwi</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_pblh</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_press</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_hflux</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(inout), pointer</type>
+          <defname>gocart_z0h</defname>
+        </param>
+        <briefdescription>
+<para>PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>metstate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tmpu </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rhoa </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>hghte </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>oro </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ustar </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pblh </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>shflux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>z0h </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>u10m </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>v10m </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraclake </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>gwettop </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[OUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rc</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_tmpu</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_rhoa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_hghte</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>geometric height [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_cloud</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cloud fraction [1] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pressure thickness [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_press</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pressure at mid-layer [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_lwi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>orography flag; Land, ocean, ice mask </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_ustar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>friction speed [m/sec] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_pblh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PBL height [m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_hflux</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>sfc. sens. heat flux [W m-2] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed [m/sec] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed [m/sec] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_z0h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rough height, sens. heat [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" line="525" column="1" bodyfile="src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90" bodystart="552" bodyend="626"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

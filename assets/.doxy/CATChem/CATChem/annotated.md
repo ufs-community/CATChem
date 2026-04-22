@@ -51,6 +51,7 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
     * **interface** [**processcreatorinterface**](interfaceprocessregistry__mod_1_1processcreatorinterface.md) _Function pointer interface for process creators._     
 * **namespace** [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md) _Process for computing sea salt aerosol emissions over ocean surfaces._     
 * **namespace** [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md) _Process for computing gravitational settling of aerosol species._     
+* **namespace** [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md) _Process for computing chemical production of sulfate from SO2 oxidation._     
 * **namespace** [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md) _Process for computing wet deposition of gas and aerosol species._     
 * **namespace** [**run\_mod**](namespacerun__mod.md)     
 * **namespace** [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md)     
@@ -61,6 +62,9 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
 * **namespace** [**settlingcommon\_mod**](namespacesettlingcommon__mod.md)     
 * **namespace** [**settlingprocesscreator\_mod**](namespacesettlingprocesscreator__mod.md)     
 * **namespace** [**settlingscheme\_gocart\_mod**](namespacesettlingscheme__gocart__mod.md)     
+* **namespace** [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md)     
+* **namespace** [**so4chemprocesscreator\_mod**](namespaceso4chemprocesscreator__mod.md)     
+* **namespace** [**so4chemscheme\_gocart\_mod**](namespaceso4chemscheme__gocart__mod.md)     
 * **namespace** [**species\_mod**](namespacespecies__mod.md)     
 * **namespace** [**state\_interface\_mod**](namespacestate__interface__mod.md)     
 * **namespace** [**state\_mod**](namespacestate__mod.md) 

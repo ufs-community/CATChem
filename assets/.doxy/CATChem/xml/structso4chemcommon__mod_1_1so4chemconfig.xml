@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structso4chemcommon__mod_1_1so4chemconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>so4chemcommon_mod::so4chemconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a250175005fb3c34be662dbac3968289a" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) so4chemcommon_mod::so4chemconfig::scheme</definition>
+        <argsstring></argsstring>
+        <name>scheme</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::scheme</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="35" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a90aef08cd1d10fb65a487b8fa49d52a1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="36" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a5ac6f47529fde640762ed1d637450c68" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemconfig::diagnostics</definition>
+        <argsstring></argsstring>
+        <name>diagnostics</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::diagnostics</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="37" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1acbaa4aead6af0e8e46e5a45a7768dc8e" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer so4chemcommon_mod::so4chemconfig::n_diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>n_diagnostic_species</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::n_diagnostic_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="40" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1abb5c7a3faa71d985a806403f1f4d0b5f" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable so4chemcommon_mod::so4chemconfig::diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::diagnostic_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="41" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a67476fd333d146f089e1a87d8289a635" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable so4chemcommon_mod::so4chemconfig::diagnostic_species_id</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species_id</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::diagnostic_species_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="42" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a7966163f18661e906ecf379d22f7e1a7" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) so4chemcommon_mod::so4chemconfig::dt_min</definition>
+        <argsstring></argsstring>
+        <name>dt_min</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::dt_min</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="43" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a28b45a4a910699c1ba4a535fe7e3a7ca" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) so4chemcommon_mod::so4chemconfig::dt_max</definition>
+        <argsstring></argsstring>
+        <name>dt_max</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::dt_max</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="44" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a12a53b997569cfdd8e6ceb3565b376e8" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer so4chemcommon_mod::so4chemconfig::n_species</definition>
+        <argsstring></argsstring>
+        <name>n_species</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::n_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="47" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1aa55da97abbfb55958f3f55ebda7d1147" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable so4chemcommon_mod::so4chemconfig::species_names</definition>
+        <argsstring></argsstring>
+        <name>species_names</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::species_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="48" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a2c827e629a3adf1b42d8f83311f25916" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable so4chemcommon_mod::so4chemconfig::species_indices</definition>
+        <argsstring></argsstring>
+        <name>species_indices</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::species_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="49" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1ab17f65f88e1984bbc13080259566cd4f" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable so4chemcommon_mod::so4chemconfig::species_mw_g</definition>
+        <argsstring></argsstring>
+        <name>species_mw_g</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::species_mw_g</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="54" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1a8f140f1d868c3901129821007456fa69" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical so4chemcommon_mod::so4chemconfig::output_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>output_diagnostics</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::output_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="57" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemconfig_1af58bdeeaa13c501055f8fb8aecb00867" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) so4chemcommon_mod::so4chemconfig::diagnostic_frequency</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_frequency</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::diagnostic_frequency</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="58" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemconfig_1a716682c5950aa4673a8579a09748e0db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemconfig" kindref="compound">so4chemconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate so4chem configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="61" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemconfig_1ac66b39664f7761406e2ee62fd522eba8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemconfig" kindref="compound">so4chemconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize so4chem configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="62" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structso4chemcommon__mod_1_1so4chemconfig_1a2438945fa83596940e53c09c56cdfb32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public so4chemcommon_mod::so4chemconfig::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>so4chemcommon_mod::so4chemconfig::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structso4chemcommon__mod_1_1so4chemconfig" kindref="compound">so4chemconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="63" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main configuration type for so4chem process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="32" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="32" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1af58bdeeaa13c501055f8fb8aecb00867" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>diagnostic_frequency</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1abb5c7a3faa71d985a806403f1f4d0b5f" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>diagnostic_species</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a67476fd333d146f089e1a87d8289a635" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>diagnostic_species_id</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a5ac6f47529fde640762ed1d637450c68" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>diagnostics</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a28b45a4a910699c1ba4a535fe7e3a7ca" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>dt_max</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a7966163f18661e906ecf379d22f7e1a7" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>dt_min</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1ac66b39664f7761406e2ee62fd522eba8" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>finalize</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a90aef08cd1d10fb65a487b8fa49d52a1" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>is_active</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1acbaa4aead6af0e8e46e5a45a7768dc8e" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>n_diagnostic_species</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a12a53b997569cfdd8e6ceb3565b376e8" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>n_species</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a8f140f1d868c3901129821007456fa69" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>output_diagnostics</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a2438945fa83596940e53c09c56cdfb32" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>print_summary</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a250175005fb3c34be662dbac3968289a" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>scheme</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a2c827e629a3adf1b42d8f83311f25916" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>species_indices</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1ab17f65f88e1984bbc13080259566cd4f" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>species_mw_g</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1aa55da97abbfb55958f3f55ebda7d1147" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>species_names</name></member>
+      <member refid="structso4chemcommon__mod_1_1so4chemconfig_1a716682c5950aa4673a8579a09748e0db" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

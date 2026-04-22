@@ -500,10 +500,10 @@
         </inbodydescription>
         <location file="src/core/StateManager_Mod.F90" line="107" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="107" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac72dd85c9901f89977b5459e4af525a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a593dbf0808bbc71d2bd3e9eaf5cd56aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
         <definition>procedure statemanager_mod::statemanagertype::create_virtual_column</definition>
-        <argsstring>(this, i, j, virtual_col, rc)</argsstring>
+        <argsstring>(this, i, j, column_id, virtual_col, rc)</argsstring>
         <name>create_virtual_column</name>
         <qualifiedname>statemanager_mod::statemanagertype::create_virtual_column</qualifiedname>
         <param>
@@ -517,6 +517,10 @@
         <param>
           <type>integer, intent(in)</type>
           <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>column_id</defname>
         </param>
         <param>
           <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(out)</type>
@@ -835,7 +839,7 @@
       <member refid="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>chem_state</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1ae450427d0b8912d93928e4902c6b3700" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>cleanup</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1a5145521a12957b0a49bc2ddba5a56e86" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>config</name></member>
-      <member refid="structstatemanager__mod_1_1statemanagertype_1ac72dd85c9901f89977b5459e4af525a3" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>create_virtual_column</name></member>
+      <member refid="structstatemanager__mod_1_1statemanagertype_1a593dbf0808bbc71d2bd3e9eaf5cd56aa" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>create_virtual_column</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1ad0572ae14175ddcd785ebc4f97e29e61" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>diag_mgr</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1aaffd4fbf9810e6b4d646fc5d1e60ac2f" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>error_mgr</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1a5e1e322876a5893ba2b3ddf3b86a467b" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>finalize</name></member>

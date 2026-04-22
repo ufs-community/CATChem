@@ -457,10 +457,10 @@
         </inbodydescription>
         <location file="src/core/StateManager_Mod.F90" line="343" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="344" bodyend="347"/>
       </memberdef>
-      <memberdef kind="function" id="namespacestatemanager__mod_1a2fd2b8ebfcbae24a59574055f317caae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacestatemanager__mod_1adcb4bda0165f2d9fad6fdd42778d6dfc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
         <definition>subroutine statemanager_mod::manager_create_virtual_column</definition>
-        <argsstring>(this, i, j, virtual_col, rc)</argsstring>
+        <argsstring>(this, i, j, column_id, virtual_col, rc)</argsstring>
         <name>manager_create_virtual_column</name>
         <qualifiedname>statemanager_mod::manager_create_virtual_column</qualifiedname>
         <param>
@@ -474,6 +474,10 @@
         <param>
           <type>integer, intent(in)</type>
           <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>column_id</defname>
         </param>
         <param>
           <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(out)</type>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_429bccfa51a729cf5e11bef5cf73cbc7" kind="dir">
+    <compoundname>src/process/so4chem/schemes</compoundname>
+    <innerfile refid="_s_o4chem_scheme___g_o_c_a_r_t___mod_8_f90">SO4chemScheme_GOCART_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/schemes/"/>
+  </compounddef>
+</doxygen>

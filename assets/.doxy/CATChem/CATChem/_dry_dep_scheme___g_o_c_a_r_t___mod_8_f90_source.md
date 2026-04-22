@@ -206,18 +206,18 @@ contains
       end do
 
       !cleanup pointers
-      if (associated(gocart_tmpu)) nullify(gocart_tmpu)
-      if (associated(gocart_rhoa)) nullify(gocart_rhoa)
-      if (associated(gocart_hghte)) nullify(gocart_hghte)
-      if (associated(gocart_u10)) nullify(gocart_u10)
-      if (associated(gocart_v10)) nullify(gocart_v10)
-      if (associated(gocart_fraclake)) nullify(gocart_fraclake)
-      if (associated(gocart_gwettop)) nullify(gocart_gwettop)
-      if (associated(gocart_lwi)) nullify(gocart_lwi)
-      if (associated(gocart_ustar)) nullify(gocart_ustar)
-      if (associated(gocart_lwi)) nullify(gocart_lwi)
-      if (associated(gocart_hflux)) nullify(gocart_hflux)
-      if (associated(gocart_z0h)) nullify(gocart_z0h)
+      if (associated(gocart_tmpu)) deallocate(gocart_tmpu); nullify(gocart_tmpu)
+      if (associated(gocart_rhoa)) deallocate(gocart_rhoa); nullify(gocart_rhoa)
+      if (associated(gocart_hghte)) deallocate(gocart_hghte); nullify(gocart_hghte)
+      if (associated(gocart_u10)) deallocate(gocart_u10); nullify(gocart_u10)
+      if (associated(gocart_v10)) deallocate(gocart_v10); nullify(gocart_v10)
+      if (associated(gocart_fraclake)) deallocate(gocart_fraclake); nullify(gocart_fraclake)
+      if (associated(gocart_gwettop)) deallocate(gocart_gwettop); nullify(gocart_gwettop)
+      if (associated(gocart_lwi)) deallocate(gocart_lwi); nullify(gocart_lwi)
+      if (associated(gocart_ustar)) deallocate(gocart_ustar); nullify(gocart_ustar)
+      if (associated(gocart_lwi)) deallocate(gocart_lwi); nullify(gocart_lwi)
+      if (associated(gocart_hflux)) deallocate(gocart_hflux); nullify(gocart_hflux)
+      if (associated(gocart_z0h)) deallocate(gocart_z0h); nullify(gocart_z0h)
 
    end subroutine compute_gocart
 

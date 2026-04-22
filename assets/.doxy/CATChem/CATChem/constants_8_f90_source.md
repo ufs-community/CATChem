@@ -32,6 +32,8 @@ module constants
    !! \brief Constants related to atmospheric composition and properties
    !! \{
    REAL(fp), PARAMETER, PUBLIC :: Cp = 1.0046e+3_fp                
+   REAL(fp), PARAMETER, PUBLIC :: Cpd = 1.00416e+3_fp              
+   REAL(fp), PARAMETER, PUBLIC :: Cpm = 1.00464e+3_fp              
    REAL(fp), PARAMETER, PUBLIC :: Cv = 7.1760e+2_fp                
    REAL(fp), PARAMETER, PUBLIC :: AIRMW = 28.9644_fp               
    REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.016_fp                

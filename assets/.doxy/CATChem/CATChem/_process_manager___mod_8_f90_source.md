@@ -205,7 +205,7 @@ contains
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
 
-      integer :: i, local_rc, col_i, col_j
+      integer :: i, local_rc, col_i, col_j, col_id
       type(GridManagerType), pointer :: grid_mgr
       type(ColumnIteratorType) :: col_iter
       type(VirtualColumnType) :: virtual_col
@@ -230,8 +230,11 @@ contains
          ! Get current column indices (i, j)
          call col_iter%get_current_indices(col_i, col_j)
 
+         ! Get current column ID
+         call col_iter%get_current_column_id(col_id)
+
          ! Create and populate virtual column for this (i, j)
-         call container%create_virtual_column(col_i, col_j, virtual_col, rc)
+         call container%create_virtual_column(col_i, col_j, col_id, virtual_col, rc)
          if (rc /= cc_success) return
 
          ! Run all column processes on this column
@@ -266,7 +269,7 @@ contains
       type(GridManagerType), pointer :: grid_mgr
       type(ColumnIteratorType) :: col_iter
       type(VirtualColumnType) :: virtual_col
-      integer :: col_i, col_j
+      integer :: col_i, col_j, col_id
 
       rc = cc_success
 
@@ -295,7 +298,10 @@ contains
             ! Get current column indices
             call col_iter%get_current_indices(col_i, col_j)
 
-            call container%create_virtual_column(col_i, col_j, virtual_col, rc)
+            ! Get current column ID
+            call col_iter%get_current_column_id(col_id)
+
+            call container%create_virtual_column(col_i, col_j, col_id, virtual_col, rc)
             if (rc /= cc_success) return
 
             call proc%run_column(virtual_col, container, rc)

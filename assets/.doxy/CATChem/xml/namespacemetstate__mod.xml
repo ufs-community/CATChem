@@ -1520,7 +1520,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1204" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1205" bodyend="1575"/>
+        <location file="src/core/metstate_mod.F90" line="1204" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1205" bodyend="1656"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
