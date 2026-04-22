@@ -85,9 +85,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build-label: CATChem
+          - build-label: NUOPC
             cmake-flags: -DBUILD_NUOPC=ON
-          - build-label: CATChem + MUSICA
+          - build-label: NUOPC + MUSICA
             cmake-flags: -DBUILD_NUOPC=ON -DBUILD_MUSICA=ON
     defaults:
       run:
