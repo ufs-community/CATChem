@@ -4,7 +4,7 @@
 !!!>
 program test_Error
    use testing_mod, only: assert, assert_close
-   use Error_Mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, ERROR_INVALID_INPUT
+   use Error_Mod, only: ErrorManagerType, CC_SUCCESS, ERROR_INVALID_INPUT
 
    implicit none
 

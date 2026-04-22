@@ -6,7 +6,7 @@ program test_ConfigManager
    use testing_mod, only: assert, assert_close
    use configmanager_mod, only: ConfigManagerType, ConfigPresetType, CONFIG_STRATEGY_PERMISSIVE
    use StateManager_Mod, only: StateManagerType
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
+   use Error_Mod, only: CC_SUCCESS, ErrorManagerType
    use GridManager_Mod, only: GridManagerType
    use ChemState_Mod, only: ChemStateType
    use Precision_Mod, only: fp
