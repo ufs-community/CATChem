@@ -38,9 +38,6 @@ program test_MetState
    logical, allocatable :: test_3d_logical(:,:,:)
 
    ! Verification pointers
-   real(fp), pointer :: area_ptr(:,:)
-   logical, pointer :: land_ptr(:,:)
-   integer, pointer :: lwi_ptr(:,:)
    real(fp), pointer :: temp_ptr(:)  ! For column pointer operations
 
    ! Test variables for multiple fields interface

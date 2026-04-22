@@ -333,7 +333,7 @@ contains
       type(CATChem_Model), intent(inout) :: model
       integer, intent(inout) :: tests_total, tests_success
 
-      integer :: rc, i, current_phase
+      integer :: rc, i
       character(len=64), allocatable :: retrieved_phases(:)
       logical :: test_passed = .true.
 
@@ -573,7 +573,6 @@ contains
       integer :: rc, diag_idx
       character(len=64), allocatable :: diag_names(:), all_diag_names(:)
       real(fp), allocatable :: diag_data(:,:,:), all_diagnostic_data(:,:,:,:)
-      logical :: test_passed = .true.
 
       tests_total = tests_total + 1
 

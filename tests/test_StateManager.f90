@@ -5,13 +5,12 @@
 program test_StateManager
    use testing_mod, only: assert, assert_close
    use StateManager_Mod
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType, ERROR_PROCESS_INITIALIZATION
+   use Error_Mod, only: CC_SUCCESS, ErrorManagerType
    use ConfigManager_Mod, only: ConfigManagerType
    use MetState_Mod, only: MetStateType
    use ChemState_Mod, only: ChemStateType
    use GridManager_Mod, only: GridManagerType
    use DiagnosticManager_Mod, only: DiagnosticManagerType
-   use Precision_Mod, only: fp
 
    implicit none
 

@@ -6,10 +6,9 @@ program test_ProcessManager
    use testing_mod, only: assert, assert_close
    use ProcessManager_Mod
    use StateManager_Mod, only: StateManagerType
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
+   use Error_Mod, only: CC_SUCCESS, ErrorManagerType
    use GridManager_Mod, only: GridManagerType
    use ConfigManager_Mod, only: ConfigDataType
-   use Precision_Mod, only: fp
 
    implicit none
 
@@ -19,7 +18,6 @@ program test_ProcessManager
    type(GridManagerType) :: grid_mgr
    type(ConfigDataType) :: config_data
    integer :: rc
-   logical :: is_ready
 
    write(*,*) 'Testing ProcessManager module...'
    write(*,*) ''

@@ -8,8 +8,6 @@ set_target_properties(
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
 
-# TODO: GOCART-2G Process Library - currently disabled as source files are missing
-# Uncomment when GOCART source files are available
 #
 # GOCART-2G Process Library
 #
@@ -39,33 +37,39 @@ set_target_properties(
 )
 
 #
-# MUSICA Fortran API
+# yaml-cpp — declare via FetchContent so MUSICA and its dependencies reuse it
 #
 
-# Set MUSICA build options before adding the subdirectory
-# set(MICM_ENABLE_TESTS OFF)
-# set(MICM_ENABLE_EXAMPLES OFF)
-# set(MUSICA_BUILD_C_CXX_INTERFACE ON)
-# set(MUSICA_BUILD_FORTRAN_INTERFACE ON)
-# set(MUSICA_ENABLE_INSTALL OFF)
-# set(MUSICA_ENABLE_TESTS OFF)
-# set(MUSICA_ENABLE_MICM ON)
-# set(MUSICA_ENABLE_TUVX ON)
-
-# # Add MUSICA as a subdirectory
-# add_subdirectory(musica)
-
-#
-# YAML-CPP standalone build (since we're not using MUSICA)
-#
+include(FetchContent)
 
 # Configure yaml-cpp build options
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Build yaml-cpp tests")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Build yaml-cpp tools")
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "Build yaml-cpp contrib")
 
-# Use the local submodule
-add_subdirectory(yaml-cpp)
+# Declare yaml-cpp as already available via FetchContent
+# This prevents MUSICA from fetching their own copy
+FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
+FetchContent_MakeAvailable(yaml-cpp)
 
-# Add our yaml interface (now that yaml-cpp is available independently)
+#
+# MUSICA Fortran API (optional, controlled by BUILD_MUSICA)
+#
+
+if(BUILD_MUSICA)
+  # Set MUSICA build options before adding the subdirectory
+  set(MICM_ENABLE_TESTS OFF)
+  set(MUSICA_BUILD_C_CXX_INTERFACE ON)
+  set(MUSICA_BUILD_FORTRAN_INTERFACE ON)
+  set(MUSICA_ENABLE_INSTALL OFF)
+  set(MUSICA_ENABLE_TESTS OFF)
+  set(MUSICA_ENABLE_MICM ON)
+  set(MUSICA_ENABLE_TUVX ON)
+  set(MUSICA_ENABLE_CARMA OFF)
+
+  # Add MUSICA as a subdirectory
+  add_subdirectory(musica)
+endif()
+
+# Add our yaml interface (yaml-cpp is already available from above)
 add_subdirectory(yaml_interface)

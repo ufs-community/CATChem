@@ -49,7 +49,8 @@ repos:
       - id: gersemi
         args: [--in-place, --indent=2]
         exclude: (?x)^(
-            cmake/FindNetCDF.cmake
+            cmake/FindNetCDF.cmake|
+            src/external/yaml-cpp/.*
           )$
 
   - repo: https://github.com/codespell-project/codespell

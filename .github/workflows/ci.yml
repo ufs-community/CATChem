@@ -79,8 +79,16 @@ jobs:
 
   build-and-test_jcsda-docker:
     runs-on: ubuntu-latest
-    name: Build and test (JCSDA docker image)
+    name: Build and test (JCSDA docker, ${{ matrix.build-label }})
     container: jcsda/docker-gnu-openmpi-dev:1.9
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build-label: NUOPC
+            cmake-flags: -DBUILD_NUOPC=ON
+          - build-label: NUOPC + MUSICA
+            cmake-flags: -DBUILD_NUOPC=ON -DBUILD_MUSICA=ON
     defaults:
       run:
         shell: bash -l {0}
@@ -93,7 +101,7 @@ jobs:
       - name: Configure and build
         run: |
           source /opt/spack-environment/activate.sh
-          cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
+          cmake -B $BUILD_DIR ${{ matrix.cmake-flags }}
           cmake --build $BUILD_DIR -j2
 
       - name: Test
