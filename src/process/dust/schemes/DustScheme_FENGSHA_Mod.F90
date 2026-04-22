@@ -230,7 +230,7 @@ contains
       select case(params%moist_option)
        case(1)
          call Fecan_SoilMoisture(clayfrac, sandfrac, soilm(1) * params%moist_correction_factor, params%drylimit_factor, h)
-       case(2) 
+       case(2)
          call Zhao_SoilMoisture(soilm(1), h)
       end select
 

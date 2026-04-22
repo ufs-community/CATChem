@@ -169,9 +169,9 @@ contains
             if (w10m .gt. u_thresh) then
                emission_temp = ginoux_scaling * w10m ** 2 * max(0.0_fp,(w10m - u_thresh) )  ! kg/m2/s
                !TODO: Note Chu_DU is used in GOCART2G for the conversion from du_src
-               !The Chu_DU list in GOCART goes through the Chem_UtilResVal function, after which all bins have the 
+               !The Chu_DU list in GOCART goes through the Chem_UtilResVal function, after which all bins have the
                !same value before the 1e-9 conversion.
-               !we do not have du_src input and use SSM instead in ginoux_scaling calculation above. 
+               !we do not have du_src input and use SSM instead in ginoux_scaling calculation above.
                emission_temp = emission_temp * params%Ch_DU(species_idx) * 1.0e-9
             endif
 
