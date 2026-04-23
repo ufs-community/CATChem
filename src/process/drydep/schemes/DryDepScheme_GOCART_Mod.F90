@@ -26,7 +26,7 @@
 !! https://doi.org/10.5194/gmd-17-1443-2024
 module DryDepScheme_GOCART_Mod
 
-   use precision_mod, only: fp, f4
+   use precision_mod, only: fp
    use DryDepCommon_Mod, only: DryDepSchemeGOCARTConfig
    use error_mod, only: CC_SUCCESS, CC_Error
    use Constants, only: Cp, g0, VON_KARMAN  !load the constants needed for this scheme
@@ -134,21 +134,21 @@ contains
       integer :: rc, k, species_idx
       integer :: diag_idx  ! For diagnostic species indexing
       real(fp) :: VD
-      real(f4) :: drydepf(1,1)
+      real(fp) :: drydepf(1,1)
       ! Local Variables
-      real(f4), pointer :: GOCART_tmpu(:,:,:)
-      real(f4), pointer :: GOCART_rhoa(:,:,:)
-      real(f4), pointer :: GOCART_HGHTE(:,:,:)
-      real(f4), pointer :: GOCART_LWI(:,:)
-      real(f4), pointer :: GOCART_USTAR(:,:)
-      real(f4), pointer :: GOCART_PBLH(:,:)
+      real(fp), pointer :: GOCART_tmpu(:,:,:)
+      real(fp), pointer :: GOCART_rhoa(:,:,:)
+      real(fp), pointer :: GOCART_HGHTE(:,:,:)
+      real(fp), pointer :: GOCART_LWI(:,:)
+      real(fp), pointer :: GOCART_USTAR(:,:)
+      real(fp), pointer :: GOCART_PBLH(:,:)
 
-      real(f4), pointer :: GOCART_HFLUX(:,:)
-      real(f4), pointer :: GOCART_Z0H(:,:)
-      real(f4), pointer :: GOCART_U10(:,:)
-      real(f4), pointer :: GOCART_V10(:,:)
-      real(f4), pointer :: GOCART_FRACLAKE(:,:)
-      real(f4), pointer :: GOCART_GWETTOP(:,:)
+      real(fp), pointer :: GOCART_HFLUX(:,:)
+      real(fp), pointer :: GOCART_Z0H(:,:)
+      real(fp), pointer :: GOCART_U10(:,:)
+      real(fp), pointer :: GOCART_V10(:,:)
+      real(fp), pointer :: GOCART_FRACLAKE(:,:)
+      real(fp), pointer :: GOCART_GWETTOP(:,:)
 
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
@@ -158,7 +158,7 @@ contains
       thisLoc = ' -> at compute_gocart (in DryDepScheme_GOCART_Mod.F90)'
       RC = CC_SUCCESS
       VD = 0.0_fp
-      drydepf = 0.0_f4
+      drydepf = 0.0_fp
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
@@ -201,12 +201,12 @@ contains
 
             if (params%resuspension) then
                call DryDeposition(num_layers, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
-                  GOCART_PBLH, GOCART_HFLUX, real(von_karman, f4), real(cp, f4), real(g0, f4), GOCART_Z0H, drydepf, RC, &
-                  real(species_radius(species_idx)*1e-6_fp, f4), real(species_density(species_idx), f4), GOCART_U10, GOCART_V10, &
+                  GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, drydepf, RC, &
+                  species_radius(species_idx)*1e-6_fp, species_density(species_idx), GOCART_U10, GOCART_V10, &
                   GOCART_FRACLAKE, GOCART_GWETTOP)
             else
                call DryDeposition(num_layers, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
-                  GOCART_PBLH, GOCART_HFLUX, real(von_karman, f4), real(cp, f4), real(g0, f4), GOCART_Z0H, drydepf, RC)
+                  GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, drydepf, RC)
             endif
 
             ! Ensure non-negative values
@@ -337,18 +337,18 @@ contains
       REAL(fp),  intent(in), target :: gwettop                ! fraction soil moisture [1]
 
       ! INPUT/OUTPUTS
-      REAL(f4), intent(inout), pointer :: GOCART_TMPU(:,:,:)   !< temperature [K]
-      REAL(f4), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
-      REAL(f4), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE  !< geometric height [m]
-      REAL(f4), intent(inout), pointer :: GOCART_U10(:,:)                 !< 10-m u-wind component [m/sec]
-      REAL(f4), intent(inout), pointer :: GOCART_V10 (:,:)                !< 10-m v-wind component [m/sec]
-      REAL(f4), intent(inout), pointer :: GOCART_FRACLAKE(:,:)            !< fraction covered by water [1]
-      REAL(f4), intent(inout), pointer :: GOCART_GWETTOP(:,:)             !< fraction soil moisture [1]
-      real(f4), intent(inout), pointer :: GOCART_LWI(:,:)                 !< orography flag; Land, ocean, ice mask
-      REAL(f4), intent(inout), pointer :: GOCART_USTAR(:,:)               !< friction speed [m/sec]
-      REAL(f4), intent(inout), pointer :: GOCART_PBLH(:,:)                !< PBL height [m]
-      REAL(f4), intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
-      REAL(f4), intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
+      REAL(fp), intent(inout), pointer :: GOCART_TMPU(:,:,:)   !< temperature [K]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE  !< geometric height [m]
+      REAL(fp), intent(inout), pointer :: GOCART_U10(:,:)                 !< 10-m u-wind component [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_V10 (:,:)                !< 10-m v-wind component [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_FRACLAKE(:,:)            !< fraction covered by water [1]
+      REAL(fp), intent(inout), pointer :: GOCART_GWETTOP(:,:)             !< fraction soil moisture [1]
+      real(fp), intent(inout), pointer :: GOCART_LWI(:,:)                 !< orography flag; Land, ocean, ice mask
+      REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)               !< friction speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)                !< PBL height [m]
+      REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
+      REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
 
       ! OUTPUTS - Add error handling back in late
       !INTEGER :: rc !< Return code
@@ -371,20 +371,20 @@ contains
 
       !Note: GOCART scheme expects vertical levels in reverse order (top to bottom)
 
-      GOCART_TMPU(1,1,:) = real(tmpu(size(tmpu):1:-1), f4) ! temperature [K]
-      GOCART_RHOA(1,1,:) = real(rhoa(size(rhoa):1:-1), f4) ! air density [kg/m^3]
-      GOCART_HGHTE(1,1,:) = real(hghte(size(hghte):1:-1), f4)    ! top of layer geopotential height [m]
-      GOCART_LWI = real(LWI, f4)     ! orography flag; Land, ocean, ice mask
-      GOCART_USTAR  = real(ustar, f4)
+      GOCART_TMPU(1,1,:) = tmpu(size(tmpu):1:-1) ! temperature [K]
+      GOCART_RHOA(1,1,:) = rhoa(size(rhoa):1:-1) ! air density [kg/m^3]
+      GOCART_HGHTE(1,1,:) = hghte(size(hghte):1:-1)    ! top of layer geopotential height [m]
+      GOCART_LWI = real(LWI, fp)     ! orography flag; Land, ocean, ice mask
+      GOCART_USTAR  = ustar
 
       ! friction speed [m/sec]
-      GOCART_PBLH   = real(pblh, f4)      ! PBL height [m]
-      GOCART_HFLUX = real(hflux, f4)     ! sfc. sens. heat flux [W m-2]
-      GOCART_Z0H    = real(z0h, f4)       ! rough height, sens. heat [m]
-      GOCART_U10 = real(u10m, f4)         ! zonal wind component (E/W) [m/s]
-      GOCART_V10 = real(v10m, f4)         ! meridional wind component (N/S) [m/s]
-      GOCART_FRACLAKE = real(fraclake, f4)   ! unitless, lake fraction (0-1)
-      GOCART_GWETTOP = real(gwettop, f4)     ! unitless, soil moisture fraction (0-1)
+      GOCART_PBLH   = pblh      ! PBL height [m]
+      GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
+      GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
+      GOCART_U10 = u10m         ! zonal wind component (E/W) [m/s]
+      GOCART_V10 = v10m         ! meridional wind component (N/S) [m/s]
+      GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
+      GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
 
 
    end subroutine PrepMetVarsForGOCART
