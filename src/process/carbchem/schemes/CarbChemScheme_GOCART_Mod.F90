@@ -22,7 +22,7 @@
 !! Reference: GOCART2G process library carbonChemLoss function
 module CarbChemScheme_GOCART_Mod
 
-   use precision_mod, only: fp, rae
+   use precision_mod, only: fp, f4, rae
    use CarbChemCommon_Mod, only: CarbChemSchemeGOCARTConfig
    use GOCART2G_Process, only: carbonChemLoss, phobicToPhilic, Chem_UtilIdow, Chem_UtilCdow
 
@@ -120,11 +120,11 @@ contains
       integer :: n, species_idx, phobic_species_idx, philic_species_idx
       integer :: klid, diag_idx, curr_idx  ! For diagnostic species indexing
       real(fp), pointer :: GOCART_RHOA(:,:,:)
-      real(fp), pointer :: GOCART_DELP(:,:,:)
+      real(f4), pointer :: GOCART_DELP(:,:,:)
       real(fp), pointer :: GOCART_PRESS(:,:,:)
-      real(fp), pointer :: flux_toPhilic(:,:) ! For phobic to philic conversion flux [kg/m2/s]
-      real(fp), pointer, dimension(:,:,:,:)  :: intPtr_phobic_philic !mass loss [kg/kg]
-      real(fp), pointer, dimension(:,:,:)  :: fluxout  !Mass lost by chemistry [kg/m^2/s]
+      real(f4), pointer :: flux_toPhilic(:,:) ! For phobic to philic conversion flux [kg/m2/s]
+      real(f4), pointer, dimension(:,:,:,:)  :: intPtr_phobic_philic !mass loss [kg/kg]
+      real(f4), pointer, dimension(:,:,:)  :: fluxout  !Mass lost by chemistry [kg/m^2/s]
       logical, allocatable :: sepcies_computed(:) !track species have been computed or not
       real(fp), pointer :: tChemLoss(:) ! tChemLoss for each bin [days]
       real(fp), allocatable :: qUpdate(:), delq(:)  !intermediate variables for diagnostics
@@ -142,12 +142,12 @@ contains
       !allocate some arrays
       allocate(flux_toPhilic(1,1), sepcies_computed(num_species), intPtr_phobic_philic(1,1, num_layers,nbins), &
          tChemLoss(nbins), fluxout(1,1,nbins), qUpdate(num_layers), delq(num_layers))
-      flux_toPhilic = 0.0_fp ! Initialize to zero
+      flux_toPhilic = 0.0_f4 ! Initialize to zero
       sepcies_computed = .false. ! Initialize to false
       reset_con = .false.
-      intPtr_phobic_philic = 0.0_fp ! Initialize to zero
+      intPtr_phobic_philic = 0.0_f4 ! Initialize to zero
       tChemLoss = 0.0_fp ! Initialize to zero
-      fluxout = 0.0_fp ! Initialize to zero
+      fluxout = 0.0_f4 ! Initialize to zero
       qUpdate = 0.0_fp ! Initialize to zero
       delq = 0.0_fp ! Initialize to zero
 
@@ -160,7 +160,7 @@ contains
       if ( (nhms==0) .and. (idow == myDOW) ) then
          reset_con = .true.
          cdow = Chem_UtilCdow(nymd)
-         intPtr_phobic_philic = tiny(1.0_fp) ! avoid division by zero
+         intPtr_phobic_philic = tiny(1.0_f4) ! avoid division by zero
          write(*, '(A, I8, I8)') 'Note: Carbon '//cdow//' tracer being reset to zero on ', nymd, nhms
       end if
 
@@ -239,8 +239,8 @@ contains
          ! Unit conversion: model state [ug/kg] -> GOCART internal [kg/kg] (multiply by 1e-9)
          ! Vertical flip: model convention (surface=1) -> GOCART convention (top=1)
          if (.not. reset_con) then
-            intPtr_phobic_philic(1,1,:, 1) = species_conc(num_layers:1:-1, phobic_species_idx) * 1.0e-9_fp ! [ug/kg] -> [kg/kg]
-            intPtr_phobic_philic(1,1,:, 2) = species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp ! [ug/kg] -> [kg/kg]
+            intPtr_phobic_philic(1,1,:, 1) = real(species_conc(num_layers:1:-1, phobic_species_idx) * 1.0e-9_fp, f4) ! [ug/kg] -> [kg/kg]
+            intPtr_phobic_philic(1,1,:, 2) = real(species_conc(num_layers:1:-1, philic_species_idx) * 1.0e-9_fp, f4) ! [ug/kg] -> [kg/kg]
          end if
 
          !for diagnostics only; have to reproduce the calculation here to save out the mass in addition to the flux
@@ -251,7 +251,7 @@ contains
          !Ad Hoc transfer of hydrophobic to hydrophilic aerosols
          !Rate controlled in RC file; tConvPhobicToPhilic < 0 means no transfer
          call phobicToPhilic (intPtr_phobic_philic(:,:,:,1), intPtr_phobic_philic(:,:,:,2), flux_toPhilic, &
-            params%time_days_hydrophobic_to_hydrophilic, num_layers, tstep, g0, GOCART_DELP, RC)
+            real(params%time_days_hydrophobic_to_hydrophilic, f4), num_layers, real(tstep, f4), real(g0, f4), GOCART_DELP, RC)
          if (RC /= 0) then
             ErrMsg = 'Error in compute_gocart: Failed in GOCART phobicToPhilic.'
             !call CC_Error(trim(ErrMsg), RC, thisLoc)
@@ -297,8 +297,8 @@ contains
             qUpdate = max(qUpdate,1.e-32_fp)
             delq = max(0.0_fp,intPtr_phobic_philic(1, 1, :, n)-qUpdate)
 
-            call carbonChemLoss (num_layers, klid, n, tstep, g0, GOCART_DELP, &
-               tChemLoss(n), intPtr_phobic_philic(:, :, :, n), fluxout, RC)
+            call carbonChemLoss (num_layers, klid, n, real(tstep, f4), real(g0, f4), GOCART_DELP, &
+               real(tChemLoss(n), f4), intPtr_phobic_philic(:, :, :, n), fluxout, RC)
             if (RC /= 0) then
                ErrMsg = 'Error in compute_gocart: Failed in GOCART carbonChemLoss.'
                !call CC_Error(trim(ErrMsg), RC, thisLoc)
@@ -410,7 +410,7 @@ contains
       ! INPUT/OUTPUTS
       REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
       REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_PRESS  !< air pressure [Pa]
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP    !< pressure thickness [Pa]
+      REAL(f4), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP    !< pressure thickness [Pa]
 
       ! OUTPUTS - Add error handling back in late
       !INTEGER :: rc !< Return code
@@ -424,7 +424,7 @@ contains
 
       !Note: GOCART scheme expects vertical levels in reverse order (top to bottom)
       GOCART_RHOA(1,1,:) = rhoa(size(rhoa):1:-1) ! air density [kg/m^3]
-      GOCART_DELP(1,1,:) = delp(size(delp):1:-1) ! pressure thickness [Pa]
+      GOCART_DELP(1,1,:) = real(delp(size(delp):1:-1), f4) ! pressure thickness [Pa]
       GOCART_PRESS(1,1,:) = pmid(size(pmid):1:-1) ! air pressure [Pa]
 
    end subroutine PrepMetVarsForGOCART
