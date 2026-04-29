@@ -97,6 +97,9 @@ processes:
       source_file: "INPUT/NEXUS_Expt.nc"
       format: "netcdf"
       gridded: true
+      regrid_method: conserve #none, bilinear, neareststod, nearestdtos, conserve, patch
+      lat_name: "lat"    #if regrid_method is not none, lat_name and lon_name are required. 
+      lon_name: "lon"
       frequency: "hourly"
       diagnostics: true
       diag_list: [NO, SO2, POC, PSO4]
@@ -155,6 +158,9 @@ processes:
       format: "netcdf"
       gridded: true
       is_2d: true
+      regrid_method: bilinear #none, bilinear, neareststod, nearestdtos, conserve, patch
+      lat_name: "lat"
+      lon_name: "lon"
       frequency: "static"
       diagnostics: true
       diag_list: [sep]
@@ -165,6 +171,9 @@ processes:
       format: "netcdf"
       gridded: true
       is_2d: true
+      regrid_method: bilinear #none, bilinear, neareststod, nearestdtos, conserve, patch
+      lat_name: "lat"
+      lon_name: "lon"
       frequency: "monthly"
       diagnostics: true
       diag_list: [albedo_drag]

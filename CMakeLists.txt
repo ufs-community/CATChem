@@ -7,10 +7,12 @@ option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 
 # Option to disable tests
 # Default ON for standalone builds, OFF when built as a submodule
+# Uses CATCHEM_BUILD_TESTING to avoid collision with the global BUILD_TESTING
+# set by CTest/parent projects.
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-  option(BUILD_TESTING "Build tests" ON)
+  option(CATCHEM_BUILD_TESTING "Build CATChem tests" ON)
 else()
-  option(BUILD_TESTING "Build tests" OFF)
+  option(CATCHEM_BUILD_TESTING "Build CATChem tests" OFF)
 endif()
 # Option to build with MUSICA chemistry library (defaults to OFF)
 option(BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
@@ -118,10 +120,24 @@ if(BUILD_NUOPC)
   endif()
 endif()
 
+# Auto-detect if default real is promoted to 8-byte by the parent build
+# or by per-target flags, and define USE_REAL8 so precision_mod sets fp=f8.
+if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
+  if(CMAKE_Fortran_FLAGS MATCHES "-fdefault-real-8")
+    add_compile_definitions(USE_REAL8)
+    message(STATUS "CATChem: detected -fdefault-real-8, enabling USE_REAL8")
+  endif()
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
+  if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
+    add_compile_definitions(USE_REAL8)
+    message(STATUS "CATChem: detected real-8 promotion flag, enabling USE_REAL8")
+  endif()
+endif()
+
 add_subdirectory(src)
 
 # Enable testing for standalone builds
-if(BUILD_TESTING)
+if(CATCHEM_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
 endif()
@@ -144,6 +160,8 @@ if(BUILD_NUOPC)
   add_library(
     cc_nuopc
     STATIC
+    drivers/nuopc/catchem_regrid_mod.F90
+    drivers/nuopc/catchem_latlon_output_mod.F90
     drivers/nuopc/aqmio.F90
     drivers/nuopc/catchem_emis_mod.F90
     drivers/nuopc/catchem_nuopc_cap.F90

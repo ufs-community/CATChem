@@ -115,6 +115,7 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: SWGDN(:,:)        !< Incident radiation @ ground [W/m2]
       REAL(fp), ALLOCATABLE        :: EFLUX(:,:)        !< Latent heat flux [W/m2]
       REAL(fp), ALLOCATABLE        :: HFLUX(:,:)        !< Sensible heat flux [W/m2]
+      REAL(fp), ALLOCATABLE        :: HFLUX_UP(:,:)     !< Sensible upward heat flux [W/m2]
       REAL(fp), ALLOCATABLE        :: U10M(:,:)         !< E/W wind speed @ 10m ht [m/s]
       REAL(fp), ALLOCATABLE        :: USTAR(:,:)        !< Friction velocity [m/s]
       REAL(fp), ALLOCATABLE        :: V10M(:,:)         !< N/S wind speed @ 10m ht [m/s]

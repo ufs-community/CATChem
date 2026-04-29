@@ -34,6 +34,7 @@ module catchem_emis_mod
    use ESMF
    use NUOPC
    use aqmio
+   use catchem_regrid_mod, only: RegridCache, catchem_regrid_field, catchem_regrid_cleanup
    use Precision_Mod, only: fp
    use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
    use ConfigManager_Mod, only: ConfigManagerType, ConfigDataType, EmissionCategoryMapping, &
@@ -58,7 +59,10 @@ module catchem_emis_mod
    integer, parameter :: EMIS_MAXSTR = 256
    integer, parameter :: EMIS_MAXFIELDS = 100
    real(fp), parameter :: EMIS_MISSING = -999.0_fp
-   real(fp), parameter :: EMIS_ACCEPT = 1.e+15_fp
+
+   !> Module-level regrid cache (weights computed once, reused)
+   type(RegridCache), save :: emis_regrid_cache
+   real(fp), parameter :: EMIS_ACCEPT = 1.e+15_fp ! Same as MAPL library "undefval"
 
    !> \brief Emission timing and alarm information
    type :: EmissionTimingType
@@ -241,16 +245,17 @@ contains
                   ! Update timing state
                   category_timings(i)%current_record = category_timings(i)%current_record + 1
                   category_timings(i)%needs_update = .false.  ! Reset until next alarm
-
-                  ! Apply emissions to chemical state
-                  call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
-                  if (localrc /= CC_SUCCESS) then
-                     write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
-                        trim(ext_emis_data%categories(i)%category_name)
-                     call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
-                  end if
                end if
             end if
+         end if
+
+         ! Apply emissions to chemical state every timestep
+         ! (data is read only when alarm rings, but applied every step)
+         call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
+         if (localrc /= CC_SUCCESS) then
+            write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
+               trim(ext_emis_data%categories(i)%category_name)
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
          end if
       end do
       nullify(config_manager, met_state, chem_state) ! Clean up pointers
@@ -285,6 +290,8 @@ contains
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
       character(len=*), parameter :: pName = 'catchem_emis_read'
+      logical :: use_regrid
+      logical :: didRegrid
 
       rc = CC_SUCCESS
 
@@ -296,6 +303,27 @@ contains
          write(msg, '(A,A,A)') trim(pName), ': No source file specified for category: ', trim(category_name)
          call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
          rc = CC_FAILURE
+         return
+      end if
+
+      ! Determine if this category needs runtime regridding.
+      ! When regrid_method is set to anything other than 'none' (e.g.
+      ! bilinear, neareststod, conserve, ...) the file is assumed to be
+      ! on a different grid and will be regridded to the model grid.
+      use_regrid = (trim(category%regrid_method) /= 'none' .and. &
+                    trim(category%regrid_method) /= 'NONE' .and. &
+                    len_trim(category%regrid_method) > 0)
+
+      if (use_regrid) then
+         if (len_trim(category%latname) == 0 .or. len_trim(category%lonname) == 0) then
+            write(msg, '(A,A,A)') trim(pName), &
+               ': regrid_method set but lat_name/lon_name missing for category: ', &
+               trim(category_name)
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
+         end if
+         call catchem_emis_read_regrid(category, grid, nlev, filename, rc)
          return
       end if
 
@@ -350,10 +378,10 @@ contains
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
-            if (category_name == 'gmi') then
+            if (category%reverse_vertical) then
                category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev:1:-1), fp)  !reverse vertical level
             else
-               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)  !assuming 3D data for now
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)
             end if
          end if
 
@@ -375,6 +403,121 @@ contains
       call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_read
+
+   !> \brief Read emission data with runtime regridding from lat-lon to model grid
+   !!
+   !! Reads global lat-lon emission data and regrids it onto the model
+   !! grid using ESMF bilinear regridding.  Route handles are cached in
+   !! the module-level emis_regrid_cache so weights are computed only once.
+   subroutine catchem_emis_read_regrid(category, grid, nlev, filename, rc)
+      implicit none
+
+      type(ExtEmisCategoryType), intent(inout) :: category
+      type(ESMF_Grid),          intent(in)    :: grid
+      integer,                  intent(in)    :: nlev
+      character(len=*),         intent(in)    :: filename
+      integer,                  intent(out)   :: rc
+
+      ! Local variables
+      integer :: localrc, ifield, klev
+      character(len=EMIS_MAXSTR) :: msg
+      character(len=64) :: category_name
+      type(ESMF_Field) :: esmf_field
+      real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
+      logical :: didRegrid
+      character(len=*), parameter :: pName = 'catchem_emis_read_regrid'
+
+      rc = CC_SUCCESS
+      category_name = trim(category%category_name)
+
+      do ifield = 1, category%n_fields
+         ! Create 2D destination field on the model grid
+         ! (for 3D data we regrid one level at a time as 2D slabs)
+         esmf_field = ESMF_FieldCreate(grid, &
+            name=trim(category%fields(ifield)%field_name), &
+            typekind=ESMF_TYPEKIND_R4, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+         if (category%is_2d) then
+            ! --- 2D field: single regrid call ---
+            call catchem_regrid_field( &
+               cache     = emis_regrid_cache, &
+               filename  = trim(filename), &
+               varname   = trim(category%fields(ifield)%field_name), &
+               dstField  = esmf_field, &
+               latname   = trim(category%latname), &
+               lonname   = trim(category%lonname), &
+               regrid_method_name = trim(category%regrid_method), &
+               timeSlice = category%irec, &
+               didRegrid = didRegrid, &
+               rc        = localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               return
+            end if
+
+            call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               return
+            end if
+
+            category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)
+         else
+            ! --- 3D field: regrid each vertical level as a 2D slab ---
+            do klev = 1, nlev
+               call catchem_regrid_field( &
+                  cache     = emis_regrid_cache, &
+                  filename  = trim(filename), &
+                  varname   = trim(category%fields(ifield)%field_name), &
+                  dstField  = esmf_field, &
+                  latname   = trim(category%latname), &
+                  lonname   = trim(category%lonname), &
+                  regrid_method_name = trim(category%regrid_method), &
+                  timeSlice = category%irec, &
+                  levelSlice = klev, &
+                  didRegrid = didRegrid, &
+                  rc        = localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  return
+               end if
+
+               call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  return
+               end if
+
+               category%fields(ifield)%emission_data(:,:,klev,1) = real(field_data_2d(:,:), fp)
+            end do
+
+            ! Reverse vertical levels if configured
+            if (category%reverse_vertical) then
+               category%fields(ifield)%emission_data(:,:,:,1) = &
+                  category%fields(ifield)%emission_data(:,:,nlev:1:-1,1)
+            end if
+         end if
+
+         category%fields(ifield)%is_loaded = .true.
+
+         call ESMF_FieldDestroy(esmf_field, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+         field_data_2d => null()
+      end do
+
+      write(msg, '(A,A,A)') trim(pName), &
+         ': Successfully read & regridded emission data for category ', trim(category_name)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+
+   end subroutine catchem_emis_read_regrid
 
    !> \brief Get emission data for a specific field and location
    !!
@@ -414,6 +557,217 @@ contains
 
    !> \brief Apply emission data to chemical state
    !!
+   !> \brief Distribute 2D surface emissions vertically based on specified method
+   !!
+   !! Based on GOCART2G SulfateDistributeEmissions and distribute_aviation_emissions.
+   !! Supports four methods:
+   !! - P100: Distribute uniformly from surface to 100m altitude
+   !! - P500: Distribute uniformly from 100m to 500m altitude
+   !! - Ppbl: Distribute uniformly from surface to PBL height (min 100m)
+   !! - aviation: Distribute using hardcoded aviation layers
+   !!   [0.0, 100.0, 9000.0, 10000.0] m covering LTO/CDS/CRS ranges
+   !! - aviation_lto: LTO only (0 - 100m)
+   !! - aviation_cds: CDS only (100 - 9000m)
+   !! - aviation_crs: CRS only (9000 - 10000m)
+   !!
+   !! Uses pressure-based vertical fractions following the GOCART2G approach:
+   !! compute pressure at target altitudes by walking from surface upward,
+   !! then assign layer fractions proportional to the pressure overlap
+   !! with the target range.
+   !!
+   !! UFS/FV3 convention: k=1 = surface, k=nz = top of atmosphere.
+   !! Loops walk from k=1 (surface) to k=nz (top) for altitude calculations.
+   !!
+   !! \param[inout] emission_flux 3D emission flux array (nx,ny,nz); surface data in k=1
+   !! \param[in] met_state Meteorological state (DELP, AIRDEN, PBLH)
+   !! \param[in] vertical_dist Distribution method name
+   !! \param[in] nx,ny,nz Grid dimensions
+   subroutine distribute_emissions_vertical(emission_flux, met_state, vertical_dist, nx, ny, nz)
+      use Constants, only: g0
+      implicit none
+
+      real(fp), intent(inout) :: emission_flux(:,:,:)
+      type(MetStateType), intent(in) :: met_state
+      character(len=*), intent(in) :: vertical_dist
+      integer, intent(in) :: nx, ny, nz
+
+      ! Local variables
+      integer :: i, j, k
+      real(fp) :: ps, p0, p1, z0_col, z1_col, dz, deltaz, deltap
+      real(fp) :: p100, p500, pPBL, p9000, p10000, zpbl
+      real(fp) :: f_dist, emis_sfc
+      real(fp) :: p_top, p_bot  ! pressure range for distribution
+
+      ! Hardcoded aviation emission layers [m] following GOCART2G convention:
+      !   aviation_layers = [LTO_bot, LTO_top/CDS_bot, CDS_top/CRS_bot, CRS_top]
+      !   LTO (Landing/Take-Off):     0 -   100 m
+      !   CDS (Climb/Descent):      100 -  9000 m
+      !   CRS (Cruise):            9000 - 10000 m
+      real(fp), parameter :: AVN_LTO_BOT =     0.0_fp
+      real(fp), parameter :: AVN_LTO_TOP =   100.0_fp
+      real(fp), parameter :: AVN_CDS_TOP =  9.0e3_fp
+      real(fp), parameter :: AVN_CRS_TOP = 10.0e3_fp
+
+      ! UFS/FV3 convention: k=1 = surface, k=nz = top of atmosphere
+      ! Return immediately if no distribution needed
+      select case (trim(vertical_dist))
+      case ('none', 'NONE', 'None', '')
+         return
+      case ('P100', 'p100', 'P500', 'p500', 'Ppbl', 'ppbl', 'PBL', 'pbl', &
+            'aviation', 'AVIATION', &
+            'aviation_lto', 'AVIATION_LTO', &
+            'aviation_cds', 'AVIATION_CDS', &
+            'aviation_crs', 'AVIATION_CRS')
+         ! proceed
+      case default
+         return
+      end select
+
+      do j = 1, ny
+         do i = 1, nx
+            ! Save surface emission value (2D data is stored in k=1 slot)
+            emis_sfc = emission_flux(i, j, 1)
+            if (emis_sfc == 0.0_fp) cycle
+
+            ! Compute surface pressure by summing all layer thicknesses
+            ps = 0.0_fp
+            do k = 1, nz
+               ps = ps + met_state%DELP(i, j, k)
+            end do
+
+            ! Find pressure at target altitudes by walking from surface (k=1) upward (k=nz)
+            p0 = ps
+            z0_col = 0.0_fp
+            p100   = 0.0_fp
+            p500   = 0.0_fp
+            pPBL   = 0.0_fp
+            p9000  = 0.0_fp
+            p10000 = 0.0_fp
+
+            do k = 1, nz
+               p1 = p0 - met_state%DELP(i, j, k)
+               dz = met_state%DELP(i, j, k) / (met_state%AIRDEN(i, j, k) * g0)
+               z1_col = z0_col + dz
+
+               if (p100 == 0.0_fp .and. z0_col < 100.0_fp .and. z1_col >= 100.0_fp) then
+                  deltaz = z1_col - 100.0_fp
+                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  p100 = p1 + deltap
+               end if
+
+               if (p500 == 0.0_fp .and. z0_col < 500.0_fp .and. z1_col >= 500.0_fp) then
+                  deltaz = z1_col - 500.0_fp
+                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  p500 = p1 + deltap
+               end if
+
+               zpbl = max(met_state%PBLH(i, j), 100.0_fp)
+               if (pPBL == 0.0_fp .and. z0_col < zpbl .and. z1_col >= zpbl) then
+                  deltaz = z1_col - zpbl
+                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  pPBL = p1 + deltap
+               end if
+
+               if (p9000 == 0.0_fp .and. z0_col < AVN_CDS_TOP .and. z1_col >= AVN_CDS_TOP) then
+                  deltaz = z1_col - AVN_CDS_TOP
+                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  p9000 = p1 + deltap
+               end if
+
+               if (p10000 == 0.0_fp .and. z0_col < AVN_CRS_TOP .and. z1_col >= AVN_CRS_TOP) then
+                  deltaz = z1_col - AVN_CRS_TOP
+                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  p10000 = p1 + deltap
+               end if
+
+               p0 = p1
+               z0_col = z1_col
+            end do
+
+            ! Fallback: if target height was never reached, use top-of-atmosphere pressure
+            if (p100   == 0.0_fp) p100   = p0
+            if (p500   == 0.0_fp) p500   = p0
+            if (pPBL   == 0.0_fp) pPBL   = p0
+            if (p9000  == 0.0_fp) p9000  = p0
+            if (p10000 == 0.0_fp) p10000 = p0
+
+            ! Determine pressure range for this distribution type
+            ! p_bot = higher pressure (lower altitude), p_top = lower pressure (higher altitude)
+            select case (trim(vertical_dist))
+            case ('P100', 'p100')
+               ! Surface to 100m
+               p_bot = ps
+               p_top = p100
+            case ('P500', 'p500')
+               ! 100m to 500m
+               p_bot = p100
+               p_top = p500
+            case ('Ppbl', 'ppbl', 'PBL', 'pbl')
+               ! Surface to PBL height
+               p_bot = ps
+               p_top = pPBL
+            case ('aviation', 'AVIATION')
+               ! Full aviation range: surface to CRS top (0 - 10000 m)
+               ! Covers LTO (0-100m) + CDS (100-9000m) + CRS (9000-10000m)
+               p_bot = ps
+               p_top = p10000
+            case ('aviation_lto', 'AVIATION_LTO')
+               ! LTO only: surface to 100m
+               p_bot = ps
+               p_top = p100
+            case ('aviation_cds', 'AVIATION_CDS')
+               ! CDS only: 100m to 9000m
+               p_bot = p100
+               p_top = p9000
+            case ('aviation_crs', 'AVIATION_CRS')
+               ! CRS only: 9000m to 10000m
+               p_bot = p9000
+               p_top = p10000
+            case default
+               cycle
+            end select
+
+            ! Guard against zero or negative pressure range
+            if (p_bot - p_top <= 0.0_fp) cycle
+
+            ! Zero out all levels, then distribute using pressure fractions
+            ! Walk from surface (k=1) to top (k=nz)
+            emission_flux(i, j, :) = 0.0_fp
+
+            p0 = ps
+            do k = 1, nz
+               p1 = p0 - met_state%DELP(i, j, k)
+
+               ! Compute fractional overlap of this model layer with the target pressure range
+               ! p0 = pressure at layer bottom (higher pressure, lower altitude)
+               ! p1 = pressure at layer top (lower pressure, higher altitude)
+               f_dist = 0.0_fp
+
+               if (p0 <= p_bot .and. p1 >= p_top) then
+                  ! Layer fully within target range
+                  f_dist = met_state%DELP(i, j, k) / (p_bot - p_top)
+               else if (p0 > p_bot .and. p1 >= p_top .and. p1 < p_bot) then
+                  ! Layer straddles bottom boundary (extends below target)
+                  f_dist = (p_bot - max(p1, p_top)) / (p_bot - p_top)
+               else if (p0 <= p_bot .and. p0 > p_top .and. p1 < p_top) then
+                  ! Layer straddles top boundary (extends above target)
+                  f_dist = (min(p0, p_bot) - p_top) / (p_bot - p_top)
+               else if (p0 > p_bot .and. p1 < p_top) then
+                  ! Layer fully encompasses the target range
+                  f_dist = 1.0_fp
+               end if
+               ! Otherwise: layer entirely outside range, f_dist = 0
+
+               emission_flux(i, j, k) = emis_sfc * f_dist
+
+               p0 = p1
+            end do
+
+         end do
+      end do
+
+   end subroutine distribute_emissions_vertical
+
    !! Applies emission data from ExtEmisDataType to the chemical state
    !! using species mapping from emission configuration. Processes entire
    !! arrays at once for efficiency and handles proper unit conversion.
@@ -491,6 +845,11 @@ contains
 
          ! Apply category and global scaling factors
          emission_flux = emission_flux * category%global_scale * global_scale
+
+         ! Apply vertical distribution if configured (redistributes 2D surface emission to 3D)
+         if (trim(category%vertical_dist) /= 'none' .and. trim(category%vertical_dist) /= '') then
+            call distribute_emissions_vertical(emission_flux, met_state, category%vertical_dist, nx, ny, nz)
+         end if
 
          ! Direct mapping access using same indices (one-to-one correspondence)
          ! Add sanity checks to ensure category and field names match
@@ -601,6 +960,9 @@ contains
                            !           = [kg/kg] * converter
                            !           = [ug/kg] for aerosols (converter=1e9)
                            !           = [ppmv]  for gases    (converter=AIRMW/MW*1e6)
+
+                           !safety check following GOCART
+                           if (1.01_fp * emission_flux(i,j,k) / category%global_scale / global_scale > EMIS_ACCEPT) cycle
                            species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
                          case default
                            write(msg, '(A,A,A)') trim(pName), ': Unrecognized emission field units: ', &
@@ -911,6 +1273,9 @@ contains
       end if
       n_category_timings = 0
 
+      ! Clean up regrid route-handle cache
+      call catchem_regrid_cleanup(emis_regrid_cache, rc=localrc)
+
       call ESMF_LogWrite(trim(pName)//': Emission data finalized', &
          ESMF_LOGMSG_INFO, rc=localrc)
 
@@ -956,6 +1321,9 @@ contains
       ! Read coordinate names
       call config_manager%get_string(trim(config_path)//'/lat_name', category%latname, localrc, '')
       call config_manager%get_string(trim(config_path)//'/lon_name', category%lonname, localrc, '')
+      call config_manager%get_string(trim(config_path)//'/regrid_method', category%regrid_method, localrc, 'none')
+      call config_manager%get_string(trim(config_path)//'/vertical_dist', category%vertical_dist, localrc, 'none')
+      call config_manager%get_logical(trim(config_path)//'/reverse_vertical', category%reverse_vertical, localrc, .false.)
 
       ! Read stack parameter names (for point sources)
       call config_manager%get_string(trim(config_path)//'/stack_diameter', category%stkdmname, localrc, '')

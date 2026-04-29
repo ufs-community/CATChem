@@ -2,6 +2,8 @@
 module AQMIO
 
    use ESMF
+   use catchem_latlon_output_mod, only: latlon_diag_init, latlon_diag_write_2d, &
+      latlon_diag_write_3d, latlon_diag_cleanup, latlon_diag_is_init
 #if HAVE_NETCDF
    use netcdf
 #endif
@@ -46,6 +48,10 @@ module AQMIO
    ! Enhanced direct data I/O functions (no ESMF fields required)
    public :: AQMIO_Write1D
    public :: AQMIO_Read1D
+
+   ! Lat/lon stitched output support
+   public :: AQMIO_LatlonInit
+   public :: AQMIO_LatlonCleanup
 
 contains
 
@@ -430,6 +436,16 @@ contains
             if (tileCount > 1) then
                call AQMIO_FileNameGet(fullName, fileName, filePath=filePath, &
                   tile=is % IO % IOLayout(localDe) % tile)
+               ! For read mode: if per-tile file doesn't exist, fall back to original filename
+               if (.not. create .and. cmode == NF90_NOWRITE) then
+                  block
+                     logical :: tile_file_exists
+                     inquire(file=trim(fullName), exist=tile_file_exists)
+                     if (.not. tile_file_exists) then
+                        call AQMIO_FileNameGet(fullName, fileName, filePath=filePath)
+                     end if
+                  end block
+               end if
             else
                call AQMIO_FileNameGet(fullName, fileName, filePath=filePath)
             end if
@@ -829,6 +845,12 @@ contains
             line=__LINE__, &
             file=__FILE__, &
             rcToReturn=rc)) return  ! bail out
+      end if
+
+      ! --- Lat/lon stitched output: regrid each field and write to .latlon.nc ---
+      if (latlon_diag_is_init() .and. present(fileName)) then
+         call AQMIO_LatlonWrite(fieldList, fieldNameList, fileName, filePath, timeSlice, localrc)
+         ! Lat/lon write errors are non-fatal — do not propagate to rc
       end if
 
    end subroutine AQMIO_Write
@@ -3022,6 +3044,8 @@ contains
 
       ! -- local variables
       integer :: lstr
+      character(len=16) :: tileSuffix
+      character(len=ESMF_MAXPATHLEN) :: tmpName
 
       ! -- begin
       fullName = fileName
@@ -3038,7 +3062,20 @@ contains
       end if
 
       if (present(tile)) then
-         fullName = AQMIO_StringReplaceWithInt(fullName, "<tile>", tile)
+         if (index(fullName, "<tile>") > 0) then
+            fullName = AQMIO_StringReplaceWithInt(fullName, "<tile>", tile)
+         else
+            ! Auto-insert tile number before file extension (UFS convention)
+            ! e.g. "output.nc" -> "output.tile1.nc"
+            write(tileSuffix, '(".tile",I0)') tile
+            lstr = index(fullName, '.', back=.true.)
+            if (lstr > 1) then
+               tmpName = fullName(1:lstr-1) // trim(tileSuffix) // trim(fullName(lstr:))
+            else
+               tmpName = trim(fullName) // trim(tileSuffix)
+            end if
+            fullName = tmpName
+         end if
       else
          fullName = AQMIO_StringReplaceWithString(fullName, "/<tile>/", "/")
          fullName = AQMIO_StringReplaceWithString(fullName, ".<tile>.", ".")
@@ -3835,6 +3872,120 @@ contains
    end subroutine AQMIO_Read1D
 
 #endif
+
+!------------------------------------------------------------------------------
+! Lat/lon stitched output routines
+!------------------------------------------------------------------------------
+
+   !> \brief Initialize lat/lon diagnostic output (call once after grid is available)
+   !!
+   !! Creates a global lat/lon grid and computes regrid weights from the model
+   !! cubed-sphere grid. Skips initialization if tile count <= 1.
+   subroutine AQMIO_LatlonInit(grid, rc)
+      type(ESMF_Grid), intent(inout) :: grid
+      integer,         intent(out), optional :: rc
+
+      integer :: localrc
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      if (latlon_diag_is_init()) return
+
+      call latlon_diag_init(grid, localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+   end subroutine AQMIO_LatlonInit
+
+!------------------------------------------------------------------------------
+
+   !> \brief Clean up lat/lon diagnostic output resources
+   subroutine AQMIO_LatlonCleanup(rc)
+      integer, intent(out), optional :: rc
+
+      integer :: localrc
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      if (.not. latlon_diag_is_init()) return
+
+      call latlon_diag_cleanup(localrc)
+      if (present(rc)) rc = localrc
+
+   end subroutine AQMIO_LatlonCleanup
+
+!------------------------------------------------------------------------------
+
+   !> \brief Write fields to lat/lon stitched output file
+   !!
+   !! Internal routine called by AQMIO_Write when lat/lon output is active.
+   !! Regrids each field from cubed-sphere to lat/lon and writes to a
+   !! .latlon.nc file derived from the per-tile filename.
+   subroutine AQMIO_LatlonWrite(fieldList, fieldNameList, fileName, filePath, timeSlice, rc)
+      type(ESMF_Field),      intent(in)            :: fieldList(:)
+      character(len=*),      intent(in),  optional :: fieldNameList(:)
+      character(len=*),      intent(in)            :: fileName
+      character(len=*),      intent(in),  optional :: filePath
+      integer,               intent(in),  optional :: timeSlice
+      integer,               intent(out), optional :: rc
+
+      integer :: localrc, item, fieldRank, dot_pos, ltimeslice
+      character(len=ESMF_MAXPATHLEN) :: ll_filename, varname
+      real(ESMF_KIND_R4), pointer :: fptr_2d(:,:) => null()
+      real(ESMF_KIND_R4), pointer :: fptr_3d(:,:,:) => null()
+
+      if (present(rc)) rc = ESMF_SUCCESS
+
+      ltimeslice = 1
+      if (present(timeSlice)) ltimeslice = timeSlice
+
+      ! Derive lat/lon filename: strip tile suffix pattern and add .latlon
+      ! Input fileName is the base name (without tile suffix, AQMIO adds that internally)
+      dot_pos = index(fileName, '.nc', back=.true.)
+      if (dot_pos > 0) then
+         ll_filename = fileName(1:dot_pos-1) // '.latlon.nc'
+      else
+         ll_filename = trim(fileName) // '.latlon.nc'
+      end if
+
+      ! Prepend path if provided
+      if (present(filePath)) then
+         if (len_trim(filePath) > 0) then
+            if (filePath(len_trim(filePath):len_trim(filePath)) == '/') then
+               ll_filename = trim(filePath) // trim(ll_filename)
+            else
+               ll_filename = trim(filePath) // '/' // trim(ll_filename)
+            end if
+         end if
+      end if
+
+      ! Process each field
+      do item = 1, size(fieldList)
+         ! Get variable name
+         if (present(fieldNameList)) then
+            varname = fieldNameList(item)
+         else
+            call ESMF_FieldGet(fieldList(item), name=varname, rc=localrc)
+            if (localrc /= ESMF_SUCCESS) cycle
+         end if
+
+         ! Get field rank to determine 2D vs 3D
+         call ESMF_FieldGet(fieldList(item), rank=fieldRank, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) cycle
+
+         if (fieldRank == 2) then
+            call ESMF_FieldGet(fieldList(item), farrayPtr=fptr_2d, rc=localrc)
+            if (localrc /= ESMF_SUCCESS) cycle
+            call latlon_diag_write_2d(fptr_2d, trim(varname), trim(ll_filename), &
+               ltimeslice, localrc)
+         else if (fieldRank == 3) then
+            call ESMF_FieldGet(fieldList(item), farrayPtr=fptr_3d, rc=localrc)
+            if (localrc /= ESMF_SUCCESS) cycle
+            call latlon_diag_write_3d(fptr_3d, trim(varname), trim(ll_filename), &
+               ltimeslice, localrc)
+         end if
+         ! Ignore errors from lat/lon write — don't fail the main write
+      end do
+
+   end subroutine AQMIO_LatlonWrite
 
 !------------------------------------------------------------------------------
 

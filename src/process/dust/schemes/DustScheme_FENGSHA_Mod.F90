@@ -172,7 +172,7 @@ contains
             skip = (gvf < 0.0_fp) .or. (lai >= VEG_THRESH)
          endif
        case default
-         if (.not. skip) skip = (rdrag < 0.001_fp)
+         if (.not. skip) skip = (rdrag < 0.001_fp .or. rdrag > 1.0_fp)
       end select
 
       if (.not. skip) then
@@ -253,7 +253,7 @@ contains
       total_emissions = FengshaScale * h_to_v_ratio * q
 
       !debug only
-      ! if (total_emissions > 0.0_fp) then
+      ! if (total_emissions > 1.0e-5_fp) then
       !    write(*,'(A,F12.8)') 'Debug: Total Emissions = ', total_emissions
       !    write(*,'(A,F12.8)') 'Debug: Total Fengsha Scale = ', FengshaScale
       !    write(*,'(A,F12.8)') 'Debug: h_to_v_ratio = ', h_to_v_ratio

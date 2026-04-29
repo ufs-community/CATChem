@@ -113,6 +113,9 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=128)                        :: frequency = ''      !< Frequency of file (e.g., hourly, daily, weekly, monthly,static)
       CHARACTER(LEN=128)                        :: latname = ''       !< Latitude variable name in the file
       CHARACTER(LEN=128)                        :: lonname = ''       !< Longitude variable name in the file
+      CHARACTER(LEN=32)                         :: regrid_method = 'none' !< Regridding method (none, bilinear, neareststod, nearestdtos, conserve, patch)
+      CHARACTER(LEN=32)                         :: vertical_dist = 'none' !< Vertical distribution method (none, P100, P500, Ppbl, aviation)
+      LOGICAL                                   :: reverse_vertical = .false. !< Reverse vertical levels after reading (e.g. top-down to bottom-up)
       CHARACTER(LEN=128)                        :: stkdmname = ''      !< Stack dimension name in the file
       CHARACTER(LEN=128)                        :: stkhtname = ''      !< Stack height variable name in the file
       CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
