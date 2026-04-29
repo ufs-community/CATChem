@@ -522,7 +522,7 @@ contains
       call ESMF_TimeGet(currTime, yy=year, mm=month, dd=day, &
          h=hour, m=minute, s=second, rc=rc)
       call ESMF_TimeIntervalGet(cc_wrap%timeStep, s_i8=timestep_seconds, rc=rc)
-      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds), error_mgr, rc)
+      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds, fp), error_mgr, rc)
       if (rc /= CC_SUCCESS) then
          return !maybe add an error message
       end if

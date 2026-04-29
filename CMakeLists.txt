@@ -114,10 +114,14 @@ endif()
 add_subdirectory(src)
 
 # Enable testing for standalone builds
-if(BUILD_TESTING)
-  enable_testing()
-  add_subdirectory(tests)
-endif()
+#tdk: re-enable testing configuration the problem is the CMAKE_SOURCE_DIR is ufs-weather-model as opposed to CATChem when compiling there -- Found process tests: drydep
+#CMake Error: File /scratch3/NCEPDEV/stmp/Benjamin.Koziol/sandbox/git-benkozi/ufs-weather-model/tests/Configs/Default/CATChem_new_config.yml does not exist.
+#CMake Error at CATChem/tests/process/drydep/CMakeLists.txt:48 (configure_file):
+#  configure_file Problem configuring file
+#if(BUILD_TESTING)
+#  enable_testing()
+#  add_subdirectory(tests)
+#endif()
 
 if(BUILD_NUOPC)
   add_subdirectory(drivers/nuopc)
