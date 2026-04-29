@@ -41,7 +41,7 @@ jobs:
                  -e '/g2/d' \
                  -e '/crtm/d' \
                  -e '/bacio/d' modulefiles/ufs_common.lua
-          
+
           # Replace model names globally
           find modulefiles/ -type f -exec sed -i 's/UFS Weather Model/Community Emissions Computing Engine/g' {} +
           find modulefiles/ -type f -exec sed -i 's/UFS Model/CECE/g' {} +
