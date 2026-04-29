@@ -43,19 +43,19 @@ jobs:
                  -e '/bacio/d' modulefiles/ufs_common.lua
 
           # Replace model names globally
-          find modulefiles/ -type f -exec sed -i 's/UFS Weather Model/Community Emissions Computing Engine/g' {} +
-          find modulefiles/ -type f -exec sed -i 's/UFS Model/CECE/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/UFS Weather Model/Configurable ATmospheric Chemistry Component/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/UFS Model/CATChem/g' {} +
 
       - name: Rename ufs_* to cece_* and update internal references
         run: |
           # 1. Rename files using a Bash loop
           for file in modulefiles/ufs_*; do
             if [ -e "$file" ]; then
-              mv "$file" "${file/ufs_/cece_}"
+              mv "$file" "${file/ufs_/catchem_}"
             fi
           done
           # 2. Update internal string references now that files are renamed
-          find modulefiles/ -type f -exec sed -i 's/ufs_common/cece_common/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/ufs_common/catchem_common/g' {} +
 
       - uses: actions/setup-python@v5
         with:
@@ -94,6 +94,6 @@ jobs:
             This weekly automated PR:
             - Syncs modulefiles from ufs-weather-model
             - Removes deprecated or unused dependencies from ufs_common.lua
-            - Renames ufs_*.lua to cece_*.lua and updates internal references
-            - Replaces model references with 'CECE'
+            - Renames ufs_*.lua to catchem_*.lua and updates internal references
+            - Replaces model references with 'CATChem'
             - Runs pre-commit formatting
