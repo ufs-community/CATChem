@@ -95,7 +95,7 @@ processes:
     anthro1:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/2021/CEDS.2019.emis.20210322.nc"
+      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
@@ -108,7 +108,7 @@ processes:
     anthro2:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/2021/CEDS.2019.emis.20210322.nc"
+      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
@@ -121,7 +121,7 @@ processes:
     ship:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/2021/CEDS.2019.emis.20210322.nc"
+      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
@@ -277,7 +277,7 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "none"
-      frequency: "monthly" #TODO: it has 14 months in total 
+      frequency: "monthly" # 14 months (Dec+Jan padding); time-coord matching selects the right slice
       diagnostics: true
       diag_list: [oh, h2o2]
     dms:
@@ -298,7 +298,7 @@ processes:
       activate: true
       scale_factor: 1.0
       topfraction: -1.0
-      source_file: "ExtData/QFED/2021/03/qfed2.emis_so2.006.20210322.nc4"
+      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true
@@ -314,7 +314,7 @@ processes:
       activate: true
       scale_factor: 1.0
       topfraction: -1.0
-      source_file: "ExtData/QFED/2021/03/qfed2.emis_oc.006.20210322.nc4"
+      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_oc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true
@@ -330,7 +330,7 @@ processes:
       activate: true
       scale_factor: 1.0
       topfraction: -1.0
-      source_file: "ExtData/QFED/2021/03/qfed2.emis_bc.006.20210322.nc4"
+      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_bc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true

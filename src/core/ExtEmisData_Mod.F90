@@ -121,7 +121,13 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
       CHARACTER(LEN=128)                        :: stkvename = ''      !< Stack velocity variable name in the file
       CHARACTER(LEN=128)                        :: plumerise = ''      !< plumerise scheme
-
+      ! Time coordinate cache — populated on first file open, used for smart time-index matching
+      INTEGER                                   :: n_times = 0         !< # of time slices cached from current file
+      INTEGER, ALLOCATABLE                      :: tc_dates(:)         !< yyyymmdd for each cached time slice
+      INTEGER, ALLOCATABLE                      :: tc_secs(:)          !< seconds-of-day for each cached time slice
+      CHARACTER(LEN=256)                        :: last_resolved_file = '' !< last resolved filename (cache key)
+      ! Calendar-period tracking — drives file/slice updates without alarm drift
+      INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
 
    CONTAINS
       !> \brief Initialize emission category with metadata
@@ -508,6 +514,9 @@ CONTAINS
          deallocate(this%fields)
       endif
 
+      if (allocated(this%tc_dates)) deallocate(this%tc_dates)
+      if (allocated(this%tc_secs))  deallocate(this%tc_secs)
+
       this%category_name = ''
       this%description = ''
       this%n_fields = 0
@@ -526,6 +535,9 @@ CONTAINS
       this%stktkname = ''
       this%stkvename = ''
       this%plumerise = ''
+      this%n_times = 0
+      this%last_resolved_file = ''
+      this%last_period_key = -1
 
    end subroutine extemicat_cleanup
 

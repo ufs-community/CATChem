@@ -34,6 +34,7 @@ module catchem_emis_mod
    use ESMF
    use NUOPC
    use aqmio
+   use netcdf
    use catchem_regrid_mod, only: RegridCache, catchem_regrid_field, catchem_regrid_cleanup
    use Precision_Mod, only: fp
    use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
@@ -65,21 +66,6 @@ module catchem_emis_mod
    real(fp), parameter :: EMIS_ACCEPT = 1.e+15_fp ! Same as MAPL library "undefval"
 
    !> \brief Emission timing and alarm information
-   type :: EmissionTimingType
-      type(ESMF_Alarm) :: alarm
-      type(ESMF_TimeInterval) :: time_interval
-      integer :: current_record = 1
-      logical :: needs_update = .true.
-      character(len=64) :: frequency = 'hourly'
-      character(len=64) :: category_name = ''  ! Category name for identification
-   end type EmissionTimingType
-
-   !> \brief Module-level storage for emission timing information
-   !! This array parallels the categories in ExtEmisDataType but stays in this module
-   !! to avoid ESMF dependencies in the core data structures
-   type(EmissionTimingType), allocatable, save :: category_timings(:)
-   integer, save :: n_category_timings = 0
-
 contains
 
    !> \brief Initialize emission data from configuration
@@ -131,11 +117,6 @@ contains
       ! Enable global emission diagnostics - read from configuration or default to true
       call config_manager%get_logical('processes/extemis/global_diagnostics', ext_emis_data%diagnostic, localrc, .true.)
 
-      ! Initialize parallel timing storage for categories
-      n_category_timings = config_manager%config_data%emission_mapping%n_categories
-      if (allocated(category_timings)) deallocate(category_timings)
-      allocate(category_timings(n_category_timings))
-
       ! Populate emission categories from already-loaded configuration
       do icat = 1, config_manager%config_data%emission_mapping%n_categories
 
@@ -151,14 +132,7 @@ contains
                return
             end if
 
-            ! Initialize timing information for this category
-            category_timings(icat)%category_name = config_manager%config_data%emission_mapping%categories(icat)%category_name
-            category_timings(icat)%frequency = trim(ext_emis_data%categories(icat)%frequency)  ! Get frequency from parsed category
-            category_timings(icat)%current_record = 0
-            category_timings(icat)%needs_update = .false.
-            !set up alarm for this category
-            call catchem_emis_setup_timing(ext_emis_data%categories(icat), clock, &
-               category_timings(icat)%frequency, localrc)
+            call catchem_emis_setup_timing(ext_emis_data%categories(icat), clock, localrc)
 
          end if
       end do
@@ -192,8 +166,7 @@ contains
       type(ErrorManagerType), pointer :: error_manager
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
-      integer :: localrc, i
-      logical :: alarm_ringing
+      integer :: localrc, i, period_key
       character(len=EMIS_MAXSTR) :: msg, timeString
       character(len=*), parameter :: pName = 'catchem_emis_update'
 
@@ -209,48 +182,48 @@ contains
       do i = 1, ext_emis_data%n_categories
          if (.not. ext_emis_data%categories(i)%is_active) cycle
 
-         ! Check timing information from parallel storage
-         if (i <= n_category_timings) then
-            ! Check if emission timing alarm is ringing
-            if (allocated(category_timings)) then
-               !check alarm ringing
-               alarm_ringing = ESMF_AlarmIsRinging(category_timings(i)%alarm, rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         ! Determine the current calendar period key for this category's frequency.
+         ! A period key encodes the calendar unit that triggers a new read:
+         !   daily -> yyyymmdd, monthly -> yyyymm, hourly -> yyyymmddhh, static -> 0.
+         ! When the key differs from last_period_key (including the sentinel -1 on
+         ! the first call), the emission data must be re-read.  This approach is
+         ! immune to the alarm-drift problem that occurs when simulations do not
+         ! start at a "natural" boundary (e.g. 06:00 start with daily data).
+         call catchem_emis_period_key(ext_emis_data%categories(i)%frequency, &
+                                       current_time, period_key, localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
 
-               category_timings(i)%needs_update = alarm_ringing ! Set update flag
+         if (period_key /= ext_emis_data%categories(i)%last_period_key) then
 
-               if (alarm_ringing) then
-                  !write infor to log
-                  call ESMF_TimeGet(current_time, timeString=timeString, rc=localrc)
-                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                     line=__LINE__,  file=__FILE__,  rcToReturn=rc))  return  ! bail out
+            call ESMF_TimeGet(current_time, timeString=timeString, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
 
-                  call ESMF_LogWrite(trim(pName)//': reading emission for '//trim(ext_emis_data%categories(i)%category_name)//&
-                     " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc)
+            call ESMF_LogWrite(trim(pName)//': reading emission for '// &
+               trim(ext_emis_data%categories(i)%category_name)// &
+               " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc)
 
-                  ! Read new emission data
-                  ext_emis_data%categories(i) % irec = ext_emis_data%categories(i) % irec + 1 !time slice one timestep forward
-                  call catchem_emis_read(ext_emis_data%categories(i), IO, grid, met_state%NLEVS, localrc)
-                  if (localrc /= CC_SUCCESS) then
-                     write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
-                        trim(ext_emis_data%categories(i)%category_name)
-                     call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
-                  end if
-
-                  !turn off alrm
-                  call ESMF_AlarmRingerOff(category_timings(i)%alarm, rc=localrc)
-                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                     line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-                  ! Update timing state
-                  category_timings(i)%current_record = category_timings(i)%current_record + 1
-                  category_timings(i)%needs_update = .false.  ! Reset until next alarm
-               end if
+            ! For files without time-coordinate matching and no filename template,
+            ! advance irec sequentially (one slice per period).
+            if (ext_emis_data%categories(i)%n_times == 0 .and. &
+                index(trim(ext_emis_data%categories(i)%source_file), '%') == 0) then
+               ext_emis_data%categories(i)%irec = ext_emis_data%categories(i)%irec + 1
             end if
+
+            call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
+                                   met_state%NLEVS, current_time, localrc)
+            if (localrc /= CC_SUCCESS) then
+               write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
+                  trim(ext_emis_data%categories(i)%category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+            end if
+
+            ext_emis_data%categories(i)%last_period_key = period_key
          end if
 
          ! Apply emissions to chemical state every timestep
-         ! (data is read only when alarm rings, but applied every step)
+         ! (data is read only when the period changes, but applied every step)
          call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
          if (localrc /= CC_SUCCESS) then
             write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
@@ -273,13 +246,14 @@ contains
    !! \param[inout] ext_emis_data External emission data container
    !! \param[in] category_name Name of emission category to read
    !! \param[out] rc Return code
-   subroutine catchem_emis_read(category, IO, grid, nlev, rc)
+   subroutine catchem_emis_read(category, IO, grid, nlev, curr_time, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
       type(ESMF_GridComp), intent(inout) :: IO
       type(ESMF_Grid), intent(in) :: grid
       integer, intent(in) :: nlev
+      type(ESMF_Time), intent(in) :: curr_time
       integer, intent(out) :: rc
 
       ! Local variables
@@ -292,18 +266,55 @@ contains
       character(len=*), parameter :: pName = 'catchem_emis_read'
       logical :: use_regrid
       logical :: didRegrid
+      logical :: file_exists
 
       rc = CC_SUCCESS
 
       category_name = trim(category%category_name)
 
-      ! Get filename from category configuration
-      filename = trim(category%source_file)
+      ! Resolve filename: substitute date tokens if the template contains '%'
+      if (index(trim(category%source_file), '%') > 0) then
+         call resolve_filename_template(category%source_file, curr_time, filename, localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      else
+         filename = trim(category%source_file)
+      end if
+
       if (len_trim(filename) == 0) then
          write(msg, '(A,A,A)') trim(pName), ': No source file specified for category: ', trim(category_name)
          call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
          rc = CC_FAILURE
          return
+      end if
+
+      ! For template-resolved filenames, check that the file exists before attempting I/O.
+      ! If missing, log a warning and keep the last loaded data unchanged.
+      if (index(trim(category%source_file), '%') > 0) then
+         inquire(file=trim(filename), exist=file_exists)
+         if (.not. file_exists) then
+            write(msg, '(A,A,A)') trim(pName), ': File not found (holding last data): ', trim(filename)
+            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+            return
+         end if
+      end if
+
+      ! Populate time-coordinate cache if the file has changed (or first call)
+      if (trim(filename) /= trim(category%last_resolved_file) .or. category%n_times == 0) then
+         if (trim(category%frequency) /= 'static') then
+            call catchem_emis_read_time_coord(filename, category, localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         end if
+         category%last_resolved_file = trim(filename)
+      end if
+
+      ! Compute the correct time-slice index from cached time coordinates
+      if (category%n_times > 0) then
+         call catchem_emis_find_time_index(category, curr_time, category%frequency, &
+                                           category%irec, localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
       ! Determine if this category needs runtime regridding.
@@ -1249,7 +1260,7 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: i, localrc
+      integer :: localrc
       character(len=*), parameter :: pName = 'catchem_emis_finalize'
 
       rc = CC_SUCCESS
@@ -1260,18 +1271,6 @@ contains
          call ESMF_LogWrite(trim(pName)//': Warning - ExtEmisDataType cleanup failed', &
             ESMF_LOGMSG_WARNING, rc=localrc)
       end if
-
-      ! Clean up module-level timing storage
-      if (allocated(category_timings)) then
-         ! Destroy ESMF alarms before deallocating
-         do i = 1, n_category_timings
-            call ESMF_AlarmDestroy(category_timings(i)%alarm, rc=localrc)
-            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-         end do
-         deallocate(category_timings)
-      end if
-      n_category_timings = 0
 
       ! Clean up regrid route-handle cache
       call catchem_regrid_cleanup(emis_regrid_cache, rc=localrc)
@@ -1443,118 +1442,74 @@ contains
 
    end subroutine catchem_emis_populate_category
 
-   !> \brief Setup emission timing alarms
+   !> \brief Initialize emission timing for one category
    !!
-   !! Creates ESMF alarms for each emission category based on update frequency.
-   !! Stores alarms in module-level category_timings array.
+   !! Pre-loads time coordinates from the NetCDF file (when available) and
+   !! sets the initial irec so the first catchem_emis_update reads the correct
+   !! time slice.  Reads are driven by period_key comparison in
+   !! catchem_emis_update — no ESMF alarms are used.
    !!
-   !! \param[in] category_name Name of emission category
-   !! \param[in] clock Model clock for alarm creation
-   !! \param[in] frequency Update frequency string (e.g., 'hourly', 'daily')
-   !! \param[out] rc Return code
-   subroutine catchem_emis_setup_timing(category, clock, frequency, rc)
+   !! \param[inout] category  Emission category to initialise
+   !! \param[in]   clock      Model clock (provides startTime / currTime)
+   !! \param[out]  rc         Return code
+   subroutine catchem_emis_setup_timing(category, clock, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
-      type(ESMF_Clock), intent(in) :: clock
-      character(len=*), intent(in) :: frequency
-      integer, intent(out) :: rc
+      type(ESMF_Clock),          intent(in)    :: clock
+      integer,                   intent(out)   :: rc
 
-      ! Local variables
-      integer :: localrc, cat_idx
-      integer :: curr_month, curr_year, start_month, start_year
-      type(ESMF_Time) :: startTime, currTime
+      integer            :: localrc
+      integer            :: curr_month, curr_year, start_month, start_year
+      type(ESMF_Time)         :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
-      character(len=EMIS_MAXSTR) ::  msg
       character(len=*), parameter :: pName = 'catchem_emis_setup_timing'
 
       rc = CC_SUCCESS
 
-      ! Find the category index in timing storage
-      cat_idx = 0
-      if (allocated(category_timings)) then
-         do cat_idx = 1, n_category_timings
-            if (trim(category_timings(cat_idx)%category_name) == trim(category%category_name)) then
-               exit
-            end if
-         end do
-         if (cat_idx > n_category_timings) cat_idx = 0
-      end if
-
-      if (cat_idx == 0) then
-         write(msg, '(A,A,A)') trim(pName), ': Category not found in timing storage: ', trim(category%category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
-         rc = CC_FAILURE
-         return
-      end if
-
-      ! Set ring interval based on frequency
-      select case (trim(frequency))
-       case ("hourly")
-         call ESMF_TimeIntervalSet(timeInterval, h=1, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case ("daily")
-         call ESMF_TimeIntervalSet(timeInterval, d=1, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case ("weekly")
-         call ESMF_TimeIntervalSet(timeInterval, d=7, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case ("monthly", "yearmonth")
-         call ESMF_TimeIntervalSet(timeInterval, mm=1, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case ("static")
-         call ESMF_TimeIntervalSet(timeInterval, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-       case default
-         call ESMF_LogSetError(ESMF_RC_NOT_VALID, &
-            msg="- unknown emission frequency: "//trim(frequency), &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)
-         return
-      end select
-
       call ESMF_ClockGet(clock, startTime=startTime, currTime=currTime, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
-      ! -- set input time record according to start type (startup/continue)
-      ! Handle monthly frequency specially due to varying month lengths
-      if (trim(frequency) == "monthly") then
-         ! Calculate actual number of months between start and current time
+      ! For non-template static-path files, pre-load time coordinates so that
+      ! find_time_index can determine the correct initial irec even when the file
+      ! contains more time slices than the arithmetic assumption (e.g. 14-month files).
+      if (trim(category%frequency) /= 'static' .and. &
+          index(trim(category%source_file), '%') == 0 .and. &
+          len_trim(category%source_file) > 0 .and. &
+          category%n_times == 0) then
+         call catchem_emis_read_time_coord(trim(category%source_file), category, localrc)
+         ! Non-fatal: if time coord read fails, fall through to arithmetic below
+         category%last_resolved_file = trim(category%source_file)
+      end if
+
+      if (category%n_times > 0) then
+         call catchem_emis_find_time_index(category, currTime, category%frequency, category%irec, localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      else if (trim(category%frequency) == "monthly") then
          call ESMF_TimeGet(currTime, mm=curr_month, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-         ! For monthly frequency, set irec to month number (0-based)
-         category % irec = max(0, curr_month -1)
-      else if (trim(frequency) == "yearmonth") then
-         ! Calculate actual number of yearmonths between start and current time
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         category%irec = max(0, curr_month - 1)
+      else if (trim(category%frequency) == "yearmonth") then
          call ESMF_TimeGet(currTime, yy=curr_year, mm=curr_month, rc=localrc)
          call ESMF_TimeGet(startTime, yy=start_year, mm=start_month, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-         ! For yearmonth frequency, set irec to yearmonth number (0-based)
-         category % irec = max(0, curr_month -1) + (curr_year - start_year) * 12
-      else
-         ! For other frequencies, use simple interval division
-         category % irec = int( (currTime - startTime) / timeInterval )
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         category%irec = max(0, curr_month - 1) + (curr_year - start_year) * 12
+      else if (trim(category%frequency) /= 'static') then
+         ! Arithmetic fallback for non-template files whose time variable was unreadable.
+         ! Computes elapsed periods since simulation start so restarts resume correctly.
+         select case (trim(category%frequency))
+          case ('hourly');  call ESMF_TimeIntervalSet(timeInterval, h=1,   rc=localrc)
+          case ('weekly');  call ESMF_TimeIntervalSet(timeInterval, d=7,   rc=localrc)
+          case default;     call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
+         end select
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         category%irec = int((currTime - startTime) / timeInterval)
       end if
-
-      category_timings(cat_idx)%alarm = ESMF_AlarmCreate(clock, ringTime=startTime, &
-         ringInterval=timeInterval, name=trim(category%category_name)//"_alarm", rc=localrc)
-      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-
-
-      ! Store timing interval
-      category_timings(cat_idx)%time_interval = timeInterval
-
-      !write(msg, '(A,A,A,A,A)') trim(pName), ': Created alarm ', trim(category%category_name)//"_alarm", &
-      !   ' for category ', trim(category%category_name)
-      !call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_setup_timing
 
@@ -1646,5 +1601,344 @@ contains
       end select
 
    end subroutine catchem_emis_map_species
+
+   !> \brief Compute a calendar period key that changes each time data should be re-read
+   !!
+   !! Returns an integer whose value changes when the model time crosses a period
+   !! boundary for the given emission frequency.  The initial value -1 (stored in
+   !! last_period_key) always differs from a real key, forcing the first read.
+   !!
+   !! Key encoding:
+   !!   hourly   -> yyyymmddhh
+   !!   daily    -> yyyymmdd
+   !!   weekly   -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
+   !!   monthly / yearmonth -> yyyymm
+   !!   static   -> 0  (constant; first read triggered by last_period_key=-1)
+   subroutine catchem_emis_period_key(frequency, curr_time, key, rc)
+      character(len=*), intent(in)  :: frequency
+      type(ESMF_Time),  intent(in)  :: curr_time
+      integer,          intent(out) :: key
+      integer,          intent(out) :: rc
+
+      integer :: localrc, yy, mm, dd, hh, doy
+      character(len=*), parameter :: pName = 'catchem_emis_period_key'
+
+      rc = CC_SUCCESS
+      key = 0
+
+      call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, &
+                        dayOfYear=doy, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      select case (trim(frequency))
+       case ('hourly')
+         key = yy*1000000 + mm*10000 + dd*100 + hh
+       case ('daily')
+         key = yy*10000 + mm*100 + dd
+       case ('weekly')
+         key = yy*1000 + (doy - 1) / 7   ! integer week-of-year
+       case ('monthly', 'yearmonth')
+         key = yy*100 + mm
+       case ('static')
+         key = 0   ! never changes; first read triggered by last_period_key = -1
+       case default
+         key = yy*10000 + mm*100 + dd   ! treat unknown as daily
+      end select
+
+   end subroutine catchem_emis_period_key
+
+   !> \brief Replace all occurrences of old_str with new_str in str (in-place)
+   subroutine str_replace_all(str, old_str, new_str)
+      character(len=*), intent(inout) :: str
+      character(len=*), intent(in)    :: old_str, new_str
+
+      integer :: pos, olen, slen
+      character(len=EMIS_MAXSTR) :: tmp
+
+      olen = len_trim(old_str)
+      if (olen == 0) return
+      do
+         pos = index(trim(str), trim(old_str))
+         if (pos == 0) exit
+         slen = len_trim(str)
+         tmp = str(1:pos-1) // trim(new_str) // str(pos+olen:slen)
+         str = tmp
+      end do
+   end subroutine str_replace_all
+
+   !> \brief Substitute date tokens in a filename template using the current model time
+   !!
+   !! Supported tokens (GEOS ExtData convention):
+   !! %y4 = 4-digit year, %m2 = 2-digit month, %d2 = 2-digit day,
+   !! %h2 = 2-digit hour, %j3 = 3-digit Julian day-of-year.
+   subroutine resolve_filename_template(template, curr_time, filename, rc)
+      character(len=*), intent(in)  :: template
+      type(ESMF_Time),  intent(in)  :: curr_time
+      character(len=*), intent(out) :: filename
+      integer,          intent(out) :: rc
+
+      integer :: localrc
+      integer :: year, month, day, hour, dayOfYear
+      character(len=4) :: y4
+      character(len=2) :: m2, d2, h2
+      character(len=3) :: j3
+      character(len=*), parameter :: pName = 'resolve_filename_template'
+
+      rc = CC_SUCCESS
+
+      call ESMF_TimeGet(curr_time, yy=year, mm=month, dd=day, h=hour, &
+                        dayOfYear=dayOfYear, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      write(y4, '(I4.4)') year
+      write(m2, '(I2.2)') month
+      write(d2, '(I2.2)') day
+      write(h2, '(I2.2)') hour
+      write(j3, '(I3.3)') dayOfYear
+
+      filename = trim(template)
+      call str_replace_all(filename, '%y4', y4)
+      call str_replace_all(filename, '%m2', m2)
+      call str_replace_all(filename, '%d2', d2)
+      call str_replace_all(filename, '%h2', h2)
+      call str_replace_all(filename, '%j3', j3)
+
+   end subroutine resolve_filename_template
+
+   !> \brief Read and cache the time coordinate from a NetCDF emission file
+   !!
+   !! Reads the 'time' variable and its CF-standard 'units' attribute, converts each
+   !! time value to (yyyymmdd, seconds-of-day), and stores the result in
+   !! category%tc_dates / category%tc_secs / category%n_times.
+   !! Supports "days since", "hours since", "minutes since", and "seconds since" units.
+   !! On any error (no time variable, unrecognised units, etc.) the routine returns
+   !! silently with n_times=0, causing the caller to fall back to arithmetic irec.
+   subroutine catchem_emis_read_time_coord(filename, category, rc)
+      character(len=*),          intent(in)    :: filename
+      type(ExtEmisCategoryType), intent(inout) :: category
+      integer,                   intent(out)   :: rc
+
+      integer :: localrc, ncid, varid, ndims, rd_stat
+      integer :: nt, i, since_pos, date_pos
+      integer :: base_yy, base_mm, base_dd, base_hh, base_mn, base_ss
+      integer :: abs_yy, abs_mm, abs_dd, abs_hh, abs_mn, abs_ss
+      integer :: dimids(NF90_MAX_VAR_DIMS)
+      real(ESMF_KIND_R8), allocatable :: tvar(:)
+      character(len=EMIS_MAXSTR) :: units_str, tmp_str
+      character(len=EMIS_MAXSTR) :: msg
+      real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
+      type(ESMF_Time) :: base_time, abs_time
+      type(ESMF_TimeInterval) :: dt_interval
+      character(len=*), parameter :: pName = 'catchem_emis_read_time_coord'
+
+      rc = CC_SUCCESS
+      category%n_times = 0
+
+      ! Open file read-only on every PE (small metadata read, safe for parallel)
+      localrc = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (localrc /= NF90_NOERR) then
+         write(msg, '(A,A,A)') trim(pName), ': Cannot open file for time coord: ', trim(filename)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+         return
+      end if
+
+      ! Locate the 'time' variable — silent return if absent
+      localrc = nf90_inq_varid(ncid, 'time', varid)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Get dimension count and first dimension size (time is the unlimited/leading dim)
+      localrc = nf90_inquire_variable(ncid, varid, ndims=ndims, dimids=dimids)
+      if (localrc /= NF90_NOERR .or. ndims < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+      localrc = nf90_inquire_dimension(ncid, dimids(1), len=nt)
+      if (localrc /= NF90_NOERR .or. nt < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the 'units' attribute
+      units_str = ''
+      localrc = nf90_get_att(ncid, varid, 'units', units_str)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Normalise to lowercase for case-insensitive search
+      tmp_str = units_str
+      do i = 1, len_trim(tmp_str)
+         if (tmp_str(i:i) >= 'A' .and. tmp_str(i:i) <= 'Z') &
+            tmp_str(i:i) = achar(iachar(tmp_str(i:i)) + 32)
+      end do
+      call str_replace_all(tmp_str, '  ', ' ')  ! collapse double spaces
+
+      ! Detect unit and locate "since" keyword
+      since_pos = index(tmp_str, 'days since')
+      if (since_pos > 0) then
+         unit_to_secs = 86400.0_ESMF_KIND_R8
+         since_pos = since_pos + len('days since')
+      else
+         since_pos = index(tmp_str, 'hours since')
+         if (since_pos > 0) then
+            unit_to_secs = 3600.0_ESMF_KIND_R8
+            since_pos = since_pos + len('hours since')
+         else
+            since_pos = index(tmp_str, 'minutes since')
+            if (since_pos > 0) then
+               unit_to_secs = 60.0_ESMF_KIND_R8
+               since_pos = since_pos + len('minutes since')
+            else
+               since_pos = index(tmp_str, 'seconds since')
+               if (since_pos > 0) then
+                  unit_to_secs = 1.0_ESMF_KIND_R8
+                  since_pos = since_pos + len('seconds since')
+               else
+                  localrc = nf90_close(ncid)
+                  write(msg, '(A,A,A)') trim(pName), ': Unrecognised time units: ', trim(units_str)
+                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+                  return
+               end if
+            end if
+         end if
+      end if
+
+      ! Skip spaces after "since" and parse reference date: YYYY-MM-DD[ HH:MM:SS]
+      date_pos = since_pos
+      do while (date_pos <= len_trim(tmp_str) .and. tmp_str(date_pos:date_pos) == ' ')
+         date_pos = date_pos + 1
+      end do
+      base_yy = 0;  base_mm = 0;  base_dd = 0
+      base_hh = 0;  base_mn = 0;  base_ss = 0
+      read(tmp_str(date_pos  :date_pos+3), '(I4)', iostat=localrc) base_yy
+      read(tmp_str(date_pos+5:date_pos+6), '(I2)', iostat=localrc) base_mm
+      read(tmp_str(date_pos+8:date_pos+9), '(I2)', iostat=localrc) base_dd
+      if (len_trim(tmp_str) >= date_pos+18) then
+         read(tmp_str(date_pos+11:date_pos+12), '(I2)', iostat=localrc) base_hh
+         read(tmp_str(date_pos+14:date_pos+15), '(I2)', iostat=localrc) base_mn
+         read(tmp_str(date_pos+17:date_pos+18), '(I2)', iostat=localrc) base_ss
+      end if
+      if (base_yy == 0) then
+         localrc = nf90_close(ncid)
+         write(msg, '(A,A,A)') trim(pName), ': Cannot parse reference date from: ', trim(units_str)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+         return
+      end if
+
+      call ESMF_TimeSet(base_time, yy=base_yy, mm=base_mm, dd=base_dd, &
+                        h=base_hh, m=base_mn, s=base_ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the time values
+      allocate(tvar(nt))
+      rd_stat = nf90_get_var(ncid, varid, tvar)
+      localrc = nf90_close(ncid)
+      if (rd_stat /= NF90_NOERR) then
+         deallocate(tvar)
+         return
+      end if
+
+      ! Allocate category cache arrays
+      if (allocated(category%tc_dates)) deallocate(category%tc_dates)
+      if (allocated(category%tc_secs))  deallocate(category%tc_secs)
+      allocate(category%tc_dates(nt), category%tc_secs(nt))
+
+      do i = 1, nt
+         tsecs_r8 = tvar(i) * unit_to_secs
+         call ESMF_TimeIntervalSet(dt_interval, s_r8=tsecs_r8, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, category%tc_dates, category%tc_secs)
+            category%n_times = 0
+            return
+         end if
+         abs_time = base_time + dt_interval
+         call ESMF_TimeGet(abs_time, yy=abs_yy, mm=abs_mm, dd=abs_dd, &
+                           h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, category%tc_dates, category%tc_secs)
+            category%n_times = 0
+            return
+         end if
+         category%tc_dates(i) = abs_yy*10000 + abs_mm*100 + abs_dd
+         category%tc_secs(i)  = abs_hh*3600  + abs_mn*60  + abs_ss
+      end do
+
+      category%n_times = nt
+      deallocate(tvar)
+
+      write(msg, '(A,A,I0,A,A)') trim(pName), ': Cached ', nt, ' time slices from ', trim(filename)
+      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+
+   end subroutine catchem_emis_read_time_coord
+
+   !> \brief Find the NetCDF time-slice index matching the current model time
+   !!
+   !! For "monthly" frequency: searches by calendar month, ignoring year
+   !! (correct for climatological files reused across simulation years).
+   !! For all other frequencies: returns the 1-based lower-bound index
+   !! (largest i where tc_dates(i) <= curr_date, or same date with tc_secs(i) <= curr_secs).
+   subroutine catchem_emis_find_time_index(category, curr_time, frequency, irec, rc)
+      type(ExtEmisCategoryType), intent(in)  :: category
+      type(ESMF_Time),           intent(in)  :: curr_time
+      character(len=*),          intent(in)  :: frequency
+      integer,                   intent(out) :: irec
+      integer,                   intent(out) :: rc
+
+      integer :: localrc, i, best
+      integer :: curr_yy, curr_mm, curr_dd, curr_hh, curr_mn, curr_ss
+      integer :: curr_date, curr_secs, tc_date_i, tc_secs_i, slice_month
+      character(len=*), parameter :: pName = 'catchem_emis_find_time_index'
+
+      rc = CC_SUCCESS
+      irec = 1
+      if (category%n_times == 0) return
+
+      call ESMF_TimeGet(curr_time, yy=curr_yy, mm=curr_mm, dd=curr_dd, &
+                        h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      if (trim(frequency) == 'monthly') then
+         ! Match by calendar month only — year-independent climatological use
+         do i = 1, category%n_times
+            slice_month = mod(category%tc_dates(i) / 100, 100)
+            if (slice_month == curr_mm) then
+               irec = i
+               return
+            end if
+         end do
+         ! Month not found in file (unusual) — fall back to 1-based month index
+         irec = max(1, min(curr_mm, category%n_times))
+      else
+         ! Lower-bound search: largest i whose time <= curr_time
+         curr_date = curr_yy*10000 + curr_mm*100 + curr_dd
+         curr_secs = curr_hh*3600  + curr_mn*60  + curr_ss
+         best = 1
+         do i = 1, category%n_times
+            tc_date_i = category%tc_dates(i)
+            tc_secs_i = category%tc_secs(i)
+            if (tc_date_i < curr_date .or. &
+               (tc_date_i == curr_date .and. tc_secs_i <= curr_secs)) then
+               best = i
+            else
+               exit  ! time array is monotonically increasing
+            end if
+         end do
+         irec = best
+      end if
+
+   end subroutine catchem_emis_find_time_index
 
 end module catchem_emis_mod
