@@ -2,8 +2,13 @@ cmake_minimum_required(VERSION 3.21)
 
 project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
 
+# Global variables for path management
+set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
+set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
+
 # Option to build NUOPC cap (defaults to OFF)
-option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
+option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
+option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
 
 # Option to build with MUSICA chemistry library (defaults to OFF)
 option(BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
@@ -105,7 +110,7 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
   find_package(NetCDF REQUIRED COMPONENTS Fortran)
 endif()
 
-if(BUILD_NUOPC)
+if(CATCHEM_BUILD_NUOPC)
   if(NOT TARGET esmf)
     find_package(ESMF REQUIRED)
   endif()
@@ -114,16 +119,12 @@ endif()
 add_subdirectory(src)
 
 # Enable testing for standalone builds
-#tdk: re-enable testing configuration the problem is the CMAKE_SOURCE_DIR is ufs-weather-model as opposed to CATChem when compiling there -- Found process tests: drydep
-#CMake Error: File /scratch3/NCEPDEV/stmp/Benjamin.Koziol/sandbox/git-benkozi/ufs-weather-model/tests/Configs/Default/CATChem_new_config.yml does not exist.
-#CMake Error at CATChem/tests/process/drydep/CMakeLists.txt:48 (configure_file):
-#  configure_file Problem configuring file
-#if(BUILD_TESTING)
-#  enable_testing()
-#  add_subdirectory(tests)
-#endif()
+if(CATCHEM_BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
-if(BUILD_NUOPC)
+if(CATCHEM_BUILD_NUOPC)
   add_subdirectory(drivers/nuopc)
 
   # Copy module files from include/ to mod/ for UFS integration during build
