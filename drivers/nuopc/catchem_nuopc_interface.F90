@@ -47,6 +47,7 @@ module catchem_nuopc_interface
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
    use aqmio, only: AQMIO_Create, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
       AQMIO_LatlonInit, AQMIO_LatlonCleanup
+   use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
    use catchem_emis_mod
 
    implicit none
@@ -1634,6 +1635,9 @@ contains
       if (rc /= ESMF_SUCCESS) return
 
       new_time_data(1) = int(time_seconds, ESMF_KIND_I4)
+
+      ! Store time value for lat/lon coordinate output
+      if (latlon_diag_is_init()) call latlon_diag_set_time(new_time_data(1))
 
       ! Determine tile count to match AQMIO's per-tile file naming
       call ESMF_GridCompGet(cc_wrap%iocomp, grid=grid, rc=rc)

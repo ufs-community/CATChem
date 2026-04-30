@@ -79,13 +79,11 @@ contains
 
       ! -- local variables
       integer :: localrc, ncid, ncStatus
-      integer :: lonDimId, latDimId, lonVarId, latVarId, varId
       integer :: nlon, nlat, ndims, xtype, uid
       integer :: timeDimLen, idx
-      integer, allocatable :: dimids(:), elemStart(:), elemCount(:)
+      integer, allocatable :: dimids(:)
       character(len=ESMF_MAXSTR) :: dimName
       real(ESMF_KIND_R8), allocatable :: lonCoord(:), latCoord(:)
-      real(ESMF_KIND_R4), allocatable :: buf(:,:)
       real(ESMF_KIND_R4), pointer     :: srcPtr(:,:) => null()
       real(ESMF_KIND_R4), pointer     :: dstPtr(:,:) => null()
       type(ESMF_Grid) :: srcGrid
@@ -94,6 +92,7 @@ contains
       logical :: cached
       integer :: exclusiveLBound(2)
       type(ESMF_RegridMethod_Flag) :: regridMethod
+      integer :: srcTermProc
 
       if (present(rc)) rc = ESMF_SUCCESS
       if (present(didRegrid)) didRegrid = .false.
@@ -143,26 +142,28 @@ contains
          return
       end if
 
+      ! ---- Read coordinate values for grid creation ----
+      allocate(lonCoord(nlon), latCoord(nlat))
+      call read_coord_values(ncid, lonname, latname, nlon, nlat, &
+                             lonCoord, latCoord, localrc)
+      if (localrc /= ESMF_SUCCESS) then
+         deallocate(lonCoord, latCoord)
+         ncStatus = nf90_close(ncid)
+         call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
+            msg="catchem_regrid_field: Cannot read coord values from "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
       ! ---- Check if we already have a cached route handle ----
       call cache%lookup(nlon, nlat, idx)
       cached = (idx > 0)
 
       if (.not. cached) then
-         ! Read the actual coordinate values
-         allocate(lonCoord(nlon), latCoord(nlat))
-         call read_coord_values(ncid, lonname, latname, nlon, nlat, lonCoord, latCoord, localrc)
-         if (localrc /= ESMF_SUCCESS) then
-            ncStatus = nf90_close(ncid)
-            deallocate(lonCoord, latCoord)
-            call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-               msg="catchem_regrid_field: Cannot read coord values from "//trim(filename), &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-            return
-         end if
-
-         ! Create rectilinear source grid
+         ! Create rectilinear source grid with explicit coordinates
+         ! from the file's lon/lat arrays. Centers are set exactly,
+         ! corners are computed as midpoints with polar clamping.
          call create_src_grid(nlon, nlat, lonCoord, latCoord, srcGrid, localrc)
-         deallocate(lonCoord, latCoord)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) then
             ncStatus = nf90_close(ncid)
@@ -178,12 +179,36 @@ contains
             return
          end if
 
-         ! Compute regrid weights using the selected method
-         call ESMF_FieldRegridStore(srcField, dstField, &
-            routehandle=routeHandle, &
-            regridmethod=regridMethod, &
-            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
-            rc=localrc)
+         ! Compute regrid weights (CDEPS-style parameters)
+         srcTermProc = 0
+         if (regridMethod == ESMF_REGRIDMETHOD_CONSERVE) then
+            call ESMF_FieldRegridStore(srcField, dstField, &
+               routehandle=routeHandle, &
+               regridmethod=regridMethod, &
+               normType=ESMF_NORMTYPE_DSTAREA, &
+               srcTermProcessing=srcTermProc, &
+               ignoreDegenerate=.true., &
+               unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+               rc=localrc)
+         else if (regridMethod == ESMF_REGRIDMETHOD_BILINEAR .or. &
+                  regridMethod == ESMF_REGRIDMETHOD_PATCH) then
+            call ESMF_FieldRegridStore(srcField, dstField, &
+               routehandle=routeHandle, &
+               regridmethod=regridMethod, &
+               polemethod=ESMF_POLEMETHOD_ALLAVG, &
+               extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
+               srcTermProcessing=srcTermProc, &
+               ignoreDegenerate=.true., &
+               rc=localrc)
+         else
+            call ESMF_FieldRegridStore(srcField, dstField, &
+               routehandle=routeHandle, &
+               regridmethod=regridMethod, &
+               srcTermProcessing=srcTermProc, &
+               ignoreDegenerate=.true., &
+               unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+               rc=localrc)
+         end if
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) then
             ncStatus = nf90_close(ncid)
@@ -199,6 +224,8 @@ contains
          srcField    = cache%entries(idx)%srcField
          routeHandle = cache%entries(idx)%routeHandle
       end if
+
+      deallocate(lonCoord, latCoord)
 
       ! ---- Read data from file into source field ----
       ! Each PET reads its local chunk. Get farrayPtr and exclusiveLBound
@@ -399,62 +426,32 @@ contains
 
    end subroutine read_coord_values
 
-   !> Create a rectilinear ESMF Grid from 1-D lon/lat arrays
+   !> Create a rectilinear ESMF Grid with coordinates filled explicitly
+   !! from the file's 1-D lon/lat arrays. Centers match the file exactly;
+   !! corners are midpoints between adjacent centers, with polar corners
+   !! clamped to +/-90.  Polar cells may be degenerate (zero-area at the
+   !! pole point) — handled by ignoreDegenerate in FieldRegridStore.
    subroutine create_src_grid(nlon, nlat, lonCoord, latCoord, srcGrid, rc)
       integer,            intent(in)  :: nlon, nlat
       real(ESMF_KIND_R8), intent(in)  :: lonCoord(nlon), latCoord(nlat)
       type(ESMF_Grid),    intent(out) :: srcGrid
       integer,            intent(out) :: rc
 
-      integer :: localrc, i, j
-      real(ESMF_KIND_R8) :: dlon_half, dlat_half
-      real(ESMF_KIND_R8), allocatable :: lonCorner(:), latCorner(:)
-      real(ESMF_KIND_R8) :: minCoord(2), maxCoord(2)
-      real(ESMF_KIND_R8) :: lonSpan
-      logical :: isPeriodic
-      integer :: maxIndex(2)
+      integer :: localrc, a, b, nPets, i, j
       type(ESMF_VM) :: vm
-      integer :: nPets, regDecomp(2), a, b
+      integer :: regDecomp(2)
+      real(ESMF_KIND_R8) :: lonSpan, dlon_half
+      logical :: isPeriodic
+      integer :: eLB(2), eUB(2)
+      real(ESMF_KIND_R8), pointer :: ptrX(:,:) => null(), ptrY(:,:) => null()
+      real(ESMF_KIND_R8), allocatable :: lonCorn(:), latCorn(:)
 
       rc = ESMF_SUCCESS
 
-      ! Compute corner coordinates (edges of cells)
-      allocate(lonCorner(nlon+1), latCorner(nlat+1))
-
-      ! Interior corners at midpoints between centers
-      do i = 2, nlon
-         lonCorner(i) = 0.5_ESMF_KIND_R8 * (lonCoord(i-1) + lonCoord(i))
-      end do
-      dlon_half = 0.5_ESMF_KIND_R8 * (lonCoord(2) - lonCoord(1))
-      lonCorner(1)      = lonCoord(1)    - dlon_half
-      lonCorner(nlon+1) = lonCoord(nlon) + dlon_half
-
-      do j = 2, nlat
-         latCorner(j) = 0.5_ESMF_KIND_R8 * (latCoord(j-1) + latCoord(j))
-      end do
-      dlat_half = 0.5_ESMF_KIND_R8 * (latCoord(2) - latCoord(1))
-      latCorner(1)      = latCoord(1)    - dlat_half
-      latCorner(nlat+1) = latCoord(nlat) + dlat_half
-
-      minCoord(1) = lonCorner(1)
-      minCoord(2) = latCorner(1)
-      maxCoord(1) = lonCorner(nlon+1)
-      maxCoord(2) = latCorner(nlat+1)
-      maxIndex(1) = nlon
-      maxIndex(2) = nlat
-
-      deallocate(lonCorner, latCorner)
-
-      ! Check if longitude span is ~360 (global periodic grid)
-      ! Float32 coords in NetCDF can cause precision loss, so use tolerance
-      lonSpan = maxCoord(1) - minCoord(1)
-      isPeriodic = (abs(lonSpan - 360.0_ESMF_KIND_R8) < 1.0_ESMF_KIND_R8)
-
-      ! Compute safe decomposition: each DE must have at least 2 cells
-      ! in each dimension (ESMF requirement for bilinear/conservative regridding).
-      ! Default ESMF decomposition is (nPets, 1) which can create width-1 DEs
-      ! when nlon < 2*nPets.
-      call ESMF_VMGetGlobal(vm, rc=localrc)
+      ! ---- Determine PET count for decomposition ----
+      ! Use VMGetCurrent (not VMGetGlobal) to get PET count for this
+      ! component, since the grid is created in the current VM context.
+      call ESMF_VMGetCurrent(vm, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       call ESMF_VMGet(vm, petCount=nPets, rc=localrc)
@@ -462,7 +459,6 @@ contains
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
       ! Find (a,b) with a*b=nPets, nlon/a >= 2, nlat/b >= 2
-      ! Prefer more DEs along lon (a as large as possible)
       regDecomp(1) = 1
       regDecomp(2) = nPets
       do a = 1, nPets
@@ -474,31 +470,116 @@ contains
          end if
       end do
 
-      if (isPeriodic) then
-         ! Snap to exactly 360 to satisfy ESMF periodicity check
-         maxCoord(1) = minCoord(1) + 360.0_ESMF_KIND_R8
+      ! ---- Detect periodicity ----
+      dlon_half = 0.5_ESMF_KIND_R8 * (lonCoord(2) - lonCoord(1))
+      lonSpan = (lonCoord(nlon) + dlon_half) - (lonCoord(1) - dlon_half)
+      isPeriodic = (abs(lonSpan - 360.0_ESMF_KIND_R8) < 1.0_ESMF_KIND_R8)
 
-         srcGrid = ESMF_GridCreate1PeriDimUfrm( &
-            maxIndex=maxIndex, &
-            minCornerCoord=minCoord, &
-            maxCornerCoord=maxCoord, &
+      ! ---- Create grid structure (no coordinates yet) ----
+      if (isPeriodic) then
+         srcGrid = ESMF_GridCreate1PeriDim( &
+            maxIndex=(/nlon, nlat/), &
+            coordSys=ESMF_COORDSYS_SPH_DEG, &
+            indexflag=ESMF_INDEX_GLOBAL, &
             regDecomp=regDecomp, &
-            staggerLocList=(/ESMF_STAGGERLOC_CENTER, ESMF_STAGGERLOC_CORNER/), &
             rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       else
-         ! Regional (non-periodic) grid
-         srcGrid = ESMF_GridCreateNoPeriDimUfrm( &
-            maxIndex=maxIndex, &
-            minCornerCoord=minCoord, &
-            maxCornerCoord=maxCoord, &
+         srcGrid = ESMF_GridCreateNoPeriDim( &
+            maxIndex=(/nlon, nlat/), &
+            coordSys=ESMF_COORDSYS_SPH_DEG, &
+            indexflag=ESMF_INDEX_GLOBAL, &
             regDecomp=regDecomp, &
-            staggerLocList=(/ESMF_STAGGERLOC_CENTER, ESMF_STAGGERLOC_CORNER/), &
             rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      ! ---- Add coordinate storage for center and corner staggers ----
+      call ESMF_GridAddCoord(srcGrid, staggerloc=ESMF_STAGGERLOC_CENTER, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      call ESMF_GridAddCoord(srcGrid, staggerloc=ESMF_STAGGERLOC_CORNER, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      ! ---- Fill center coordinates from the file's coordinate arrays ----
+      call ESMF_GridGetCoord(srcGrid, coordDim=1, localDE=0, &
+         staggerloc=ESMF_STAGGERLOC_CENTER, &
+         exclusiveLBound=eLB, exclusiveUBound=eUB, &
+         farrayPtr=ptrX, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      do j = eLB(2), eUB(2)
+         do i = eLB(1), eUB(1)
+            ptrX(i,j) = lonCoord(i)
+         end do
+      end do
+
+      call ESMF_GridGetCoord(srcGrid, coordDim=2, localDE=0, &
+         staggerloc=ESMF_STAGGERLOC_CENTER, &
+         farrayPtr=ptrY, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      do j = eLB(2), eUB(2)
+         do i = eLB(1), eUB(1)
+            ptrY(i,j) = latCoord(j)
+         end do
+      end do
+
+      ! ---- Compute 1-D corner arrays ----
+      ! Lon corners: western cell edges.
+      ! Periodic dim has nlon corners (last wraps); non-periodic has nlon+1.
+      if (isPeriodic) then
+         allocate(lonCorn(nlon))
+         lonCorn(1) = lonCoord(1) - dlon_half
+         do i = 2, nlon
+            lonCorn(i) = 0.5_ESMF_KIND_R8 * (lonCoord(i-1) + lonCoord(i))
+         end do
+      else
+         allocate(lonCorn(nlon+1))
+         lonCorn(1) = lonCoord(1) - 0.5_ESMF_KIND_R8 * (lonCoord(2) - lonCoord(1))
+         do i = 2, nlon
+            lonCorn(i) = 0.5_ESMF_KIND_R8 * (lonCoord(i-1) + lonCoord(i))
+         end do
+         lonCorn(nlon+1) = lonCoord(nlon) + 0.5_ESMF_KIND_R8 * (lonCoord(nlon) - lonCoord(nlon-1))
+      end if
+
+      ! Lat corners: southern cell edges + northern edge of last row (nlat+1).
+      allocate(latCorn(nlat+1))
+      latCorn(1) = latCoord(1) - 0.5_ESMF_KIND_R8 * (latCoord(2) - latCoord(1))
+      do j = 2, nlat
+         latCorn(j) = 0.5_ESMF_KIND_R8 * (latCoord(j-1) + latCoord(j))
+      end do
+      latCorn(nlat+1) = latCoord(nlat) + 0.5_ESMF_KIND_R8 * (latCoord(nlat) - latCoord(nlat-1))
+      ! Clamp polar corners — only affects outermost edges, not centers.
+      if (latCorn(1)      < -90.0_ESMF_KIND_R8) latCorn(1)      = -90.0_ESMF_KIND_R8
+      if (latCorn(nlat+1) >  90.0_ESMF_KIND_R8) latCorn(nlat+1) =  90.0_ESMF_KIND_R8
+
+      ! ---- Fill corner coordinates ----
+      call ESMF_GridGetCoord(srcGrid, coordDim=1, localDE=0, &
+         staggerloc=ESMF_STAGGERLOC_CORNER, &
+         exclusiveLBound=eLB, exclusiveUBound=eUB, &
+         farrayPtr=ptrX, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      do j = eLB(2), eUB(2)
+         do i = eLB(1), eUB(1)
+            ptrX(i,j) = lonCorn(i)
+         end do
+      end do
+
+      call ESMF_GridGetCoord(srcGrid, coordDim=2, localDE=0, &
+         staggerloc=ESMF_STAGGERLOC_CORNER, &
+         farrayPtr=ptrY, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      do j = eLB(2), eUB(2)
+         do i = eLB(1), eUB(1)
+            ptrY(i,j) = latCorn(j)
+         end do
+      end do
+
+      deallocate(lonCorn, latCorn)
 
    end subroutine create_src_grid
 

@@ -840,6 +840,11 @@ contains
       end if
 
       if (present(fileName)) then
+         ! Write grid coordinate variables (grid_xt, grid_yt, grid_lont, grid_latt)
+         ! to each tile file before closing. Skips if coords already exist.
+         call AQMIO_TileWriteCoords(IOComp, localrc)
+         ! Non-fatal — don't propagate errors from coord writing
+
          call AQMIO_Close(IOComp, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, &
@@ -3230,30 +3235,16 @@ contains
       end if
 
 
-      do dimId = 1, ndims
-         ncStatus = nf90_inquire_dimension(IOLayout % ncid, dimId, len=length)
-         if (ncStatus /= NF90_NOERR) then
-            call ESMF_LogSetError(ESMF_RC_FILE_READ, &
-               msg="Error inquiring existing dimension", &
-               line=__LINE__, &
-               file=__FILE__, &
-               rcToReturn=rc)
-            return  ! bail out
+      ! -- Look up or create named shared dimensions.
+      ! dim1 = grid_xt, dim2 = grid_yt, dim3 (ungridded) = lev
+      do item = 1, dimCount
+         if (item == 1) then
+            dimName = 'grid_xt'
+         else
+            dimName = 'grid_yt'
          end if
-         do item = 1, rank
-            if (length == dimLen(item)) then
-               dimIds(item) = dimId
-               exit
-            end if
-         end do
-      end do
-
-      dimId = ndims
-      do item = 1, rank
-         if (dimIds(item) < 0) then
-            dimid = dimid + 1
-            dimName = ""
-            write(dimName, '("x",i0.2)') dimid
+         ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(item))
+         if (ncStatus /= NF90_NOERR) then
             ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(item), dimIds(item))
             if (ncStatus /= NF90_NOERR) then
                call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
@@ -3265,6 +3256,22 @@ contains
             end if
          end if
       end do
+      ! Ungridded dimension (vertical levels)
+      if (rank > dimCount) then
+         dimName = 'lev'
+         ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
+         if (ncStatus /= NF90_NOERR) then
+            ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+                  msg="Error defining dimension "//trim(dimName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               return  ! bail out
+            end if
+         end if
+      end if
 
 
       deallocate(dimLen, stat=stat)
@@ -3874,6 +3881,215 @@ contains
 #endif
 
 !------------------------------------------------------------------------------
+! Tile coordinate writing
+!------------------------------------------------------------------------------
+
+   !> \brief Write grid coordinate variables to per-tile diagnostic files
+   !!
+   !! Adds grid_xt(grid_xt), grid_yt(grid_yt), grid_lont(grid_yt,grid_xt),
+   !! and grid_latt(grid_yt,grid_xt) coordinate variables with CF attributes
+   !! to each open tile file. Reads actual lon/lat from the model ESMF Grid.
+   !! Skips if grid_xt variable already exists in the file.
+   subroutine AQMIO_TileWriteCoords(IOComp, rc)
+      type(ESMF_GridComp), intent(inout) :: IOComp
+      integer,             intent(out)   :: rc
+
+      integer :: localrc, ncStatus, localDe, localDeCount
+      integer :: ncid, xtDimId, ytDimId, varId
+      integer :: i, j, nx, ny, de, tile, deCount, dimCount, tileCount, lbuf
+      integer :: elb(2), eub(2)
+      integer, allocatable :: deToTileMap(:), localDeToDeMap(:)
+      integer, allocatable :: minIndexPDe(:,:), maxIndexPDe(:,:)
+      integer, allocatable :: minIndexPTile(:,:), maxIndexPTile(:,:)
+      real(ESMF_KIND_R8), pointer :: ptrCoord(:,:) => null()
+      real(ESMF_KIND_R8), allocatable :: lonBuf(:,:), latBuf(:,:), xt(:), yt(:)
+      real(ESMF_KIND_R8), allocatable :: sendbuf(:), recvbuf(:)
+      real(ESMF_KIND_R8), parameter :: rad2deg = 180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
+      type(ioWrapper) :: is
+      type(ESMF_Grid) :: grid
+      type(ESMF_DistGrid) :: distgrid
+      type(ESMF_VM) :: vm
+
+      rc = ESMF_SUCCESS
+      if (.not. ESMF_GridCompIsPetLocal(IOComp)) return
+
+      call ESMF_GridCompGetInternalState(IOComp, is, localrc)
+      if (localrc /= ESMF_SUCCESS) return
+      if (.not. associated(is % IO)) return
+      if (.not. associated(is % IO % IOLayout)) return
+
+      localDeCount = size(is % IO % IOLayout)
+
+      ! Get grid and its decomposition info
+      call ESMF_GridCompGet(IOComp, grid=grid, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+
+      call ESMF_GridGet(grid, ESMF_STAGGERLOC_CENTER, distgrid=distgrid, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+
+      call ESMF_DistGridGet(distgrid, deCount=deCount, dimCount=dimCount, &
+         tileCount=tileCount, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+      if (dimCount /= 2) return
+
+      allocate(minIndexPDe(dimCount, deCount), maxIndexPDe(dimCount, deCount), &
+         minIndexPTile(dimCount, tileCount), maxIndexPTile(dimCount, tileCount), &
+         deToTileMap(deCount), localDeToDeMap(localDeCount))
+
+      call ESMF_DistGridGet(distgrid, &
+         minIndexPDe=minIndexPDe, maxIndexPDe=maxIndexPDe, &
+         minIndexPTile=minIndexPTile, maxIndexPTile=maxIndexPTile, &
+         deToTileMap=deToTileMap, localDeToDeMap=localDeToDeMap, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) then
+         deallocate(minIndexPDe, maxIndexPDe, minIndexPTile, maxIndexPTile, &
+            deToTileMap, localDeToDeMap)
+         return
+      end if
+
+      do localDe = 0, localDeCount - 1
+         de   = localDeToDeMap(localDe + 1) + 1
+         tile = deToTileMap(de)
+         nx   = maxIndexPTile(1, tile) - minIndexPTile(1, tile) + 1
+         ny   = maxIndexPTile(2, tile) - minIndexPTile(2, tile) + 1
+         lbuf = nx * ny
+
+         ! Get VM for this tile — ALL PETs will participate in collective
+         call ESMF_GridCompGet(is % IO % IOLayout(localDe) % taskComp, vm=vm, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) cycle
+
+         ! --- Gather longitude (coordDim=1) from all PETs ---
+         allocate(lonBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
+                         minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         lonBuf = 0._ESMF_KIND_R8
+
+         call ESMF_GridGetCoord(grid, coordDim=1, localDE=localDe, &
+            staggerloc=ESMF_STAGGERLOC_CENTER, &
+            exclusiveLBound=elb, exclusiveUBound=eub, &
+            farrayPtr=ptrCoord, rc=localrc)
+         if (localrc == ESMF_SUCCESS) then
+            lonBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
+                   minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               ptrCoord(elb(1):eub(1), elb(2):eub(2))
+         end if
+
+         allocate(sendbuf(lbuf), recvbuf(lbuf))
+         sendbuf = reshape(lonBuf, (/lbuf/))
+         call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
+            ESMF_REDUCE_SUM, 0, rc=localrc)
+         lonBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         deallocate(sendbuf, recvbuf)
+
+         ! --- Gather latitude (coordDim=2) from all PETs ---
+         allocate(latBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
+                         minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         latBuf = 0._ESMF_KIND_R8
+
+         call ESMF_GridGetCoord(grid, coordDim=2, localDE=localDe, &
+            staggerloc=ESMF_STAGGERLOC_CENTER, &
+            exclusiveLBound=elb, exclusiveUBound=eub, &
+            farrayPtr=ptrCoord, rc=localrc)
+         if (localrc == ESMF_SUCCESS) then
+            latBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
+                   minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               ptrCoord(elb(1):eub(1), elb(2):eub(2))
+         end if
+
+         allocate(sendbuf(lbuf), recvbuf(lbuf))
+         sendbuf = reshape(latBuf, (/lbuf/))
+         call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
+            ESMF_REDUCE_SUM, 0, rc=localrc)
+         latBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         deallocate(sendbuf, recvbuf)
+
+         ! --- Only I/O PET writes coordinate variables to file ---
+         if (is % IO % IOLayout(localDe) % localIOflag) then
+            ncid = is % IO % IOLayout(localDe) % ncid
+            if (ncid > 0) then
+               ! Skip if already written
+               if (nf90_inq_varid(ncid, 'grid_lont', varId) /= NF90_NOERR) then
+
+                  ncStatus = nf90_inq_dimid(ncid, 'grid_xt', xtDimId)
+                  if (ncStatus == NF90_NOERR) then
+                     ncStatus = nf90_inq_dimid(ncid, 'grid_yt', ytDimId)
+                  end if
+
+                  if (ncStatus == NF90_NOERR) then
+                     ! Enter define mode
+                     ncStatus = nf90_redef(ncid)
+                     if (ncStatus == NF90_NOERR .or. ncStatus == NF90_EINDEFINE) then
+
+                        ! 1-D index coordinate variables
+                        ncStatus = nf90_def_var(ncid, 'grid_xt', NF90_DOUBLE, &
+                           (/xtDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell longitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_E')
+                        end if
+
+                        ncStatus = nf90_def_var(ncid, 'grid_yt', NF90_DOUBLE, &
+                           (/ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell latitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_N')
+                        end if
+
+                        ! 2-D coordinate variables with real lon/lat
+                        ncStatus = nf90_def_var(ncid, 'grid_lont', NF90_DOUBLE, &
+                           (/xtDimId, ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell longitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_E')
+                        end if
+
+                        ncStatus = nf90_def_var(ncid, 'grid_latt', NF90_DOUBLE, &
+                           (/xtDimId, ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell latitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_N')
+                        end if
+
+                        ncStatus = nf90_enddef(ncid)
+                     end if
+
+                     ! Write 1-D index arrays
+                     allocate(xt(nx), yt(ny))
+                     do i = 1, nx
+                        xt(i) = real(i, ESMF_KIND_R8)
+                     end do
+                     do j = 1, ny
+                        yt(j) = real(j, ESMF_KIND_R8)
+                     end do
+                     ncStatus = nf90_inq_varid(ncid, 'grid_xt', varId)
+                     if (ncStatus == NF90_NOERR) ncStatus = nf90_put_var(ncid, varId, xt)
+                     ncStatus = nf90_inq_varid(ncid, 'grid_yt', varId)
+                     if (ncStatus == NF90_NOERR) ncStatus = nf90_put_var(ncid, varId, yt)
+                     deallocate(xt, yt)
+
+                     ! Write 2-D lon/lat arrays
+                     ncStatus = nf90_inq_varid(ncid, 'grid_lont', varId)
+                     if (ncStatus == NF90_NOERR) &
+                        ncStatus = nf90_put_var(ncid, varId, lonBuf)
+                     ncStatus = nf90_inq_varid(ncid, 'grid_latt', varId)
+                     if (ncStatus == NF90_NOERR) &
+                        ncStatus = nf90_put_var(ncid, varId, latBuf)
+                  end if
+               end if
+            end if
+         end if
+
+         deallocate(lonBuf, latBuf)
+      end do
+
+      deallocate(minIndexPDe, maxIndexPDe, minIndexPTile, maxIndexPTile, &
+         deToTileMap, localDeToDeMap)
+
+   end subroutine AQMIO_TileWriteCoords
+
+!------------------------------------------------------------------------------
 ! Lat/lon stitched output routines
 !------------------------------------------------------------------------------
 
@@ -3929,8 +4145,6 @@ contains
 
       integer :: localrc, item, fieldRank, dot_pos, ltimeslice
       character(len=ESMF_MAXPATHLEN) :: ll_filename, varname
-      real(ESMF_KIND_R4), pointer :: fptr_2d(:,:) => null()
-      real(ESMF_KIND_R4), pointer :: fptr_3d(:,:,:) => null()
 
       if (present(rc)) rc = ESMF_SUCCESS
 
@@ -3972,15 +4186,11 @@ contains
          if (localrc /= ESMF_SUCCESS) cycle
 
          if (fieldRank == 2) then
-            call ESMF_FieldGet(fieldList(item), farrayPtr=fptr_2d, rc=localrc)
-            if (localrc /= ESMF_SUCCESS) cycle
-            call latlon_diag_write_2d(fptr_2d, trim(varname), trim(ll_filename), &
-               ltimeslice, localrc)
+            call latlon_diag_write_2d(fieldList(item), trim(varname), &
+               trim(ll_filename), ltimeslice, localrc)
          else if (fieldRank == 3) then
-            call ESMF_FieldGet(fieldList(item), farrayPtr=fptr_3d, rc=localrc)
-            if (localrc /= ESMF_SUCCESS) cycle
-            call latlon_diag_write_3d(fptr_3d, trim(varname), trim(ll_filename), &
-               ltimeslice, localrc)
+            call latlon_diag_write_3d(fieldList(item), trim(varname), &
+               trim(ll_filename), ltimeslice, localrc)
          end if
          ! Ignore errors from lat/lon write — don't fail the main write
       end do
