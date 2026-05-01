@@ -122,7 +122,7 @@ module ConfigManager_Mod
    !> \brief External emissions configuration
    type :: ExternalEmisConfig
       logical :: activate = .false.                   !< Enable external emissions
-      character(len=256) :: config_file = ''          !< External emissions configuration file
+      character(len=512) :: config_file = ''          !< External emissions configuration file
       character(len=64) :: temporal_profile = 'constant' !< Temporal profile type
       logical :: dynamic_mapping = .true.             !< Enable dynamic species mapping
       real(fp) :: global_scale_factor = 1.0_fp        !< Global scaling factor
@@ -167,7 +167,7 @@ module ConfigManager_Mod
    type :: EmissionMappingConfig
       integer :: n_categories = 0                     !< Number of emission categories
       type(EmissionCategoryMapping), allocatable :: categories(:) !< All categories
-      character(len=256) :: config_file = ''          !< Source configuration file
+      character(len=512) :: config_file = ''          !< Source configuration file
       logical :: is_loaded = .false.                  !< Whether mapping has been loaded
    contains
       procedure :: init => emis_mapping_config_init
@@ -196,7 +196,7 @@ module ConfigManager_Mod
 
       ! Metadata
       character(len=64) :: config_version = '2.0'       !< Configuration version
-      character(len=256) :: source_file = ''            !< Source configuration file
+      character(len=512) :: source_file = ''            !< Source configuration file
       logical :: is_validated = .false.                 !< Has configuration been validated?
       logical :: run_phases_enabled = .false.           !< Are run phases configured?
 
