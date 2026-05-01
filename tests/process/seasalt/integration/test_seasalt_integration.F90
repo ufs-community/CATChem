@@ -184,7 +184,7 @@ contains
       type(MetStateType), pointer :: met_state
       type(GridManagerType), pointer :: grid_mgr
       integer :: nx, ny, nz, i, j, k
-      real(fp) :: lat, wind_speed, altitude_km, edge_altitude_km
+      real(fp) :: lat, wind_speed, altitude_km
 
       rc_arg = CC_SUCCESS
 
@@ -378,7 +378,6 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       logical :: validation_passed
       character(len=64) :: field_name
-      character(len=20) :: type_name
 
       rc_arg = CC_SUCCESS
       validation_passed = .true.

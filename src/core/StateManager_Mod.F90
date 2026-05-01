@@ -15,6 +15,7 @@
 !! Most complex lifecycle management is delegated to CATChemCore_Mod.
 !!
 module StateManager_Mod
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
    use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
    use ConfigManager_Mod, only: ConfigManagerType
@@ -419,7 +420,7 @@ contains
 
       integer :: grid_i, grid_j, k, ispec
       integer :: nlev, nspec_chem, nspec_emis
-      real(fp) :: met_value, chem_value
+      real(fp) :: chem_value
 
       rc = CC_SUCCESS
 
@@ -633,7 +634,7 @@ contains
       rc = CC_SUCCESS
 
       do i = 1, size(values)
-         if (values(i) /= values(i)) then  ! NaN check
+         if (ieee_is_nan(values(i))) then  ! NaN check
             rc = CC_FAILURE
             return
          endif

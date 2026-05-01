@@ -477,7 +477,6 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       logical :: validation_passed
       character(len=64) :: field_name
-      character(len=20) :: type_name
 
       rc_arg = CC_SUCCESS
       validation_passed = .true.

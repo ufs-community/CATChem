@@ -266,7 +266,6 @@ contains
       real(fp), intent(in), optional :: layer_height
       integer, intent(out) :: rc
 
-      type(ChemStateType), pointer :: chem_state
       real(fp), pointer :: chem_column(:), emis_column(:)
       real(fp) :: height
       integer :: k
