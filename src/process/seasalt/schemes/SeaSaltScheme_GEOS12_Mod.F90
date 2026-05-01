@@ -109,7 +109,7 @@ contains
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
       integer :: n, ir                                 !< Loop counter
       integer, parameter :: nr = 10                    !< Number of (linear) sub-size bins
-      real(fp), parameter    :: r80fac = 1.65              !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
+      real(fp), parameter    :: r80fac = 1.65_fp       !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
       real(fp) :: DryRadius                            !< sub-bin radius         (dry, um)
       real(fp) :: DeltaDryRadius                       !< sub-bin radius spacing (dry, um)
       real(fp) :: rwet, drwet                          !< sub-bin radius spacing (rh=80%, um)
