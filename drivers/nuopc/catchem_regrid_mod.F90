@@ -63,8 +63,8 @@ contains
    !! \param[out]   rc          Return code
    !--------------------------------------------------------------------------
    subroutine catchem_regrid_field(cache, filename, varname, dstField, &
-                                   latname, lonname, regrid_method_name, &
-                                   timeSlice, levelSlice, didRegrid, rc)
+      latname, lonname, regrid_method_name, &
+      timeSlice, levelSlice, didRegrid, rc)
       type(RegridCache),    intent(inout)         :: cache
       character(len=*),     intent(in)            :: filename
       character(len=*),     intent(in)            :: varname
@@ -101,22 +101,22 @@ contains
       regridMethod = ESMF_REGRIDMETHOD_BILINEAR
       if (present(regrid_method_name)) then
          select case (trim(regrid_method_name))
-         case ('none', 'NONE')
+          case ('none', 'NONE')
             ! Should not reach here — caller should skip regridding
             call ESMF_LogWrite("catchem_regrid_field: regrid_method='none' but regrid was called", &
                ESMF_LOGMSG_WARNING)
             regridMethod = ESMF_REGRIDMETHOD_BILINEAR
-         case ('bilinear', 'BILINEAR')
+          case ('bilinear', 'BILINEAR')
             regridMethod = ESMF_REGRIDMETHOD_BILINEAR
-         case ('neareststod', 'NEARESTSTOD', 'nearest_stod')
+          case ('neareststod', 'NEARESTSTOD', 'nearest_stod')
             regridMethod = ESMF_REGRIDMETHOD_NEAREST_STOD
-         case ('nearestdtos', 'NEARESTDTOS', 'nearest_dtos')
+          case ('nearestdtos', 'NEARESTDTOS', 'nearest_dtos')
             regridMethod = ESMF_REGRIDMETHOD_NEAREST_DTOS
-         case ('conserve', 'CONSERVE', 'conserve1')
+          case ('conserve', 'CONSERVE', 'conserve1')
             regridMethod = ESMF_REGRIDMETHOD_CONSERVE
-         case ('patch', 'PATCH')
+          case ('patch', 'PATCH')
             regridMethod = ESMF_REGRIDMETHOD_PATCH
-         case default
+          case default
             call ESMF_LogWrite("catchem_regrid_field: Unknown regrid method '"// &
                trim(regrid_method_name)//"', using bilinear", ESMF_LOGMSG_WARNING)
             regridMethod = ESMF_REGRIDMETHOD_BILINEAR
@@ -145,7 +145,7 @@ contains
       ! ---- Read coordinate values for grid creation ----
       allocate(lonCoord(nlon), latCoord(nlat))
       call read_coord_values(ncid, lonname, latname, nlon, nlat, &
-                             lonCoord, latCoord, localrc)
+         lonCoord, latCoord, localrc)
       if (localrc /= ESMF_SUCCESS) then
          deallocate(lonCoord, latCoord)
          ncStatus = nf90_close(ncid)
@@ -191,7 +191,7 @@ contains
                unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
                rc=localrc)
          else if (regridMethod == ESMF_REGRIDMETHOD_BILINEAR .or. &
-                  regridMethod == ESMF_REGRIDMETHOD_PATCH) then
+            regridMethod == ESMF_REGRIDMETHOD_PATCH) then
             call ESMF_FieldRegridStore(srcField, dstField, &
                routehandle=routeHandle, &
                regridmethod=regridMethod, &
@@ -244,7 +244,7 @@ contains
          ncStatus = nf90_close(ncid)
          call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
             msg="catchem_regrid_field: Cannot read var "//trim(varname)// &
-                " from "//trim(filename), &
+            " from "//trim(filename), &
             line=__LINE__, file=__FILE__, rcToReturn=rc)
          return
       end if
@@ -278,8 +278,8 @@ contains
       idx = 0
       do i = 1, self%count
          if (self%entries(i)%active .and. &
-             self%entries(i)%nlon == nlon .and. &
-             self%entries(i)%nlat == nlat) then
+            self%entries(i)%nlon == nlon .and. &
+            self%entries(i)%nlat == nlat) then
             idx = i
             return
          end if
@@ -404,7 +404,7 @@ contains
 
    !> Read coordinate values
    subroutine read_coord_values(ncid, lonname, latname, nlon, nlat, &
-                                lonCoord, latCoord, rc)
+      lonCoord, latCoord, rc)
       integer,             intent(in)  :: ncid, nlon, nlat
       character(len=*),    intent(in)  :: lonname, latname
       real(ESMF_KIND_R8),  intent(out) :: lonCoord(nlon), latCoord(nlat)
@@ -644,8 +644,8 @@ contains
             ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName, len=timeDimLen)
             if (ncStatus == NF90_NOERR .and. &
                (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
-                index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
-                index(dimName,'Month') > 0)) then
+               index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+               index(dimName,'Month') > 0)) then
                if (present(timeSlice)) start(ndims) = timeSlice
                cnt(ndims) = 1
             end if
@@ -668,9 +668,9 @@ contains
             dimName = ''
             ncStatus = nf90_inquire_dimension(ncid, dimids(3), name=dimName)
             if (.not. (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
-                       index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
-                       index(dimName,'Month') > 0 .or. &
-                       (uid /= -1 .and. dimids(3) == uid))) then
+               index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+               index(dimName,'Month') > 0 .or. &
+               (uid /= -1 .and. dimids(3) == uid))) then
                ! dim 3 is the level dimension
                start(3) = levelSlice
                cnt(3) = 1

@@ -190,7 +190,7 @@ contains
          ! immune to the alarm-drift problem that occurs when simulations do not
          ! start at a "natural" boundary (e.g. 06:00 start with daily data).
          call catchem_emis_period_key(ext_emis_data%categories(i)%frequency, &
-                                       current_time, period_key, localrc)
+            current_time, period_key, localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
 
@@ -207,12 +207,12 @@ contains
             ! For files without time-coordinate matching and no filename template,
             ! advance irec sequentially (one slice per period).
             if (ext_emis_data%categories(i)%n_times == 0 .and. &
-                index(trim(ext_emis_data%categories(i)%source_file), '%') == 0) then
+               index(trim(ext_emis_data%categories(i)%source_file), '%') == 0) then
                ext_emis_data%categories(i)%irec = ext_emis_data%categories(i)%irec + 1
             end if
 
             call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
-                                   met_state%NLEVS, current_time, localrc)
+               met_state%NLEVS, current_time, localrc)
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
@@ -312,7 +312,7 @@ contains
       ! Compute the correct time-slice index from cached time coordinates
       if (category%n_times > 0) then
          call catchem_emis_find_time_index(category, curr_time, category%frequency, &
-                                           category%irec, localrc)
+            category%irec, localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
@@ -322,8 +322,8 @@ contains
       ! bilinear, neareststod, conserve, ...) the file is assumed to be
       ! on a different grid and will be regridded to the model grid.
       use_regrid = (trim(category%regrid_method) /= 'none' .and. &
-                    trim(category%regrid_method) /= 'NONE' .and. &
-                    len_trim(category%regrid_method) > 0)
+         trim(category%regrid_method) /= 'NONE' .and. &
+         len_trim(category%regrid_method) > 0)
 
       if (use_regrid) then
          if (len_trim(category%latname) == 0 .or. len_trim(category%lonname) == 0) then
@@ -622,15 +622,15 @@ contains
       ! UFS/FV3 convention: k=1 = surface, k=nz = top of atmosphere
       ! Return immediately if no distribution needed
       select case (trim(vertical_dist))
-      case ('none', 'NONE', 'None', '')
+       case ('none', 'NONE', 'None', '')
          return
-      case ('P100', 'p100', 'P500', 'p500', 'Ppbl', 'ppbl', 'PBL', 'pbl', &
-            'aviation', 'AVIATION', &
-            'aviation_lto', 'AVIATION_LTO', &
-            'aviation_cds', 'AVIATION_CDS', &
-            'aviation_crs', 'AVIATION_CRS')
+       case ('P100', 'p100', 'P500', 'p500', 'Ppbl', 'ppbl', 'PBL', 'pbl', &
+          'aviation', 'AVIATION', &
+          'aviation_lto', 'AVIATION_LTO', &
+          'aviation_cds', 'AVIATION_CDS', &
+          'aviation_crs', 'AVIATION_CRS')
          ! proceed
-      case default
+       case default
          return
       end select
 
@@ -705,36 +705,36 @@ contains
             ! Determine pressure range for this distribution type
             ! p_bot = higher pressure (lower altitude), p_top = lower pressure (higher altitude)
             select case (trim(vertical_dist))
-            case ('P100', 'p100')
+             case ('P100', 'p100')
                ! Surface to 100m
                p_bot = ps
                p_top = p100
-            case ('P500', 'p500')
+             case ('P500', 'p500')
                ! 100m to 500m
                p_bot = p100
                p_top = p500
-            case ('Ppbl', 'ppbl', 'PBL', 'pbl')
+             case ('Ppbl', 'ppbl', 'PBL', 'pbl')
                ! Surface to PBL height
                p_bot = ps
                p_top = pPBL
-            case ('aviation', 'AVIATION')
+             case ('aviation', 'AVIATION')
                ! Full aviation range: surface to CRS top (0 - 10000 m)
                ! Covers LTO (0-100m) + CDS (100-9000m) + CRS (9000-10000m)
                p_bot = ps
                p_top = p10000
-            case ('aviation_lto', 'AVIATION_LTO')
+             case ('aviation_lto', 'AVIATION_LTO')
                ! LTO only: surface to 100m
                p_bot = ps
                p_top = p100
-            case ('aviation_cds', 'AVIATION_CDS')
+             case ('aviation_cds', 'AVIATION_CDS')
                ! CDS only: 100m to 9000m
                p_bot = p100
                p_top = p9000
-            case ('aviation_crs', 'AVIATION_CRS')
+             case ('aviation_crs', 'AVIATION_CRS')
                ! CRS only: 9000m to 10000m
                p_bot = p9000
                p_top = p10000
-            case default
+             case default
                cycle
             end select
 
@@ -795,8 +795,8 @@ contains
    !! \param[out] f_bb           2D scaling factor [0..1] per column
    !! \param[out] rc             Return code
    subroutine compute_bb_emission_factor(emission_flux, scale_factor, dt, &
-                                          met_state, chem_state, species_idx, &
-                                          f_bb, rc)
+      met_state, chem_state, species_idx, &
+      f_bb, rc)
       use Constants, only: g0
       implicit none
 
@@ -1084,7 +1084,7 @@ contains
             ! Add tendency to concentrations
             ! Apply Mie-based BB emission scaling factor if enabled
             if (category%use_oc_fbb .and. &
-                .not. chem_state%ChemSpecies(species_idx)%is_gas) then
+               .not. chem_state%ChemSpecies(species_idx)%is_gas) then
                if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
                call compute_bb_emission_factor(emission_flux, scale_factor, dt, &
                   met_state, chem_state, species_idx, f_bb, localrc)
@@ -1586,9 +1586,9 @@ contains
       ! find_time_index can determine the correct initial irec even when the file
       ! contains more time slices than the arithmetic assumption (e.g. 14-month files).
       if (trim(category%frequency) /= 'static' .and. &
-          index(trim(category%source_file), '%') == 0 .and. &
-          len_trim(category%source_file) > 0 .and. &
-          category%n_times == 0) then
+         index(trim(category%source_file), '%') == 0 .and. &
+         len_trim(category%source_file) > 0 .and. &
+         category%n_times == 0) then
          call catchem_emis_read_time_coord(trim(category%source_file), category, localrc)
          ! Non-fatal: if time coord read fails, fall through to arithmetic below
          category%last_resolved_file = trim(category%source_file)
@@ -1738,7 +1738,7 @@ contains
       key = 0
 
       call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, &
-                        dayOfYear=doy, rc=localrc)
+         dayOfYear=doy, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
@@ -1799,7 +1799,7 @@ contains
       rc = CC_SUCCESS
 
       call ESMF_TimeGet(curr_time, yy=year, mm=month, dd=day, h=hour, &
-                        dayOfYear=dayOfYear, rc=localrc)
+         dayOfYear=dayOfYear, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
@@ -1943,7 +1943,7 @@ contains
       end if
 
       call ESMF_TimeSet(base_time, yy=base_yy, mm=base_mm, dd=base_dd, &
-                        h=base_hh, m=base_mn, s=base_ss, rc=localrc)
+         h=base_hh, m=base_mn, s=base_ss, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) then
          localrc = nf90_close(ncid)
@@ -1975,7 +1975,7 @@ contains
          end if
          abs_time = base_time + dt_interval
          call ESMF_TimeGet(abs_time, yy=abs_yy, mm=abs_mm, dd=abs_dd, &
-                           h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
+            h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) then
             deallocate(tvar, category%tc_dates, category%tc_secs)
@@ -2017,7 +2017,7 @@ contains
       if (category%n_times == 0) return
 
       call ESMF_TimeGet(curr_time, yy=curr_yy, mm=curr_mm, dd=curr_dd, &
-                        h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
+         h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 

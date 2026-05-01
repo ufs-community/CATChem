@@ -98,7 +98,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve #none, bilinear, neareststod, nearestdtos, conserve, patch
-      lat_name: "lat"    #if regrid_method is not none, lat_name and lon_name are required. 
+      lat_name: "lat"    #if regrid_method is not none, lat_name and lon_name are required.
       lon_name: "lon"
       frequency: "hourly"
       diagnostics: true

@@ -8,33 +8,33 @@ anthro1:
     long_name: "Sulfur Dioxide"
     units: "kg/m2/s"
     scale: [0.97, '0.045'] #1-0.03; 0.03*96/64
-    map: ["so2", "so4"] 
+    map: ["so2", "so4"]
   OC:
     long_name: "Organic Carbon"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
   BC:
     long_name: "Black Carbon"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 anthro2:
   SO2_elev:
     long_name: "Sulfur Dioxide at Elevated Levels"
     units: "kg/m2/s"
     scale: [0.97, '0.045'] #1-0.03; 0.03*96/64
-    map: ["so2", "so4"] 
+    map: ["so2", "so4"]
   OC_elev:
     long_name: "Organic Carbon at Elevated Levels"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
   BC_elev:
     long_name: "Black Carbon at Elevated Levels"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 ship:
   SO2_ship:
     long_name: "Sulfur Dioxide from Ships"
@@ -50,12 +50,12 @@ ship:
     long_name: "Organic Carbon from Ships"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
   BC_ship:
     long_name: "Black Carbon from Ships"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 fire_so2:
   biomass:
     long_name: "Sulfur Dioxide from Biomass Burning"
@@ -85,13 +85,13 @@ oc_aviation_lto:
     long_name: "Organic Carbon from Aviation LTO"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
 bc_aviation_lto:
   bc_aviation:
     long_name: "Black Carbon from Aviation LTO"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 so2_aviation_cds:
   so2_aviation:
     long_name: "Sulfur Dioxide from Aviation CDS"
@@ -103,13 +103,13 @@ oc_aviation_cds:
     long_name: "Organic Carbon from Aviation CDS"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
 bc_aviation_cds:
   bc_aviation:
     long_name: "Black Carbon from Aviation CDS"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 so2_aviation_crs:
   so2_aviation:
     long_name: "Sulfur Dioxide from Aviation CRS"
@@ -121,13 +121,13 @@ oc_aviation_crs:
     long_name: "Organic Carbon from Aviation CRS"
     units: "kg/m2/s"
     scale: [0.9, 0.9] #0.5 x 1.8; 0.5 is the fraction of OC that is hydrophobic/hydrophilic; 1.8 is the scaling factor from OC to POM
-    map: ["oc1", "oc2"] 
+    map: ["oc1", "oc2"]
 bc_aviation_crs:
   bc_aviation:
     long_name: "Black Carbon from Aviation CRS"
     units: "kg/m2/s"
     scale: [0.5, 0.5] #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"] 
+    map: ["bc1", "bc2"]
 bio:
   limo:
    long_name: "Limonene"

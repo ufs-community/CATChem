@@ -130,7 +130,10 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
   if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
     add_compile_definitions(USE_REAL8)
-    message(STATUS "CATChem: detected real-8 promotion flag, enabling USE_REAL8")
+    message(
+      STATUS
+      "CATChem: detected real-8 promotion flag, enabling USE_REAL8"
+    )
   endif()
 endif()
 

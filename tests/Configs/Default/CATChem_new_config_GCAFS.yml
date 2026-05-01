@@ -260,7 +260,7 @@ processes:
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
       frequency: "monthly"
       diagnostics: true
-      diag_list: [bc_aviation]  
+      diag_list: [bc_aviation]
     point: #not used for now
       activate: true
       scale_factor: 1.0
@@ -362,7 +362,7 @@ processes:
       source_file: "ExtData/dust/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
       format: "netcdf"
       gridded: true
-      regrid_method: bilinear      
+      regrid_method: bilinear
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true

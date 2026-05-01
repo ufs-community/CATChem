@@ -3959,7 +3959,7 @@ contains
 
          ! --- Gather longitude (coordDim=1) from all PETs ---
          allocate(lonBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-                         minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
          lonBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=1, localDE=localDe, &
@@ -3968,7 +3968,7 @@ contains
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
             lonBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-                   minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 
@@ -3981,7 +3981,7 @@ contains
 
          ! --- Gather latitude (coordDim=2) from all PETs ---
          allocate(latBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-                         minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
          latBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=2, localDE=localDe, &
@@ -3990,7 +3990,7 @@ contains
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
             latBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-                   minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 

@@ -90,7 +90,7 @@ contains
 
       ! Equation of time (in minutes).
       eqtime = 229.18_fp * (0.000075_fp + 0.001868_fp * cos(gamma) - 0.032077_fp * sin(gamma) &
-      - 0.014615_fp * cos(2.0_fp*gamma) - 0.040849_fp * sin(2.0_fp*gamma))
+         - 0.014615_fp * cos(2.0_fp*gamma) - 0.040849_fp * sin(2.0_fp*gamma))
 
       ! Time offset (in minutes). Note here we assume longitude between -180 and 180 degrees
       time_offset = eqtime + 4.0_fp * lon

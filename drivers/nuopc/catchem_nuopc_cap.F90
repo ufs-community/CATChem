@@ -59,7 +59,7 @@ module cc_nuopc
    private
 
    public :: SetServices
-   public :: SetVM !for GCAFS only 
+   public :: SetVM !for GCAFS only
 
    !> \brief Component configuration parameters
    !! \{
