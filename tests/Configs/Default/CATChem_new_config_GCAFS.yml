@@ -131,6 +131,19 @@ processes:
       frequency: "daily"
       diagnostics: true
       diag_list: [SO2_ship, OC_ship, BC_ship]
+    bio:
+      activate: true
+      scale_factor: 1.0
+      source_file: "ExtData/MEGAN_OFFLINE_BVOC/v2019-10/%y4/MEGAN.OFFLINE.BIOVOC.%y4.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: conserve
+      lat_name: "lat"
+      lon_name: "lon"
+      vertical_dist: "none" #biogenic is only at the surface.
+      frequency: "daily"
+      diagnostics: true
+      diag_list: [isoprene, mtpa]
     so2_aviation_lto:
       activate: true
       scale_factor: 1.0
@@ -323,6 +336,7 @@ processes:
       lon_name: "lon"
       vertical_dist: "Ppbl"
       frequency: "daily"
+      use_oc_fbb: true  #apply Mie-based BB emission scaling for OC following GOCART2G CAEmission
       plume_rise: "sofiev"
       diagnostics: true
       diag_list: [biomass]

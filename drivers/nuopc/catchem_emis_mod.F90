@@ -779,6 +779,101 @@ contains
 
    end subroutine distribute_emissions_vertical
 
+   !> \brief Compute biomass burning emission scaling factor using Mie data
+   !!
+   !! Prevents unrealistically high aerosol optical thickness from biomass
+   !! burning emissions by computing the extinction AOT that the emission
+   !! would produce and scaling down if it exceeds max_bb_exttau (30.0).
+   !! Follows GOCART2G CAEmission pattern.
+   !!
+   !! \param[in]  emission_flux  3D emission flux after vertical distribution [kg/m2/s]
+   !! \param[in]  scale_factor   Species-specific scale factor from mapping
+   !! \param[in]  dt             Time step [s]
+   !! \param[in]  met_state      Meteorological state (for RH)
+   !! \param[in]  chem_state     Chemical state (for MieData)
+   !! \param[in]  species_idx    Species index in chem_state
+   !! \param[out] f_bb           2D scaling factor [0..1] per column
+   !! \param[out] rc             Return code
+   subroutine compute_bb_emission_factor(emission_flux, scale_factor, dt, &
+                                          met_state, chem_state, species_idx, &
+                                          f_bb, rc)
+      use Constants, only: g0
+      implicit none
+
+      real(fp), intent(in)    :: emission_flux(:,:,:)
+      real(fp), intent(in)    :: scale_factor
+      real(fp), intent(in)    :: dt
+      type(MetStateType), intent(in)  :: met_state
+      type(ChemStateType), intent(in) :: chem_state
+      integer, intent(in)    :: species_idx
+      real(fp), intent(out)   :: f_bb(:,:)
+      integer, intent(out)   :: rc
+
+      ! Local variables
+      integer :: nx, ny, nz, i, j, k, mie_idx, ibin
+      real, allocatable :: q_mass(:,:,:), rh_r4(:,:,:), tau(:,:,:)
+      real(fp) :: exttau_bb, cutoff_bb_exttau
+      integer :: localrc
+      character(len=*), parameter :: pName = 'compute_bb_emission_factor'
+      character(len=EMIS_MAXSTR) :: msg
+
+      ! Parameters following GOCART2G CAEmission
+      real(fp), parameter :: max_bb_exttau = 30.0_fp  ! daily maximum AOT from BB
+      integer, parameter  :: nbin = 2  ! hardcoded for carbonaceous aerosols
+
+      rc = CC_SUCCESS
+      f_bb = 1.0_fp
+
+      ! Scale daily max AOT to per-timestep cutoff (GOCART2G: cdt / (24*3600) * max_bb_exttau)
+      cutoff_bb_exttau = (dt / 86400.0_fp) * max_bb_exttau
+
+      ! Check species has Mie data
+      if (.not. allocated(chem_state%SpcMieMap)) return
+      if (species_idx < 1 .or. species_idx > size(chem_state%SpcMieMap)) return
+      mie_idx = chem_state%SpcMieMap(species_idx)
+      if (mie_idx <= 0) return
+
+      nx = size(emission_flux, 1)
+      ny = size(emission_flux, 2)
+      nz = size(emission_flux, 3)
+
+      ! Allocate working arrays as default real (GOCART2G_Mie uses default real)
+      allocate(q_mass(nx, ny, nz), rh_r4(nx, ny, nz), tau(nx, ny, nz))
+
+      ! Relative humidity clamped to [0, 0.99] for Mie table lookup
+      rh_r4 = real(min(max(met_state%RH, 0.0_fp), 0.99_fp))
+
+      ! Column mass from emission [kg/m2]: flux [kg/m2/s] * scale * dt [s]
+      q_mass = real(emission_flux * scale_factor * dt)
+
+      ! Sum extinction optical depth over all Mie bins
+      do j = 1, ny
+         do i = 1, nx
+            exttau_bb = 0.0_fp
+            do ibin = 1, min(nbin, chem_state%MieData(mie_idx)%nbin)
+               call chem_state%MieData(mie_idx)%Query( &
+                  550.0e-9, ibin, q_mass(i:i,j:j,:), rh_r4(i:i,j:j,:), &
+                  tau=tau(i:i,j:j,:), rc=localrc)
+               if (localrc /= 0) then
+                  write(msg, '(A,A,I0,A,I0)') trim(pName), &
+                     ': Mie Query failed for species ', species_idx, ' bin ', ibin
+                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+                  cycle
+               end if
+               do k = 1, nz
+                  exttau_bb = exttau_bb + real(tau(i,j,k), fp)
+               end do
+            end do
+            if (exttau_bb > cutoff_bb_exttau) then
+               f_bb(i,j) = cutoff_bb_exttau / exttau_bb
+            end if
+         end do
+      end do
+
+      deallocate(q_mass, rh_r4, tau)
+
+   end subroutine compute_bb_emission_factor
+
    !! Applies emission data from ExtEmisDataType to the chemical state
    !! using species mapping from emission configuration. Processes entire
    !! arrays at once for efficiency and handles proper unit conversion.
@@ -816,6 +911,7 @@ contains
       real(fp), allocatable :: concentrations(:,:,:,:)  ! (nx,ny,nz,n_species)
       real(fp), allocatable :: emission_flux(:,:,:)       ! (nx,ny,nz) - emission rate [kg/m2/s]
       real(fp), allocatable :: species_tendency(:,:,:)  ! (nx,ny,nz) - species tendency [mol/mol/s]
+      real(fp), allocatable :: f_bb(:,:)                 ! (nx,ny) - BB emission scaling factor
       real(fp) :: converter
 
       rc = CC_SUCCESS
@@ -986,7 +1082,18 @@ contains
             end do
 
             ! Add tendency to concentrations
-            ! Only apply to first vertical level (k=1) since emissions are surface-based
+            ! Apply Mie-based BB emission scaling factor if enabled
+            if (category%use_oc_fbb .and. &
+                .not. chem_state%ChemSpecies(species_idx)%is_gas) then
+               if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
+               call compute_bb_emission_factor(emission_flux, scale_factor, dt, &
+                  met_state, chem_state, species_idx, f_bb, localrc)
+               if (localrc == CC_SUCCESS) then
+                  do k = 1, nz
+                     species_tendency(:,:,k) = species_tendency(:,:,k) * f_bb(:,:)
+                  end do
+               end if
+            end if
             concentrations(:,:,:,species_idx) = concentrations(:,:,:,species_idx) + species_tendency(:,:,:)
 
          end do !end of mapped species loop
@@ -1004,6 +1111,7 @@ contains
 
       ! Clean up
       deallocate(concentrations, emission_flux, species_tendency)
+      if (allocated(f_bb)) deallocate(f_bb)
    end subroutine catchem_emis_apply
 
    !> \brief Write emission diagnostics to NetCDF file
@@ -1337,6 +1445,9 @@ contains
       ! Read diagnostic species list using get_array
       call config_manager%get_array(trim(config_path)//'/diag_list', diag_species, localrc, default_values=["All"])
 
+      ! Carbon emission factor (Mie-based BB AOT limiter)
+      call config_manager%get_logical(trim(config_path)//'/use_oc_fbb', &
+         category%use_oc_fbb, localrc, .false.)
 
    end subroutine parse_emission_category
 

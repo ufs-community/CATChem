@@ -128,6 +128,8 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=256)                        :: last_resolved_file = '' !< last resolved filename (cache key)
       ! Calendar-period tracking — drives file/slice updates without alarm drift
       INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
+      ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
+      LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
 
    CONTAINS
       !> \brief Initialize emission category with metadata
