@@ -1,0 +1,85 @@
+name: "carbchem"
+description: "Process for computing chemical production and loss of carbon species"
+class_name: "CarbChem"
+process_type: "chemistry"
+author: "Wei Li"
+
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "source" #is not doing anything now
+  tendency_mode: "replacement" #additive or multiplicative or replacement;
+  species_filter:
+    #type: "all_species"
+    #type: "by_metadata"
+    #metadata_flags:
+    #  - "is_aerosol"  # Filter for species with is_aerosol=true property
+    type: "by_list"
+    species_list:
+      - "oc1"    #hydrophobic organic carbon
+      - "oc2"    #hydrophilic organic carbon
+      - "bc1"    #hydrophobic black carbon
+      - "bc2"    #hydrophilic black carbon
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "independent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
+  memory_requirements: "low" #is not doing anything now
+
+#required_met_fields: [] #used for other purpose, such as unit conversion
+
+schemes:
+  gocart:
+    name: "gocart"
+    class_name: "GOCART"
+    description: "GOCART carbon species chemical production and loss scheme"
+    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "GOCART2G process library carbonChemLoss function"
+    author: "Wei Li"
+
+    required_met_fields: #needed for scheme calculations
+      - DELP
+      - TSTEP
+      - AIRDEN
+      - PMID
+
+    required_species_properties:
+      - t_chem_loss
+      - short_name
+
+    required_constants:
+      - g0
+
+    required_time_parameters: #Chem_UtilIdow is using these parameters but it is not used because myDOW is -1 all the time
+      - year
+      - month
+      - day
+      - hour
+      - minute
+      - second
+
+
+    parameters:
+      time_days_hydrophobic_to_hydrophilic:
+        default: 2.5
+        description: "Rate of conversion of hydrophobic to hydrophilic [days]"
+
+    diagnostics:
+      - name: "loss_flux_per_species"
+        description: "chemical loss flux per species"
+        units: "kg/m2/s"
+      - name: "PhobicToPhilic_mass_per_species_per_level"
+        description: "conversion mass from hydrophobic to hydrophilic per species per level"
+        units: "kg/kg"
+      - name: "PhobicToPhilic_flux_per_species"
+        description: "conversion flux from hydrophobic to hydrophilic per species"
+        units: "kg/m2/s"
+
+
+diagnostics:
+  - name: "Production_mass_per_species_per_level"
+    description: "Production mass (negative for loss) per species per level"
+    units: "kg/kg"

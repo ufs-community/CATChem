@@ -39,7 +39,9 @@ module cc_nuopc
 
    use ESMF
    use NUOPC
-   use NUOPC_Model, &
+   use NUOPC_Model, only: &
+      NUOPC_ModelGet, &
+      SetVM, &
       modelSS        => SetServices, &
       model_label_Advertise       => label_Advertise,      &
       model_label_DataInitialize  => label_DataInitialize, &
@@ -55,6 +57,7 @@ module cc_nuopc
    private
 
    public :: SetServices
+   public :: SetVM !for GCAFS only
 
    !> \brief Component configuration parameters
    !! \{

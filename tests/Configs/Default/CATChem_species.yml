@@ -100,13 +100,14 @@ bc1:
   is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 12.01
-  radius: 0.087   #gocart is 0.35
+  mw_g: 12.01    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
+  radius: 0.35   #gocart is 0.35; GC is 0.087
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: BC
 bc2:
   name: bc2
@@ -116,13 +117,14 @@ bc2:
   is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 12.01
-  radius: 0.087   #gocart is 0.35
+  mw_g: 12.01    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
+  radius: 0.35   #gocart is 0.35; GC is 0.087
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: BC
 oc1:
   name: oc1
@@ -132,13 +134,14 @@ oc1:
   is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 12.01
-  radius: 0.087
+  mw_g: 12.01    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
+  radius: 0.35   #gocart is 0.35; GC is 0.087
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: OC
 oc2:
   name: oc2
@@ -148,13 +151,14 @@ oc2:
   is_wetdep: true
   dd_f0: 0.0
   dd_hstar: 0.0
-  mw_g: 12.01
-  radius: 0.087
+  mw_g: 12.01    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
+  radius: 0.35   #gocart is 0.35; GC is 0.087
   density: 1800.0
   dd_DvzAerSnow: 0.03
   lower_radius: 0.1
   upper_radius: 1.0
   wd_rainouteff: [1.0, 0.0, 1.0]
+  t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   mie_name: OC
 dust1:
   name: dust1

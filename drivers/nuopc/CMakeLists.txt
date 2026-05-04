@@ -5,6 +5,8 @@
 set(
   _srcs
   aqmio.F90
+  catchem_regrid_mod.F90
+  catchem_latlon_output_mod.F90
   catchem_nuopc_cap.F90
   catchem_nuopc_interface.F90
   catchem_emis_mod.F90

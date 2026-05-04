@@ -113,12 +113,23 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=128)                        :: frequency = ''      !< Frequency of file (e.g., hourly, daily, weekly, monthly,static)
       CHARACTER(LEN=128)                        :: latname = ''       !< Latitude variable name in the file
       CHARACTER(LEN=128)                        :: lonname = ''       !< Longitude variable name in the file
+      CHARACTER(LEN=32)                         :: regrid_method = 'none' !< Regridding method (none, bilinear, neareststod, nearestdtos, conserve, patch)
+      CHARACTER(LEN=32)                         :: vertical_dist = 'none' !< Vertical distribution method (none, P100, P500, Ppbl, aviation)
+      LOGICAL                                   :: reverse_vertical = .false. !< Reverse vertical levels after reading (e.g. top-down to bottom-up)
       CHARACTER(LEN=128)                        :: stkdmname = ''      !< Stack dimension name in the file
       CHARACTER(LEN=128)                        :: stkhtname = ''      !< Stack height variable name in the file
       CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
       CHARACTER(LEN=128)                        :: stkvename = ''      !< Stack velocity variable name in the file
       CHARACTER(LEN=128)                        :: plumerise = ''      !< plumerise scheme
-
+      ! Time coordinate cache — populated on first file open, used for smart time-index matching
+      INTEGER                                   :: n_times = 0         !< # of time slices cached from current file
+      INTEGER, ALLOCATABLE                      :: tc_dates(:)         !< yyyymmdd for each cached time slice
+      INTEGER, ALLOCATABLE                      :: tc_secs(:)          !< seconds-of-day for each cached time slice
+      CHARACTER(LEN=256)                        :: last_resolved_file = '' !< last resolved filename (cache key)
+      ! Calendar-period tracking — drives file/slice updates without alarm drift
+      INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
+      ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
+      LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
 
    CONTAINS
       !> \brief Initialize emission category with metadata
@@ -505,6 +516,9 @@ CONTAINS
          deallocate(this%fields)
       endif
 
+      if (allocated(this%tc_dates)) deallocate(this%tc_dates)
+      if (allocated(this%tc_secs))  deallocate(this%tc_secs)
+
       this%category_name = ''
       this%description = ''
       this%n_fields = 0
@@ -523,6 +537,9 @@ CONTAINS
       this%stktkname = ''
       this%stkvename = ''
       this%plumerise = ''
+      this%n_times = 0
+      this%last_resolved_file = ''
+      this%last_period_key = -1
 
    end subroutine extemicat_cleanup
 

@@ -28,6 +28,8 @@ process_behavior:
 
 required_met_fields: #needed for other purposes, such as unit conversion
   - DELP
+required_constants: #needed for other purposes, such as unit conversion
+  - AIRMW
 
 schemes:
   gong97:

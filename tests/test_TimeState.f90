@@ -5,6 +5,7 @@
 program test_TimeState
    use testing_mod, only: assert, assert_close
    use TimeState_Mod
+   use Precision_Mod, only: fp
    use Error_Mod, only: ErrorManagerType, CC_SUCCESS
    use Precision_Mod, only: fp
 

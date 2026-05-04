@@ -106,6 +106,7 @@ module ConfigManager_Mod
       integer :: nSpecies_drydep = 20                !< Number of species with dry deposition
       integer :: nEmissionCategories = 10            !< Number of emission categories
       integer :: nEmissionSpecies = 50               !< Number of emission species per category
+      logical :: latlon_output = .false.              !< Stitch cubed-sphere tiles to single lat/lon file?
    end type RuntimeConfig
 
    !> \brief File paths and data sources
@@ -1461,6 +1462,9 @@ contains
       call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/frequency', this%config_data%runtime%Output_Frequency, local_rc)
       if (local_rc /= 0) this%config_data%runtime%Output_Frequency = 3600  ! default value
 
+      call safe_yaml_get_logical(this%yaml_data, 'diagnostics/output/latlon_output', this%config_data%runtime%latlon_output, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%latlon_output = .false.  ! default value
+
       call this%get_array('diagnostics/output/diag_list', this%config_data%runtime%diag_species, local_rc, default_values=["All"])
       if (local_rc /= 0) then
          ! Default to all species if not specified
@@ -1922,6 +1926,14 @@ contains
          ! Return missing array
          species%wd_rainouteff(:) = MISSING
          deallocate(temp_real_array)
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/t_chem_loss'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%t_chem_loss = temp_real
+      else
+         species%t_chem_loss = MISSING
       endif
 
       ! Load type flags (with proper default handling)

@@ -116,6 +116,23 @@ if(CATCHEM_BUILD_NUOPC)
   endif()
 endif()
 
+# Auto-detect if default real is promoted to 8-byte by the parent build
+# or by per-target flags, and define USE_REAL8 so precision_mod sets fp=f8.
+if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
+  if(CMAKE_Fortran_FLAGS MATCHES "-fdefault-real-8")
+    add_compile_definitions(USE_REAL8)
+    message(STATUS "CATChem: detected -fdefault-real-8, enabling USE_REAL8")
+  endif()
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
+  if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
+    add_compile_definitions(USE_REAL8)
+    message(
+      STATUS
+      "CATChem: detected real-8 promotion flag, enabling USE_REAL8"
+    )
+  endif()
+endif()
+
 add_subdirectory(src)
 
 # Enable testing for standalone builds
@@ -142,6 +159,8 @@ if(CATCHEM_BUILD_NUOPC)
   add_library(
     cc_nuopc
     STATIC
+    drivers/nuopc/catchem_regrid_mod.F90
+    drivers/nuopc/catchem_latlon_output_mod.F90
     drivers/nuopc/aqmio.F90
     drivers/nuopc/catchem_emis_mod.F90
     drivers/nuopc/catchem_nuopc_cap.F90
@@ -161,10 +180,12 @@ if(CATCHEM_BUILD_NUOPC)
     PRIVATE
       $<TARGET_FILE:CATChem>
       $<TARGET_FILE:CATChem_process_seasalt>
+      $<TARGET_FILE:CATChem_process_dust>
       $<TARGET_FILE:CATChem_process_drydep>
       $<TARGET_FILE:CATChem_process_wetdep>
       $<TARGET_FILE:CATChem_process_settling>
       $<TARGET_FILE:CATChem_process_so4chem>
+      $<TARGET_FILE:CATChem_process_carbchem>
       $<TARGET_FILE:CATChem_core>
       $<TARGET_FILE:yaml_interface>
       $<TARGET_FILE:catchem_utilities>
