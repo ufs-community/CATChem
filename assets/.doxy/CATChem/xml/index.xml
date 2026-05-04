@@ -493,7 +493,7 @@
     <member refid="structconfigmanager__mod_1_1configdatatype_1a7521a2d1f0913e82deb24fb71911c6a3" kind="variable"><name>external_emissions</name></member>
     <member refid="structconfigmanager__mod_1_1configdatatype_1a7026f8b86c5f1eb74d9602eb711ce7b1" kind="variable"><name>emission_mapping</name></member>
     <member refid="structconfigmanager__mod_1_1configdatatype_1a4c6d689a1641b51ef8941a2e170173ec" kind="variable"><name>config_version</name></member>
-    <member refid="structconfigmanager__mod_1_1configdatatype_1ac1a307ff46b2938ad00f0173377ef99a" kind="variable"><name>source_file</name></member>
+    <member refid="structconfigmanager__mod_1_1configdatatype_1a05d2de5c0b64d09ed8efef95eb17666d" kind="variable"><name>source_file</name></member>
     <member refid="structconfigmanager__mod_1_1configdatatype_1a081a13120d002e0fa98046f4ce79dc25" kind="variable"><name>is_validated</name></member>
     <member refid="structconfigmanager__mod_1_1configdatatype_1a19e52705d6177f03c2096fed09621fda" kind="variable"><name>run_phases_enabled</name></member>
     <member refid="structconfigmanager__mod_1_1configdatatype_1a0686bc492ea8907be4a5c4436db698f7" kind="variable"><name>run_phase_processes</name></member>
@@ -812,7 +812,7 @@
   <compound refid="structconfigmanager__mod_1_1emissionmappingconfig" kind="type"><name>configmanager_mod::emissionmappingconfig</name>
     <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1ae4f165783a2cf3daec5eec7d78d77c15" kind="variable"><name>n_categories</name></member>
     <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1a9c44da19e3f8173a59c4f2027433bd15" kind="variable"><name>categories</name></member>
-    <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1a1cb4c6745de845c7f46dc93ad266b151" kind="variable"><name>config_file</name></member>
+    <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1a5486c590e83ac90c5dd3a9b13eb89a84" kind="variable"><name>config_file</name></member>
     <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1a42e994d4572af094d1891c6e1437816f" kind="variable"><name>is_loaded</name></member>
     <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1aa16034b0b1328094bc1944522ccd8c20" kind="function"><name>init</name></member>
     <member refid="structconfigmanager__mod_1_1emissionmappingconfig_1a0c4e11d65388f80df63525f60ece6440" kind="function"><name>cleanup</name></member>
@@ -947,7 +947,7 @@
   </compound>
   <compound refid="structconfigmanager__mod_1_1externalemisconfig" kind="type"><name>configmanager_mod::externalemisconfig</name>
     <member refid="structconfigmanager__mod_1_1externalemisconfig_1a78bff6233b1329e7bc0ecc50994e4bfa" kind="variable"><name>activate</name></member>
-    <member refid="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" kind="variable"><name>config_file</name></member>
+    <member refid="structconfigmanager__mod_1_1externalemisconfig_1ad7d23efb1e0748582a990063633519c2" kind="variable"><name>config_file</name></member>
     <member refid="structconfigmanager__mod_1_1externalemisconfig_1af6775f95edc0bd048ce06865fd7696aa" kind="variable"><name>temporal_profile</name></member>
     <member refid="structconfigmanager__mod_1_1externalemisconfig_1aa2b8ac78c3c9eab77f0eaf65b46202f2" kind="variable"><name>dynamic_mapping</name></member>
     <member refid="structconfigmanager__mod_1_1externalemisconfig_1ac2eefe3fe493285697f334a86c40174c" kind="variable"><name>global_scale_factor</name></member>

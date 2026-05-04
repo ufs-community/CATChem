@@ -267,7 +267,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="85" bodyend="258"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="85" bodyend="253"/>
       </memberdef>
       <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ac09cc3e8dab33327e43ca0c559f9418a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure real(fp) function</type>
@@ -290,7 +290,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="268" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="269" bodyend="275"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="263" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="264" bodyend="270"/>
       </memberdef>
       <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure real(fp) function</type>
@@ -313,7 +313,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="279" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="280" bodyend="293"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="274" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="275" bodyend="288"/>
       </memberdef>
       <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
       <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>

@@ -19,9 +19,9 @@
         </inbodydescription>
         <location file="src/core/ConfigManager_Mod.F90" line="124" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="124" bodyend="124"/>
       </memberdef>
-      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" static="no" mutable="no">
-        <type>character(len=256)</type>
-        <definition>character(len=256) configmanager_mod::externalemisconfig::config_file</definition>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1externalemisconfig_1ad7d23efb1e0748582a990063633519c2" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) configmanager_mod::externalemisconfig::config_file</definition>
         <argsstring></argsstring>
         <name>config_file</name>
         <qualifiedname>configmanager_mod::externalemisconfig::config_file</qualifiedname>
@@ -92,7 +92,7 @@
     <location file="src/core/ConfigManager_Mod.F90" line="123" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="123" bodyend="129"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1a78bff6233b1329e7bc0ecc50994e4bfa" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>activate</name></member>
-      <member refid="structconfigmanager__mod_1_1externalemisconfig_1a202f13b303d64f81c41b4282690d8238" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>config_file</name></member>
+      <member refid="structconfigmanager__mod_1_1externalemisconfig_1ad7d23efb1e0748582a990063633519c2" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>config_file</name></member>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1aa2b8ac78c3c9eab77f0eaf65b46202f2" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>dynamic_mapping</name></member>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1ac2eefe3fe493285697f334a86c40174c" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>global_scale_factor</name></member>
       <member refid="structconfigmanager__mod_1_1externalemisconfig_1af6775f95edc0bd048ce06865fd7696aa" prot="public" virt="non-virtual"><scope>configmanager_mod::externalemisconfig</scope><name>temporal_profile</name></member>

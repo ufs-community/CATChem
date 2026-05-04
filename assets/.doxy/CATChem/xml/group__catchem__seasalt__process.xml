@@ -37,7 +37,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="306" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="307" bodyend="343"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="301" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="302" bodyend="338"/>
       </memberdef>
       <memberdef kind="function" id="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure real(fp) function</type>
@@ -124,7 +124,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="355" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="356" bodyend="376"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="350" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="351" bodyend="371"/>
       </memberdef>
       <memberdef kind="function" id="group__catchem__seasalt__process_1ga47b81e2f8cc2a605f8beb8c6368f66dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>

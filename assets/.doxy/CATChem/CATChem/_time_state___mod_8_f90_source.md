@@ -143,7 +143,6 @@ contains
    end function get_doy
 
    subroutine timestate_init(this, year, month, day, hour, minute, second, timestep, error_mgr, rc)
-      use error_mod, only: error_invalid_input
 
       class(TimeStateType), intent(inout) :: this
       integer, optional, intent(in) :: year, month, day, hour, minute, second
@@ -414,7 +413,6 @@ contains
    end function get_timezone_offset
 
    subroutine calculate_derived_fields(this, error_mgr, rc)
-      use error_mod, only: error_invalid_input
 
       class(TimeStateType), intent(inout) :: this
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr

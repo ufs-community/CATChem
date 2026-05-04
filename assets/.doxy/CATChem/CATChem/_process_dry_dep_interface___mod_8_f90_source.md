@@ -342,7 +342,7 @@ contains
       real(fp), allocatable :: species_dd_DvzMinVal_land(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: loss_fraction  ! Loss fraction for multiplicative tendencies
 
@@ -570,7 +570,7 @@ contains
       logical, allocatable :: species_is_seasalt(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: loss_fraction  ! Loss fraction for multiplicative tendencies
 
@@ -756,7 +756,7 @@ contains
       logical, allocatable :: species_is_seasalt(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: loss_fraction  ! Loss fraction for multiplicative tendencies
 
@@ -962,12 +962,11 @@ contains
    function get_required_met_fields(this) result(field_names)
       class(ProcessDryDepInterface), intent(in) :: this
       character(len=32), allocatable :: field_names(:)
-      character(len=32), allocatable :: scheme_fields(:)
       character(len=32), allocatable :: process_fields(:)
       character(len=32), allocatable :: gas_scheme_fields(:), aero_scheme_fields(:)
       integer :: gas_scheme_count, aero_scheme_count
       character(len=32), allocatable :: unique_fields(:)
-      integer :: total_fields, scheme_count, process_count, i, j, unique_count
+      integer :: total_fields, process_count, i, j, unique_count
       logical :: is_duplicate
 
       ! No process-level required fields
@@ -1113,7 +1112,7 @@ contains
 
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
-      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_2d, diag_real_3d
+      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_2d
 
       class(ProcessDryDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container

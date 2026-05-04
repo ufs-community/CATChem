@@ -79,9 +79,9 @@
         </inbodydescription>
         <location file="src/core/ConfigManager_Mod.F90" line="198" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="198" bodyend="198"/>
       </memberdef>
-      <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1ac1a307ff46b2938ad00f0173377ef99a" prot="public" static="no" mutable="no">
-        <type>character(len=256)</type>
-        <definition>character(len=256) configmanager_mod::configdatatype::source_file</definition>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1configdatatype_1a05d2de5c0b64d09ed8efef95eb17666d" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) configmanager_mod::configdatatype::source_file</definition>
         <argsstring></argsstring>
         <name>source_file</name>
         <qualifiedname>configmanager_mod::configdatatype::source_file</qualifiedname>
@@ -393,7 +393,7 @@
       <member refid="structconfigmanager__mod_1_1configdatatype_1a36e88a94df53a0b6399eb99b0ff4f0c6" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>run_phases</name></member>
       <member refid="structconfigmanager__mod_1_1configdatatype_1a19e52705d6177f03c2096fed09621fda" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>run_phases_enabled</name></member>
       <member refid="structconfigmanager__mod_1_1configdatatype_1ab9c7e356bd6b63fbbdb4c98f0434f7ad" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>runtime</name></member>
-      <member refid="structconfigmanager__mod_1_1configdatatype_1ac1a307ff46b2938ad00f0173377ef99a" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>source_file</name></member>
+      <member refid="structconfigmanager__mod_1_1configdatatype_1a05d2de5c0b64d09ed8efef95eb17666d" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>source_file</name></member>
       <member refid="structconfigmanager__mod_1_1configdatatype_1ac6cb6715d05f373c6138f945cbf833ba" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>to_yaml_string</name></member>
       <member refid="structconfigmanager__mod_1_1configdatatype_1ac8e85d8ceca3aaa7318ea320531775ab" prot="public" virt="non-virtual"><scope>configmanager_mod::configdatatype</scope><name>validate</name></member>
     </listofallmembers>

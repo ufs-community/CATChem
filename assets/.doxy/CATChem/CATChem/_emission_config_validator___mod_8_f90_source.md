@@ -157,7 +157,6 @@ contains
 
       type(ValidationResultType) :: result
       logical :: species_exists
-      character(len=256) :: message
 
       rc = cc_success
       this%n_species_validated = this%n_species_validated + 1
@@ -230,7 +229,6 @@ contains
 
       type(ValidationResultType) :: result
       real(fp) :: total_scale
-      character(len=256) :: message
 
       rc = cc_success
 

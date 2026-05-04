@@ -562,7 +562,7 @@ contains
 
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
-      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_2d, diag_real_3d
+      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_3d
 
       class(ProcessWetDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container

@@ -341,8 +341,6 @@ contains
       integer, intent(in) :: species_mapping(:)
       integer, intent(out) :: rc
 
-      integer :: i, j, species_idx
-
       rc = cc_success
 
       ! Deprecated functionality - EmisState_Mod has been removed
@@ -364,8 +362,6 @@ contains
 
       type(ChemStateType), pointer :: chem_state
       real(fp), allocatable :: concentrations(:,:,:,:)
-      integer :: i, j, k, s
-
       rc = cc_success
 
       ! Get chemical state from container

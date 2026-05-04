@@ -10,6 +10,7 @@
 ```Fortran
 
 module statemanager_mod
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
    use precision_mod, only: fp
    use error_mod, only: cc_success, cc_failure, errormanagertype
    use configmanager_mod, only: configmanagertype
@@ -383,7 +384,7 @@ contains
 
       integer :: grid_i, grid_j, k, ispec
       integer :: nlev, nspec_chem, nspec_emis
-      real(fp) :: met_value, chem_value
+      real(fp) :: chem_value
 
       rc = cc_success
 
@@ -587,7 +588,7 @@ contains
       rc = cc_success
 
       do i = 1, size(values)
-         if (values(i) /= values(i)) then  ! NaN check
+         if (ieee_is_nan(values(i))) then  ! NaN check
             rc = cc_failure
             return
          endif

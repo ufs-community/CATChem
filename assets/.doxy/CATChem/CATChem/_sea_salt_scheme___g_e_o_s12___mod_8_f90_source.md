@@ -69,16 +69,12 @@ contains
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
 
       ! Local variables
-      integer :: k, species_idx, RC
+      integer :: k, RC
       integer :: diag_idx  ! For diagnostic species indexing
-      real(fp) :: base_emission_factor
-      real(fp) :: environmental_factor
-      real(fp) :: species_factor
-
       logical :: do_seasalt
       integer :: n, ir
       integer, parameter :: nr = 10
-      real(fp), parameter    :: r80fac = 1.65
+      real(fp), parameter    :: r80fac = 1.65_fp       
       real(fp) :: DryRadius
       real(fp) :: DeltaDryRadius
       real(fp) :: rwet, drwet
@@ -93,7 +89,6 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
-      real(fp) :: gweibull
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale

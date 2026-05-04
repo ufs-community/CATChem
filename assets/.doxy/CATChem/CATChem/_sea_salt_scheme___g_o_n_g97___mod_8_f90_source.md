@@ -77,7 +77,7 @@ contains
       integer :: n, ir
       real(fp) :: w10m
       integer, parameter :: nr = 10
-      real, parameter    :: r80fac = 1.65_fp           
+      real(fp), parameter    :: r80fac = 1.65_fp       
       real(fp) :: DryRadius
       real(fp) :: DeltaDryRadius
       real(fp) :: rwet, drwet
@@ -160,7 +160,7 @@ contains
 
                ! Dry Radius Substep
                !-------------------
-               dryradius = species_lower_radius(n) + 0.5 * deltadryradius
+               dryradius = species_lower_radius(n) + 0.5_fp * deltadryradius
 
                do ir = 1, nr ! SubSteps
 

@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="73" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="73" bodyend="73"/>
+        <location file="src/core/StateManager_Mod.F90" line="74" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="74" bodyend="74"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="74" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="74" bodyend="74"/>
+        <location file="src/core/StateManager_Mod.F90" line="75" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), allocatable</type>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="75" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/core/StateManager_Mod.F90" line="76" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1aaffd4fbf9810e6b4d646fc5d1e60ac2f" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>)</type>
@@ -63,7 +63,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="76" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="76" bodyend="76"/>
+        <location file="src/core/StateManager_Mod.F90" line="77" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="77" bodyend="77"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a5145521a12957b0a49bc2ddba5a56e86" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), pointer</type>
@@ -79,7 +79,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="79" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="79" bodyend="79"/>
+        <location file="src/core/StateManager_Mod.F90" line="80" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ab01fb7040449be363c596e2b3e91d187" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>), pointer</type>
@@ -95,7 +95,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="80" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="80" bodyend="80"/>
+        <location file="src/core/StateManager_Mod.F90" line="81" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="81" bodyend="81"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ad0572ae14175ddcd785ebc4f97e29e61" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>), pointer</type>
@@ -111,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="81" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="81" bodyend="81"/>
+        <location file="src/core/StateManager_Mod.F90" line="82" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a01d344cd536e313362f34832655b8f0b" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -127,7 +127,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="84" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="84" bodyend="84"/>
+        <location file="src/core/StateManager_Mod.F90" line="85" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="85" bodyend="85"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1ab9ad4fe2de3021f23089139a54a0fe9a" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -143,7 +143,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="85" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="85" bodyend="85"/>
+        <location file="src/core/StateManager_Mod.F90" line="86" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="86" bodyend="86"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a14e13916158558d793b84263d9457fae" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -159,7 +159,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="86" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="86" bodyend="86"/>
+        <location file="src/core/StateManager_Mod.F90" line="87" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="87" bodyend="87"/>
       </memberdef>
       <memberdef kind="variable" id="structstatemanager__mod_1_1statemanagertype_1a502368bc04ecde7ac787a19336a4dd2c" prot="public" static="no" mutable="no">
         <type>real(fp), public</type>
@@ -175,7 +175,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="87" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="87" bodyend="87"/>
+        <location file="src/core/StateManager_Mod.F90" line="88" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="88" bodyend="88"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -204,7 +204,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="91" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="91" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="92" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="92" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ae450427d0b8912d93928e4902c6b3700" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -227,7 +227,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="92" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="92" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="93" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="93" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a5e1e322876a5893ba2b3ddf3b86a467b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -250,7 +250,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="93" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="93" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="94" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="94" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa3214b20d24ad3fbd6f88f617ab5aa13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -269,7 +269,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="94" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="94" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="95" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac558bf9278efec2a68c318004b495cf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -288,7 +288,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="95" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="95" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="96" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="96" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aba1a5c21b957052228b41a867f949cbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -307,7 +307,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="98" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="98" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="99" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="99" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a97f855b77c342965ab3f38750066ece7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -334,7 +334,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="99" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="99" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="100" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="100" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a90211c01235b1f81225da9e0ee320690" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -353,7 +353,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="100" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="100" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="101" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="101" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aecfe57f24e106524641c76081064f7d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -372,7 +372,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="101" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="101" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="102" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="102" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a6e9028cd5b0601e872a4d7ec603346ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -391,7 +391,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="102" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="102" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="103" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="103" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a2878cb419f6a06394196f8c7755c6a1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -410,7 +410,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="103" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="103" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="104" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aaaced62385697b1be8bdd460bbf37d43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -429,7 +429,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="104" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="105" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa333e1314dc567c00a376c0ebdf8af02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -456,7 +456,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="105" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="105" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="106" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1ac4758e37797dfa2d0a31b94f3631408b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -475,7 +475,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="106" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="106" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="107" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="107" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a4457e561b3f7a645e66506d6d191d1a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -498,7 +498,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="107" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="107" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="108" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="108" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a593dbf0808bbc71d2bd3e9eaf5cd56aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -538,7 +538,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="108" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="108" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="109" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1acf5e89b6d5954cc7f82e2eb6e7bc17fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -566,7 +566,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="109" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="109" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="110" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="110" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a59822ebb98f4049a37615bfad957db73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -594,7 +594,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="110" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="110" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="111" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="111" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1aa1bb6355b40163973f8d5615bac667b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -617,7 +617,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="113" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="113" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="114" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="114" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a7a1ebea13f4c9c301c73635965485ca1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -636,7 +636,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="114" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="114" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="115" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="115" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structstatemanager__mod_1_1statemanagertype_1a17ca0e1b48732c62c778f59251265dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -655,7 +655,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/StateManager_Mod.F90" line="115" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="115" bodyend="-1"/>
+        <location file="src/core/StateManager_Mod.F90" line="116" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="116" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -833,7 +833,7 @@
         <link refid="structtimestate__mod_1_1timestatetype"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/StateManager_Mod.F90" line="69" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="69" bodyend="117"/>
+    <location file="src/core/StateManager_Mod.F90" line="70" column="1" bodyfile="src/core/StateManager_Mod.F90" bodystart="70" bodyend="118"/>
     <listofallmembers>
       <member refid="structstatemanager__mod_1_1statemanagertype_1acf5e89b6d5954cc7f82e2eb6e7bc17fb" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>apply_virtual_column</name></member>
       <member refid="structstatemanager__mod_1_1statemanagertype_1af5a2373e0cf76566b767c9f5f88c3393" prot="public" virt="non-virtual"><scope>statemanager_mod::statemanagertype</scope><name>chem_state</name></member>

@@ -256,7 +256,7 @@ MODULE metstate_mod
 CONTAINS
 
    subroutine metstate_init(this, nx, ny, nlevs, nsoil, nsoiltype, nsurftype, error_mgr, rc)
-      use error_mod, only: errormanagertype, cc_success, error_memory_allocation
+      use error_mod, only: errormanagertype, cc_success
 
       implicit none
       class(MetStateType), intent(inout) :: this
@@ -305,7 +305,7 @@ CONTAINS
    end subroutine metstate_init
 
    subroutine allocate_metstate_arrays(this, field_name, error_mgr, rc)
-      use error_mod, only: errormanagertype, cc_success, error_memory_allocation
+      use error_mod, only: errormanagertype, cc_success
 
       implicit none
       class(MetStateType), intent(inout) :: this

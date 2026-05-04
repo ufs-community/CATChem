@@ -83,7 +83,7 @@ module configmanager_mod
 
    type :: externalemisconfig
       logical :: activate = .false.                   
-      character(len=256) :: config_file = ''
+      character(len=512) :: config_file = ''
       character(len=64) :: temporal_profile = 'constant'
       logical :: dynamic_mapping = .true.             
       real(fp) :: global_scale_factor = 1.0_fp        
@@ -118,7 +118,7 @@ module configmanager_mod
    type :: emissionmappingconfig
       integer :: n_categories = 0
       type(EmissionCategoryMapping), allocatable :: categories(:)
-      character(len=256) :: config_file = ''
+      character(len=512) :: config_file = ''
       logical :: is_loaded = .false.                  
    contains
       procedure :: init => emis_mapping_config_init
@@ -135,7 +135,7 @@ module configmanager_mod
 
       ! Metadata
       character(len=64) :: config_version = '2.0'
-      character(len=256) :: source_file = ''
+      character(len=512) :: source_file = ''
       logical :: is_validated = .false.                 
       logical :: run_phases_enabled = .false.           
 
@@ -1395,7 +1395,7 @@ contains
 
       type(yaml_node_t) :: species_config
       logical :: file_exists, success
-      integer :: i, j, list_size, total_keys, species_index
+      integer :: i, list_size, total_keys, species_index
       character(len=256) :: species_path
       character(len=64), allocatable :: species_keys(:)
       character(len=64) :: all_yaml_keys(200)
@@ -1592,7 +1592,7 @@ contains
       logical :: temp_logical
       character(len=256) :: temp_string
       integer :: yaml_rc  ! Separate return code for YAML operations
-      integer :: i, j, actual_size  ! Loop variables for debugging
+      integer :: actual_size
 
       rc = cc_success
 
@@ -2125,10 +2125,7 @@ contains
       logical :: file_exists, success
       integer :: n_categories, n_species, i, j, n_maps, n_scales, k, species_idx
       integer :: n_resolved, n_unresolved
-      real(fp) :: single_scale
       character(len=64), allocatable :: all_categories(:), all_species(:)
-      character(len=64), allocatable :: emission_fields(:)
-      integer :: n_fields
 
       rc = cc_success
 
@@ -2322,7 +2319,7 @@ contains
 
       ! Variables for duplicate detection
       logical :: already_exists
-      integer :: check_idx, i
+      integer :: check_idx
       rc = cc_success
       n_items = 0
       in_section = .false.
@@ -2648,7 +2645,7 @@ contains
       character(len=64), intent(out) :: components(:)
       integer, intent(out) :: n_components
 
-      integer :: start_pos, end_pos, slash_pos
+      integer :: slash_pos
       character(len=256) :: remaining_path
 
       n_components = 0
@@ -2897,13 +2894,13 @@ contains
       character(len=64), allocatable :: unique_processes(:)  ! Track unique process names
       integer, allocatable :: unique_process_indices(:)      ! Map unique process names to indices
       character(len=64) :: phase_name, process_name, test_value
-      integer :: phase_idx, process_idx, num_phases, num_processes
-      integer :: total_processes, n_discovered_phases, global_process_idx
+      integer :: phase_idx, process_idx, num_processes
+      integer :: n_discovered_phases, global_process_idx
       integer :: n_unique_processes, unique_idx
-      logical :: has_run_phases, has_processes, success, process_found, is_duplicate
-      character(len=256) :: process_scheme, temp_string
+      logical :: has_run_phases, has_processes, success, is_duplicate
+      character(len=256) :: temp_string
       logical :: temp_logical
-      integer :: temp_integer, valid_phases
+      integer :: valid_phases
 
       rc = cc_success
 
@@ -3327,7 +3324,7 @@ contains
       integer, intent(out) :: num_elements
 
       character(len=len(input_string)) :: work_string
-      integer :: pos, start_pos, str_len, i
+      integer :: pos, start_pos, str_len
       logical :: in_word
 
       num_elements = 0
