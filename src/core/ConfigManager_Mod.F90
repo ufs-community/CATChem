@@ -2011,7 +2011,7 @@ contains
       species%is_valid = .true.
 
       ! Print species information in a single line
-      write(*, '(A,A,A,F6.1,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
+      write(*, '(A,A,A,ES10.3,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
          'INFO: Loaded species "', trim(adjustl(species%short_name)), &
          '" (MW=', species%mw_g, ', gas=', species%is_gas, &
          ', aerosol=', species%is_aerosol, ', dust=', species%is_dust, &
