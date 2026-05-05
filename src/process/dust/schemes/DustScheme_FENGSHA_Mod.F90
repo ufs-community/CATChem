@@ -153,14 +153,14 @@ contains
       real(fp) :: FengshaScale                   !< Total Scaling Factor
       real(fp) :: h_to_v_ratio                   !< Horizontal to Vertical Mass Flux Ratio
       real(fp) :: distribution(num_species)      !< Distribution Weights
-      
+
       !needs to reinitialize otherwise the skip condition below will cause weird maps.
       if (present(dust_effective_threshold)) dust_effective_threshold = 0.0_fp
       if (present(dust_horizontal_flux)) dust_horizontal_flux = 0.0_fp
       if (present(dust_moisture_correction)) dust_moisture_correction = 0.0_fp
       if (present(dust_emission_total)) dust_emission_total = 0.0_fp
       if (present(dust_emission_per_bin)) dust_emission_per_bin = 0.0_fp
-      
+
       ! Precompute scaling factor
       alpha_grav = params%alpha / max(g0, SMALL)
 
@@ -194,7 +194,7 @@ contains
       if (TSKIN <= 273.15_fp) then
          skip = .true.
       endif
-      
+
       ! Skip computation if criteria not met
       if (skip) then
          return
