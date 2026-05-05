@@ -36,8 +36,6 @@
 !! \ingroup catchem_nuopc_group
 
 module cc_nuopc
-! Renamed from catchem_nuopc_cap to aqm for UFS Driver compatibility
-! UFS expects: use aqm, only: AQM_SS => SetServices (after FRONT_AQM=aqm substitution)
 
    use ESMF
    use NUOPC

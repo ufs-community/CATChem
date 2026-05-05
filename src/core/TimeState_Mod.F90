@@ -79,7 +79,7 @@ contains
       gamma = 2.0_fp * PI * (real(this%doy, fp) - 1.0_fp) / 365.0_fp
 
       ! Solar declination (in degrees, then radians)
-      !decl = 23.44 * sin(2.0 * PI * (real(this%doy) - 81.0) / 365.0)
+      !decl = 23.44 * sin(2.0 * PI * (real(this%doy, fp) - 81.0) / 365.0)
       !decl_rad = decl * PI_180
 
       !use a more accurate formula for declination
