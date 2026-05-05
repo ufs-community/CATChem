@@ -120,6 +120,11 @@ contains
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
       real(fp) :: emission_temp                        !< Temporary variable for emission calculation
 
+      !needs to reinitialize otherwise the skip condition below will cause weird maps.
+      if (present(utar_threshold_per_bin)) utar_threshold_per_bin = 0.0_fp
+      if (present(dust_emission_total)) dust_emission_total = 0.0_fp
+      if (present(dust_emission_per_bin)) dust_emission_per_bin = 0.0_fp
+
       ! Skip criteria evaluation
       skip = (LWI /= 1)  !land = 1, water = 0, ice = 2
 

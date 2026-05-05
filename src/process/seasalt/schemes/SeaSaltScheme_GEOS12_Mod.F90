@@ -144,6 +144,12 @@ contains
       fsstemis = 1.0_fp
       fhoppel = 1.0_fp
 
+      !initialize diagnostics if present
+      if (present(seasalt_mass_emission_total)) seasalt_mass_emission_total = 0.0_fp
+      if (present(seasalt_number_emission_total)) seasalt_number_emission_total = 0.0_fp
+      if (present(seasalt_mass_emission_per_bin)) seasalt_mass_emission_per_bin = 0.0_fp
+      if (present(seasalt_number_emission_per_bin)) seasalt_number_emission_per_bin = 0.0_fp
+
       do_seasalt = .true. ! Default value for all cases
 
       ! Don't do Sea Salt over land
