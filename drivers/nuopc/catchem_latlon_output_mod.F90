@@ -135,6 +135,7 @@ contains
          routehandle=ll_rh, &
          regridmethod=ESMF_REGRIDMETHOD_BILINEAR, &
          unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+         ignoreDegenerate=.true., &
          rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return

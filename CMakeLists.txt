@@ -111,9 +111,17 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
 endif()
 
 if(CATCHEM_BUILD_NUOPC)
-  if(NOT TARGET esmf)
+  # Resolve ESMF target: prefer uppercase ESMF (FindESMF), fall back to
+  # lowercase esmf (MPAS internal), or find_package as last resort.
+  if(TARGET ESMF)
+    set(CATCHEM_ESMF_TARGET ESMF)
+  elseif(TARGET esmf)
+    set(CATCHEM_ESMF_TARGET esmf)
+  else()
     find_package(ESMF REQUIRED)
+    set(CATCHEM_ESMF_TARGET ESMF)
   endif()
+  message(STATUS "CATChem: using ESMF target '${CATCHEM_ESMF_TARGET}'")
 endif()
 
 # Auto-detect if default real is promoted to 8-byte by the parent build
@@ -168,7 +176,7 @@ if(CATCHEM_BUILD_NUOPC)
   )
 
   # Link only to external dependencies (not internal CATChem targets)
-  target_link_libraries(cc_nuopc PUBLIC esmf NetCDF::NetCDF_Fortran)
+  target_link_libraries(cc_nuopc PUBLIC ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran)
 
   # Manually handle the CATChem dependencies by linking to built libraries
   # Only need to depend on CATChem - it already depends on CATChem_core, yaml_interface, etc.

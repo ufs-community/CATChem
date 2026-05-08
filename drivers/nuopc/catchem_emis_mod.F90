@@ -90,11 +90,20 @@ contains
 
       ! Local variables
       integer :: localrc,  icat
+      logical :: extemis_activate
       character(len=EMIS_MAXSTR) :: msg
       character(len=*), parameter :: pName = 'catchem_emis_init'
 
       ! Initialize
       rc = CC_SUCCESS
+
+      ! Check top-level processes/extemis/activate switch
+      call config_manager%get_logical('processes/extemis/activate', extemis_activate, localrc, .true.)
+      if (.not. extemis_activate) then
+         call ESMF_LogWrite(trim(pName)//': External emissions disabled (processes/extemis/activate=false)', &
+            ESMF_LOGMSG_INFO, rc=localrc)
+         return
+      end if
 
       ! Check if emission mapping is loaded
       if (.not. config_manager%config_data%emission_mapping%is_loaded) then
@@ -171,6 +180,9 @@ contains
       character(len=*), parameter :: pName = 'catchem_emis_update'
 
       rc = CC_SUCCESS
+
+      ! Skip if no emission categories were initialized (e.g. extemis disabled)
+      if (ext_emis_data%n_categories == 0) return
 
       ! Get managers from state manager
       config_manager => state_manager%get_config_ptr()

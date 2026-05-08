@@ -45,7 +45,7 @@ module catchem_nuopc_interface
    use ExtEmisData_Mod, only: ExtEmisDataType  ! External emissions data type
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
-   use aqmio, only: AQMIO_Create, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
+   use aqmio, only: AQMIO_Create, AQMIO_Destroy, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
       AQMIO_LatlonInit, AQMIO_LatlonCleanup
    use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
    use catchem_emis_mod
@@ -496,8 +496,17 @@ contains
       if (allocated(cc_wrap%field_config%import_fields)) deallocate(cc_wrap%field_config%import_fields)
       if (allocated(cc_wrap%field_config%export_fields)) deallocate(cc_wrap%field_config%export_fields)
 
+      ! Deallocate tracer mapping
+      if (allocated(cc_wrap%tracer_map%nuopc_to_cc)) deallocate(cc_wrap%tracer_map%nuopc_to_cc)
+      if (allocated(cc_wrap%tracer_map%names)) deallocate(cc_wrap%tracer_map%names)
+      if (allocated(cc_wrap%tracer_map%units)) deallocate(cc_wrap%tracer_map%units)
+
       ! Clean up lat/lon stitched output resources
       call AQMIO_LatlonCleanup(rc=rc)
+
+      ! Destroy the IO component and its per-tile taskComps
+      ! Must happen before the parent component's VM is torn down
+      call AQMIO_Destroy(cc_wrap%iocomp, rc=rc)
 
    end subroutine catchem_nuopc_finalize
 
@@ -1107,6 +1116,8 @@ contains
 
       !type(cc_wrap_type), pointer :: cc_wrap
       type(DiagnosticManagerType), pointer :: diag_mgr => null()
+      type(StateManagerType), pointer :: state_mgr_diag => null()
+      type(ConfigManagerType), pointer :: config_mgr_diag => null()
       type(ESMF_Time) :: time_on_file
       character(len=64), allocatable :: process_list(:)
       integer :: num_processes, i
@@ -1115,8 +1126,13 @@ contains
 
       rc = CC_SUCCESS
 
-      ! Get process-local state
-      !cc_wrap => get_cc_wrap()
+      ! Check top-level diagnostics/output/enabled switch before doing anything
+      state_mgr_diag => cc_wrap%catchem_model%get_state_manager()
+      config_mgr_diag => state_mgr_diag%get_config_ptr()
+      if (.not. config_mgr_diag%config_data%runtime%DiagEnabled) then
+         return
+      end if
+      nullify(state_mgr_diag, config_mgr_diag)
 
       ! Initialize output timing if not done
       if (.not. cc_wrap%output_timing_initialized) then

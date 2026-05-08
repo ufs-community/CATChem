@@ -557,6 +557,12 @@ contains
             ESMF_LOGMSG_WARNING, rc=rc)
       end if
 
+      ! Deallocate internal state wrapper
+      if (associated(is%wrap)) then
+         deallocate(is%wrap)
+         nullify(is%wrap)
+      end if
+
       ! Log successful completion
       if (localPet == 0) then
          call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=rc)
