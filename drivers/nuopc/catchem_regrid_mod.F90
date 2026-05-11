@@ -9,6 +9,9 @@ module catchem_regrid_mod
 
    use ESMF
    use netcdf
+   use, intrinsic :: ieee_exceptions, only: ieee_set_halting_mode, &
+      ieee_get_halting_mode, ieee_invalid, ieee_divide_by_zero, &
+      ieee_overflow
 
    implicit none
    private
@@ -93,6 +96,7 @@ contains
       integer :: exclusiveLBound(2)
       type(ESMF_RegridMethod_Flag) :: regridMethod
       integer :: srcTermProc
+      logical :: halting_inv, halting_dzero, halting_ovf
 
       if (present(rc)) rc = ESMF_SUCCESS
       if (present(didRegrid)) didRegrid = .false.
@@ -180,6 +184,16 @@ contains
          end if
 
          ! Compute regrid weights (CDEPS-style parameters)
+         ! Temporarily disable FPE trapping: ESMF internally produces
+         ! transient invalid/divide-by-zero during weight computation
+         ! which it handles; -fpe0 would kill the process otherwise.
+         call ieee_get_halting_mode(ieee_invalid, halting_inv)
+         call ieee_get_halting_mode(ieee_divide_by_zero, halting_dzero)
+         call ieee_get_halting_mode(ieee_overflow, halting_ovf)
+         call ieee_set_halting_mode(ieee_invalid, .false.)
+         call ieee_set_halting_mode(ieee_divide_by_zero, .false.)
+         call ieee_set_halting_mode(ieee_overflow, .false.)
+
          srcTermProc = 0
          if (regridMethod == ESMF_REGRIDMETHOD_CONSERVE) then
             call ESMF_FieldRegridStore(srcField, dstField, &
@@ -209,6 +223,12 @@ contains
                unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
                rc=localrc)
          end if
+
+         ! Restore original FPE halting modes
+         call ieee_set_halting_mode(ieee_invalid, halting_inv)
+         call ieee_set_halting_mode(ieee_divide_by_zero, halting_dzero)
+         call ieee_set_halting_mode(ieee_overflow, halting_ovf)
+
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) then
             ncStatus = nf90_close(ncid)

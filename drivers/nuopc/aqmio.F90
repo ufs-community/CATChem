@@ -3974,6 +3974,7 @@ contains
 
          allocate(sendbuf(lbuf), recvbuf(lbuf))
          sendbuf = reshape(lonBuf, (/lbuf/))
+         recvbuf = 0._ESMF_KIND_R8
          call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
             ESMF_REDUCE_SUM, 0, rc=localrc)
          lonBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
@@ -3996,6 +3997,7 @@ contains
 
          allocate(sendbuf(lbuf), recvbuf(lbuf))
          sendbuf = reshape(latBuf, (/lbuf/))
+         recvbuf = 0._ESMF_KIND_R8
          call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
             ESMF_REDUCE_SUM, 0, rc=localrc)
          latBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg

@@ -183,10 +183,14 @@ contains
       end select
 
       if (.not. skip) then
+         skip = (clayfrac /= clayfrac) .or. (sandfrac /= sandfrac) ! check for NaNs   
+         if (skip) return !return here to avoid floating point checking below.    
+      endif
+
+      if (.not. skip) then
          skip = (SSM < SSM_THRESH) .or. &
             (clayfrac <= 0.0_fp) .or. (sandfrac <= 0.0_fp) .or. &
-            (clayfrac > 1.0_fp) .or. (sandfrac > 1.0_fp) .or. &
-            (clayfrac /= clayfrac) .or. (sandfrac /= sandfrac) ! check for NaNs
+            (clayfrac > 1.0_fp) .or. (sandfrac > 1.0_fp)            
       endif
 
       ! Don't do dust over frozen soil

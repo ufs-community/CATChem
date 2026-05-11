@@ -19,6 +19,9 @@ module catchem_latlon_output_mod
 
    use ESMF
    use netcdf
+   use, intrinsic :: ieee_exceptions, only: ieee_set_halting_mode, &
+      ieee_get_halting_mode, ieee_invalid, ieee_divide_by_zero, &
+      ieee_overflow
 
    implicit none
    private
@@ -69,6 +72,7 @@ contains
       integer :: maxIdx(2)
       character(len=128) :: logmsg
       type(ESMF_VM) :: vm
+      logical :: halting_inv, halting_dzero, halting_ovf
 
       rc = ESMF_SUCCESS
       if (ll_initialized) return
@@ -131,12 +135,25 @@ contains
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
       ! --- Compute bilinear regrid weights (cubed-sphere -> lat/lon) ---
+      ! Temporarily disable FPE trapping for ESMF weight computation
+      call ieee_get_halting_mode(ieee_invalid, halting_inv)
+      call ieee_get_halting_mode(ieee_divide_by_zero, halting_dzero)
+      call ieee_get_halting_mode(ieee_overflow, halting_ovf)
+      call ieee_set_halting_mode(ieee_invalid, .false.)
+      call ieee_set_halting_mode(ieee_divide_by_zero, .false.)
+      call ieee_set_halting_mode(ieee_overflow, .false.)
+
       call ESMF_FieldRegridStore(ll_src_2d, ll_dst_2d, &
          routehandle=ll_rh, &
          regridmethod=ESMF_REGRIDMETHOD_BILINEAR, &
          unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
          ignoreDegenerate=.true., &
          rc=localrc)
+
+      call ieee_set_halting_mode(ieee_invalid, halting_inv)
+      call ieee_set_halting_mode(ieee_divide_by_zero, halting_dzero)
+      call ieee_set_halting_mode(ieee_overflow, halting_ovf)
+
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 

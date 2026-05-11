@@ -48,7 +48,9 @@ diagnostics:
 # Optics files for Mie
 #============================================================================
 mie:
-  directory: "/gpfs/f6/bil-fire3/world-shared/Emissions/NASA/ExtData/monochromatic/"  #location on gaeac6
+  #directory: "/gpfs/f6/bil-fire3/world-shared/Emissions/NASA/ExtData/monochromatic/"  #location on gaeac6
+  #directory: "/scratch4/NCEPDEV/naqfc/Barry.Baker/Emissions/Emissions/NASA/ExtData/monochromatic/"  #location on ursa
+  directory: "./ExtData/monochromatic/"  #in running directory after copying from the above directories
   #directory: "../../../../../../optics/"
   files:
     # SS: opticsBands_SS.v3_3.RRTMG.nc
@@ -57,12 +59,18 @@ mie:
     # OC: opticsBands_OC.v1_3.RRTMG.nc
     # NI: opticsBands_NI.v2_5.RRTMG.nc
     # SU: opticsBands_SU.v1_3.RRTMG.nc
-    SS: optics_SS.v3_5.nc
-    DU: optics_DU.v15_5.nc
-    BC: optics_BC.v1_5.nc
-    OC: optics_OC.v1_5.nc
+    # SS: optics_SS.v3_5.nc
+    # DU: optics_DU.v15_5.nc
+    # BC: optics_BC.v1_5.nc
+    # OC: optics_OC.v1_5.nc
+    # NI: optics_NI.v2_5.nc
+    # SU: optics_SU.v1_5.nc
+    SS: optics_SS.v3_3.nc
+    DU: optics_DU.v15_3.nc
+    BC: optics_BC.v1_3.nc
+    OC: optics_OC.v1_3.nc
     NI: optics_NI.v2_5.nc
-    SU: optics_SU.v1_5.nc
+    SU: optics_SU.v1_3.nc
 #============================================================================
 # RunPhase settings: define process running order
 #============================================================================
