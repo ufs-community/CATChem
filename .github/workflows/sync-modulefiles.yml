@@ -1,0 +1,99 @@
+name: Weekly Modulefile Sync
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # Every Monday at 3:00 AM UTC
+  workflow_dispatch:
+
+jobs:
+  update-and-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clone ufs-weather-model and copy modulefiles
+        run: |
+          git clone --depth 1 https://github.com/ufs-community/ufs-weather-model.git
+          mkdir -p modulefiles
+          cp -r ufs-weather-model/modulefiles/* modulefiles/
+          rm -rf ufs-weather-model
+
+      - name: Cleanup and Replace Text
+        run: |
+          # Consolidate deletions for ufs_common.lua while it still has its original name
+          sed -i -e '/mapl/d' \
+                 -e '/scotch/d' \
+                 -e '/gftl-shared/d' \
+                 -e '/w3emc/d' \
+                 -e '/ip/d' \
+                 -e '/sp/d' \
+                 -e '/g2tmpl/d' \
+                 -e '/g2/d' \
+                 -e '/crtm/d' \
+                 -e '/bacio/d' modulefiles/ufs_common.lua
+
+          # Replace model names globally
+          find modulefiles/ -type f -exec sed -i 's/UFS Weather Model/Configurable ATmospheric Chemistry Component/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/UFS Model/CATChem/g' {} +
+
+      - name: Rename ufs_* to cece_* and update internal references
+        run: |
+          # 1. Rename files using a Bash loop
+          for file in modulefiles/ufs_*; do
+            if [ -e "$file" ]; then
+              mv "$file" "${file/ufs_/catchem_}"
+            fi
+          done
+          # 2. Update internal string references now that files are renamed
+          find modulefiles/ -type f -exec sed -i 's/ufs_common/catchem_common/g' {} +
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pre-commit
+
+      - name: Run pre-commit hooks on modulefiles
+        run: |
+          # Initialize git so pre-commit has a context, then run
+          git add modulefiles
+          pre-commit run --files $(find modulefiles/ -type f) || true
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "no_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.no_changes == 'false'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Automated update: Sync modulefiles and clean up references"
+          branch: update-modulefiles
+          delete-branch: true
+          title: "Automated PR: Sync modulefiles from ufs-weather-model"
+          body: |
+            This weekly automated PR:
+            - Syncs modulefiles from ufs-weather-model
+            - Removes deprecated or unused dependencies from ufs_common.lua
+            - Renames ufs_*.lua to catchem_*.lua and updates internal references
+            - Replaces model references with 'CATChem'
+            - Runs pre-commit formatting

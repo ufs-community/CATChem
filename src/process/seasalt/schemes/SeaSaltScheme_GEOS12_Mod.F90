@@ -104,16 +104,12 @@ contains
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
 
       ! Local variables
-      integer :: k, species_idx, RC
+      integer :: k, RC
       integer :: diag_idx  ! For diagnostic species indexing
-      real(fp) :: base_emission_factor
-      real(fp) :: environmental_factor
-      real(fp) :: species_factor
-
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
       integer :: n, ir                                 !< Loop counter
       integer, parameter :: nr = 10                    !< Number of (linear) sub-size bins
-      real(fp), parameter    :: r80fac = 1.65              !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
+      real(fp), parameter    :: r80fac = 1.65_fp       !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
       real(fp) :: DryRadius                            !< sub-bin radius         (dry, um)
       real(fp) :: DeltaDryRadius                       !< sub-bin radius spacing (dry, um)
       real(fp) :: rwet, drwet                          !< sub-bin radius spacing (rh=80%, um)
@@ -128,7 +124,6 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
-      real(fp) :: gweibull
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale

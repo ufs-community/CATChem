@@ -245,7 +245,7 @@ contains
       type(ErrorManagerType), intent(inout) :: error_handler
 
       character(len=256) :: scheme_name
-      integer :: ierr, rc
+      integer :: rc
 
       ! Process reads directly from master YAML structure: processes.so4chem
       ! ConfigManager provides generic YAML access, process handles its own configuration
@@ -397,7 +397,7 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
 
-      integer :: ierr, rc
+      integer :: rc
 
       ! Load scheme parameters directly from processes/so4chem/gocart/ in master YAML
       call config_manager%get_logical("processes/so4chem/gocart/update_so2", &

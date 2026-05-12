@@ -147,7 +147,6 @@ contains
    !! Sets default values, calculates derived quantities (Julian date, DOY),
    !! and validates the initial time configuration.
    subroutine timestate_init(this, year, month, day, hour, minute, second, timestep, error_mgr, rc)
-      use error_mod, only: ERROR_INVALID_INPUT
 
       class(TimeStateType), intent(inout) :: this
       integer, optional, intent(in) :: year, month, day, hour, minute, second
@@ -444,7 +443,6 @@ contains
    !! \param[inout] error_mgr  Error manager
    !! \param[out]   rc         Return code
    subroutine calculate_derived_fields(this, error_mgr, rc)
-      use error_mod, only: ERROR_INVALID_INPUT
 
       class(TimeStateType), intent(inout) :: this
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr

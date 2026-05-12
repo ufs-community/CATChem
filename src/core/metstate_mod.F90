@@ -259,7 +259,7 @@ CONTAINS
    !! \param[inout] error_mgr Error manager for context and error reporting
    !! \param[out]   rc        Return code (CC_SUCCESS or error code)
    subroutine metstate_init(this, nx, ny, nlevs, nsoil, nsoiltype, nsurftype, error_mgr, rc)
-      use error_mod, only: ErrorManagerType, CC_SUCCESS, ERROR_MEMORY_ALLOCATION
+      use error_mod, only: ErrorManagerType, CC_SUCCESS
 
       implicit none
       class(MetStateType), intent(inout) :: this
@@ -316,7 +316,7 @@ CONTAINS
    !! \param[inout] error_mgr Error manager for context and error reporting
    !! \param[out]   rc        Return code
    subroutine allocate_metstate_arrays(this, field_name, error_mgr, rc)
-      use error_mod, only: ErrorManagerType, CC_SUCCESS, ERROR_MEMORY_ALLOCATION
+      use error_mod, only: ErrorManagerType, CC_SUCCESS
 
       implicit none
       class(MetStateType), intent(inout) :: this

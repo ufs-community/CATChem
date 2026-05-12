@@ -8,7 +8,7 @@
 program test_wetdep_unit
    use testing_mod, only: assert, assert_close
    use precision_mod, only: fp
-   use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
+   use error_mod, only: CC_SUCCESS, ErrorManagerType
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType
    use ProcessWetDepInterface_Mod, only: ProcessWetDepInterface

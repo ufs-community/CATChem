@@ -587,7 +587,6 @@ contains
       class(GridManagerType), intent(in) :: this
       integer, intent(in) :: i, j
       type(ColumnViewType) :: column_view
-      integer :: rc
 
       ! Check bounds for safety
       if (.not. this%geometry%is_valid_position(i, j)) then

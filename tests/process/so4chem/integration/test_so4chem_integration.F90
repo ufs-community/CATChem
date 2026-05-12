@@ -7,8 +7,9 @@
 !! Generated on: 2026-03-03T18:15:44.599765
 
 program test_so4chem_integration
-   use precision_mod, only: fp
+   use precision_mod, only: fp, rae
    use iso_fortran_env, only: output_unit, error_unit
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
    use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType, ERROR_UNSUPPORTED_OPERATION
    use CATChemCore_Mod, only: CATChemCoreType, CATChemBuilderType
    use StateManager_Mod, only: StateManagerType
@@ -376,7 +377,6 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       logical :: validation_passed
       character(len=64) :: field_name
-      character(len=20) :: type_name
 
       rc_arg = CC_SUCCESS
       validation_passed = .true.
@@ -500,7 +500,7 @@ contains
          end if
 
          ! Check if scalar value is finite and non-negative
-         if (scalar_value /= scalar_value) then  ! NaN check
+         if (ieee_is_nan(scalar_value)) then  ! NaN check
             write(error_unit,'(A,A)') '    ERROR: Field has NaN value: ', trim(field_name)
             field_passed = .false.
          else if (scalar_value < 0.0_fp) then
@@ -525,7 +525,7 @@ contains
                if (is_verbose) then
                   write(output_unit,'(A,A,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, '] = ', current_value
                end if
-               if (current_value /= current_value) then  ! NaN check
+               if (ieee_is_nan(current_value)) then  ! NaN check
                   write(error_unit,'(A,A,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ')'
                   field_passed = .false.
                   exit
@@ -542,7 +542,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_1d_ptr) == 0.0_fp) then
+               if (rae(sum(array_1d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
@@ -567,7 +567,7 @@ contains
                   if (is_verbose) then
                      write(output_unit,'(A,A,A,I0,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, ',', j, '] = ', current_value
                   end if
-                  if (current_value /= current_value) then  ! NaN check
+                  if (ieee_is_nan(current_value)) then  ! NaN check
                      write(error_unit,'(A,A,A,I0,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ',', j, ')'
                      field_passed = .false.
                      exit outer_loop_2d
@@ -585,7 +585,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_2d_ptr) == 0.0_fp) then
+               if (rae(sum(array_2d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
@@ -611,7 +611,7 @@ contains
                      if (is_verbose) then
                         write(output_unit,'(A,A,A,I0,A,I0,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, ',', j, ',', k, '] = ', current_value
                      end if
-                     if (current_value /= current_value) then  ! NaN check
+                     if (ieee_is_nan(current_value)) then  ! NaN check
                         write(error_unit,'(A,A,A,I0,A,I0,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ',', j, ',', k, ')'
                         field_passed = .false.
                         exit outer_loop_3d
@@ -630,7 +630,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_3d_ptr) == 0.0_fp) then
+               if (rae(sum(array_3d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
@@ -670,7 +670,7 @@ contains
                if (is_verbose) then
                   write(output_unit,'(A,A,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, '] = ', current_value
                end if
-               if (current_value /= current_value) then  ! NaN check
+               if (ieee_is_nan(current_value)) then  ! NaN check
                   write(error_unit,'(A,A,A,I0,A)') '    ERROR: Integer field has NaN at index ', trim(field_name), ' (', i, ')'
                   field_passed = .false.
                   exit
@@ -683,7 +683,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_1d_ptr) == 0.0_fp) then
+               if (rae(sum(array_1d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Integer field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
@@ -708,7 +708,7 @@ contains
                   if (is_verbose) then
                      write(output_unit,'(A,A,A,I0,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, ',', j, '] = ', current_value
                   end if
-                  if (current_value /= current_value) then  ! NaN check
+                  if (ieee_is_nan(current_value)) then  ! NaN check
                      write(error_unit,'(A,A,A,I0,A,I0,A)') '    ERROR: Integer field has NaN at index ', trim(field_name), ' (', i, ',', j, ')'
                      field_passed = .false.
                      exit outer_loop_int_2d
@@ -722,7 +722,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_2d_ptr) == 0.0_fp) then
+               if (rae(sum(array_2d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Integer field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
@@ -748,7 +748,7 @@ contains
                      if (is_verbose) then
                         write(output_unit,'(A,A,A,I0,A,I0,A,I0,A,E12.5)') '          ', trim(field_name), '[', i, ',', j, ',', k, '] = ', current_value
                      end if
-                     if (current_value /= current_value) then  ! NaN check
+                     if (ieee_is_nan(current_value)) then  ! NaN check
                         write(error_unit,'(A,A,A,I0,A,I0,A,I0,A)') '    ERROR: Integer field has NaN at index ', trim(field_name), ' (', i, ',', j, ',', k, ')'
                         field_passed = .false.
                         exit outer_loop_int_3d
@@ -763,7 +763,7 @@ contains
 
             if (field_passed) then
                ! Check if sum of array is zero
-               if (sum(array_3d_ptr) == 0.0_fp) then
+               if (rae(sum(array_3d_ptr), 0.0_fp)) then
                   write(error_unit,'(A,A)') '    WARNING: Integer field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else

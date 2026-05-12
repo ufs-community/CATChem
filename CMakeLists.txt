@@ -32,16 +32,12 @@ cmake_print_variables(
 )
 set(_catchem_compiler_options "")
 
-# Handle Intel compiler deprecation warnings and incompatible flags
+# Handle Intel compiler deprecation warnings
 if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
   # Always disable the deprecation warning for ifort
   list(APPEND _catchem_compiler_options -diag-disable=6379,10448)
   # Also disable problematic flags that might come from external dependencies
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448")
-  # Disable memory sanitizer to avoid linking issues
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sanitize=all")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-sanitize=all")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sanitize=all")
 endif()
 
 if(
@@ -97,6 +93,35 @@ elseif(
     -error-limit
     0
   )
+endif()
+
+# Disable memory sanitizer to avoid linking issues
+# For Intel, must come _after_ `-check all` to have an effect
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+  # gfortran uses standard sanitizer flags
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sanitize=all")
+elseif(
+  CMAKE_Fortran_COMPILER_ID STREQUAL "Intel"
+  OR CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM"
+)
+  # ifort (Intel) and ifx (IntelLLVM) both use -check
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -check nouninit")
+endif()
+if(
+  CMAKE_C_COMPILER_ID STREQUAL "GNU"
+  OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
+)
+  # gcc and icx both accept standard sanitizer flags
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-sanitize=all")
+  # Note: Intel Classic C (icc) doesn't use -fsanitize, so we safely do nothing
+endif()
+if(
+  CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+  OR CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM"
+)
+  # g++ and icpx both accept standard sanitizer flags
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sanitize=all")
+  # Note: Intel Classic C++ (icpc) doesn't use -fsanitize, so we safely do nothing
 endif()
 
 # Find external dependencies if not already available (for standalone builds)

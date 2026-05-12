@@ -785,7 +785,6 @@ contains
       integer :: i_col, j_col  ! Column grid position
       integer :: i  ! Loop variable for diagnostic species
       character(len=256) :: field_name  ! For constructing species-specific field names
-      character(len=64) :: selected_scheme
 
       rc = CC_SUCCESS
 
