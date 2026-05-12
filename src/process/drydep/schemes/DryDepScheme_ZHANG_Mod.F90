@@ -963,7 +963,7 @@ contains
             RS = 1.e0_fp / (E0 * USTAR * (EB + EIM + EIN) * R1 )
          ELSE
             RS = 1.0e+10_fp !assign a very large value to RS
-         ENDIF 
+         ENDIF
       ENDIF
 
    END FUNCTION AERO_SFCRSII
