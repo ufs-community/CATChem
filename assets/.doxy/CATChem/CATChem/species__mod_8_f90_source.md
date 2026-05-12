@@ -70,6 +70,9 @@ module species_mod
       !used for settling
       character(len=30) :: mie_name
 
+      !used for gocart carbon species chemical loss
+      real(kind=fp) :: t_chem_loss          
+
       ! Default background concentration
       real(kind=fp) :: backgroundvv        
 
@@ -185,6 +188,9 @@ contains
       this%wd_LiqAndGas = .false.
       this%wd_convfacI2G = 0.0_fp
       this%wd_rainouteff(:) = 0.0_fp
+
+      !carbon chem loss in days
+      this%t_chem_loss = -1.0_fp
 
       this%BackgroundVV = missing_vv
       this%mie_name = ''  ! Initialize Mie name to empty
@@ -490,6 +496,9 @@ contains
       this%wd_LiqAndGas = source%wd_LiqAndGas
       this%wd_convfacI2G = source%wd_convfacI2G
       this%wd_rainouteff = source%wd_rainouteff
+
+      !gocart carbon loss
+      this%t_chem_loss = source%t_chem_loss
 
       this%BackgroundVV = source%BackgroundVV
       this%mie_name = source%mie_name

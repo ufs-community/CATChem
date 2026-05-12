@@ -60,6 +60,51 @@
   <compound refid="interfaceyaml__interface__mod_1_1c__yaml__set__string" kind="interface"><name>yaml_interface_mod::c_yaml_set_string</name>
     <member refid="interfaceyaml__interface__mod_1_1c__yaml__set__string_1a100c8906690cc1599f2c0b6a277243a3" kind="function"><name>c_yaml_set_string</name></member>
   </compound>
+  <compound refid="structcarbchemcommon__mod_1_1carbchemconfig" kind="type"><name>carbchemcommon_mod::carbchemconfig</name>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a7717e844c24e4b51fa82150ee200fb2a" kind="variable"><name>scheme</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ae4705966210565b2b475aaa98253d7b1" kind="variable"><name>is_active</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1abb9c7377ec358e5107f2b90eb02a6a06" kind="variable"><name>diagnostics</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ad6e96384995e7c89f3060f4406aaedbd" kind="variable"><name>n_diagnostic_species</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1afb5407c4c1fdefa9292b0a750a833fdf" kind="variable"><name>diagnostic_species</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1aa6a0a8d7c9269129f12f20d8732f2ffc" kind="variable"><name>diagnostic_species_id</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a483d5dc76f0dcf47ef45441f9fff159c" kind="variable"><name>dt_min</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a82ecbb1157ffb9ed691590ddeeebcc4a" kind="variable"><name>dt_max</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1af16a92ffb65fc7f7b0b55c3e4328432b" kind="variable"><name>n_species</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1abb1190d67a12f2122fbcc56b4a654046" kind="variable"><name>species_names</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ad888e0806f78d01c55ae5d1c9788dea7" kind="variable"><name>species_indices</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ae43940c3279cddee1feba1535ee7e31d" kind="variable"><name>species_t_chem_loss</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a42099188853abc35737682dcde95d4a1" kind="variable"><name>output_diagnostics</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a0e9f27e8e6c81d5d0734667e27bcc919" kind="variable"><name>diagnostic_frequency</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a7beb335ef4fc8ccf6f748d9b2fb5293a" kind="function"><name>validate</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a43340605e6118f1016f660cb3710ce98" kind="function"><name>finalize</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a6caf9e3724688e7d89298594d5b2717c" kind="function"><name>print_summary</name></member>
+  </compound>
+  <compound refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kind="type"><name>carbchemcommon_mod::carbchemprocessconfig</name>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a2b09677176bed987121cba1463900bfc" kind="variable"><name>process_name</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a47fcedba2f74508c419292215755212e" kind="variable"><name>process_version</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a7d5bdb0bd13f34a71fa3a3890da508c2" kind="variable"><name>is_active</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1af5d9dfcd234aa0bf879369184d76195b" kind="variable"><name>carbchem_config</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a18e9285b3aea3f8e73a5a59dce707a47" kind="variable"><name>gocart_config</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a6747044f85203c64634ce87ce8d6746e" kind="function"><name>load_from_config</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aa62efe77e440a89cf03f37d72b5ccb44" kind="function"><name>load_species_from_list</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1ace7afef6d424119e373736bbe8cc1120" kind="function"><name>validate</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a201da8800b697d3b94ee0e8e7c9276c6" kind="function"><name>finalize</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aad004916c327bb2265f8efa91da9f9b1" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a0521d9f84123318d33cf67f461cc649a" kind="function"><name>load_gocart_config</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a858cf62b9ae52c82528d7f55f5974d17" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig" kind="type"><name>carbchemcommon_mod::carbchemschemegocartconfig</name>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a9e1b252365e032123a94b5d523c3f819" kind="variable"><name>scheme_name</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1afd431168ca67138d3e0c811081722025" kind="variable"><name>description</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ab7cd7ee20e0d1003c689c81e3d16d08a" kind="variable"><name>author</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a4528e950fb4196706cde73eeeb925d6b" kind="variable"><name>algorithm_type</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a2adf29ac39fe806d238997ca502346f2" kind="variable"><name>affects_full_column</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a19e53eba9066c226c20fd9783b46ba9a" kind="variable"><name>time_days_hydrophobic_to_hydrophilic</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ae6f6eb3b5959e5804dc602e3de378344" kind="variable"><name>n_required_met_fields</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a8c664bf4cc903fbd21002baa6c9ec69b" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a7e807bdafbfa38683138f8abf91d897d" kind="function"><name>validate</name></member>
+    <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a1f04cb193c486e30802b52986d0e5301" kind="function"><name>finalize</name></member>
+  </compound>
   <compound refid="structcatchem__api_1_1catchem__model" kind="type"><name>catchem_api::catchem_model</name>
     <member refid="structcatchem__api_1_1catchem__model_1a34e972969b838c6c55a507ffc608f933" kind="variable"><name>core</name></member>
     <member refid="structcatchem__api_1_1catchem__model_1af4b07afe2c6263b36c1a16b3b90927f3" kind="variable"><name>initialized</name></member>
@@ -1415,6 +1460,33 @@
     <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a630108a426d6e2bf0fa7b9fef9df1fab" kind="function"><name>sync</name></member>
     <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a153260a6bc4e9fa818d3a2d5a93a15e5" kind="function"><name>get_error_message</name></member>
   </compound>
+  <compound refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface" kind="type"><name>processcarbcheminterface_mod::processcarbcheminterface</name>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a1ceda4c149fabb4f71ecc8e220cbc823" kind="variable"><name>process_config</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a19a96e3e55c259add82a1899bcd8146e" kind="variable"><name>chem_state</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1ad89436d05f8f5efba3d9b3f1f43a7d1f" kind="variable"><name>met_state</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a3ba650e0c11b3c6af39b757b42c3028c" kind="variable"><name>time_state</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a7a83c64974bee5f68043109352ce34f0" kind="variable"><name>diag_production_mass_per_species_per_level_idx</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a6c4ac22ddb72603c976f9ad52488e533" kind="variable"><name>column_production_mass_per_species_per_level</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a9dec8422040bfc45c9277f823adbb6d5" kind="variable"><name>column_loss_flux_per_species</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a962c4a43b3724acc6650c9f2b427ab3c" kind="variable"><name>column_phobictophilic_mass_per_species_per_level</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a08f6e5ce27a60c78419e27be44dfd848" kind="variable"><name>column_phobictophilic_flux_per_species</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a385a5a66a813606cd57422d53c2e9410" kind="function"><name>init</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1ab24d96bffda4fa529f5e8ad76535e2c4" kind="function"><name>run</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a3a103c68da9f2ea973c6c17e83b09fba" kind="function"><name>finalize</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a09ee5df1f2a44caa12de08ca57dc1532" kind="function"><name>parse_process_config</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1af7ea5e6e9507c013c94bc38aec31c0b2" kind="function"><name>init_column_processing</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a6c7a2ffeb0c97148b9fb02143e0d105d" kind="function"><name>run_column</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a51c39fef52d4b18def6e46f3cb54bae9" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1acc499a7115e87fe569bd4f71b8ded052" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a1b4246da96ad3055842ed3308e363e19" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a449e4865acd9b5de2f054bfeea296538" kind="function"><name>set_scheme</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1aec57457e5f7c1da5fa7eb9a2545dc5f9" kind="function"><name>get_scheme</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a5e60b1126be363d2b6f01f2b7712a61a" kind="function"><name>register_diagnostics</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1aaf0cd5a1eeb5cb47554230b64037079e" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1ad2e29b554830437c0ce3b5ea8f2712a0" kind="function"><name>run_gocart_scheme_column</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a90a6e7e090dccde348bb29a92eba951c" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface_1a444e0e0baf1c247b134f9e68e7a0ec9e" kind="function"><name>calculate_and_update_diagnostics</name></member>
+  </compound>
   <compound refid="structconfigmanager__mod_1_1processconfigtype" kind="type"><name>configmanager_mod::processconfigtype</name>
     <member refid="structconfigmanager__mod_1_1processconfigtype_1a7c94b9b3afaab1c5e70e4930a5f53f29" kind="variable"><name>name</name></member>
     <member refid="structconfigmanager__mod_1_1processconfigtype_1aad820d197c0271e326f1283fa3e93839" kind="variable"><name>process_type</name></member>
@@ -1930,6 +2002,7 @@
     <member refid="structspecies__mod_1_1speciestype_1a685e9d2b12e6dfefaceaab4d8ee45338" kind="variable"><name>wd_convfaci2g</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a97d4bb5fa2e2f9a66dfe9a4926075dd4" kind="variable"><name>wd_rainouteff</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a96875d4738ef4b082591953496a0b07e" kind="variable"><name>mie_name</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1a20e7550ceb2d8132250f7c5c60a137dd" kind="variable"><name>t_chem_loss</name></member>
     <member refid="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" kind="variable"><name>backgroundvv</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a9133ba1e9bc04616dff46121b41d4221" kind="variable"><name>species_index</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a255661e560792422d0021da2175384b9" kind="variable"><name>drydep_index</name></member>
@@ -2151,6 +2224,33 @@
     <member refid="interfaceyaml__interface__mod_1_1yaml__set_1ad1ff7ffbbe691c4036b301f7ca84ca6c" kind="function"><name>yaml_set_integer_generic</name></member>
     <member refid="interfaceyaml__interface__mod_1_1yaml__set_1af2cb59c4496e7c454b3f2c04724e5965" kind="function"><name>yaml_set_logical_generic</name></member>
     <member refid="interfaceyaml__interface__mod_1_1yaml__set_1afb0a5f38dd494071ed74d124b32fb1b7" kind="function"><name>yaml_set_real_dp_generic</name></member>
+  </compound>
+  <compound refid="namespacecarbchemcommon__mod" kind="namespace"><name>carbchemcommon_mod</name>
+    <member refid="namespacecarbchemcommon__mod_1a5787d8f2818cbb3a43c5fbf1a1b786f9" kind="function"><name>validate_carbchem_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a14ebd9ec0a5fed28ddbe72675b6e7ad6" kind="function"><name>print_carbchem_config_summary</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a29b2a4d881f8fd2d61e9e19eabd3bf1d" kind="function"><name>finalize_carbchem_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1ac522edc736597286ee376dfc0ffaf8d1" kind="function"><name>validate_gocart_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a2a1e2ee8696a9b6f2c9e5b4e1b222ba6" kind="function"><name>finalize_gocart_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1afdcf442dd5b96e5c4c50b3bfd6606732" kind="function"><name>int_to_string</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a40f3c4f778ab26bef56b46bd07bf05df" kind="function"><name>carbchem_process_load_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1aaa6737ba702d68e3d8880b48b7f73730" kind="function"><name>load_species_from_list</name></member>
+    <member refid="namespacecarbchemcommon__mod_1ae57cf80eabe514a2d45ee303148f4785" kind="function"><name>load_gocart_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a3c9e130d692981e4bb1d866879d971aa" kind="function"><name>carbchem_process_validate</name></member>
+    <member refid="namespacecarbchemcommon__mod_1afdd4c7f6f0d656a4e383c4cee5de745f" kind="function"><name>carbchem_process_finalize</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a82eca7c5d08824b6fa6b08a732370566" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="namespacecarbchemcommon__mod_1a569d14e4f697bd33e425925326fee3ed" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="namespacecarbchemprocesscreator__mod" kind="namespace"><name>carbchemprocesscreator_mod</name>
+    <member refid="namespacecarbchemprocesscreator__mod_1a3304804f0c5682fa4438e95fc3cc63d2" kind="function"><name>create_carbchem_process</name></member>
+    <member refid="namespacecarbchemprocesscreator__mod_1a9a66b927f5a7809934106841111096cb" kind="function"><name>register_carbchem_process</name></member>
+    <member refid="namespacecarbchemprocesscreator__mod_1a1ad2ef77585b875aedb0e4bfccb558de" kind="function"><name>get_carbchem_default_config</name></member>
+  </compound>
+  <compound refid="namespacecarbchemscheme__gocart__mod" kind="namespace"><name>carbchemscheme_gocart_mod</name>
+    <member refid="namespacecarbchemscheme__gocart__mod_1a13b5cf1a2a2a18e4c834f0e365a0e2ce" kind="variable"><name>plid</name></member>
+    <member refid="namespacecarbchemscheme__gocart__mod_1a5fc1436b8e07a01970c276c08ce3cfc4" kind="function"><name>compute_gocart</name></member>
+    <member refid="group__core__modules_1ga898e911896cab88ba7ca735d13f996d0" kind="function"><name>prepmetvarsforgocart</name></member>
+    <member refid="namespacecarbchemscheme__gocart__mod_1a8b9e55b831970d8ab439c0f15a0bd9de" kind="function"><name>findklid</name></member>
+    <member refid="namespacecarbchemscheme__gocart__mod_1af228f1522c75b1e105b5d1781f2be455" kind="function"><name>find_species_ind</name></member>
   </compound>
   <compound refid="namespacecatchem" kind="namespace"><name>catchem</name>
     <member refid="namespacecatchem_1ac1e35198731c157c4555eabbfe4c7886" kind="function"><name>cc_init_grid_manager</name></member>
@@ -2961,6 +3061,23 @@
     <member refid="namespaceprecision__mod_1a41ddf075a27b283984f59b2a0e6de7d8" kind="function"><name>rae_f4</name></member>
     <member refid="namespaceprecision__mod_1a3dad4cff4c4d1384e1cbf3158ace195f" kind="function"><name>rae_f8</name></member>
   </compound>
+  <compound refid="namespaceprocesscarbcheminterface__mod" kind="namespace"><name>processcarbcheminterface_mod</name>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a01dda7816878f9ae5f8a441a012d11a2" kind="function"><name>process_init</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a7fb7d1332255318472d0faad1e7d0634" kind="function"><name>process_run</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a8d2baae8bef564af4ba60d4f0d419fe4" kind="function"><name>process_finalize</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1ac9efb41d85823f0ebc448b995d4267dd" kind="function"><name>parse_carbchem_config</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1af31a539f7869377d9b8027bb24a7ea67" kind="function"><name>init_column_processing</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a34f4c7295b92be30ada15457c73e1b0f" kind="function"><name>run_column</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a8e41790a04d2eee368181315bf2e220d" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1af9d16f7eb598252d052747d7c80d6d0c" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a5c0fe639259e8d53e8878cd2e393182d" kind="function"><name>run_gocart_scheme_column</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1af3a82cfc677c57be64301c5e5a0989d1" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1ad598e11a60cc7b34cbd87af28749927e" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1abd50ea542f5d3e85f9a5bc379c74f1ff" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1a2a50e3599572d502821f1230f0875085" kind="function"><name>calculate_and_update_diagnostics</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1ac34b990c7f29a5932efe2f74fcc9efd4" kind="function"><name>set_carbchem_scheme</name></member>
+    <member refid="namespaceprocesscarbcheminterface__mod_1ac4e11bf243c1c68b5fd3d80769e9891e" kind="function"><name>get_carbchem_scheme</name></member>
+  </compound>
   <compound refid="namespaceprocessdrydepinterface__mod" kind="namespace"><name>processdrydepinterface_mod</name>
     <member refid="namespaceprocessdrydepinterface__mod_1ae868881ad3ec2d370d8fc3fbf119518d" kind="function"><name>process_init</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1ae1bb6e8fe4240377becaf1977812bb4e" kind="function"><name>process_run</name></member>
@@ -3597,6 +3714,14 @@
   </compound>
   <compound refid="yaml__interface__mod_8_f90" kind="file"><name>yaml_interface_mod.F90</name>
   </compound>
+  <compound refid="_carb_chem_common___mod_8_f90" kind="file"><name>CarbChemCommon_Mod.F90</name>
+  </compound>
+  <compound refid="_carb_chem_process_creator___mod_8_f90" kind="file"><name>CarbChemProcessCreator_Mod.F90</name>
+  </compound>
+  <compound refid="_process_carb_chem_interface___mod_8_f90" kind="file"><name>ProcessCarbChemInterface_Mod.F90</name>
+  </compound>
+  <compound refid="_carb_chem_scheme___g_o_c_a_r_t___mod_8_f90" kind="file"><name>CarbChemScheme_GOCART_Mod.F90</name>
+  </compound>
   <compound refid="_dry_dep_common___mod_8_f90" kind="file"><name>DryDepCommon_Mod.F90</name>
   </compound>
   <compound refid="_dry_dep_process_creator___mod_8_f90" kind="file"><name>DryDepProcessCreator_Mod.F90</name>
@@ -3654,6 +3779,7 @@
     <member refid="group__core__modules_1ga0f4bed4ec5273e84346e57d9d2c0cb92" kind="function"><name>chemstate_init</name></member>
     <member refid="group__core__modules_1ga87ab277c6a17ccfee5e2831aba7895cd" kind="function"><name>cc_warning</name></member>
     <member refid="group__core__modules_1ga07c7634132d8b5cc9561f69d070df2ae" kind="function"><name>cc_checkvar</name></member>
+    <member refid="group__core__modules_1ga898e911896cab88ba7ca735d13f996d0" kind="function"><name>prepmetvarsforgocart</name></member>
     <member refid="group__core__modules_1gaf3456b2605a4a5fe70dd90e0c147c83e" kind="function"><name>prepmetvarsforgocart</name></member>
     <member refid="group__core__modules_1ga4422d7cf6c32bffadb49d078d19fa747" kind="function"><name>prepmetvarsforgocart</name></member>
   </compound>
@@ -3689,6 +3815,8 @@
   </compound>
   <compound refid="dir_da61e3e9a357748887e3ca8d7c5a0c16" kind="dir"><name>src/api</name>
   </compound>
+  <compound refid="dir_5dbdd03f815becc4c35f94e0692b4e09" kind="dir"><name>src/process/carbchem</name>
+  </compound>
   <compound refid="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir"><name>src/core</name>
   </compound>
   <compound refid="dir_57fb5aa14ddb2cd518a6d90b65ffd000" kind="dir"><name>src/process/drydep</name>
@@ -3696,6 +3824,8 @@
   <compound refid="dir_805a0af995e93a362739e98abd740eb2" kind="dir"><name>src/external</name>
   </compound>
   <compound refid="dir_c0cd66d8ddae4fc5bc5dc2f24e29763b" kind="dir"><name>src/process</name>
+  </compound>
+  <compound refid="dir_2aa0506a6ee0350ff25dc7952f19a30f" kind="dir"><name>src/process/carbchem/schemes</name>
   </compound>
   <compound refid="dir_5a3c86e36f17958630366ebc2b7ca21b" kind="dir"><name>src/process/drydep/schemes</name>
   </compound>

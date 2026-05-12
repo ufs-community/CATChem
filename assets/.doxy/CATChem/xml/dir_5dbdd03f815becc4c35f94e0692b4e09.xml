@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_5dbdd03f815becc4c35f94e0692b4e09" kind="dir">
+    <compoundname>src/process/carbchem</compoundname>
+    <innerdir refid="dir_2aa0506a6ee0350ff25dc7952f19a30f">src/process/carbchem/schemes</innerdir>
+    <innerfile refid="_carb_chem_common___mod_8_f90">CarbChemCommon_Mod.F90</innerfile>
+    <innerfile refid="_carb_chem_process_creator___mod_8_f90">CarbChemProcessCreator_Mod.F90</innerfile>
+    <innerfile refid="_process_carb_chem_interface___mod_8_f90">ProcessCarbChemInterface_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/carbchem/"/>
+  </compounddef>
+</doxygen>

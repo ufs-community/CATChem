@@ -434,6 +434,189 @@
         </inbodydescription>
         <location file="src/core/error_mod.F90" line="321" column="1" bodyfile="src/core/error_mod.F90" bodystart="322" bodyend="362"/>
       </memberdef>
+      <memberdef kind="function" id="group__core__modules_1ga898e911896cab88ba7ca735d13f996d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine carbchemscheme_gocart_mod::prepmetvarsforgocart</definition>
+        <argsstring>(km, rhoa, delp, pmid, gocart_rhoa, gocart_press, gocart_delp)</argsstring>
+        <name>prepmetvarsforgocart</name>
+        <qualifiedname>carbchemscheme_gocart_mod::prepmetvarsforgocart</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>km</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in), target</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_rhoa</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_press</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(inout), pointer</type>
+          <defname>gocart_delp</defname>
+        </param>
+        <briefdescription>
+<para>PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>metstate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tmpu </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rhoa </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>hghte </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>oro </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ustar </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pblh </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>shflux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>z0h </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>u10m </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>v10m </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraclake </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[INOUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>gwettop </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>[OUT]</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>rc</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_rhoa</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air density [kg/m^3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_press</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">gocart_delp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pressure thickness [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/schemes/CarbChemScheme_GOCART_Mod.F90" line="392" column="1" bodyfile="src/process/carbchem/schemes/CarbChemScheme_GOCART_Mod.F90" bodystart="399" bodyend="429"/>
+      </memberdef>
       <memberdef kind="function" id="group__core__modules_1gaf3456b2605a4a5fe70dd90e0c147c83e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
         <definition>subroutine drydepscheme_gocart_mod::prepmetvarsforgocart</definition>

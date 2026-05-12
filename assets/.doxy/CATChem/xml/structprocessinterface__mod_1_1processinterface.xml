@@ -1518,6 +1518,12 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
     </detaileddescription>
     <inheritancegraph>
       <node id="3">
+        <label>processcarbcheminterface_mod::processcarbcheminterface</label>
+        <link refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
         <label>processdrydepinterface_mod::processdrydepinterface</label>
         <link refid="structprocessdrydepinterface__mod_1_1processdrydepinterface"/>
         <childnode refid="2" relation="public-inheritance">
@@ -1533,25 +1539,25 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         <label>processinterface_mod::processinterface</label>
         <link refid="structprocessinterface__mod_1_1processinterface"/>
       </node>
-      <node id="4">
+      <node id="5">
         <label>processseasaltinterface_mod::processseasaltinterface</label>
         <link refid="structprocessseasaltinterface__mod_1_1processseasaltinterface"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="5">
+      <node id="6">
         <label>processsettlinginterface_mod::processsettlinginterface</label>
         <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="6">
+      <node id="7">
         <label>processso4cheminterface_mod::processso4cheminterface</label>
         <link refid="structprocessso4cheminterface__mod_1_1processso4cheminterface"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="7">
+      <node id="8">
         <label>processwetdepinterface_mod::processwetdepinterface</label>
         <link refid="structprocesswetdepinterface__mod_1_1processwetdepinterface"/>
         <childnode refid="2" relation="public-inheritance">

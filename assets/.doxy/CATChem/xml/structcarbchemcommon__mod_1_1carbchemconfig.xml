@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcarbchemcommon__mod_1_1carbchemconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>carbchemcommon_mod::carbchemconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1a7717e844c24e4b51fa82150ee200fb2a" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) carbchemcommon_mod::carbchemconfig::scheme</definition>
+        <argsstring></argsstring>
+        <name>scheme</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::scheme</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="35" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1ae4705966210565b2b475aaa98253d7b1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical carbchemcommon_mod::carbchemconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="36" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1abb9c7377ec358e5107f2b90eb02a6a06" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical carbchemcommon_mod::carbchemconfig::diagnostics</definition>
+        <argsstring></argsstring>
+        <name>diagnostics</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::diagnostics</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="37" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1ad6e96384995e7c89f3060f4406aaedbd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer carbchemcommon_mod::carbchemconfig::n_diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>n_diagnostic_species</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::n_diagnostic_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="40" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1afb5407c4c1fdefa9292b0a750a833fdf" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable carbchemcommon_mod::carbchemconfig::diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::diagnostic_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="41" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1aa6a0a8d7c9269129f12f20d8732f2ffc" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable carbchemcommon_mod::carbchemconfig::diagnostic_species_id</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species_id</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::diagnostic_species_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="42" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1a483d5dc76f0dcf47ef45441f9fff159c" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) carbchemcommon_mod::carbchemconfig::dt_min</definition>
+        <argsstring></argsstring>
+        <name>dt_min</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::dt_min</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="43" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1a82ecbb1157ffb9ed691590ddeeebcc4a" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) carbchemcommon_mod::carbchemconfig::dt_max</definition>
+        <argsstring></argsstring>
+        <name>dt_max</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::dt_max</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="44" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1af16a92ffb65fc7f7b0b55c3e4328432b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer carbchemcommon_mod::carbchemconfig::n_species</definition>
+        <argsstring></argsstring>
+        <name>n_species</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::n_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="47" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1abb1190d67a12f2122fbcc56b4a654046" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable carbchemcommon_mod::carbchemconfig::species_names</definition>
+        <argsstring></argsstring>
+        <name>species_names</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::species_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="48" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1ad888e0806f78d01c55ae5d1c9788dea7" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable carbchemcommon_mod::carbchemconfig::species_indices</definition>
+        <argsstring></argsstring>
+        <name>species_indices</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::species_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="49" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1ae43940c3279cddee1feba1535ee7e31d" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable carbchemcommon_mod::carbchemconfig::species_t_chem_loss</definition>
+        <argsstring></argsstring>
+        <name>species_t_chem_loss</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::species_t_chem_loss</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="54" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1a42099188853abc35737682dcde95d4a1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical carbchemcommon_mod::carbchemconfig::output_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>output_diagnostics</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::output_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="57" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemconfig_1a0e9f27e8e6c81d5d0734667e27bcc919" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) carbchemcommon_mod::carbchemconfig::diagnostic_frequency</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_frequency</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::diagnostic_frequency</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="58" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemconfig_1a7beb335ef4fc8ccf6f748d9b2fb5293a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemconfig" kindref="compound">carbchemconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate carbchem configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="61" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemconfig_1a43340605e6118f1016f660cb3710ce98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemconfig" kindref="compound">carbchemconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize carbchem configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="62" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemconfig_1a6caf9e3724688e7d89298594d5b2717c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemconfig::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>carbchemcommon_mod::carbchemconfig::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemconfig" kindref="compound">carbchemconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="63" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main configuration type for carbchem process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="32" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="32" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a0e9f27e8e6c81d5d0734667e27bcc919" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>diagnostic_frequency</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1afb5407c4c1fdefa9292b0a750a833fdf" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>diagnostic_species</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1aa6a0a8d7c9269129f12f20d8732f2ffc" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>diagnostic_species_id</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1abb9c7377ec358e5107f2b90eb02a6a06" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>diagnostics</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a82ecbb1157ffb9ed691590ddeeebcc4a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>dt_max</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a483d5dc76f0dcf47ef45441f9fff159c" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>dt_min</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a43340605e6118f1016f660cb3710ce98" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>finalize</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ae4705966210565b2b475aaa98253d7b1" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>is_active</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ad6e96384995e7c89f3060f4406aaedbd" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>n_diagnostic_species</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1af16a92ffb65fc7f7b0b55c3e4328432b" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>n_species</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a42099188853abc35737682dcde95d4a1" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>output_diagnostics</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a6caf9e3724688e7d89298594d5b2717c" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>print_summary</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a7717e844c24e4b51fa82150ee200fb2a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>scheme</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ad888e0806f78d01c55ae5d1c9788dea7" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>species_indices</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1abb1190d67a12f2122fbcc56b4a654046" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>species_names</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ae43940c3279cddee1feba1535ee7e31d" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>species_t_chem_loss</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a7beb335ef4fc8ccf6f748d9b2fb5293a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

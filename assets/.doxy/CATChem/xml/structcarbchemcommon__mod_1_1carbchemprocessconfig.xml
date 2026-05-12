@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcarbchemcommon__mod_1_1carbchemprocessconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>carbchemcommon_mod::carbchemprocessconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a2b09677176bed987121cba1463900bfc" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) carbchemcommon_mod::carbchemprocessconfig::process_name</definition>
+        <argsstring></argsstring>
+        <name>process_name</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::process_name</qualifiedname>
+        <initializer>= &apos;carbchem&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="98" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a47fcedba2f74508c419292215755212e" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) carbchemcommon_mod::carbchemprocessconfig::process_version</definition>
+        <argsstring></argsstring>
+        <name>process_version</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::process_version</qualifiedname>
+        <initializer>= &apos;1.0.0&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="99" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a7d5bdb0bd13f34a71fa3a3890da508c2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical carbchemcommon_mod::carbchemprocessconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="100" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1af5d9dfcd234aa0bf879369184d76195b" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structcarbchemcommon__mod_1_1carbchemconfig" kindref="compound">carbchemconfig</ref>)</type>
+        <definition>type(carbchemconfig) carbchemcommon_mod::carbchemprocessconfig::carbchem_config</definition>
+        <argsstring></argsstring>
+        <name>carbchem_config</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::carbchem_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="103" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a18e9285b3aea3f8e73a5a59dce707a47" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig" kindref="compound">carbchemschemegocartconfig</ref>)</type>
+        <definition>type(carbchemschemegocartconfig) carbchemcommon_mod::carbchemprocessconfig::gocart_config</definition>
+        <argsstring></argsstring>
+        <name>gocart_config</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::gocart_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="106" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a6747044f85203c64634ce87ce8d6746e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::load_from_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_from_config</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::load_from_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="110" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aa62efe77e440a89cf03f37d72b5ccb44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::load_species_from_list</definition>
+        <argsstring>(this, chem_state, error_handler, rc)</argsstring>
+        <name>load_species_from_list</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::load_species_from_list</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load species from explicit list (from species_filter) This function is used when explicit species are provided via species_filter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="111" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1ace7afef6d424119e373736bbe8cc1120" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="112" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a201da8800b697d3b94ee0e8e7c9276c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="113" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aad004916c327bb2265f8efa91da9f9b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::get_active_scheme_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="114" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a0521d9f84123318d33cf67f461cc649a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::load_gocart_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_gocart_config</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::load_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load gocart scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="115" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a858cf62b9ae52c82528d7f55f5974d17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemprocessconfig::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>carbchemcommon_mod::carbchemprocessconfig::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemprocessconfig" kindref="compound">carbchemprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="116" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Unified process configuration type that bridges ConfigManager and process-specific configs This is the main configuration type that ProcessInterface should use. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>carbchemcommon_mod::carbchemconfig</label>
+        <link refid="structcarbchemcommon__mod_1_1carbchemconfig"/>
+      </node>
+      <node id="1">
+        <label>carbchemcommon_mod::carbchemprocessconfig</label>
+        <link refid="structcarbchemcommon__mod_1_1carbchemprocessconfig"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>carbchem_config</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>gocart_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>carbchemcommon_mod::carbchemschemegocartconfig</label>
+        <link refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="95" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="95" bodyend="117"/>
+    <listofallmembers>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1af5d9dfcd234aa0bf879369184d76195b" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>carbchem_config</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a201da8800b697d3b94ee0e8e7c9276c6" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>finalize</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aad004916c327bb2265f8efa91da9f9b1" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>get_active_scheme_config</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a18e9285b3aea3f8e73a5a59dce707a47" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>gocart_config</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a7d5bdb0bd13f34a71fa3a3890da508c2" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>is_active</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a6747044f85203c64634ce87ce8d6746e" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>load_from_config</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a0521d9f84123318d33cf67f461cc649a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>load_gocart_config</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1aa62efe77e440a89cf03f37d72b5ccb44" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>load_species_from_list</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a858cf62b9ae52c82528d7f55f5974d17" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>map_diagnostic_species_indices</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a2b09677176bed987121cba1463900bfc" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>process_name</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1a47fcedba2f74508c419292215755212e" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>process_version</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemprocessconfig_1ace7afef6d424119e373736bbe8cc1120" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemprocessconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

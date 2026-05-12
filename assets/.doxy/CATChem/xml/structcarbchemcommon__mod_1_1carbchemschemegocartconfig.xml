@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>carbchemcommon_mod::carbchemschemegocartconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a9e1b252365e032123a94b5d523c3f819" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) carbchemcommon_mod::carbchemschemegocartconfig::scheme_name</definition>
+        <argsstring></argsstring>
+        <name>scheme_name</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::scheme_name</qualifiedname>
+        <initializer>= &apos;gocart&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="70" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1afd431168ca67138d3e0c811081722025" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) carbchemcommon_mod::carbchemschemegocartconfig::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::description</qualifiedname>
+        <initializer>= &apos;GOCART carbon species chemical production and loss scheme&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="71" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ab7cd7ee20e0d1003c689c81e3d16d08a" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) carbchemcommon_mod::carbchemschemegocartconfig::author</definition>
+        <argsstring></argsstring>
+        <name>author</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::author</qualifiedname>
+        <initializer>= &apos;Wei Li&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="72" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a4528e950fb4196706cde73eeeb925d6b" prot="public" static="no" mutable="no">
+        <type>character(len=16)</type>
+        <definition>character(len=16) carbchemcommon_mod::carbchemschemegocartconfig::algorithm_type</definition>
+        <argsstring></argsstring>
+        <name>algorithm_type</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::algorithm_type</qualifiedname>
+        <initializer>= &apos;explicit&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="73" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a2adf29ac39fe806d238997ca502346f2" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical carbchemcommon_mod::carbchemschemegocartconfig::affects_full_column</definition>
+        <argsstring></argsstring>
+        <name>affects_full_column</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::affects_full_column</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="76" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a19e53eba9066c226c20fd9783b46ba9a" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) carbchemcommon_mod::carbchemschemegocartconfig::time_days_hydrophobic_to_hydrophilic</definition>
+        <argsstring></argsstring>
+        <name>time_days_hydrophobic_to_hydrophilic</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::time_days_hydrophobic_to_hydrophilic</qualifiedname>
+        <initializer>= 2.5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="79" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ae6f6eb3b5959e5804dc602e3de378344" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer carbchemcommon_mod::carbchemschemegocartconfig::n_required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>n_required_met_fields</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::n_required_met_fields</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="82" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a8c664bf4cc903fbd21002baa6c9ec69b" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(4)</type>
+        <definition>character(len=32), dimension(4) carbchemcommon_mod::carbchemschemegocartconfig::required_met_fields</definition>
+        <argsstring></argsstring>
+        <name>required_met_fields</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::required_met_fields</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="83" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a7e807bdafbfa38683138f8abf91d897d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemschemegocartconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig" kindref="compound">carbchemschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="86" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a1f04cb193c486e30802b52986d0e5301" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public carbchemcommon_mod::carbchemschemegocartconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>carbchemcommon_mod::carbchemschemegocartconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig" kindref="compound">carbchemschemegocartconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize gocart scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="87" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration type for gocart scheme. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/carbchem/CarbChemCommon_Mod.F90" line="67" column="1" bodyfile="src/process/carbchem/CarbChemCommon_Mod.F90" bodystart="67" bodyend="88"/>
+    <listofallmembers>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a2adf29ac39fe806d238997ca502346f2" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>affects_full_column</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a4528e950fb4196706cde73eeeb925d6b" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>algorithm_type</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ab7cd7ee20e0d1003c689c81e3d16d08a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>author</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1afd431168ca67138d3e0c811081722025" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>description</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a1f04cb193c486e30802b52986d0e5301" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>finalize</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1ae6f6eb3b5959e5804dc602e3de378344" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>n_required_met_fields</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a8c664bf4cc903fbd21002baa6c9ec69b" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>required_met_fields</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a9e1b252365e032123a94b5d523c3f819" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>scheme_name</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a19e53eba9066c226c20fd9783b46ba9a" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>time_days_hydrophobic_to_hydrophilic</name></member>
+      <member refid="structcarbchemcommon__mod_1_1carbchemschemegocartconfig_1a7e807bdafbfa38683138f8abf91d897d" prot="public" virt="non-virtual"><scope>carbchemcommon_mod::carbchemschemegocartconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
