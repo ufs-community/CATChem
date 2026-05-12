@@ -481,11 +481,21 @@ contains
          line=__LINE__,  file=__FILE__))  return  ! bail out
 
       ! Import meteorological data from other components
+      !tdk: flag to enable/disable tracing with catchem build
+      call ESMF_TraceRegionEnter("transform_nuopc_to_catchem", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
       call transform_nuopc_to_catchem(is%wrap, importState, currTime, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+      call ESMF_TraceRegionExit("transform_nuopc_to_catchem", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
       ! Run CATChem processes with current time
+      call ESMF_TraceRegionEnter("catchem_nuopc_run", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
       call catchem_nuopc_run(is%wrap, dt_seconds, currTime, errmsg, rc)
       if (rc /= ESMF_SUCCESS) then
          call ESMF_LogWrite("CATChem: Failed to run CATChem - " // trim(errmsg), &
@@ -493,11 +503,20 @@ contains
          rc = ESMF_FAILURE
          return
       end if
+      call ESMF_TraceRegionExit("catchem_nuopc_run", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
       ! Export results to other components
+      call ESMF_TraceRegionEnter("transform_catchem_to_nuopc", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
       call transform_catchem_to_nuopc(is%wrap, exportState, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+      call ESMF_TraceRegionExit("transform_catchem_to_nuopc", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
       ! Log successful completion
       if (localPet == 0) then

@@ -431,23 +431,41 @@ contains
 
       ! Update extemission data first
       state_mgr => cc_wrap%catchem_model%get_state_manager()
+      call ESMF_TraceRegionEnter("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
+      call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
       !Run CATChem processes
       timestep = timestep + 1
+      call ESMF_TraceRegionEnter("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
          write(errmsg, '(A,I0)') 'Error in run_timestep at timestep = ', timestep
          return
       end if
+      call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
       ! Write NetCDF output diagnostics if needed
+      call ESMF_TraceRegionEnter("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
          errmsg = 'Error writing NetCDF output diagnostics'
          return
       end if
+      call ESMF_TraceRegionExit("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+              line=__LINE__, file=__FILE__)) return
 
    end subroutine catchem_nuopc_run
 
