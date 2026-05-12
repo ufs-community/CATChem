@@ -1353,7 +1353,7 @@ contains
             IF (DUMMY4 > SMALL) THEN
                RA = 1.e+0_fp * (1.e+0_fp/CKUSTR) * LOG(DUMMY3/DUMMY4)
             ELSE
-               RA = 0.e+0_fp
+               RA = 1.e+4_fp
             END IF
 
          ELSEIF((CORR1.GE.0.0e+0_fp).AND.(CORR1.LE.1.0e+0_fp)) THEN

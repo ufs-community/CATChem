@@ -33,7 +33,7 @@ timesteps:
 #============================================================================
 diagnostics:
   output:
-    enabled: true
+    enabled: false
     directory: "./output"
     prefix: "catchem_diag"
     frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
