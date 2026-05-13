@@ -9,6 +9,11 @@ set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 # Option to build NUOPC cap (defaults to OFF)
 option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
+option(CATCHEM_TRACE_NUOPC "Enable ESMF trace regions in NUOPC cap" OFF)
+
+if(CATCHEM_TRACE_NUOPC)
+  add_compile_definitions(CATCHEM_TRACE_NUOPC)
+endif()
 
 # Option to build with MUSICA chemistry library (defaults to OFF)
 option(BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
