@@ -481,11 +481,26 @@ contains
          line=__LINE__,  file=__FILE__))  return  ! bail out
 
       ! Import meteorological data from other components
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("transform_nuopc_to_catchem", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call transform_nuopc_to_catchem(is%wrap, importState, currTime, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("transform_nuopc_to_catchem", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Run CATChem processes with current time
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("catchem_nuopc_run", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_nuopc_run(is%wrap, dt_seconds, currTime, errmsg, rc)
       if (rc /= ESMF_SUCCESS) then
          call ESMF_LogWrite("CATChem: Failed to run CATChem - " // trim(errmsg), &
@@ -493,11 +508,26 @@ contains
          rc = ESMF_FAILURE
          return
       end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("catchem_nuopc_run", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Export results to other components
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("transform_catchem_to_nuopc", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call transform_catchem_to_nuopc(is%wrap, exportState, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("transform_catchem_to_nuopc", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Log successful completion
       if (localPet == 0) then

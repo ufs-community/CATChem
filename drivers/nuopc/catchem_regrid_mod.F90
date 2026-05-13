@@ -278,7 +278,7 @@ contains
       dstPtr = 0.0_ESMF_KIND_R4
 
       call ESMF_FieldRegrid(srcField, dstField, routeHandle=routeHandle, &
-         zeroregion=ESMF_REGION_SELECT, rc=localrc)
+         zeroregion=ESMF_REGION_SELECT, termorderflag=ESMF_TERMORDER_SRCSEQ, rc=localrc)
       if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
