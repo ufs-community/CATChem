@@ -171,6 +171,7 @@ contains
             u_thresh = max(0.0_fp, u_thresh0 * (1.2_fp + 0.2_fp*log10(max(1.e-3_fp, GWETTOP))) )
 
             ! Compute emission flux
+            emission_temp = 0.0_fp
             if (w10m .gt. u_thresh) then
                emission_temp = ginoux_scaling * w10m ** 2 * max(0.0_fp,(w10m - u_thresh) )  ! kg/m2/s
                !TODO: Note Chu_DU is used in GOCART2G for the conversion from du_src
