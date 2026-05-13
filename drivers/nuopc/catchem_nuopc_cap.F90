@@ -492,14 +492,14 @@ contains
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("transform_nuopc_to_catchem", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-              line=__LINE__, file=__FILE__)) return
+         line=__LINE__, file=__FILE__)) return
 #endif
 
       ! Run CATChem processes with current time
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionEnter("catchem_nuopc_run", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-              line=__LINE__, file=__FILE__)) return
+         line=__LINE__, file=__FILE__)) return
 #endif
       call catchem_nuopc_run(is%wrap, dt_seconds, currTime, errmsg, rc)
       if (rc /= ESMF_SUCCESS) then
@@ -511,14 +511,14 @@ contains
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("catchem_nuopc_run", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-              line=__LINE__, file=__FILE__)) return
+         line=__LINE__, file=__FILE__)) return
 #endif
 
       ! Export results to other components
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionEnter("transform_catchem_to_nuopc", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-              line=__LINE__, file=__FILE__)) return
+         line=__LINE__, file=__FILE__)) return
 #endif
       call transform_catchem_to_nuopc(is%wrap, exportState, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -526,7 +526,7 @@ contains
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("transform_catchem_to_nuopc", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-              line=__LINE__, file=__FILE__)) return
+         line=__LINE__, file=__FILE__)) return
 #endif
 
       ! Log successful completion
