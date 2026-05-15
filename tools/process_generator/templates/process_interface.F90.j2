@@ -1143,9 +1143,9 @@ contains
    !> Get required meteorological fields for this process
    subroutine get_required_met_fields(this, field_names)
       class(Process{{ config.class_name }}Interface), intent(in) :: this
-      character(len=32), allocatable, intent(out) :: field_names(:)
-      character(len=32), allocatable :: scheme_fields(:)
-      character(len=32), allocatable :: process_fields(:)
+      character(len=64), allocatable, intent(out) :: field_names(:)
+      character(len=64), allocatable :: scheme_fields(:)
+      character(len=64), allocatable :: process_fields(:)
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
       character(len=32), allocatable :: gas_scheme_fields(:), aero_scheme_fields(:)
       integer :: gas_scheme_count, aero_scheme_count

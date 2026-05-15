@@ -1005,11 +1005,11 @@ contains
    !> Get required meteorological fields for this process
    subroutine get_required_met_fields(this, field_names)
       class(ProcessDryDepInterface), intent(in) :: this
-      character(len=32), allocatable, intent(out) :: field_names(:)
-      character(len=32), allocatable :: process_fields(:)
-      character(len=32), allocatable :: gas_scheme_fields(:), aero_scheme_fields(:)
+      character(len=64), allocatable, intent(out) :: field_names(:)
+      character(len=64), allocatable :: process_fields(:)
+      character(len=64), allocatable :: gas_scheme_fields(:), aero_scheme_fields(:)
       integer :: gas_scheme_count, aero_scheme_count
-      character(len=32), allocatable :: unique_fields(:)
+      character(len=64), allocatable :: unique_fields(:)
       integer :: total_fields, process_count, i, j, unique_count
       logical :: is_duplicate
 

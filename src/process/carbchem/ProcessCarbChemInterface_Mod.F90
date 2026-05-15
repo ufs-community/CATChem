@@ -475,10 +475,10 @@ contains
    !> Get required meteorological fields for this process
    subroutine get_required_met_fields(this, field_names)
       class(ProcessCarbChemInterface), intent(in) :: this
-      character(len=32), allocatable, intent(out) :: field_names(:)
-      character(len=32), allocatable :: scheme_fields(:)
-      character(len=32), allocatable :: process_fields(:)
-      character(len=32), allocatable :: unique_fields(:)
+      character(len=64), allocatable, intent(out) :: field_names(:)
+      character(len=64), allocatable :: scheme_fields(:)
+      character(len=64), allocatable :: process_fields(:)
+      character(len=64), allocatable :: unique_fields(:)
       integer :: total_fields, scheme_count, process_count, i, j, unique_count
       logical :: is_duplicate
 

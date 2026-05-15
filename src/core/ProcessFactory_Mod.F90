@@ -54,7 +54,7 @@ contains
       integer, intent(out) :: rc
 
       type(ErrorManagerType), pointer :: error_mgr
-      character(len=32), allocatable :: met_fields(:)
+      character(len=64), allocatable :: met_fields(:)
       integer :: i, alloc_rc
       type(MetStateType), pointer :: met_state
 

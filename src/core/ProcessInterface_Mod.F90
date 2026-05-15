@@ -175,7 +175,7 @@ module ProcessInterface_Mod
       subroutine get_required_met_fields_interface(this, field_names)
          import :: ProcessInterface
          class(ProcessInterface), intent(in) :: this
-         character(len=32), allocatable, intent(out) :: field_names(:)
+         character(len=64), allocatable, intent(out) :: field_names(:)
       end subroutine get_required_met_fields_interface
    end interface
 
@@ -254,7 +254,7 @@ contains
    !! The framework will only allocate the fields that are required.
    subroutine process_get_required_met_fields(this, field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=32), allocatable, intent(out) :: field_names(:)
+      character(len=64), allocatable, intent(out) :: field_names(:)
 
       ! Default implementation - no met fields required
       allocate(field_names(0))
