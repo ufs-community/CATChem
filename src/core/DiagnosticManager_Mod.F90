@@ -174,13 +174,7 @@ contains
 
       rc = CC_SUCCESS
 
-      ! Finalize all process registries
-      do i = 1, this%num_processes
-         call this%process_registries(i)%finalize(local_rc)
-         if (local_rc /= CC_SUCCESS) then
-            rc = local_rc
-         endif
-      enddo
+      ! Finalize all process registries (handled by finalizer)
 
       ! Deallocate arrays
       if (allocated(this%process_registries)) then
@@ -303,8 +297,7 @@ contains
       ! Find and remove process
       do i = 1, this%num_processes
          if (trim(this%process_names(i)) == trim(process_name)) then
-            ! Finalize registry
-            call this%process_registries(i)%finalize(local_rc)
+            ! Finalize registry (handled by finalizer)
 
             ! Shift remaining processes
             do j = i, this%num_processes - 1
