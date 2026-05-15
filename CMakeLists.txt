@@ -33,7 +33,7 @@ cmake_print_variables(
 set(_catchem_compiler_options "")
 
 # Handle Intel compiler deprecation warnings
-if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
   # Always disable the deprecation warning for ifort
   list(APPEND _catchem_compiler_options -diag-disable=6379,10448)
   # Also disable problematic flags that might come from external dependencies
