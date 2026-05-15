@@ -1141,9 +1141,9 @@ contains
 {% endif %}
 
    !> Get required meteorological fields for this process
-   function get_required_met_fields(this) result(field_names)
+   subroutine get_required_met_fields(this, field_names)
       class(Process{{ config.class_name }}Interface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=32), allocatable, intent(out) :: field_names(:)
       character(len=32), allocatable :: scheme_fields(:)
       character(len=32), allocatable :: process_fields(:)
 {% if config.process_behavior and config.process_behavior.gas_aero_differentiation %}
@@ -1338,7 +1338,7 @@ contains
       if (allocated(scheme_fields)) deallocate(scheme_fields)
 {% endif %}
 
-   end function get_required_met_fields
+   end subroutine get_required_met_fields
 
    !> Get required diagnostic fields for this process
    function get_required_diagnostic_fields(this) result(field_names)

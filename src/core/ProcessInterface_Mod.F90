@@ -172,11 +172,11 @@ module ProcessInterface_Mod
 
    !> \brief Interface for getting required met fields for a process
    abstract interface
-      function get_required_met_fields_interface(this) result(field_names)
+      subroutine get_required_met_fields_interface(this, field_names)
          import :: ProcessInterface
          class(ProcessInterface), intent(in) :: this
-         character(len=32), allocatable :: field_names(:)
-      end function get_required_met_fields_interface
+         character(len=32), allocatable, intent(out) :: field_names(:)
+      end subroutine get_required_met_fields_interface
    end interface
 
 contains
@@ -252,13 +252,13 @@ contains
    !!
    !! Override this method in concrete processes to specify which met fields are needed.
    !! The framework will only allocate the fields that are required.
-   function process_get_required_met_fields(this) result(field_names)
+   subroutine process_get_required_met_fields(this, field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=32), allocatable, intent(out) :: field_names(:)
 
       ! Default implementation - no met fields required
       allocate(field_names(0))
-   end function process_get_required_met_fields
+   end subroutine process_get_required_met_fields
 
    !> \brief Get required diagnostic fields for this process
    !!

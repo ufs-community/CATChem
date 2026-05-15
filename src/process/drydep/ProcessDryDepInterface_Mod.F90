@@ -1003,9 +1003,9 @@ contains
 
 
    !> Get required meteorological fields for this process
-   function get_required_met_fields(this) result(field_names)
+   subroutine get_required_met_fields(this, field_names)
       class(ProcessDryDepInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=32), allocatable, intent(out) :: field_names(:)
       character(len=32), allocatable :: process_fields(:)
       character(len=32), allocatable :: gas_scheme_fields(:), aero_scheme_fields(:)
       integer :: gas_scheme_count, aero_scheme_count
@@ -1142,7 +1142,7 @@ contains
       if (allocated(gas_scheme_fields)) deallocate(gas_scheme_fields)
       if (allocated(aero_scheme_fields)) deallocate(aero_scheme_fields)
 
-   end function get_required_met_fields
+   end subroutine get_required_met_fields
 
    !> Get required diagnostic fields for this process
    function get_required_diagnostic_fields(this) result(field_names)

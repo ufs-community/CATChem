@@ -74,7 +74,7 @@ contains
       endif
 
       ! Allocate only required met fields for this process
-      met_fields = process%get_required_met_fields()
+      call process%get_required_met_fields(met_fields)
       met_state => container%get_met_state_ptr()
       if (associated(met_state) .and. allocated(met_fields)) then
          do i = 1, size(met_fields)

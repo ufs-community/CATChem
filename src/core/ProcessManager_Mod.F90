@@ -615,7 +615,7 @@ contains
       rc = CC_SUCCESS
 
       ! Get required fields from the new process
-      new_fields = process%get_required_met_fields()
+      call process%get_required_met_fields(new_fields)
       new_size = size(new_fields)
 
       ! If no new fields, nothing to do
