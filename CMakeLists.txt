@@ -79,7 +79,6 @@ elseif(
 endif()
 
 # Disable memory sanitizer to avoid linking issues
-# Note for Intel, must come _after_ `-check all` to have an effect
 if(
   CMAKE_C_COMPILER_ID STREQUAL "GNU"
   OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
