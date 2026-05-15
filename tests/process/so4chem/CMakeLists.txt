@@ -22,10 +22,12 @@ foreach(test_source ${TEST_SOURCES})
     testing
   )
 
-  # Set Fortran module directory
+  # Set Fortran module directory and force Fortran linker
   set_target_properties(
     ${test_name}
-    PROPERTIES Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules"
+    PROPERTIES
+      Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules"
+      LINKER_LANGUAGE Fortran
   )
 
   # Add include directories for module files
