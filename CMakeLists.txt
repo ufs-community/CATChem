@@ -99,13 +99,13 @@ endif()
 # For Intel, must come _after_ `-check all` to have an effect
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   # gfortran uses standard sanitizer flags
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sanitize=all")
+  list(APPEND _catchem_compiler_options -fno-sanitize=all)
 elseif(
   CMAKE_Fortran_COMPILER_ID STREQUAL "Intel"
   OR CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM"
 )
   # ifort (Intel) and ifx (IntelLLVM) both use -check
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -check nouninit")
+  list(APPEND _catchem_compiler_options -check nouninit)
 endif()
 if(
   CMAKE_C_COMPILER_ID STREQUAL "GNU"
