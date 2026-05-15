@@ -52,13 +52,14 @@ if(
     -Wextra
     -pedantic
     -fcheck=all
+    -fno-sanitize=all
     -ffpe-trap=invalid,zero,overflow
     -fbacktrace
     -fmax-errors=0
     -ffree-line-length-none
   )
 elseif(
-  CMAKE_Fortran_COMPILER_ID MATCHES "Intel"
+  CMAKE_Fortran_COMPILER_ID MATCHES "^Intel"
   AND CMAKE_BUILD_TYPE MATCHES "Debug"
 )
   list(
@@ -68,25 +69,7 @@ elseif(
     -warn
     all
     -check
-    all
-    -implicitnone
-    -fpe0
-    -traceback
-    -error-limit
-    0
-  )
-elseif(
-  CMAKE_Fortran_COMPILER_ID MATCHES "IntelLLVM"
-  AND CMAKE_BUILD_TYPE MATCHES "Debug"
-)
-  list(
-    APPEND
-    _catchem_compiler_options
-    -O0
-    -warn
-    all
-    -check
-    all
+    all,nouninit
     -implicitnone
     -fpe0
     -traceback
@@ -96,17 +79,7 @@ elseif(
 endif()
 
 # Disable memory sanitizer to avoid linking issues
-# For Intel, must come _after_ `-check all` to have an effect
-if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  # gfortran uses standard sanitizer flags
-  list(APPEND _catchem_compiler_options -fno-sanitize=all)
-elseif(
-  CMAKE_Fortran_COMPILER_ID STREQUAL "Intel"
-  OR CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM"
-)
-  # ifort (Intel) and ifx (IntelLLVM) both use -check
-  list(APPEND _catchem_compiler_options -check nouninit)
-endif()
+# Note for Intel, must come _after_ `-check all` to have an effect
 if(
   CMAKE_C_COMPILER_ID STREQUAL "GNU"
   OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
