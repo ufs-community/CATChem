@@ -55,14 +55,8 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
 endif()
 
 # No Fortran line length restrictions on all GNU build types
-if(
-  CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95"
-)
-  list(
-  APPEND
-  _catchem_compiler_options
-  -ffree-line-length-none
-  )
+if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
+  list(APPEND _catchem_compiler_options -ffree-line-length-none)
 endif()
 
 if(
