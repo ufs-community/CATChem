@@ -77,6 +77,7 @@
 |  type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)) function, public | [**yaml\_load\_file**](#function-yaml_load_file) (character(len=\*), intent(in) filename) <br>_Load YAML from file._  |
 |  type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)) function, public | [**yaml\_load\_string**](#function-yaml_load_string) (character(len=\*), intent(in) yaml\_string) <br>_Load YAML from string._  |
 |  logical function, public | [**yaml\_save\_file**](#function-yaml_save_file) (type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)), intent(in) node, character(len=\*), intent(in) filename) <br>_Save YAML to file._  |
+|  type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)) function, public | [**yaml\_sequence\_to\_map**](#function-yaml_sequence_to_map) (type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)), intent(in) node) <br> |
 |  logical function, public | [**yaml\_set\_integer**](#function-yaml_set_integer) (type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)), intent(in) node, character(len=\*), intent(in) key, integer, intent(in) value) <br>_Set integer value._  |
 |  logical function, public | [**yaml\_set\_logical**](#function-yaml_set_logical) (type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)), intent(in) node, character(len=\*), intent(in) key, logical, intent(in) value) <br>_Set logical value._  |
 |  logical function, public | [**yaml\_set\_real**](#function-yaml_set_real) (type([**yaml\_node\_t**](namespaceyaml__interface__mod.md#none-yaml_node_t)), intent(in) node, character(len=\*), intent(in) key, real(fp), intent(in) value) <br>_Set real value._  |
@@ -438,6 +439,21 @@ _Save YAML to file._
 logical function, public yaml_interface_mod::yaml_save_file (
     type( yaml_node_t ), intent(in) node,
     character(len=*), intent(in) filename
+) 
+```
+
+
+
+
+<hr>
+
+
+
+### function yaml\_sequence\_to\_map 
+
+```Fortran
+type( yaml_node_t ) function, public yaml_interface_mod::yaml_sequence_to_map (
+    type( yaml_node_t ), intent(in) node
 ) 
 ```
 

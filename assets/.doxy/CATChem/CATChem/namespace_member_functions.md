@@ -981,6 +981,7 @@
 * **yaml\_load\_file** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_load\_string** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_save\_file** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
+* **yaml\_sequence\_to\_map** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_set\_integer** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_set\_integer\_generic** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_set\_logical** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))

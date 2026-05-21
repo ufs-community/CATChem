@@ -20,6 +20,7 @@
 * [**c\_yaml\_load\_file**](interfaceyaml__interface__mod_1_1c__yaml__load__file.md)
 * [**c\_yaml\_load\_string**](interfaceyaml__interface__mod_1_1c__yaml__load__string.md)
 * [**c\_yaml\_save\_file**](interfaceyaml__interface__mod_1_1c__yaml__save__file.md)
+* [**c\_yaml\_sequence\_to\_map**](interfaceyaml__interface__mod_1_1c__yaml__sequence__to__map.md)
 * [**c\_yaml\_set\_integer**](interfaceyaml__interface__mod_1_1c__yaml__set__integer.md)
 * [**c\_yaml\_set\_logical**](interfaceyaml__interface__mod_1_1c__yaml__set__logical.md)
 * [**c\_yaml\_set\_real**](interfaceyaml__interface__mod_1_1c__yaml__set__real.md)

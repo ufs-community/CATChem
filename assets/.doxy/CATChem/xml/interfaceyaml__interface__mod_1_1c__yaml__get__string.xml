@@ -31,14 +31,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="91" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="92" bodyend="97"/>
+        <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="97" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="98" bodyend="103"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="91" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="91" bodyend="97"/>
+    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="97" column="1" bodyfile="src/external/yaml_interface/yaml_interface_mod.F90" bodystart="97" bodyend="103"/>
     <listofallmembers>
       <member refid="interfaceyaml__interface__mod_1_1c__yaml__get__string_1ada4c738a694c9e616c09952ec6176a43" prot="public" virt="non-virtual"><scope>yaml_interface_mod::c_yaml_get_string</scope><name>c_yaml_get_string</name></member>
     </listofallmembers>

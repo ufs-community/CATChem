@@ -48,6 +48,9 @@
   <compound refid="interfaceyaml__interface__mod_1_1c__yaml__save__file" kind="interface"><name>yaml_interface_mod::c_yaml_save_file</name>
     <member refid="interfaceyaml__interface__mod_1_1c__yaml__save__file_1ac75f62ed7eea3978b958ed66ed6d7e44" kind="function"><name>c_yaml_save_file</name></member>
   </compound>
+  <compound refid="interfaceyaml__interface__mod_1_1c__yaml__sequence__to__map" kind="interface"><name>yaml_interface_mod::c_yaml_sequence_to_map</name>
+    <member refid="interfaceyaml__interface__mod_1_1c__yaml__sequence__to__map_1a8c7d215a1b72fa17d388b3af450b977e" kind="function"><name>c_yaml_sequence_to_map</name></member>
+  </compound>
   <compound refid="interfaceyaml__interface__mod_1_1c__yaml__set__integer" kind="interface"><name>yaml_interface_mod::c_yaml_set_integer</name>
     <member refid="interfaceyaml__interface__mod_1_1c__yaml__set__integer_1aa17f883d90628e598f1cb7a315588bf9" kind="function"><name>c_yaml_set_integer</name></member>
   </compound>
@@ -3608,6 +3611,7 @@
     <member refid="namespaceyaml__interface__mod_1afeb325811318d4ec78e035130b798137" kind="function"><name>yaml_load_file</name></member>
     <member refid="namespaceyaml__interface__mod_1ad06132c14d7eadaf706eec90206a6577" kind="function"><name>yaml_load_string</name></member>
     <member refid="namespaceyaml__interface__mod_1a06bb4a635c6772f0b9dd27bff7b269f7" kind="function"><name>yaml_destroy_node</name></member>
+    <member refid="namespaceyaml__interface__mod_1a7e3932c838dc2c9c6c32ffe20ded5c76" kind="function"><name>yaml_sequence_to_map</name></member>
     <member refid="namespaceyaml__interface__mod_1a6a30e8e4d946f492cac9fd5ad030a7b1" kind="function"><name>yaml_get_string</name></member>
     <member refid="namespaceyaml__interface__mod_1ae8b05d0e36180f7454c5277fb689350a" kind="function"><name>yaml_get_integer</name></member>
     <member refid="namespaceyaml__interface__mod_1ab9cf6053d1384b19c8ed0cc31a0929a8" kind="function"><name>yaml_get_real</name></member>
