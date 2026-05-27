@@ -173,7 +173,7 @@ contains
             ! TODO: Replace this generic implementation with your scheme's algorithm
             ! This is a placeholder that demonstrates the expected structure
             ! Get Jeagle SST Correction
-            call jeagleSSTcorrection(fsstemis, SST,1, RC)
+            call jeagleSSTcorrection(fsstemis, SST,2, RC)
             if (RC /= 0) then
                RC = -1
                !print *, 'Error in jeagleSSTcorrection'

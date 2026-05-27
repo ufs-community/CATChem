@@ -1106,7 +1106,12 @@ contains
                   end do
                end if
             end if
-            concentrations(:,:,:,species_idx) = concentrations(:,:,:,species_idx) + species_tendency(:,:,:)
+            ! Apply tendency: 'add' accumulates, 'replace' overwrites concentration
+            if (trim(category%apply_method) == 'replace') then
+               concentrations(:,:,:,species_idx) = species_tendency(:,:,:)
+            else
+               concentrations(:,:,:,species_idx) = concentrations(:,:,:,species_idx) + species_tendency(:,:,:)
+            end if
 
          end do !end of mapped species loop
 
@@ -1460,6 +1465,10 @@ contains
       ! Carbon emission factor (Mie-based BB AOT limiter)
       call config_manager%get_logical(trim(config_path)//'/use_oc_fbb', &
          category%use_oc_fbb, localrc, .false.)
+
+      ! Apply method: 'add' (default, accumulate onto concentration) or 'replace' (overwrite)
+      call config_manager%get_string(trim(config_path)//'/apply_method', &
+         category%apply_method, localrc, 'add')
 
    end subroutine parse_emission_category
 

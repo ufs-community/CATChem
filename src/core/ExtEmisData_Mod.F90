@@ -130,6 +130,7 @@ MODULE ExtEmisData_Mod
       INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
       ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
       LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
+      CHARACTER(LEN=16)                          :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
 
    CONTAINS
       !> \brief Initialize emission category with metadata

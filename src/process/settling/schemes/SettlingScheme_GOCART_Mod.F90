@@ -191,6 +191,11 @@ contains
          else
             bin = 1  ! default bin if name is too short
          end if
+         
+         !Check if it's a multi-bin species (like dust4) vs chemical name (like SO4, which has two mie bins with MSA)
+         if (bin > mie_data(species_mie_map(species_idx))%nbin) then
+            bin = 1
+         end if
 
          !initialize fluxout
          allocate(fluxout(1, 1, bin))

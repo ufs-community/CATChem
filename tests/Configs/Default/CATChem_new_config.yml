@@ -293,6 +293,7 @@ processes:
       format: "netcdf"
       gridded: true
       is_2d: false
+      apply_method: "replace"
       reverse_vertical: true
       regrid_method: conserve
       lat_name: "lat"
@@ -308,6 +309,7 @@ processes:
       format: "netcdf"
       gridded: true
       is_2d: true
+      apply_method: "replace" # "add" to accumulate concentration (default); "replace" to overwrite existing concentration
       regrid_method: conserve
       lat_name: "latitude"
       lon_name: "longitude"
@@ -364,7 +366,7 @@ processes:
       plume_rise: "sofiev"
       diagnostics: true
       diag_list: [biomass]
-    dust:
+    dust: 
       activate: true
       scale_factor: 1.0
       source_file: "ExtData/dust/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
@@ -374,6 +376,7 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
+      apply_method: "replace" #mapped to met_state; so it is non-op here
       frequency: "static"
       diagnostics: true
       diag_list: [clayfrac,sandfrac,uthres,sep]
@@ -387,6 +390,7 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
+      apply_method: "replace" #mapped to met_state; so it is non-op here
       frequency: "monthly"
       diagnostics: true
       diag_list: [PC]
@@ -448,7 +452,7 @@ processes:
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
-      simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
