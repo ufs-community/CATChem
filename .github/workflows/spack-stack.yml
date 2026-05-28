@@ -1,10 +1,8 @@
 name: CI (spack-stack)
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
   workflow_dispatch:
+  workflow_call:
 
 # Use custom shell with -l so .bash_profile is sourced
 # without having to do it in manually every step

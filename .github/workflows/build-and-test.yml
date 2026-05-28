@@ -1,10 +1,8 @@
 name: CI (GNU)
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
   workflow_dispatch:
+  workflow_call:
 
 env:
   BUILD_DIR: build

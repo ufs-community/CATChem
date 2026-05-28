@@ -63,5 +63,13 @@ repos:
                 drivers/ccpp/.*\.F90|
                 parameters/.*\.F90|
                 src/external/GOCART/.*|
-                src/external/yaml-cpp/.*
+                src/external/yaml-cpp/.*|
+                CHANGELOG.md
             )$
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []

@@ -1,0 +1,40 @@
+name: Main CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  ci-gnu:
+    uses: ./.github/workflows/build-and-test.yml
+
+  ci-spack:
+    uses: ./.github/workflows/spack-stack.yml
+
+  release:
+    needs: [lint, ci-gnu, ci-spack]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/semantic-release.yml
+
+  docs:
+    needs: [lint, ci-gnu, ci-spack, release]
+    if: |
+      always() &&
+      needs.lint.result == 'success' &&
+      needs.ci-gnu.result == 'success' &&
+      needs.ci-spack.result == 'success' &&
+      (needs.release.result == 'success' || needs.release.result == 'skipped')
+    uses: ./.github/workflows/docs.yml

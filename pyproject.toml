@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catchem-docs"
-version = "1.0.0"
+version = "0.0.1"
 description = "CATChem (Configurable Atmospheric Chemistry) Documentation"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -42,3 +42,13 @@ packages = []
 
 [tool.mkdocs]
 config-file = "mkdocs.yml"
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:project.version",
+]
+version_variables = []
+branches = { main = { match = "main" } }
+upload_to_pypi = false
+upload_to_release = false
+build_command = ""

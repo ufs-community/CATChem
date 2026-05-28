@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
+# Extract version from pyproject.toml
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml" PYPROJECT_TOML)
+string(REGEX MATCH "version = \"([^\"]+)\"" _ ${PYPROJECT_TOML})
+set(CATCHEM_VERSION ${CMAKE_MATCH_1})
+
+project(CATChem VERSION ${CATCHEM_VERSION} LANGUAGES Fortran C CXX)
 
 # Option to build NUOPC cap (defaults to OFF)
 option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
