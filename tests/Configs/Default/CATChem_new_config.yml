@@ -407,6 +407,7 @@ processes:
       weibull_flag: false
     geos12:
       scale_factor: 1.0
+      weibull_flag: false
   dust:
     activate: true
     diagnostics: true

@@ -4,7 +4,7 @@
 !! This module provides the factory functions for creating seasalt
 !! process instances following the CATChem Process Factory pattern.
 !!
-!! Generated on: 2025-11-14T23:01:21.603774
+!! Generated on: 2026-05-28T17:43:34.281577
 !! Author: Barry Baker & Wei Li
 !! Version: 1.0.0
 
@@ -75,7 +75,7 @@ contains
          description='Process for computing sea salt aerosol emissions over ocean surfaces', &
          creator=create_seasalt_process, &
          rc=rc &
-         )
+      )
 
    end subroutine register_seasalt_process
 
