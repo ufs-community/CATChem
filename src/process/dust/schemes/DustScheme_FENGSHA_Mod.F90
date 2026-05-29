@@ -179,7 +179,7 @@ contains
             skip = (gvf < 0.0_fp) .or. (lai >= VEG_THRESH)
          endif
        case default
-         if (.not. skip) skip = (rdrag < 0.001_fp .or. rdrag > 1.0_fp)
+         if (.not. skip) skip = (rdrag < 0.0_fp .or. rdrag > 1.0_fp)
       end select
 
       if (.not. skip) then
@@ -189,14 +189,14 @@ contains
 
       if (.not. skip) then
          skip = (SSM < SSM_THRESH) .or. &
-            (clayfrac <= 0.0_fp) .or. (sandfrac <= 0.0_fp) .or. &
+            (clayfrac < 0.0_fp) .or. (sandfrac < 0.0_fp) .or. &
             (clayfrac > 1.0_fp) .or. (sandfrac > 1.0_fp)
       endif
 
       ! Don't do dust over frozen soil
       !--------------------------------
       if (TSKIN <= 273.15_fp) then
-         skip = .true.
+         ! skip = .true.
       endif
 
       ! Skip computation if criteria not met
