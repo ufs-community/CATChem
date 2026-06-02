@@ -28,7 +28,7 @@ foreach(test_source ${TEST_SOURCES})
     PROPERTIES
       Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules"
       LINKER_LANGUAGE Fortran
-  )  
+  )
 
   # Add include directories for module files
   target_include_directories(
