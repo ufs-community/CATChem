@@ -346,7 +346,7 @@ contains
             rc = CC_FAILURE
             return
          end if
-         call catchem_emis_read_regrid(category, grid, nlev, filename, rc)
+         call catchem_emis_read_regrid(category, grid, nlev, filename, curr_time, rc)
          return
       end if
 
@@ -432,13 +432,14 @@ contains
    !! Reads global lat-lon emission data and regrids it onto the model
    !! grid using ESMF bilinear regridding.  Route handles are cached in
    !! the module-level emis_regrid_cache so weights are computed only once.
-   subroutine catchem_emis_read_regrid(category, grid, nlev, filename, rc)
+   subroutine catchem_emis_read_regrid(category, grid, nlev, filename, curr_time, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
       type(ESMF_Grid),          intent(in)    :: grid
       integer,                  intent(in)    :: nlev
       character(len=*),         intent(in)    :: filename
+      type(ESMF_Time),          intent(in)    :: curr_time
       integer,                  intent(out)   :: rc
 
       ! Local variables
@@ -450,12 +451,69 @@ contains
       logical :: didRegrid
       character(len=*), parameter :: pName = 'catchem_emis_read_regrid'
 
+      ! Temporal interpolation variables
+      logical :: do_time_interp
+      integer :: irec_next, curr_dd, curr_hh, curr_mn, curr_ss
+      integer :: curr_mm, curr_yy, days_in_month
+      real(ESMF_KIND_R4) :: w_curr, w_next
+      real(ESMF_KIND_R4), allocatable :: data_t1(:,:)
+      integer :: nx, ny
+
       rc = CC_SUCCESS
       category_name = trim(category%category_name)
 
+      ! Determine if temporal interpolation is needed
+      do_time_interp = (trim(category%time_interpolation) == 'linear' .and. &
+                        category%n_times >= 2)
+
+      ! Compute temporal weights if needed
+      if (do_time_interp) then
+         ! Determine the next bracketing record index
+         if (category%irec < category%n_times) then
+            irec_next = category%irec + 1
+         else
+            irec_next = 1  ! wrap around for climatological data (Dec -> Jan)
+         end if
+
+         ! Compute fractional position within the current period
+         call ESMF_TimeGet(curr_time, yy=curr_yy, mm=curr_mm, dd=curr_dd, &
+            h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+         ! Compute weight based on frequency:
+         !   monthly -> fraction into month (day-1 + hh/24 + ...) / days_in_month
+         !   daily   -> fraction into day   (hh + mm/60 + ss/3600) / 24
+         !   hourly  -> fraction into hour  (mm + ss/60) / 60
+         select case (trim(category%frequency))
+         case ('monthly')
+            days_in_month = days_in_month_func(curr_yy, curr_mm)
+            w_next = real((curr_dd - 1) + real(curr_hh)/24.0 + &
+                          real(curr_mn)/1440.0 + real(curr_ss)/86400.0, ESMF_KIND_R4) / &
+                     real(days_in_month, ESMF_KIND_R4)
+         case ('daily')
+            w_next = real(real(curr_hh) + real(curr_mn)/60.0 + &
+                          real(curr_ss)/3600.0, ESMF_KIND_R4) / 24.0_ESMF_KIND_R4
+         case ('hourly')
+            w_next = real(real(curr_mn) + real(curr_ss)/60.0, ESMF_KIND_R4) / &
+                     60.0_ESMF_KIND_R4
+         case default
+            ! Unknown frequency — disable interpolation
+            do_time_interp = .false.
+            w_next = 0.0_ESMF_KIND_R4
+         end select
+         w_curr = 1.0_ESMF_KIND_R4 - w_next
+
+         if (do_time_interp) then
+            write(msg, '(A,A,A,A,A,I3,A,F6.4,A,I3,A,F6.4)') trim(pName), &
+               ': time_interp (', trim(category%frequency), ') for ', trim(category_name), &
+               category%irec, ' w=', w_curr, '  rec_next=', irec_next, ' w=', w_next
+            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+         end if
+      end if
+
       do ifield = 1, category%n_fields
          ! Create 2D destination field on the model grid
-         ! (for 3D data we regrid one level at a time as 2D slabs)
          esmf_field = ESMF_FieldCreate(grid, &
             name=trim(category%fields(ifield)%field_name), &
             typekind=ESMF_TYPEKIND_R4, rc=localrc)
@@ -463,7 +521,7 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
          if (category%is_2d) then
-            ! --- 2D field: single regrid call ---
+            ! --- 2D field ---
             call catchem_regrid_field( &
                cache     = emis_regrid_cache, &
                filename  = trim(filename), &
@@ -488,7 +546,39 @@ contains
                return
             end if
 
-            category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)
+            if (do_time_interp) then
+               ! Save first time slice, then regrid second and blend
+               nx = size(field_data_2d, 1)
+               ny = size(field_data_2d, 2)
+               allocate(data_t1(nx, ny))
+               data_t1(:,:) = field_data_2d(:,:)
+
+               ! Regrid the next time slice
+               call catchem_regrid_field( &
+                  cache     = emis_regrid_cache, &
+                  filename  = trim(filename), &
+                  varname   = trim(category%fields(ifield)%field_name), &
+                  dstField  = esmf_field, &
+                  latname   = trim(category%latname), &
+                  lonname   = trim(category%lonname), &
+                  regrid_method_name = trim(category%regrid_method), &
+                  timeSlice = irec_next, &
+                  didRegrid = didRegrid, &
+                  rc        = localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+                  deallocate(data_t1)
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  return
+               end if
+
+               ! Blend: result = w_curr * t1 + w_next * t2
+               category%fields(ifield)%emission_data(:,:,1,1) = &
+                  real(w_curr * data_t1(:,:) + w_next * field_data_2d(:,:), fp)
+               deallocate(data_t1)
+            else
+               category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)
+            end if
          else
             ! --- 3D field: regrid each vertical level as a 2D slab ---
             do klev = 1, nlev
@@ -517,8 +607,39 @@ contains
                   return
                end if
 
-               category%fields(ifield)%emission_data(:,:,klev,1) = real(field_data_2d(:,:), fp)
+               if (do_time_interp) then
+                  nx = size(field_data_2d, 1)
+                  ny = size(field_data_2d, 2)
+                  if (.not. allocated(data_t1)) allocate(data_t1(nx, ny))
+                  data_t1(:,:) = field_data_2d(:,:)
+
+                  call catchem_regrid_field( &
+                     cache     = emis_regrid_cache, &
+                     filename  = trim(filename), &
+                     varname   = trim(category%fields(ifield)%field_name), &
+                     dstField  = esmf_field, &
+                     latname   = trim(category%latname), &
+                     lonname   = trim(category%lonname), &
+                     regrid_method_name = trim(category%regrid_method), &
+                     timeSlice = irec_next, &
+                     levelSlice = klev, &
+                     didRegrid = didRegrid, &
+                     rc        = localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+                     deallocate(data_t1)
+                     call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                     return
+                  end if
+
+                  category%fields(ifield)%emission_data(:,:,klev,1) = &
+                     real(w_curr * data_t1(:,:) + w_next * field_data_2d(:,:), fp)
+               else
+                  category%fields(ifield)%emission_data(:,:,klev,1) = real(field_data_2d(:,:), fp)
+               end if
             end do
+
+            if (allocated(data_t1)) deallocate(data_t1)
 
             ! Reverse vertical levels if configured
             if (category%reverse_vertical) then
@@ -1446,6 +1567,7 @@ contains
       call config_manager%get_string(trim(config_path)//'/lat_name', category%latname, localrc, '')
       call config_manager%get_string(trim(config_path)//'/lon_name', category%lonname, localrc, '')
       call config_manager%get_string(trim(config_path)//'/regrid_method', category%regrid_method, localrc, 'none')
+      call config_manager%get_string(trim(config_path)//'/time_interpolation', category%time_interpolation, localrc, 'none')
       call config_manager%get_string(trim(config_path)//'/vertical_dist', category%vertical_dist, localrc, 'none')
       call config_manager%get_logical(trim(config_path)//'/reverse_vertical', category%reverse_vertical, localrc, .false.)
 
@@ -2072,5 +2194,23 @@ contains
       end if
 
    end subroutine catchem_emis_find_time_index
+
+   !> \brief Return the number of days in a given month/year
+   pure function days_in_month_func(year, month) result(ndays)
+      integer, intent(in) :: year, month
+      integer :: ndays
+      integer, parameter :: mdays(12) = (/31,28,31,30,31,30,31,31,30,31,30,31/)
+      logical :: is_leap
+
+      if (month < 1 .or. month > 12) then
+         ndays = 30
+         return
+      end if
+      ndays = mdays(month)
+      if (month == 2) then
+         is_leap = (mod(year,4)==0 .and. mod(year,100)/=0) .or. (mod(year,400)==0)
+         if (is_leap) ndays = 29
+      end if
+   end function days_in_month_func
 
 end module catchem_emis_mod

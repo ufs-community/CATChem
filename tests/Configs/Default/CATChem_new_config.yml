@@ -373,6 +373,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: bilinear
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
@@ -387,6 +388,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: bilinear
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
@@ -414,12 +416,12 @@ processes:
     diag_species: []
     scheme: 'fengsha'
     fengsha:
-      alpha: 0.20
+      alpha: 0.20   
       gamma: 1.0
       drylimit_factor: 1.2
       moist_correction_factor: 1.0
       kvhmax: 0.0002
-      drag_option: 1
+      drag_option: 1  
       horizflux_option: 1
       moist_option: 1
       distribution_option: 1

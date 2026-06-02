@@ -27,6 +27,7 @@ module catchem_regrid_mod
    type :: RegridCacheEntry
       integer :: nlon = 0         !< Source grid longitude count
       integer :: nlat = 0         !< Source grid latitude  count
+      type(ESMF_RegridMethod_Flag) :: method
       type(ESMF_Grid)        :: srcGrid
       type(ESMF_Field)       :: srcField
       type(ESMF_RouteHandle) :: routeHandle
@@ -160,7 +161,7 @@ contains
       end if
 
       ! ---- Check if we already have a cached route handle ----
-      call cache%lookup(nlon, nlat, idx)
+      call cache%lookup(nlon, nlat, regridMethod, idx)
       cached = (idx > 0)
 
       if (.not. cached) then
@@ -236,7 +237,7 @@ contains
          end if
 
          ! Store in cache
-         call cache%add(nlon, nlat, srcGrid, srcField, routeHandle, idx)
+         call cache%add(nlon, nlat, regridMethod, srcGrid, srcField, routeHandle, idx)
 
          call ESMF_LogWrite("catchem_regrid_field: Computed regrid weights for "// &
             trim(filename), ESMF_LOGMSG_INFO, rc=localrc)
@@ -287,11 +288,12 @@ contains
    end subroutine catchem_regrid_field
 
    !--------------------------------------------------------------------------
-   !> \brief Look up a cached entry by source grid shape
+   !> \brief Look up a cached entry by source grid shape and regrid method
    !--------------------------------------------------------------------------
-   subroutine regrid_cache_lookup(self, nlon, nlat, idx)
+   subroutine regrid_cache_lookup(self, nlon, nlat, method, idx)
       class(RegridCache), intent(in)  :: self
       integer,            intent(in)  :: nlon, nlat
+      type(ESMF_RegridMethod_Flag), intent(in) :: method
       integer,            intent(out) :: idx
       integer :: i
 
@@ -299,7 +301,8 @@ contains
       do i = 1, self%count
          if (self%entries(i)%active .and. &
             self%entries(i)%nlon == nlon .and. &
-            self%entries(i)%nlat == nlat) then
+            self%entries(i)%nlat == nlat .and. &
+            self%entries(i)%method == method) then
             idx = i
             return
          end if
@@ -309,9 +312,10 @@ contains
    !--------------------------------------------------------------------------
    !> \brief Add a new entry to the regrid cache
    !--------------------------------------------------------------------------
-   subroutine regrid_cache_add(self, nlon, nlat, srcGrid, srcField, routeHandle, idx)
+   subroutine regrid_cache_add(self, nlon, nlat, method, srcGrid, srcField, routeHandle, idx)
       class(RegridCache),      intent(inout) :: self
       integer,                 intent(in)    :: nlon, nlat
+      type(ESMF_RegridMethod_Flag), intent(in) :: method
       type(ESMF_Grid),        intent(in)    :: srcGrid
       type(ESMF_Field),       intent(in)    :: srcField
       type(ESMF_RouteHandle), intent(in)    :: routeHandle
@@ -330,6 +334,7 @@ contains
 
       self%entries(idx)%nlon        = nlon
       self%entries(idx)%nlat        = nlat
+      self%entries(idx)%method      = method
       self%entries(idx)%srcGrid     = srcGrid
       self%entries(idx)%srcField    = srcField
       self%entries(idx)%routeHandle = routeHandle
