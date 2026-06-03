@@ -234,6 +234,16 @@ contains
             ext_emis_data%categories(i)%last_period_key = period_key
          end if
 
+         ! Recompute temporal blend weights every timestep for time-interpolated categories
+         if (ext_emis_data%categories(i)%needs_time_blend) then
+            call catchem_emis_blend_time(ext_emis_data%categories(i), current_time, localrc)
+            if (localrc /= CC_SUCCESS) then
+               write(msg, '(A,A,A)') trim(pName), ': Failed to blend time for category: ', &
+                  trim(ext_emis_data%categories(i)%category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+            end if
+         end if
+
          ! Apply emissions to chemical state every timestep
          ! (data is read only when the period changes, but applied every step)
          call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
@@ -453,61 +463,84 @@ contains
 
       ! Temporal interpolation variables
       logical :: do_time_interp
-      integer :: irec_next, curr_dd, curr_hh, curr_mn, curr_ss
-      integer :: curr_mm, curr_yy, days_in_month
-      real(ESMF_KIND_R4) :: w_curr, w_next
-      real(ESMF_KIND_R4), allocatable :: data_t1(:,:)
+      logical :: multi_file_interp   ! t2 comes from a different file
+      integer :: irec_next
       integer :: nx, ny
+      character(len=EMIS_MAXSTR) :: filename_next
+      type(ESMF_Time) :: next_time
+      type(ESMF_TimeInterval) :: period_step
+      logical :: next_file_exists
 
       rc = CC_SUCCESS
       category_name = trim(category%category_name)
 
-      ! Determine if temporal interpolation is needed
-      do_time_interp = (trim(category%time_interpolation) == 'linear' .and. &
-                        category%n_times >= 2)
-
-      ! Compute temporal weights if needed
+      ! Determine if temporal interpolation is needed.
+      ! Two modes:
+      !   (a) single multi-record file: n_times >= 2
+      !   (b) separate files per period (template with %): n_times <= 1
+      multi_file_interp = .false.
+      do_time_interp = (trim(category%time_interpolation) == 'linear')
       if (do_time_interp) then
-         ! Determine the next bracketing record index
-         if (category%irec < category%n_times) then
-            irec_next = category%irec + 1
+         if (category%n_times >= 2) then
+            ! Single file with multiple time records — use next record in same file
+            multi_file_interp = .false.
+         else if (index(trim(category%source_file), '%') > 0) then
+            ! Template-based: each file has 1 record, read t2 from next-period file
+            multi_file_interp = .true.
          else
-            irec_next = 1  ! wrap around for climatological data (Dec -> Jan)
-         end if
-
-         ! Compute fractional position within the current period
-         call ESMF_TimeGet(curr_time, yy=curr_yy, mm=curr_mm, dd=curr_dd, &
-            h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
-
-         ! Compute weight based on frequency:
-         !   monthly -> fraction into month (day-1 + hh/24 + ...) / days_in_month
-         !   daily   -> fraction into day   (hh + mm/60 + ss/3600) / 24
-         !   hourly  -> fraction into hour  (mm + ss/60) / 60
-         select case (trim(category%frequency))
-         case ('monthly')
-            days_in_month = days_in_month_func(curr_yy, curr_mm)
-            w_next = real((curr_dd - 1) + real(curr_hh)/24.0 + &
-                          real(curr_mn)/1440.0 + real(curr_ss)/86400.0, ESMF_KIND_R4) / &
-                     real(days_in_month, ESMF_KIND_R4)
-         case ('daily')
-            w_next = real(real(curr_hh) + real(curr_mn)/60.0 + &
-                          real(curr_ss)/3600.0, ESMF_KIND_R4) / 24.0_ESMF_KIND_R4
-         case ('hourly')
-            w_next = real(real(curr_mn) + real(curr_ss)/60.0, ESMF_KIND_R4) / &
-                     60.0_ESMF_KIND_R4
-         case default
-            ! Unknown frequency — disable interpolation
+            ! Single-record file, no template — cannot interpolate
             do_time_interp = .false.
-            w_next = 0.0_ESMF_KIND_R4
-         end select
-         w_curr = 1.0_ESMF_KIND_R4 - w_next
+         end if
+      end if
 
-         if (do_time_interp) then
-            write(msg, '(A,A,A,A,A,I3,A,F6.4,A,I3,A,F6.4)') trim(pName), &
-               ': time_interp (', trim(category%frequency), ') for ', trim(category_name), &
-               category%irec, ' w=', w_curr, '  rec_next=', irec_next, ' w=', w_next
+      ! Compute next record index or resolve next-period filename
+      if (do_time_interp) then
+         if (multi_file_interp) then
+            ! Advance curr_time by one period to resolve the next file
+            irec_next = 1  ! next file's first (only) record
+            select case (trim(category%frequency))
+            case ('monthly')
+               call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+            case ('daily')
+               call ESMF_TimeIntervalSet(period_step, d=1, rc=localrc)
+            case ('hourly')
+               call ESMF_TimeIntervalSet(period_step, h=1, rc=localrc)
+            case default
+               call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+            end select
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+            next_time = curr_time + period_step
+            call resolve_filename_template(category%source_file, next_time, filename_next, localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+            ! Check next file exists; fall back to no interpolation if missing
+            inquire(file=trim(filename_next), exist=next_file_exists)
+            if (.not. next_file_exists) then
+               write(msg, '(A,A,A)') trim(pName), &
+                  ': next-period file not found, disabling time_interp: ', trim(filename_next)
+               call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
+               do_time_interp = .false.
+               multi_file_interp = .false.
+            else
+               write(msg, '(A,A,A,A)') trim(pName), &
+                  ': multi-file time_interp for ', trim(category_name), &
+                  ' next_file='//trim(filename_next)
+               call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+            end if
+         else
+            ! Same-file interpolation
+            if (category%irec < category%n_times) then
+               irec_next = category%irec + 1
+            else
+               irec_next = 1  ! wrap around for climatological data (Dec -> Jan)
+            end if
+
+            write(msg, '(A,A,A,I3,A,I3)') trim(pName), &
+               ': time_interp read for ', trim(category_name), &
+               category%irec, '  and next=', irec_next
             call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
          end if
       end if
@@ -547,35 +580,58 @@ contains
             end if
 
             if (do_time_interp) then
-               ! Save first time slice, then regrid second and blend
+               ! Store current time slice in interp_data_t1
                nx = size(field_data_2d, 1)
                ny = size(field_data_2d, 2)
-               allocate(data_t1(nx, ny))
-               data_t1(:,:) = field_data_2d(:,:)
+               if (.not. allocated(category%fields(ifield)%interp_data_t1)) then
+                  allocate(category%fields(ifield)%interp_data_t1(nx, ny, 1, 1))
+               end if
+               category%fields(ifield)%interp_data_t1(:,:,1,1) = real(field_data_2d(:,:), fp)
 
-               ! Regrid the next time slice
-               call catchem_regrid_field( &
-                  cache     = emis_regrid_cache, &
-                  filename  = trim(filename), &
-                  varname   = trim(category%fields(ifield)%field_name), &
-                  dstField  = esmf_field, &
-                  latname   = trim(category%latname), &
-                  lonname   = trim(category%lonname), &
-                  regrid_method_name = trim(category%regrid_method), &
-                  timeSlice = irec_next, &
-                  didRegrid = didRegrid, &
-                  rc        = localrc)
+               ! Regrid the next time slice (from same file or next-period file)
+               if (multi_file_interp) then
+                  call catchem_regrid_field( &
+                     cache     = emis_regrid_cache, &
+                     filename  = trim(filename_next), &
+                     varname   = trim(category%fields(ifield)%field_name), &
+                     dstField  = esmf_field, &
+                     latname   = trim(category%latname), &
+                     lonname   = trim(category%lonname), &
+                     regrid_method_name = trim(category%regrid_method), &
+                     timeSlice = irec_next, &
+                     didRegrid = didRegrid, &
+                     rc        = localrc)
+               else
+                  call catchem_regrid_field( &
+                     cache     = emis_regrid_cache, &
+                     filename  = trim(filename), &
+                     varname   = trim(category%fields(ifield)%field_name), &
+                     dstField  = esmf_field, &
+                     latname   = trim(category%latname), &
+                     lonname   = trim(category%lonname), &
+                     regrid_method_name = trim(category%regrid_method), &
+                     timeSlice = irec_next, &
+                     didRegrid = didRegrid, &
+                     rc        = localrc)
+               end if
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  deallocate(data_t1)
                   call ESMF_FieldDestroy(esmf_field, rc=localrc)
                   return
                end if
 
-               ! Blend: result = w_curr * t1 + w_next * t2
+               ! Store next time slice in interp_data_t2
+               if (.not. allocated(category%fields(ifield)%interp_data_t2)) then
+                  allocate(category%fields(ifield)%interp_data_t2(nx, ny, 1, 1))
+               end if
+               category%fields(ifield)%interp_data_t2(:,:,1,1) = real(field_data_2d(:,:), fp)
+
+               ! Mark category for per-timestep blending
+               category%needs_time_blend = .true.
+
+               ! Initialize emission_data with a placeholder (will be overwritten by blend)
                category%fields(ifield)%emission_data(:,:,1,1) = &
-                  real(w_curr * data_t1(:,:) + w_next * field_data_2d(:,:), fp)
-               deallocate(data_t1)
+                  category%fields(ifield)%interp_data_t1(:,:,1,1)
             else
                category%fields(ifield)%emission_data(:,:,1,1) = real(field_data_2d(:,:), fp)
             end if
@@ -610,41 +666,67 @@ contains
                if (do_time_interp) then
                   nx = size(field_data_2d, 1)
                   ny = size(field_data_2d, 2)
-                  if (.not. allocated(data_t1)) allocate(data_t1(nx, ny))
-                  data_t1(:,:) = field_data_2d(:,:)
+                  if (.not. allocated(category%fields(ifield)%interp_data_t1)) then
+                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev, 1))
+                  end if
+                  category%fields(ifield)%interp_data_t1(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
-                  call catchem_regrid_field( &
-                     cache     = emis_regrid_cache, &
-                     filename  = trim(filename), &
-                     varname   = trim(category%fields(ifield)%field_name), &
-                     dstField  = esmf_field, &
-                     latname   = trim(category%latname), &
-                     lonname   = trim(category%lonname), &
-                     regrid_method_name = trim(category%regrid_method), &
-                     timeSlice = irec_next, &
-                     levelSlice = klev, &
-                     didRegrid = didRegrid, &
-                     rc        = localrc)
+                  if (multi_file_interp) then
+                     call catchem_regrid_field( &
+                        cache     = emis_regrid_cache, &
+                        filename  = trim(filename_next), &
+                        varname   = trim(category%fields(ifield)%field_name), &
+                        dstField  = esmf_field, &
+                        latname   = trim(category%latname), &
+                        lonname   = trim(category%lonname), &
+                        regrid_method_name = trim(category%regrid_method), &
+                        timeSlice = irec_next, &
+                        levelSlice = klev, &
+                        didRegrid = didRegrid, &
+                        rc        = localrc)
+                  else
+                     call catchem_regrid_field( &
+                        cache     = emis_regrid_cache, &
+                        filename  = trim(filename), &
+                        varname   = trim(category%fields(ifield)%field_name), &
+                        dstField  = esmf_field, &
+                        latname   = trim(category%latname), &
+                        lonname   = trim(category%lonname), &
+                        regrid_method_name = trim(category%regrid_method), &
+                        timeSlice = irec_next, &
+                        levelSlice = klev, &
+                        didRegrid = didRegrid, &
+                        rc        = localrc)
+                  end if
                   if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                     deallocate(data_t1)
                      call ESMF_FieldDestroy(esmf_field, rc=localrc)
                      return
                   end if
 
+                  if (.not. allocated(category%fields(ifield)%interp_data_t2)) then
+                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev, 1))
+                  end if
+                  category%fields(ifield)%interp_data_t2(:,:,klev,1) = real(field_data_2d(:,:), fp)
+
+                  category%needs_time_blend = .true.
                   category%fields(ifield)%emission_data(:,:,klev,1) = &
-                     real(w_curr * data_t1(:,:) + w_next * field_data_2d(:,:), fp)
+                     category%fields(ifield)%interp_data_t1(:,:,klev,1)
                else
                   category%fields(ifield)%emission_data(:,:,klev,1) = real(field_data_2d(:,:), fp)
                end if
             end do
 
-            if (allocated(data_t1)) deallocate(data_t1)
-
-            ! Reverse vertical levels if configured
+            ! Reverse vertical levels if configured (apply to both stored slices)
             if (category%reverse_vertical) then
                category%fields(ifield)%emission_data(:,:,:,1) = &
                   category%fields(ifield)%emission_data(:,:,nlev:1:-1,1)
+               if (do_time_interp) then
+                  category%fields(ifield)%interp_data_t1(:,:,:,1) = &
+                     category%fields(ifield)%interp_data_t1(:,:,nlev:1:-1,1)
+                  category%fields(ifield)%interp_data_t2(:,:,:,1) = &
+                     category%fields(ifield)%interp_data_t2(:,:,nlev:1:-1,1)
+               end if
             end if
          end if
 
@@ -2194,6 +2276,59 @@ contains
       end if
 
    end subroutine catchem_emis_find_time_index
+
+   !> \brief Recompute temporal interpolation weights and blend cached time slices
+   !!
+   !! Called every timestep for categories with needs_time_blend=.true.
+   !! Recomputes weights from the current clock time and blends interp_data_t1/t2
+   !! into emission_data.
+   subroutine catchem_emis_blend_time(category, curr_time, rc)
+      type(ExtEmisCategoryType), intent(inout) :: category
+      type(ESMF_Time),           intent(in)    :: curr_time
+      integer,                   intent(out)   :: rc
+
+      integer :: localrc, ifield
+      integer :: curr_yy, curr_mm, curr_dd, curr_hh, curr_mn, curr_ss
+      integer :: dim_days, nk_blend
+      real(fp) :: w_next, w_curr
+
+      rc = CC_SUCCESS
+
+      ! Get current time components
+      call ESMF_TimeGet(curr_time, yy=curr_yy, mm=curr_mm, dd=curr_dd, &
+         h=curr_hh, m=curr_mn, s=curr_ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      ! Compute weight based on frequency
+      select case (trim(category%frequency))
+      case ('monthly')
+         dim_days = days_in_month_func(curr_yy, curr_mm)
+         w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
+                   real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
+                  real(dim_days, fp)
+      case ('daily')
+         w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
+                   real(curr_ss, fp)/3600.0_fp) / 24.0_fp
+      case ('hourly')
+         w_next = (real(curr_mn, fp) + real(curr_ss, fp)/60.0_fp) / 60.0_fp
+      case default
+         w_next = 0.0_fp
+      end select
+      w_curr = 1.0_fp - w_next
+
+      ! Blend stored time slices for each field
+      do ifield = 1, category%n_fields
+         if (.not. allocated(category%fields(ifield)%interp_data_t1) .or. &
+             .not. allocated(category%fields(ifield)%interp_data_t2)) cycle
+
+         nk_blend = size(category%fields(ifield)%interp_data_t1, 3)
+         category%fields(ifield)%emission_data(:,:,1:nk_blend,1) = &
+            w_curr * category%fields(ifield)%interp_data_t1(:,:,:,1) + &
+            w_next * category%fields(ifield)%interp_data_t2(:,:,:,1)
+      end do
+
+   end subroutine catchem_emis_blend_time
 
    !> \brief Return the number of days in a given month/year
    pure function days_in_month_func(year, month) result(ndays)

@@ -61,10 +61,8 @@ MODULE ExtEmisData_Mod
       LOGICAL                       :: time_interpolate = .true. !< Enable time interpolation
       LOGICAL                       :: diagnostic = .false. !< Enable diagnostic output of this field
       REAL(fp), ALLOCATABLE         :: emission_data(:,:,:,:) !< Emission flux [kg/m2/s] (nx,ny,nz,n_times)
-      ! REAL(fp), ALLOCATABLE         :: longitude(:,:)         !< Longitude coordinates [degrees]
-      ! REAL(fp), ALLOCATABLE         :: latitude(:,:)          !< Latitude coordinates [degrees]
-      ! REAL(fp), ALLOCATABLE         :: vertical(:,:)          !< Vertical coordinates (if applicable)
-      ! REAL(fp), ALLOCATABLE         :: time_coords(:,:)       !< Time coordinates
+      REAL(fp), ALLOCATABLE         :: interp_data_t1(:,:,:,:) !< Regridded current time slice for temporal blending
+      REAL(fp), ALLOCATABLE         :: interp_data_t2(:,:,:,:) !< Regridded next time slice for temporal blending
       LOGICAL                       :: is_loaded = .false. !< Data loading status
       LOGICAL                       :: is_valid = .false.  !< Data validation status
       CHARACTER(LEN=32)             :: interpolation_method = 'bilinear' !< Spatial interpolation method
@@ -132,6 +130,7 @@ MODULE ExtEmisData_Mod
       ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
       LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
       CHARACTER(LEN=16)                          :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
+      LOGICAL                                   :: needs_time_blend = .false. !< Per-timestep temporal blending needed
 
    CONTAINS
       !> \brief Initialize emission category with metadata
