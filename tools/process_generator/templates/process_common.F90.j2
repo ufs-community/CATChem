@@ -128,7 +128,7 @@ module {{ config.class_name }}Common_Mod
 {% set param_type = 'real(fp)' %}
 {% endif %}
 {% endif %}
-      {{ param_type }} :: {{ param_name }} = {% if param_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif param_type == 'integer' %}{{ param_info.default | default('0') }}{% elif param_type == 'character' %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('0.0_fp') }}{% endif %}  ! {{ param_info.description | default('Parameter') }}
+      {{ param_type }} :: {{ param_name }} = {% if param_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif param_type == 'integer' %}{{ param_info.default | default('0') }}{% elif 'character' in param_type %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('0.0_fp') }}{% endif %}  ! {{ param_info.description | default('Parameter') }}
 {% endfor %}
 
       ! Required meteorological fields

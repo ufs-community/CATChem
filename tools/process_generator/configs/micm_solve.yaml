@@ -1,0 +1,56 @@
+name: "GasChem"
+description: "Process for MICM gas phase chemical solver"
+class_name: "GasChem"
+process_type: "chemistry"
+author: "Maggie Bruckner"
+
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "transformation" #is not doing anything now
+  tendency_mode: "replacement" #additive or multiplicative or replacement;
+  species_filter:
+    type: "by_metadata"
+    metadata_flags:
+      - "is_gas"
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "dependent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
+  memory_requirements: "medium" #is not doing anything now
+
+#required_met_fields: [] #used for other purpose, such as unit conversion
+
+schemes:
+  no_phot:
+    name: "no_phot"
+    class_name: "MUSICA"
+    description: "MICM gas phase chemistry solver without photolysis"
+    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "MUSICA library"
+    author: "Maggie Bruckner"
+
+    required_met_fields: #needed for scheme calculations
+      - DELP
+      - T
+      - AIRDEN
+      - PMID
+
+    parameters:
+      mechanism:
+        default: 'mechanism_config.yaml'
+        description: "MICM yaml file for chemical mechanism"
+
+    diagnostics:
+      - name: "net_chemical_rate_per_species"
+        description: "Net chem rate"
+        units: "molecules/cm3/s"
+
+
+diagnostics:
+  - name: "total_rate_per_species_per_level"
+    description: "Net chemical change per species per level"
+    units: "molecules/cm3/s"

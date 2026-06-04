@@ -44,7 +44,7 @@
   __is_advected: false
   molecular weight [kg mol-1]: 17.01e-3
 - name: no3
-  description: Nitrate radical
+  __description: Nitrate radical
   __is_gas: true
   __is_photolysis: true
   __is_advected: false
