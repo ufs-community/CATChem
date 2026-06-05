@@ -17,7 +17,7 @@ anthro1:
   BC:
     long_name: "Black Carbon"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 anthro2:
   SO2_elev:
@@ -33,7 +33,7 @@ anthro2:
   BC_elev:
     long_name: "Black Carbon at Elevated Levels"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 ship:
   SO2_ship:
@@ -54,7 +54,7 @@ ship:
   BC_ship:
     long_name: "Black Carbon from Ships"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 fire_so2:
   biomass:
@@ -66,13 +66,13 @@ fire_oc:
   biomass:
     long_name: "Organic Carbon from Biomass Burning"
     units: "kg/m2/s"
-    scale: [1.0, 1.0]  #TODO: double check
+    scale: [0.9, 0.9]  #TODO: double check
     map: ["oc1", "oc2"]
 fire_bc:
   biomass:
     long_name: "Black Carbon from Biomass Burning"
     units: "kg/m2/s"
-    scale: [0.5, 0.5]  #There is no 1.8 factor for BC
+    scale: [0.8, 0.2]  #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 so2_aviation_lto:
   so2_aviation:
@@ -90,7 +90,7 @@ bc_aviation_lto:
   bc_aviation:
     long_name: "Black Carbon from Aviation LTO"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 so2_aviation_cds:
   so2_aviation:
@@ -108,7 +108,7 @@ bc_aviation_cds:
   bc_aviation:
     long_name: "Black Carbon from Aviation CDS"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 so2_aviation_crs:
   so2_aviation:
@@ -126,7 +126,7 @@ bc_aviation_crs:
   bc_aviation:
     long_name: "Black Carbon from Aviation CRS"
     units: "kg/m2/s"
-    scale: [0.5, 0.5] #There is no 1.8 factor for BC
+    scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
 bio:
   limo:

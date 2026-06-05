@@ -122,6 +122,7 @@ module DryDepCommon_Mod
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! Dry deposition velocity scale factor
       logical :: resuspension = .false.  ! Apply resuspension for dry deposition
+      logical :: dust_resuspension_only = .true.  ! If true, resuspension only applies to dust species
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 13
@@ -625,6 +626,9 @@ contains
       call config_manager%get_logical("processes/drydep/gocart/resuspension", &
          this%gocart_config%resuspension, rc, .false.)
       if (rc /= CC_SUCCESS) this%gocart_config%resuspension = .false.
+      call config_manager%get_logical("processes/drydep/gocart/dust_resuspension_only", &
+         this%gocart_config%dust_resuspension_only, rc, .true.)
+      if (rc /= CC_SUCCESS) this%gocart_config%dust_resuspension_only = .true.
 
 
    end subroutine load_gocart_config

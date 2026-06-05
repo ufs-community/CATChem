@@ -246,7 +246,7 @@ contains
 
          ! Apply emissions to chemical state every timestep
          ! (data is read only when the period changes, but applied every step)
-         call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, localrc)
+         call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
          if (localrc /= CC_SUCCESS) then
             write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
                trim(ext_emis_data%categories(i)%category_name)
@@ -1089,6 +1089,144 @@ contains
 
    end subroutine compute_bb_emission_factor
 
+   !> \brief Apply diurnal cycle to biomass burning emissions
+   !!
+   !! Ported from GOCART2G Chem_BiomassDiurnal. Modulates daily-mean fire
+   !! emissions using a GOES-12 derived diurnal profile (2003-2007).
+   !! - NonBoreal (lat < 30): strong afternoon peak (~2x), near-zero at night
+   !! - Boreal (lat >= 50): flat cycle (effectively 1.0)
+   !! - Transition (30-50): linear blend
+   !! Normalization ensures daily total emission is preserved.
+   !!
+   !! \param[inout] emission_2d  2D surface emission field [kg/m2/s], modified in place
+   !! \param[in]    lons         2D longitude array [degrees]
+   !! \param[in]    lats         2D latitude array [degrees]
+   !! \param[in]    current_time ESMF_Time for current model time
+   !! \param[in]    nx, ny       Grid dimensions
+   !! \param[out]   rc           Return code
+   subroutine apply_biomass_diurnal(emission_2d, lons, lats, current_time, nx, ny, rc)
+      implicit none
+
+      real(fp), intent(inout) :: emission_2d(:,:)
+      real(fp), intent(in)    :: lons(:,:)
+      real(fp), intent(in)    :: lats(:,:)
+      type(ESMF_Time), intent(in) :: current_time
+      integer, intent(in)     :: nx, ny
+      integer, intent(out)    :: rc
+
+      ! Parameters: N=240 time bins per day, DT=360 seconds
+      integer, parameter :: N = 240
+      real(fp), parameter :: DT_DIURNAL = 86400.0_fp / N
+
+      ! Boreal: flat diurnal cycle (no modulation for lat >= 50)
+      real(fp), parameter :: Boreal(N) = 1.0_fp
+
+      ! NonBoreal: GOES-12 derived diurnal profile (2003-2007)
+      real(fp), parameter :: NonBoreal(N) = (/ &
+         0.0121_fp, 0.0150_fp, 0.0172_fp, 0.0185_fp, 0.0189_fp, 0.0184_fp, &
+         0.0174_fp, 0.0162_fp, 0.0151_fp, 0.0141_fp, 0.0133_fp, 0.0126_fp, &
+         0.0121_fp, 0.0117_fp, 0.0115_fp, 0.0114_fp, 0.0114_fp, 0.0116_fp, &
+         0.0120_fp, 0.0126_fp, 0.0133_fp, 0.0142_fp, 0.0151_fp, 0.0159_fp, &
+         0.0167_fp, 0.0174_fp, 0.0180_fp, 0.0184_fp, 0.0187_fp, 0.0189_fp, &
+         0.0190_fp, 0.0190_fp, 0.0191_fp, 0.0192_fp, 0.0192_fp, 0.0193_fp, &
+         0.0194_fp, 0.0194_fp, 0.0193_fp, 0.0192_fp, 0.0190_fp, 0.0187_fp, &
+         0.0185_fp, 0.0182_fp, 0.0180_fp, 0.0178_fp, 0.0177_fp, 0.0176_fp, &
+         0.0174_fp, 0.0172_fp, 0.0169_fp, 0.0166_fp, 0.0162_fp, 0.0158_fp, &
+         0.0153_fp, 0.0149_fp, 0.0144_fp, 0.0138_fp, 0.0132_fp, 0.0126_fp, &
+         0.0118_fp, 0.0109_fp, 0.0101_fp, 0.0092_fp, 0.0085_fp, 0.0081_fp, &
+         0.0080_fp, 0.0083_fp, 0.0091_fp, 0.0102_fp, 0.0117_fp, 0.0135_fp, &
+         0.0157_fp, 0.0182_fp, 0.0210_fp, 0.0240_fp, 0.0273_fp, 0.0308_fp, &
+         0.0345_fp, 0.0387_fp, 0.0432_fp, 0.0483_fp, 0.0540_fp, 0.0606_fp, &
+         0.0683_fp, 0.0775_fp, 0.0886_fp, 0.1022_fp, 0.1188_fp, 0.1388_fp, &
+         0.1625_fp, 0.1905_fp, 0.2229_fp, 0.2602_fp, 0.3025_fp, 0.3500_fp, &
+         0.4031_fp, 0.4623_fp, 0.5283_fp, 0.6016_fp, 0.6824_fp, 0.7705_fp, &
+         0.8650_fp, 0.9646_fp, 1.0676_fp, 1.1713_fp, 1.2722_fp, 1.3662_fp, &
+         1.4491_fp, 1.5174_fp, 1.5685_fp, 1.6014_fp, 1.6173_fp, 1.6200_fp, &
+         1.6150_fp, 1.6082_fp, 1.6040_fp, 1.6058_fp, 1.6157_fp, 1.6353_fp, &
+         1.6651_fp, 1.7045_fp, 1.7513_fp, 1.8024_fp, 1.8541_fp, 1.9022_fp, &
+         1.9429_fp, 1.9738_fp, 1.9947_fp, 2.0072_fp, 2.0132_fp, 2.0141_fp, &
+         2.0096_fp, 1.9994_fp, 1.9829_fp, 1.9604_fp, 1.9321_fp, 1.8977_fp, &
+         1.8562_fp, 1.8052_fp, 1.7419_fp, 1.6646_fp, 1.5738_fp, 1.4734_fp, &
+         1.3693_fp, 1.2676_fp, 1.1724_fp, 1.0851_fp, 1.0052_fp, 0.9317_fp, &
+         0.8637_fp, 0.8004_fp, 0.7414_fp, 0.6862_fp, 0.6348_fp, 0.5871_fp, &
+         0.5434_fp, 0.5037_fp, 0.4682_fp, 0.4368_fp, 0.4097_fp, 0.3864_fp, &
+         0.3667_fp, 0.3499_fp, 0.3355_fp, 0.3231_fp, 0.3123_fp, 0.3029_fp, &
+         0.2944_fp, 0.2862_fp, 0.2773_fp, 0.2670_fp, 0.2547_fp, 0.2402_fp, &
+         0.2238_fp, 0.2061_fp, 0.1882_fp, 0.1712_fp, 0.1562_fp, 0.1434_fp, &
+         0.1332_fp, 0.1251_fp, 0.1189_fp, 0.1141_fp, 0.1103_fp, 0.1071_fp, &
+         0.1043_fp, 0.1018_fp, 0.0996_fp, 0.0979_fp, 0.0968_fp, 0.0964_fp, &
+         0.0966_fp, 0.0970_fp, 0.0973_fp, 0.0970_fp, 0.0959_fp, 0.0938_fp, &
+         0.0909_fp, 0.0873_fp, 0.0831_fp, 0.0784_fp, 0.0732_fp, 0.0676_fp, &
+         0.0618_fp, 0.0565_fp, 0.0521_fp, 0.0491_fp, 0.0475_fp, 0.0473_fp, &
+         0.0480_fp, 0.0492_fp, 0.0504_fp, 0.0514_fp, 0.0519_fp, 0.0521_fp, &
+         0.0520_fp, 0.0517_fp, 0.0513_fp, 0.0510_fp, 0.0507_fp, 0.0507_fp, &
+         0.0508_fp, 0.0512_fp, 0.0515_fp, 0.0518_fp, 0.0519_fp, 0.0518_fp, &
+         0.0513_fp, 0.0506_fp, 0.0496_fp, 0.0482_fp, 0.0465_fp, 0.0443_fp, &
+         0.0418_fp, 0.0387_fp, 0.0351_fp, 0.0310_fp, 0.0263_fp, 0.0214_fp /)
+
+      ! Local variables
+      integer :: i, j, k, localrc, hh, mm, ss, ndt, NN, kk
+      real(fp) :: secs, secs_local, aBoreal, aNonBoreal, alpha
+      real(fp) :: fBoreal, fNonBoreal
+      integer :: nhms
+      character(len=*), parameter :: pName = 'apply_biomass_diurnal'
+
+      rc = CC_SUCCESS
+
+      ! Get HHMMSS from current ESMF time
+      call ESMF_TimeGet(current_time, h=hh, m=mm, s=ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      nhms = hh * 10000 + mm * 100 + ss
+
+      ! Compute normalization factors (depend on model timestep via ndt=1 for 360s bins)
+      ! Use ndt=1 since we sample one bin per call (consistent with GOCART default)
+      ndt = 1
+      fBoreal = 0.0_fp
+      fNonBoreal = 0.0_fp
+      NN = 0
+      do kk = 1, N, ndt
+         NN = NN + 1
+         fBoreal    = fBoreal    + Boreal(kk)
+         fNonBoreal = fNonBoreal + NonBoreal(kk)
+      end do
+      fBoreal    = fBoreal / real(NN, fp)
+      fNonBoreal = fNonBoreal / real(NN, fp)
+
+      ! Find number of seconds since beginning of the day (GMT)
+      secs = 3600.0_fp * hh + 60.0_fp * mm + ss
+
+      ! Apply diurnal factors depending on latitude
+      do j = 1, ny
+         do i = 1, nx
+            if (emission_2d(i,j) == 0.0_fp) cycle
+
+            ! Find corresponding index in diurnal cycle array
+            ! 240 = 24*60*60 / 360 (seconds per degree of longitude)
+            secs_local = secs + 240.0_fp * lons(i,j)
+            k = 1 + mod(nint(secs_local / DT_DIURNAL), N)
+            if (k < 1) k = N + k
+
+            ! Compute scaling factors normalized to preserve daily mean
+            aBoreal    = Boreal(k) / fBoreal
+            aNonBoreal = NonBoreal(k) / fNonBoreal
+
+            ! Apply based on latitude band
+            if (lats(i,j) >= 50.0_fp) then
+               emission_2d(i,j) = aBoreal * emission_2d(i,j)
+            else if (lats(i,j) >= 30.0_fp) then
+               alpha = (lats(i,j) - 30.0_fp) / 20.0_fp
+               emission_2d(i,j) = (1.0_fp - alpha) * aNonBoreal * emission_2d(i,j) + &
+                                  alpha * aBoreal * emission_2d(i,j)
+            else
+               emission_2d(i,j) = aNonBoreal * emission_2d(i,j)
+            end if
+         end do
+      end do
+
+   end subroutine apply_biomass_diurnal
+
    !! Applies emission data from ExtEmisDataType to the chemical state
    !! using species mapping from emission configuration. Processes entire
    !! arrays at once for efficiency and handles proper unit conversion.
@@ -1099,7 +1237,7 @@ contains
    !! \param[in] met_state Meteorological state for unit conversion
    !! \param[in] dt Time step [s]
    !! \param[out] rc Return code
-   subroutine catchem_emis_apply(category, icat, global_scale, config_manager, error_manager, chem_state, met_state, dt, rc)
+   subroutine catchem_emis_apply(category, icat, global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, rc)
       use Constants, only: g0, AIRMW  ! Gravitational acceleration and air molecular weight
       implicit none
 
@@ -1111,6 +1249,7 @@ contains
       type(ChemStateType), intent(inout) :: chem_state
       type(MetStateType), intent(inout) :: met_state
       real(fp), intent(in) :: dt
+      type(ESMF_Time), intent(in) :: current_time
       integer, intent(out) :: rc
 
       ! Local variables
@@ -1167,6 +1306,12 @@ contains
 
          ! Apply category and global scaling factors
          emission_flux = emission_flux * category%global_scale * global_scale
+
+         ! Apply diurnal biomass burning cycle if enabled (before vertical distribution)
+         if (category%diurnal_bb) then
+            call apply_biomass_diurnal(emission_flux(:,:,1), met_state%LON, met_state%LAT, &
+               current_time, nx, ny, localrc)
+         end if
 
          ! Apply vertical distribution if configured (redistributes 2D surface emission to 3D)
          if (trim(category%vertical_dist) /= 'none' .and. trim(category%vertical_dist) /= '') then
@@ -1298,8 +1443,11 @@ contains
 
             ! Add tendency to concentrations
             ! Apply Mie-based BB emission scaling factor if enabled
+            ! Only for OC and BrC species (matching GOCART: prefix=='OC' or 'BR')
             if (category%use_oc_fbb .and. &
-               .not. chem_state%ChemSpecies(species_idx)%is_gas) then
+               .not. chem_state%ChemSpecies(species_idx)%is_gas .and. &
+               (mapped_species_name(1:2) == 'oc' .or. mapped_species_name(1:2) == 'OC' .or. &
+                mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
                if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
                call compute_bb_emission_factor(emission_flux, scale_factor, dt, &
                   met_state, chem_state, species_idx, f_bb, localrc)
@@ -1669,6 +1817,10 @@ contains
       ! Carbon emission factor (Mie-based BB AOT limiter)
       call config_manager%get_logical(trim(config_path)//'/use_oc_fbb', &
          category%use_oc_fbb, localrc, .false.)
+
+      ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
+      call config_manager%get_logical(trim(config_path)//'/diurnal_bb', &
+         category%diurnal_bb, localrc, .false.)
 
       ! Apply method: 'add' (default, accumulate onto concentration) or 'replace' (overwrite)
       call config_manager%get_string(trim(config_path)//'/apply_method', &

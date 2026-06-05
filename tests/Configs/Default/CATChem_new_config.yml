@@ -146,6 +146,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "none" #biogenic is only at the surface.
@@ -159,6 +160,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -172,6 +174,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -185,6 +188,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -198,6 +202,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -211,6 +216,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -224,6 +230,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -237,6 +244,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -250,6 +258,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -263,6 +272,7 @@ processes:
       format: "netcdf"
       gridded: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -311,6 +321,7 @@ processes:
       is_2d: true
       apply_method: "replace" # "add" to accumulate concentration (default); "replace" to overwrite existing concentration
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "latitude"
       lon_name: "longitude"
       vertical_dist: "none"
@@ -319,13 +330,14 @@ processes:
       diag_list: [conc]
     fire_so2:
       activate: true
-      scale_factor: 1.0
+      scale_factor: 0.7778
       topfraction: -1.0
       source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true
       regrid_method: conserve
+      diurnal_bb: true
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "Ppbl"
@@ -335,7 +347,7 @@ processes:
       diag_list: [biomass]
     fire_oc:
       activate: true
-      scale_factor: 1.0
+      scale_factor: 0.7778
       topfraction: -1.0
       source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_oc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
@@ -347,18 +359,20 @@ processes:
       vertical_dist: "Ppbl"
       frequency: "daily"
       use_oc_fbb: true  #apply Mie-based BB emission scaling for OC following GOCART2G CAEmission
+      diurnal_bb: true
       plume_rise: "sofiev"
       diagnostics: true
       diag_list: [biomass]
     fire_bc:
       activate: true
-      scale_factor: 1.0
+      scale_factor: 0.7778
       topfraction: -1.0
       source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_bc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true
       regrid_method: conserve
+      diurnal_bb: true
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "Ppbl"
@@ -438,6 +452,7 @@ processes:
     gocart:
       scale_factor: 1.0
       resuspension: false
+      dust_resuspension_only: true   # default
     zhang:
       scale_factor: 1.0
   wetdep:
@@ -447,7 +462,7 @@ processes:
     scheme: 'jacob'
     jacob:
       scale_factor: 1.0
-      radius_threshold: 1.0
+      radius_threshold: 0.05
   settling:
     activate: true
     diagnostics: true
@@ -457,7 +472,7 @@ processes:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
-      correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+      correction_maring: true  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
     activate: true
     diagnostics: true
