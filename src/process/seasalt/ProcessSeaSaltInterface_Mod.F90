@@ -363,7 +363,7 @@ contains
       real(fp), allocatable :: species_upper_radius(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: dqa  ! Concentration change for additive tendencies
       real(fp) :: converter  ! Unit conversion factor for emissions
@@ -529,7 +529,7 @@ contains
       real(fp), allocatable :: species_upper_radius(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: dqa  ! Concentration change for additive tendencies
       real(fp) :: converter  ! Unit conversion factor for emissions
@@ -696,7 +696,7 @@ contains
       real(fp), allocatable :: species_upper_radius(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
-      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer :: n_species, n_levels, i
       integer, allocatable :: species_indices(:)
       real(fp) :: dqa  ! Concentration change for additive tendencies
       real(fp) :: converter  ! Unit conversion factor for emissions
@@ -950,7 +950,7 @@ contains
    !> Register diagnostic fields with the DiagnosticManager and allocate diagnostic storage
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
-      use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_2D, DIAG_REAL_3D
+      use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_2D
 
       class(ProcessSeaSaltInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container
@@ -1185,7 +1185,6 @@ contains
       integer :: i_col, j_col  ! Column grid position
       integer :: i  ! Loop variable for diagnostic species
       character(len=256) :: field_name  ! For constructing species-specific field names
-      character(len=64) :: selected_scheme
 
       rc = CC_SUCCESS
 

@@ -69,6 +69,30 @@ void yaml_destroy_node(void* node_ptr) {
     }
 }
 
+void* yaml_sequence_to_map(void* node_ptr) {
+    if (!node_ptr) return nullptr;
+
+    try {
+        YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
+        if (wrapper->node.IsSequence()) {
+           YAML::Node resultMap(YAML::NodeType::Map);
+           for (size_t i=0; i < wrapper->node.size(); ++i) {
+               resultMap[std::to_string(i)] = wrapper->node[i];
+           }
+	       // Remove sequence version of node from memory
+	       delete wrapper;
+	       // Return the new map wrapped in a new pointer
+           return new YamlNodeWrapper(resultMap);
+	} else {
+            std::cerr << "Warning: yaml_sequence_to_map called on non-sequence node" << std::endl;
+            return node_ptr;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error converting sequence to map: " << e.what() << std::endl;
+    }
+    return node_ptr;
+}
+
 // Getter functions
 bool yaml_get_string(void* node_ptr, const char* key, char* value, int max_len) {
     if (!node_ptr || !key || !value) return false;

@@ -376,7 +376,7 @@ contains
       type(StateManagerType), intent(inout) :: container
       integer, intent(out) :: rc
 
-      integer :: i, j, local_rc, phase_idx, process_idx
+      integer :: j, local_rc, phase_idx, process_idx
       type(RunPhaseType) :: current_phase
       type(ProcessConfigType) :: process_config
       logical :: phase_found

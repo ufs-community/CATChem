@@ -5,7 +5,7 @@
 program test_DiagnosticInterface
    use testing_mod, only: assert, assert_close
    use DiagnosticInterface_Mod
-   use Precision_Mod, only: fp
+   use Precision_Mod
    use error_mod, only: ErrorManagerType, CC_SUCCESS
 
    implicit none

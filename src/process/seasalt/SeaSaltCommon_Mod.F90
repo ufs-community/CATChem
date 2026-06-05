@@ -345,7 +345,7 @@ contains
       type(ErrorManagerType), intent(inout) :: error_handler
 
       character(len=256) :: scheme_name
-      integer :: ierr, rc
+      integer :: rc
 
       ! Process reads directly from master YAML structure: processes.seasalt
       ! ConfigManager provides generic YAML access, process handles its own configuration
@@ -509,7 +509,7 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
 
-      integer :: ierr, rc
+      integer :: rc
 
       ! Load scheme parameters directly from processes/seasalt/gong97/ in master YAML
       call config_manager%get_real("processes/seasalt/gong97/scale_factor", &
@@ -528,7 +528,7 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
 
-      integer :: ierr, rc
+      integer :: rc
 
       ! Load scheme parameters directly from processes/seasalt/gong03/ in master YAML
       call config_manager%get_real("processes/seasalt/gong03/scale_factor", &
@@ -547,7 +547,7 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
 
-      integer :: ierr, rc
+      integer :: rc
 
       ! Load scheme parameters directly from processes/seasalt/geos12/ in master YAML
       call config_manager%get_real("processes/seasalt/geos12/scale_factor", &

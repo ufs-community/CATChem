@@ -224,7 +224,7 @@ contains
 
                ! Dry Radius Substep
                !-------------------
-               DryRadius = species_lower_radius(n) + 0.5 * DeltaDryRadius
+               DryRadius = species_lower_radius(n) + 0.5_fp * DeltaDryRadius
 
                do ir = 1, nr ! SubSteps
 

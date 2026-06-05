@@ -5,7 +5,6 @@
 program test_ProcessRegistry
    use testing_mod, only: assert, assert_close
    use ProcessRegistry_Mod
-   use Precision_Mod, only: fp
    use Error_Mod, only: CC_SUCCESS
 
    implicit none

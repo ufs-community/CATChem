@@ -49,13 +49,13 @@ module ConfigManager_Mod
    use Precision_Mod, only: fp, MISSING_BOOL, MISSING
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE, ERROR_INVALID_CONFIG, ERROR_INVALID_INPUT, ErrorManagerType
    use Species_Mod, only: SpeciesType
-   use yaml_interface_mod, only : yaml_node_t, yaml_load_file, yaml_load_string, yaml_destroy_node, &
+   use yaml_interface_mod, only : yaml_node_t, yaml_load_file, yaml_load_string, &
+      yaml_sequence_to_map, yaml_destroy_node, &
       yaml_get_string, yaml_get_integer, yaml_get_real, yaml_get_logical, &
       yaml_has_key, yaml_get, yaml_set, yaml_is_map, yaml_is_sequence, &
       yaml_get_size, yaml_get_string_array, yaml_get_all_keys, &
       yaml_get_real_array, safe_yaml_get_real, safe_yaml_get_logical, &
       safe_yaml_get_integer
-
    implicit none
    private
 
@@ -123,7 +123,7 @@ module ConfigManager_Mod
    !> \brief External emissions configuration
    type :: ExternalEmisConfig
       logical :: activate = .false.                   !< Enable external emissions
-      character(len=256) :: config_file = ''          !< External emissions configuration file
+      character(len=512) :: config_file = ''          !< External emissions configuration file
       character(len=64) :: temporal_profile = 'constant' !< Temporal profile type
       logical :: dynamic_mapping = .true.             !< Enable dynamic species mapping
       real(fp) :: global_scale_factor = 1.0_fp        !< Global scaling factor
@@ -168,7 +168,7 @@ module ConfigManager_Mod
    type :: EmissionMappingConfig
       integer :: n_categories = 0                     !< Number of emission categories
       type(EmissionCategoryMapping), allocatable :: categories(:) !< All categories
-      character(len=256) :: config_file = ''          !< Source configuration file
+      character(len=512) :: config_file = ''          !< Source configuration file
       logical :: is_loaded = .false.                  !< Whether mapping has been loaded
    contains
       procedure :: init => emis_mapping_config_init
@@ -197,7 +197,7 @@ module ConfigManager_Mod
 
       ! Metadata
       character(len=64) :: config_version = '2.0'       !< Configuration version
-      character(len=256) :: source_file = ''            !< Source configuration file
+      character(len=512) :: source_file = ''            !< Source configuration file
       logical :: is_validated = .false.                 !< Has configuration been validated?
       logical :: run_phases_enabled = .false.           !< Are run phases configured?
 
@@ -1526,7 +1526,7 @@ contains
 
       type(yaml_node_t) :: species_config
       logical :: file_exists, success
-      integer :: i, j, list_size, total_keys, species_index
+      integer :: i, list_size, total_keys, species_index
       character(len=256) :: species_path
       character(len=64), allocatable :: species_keys(:)
       character(len=64) :: all_yaml_keys(200)
@@ -1549,9 +1549,15 @@ contains
          return
       endif
 
+      ! Check if this is a sequence structure
+      if (yaml_is_sequence(species_config)) then
+         write(*, '(A)') 'INFO: Converting MICM-style species configuration to YAML map/dictionary'
+         species_config = yaml_sequence_to_map(species_config)
+      endif
+
       ! Check if this is a map/dictionary structure
       if (.not. yaml_is_map(species_config)) then
-         write(*, '(A)') 'ERROR: Species configuration file must be a YAML map/dictionary'
+         write(*, '(A)') 'ERROR: Must be able to access species configuration as YAML map/dictionary'
          rc = CC_FAILURE
          call yaml_destroy_node(species_config)
          return
@@ -1728,7 +1734,7 @@ contains
       logical :: temp_logical
       character(len=256) :: temp_string
       integer :: yaml_rc  ! Separate return code for YAML operations
-      integer :: i, j, actual_size  ! Loop variables for debugging
+      integer :: actual_size
 
       rc = CC_SUCCESS
 
@@ -1756,31 +1762,31 @@ contains
       endif
 
       ! Load long_name if explicitly provided
-      write(field_path, '(A,A)') trim(species_path), '/long_name'
+      write(field_path, '(A,A)') trim(species_path), '/__long_name'
       call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
       if (yaml_rc == 0) then
          species%long_name = trim(adjustl(temp_string))
       endif
 
       ! Load description (optional)
-      write(field_path, '(A,A)') trim(species_path), '/description'
+      write(field_path, '(A,A)') trim(species_path), '/__description'
       call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
       if (yaml_rc == 0) then
          species%description = trim(adjustl(temp_string))
       endif
 
       ! Load mie name (optional)
-      write(field_path, '(A,A)') trim(species_path), '/mie_name'
+      write(field_path, '(A,A)') trim(species_path), '/__mie_name'
       call yaml_get(yaml_root, trim(field_path), temp_string, yaml_rc)
       if (yaml_rc == 0) then
          species%mie_name = trim(adjustl(temp_string))
       endif
 
       ! Load molecular weight (optional, but important) - use safe conversion for numeric values
-      write(field_path, '(A,A)') trim(species_path), '/mw_g'
+      write(field_path, '(A,A)') trim(species_path), '/molecular weight [kg mol-1]'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
-         species%mw_g = temp_real
+         species%mw_g = temp_real * 1000
       else
          ! No molecular weight specified - keep default from init
          write(*, '(A,A,A)') 'WARNING: No molecular_weight found for species ', &
@@ -1788,7 +1794,7 @@ contains
       endif
 
       ! Load physical properties
-      write(field_path, '(A,A)') trim(species_path), '/density'
+      write(field_path, '(A,A)') trim(species_path), '/__density'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%density = temp_real
@@ -1796,7 +1802,7 @@ contains
          species%density = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/radius'
+      write(field_path, '(A,A)') trim(species_path), '/__radius'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%radius = temp_real
@@ -1804,7 +1810,7 @@ contains
          species%radius = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/lower_radius'
+      write(field_path, '(A,A)') trim(species_path), '/__lower_radius'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%lower_radius = temp_real
@@ -1812,7 +1818,7 @@ contains
          species%lower_radius = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/upper_radius'
+      write(field_path, '(A,A)') trim(species_path), '/__upper_radius'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%upper_radius = temp_real
@@ -1820,7 +1826,7 @@ contains
          species%upper_radius = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/viscosity'
+      write(field_path, '(A,A)') trim(species_path), '/__viscosity'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%viscosity = temp_real
@@ -1828,7 +1834,7 @@ contains
          species%viscosity = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/dd_f0'
+      write(field_path, '(A,A)') trim(species_path), '/__dd_f0'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%dd_f0 = temp_real
@@ -1836,7 +1842,7 @@ contains
          species%dd_f0 = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/dd_hstar'
+      write(field_path, '(A,A)') trim(species_path), '/__dd_hstar'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%dd_hstar = temp_real
@@ -1844,7 +1850,7 @@ contains
          species%dd_hstar = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/dd_DvzAerSnow'
+      write(field_path, '(A,A)') trim(species_path), '/__dd_DvzAerSnow'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%dd_DvzAerSnow = temp_real
@@ -1852,7 +1858,7 @@ contains
          species%dd_DvzAerSnow = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/dd_DvzMinVal_snow'
+      write(field_path, '(A,A)') trim(species_path), '/__dd_DvzMinVal_snow'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%dd_DvzMinVal_snow = temp_real
@@ -1860,7 +1866,7 @@ contains
          species%dd_DvzMinVal_snow = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/dd_DvzMinVal_land'
+      write(field_path, '(A,A)') trim(species_path), '/__dd_DvzMinVal_land'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%dd_DvzMinVal_land = temp_real
@@ -1868,7 +1874,7 @@ contains
          species%dd_DvzMinVal_land = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/henry_k0'
+      write(field_path, '(A,A)') trim(species_path), '/__henry_k0'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%henry_k0 = temp_real
@@ -1876,7 +1882,7 @@ contains
          species%henry_k0 = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/henry_cr'
+      write(field_path, '(A,A)') trim(species_path), '/__henry_cr'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%henry_cr = temp_real
@@ -1884,7 +1890,7 @@ contains
          species%henry_cr = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/henry_pKa'
+      write(field_path, '(A,A)') trim(species_path), '/__henry_pKa'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%henry_pKa = temp_real
@@ -1892,7 +1898,7 @@ contains
          species%henry_pKa = 0.0_fp  ! Default to 0.0 if not specified
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/wd_retfactor'
+      write(field_path, '(A,A)') trim(species_path), '/__wd_retfactor'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%wd_retfactor = temp_real
@@ -1900,7 +1906,7 @@ contains
          species%wd_retfactor = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/wd_LiqAndGas'
+      write(field_path, '(A,A)') trim(species_path), '/__wd_LiqAndGas'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%wd_LiqAndGas = temp_logical
@@ -1908,7 +1914,7 @@ contains
          species%wd_LiqAndGas = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/wd_convfacI2G'
+      write(field_path, '(A,A)') trim(species_path), '/__wd_convfacI2G'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%wd_convfacI2G = temp_real
@@ -1916,7 +1922,7 @@ contains
          species%wd_convfacI2G = MISSING
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/wd_rainouteff'
+      write(field_path, '(A,A)') trim(species_path), '/__wd_rainouteff'
       allocate(temp_real_array(10))  ! Assume max size of 10 for temporary array
       success = yaml_get_real_array(yaml_root, trim(field_path), temp_real_array, actual_size)
       if (success .and. actual_size > 0) then
@@ -1928,7 +1934,7 @@ contains
          deallocate(temp_real_array)
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/t_chem_loss'
+      write(field_path, '(A,A)') trim(species_path), '/__t_chem_loss'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%t_chem_loss = temp_real
@@ -1937,7 +1943,7 @@ contains
       endif
 
       ! Load type flags (with proper default handling)
-      write(field_path, '(A,A)') trim(species_path), '/is_gas'
+      write(field_path, '(A,A)') trim(species_path), '/__is_gas'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_gas = temp_logical
@@ -1945,7 +1951,7 @@ contains
          species%is_gas = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_aerosol'
+      write(field_path, '(A,A)') trim(species_path), '/__is_aerosol'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_aerosol = temp_logical
@@ -1953,7 +1959,7 @@ contains
          species%is_aerosol = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_dust'
+      write(field_path, '(A,A)') trim(species_path), '/__is_dust'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_dust = temp_logical
@@ -1961,7 +1967,7 @@ contains
          species%is_dust = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_seasalt'
+      write(field_path, '(A,A)') trim(species_path), '/__is_seasalt'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_seasalt = temp_logical
@@ -1969,7 +1975,7 @@ contains
          species%is_seasalt = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_tracer'
+      write(field_path, '(A,A)') trim(species_path), '/__is_tracer'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_tracer = temp_logical
@@ -1977,7 +1983,7 @@ contains
          species%is_tracer = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_drydep'
+      write(field_path, '(A,A)') trim(species_path), '/__is_drydep'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_drydep = temp_logical
@@ -1985,7 +1991,7 @@ contains
          species%is_drydep = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_wetdep'
+      write(field_path, '(A,A)') trim(species_path), '/__is_wetdep'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_wetdep = temp_logical
@@ -1993,7 +1999,7 @@ contains
          species%is_wetdep = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_photolysis'
+      write(field_path, '(A,A)') trim(species_path), '/__is_photolysis'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_photolysis = temp_logical
@@ -2001,7 +2007,7 @@ contains
          species%is_photolysis = MISSING_BOOL
       endif
 
-      write(field_path, '(A,A)') trim(species_path), '/is_advected'
+      write(field_path, '(A,A)') trim(species_path), '/__is_advected'
       call safe_yaml_get_logical(yaml_root, trim(field_path), temp_logical, yaml_rc)
       if (yaml_rc == 0) then
          species%is_advected = temp_logical
@@ -2010,7 +2016,7 @@ contains
       endif
 
       ! Load background concentration (optional)
-      write(field_path, '(A,A)') trim(species_path), '/background_vv'
+      write(field_path, '(A,A)') trim(species_path), '/__background_vv'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then
          species%BackgroundVV = temp_real
@@ -2023,7 +2029,7 @@ contains
       species%is_valid = .true.
 
       ! Print species information in a single line
-      write(*, '(A,A,A,F6.1,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
+      write(*, '(A,A,A,ES10.3,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
          'INFO: Loaded species "', trim(adjustl(species%short_name)), &
          '" (MW=', species%mw_g, ', gas=', species%is_gas, &
          ', aerosol=', species%is_aerosol, ', dust=', species%is_dust, &
@@ -2283,10 +2289,7 @@ contains
       logical :: file_exists, success
       integer :: n_categories, n_species, i, j, n_maps, n_scales, k, species_idx
       integer :: n_resolved, n_unresolved
-      real(fp) :: single_scale
       character(len=64), allocatable :: all_categories(:), all_species(:)
-      character(len=64), allocatable :: emission_fields(:)
-      integer :: n_fields
 
       rc = CC_SUCCESS
 
@@ -2489,7 +2492,7 @@ contains
 
       ! Variables for duplicate detection
       logical :: already_exists
-      integer :: check_idx, i
+      integer :: check_idx
       rc = CC_SUCCESS
       n_items = 0
       in_section = .false.
@@ -2832,7 +2835,7 @@ contains
       character(len=64), intent(out) :: components(:)
       integer, intent(out) :: n_components
 
-      integer :: start_pos, end_pos, slash_pos
+      integer :: slash_pos
       character(len=256) :: remaining_path
 
       n_components = 0
@@ -3104,13 +3107,13 @@ contains
       character(len=64), allocatable :: unique_processes(:)  ! Track unique process names
       integer, allocatable :: unique_process_indices(:)      ! Map unique process names to indices
       character(len=64) :: phase_name, process_name, test_value
-      integer :: phase_idx, process_idx, num_phases, num_processes
-      integer :: total_processes, n_discovered_phases, global_process_idx
+      integer :: phase_idx, process_idx, num_processes
+      integer :: n_discovered_phases, global_process_idx
       integer :: n_unique_processes, unique_idx
-      logical :: has_run_phases, has_processes, success, process_found, is_duplicate
-      character(len=256) :: process_scheme, temp_string
+      logical :: has_run_phases, has_processes, success, is_duplicate
+      character(len=256) :: temp_string
       logical :: temp_logical
-      integer :: temp_integer, valid_phases
+      integer :: valid_phases
 
       rc = CC_SUCCESS
 
@@ -3550,7 +3553,7 @@ contains
       integer, intent(out) :: num_elements
 
       character(len=len(input_string)) :: work_string
-      integer :: pos, start_pos, str_len, i
+      integer :: pos, start_pos, str_len
       logical :: in_word
 
       num_elements = 0

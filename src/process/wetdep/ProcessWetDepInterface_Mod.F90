@@ -606,7 +606,7 @@ contains
    !> Register diagnostic fields with the DiagnosticManager and allocate diagnostic storage
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
-      use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_2D, DIAG_REAL_3D
+      use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_3D
 
       class(ProcessWetDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container
