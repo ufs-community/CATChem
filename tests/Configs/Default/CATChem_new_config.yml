@@ -386,7 +386,7 @@ processes:
       source_file: "ExtData/dust/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
       format: "netcdf"
       gridded: true
-      regrid_method: bilinear
+      regrid_method: neareststod
       time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
@@ -401,7 +401,7 @@ processes:
       source_file: "ExtData/dust/FENGSHA_New_Method_NESDISv1.1_9km.nc"
       format: "netcdf"
       gridded: true
-      regrid_method: bilinear
+      regrid_method: neareststod
       time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
