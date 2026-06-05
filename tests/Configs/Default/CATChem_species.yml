@@ -76,7 +76,7 @@ dms:
   description: Dimethyl sulfide
   mw_g: 62.13
   radius: 0.0  #dummy value since we do not use it for now
-  is_gas: true   #gocart treat it as a gas without dry and wet deposition 
+  is_gas: true   #gocart treat it as a gas without dry and wet deposition
   is_drydep: false
   is_wetdep: false
   henry_k0: 0.48

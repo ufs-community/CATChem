@@ -56,7 +56,7 @@ schemes:
       - radius
       - lower_radius
       - upper_radius
-    
+
     required_constants:
       - PI
 
@@ -102,7 +102,7 @@ schemes:
       - radius
       - lower_radius
       - upper_radius
-    
+
     required_constants:
       - PI
 

@@ -380,7 +380,7 @@ processes:
       plume_rise: "sofiev"
       diagnostics: true
       diag_list: [biomass]
-    dust: 
+    dust:
       activate: true
       scale_factor: 1.0
       source_file: "ExtData/dust/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
@@ -430,12 +430,12 @@ processes:
     diag_species: []
     scheme: 'fengsha'
     fengsha:
-      alpha: 0.20   
+      alpha: 0.20
       gamma: 1.0
       drylimit_factor: 1.2
       moist_correction_factor: 1.0
       kvhmax: 0.0002
-      drag_option: 1  
+      drag_option: 1
       horizflux_option: 1
       moist_option: 1
       distribution_option: 1

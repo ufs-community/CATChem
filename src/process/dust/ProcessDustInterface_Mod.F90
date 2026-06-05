@@ -541,7 +541,7 @@ contains
                dbg_best_lon = dbg_lon
             end if
             if (abs(dbg_lat - dbg_best_lat) < 0.001_fp .and. &
-                abs(dbg_lon - dbg_best_lon) < 0.001_fp) then
+               abs(dbg_lon - dbg_best_lon) < 0.001_fp) then
                dbg_dust_found = .true.
                dbg_dust_print_count = dbg_dust_print_count + 1
                if (dbg_dust_print_count <= 20) then

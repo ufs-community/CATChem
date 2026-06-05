@@ -75,7 +75,7 @@ contains
          description='Process for computing sea salt aerosol emissions over ocean surfaces', &
          creator=create_seasalt_process, &
          rc=rc &
-      )
+         )
 
    end subroutine register_seasalt_process
 

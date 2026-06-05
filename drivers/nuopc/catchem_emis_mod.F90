@@ -499,13 +499,13 @@ contains
             ! Advance curr_time by one period to resolve the next file
             irec_next = 1  ! next file's first (only) record
             select case (trim(category%frequency))
-            case ('monthly')
+             case ('monthly')
                call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
-            case ('daily')
+             case ('daily')
                call ESMF_TimeIntervalSet(period_step, d=1, rc=localrc)
-            case ('hourly')
+             case ('hourly')
                call ESMF_TimeIntervalSet(period_step, h=1, rc=localrc)
-            case default
+             case default
                call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
             end select
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -1218,7 +1218,7 @@ contains
             else if (lats(i,j) >= 30.0_fp) then
                alpha = (lats(i,j) - 30.0_fp) / 20.0_fp
                emission_2d(i,j) = (1.0_fp - alpha) * aNonBoreal * emission_2d(i,j) + &
-                                  alpha * aBoreal * emission_2d(i,j)
+                  alpha * aBoreal * emission_2d(i,j)
             else
                emission_2d(i,j) = aNonBoreal * emission_2d(i,j)
             end if
@@ -1447,7 +1447,7 @@ contains
             if (category%use_oc_fbb .and. &
                .not. chem_state%ChemSpecies(species_idx)%is_gas .and. &
                (mapped_species_name(1:2) == 'oc' .or. mapped_species_name(1:2) == 'OC' .or. &
-                mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
+               mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
                if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
                call compute_bb_emission_factor(emission_flux, scale_factor, dt, &
                   met_state, chem_state, species_idx, f_bb, localrc)
@@ -2454,17 +2454,17 @@ contains
 
       ! Compute weight based on frequency
       select case (trim(category%frequency))
-      case ('monthly')
+       case ('monthly')
          dim_days = days_in_month_func(curr_yy, curr_mm)
          w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
-                   real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
-                  real(dim_days, fp)
-      case ('daily')
+            real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
+            real(dim_days, fp)
+       case ('daily')
          w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
-                   real(curr_ss, fp)/3600.0_fp) / 24.0_fp
-      case ('hourly')
+            real(curr_ss, fp)/3600.0_fp) / 24.0_fp
+       case ('hourly')
          w_next = (real(curr_mn, fp) + real(curr_ss, fp)/60.0_fp) / 60.0_fp
-      case default
+       case default
          w_next = 0.0_fp
       end select
       w_curr = 1.0_fp - w_next
@@ -2472,7 +2472,7 @@ contains
       ! Blend stored time slices for each field
       do ifield = 1, category%n_fields
          if (.not. allocated(category%fields(ifield)%interp_data_t1) .or. &
-             .not. allocated(category%fields(ifield)%interp_data_t2)) cycle
+            .not. allocated(category%fields(ifield)%interp_data_t2)) cycle
 
          nk_blend = size(category%fields(ifield)%interp_data_t1, 3)
          category%fields(ifield)%emission_data(:,:,1:nk_blend,1) = &

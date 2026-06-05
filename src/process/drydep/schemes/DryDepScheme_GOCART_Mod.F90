@@ -205,7 +205,7 @@ contains
             ! - dust_resuspension_only=true (default): resuspension only for dust (matches GOCART)
             ! - dust_resuspension_only=false: resuspension controlled by resuspension flag for all species
             if ((params%dust_resuspension_only .and. species_is_dust(species_idx)) .or. &
-                (.not. params%dust_resuspension_only .and. params%resuspension)) then
+               (.not. params%dust_resuspension_only .and. params%resuspension)) then
                call DryDeposition(num_layers, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
                   GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, drydepf, RC, &
                   species_radius(species_idx)*1e-6_fp, species_density(species_idx), GOCART_U10, GOCART_V10, &

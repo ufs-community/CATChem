@@ -318,7 +318,7 @@ contains
       ! from resetting xh2o2 to climatology every timestep.
       recycle_h2o2 = .false.
       if ((nhms - nhms_last_recycle >= 30000) .or. &
-          (nhms < nhms_last_recycle)) then  ! handles day rollover (e.g., 230000 -> 010000)
+         (nhms < nhms_last_recycle)) then  ! handles day rollover (e.g., 230000 -> 010000)
          nhms_last_recycle = nhms
          recycle_h2o2 = .true.
       end if

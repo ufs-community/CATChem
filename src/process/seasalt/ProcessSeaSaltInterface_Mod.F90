@@ -236,7 +236,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -328,13 +328,13 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%seasalt_config%scheme))
-      case ('gong97')
+       case ('gong97')
          call this%run_gong97_scheme_column(column, rc)
-      case ('gong03')
+       case ('gong03')
          call this%run_gong03_scheme_column(column, rc)
-      case ('geos12')
+       case ('geos12')
          call this%run_geos12_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -479,7 +479,7 @@ contains
             species_upper_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -500,7 +500,7 @@ contains
          dqa = dqa * converter
 
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) + dqa)
+            species_conc(1, i) + dqa)
 
       end do
 
@@ -645,7 +645,7 @@ contains
             species_upper_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -666,7 +666,7 @@ contains
          dqa = dqa * converter
 
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) + dqa)
+            species_conc(1, i) + dqa)
 
       end do
 
@@ -816,7 +816,7 @@ contains
             species_upper_radius, &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -837,7 +837,7 @@ contains
          dqa = dqa * converter
 
          call column%set_chem_field(1, species_indices(i), &
-                                   species_conc(1, i) + dqa)
+            species_conc(1, i) + dqa)
 
       end do
 
@@ -862,7 +862,7 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%seasalt_config%scheme))
-      case ('gong97')
+       case ('gong97')
          scheme_count = 7
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
@@ -872,7 +872,7 @@ contains
          scheme_fields(5) = 'V10M'
          scheme_fields(6) = 'LAT'
          scheme_fields(7) = 'LON'
-      case ('gong03')
+       case ('gong03')
          scheme_count = 7
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
@@ -882,7 +882,7 @@ contains
          scheme_fields(5) = 'V10M'
          scheme_fields(6) = 'LAT'
          scheme_fields(7) = 'LON'
-      case ('geos12')
+       case ('geos12')
          scheme_count = 8
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
@@ -893,7 +893,7 @@ contains
          scheme_fields(6) = 'V10M'
          scheme_fields(7) = 'LAT'
          scheme_fields(8) = 'LON'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -996,34 +996,34 @@ contains
       ! Register seasalt_mass_emission_total
       ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, 'seasalt_mass_emission_total', &
-                                          'Sea salt mass emission flux total', &
-                                          'kg/m2/s', DIAG_REAL_2D, &
-                                          'seasalt', dims_2d, rc=rc)
+         'Sea salt mass emission flux total', &
+         'kg/m2/s', DIAG_REAL_2D, &
+         'seasalt', dims_2d, rc=rc)
       if (rc /= CC_SUCCESS) return
 
       ! Register seasalt_number_emission_total
       ! Register single field for non-species or level-only diagnostics
       call this%register_diagnostic_field(registry, 'seasalt_number_emission_total', &
-                                          'Sea salt number emission flux total', &
-                                          'kg/m2/s', DIAG_REAL_2D, &
-                                          'seasalt', dims_2d, rc=rc)
+         'Sea salt number emission flux total', &
+         'kg/m2/s', DIAG_REAL_2D, &
+         'seasalt', dims_2d, rc=rc)
       if (rc /= CC_SUCCESS) return
 
       ! Get selected scheme(s)
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%seasalt_config%scheme))
 
-      case ('gong97')
+       case ('gong97')
          ! Register gong97-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt mass emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt mass emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1033,27 +1033,27 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt number emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt number emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case ('gong03')
+       case ('gong03')
          ! Register gong03-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt mass emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt mass emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1063,27 +1063,27 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt number emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt number emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case ('geos12')
+       case ('geos12')
          ! Register geos12-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt mass emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt mass emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1093,17 +1093,17 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Sea salt number emission flux per bin', &
-                                                   'kg/m2/s', DIAG_REAL_2D, &
-                                                   'seasalt', dims_2d, rc=rc)
+                  'Sea salt number emission flux per bin', &
+                  'kg/m2/s', DIAG_REAL_2D, &
+                  'seasalt', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
 
@@ -1129,7 +1129,7 @@ contains
 
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%seasalt_config%scheme))
-      case ('gong97')
+       case ('gong97')
          ! Scheme-specific diagnostics for gong97
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
@@ -1141,7 +1141,7 @@ contains
             allocate(this%column_seasalt_number_emission_per_bin(this%process_config%seasalt_config%n_diagnostic_species))
          end if
          if (allocated(this%column_seasalt_number_emission_per_bin)) this%column_seasalt_number_emission_per_bin = 0.0_fp
-      case ('gong03')
+       case ('gong03')
          ! Scheme-specific diagnostics for gong03
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
@@ -1153,7 +1153,7 @@ contains
             allocate(this%column_seasalt_number_emission_per_bin(this%process_config%seasalt_config%n_diagnostic_species))
          end if
          if (allocated(this%column_seasalt_number_emission_per_bin)) this%column_seasalt_number_emission_per_bin = 0.0_fp
-      case ('geos12')
+       case ('geos12')
          ! Scheme-specific diagnostics for geos12
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
@@ -1165,7 +1165,7 @@ contains
             allocate(this%column_seasalt_number_emission_per_bin(this%process_config%seasalt_config%n_diagnostic_species))
          end if
          if (allocated(this%column_seasalt_number_emission_per_bin)) this%column_seasalt_number_emission_per_bin = 0.0_fp
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
@@ -1198,26 +1198,26 @@ contains
       ! Update common diagnostic fields (used by all schemes)
       ! Scalar diagnostic field
       call this%update_scalar_diagnostic_column('seasalt_mass_emission_total', &
-                                              this%column_seasalt_mass_emission_total, &
-                                              i_col, j_col, container, rc)
+         this%column_seasalt_mass_emission_total, &
+         i_col, j_col, container, rc)
       if (rc /= CC_SUCCESS) return
       ! Scalar diagnostic field
       call this%update_scalar_diagnostic_column('seasalt_number_emission_total', &
-                                              this%column_seasalt_number_emission_total, &
-                                              i_col, j_col, container, rc)
+         this%column_seasalt_number_emission_total, &
+         i_col, j_col, container, rc)
       if (rc /= CC_SUCCESS) return
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%seasalt_config%scheme))
-      case ("gong97")
+       case ("gong97")
          ! Scheme-specific diagnostics for gong97
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_mass_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_mass_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1225,23 +1225,23 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_number_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_number_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
-      case ("gong03")
+       case ("gong03")
          ! Scheme-specific diagnostics for gong03
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_mass_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_mass_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1249,23 +1249,23 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_number_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_number_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
-      case ("geos12")
+       case ("geos12")
          ! Scheme-specific diagnostics for geos12
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_mass_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_mass_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_mass_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
@@ -1273,10 +1273,10 @@ contains
          if (this%process_config%seasalt_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%seasalt_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'seasalt_number_emission_', &
-                     trim(this%process_config%seasalt_config%diagnostic_species(i))
+                  trim(this%process_config%seasalt_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_seasalt_number_emission_per_bin(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_seasalt_number_emission_per_bin(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if

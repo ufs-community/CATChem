@@ -13,7 +13,7 @@ module SeaSaltCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -206,9 +206,9 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'gong97' .and. &
-          trim(this%scheme) /= 'gong03' .and. &
-          trim(this%scheme) /= 'geos12' .and. &
-          .true.) then
+         trim(this%scheme) /= 'gong03' .and. &
+         trim(this%scheme) /= 'geos12' .and. &
+         .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -230,7 +230,7 @@ contains
 
    end subroutine print_seasalt_config_summary
 
-      !> Finalize seasalt configuration
+   !> Finalize seasalt configuration
    subroutine finalize_seasalt_config(this)
       class(SeaSaltConfig), intent(inout) :: this
 
@@ -374,7 +374,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/seasalt/diag_species", this%seasalt_config%diagnostic_species, &
-                                    rc, default_values=["All"])
+         rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%seasalt_config%diagnostic_species(1))
@@ -397,13 +397,13 @@ contains
       ! Load scheme-specific configuration from master YAML
       scheme_name = trim(this%seasalt_config%scheme)
       select case (scheme_name)
-      case ('gong97')
+       case ('gong97')
          call this%load_gong97_config(config_manager, error_handler)
-      case ('gong03')
+       case ('gong03')
          call this%load_gong03_config(config_manager, error_handler)
-      case ('geos12')
+       case ('geos12')
          call this%load_geos12_config(config_manager, error_handler)
-      case default
+       case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown seasalt scheme: " // trim(scheme_name), rc)
          return
@@ -481,7 +481,7 @@ contains
       ! Get species names using the indices
       do i = 1, this%seasalt_config%n_species
          if (this%seasalt_config%species_indices(i) > 0 .and. &
-             this%seasalt_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
+            this%seasalt_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%seasalt_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%seasalt_config%species_indices(i)))
          else
@@ -513,10 +513,10 @@ contains
 
       ! Load scheme parameters directly from processes/seasalt/gong97/ in master YAML
       call config_manager%get_real("processes/seasalt/gong97/scale_factor", &
-           this%gong97_config%scale_factor, rc, 1.0_fp)
+         this%gong97_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%gong97_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/gong97/weibull_flag", &
-           this%gong97_config%weibull_flag, rc, .false.)
+         this%gong97_config%weibull_flag, rc, .false.)
       if (rc /= CC_SUCCESS) this%gong97_config%weibull_flag = .false.
 
 
@@ -532,10 +532,10 @@ contains
 
       ! Load scheme parameters directly from processes/seasalt/gong03/ in master YAML
       call config_manager%get_real("processes/seasalt/gong03/scale_factor", &
-           this%gong03_config%scale_factor, rc, 1.0_fp)
+         this%gong03_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%gong03_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/gong03/weibull_flag", &
-           this%gong03_config%weibull_flag, rc, .false.)
+         this%gong03_config%weibull_flag, rc, .false.)
       if (rc /= CC_SUCCESS) this%gong03_config%weibull_flag = .false.
 
 
@@ -551,10 +551,10 @@ contains
 
       ! Load scheme parameters directly from processes/seasalt/geos12/ in master YAML
       call config_manager%get_real("processes/seasalt/geos12/scale_factor", &
-           this%geos12_config%scale_factor, rc, 1.0_fp)
+         this%geos12_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%geos12_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/geos12/weibull_flag", &
-           this%geos12_config%weibull_flag, rc, .false.)
+         this%geos12_config%weibull_flag, rc, .false.)
       if (rc /= CC_SUCCESS) this%geos12_config%weibull_flag = .false.
 
 
@@ -572,11 +572,11 @@ contains
 
       ! Validate scheme-specific config
       select case (trim(this%seasalt_config%scheme))
-      case ('gong97')
+       case ('gong97')
          call this%gong97_config%validate(error_handler)
-      case ('gong03')
+       case ('gong03')
          call this%gong03_config%validate(error_handler)
-      case ('geos12')
+       case ('geos12')
          call this%geos12_config%validate(error_handler)
       end select
 
@@ -601,13 +601,13 @@ contains
       class(*), allocatable :: scheme_config
 
       select case (trim(this%seasalt_config%scheme))
-      case ('gong97')
+       case ('gong97')
          allocate(scheme_config, source=this%gong97_config)
-      case ('gong03')
+       case ('gong03')
          allocate(scheme_config, source=this%gong03_config)
-      case ('geos12')
+       case ('geos12')
          allocate(scheme_config, source=this%geos12_config)
-      case default
+       case default
          ! Return null
       end select
 
@@ -629,7 +629,7 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%seasalt_config%n_diagnostic_species == 1 .and. &
-          trim(this%seasalt_config%diagnostic_species(1)) == "All") then
+         trim(this%seasalt_config%diagnostic_species(1)) == "All") then
 
          ! Deallocate and reallocate for all species
          if (allocated(this%seasalt_config%diagnostic_species_id)) deallocate(this%seasalt_config%diagnostic_species_id)
@@ -665,8 +665,8 @@ contains
 
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-                  trim(this%seasalt_config%diagnostic_species(i)), &
-                  "' not found in process species list"
+               trim(this%seasalt_config%diagnostic_species(i)), &
+               "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             !return !do not return and the diagnostics for this unspecified species will be zero in the output
          end if
