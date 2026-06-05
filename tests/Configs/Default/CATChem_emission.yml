@@ -7,7 +7,7 @@ anthro1:
   SO2:
     long_name: "Sulfur Dioxide"
     units: "kg/m2/s"
-    scale: [0.97, '0.045'] #1-0.03; 0.03*96/64
+    scale: [0.97, 0.045] #1-0.03; 0.03*96/64
     map: ["so2", "so4"]
   OC:
     long_name: "Organic Carbon"
@@ -23,7 +23,7 @@ anthro2:
   SO2_elev:
     long_name: "Sulfur Dioxide at Elevated Levels"
     units: "kg/m2/s"
-    scale: [0.97, '0.045'] #1-0.03; 0.03*96/64
+    scale: [0.97, 0.045] #1-0.03; 0.03*96/64
     map: ["so2", "so4"]
   OC_elev:
     long_name: "Organic Carbon at Elevated Levels"
