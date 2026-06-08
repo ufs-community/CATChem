@@ -528,42 +528,6 @@ contains
             )
       end if
 
-      ! === DEBUG: Print inputs at specific target point for comparison ===
-      block
-         real(fp) :: dbg_lat, dbg_lon, dbg_area
-         real(fp) :: dbg_dist
-         call column%get_metadata(dbg_lat, dbg_lon, dbg_area)
-         dbg_dist = (dbg_lat - DBG_TARGET_LAT)**2 + (dbg_lon - DBG_TARGET_LON)**2
-         if (dbg_dist < DBG_TOLERANCE**2) then
-            if (.not. dbg_dust_found .or. dbg_dist < dbg_best_dist) then
-               dbg_best_dist = dbg_dist
-               dbg_best_lat = dbg_lat
-               dbg_best_lon = dbg_lon
-            end if
-            if (abs(dbg_lat - dbg_best_lat) < 0.001_fp .and. &
-               abs(dbg_lon - dbg_best_lon) < 0.001_fp) then
-               dbg_dust_found = .true.
-               dbg_dust_print_count = dbg_dust_print_count + 1
-               if (dbg_dust_print_count <= 20) then
-                  write(*,'(A,I6,A,2F10.4,A,5E14.6)') &
-                     'CATCHEM_DUST_DBG #', dbg_dust_print_count, &
-                     ' lat/lon=', dbg_lat, dbg_lon, &
-                     ' tend1-5=', species_tendencies(1, 1:min(5,n_species))
-                  write(*,'(A,6E14.6)') &
-                     '  airden,ustar,ssm,rdrag,clay,sand=', &
-                     airden(1), ustar(1), ssm(1), rdrag(1), clayfrac(1), sandfrac(1)
-                  write(*,'(A,5E14.6)') &
-                     '  soilm,uthres,frlake,frsno,delp=', &
-                     soilm(1), ustar_threshold(1), frlake(1), frsno(1), met%DELP(1)
-                  write(*,'(A,E14.6,A,I2,A,E14.6)') &
-                     '  dt=', this%get_timestep(), ' lwi=', lwi(1), &
-                     ' tskin=', tskin(1)
-               end if
-            end if
-         end if
-      end block
-      ! === END DEBUG ===
-
       ! Apply tendencies back to virtual column based on tendency_mode
       ! Surface-only processing - apply tendencies to surface level only
       do i = 1, n_species
