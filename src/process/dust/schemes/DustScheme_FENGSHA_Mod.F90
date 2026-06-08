@@ -339,7 +339,7 @@ contains
          if (R > SMALL) then
             dust_effective_threshold = ustar_threshold * H / R
          else
-            dust_effective_threshold = 0.0_fp
+            dust_effective_threshold = 0.001_fp
          end if
       end if
 
@@ -393,15 +393,18 @@ contains
 
       do n = 1, nbins
          diameter = radius(n) * 2.0_fp
+         if (diameter <= 0.0_fp .or. rLow(n) <= 0.0_fp .or. rUp(n) <= 0.0_fp) cycle
          dlam = diameter / lambda
          dist(n) = diameter * (1._fp + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
          dvol = dvol + dist(n)
       end do
 
       ! Normalize Distribution
-      do n = 1, nbins
-         dist(n) = dist(n) / dvol
-      end do
+      if (dvol > 0.0_fp) then
+         do n = 1, nbins
+            dist(n) = dist(n) / dvol
+         end do
+      end if
 
    end subroutine KokDistribution
 
@@ -704,6 +707,7 @@ contains
       !--------------------------------------------
       ! MB95 Drag Partition
       !--------------------------------------------
+      if (z0 <= 0.0_fp) return
       R = 1.0_fp - (log(z0 / z0s ) / log(0.7_fp * (0.1_fp / z0s) ** 0.8_fp))
       return
 
@@ -746,6 +750,7 @@ contains
       !--------------------------------------------
       ! Compute Draxler Horizontal Flux
       !--------------------------------------------
+      if (R < 1.0E-10_fp .or. ustar < 1.0E-10_fp) return
       u_ts = ustar_threshold * H / R
 
       if (ustar >= ustar_threshold) then
@@ -789,6 +794,7 @@ contains
       !--------------------------------------------
       ! Compute Kawamura Horizontal Flux
       !--------------------------------------------
+      if (R < 1.0E-10_fp .or. ustar < 1.0E-10_fp) return
       u_ts = ustar_threshold * H / R
 
       HorizFlux = MAX(0._fp, (ustar ** 3.0_fp * (1.0_fp - (u_ts / ustar) ** 2.0_fp) * (1.0_fp + (u_ts / ustar) ** 2.0_fp ) ) )
