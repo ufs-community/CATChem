@@ -217,6 +217,7 @@ contains
             met_state%GVF(i,j) = 0.0_fp                        ! Green vegetation fraction (ocean)
             met_state%CLAYFRAC(i,j) = 0.0_fp                   ! Clay fraction (ocean)
             met_state%SANDFRAC(i,j) = 0.0_fp                   ! Sand fraction (ocean)
+            met_state%LWI(i,j) = 0                             ! Land-water-ice mask (0=water)
             met_state%GWETTOP(i,j) = 0.0_fp                    ! Top soil moisture (ocean)
             met_state%RDRAG(i,j) = 0.0_fp                      ! Drag partition (ocean)
             met_state%USTAR_THRESHOLD(i,j) = 0.0_fp            ! Threshold friction velocity (ocean)

@@ -336,7 +336,11 @@ contains
       end if
       if (present(dust_effective_threshold)) then
          ! Add your custom effective dust threshold friction velocity: u_thres * h / r calculation
-         dust_effective_threshold = ustar_threshold * H / R
+         if (R > SMALL) then
+            dust_effective_threshold = ustar_threshold * H / R
+         else
+            dust_effective_threshold = 0.0_fp
+         end if
       end if
 
    end subroutine compute_fengsha
