@@ -1,5 +1,5 @@
 # GasChem Schemes CMakeLists.txt
-# Generated on: 2026-06-05T09:03:17.700894
+# Generated on: 2026-06-09T15:53:02.119373
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -11,7 +11,7 @@
 
 # MUSICA scheme configuration
 # Required meteorological fields for MUSICA:
-#   - DELP
+#   - TSTEP
 #   - T
 #   - AIRDEN
 #   - PMID

@@ -17,15 +17,13 @@
 !! - Memory management and array allocation
 !! - Integration with host model time stepping
 !!
-!! Generated on: 2026-06-05T09:03:17.593387
+!! Generated on: 2026-06-09T15:53:02.102110
 !! Author: Maggie Bruckner
 !! Reference: MUSICA library
 module GasChemScheme_MUSICA_Mod
 
    use precision_mod, only: fp
    use GasChemCommon_Mod, only: GasChemSchemeMUSICAConfig
-   use GasChemCommon_Mod, only: GasChemSchemeMUSICAConfig
-   use Constants, only: RSTARG, AIRMW
    use musica_micm, only: get_micm_version, Rosenbrock, RosenbrockStandardOrder
    use musica_micm, only: micm_t, solver_stats_t
    use musica_state, only: state_t, conditions_t
@@ -52,23 +50,27 @@ contains
    !! @param[in]  num_layers     Number of vertical layers
    !! @param[in]  num_species    Number of chemical species
    !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  RSTARG    Required constant from Constants module
+   !! @param[in]  AIRMW    Required constant from Constants module
    !! @param[in]  airden    AIRDEN field [appropriate units]
-   !! @param[in]  delp    DELP field [appropriate units]
    !! @param[in]  pmid    PMID field [appropriate units]
    !! @param[in]  t    T field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
    !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
-   !! @param[inout] total_rate_per_species_per_level    Net chemical change per species per level [molecules/cm3/s] (num_layers, num_species)
-   !! @param[inout] net_chemical_rate_per_species    Net chem rate [molecules/cm3/s] (num_species)
+   !! @param[inout] total_rate_per_species_per_level    Net chemical change per species per level [ppmv/s] (num_layers, num_species)
+   !! @param[inout] net_chemical_rate_per_species    Net chem rate [ppmv/s] (num_species)
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    impure subroutine compute_no_phot( &
       num_layers, &
       num_species, &
       params, &
+      RSTARG, &
+      AIRMW, &
       airden, &
-      delp, &
       pmid, &
       t, &
+      tstep, &
       species_conc, &
       species_tendencies, &
       total_rate_per_species_per_level, &
@@ -80,10 +82,12 @@ contains
       integer, intent(in) :: num_layers
       integer, intent(in) :: num_species
       type(GasChemSchemeMUSICAConfig), intent(in) :: params
+      real(fp), intent(in) :: RSTARG  ! Required constant from Constants module
+      real(fp), intent(in) :: AIRMW  ! Required constant from Constants module
       real(fp), intent(in) :: airden(num_layers)    ! 3D atmospheric field
-      real(fp), intent(in) :: delp(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: pmid(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
+      real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       real(fp), intent(inout), optional :: total_rate_per_species_per_level(:,:)
@@ -91,12 +95,8 @@ contains
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
 
       ! Local variables
-      integer :: k, species_idx, micm_sp_idx, rp_index, n_rp
-      integer :: diag_idx, idx  ! For diagnostic species indexing
-      real(fp) :: base_emission_factor
-      real(fp) :: environmental_factor
-      real(fp) :: species_factor
-      real(fp) :: mw
+      integer :: k, species_idx, micm_sp_idx, rp_idx, nrp, idx
+      integer :: diag_idx  ! For diagnostic species indexing
       real(fp) :: rate_val
       real(fp) :: conc
       type(string_t) :: solver_state
@@ -106,11 +106,11 @@ contains
       type(state_t), pointer :: state
       integer :: solver_type
       character(len=:), allocatable :: rp_name
-      
+
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
       ! Do not re-initialize them here.
-      
+
       solver_type = RosenbrockStandardOrder
       micm => micm_t(params%mechanism, solver_type, micm_error)
 
@@ -118,14 +118,14 @@ contains
         write(*,'(A)') "Error creating MICM: ", micm_error%message()
       end if
       state => micm%get_state(num_layers,micm_error)
-      n_rp = state%rate_parameters_ordering%size()
-      
+      nrp = state%rate_parameters_ordering%size()
+
       ! initialize MICM rate parameters
-      ! Note: LOSS parameters stay at 0 unless explicitly configured. 
+      ! Note: LOSS parameters stay at 0 unless explicitly configured.
       ! default rate to 1.0 so the
       ! YAML scaling_factor defines the effective rate constant.
-      do rp_index = 1, n_rp
-         rp_name = trim(state%rate_parameters_ordering%name(rp_index)) 
+      do rp_idx = 1, nrp
+         rp_name = trim(state%rate_parameters_ordering%name(rp_idx))
          if (rp_name(1:min(5,len(rp_name))) == 'LOSS.') then
             rate_val = 1.0_8
          endif
@@ -134,7 +134,8 @@ contains
             idx = 1 + (k - 1) * state%rate_parameters_strides%grid_cell + (state%rate_parameters_ordering%index(rp_name, micm_error) - 1) * state%rate_parameters_strides%variable
             state%rate_parameters(idx) = rate_val
          end do
-      end do 
+      end do
+      
       ! set up initial conditions for MICM
       do k = 1, num_layers
          state%conditions(k)%temperature = t(k)
@@ -147,13 +148,10 @@ contains
             state%concentrations(micm_sp_idx) = conc
          enddo
       enddo
-      call micm%solve(60.0_8,state,solver_state,solver_stats,micm_error)
-      ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
-      do k = 1, num_layers
+      
+      call micm%solve(REAL(tstep, 8),state,solver_state,solver_stats,micm_error)
 
-         ! TODO: Replace this generic implementation with your scheme's algorithm
-         ! This is a placeholder that demonstrates the expected structure
-         ! Apply to each species
+      do k = 1, num_layers
          do species_idx = 1, num_species
             micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + (species_idx-1)*state%species_strides%variable
             ! convert final concentration back to ppmv from mol/m3
@@ -163,30 +161,22 @@ contains
             ! Ensure non-negative concentrations
             species_tendencies(k, species_idx) = max(0.0_fp, species_tendencies(k, species_idx))
             
-            ! TODO: Update diagnostic fields here based on your scheme's requirements
-            ! Each process should implement custom diagnostic calculations
-            ! Example patterns:
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(total_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)
                   if (diagnostic_species_id(diag_idx) == species_idx) then
-                     ! Add your custom net chemical change per species per level calculation
                      total_rate_per_species_per_level(k, diag_idx) = species_conc(k,species_idx) - species_tendencies(k, species_idx)
                      exit
                   end if
                end do
             end if
 
-            ! TODO: Update scheme-specific diagnostic fields here based on your scheme's requirements
-            ! Each scheme should implement custom diagnostic calculations
-            ! Example patterns:
             ! Per-species diagnostic: only update for diagnostic species
             if (present(net_chemical_rate_per_species) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)
                   if (diagnostic_species_id(diag_idx) == species_idx) then
-                     ! Add your custom net chem rate calculation
                      net_chemical_rate_per_species(diag_idx) = species_tendencies(k, species_idx) * 1.0_fp  ! TODO: Replace with actual calculation
                      exit
                   end if
@@ -195,12 +185,10 @@ contains
          end do
 
       end do
-
    end subroutine compute_no_phot
 
    ! =======================================================================
    ! SCHEME-SPECIFIC HELPER SUBROUTINES
    ! =======================================================================
-   ! Add your custom scientific algorithms here as pure functions/subroutines
-   ! Examples: environmental response functions, species-specific calculations, etc.
+
 end module GasChemScheme_MUSICA_Mod

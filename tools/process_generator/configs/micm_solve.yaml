@@ -34,11 +34,15 @@ schemes:
     author: "Maggie Bruckner"
 
     required_met_fields: #needed for scheme calculations
-      - DELP
+      - TSTEP
       - T
       - AIRDEN
       - PMID
 
+    required_constants:
+      - RSTARG
+      - AIRMW 
+   
     parameters:
       mechanism:
         default: 'mechanism_config.yaml'
@@ -47,10 +51,10 @@ schemes:
     diagnostics:
       - name: "net_chemical_rate_per_species"
         description: "Net chem rate"
-        units: "molecules/cm3/s"
+        units: "ppmv/s"
 
 
 diagnostics:
   - name: "total_rate_per_species_per_level"
     description: "Net chemical change per species per level"
-    units: "molecules/cm3/s"
+    units: "ppmv/s"

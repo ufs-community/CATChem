@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! GasChem process and its schemes.
 !!
-!! Generated on: 2026-06-05T09:03:17.420077
+!! Generated on: 2026-06-09T15:53:01.917893
 !! Author: Maggie Bruckner
 !! Version: 1.0.0
 
@@ -349,14 +349,13 @@ contains
       ! Dynamic mapping: is_gas -> GasIndex
       this%GasChem_config%species_indices(1:this%GasChem_config%n_species) = &
          chem_state%GasIndex(1:this%GasChem_config%n_species)
-      write(*,'(A)') "Grabbing species: "
+
       ! Get species names using the indices
       do i = 1, this%GasChem_config%n_species
          if (this%GasChem_config%species_indices(i) > 0 .and. &
              this%GasChem_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%GasChem_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%GasChem_config%species_indices(i)))
-            write(*,'(A)') "Loading: ", this%GasChem_config%species_names(i)
          else
             call error_handler%report_error(ERROR_INVALID_STATE, &
                "Invalid species index in species index array", rc)

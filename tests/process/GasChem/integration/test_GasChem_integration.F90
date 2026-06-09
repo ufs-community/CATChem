@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the GasChem process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2026-06-05T09:03:17.853041
+!! Generated on: 2026-06-09T15:53:02.210783
 
 program test_GasChem_integration
    use precision_mod, only: fp, rae
@@ -215,7 +215,6 @@ contains
                altitude_km = real(k-1, fp) * 1.0_fp
                met_state%T(i,j,k) = 288.15_fp - 6.5_fp * altitude_km  ! Temperature lapse rate [K]
                met_state%PMID(i,j,k) = 101300.25_fp * exp(-altitude_km / 8.0_fp)  ! Mid-level pressure [Pa]
-               met_state%DELP(i,j,k) = 5000.0_fp                                  ! Pressure thickness [Pa]
                met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
                met_state%AIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp    ! wet Air density [kg/m3]
             end do
@@ -482,15 +481,18 @@ contains
             write(output_unit,'(A,A,A,E12.5)') '          ', trim(field_name), ' = ', scalar_value
          end if
 
-         ! Check if scalar value is finite 
+         ! Check if scalar value is finite and non-negative
          if (ieee_is_nan(scalar_value)) then  ! NaN check
             write(error_unit,'(A,A)') '    ERROR: Field has NaN value: ', trim(field_name)
+            field_passed = .false.
+         else if (scalar_value < 0.0_fp) then
+            write(error_unit,'(A,A)') '    ERROR: Field has negative value: ', trim(field_name)
             field_passed = .false.
          else if (.not. (scalar_value < huge(scalar_value))) then  ! Infinite check
             write(error_unit,'(A,A)') '    ERROR: Field has infinite value: ', trim(field_name)
             field_passed = .false.
          else
-            write(output_unit,'(A,A)') '        ✓ Field has valid finite value: ', trim(field_name)
+            write(output_unit,'(A,A)') '        ✓ Field has valid finite non-negative value: ', trim(field_name)
          end if
 
       case (DIAG_REAL_1D)
@@ -509,6 +511,10 @@ contains
                   write(error_unit,'(A,A,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ')'
                   field_passed = .false.
                   exit
+               else if (current_value < 0.0_fp) then
+                  write(error_unit,'(A,A,A,I0,A)') '    ERROR: Field has negative value at index ', trim(field_name), ' (', i, ')'
+                  field_passed = .false.
+                  exit
                else if (.not. (current_value < huge(current_value))) then  ! Infinite check
                   write(error_unit,'(A,A,A,I0,A)') '    ERROR: Field has infinite value at index ', trim(field_name), ' (', i, ')'
                   field_passed = .false.
@@ -522,7 +528,7 @@ contains
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
-                  write(output_unit,'(A,A)') '        ✓ All array elements are finite: ', trim(field_name)
+                  write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if
             end if
          else
@@ -547,6 +553,10 @@ contains
                      write(error_unit,'(A,A,A,I0,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ',', j, ')'
                      field_passed = .false.
                      exit outer_loop_2d
+                  else if (current_value < 0.0_fp) then
+                     write(error_unit,'(A,A,A,I0,A,I0,A)') '    ERROR: Field has negative value at index ', trim(field_name), ' (', i, ',', j, ')'
+                     field_passed = .false.
+                     exit outer_loop_2d
                   else if (.not. (current_value < huge(current_value))) then  ! Infinite check
                      write(error_unit,'(A,A,A,I0,A,I0,A)') '    ERROR: Field has infinite value at index ', trim(field_name), ' (', i, ',', j, ')'
                      field_passed = .false.
@@ -561,7 +571,7 @@ contains
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
-                  write(output_unit,'(A,A)') '        ✓ All array elements are finite: ', trim(field_name)
+                  write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if
             end if
          else
@@ -587,6 +597,10 @@ contains
                         write(error_unit,'(A,A,A,I0,A,I0,A,I0,A)') '    ERROR: Field has NaN at index ', trim(field_name), ' (', i, ',', j, ',', k, ')'
                         field_passed = .false.
                         exit outer_loop_3d
+                     else if (current_value < 0.0_fp) then
+                        write(error_unit,'(A,A,A,I0,A,I0,A,I0,A)') '    ERROR: Field has negative value at index ', trim(field_name), ' (', i, ',', j, ',', k, ')'
+                        field_passed = .false.
+                        exit outer_loop_3d
                      else if (.not. (current_value < huge(current_value))) then  ! Infinite check
                         write(error_unit,'(A,A,A,I0,A,I0,A,I0,A)') '    ERROR: Field has infinite value at index ', trim(field_name), ' (', i, ',', j, ',', k, ')'
                         field_passed = .false.
@@ -602,7 +616,7 @@ contains
                   write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
                   !field_passed = .false.
                else
-                  write(output_unit,'(A,A)') '        ✓ All array elements are finite: ', trim(field_name)
+                  write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if
             end if
          else
