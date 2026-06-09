@@ -113,7 +113,7 @@ contains
       integer :: n, ir                                 !< Loop counter
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
       integer, parameter :: nr = 10                    !< Number of (linear) sub-size bins
-      real, parameter    :: r80fac = 1.65_fp           !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
+      real(fp), parameter    :: r80fac = 1.65_fp       !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
       real(fp) :: DryRadius                            !< sub-bin radius         (dry, um)
       real(fp) :: DeltaDryRadius                       !< sub-bin radius spacing (dry, um)
       real(fp) :: rwet, drwet                          !< sub-bin radius spacing (rh=80%, um)
@@ -196,7 +196,7 @@ contains
 
                ! Dry Radius Substep
                !-------------------
-               DryRadius = species_lower_radius(n) + 0.5 * DeltaDryRadius
+               DryRadius = species_lower_radius(n) + 0.5_fp * DeltaDryRadius
 
                do ir = 1, nr ! SubSteps
 

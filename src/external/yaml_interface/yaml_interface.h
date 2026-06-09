@@ -11,6 +11,7 @@ extern "C" {
 void* yaml_load_file(const char* filename);
 void* yaml_load_string(const char* yaml_string);
 void yaml_destroy_node(void* node_ptr);
+void* yaml_sequence_to_map(void* node_ptr);
 
 // Getter functions
 bool yaml_get_string(void* node_ptr, const char* key, char* value, int max_len);

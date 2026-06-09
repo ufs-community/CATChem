@@ -4,40 +4,35 @@
 ### parsers will confuse this with a negative "no" value.
 
 # species:
-dust1:
-  name: dust1
-  description: dust1
-  lower_radius: 0.1
-  upper_radius: 1.0
-  radius: .8
-  density: 2500.
-  is_dust: true
-  is_aerosol: true
-dust2:
-  name: dust2
-  long_name: 'Dust Species Accumulation'
-  description: dust2
-  lower_radius: 0.1
-  upper_radius: 5.0
-  radius: 3.
-  density: 2500.
-  is_dust: true
-  is_aerosol: true
-NO:
-  name: NO
-  long_name: 'Nitrogen Oxide'
-  description: NO
-  mw_g: 30.006
-  is_gas: true
-CO:
-  name: CO
-  long_name: 'Carbon Monoxide'
-  description: CO
-  mw_g: 28.010
-  is_gas: true
-ISOP:
-  name: ISOP
-  long_name: 'Isoprene'
-  description: ISOP
-  mw_g: 44.01
-  is_gas: true
+- name: dust1
+  __description: dust1
+  __lower_radius: 0.1
+  __upper_radius: 1.0
+  __radius: .8
+  __density: 2500.
+  __is_dust: true
+  __is_aerosol: true
+- name: dust2
+  __long_name: 'Dust Species Accumulation'
+  __description: dust2
+  __lower_radius: 0.1
+  __upper_radius: 5.0
+  __radius: 3.
+  __density: 2500.
+  __is_dust: true
+  __is_aerosol: true
+- name: 'NO'
+  __long_name: 'Nitrogen Oxide'
+  __description: 'NO'
+  molecular weight [kg mol-1]: 30.006e-3
+  __is_gas: true
+- name: CO
+  __long_name: 'Carbon Monoxide'
+  __description: CO
+  molecular weight [kg mol-1]: 28.010e-3
+  __is_gas: true
+- name: ISOP
+  __long_name: 'Isoprene'
+  __description: ISOP
+  molecular weight [kg mol-1]: 44.01e-3
+  __is_gas: true

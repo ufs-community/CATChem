@@ -19,7 +19,7 @@ module yaml_interface_mod
    public :: yaml_node_t
 
    ! Public procedures - Low level
-   public :: yaml_load_file, yaml_load_string, yaml_destroy_node
+   public :: yaml_load_file, yaml_load_string, yaml_destroy_node, yaml_sequence_to_map
    public :: yaml_get_string, yaml_get_integer, yaml_get_real, yaml_get_logical
    public :: yaml_get_real_array, yaml_get_integer_array, yaml_get_string_array
    public :: yaml_has_key, yaml_get_size, yaml_is_sequence, yaml_is_map
@@ -86,6 +86,12 @@ module yaml_interface_mod
          import :: c_ptr
          type(c_ptr), value :: node
       end subroutine c_yaml_destroy_node
+
+      function c_yaml_sequence_to_map(node) bind(C, name='yaml_sequence_to_map')
+         import :: c_ptr
+         type(c_ptr), value :: node
+         type(c_ptr) :: c_yaml_sequence_to_map
+      end function
 
       ! Getters
       function c_yaml_get_string(node, key, value, max_len) bind(C, name="yaml_get_string")
@@ -263,6 +269,16 @@ contains
          node%ptr = c_null_ptr
       endif
    end subroutine yaml_destroy_node
+
+   function yaml_sequence_to_map(node) result(modified_node)
+      type(yaml_node_t), intent(in) :: node
+      type(yaml_node_t) :: modified_node
+      if (c_associated(node%ptr)) then
+         modified_node%ptr = c_yaml_sequence_to_map(node%ptr)
+      else
+         modified_node%ptr = c_null_ptr
+      endif
+   end function
 
    !> Get string value
    function yaml_get_string(node, key, value) result(success)
