@@ -79,9 +79,9 @@ void* yaml_sequence_to_map(void* node_ptr) {
            for (size_t i=0; i < wrapper->node.size(); ++i) {
                resultMap[std::to_string(i)] = wrapper->node[i];
            }
-	   // Remove sequence version of node from memory
-	   delete wrapper;
-	   // Return the new map wrapped in a new pointer
+	       // Remove sequence version of node from memory
+	       delete wrapper;
+	       // Return the new map wrapped in a new pointer
            return new YamlNodeWrapper(resultMap);
 	} else {
             std::cerr << "Warning: yaml_sequence_to_map called on non-sequence node" << std::endl;
