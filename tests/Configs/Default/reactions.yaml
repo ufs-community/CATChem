@@ -1,0 +1,6 @@
+- type: FIRST_ORDER_LOSS
+  name: so2_loss
+  scaling factor: 0.2
+  gas phase: gas
+  reactants:
+    - species name: so2

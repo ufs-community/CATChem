@@ -1,0 +1,7 @@
+  - name: gas
+    species:
+      - name: 'so2'
+      - name: 'oh'
+      - name: 'h2o2'
+      - name: 'no3'
+      - name: 'msa'
