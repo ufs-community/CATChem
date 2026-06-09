@@ -12,7 +12,7 @@ target_link_libraries(${_lib} PUBLIC CATChem_process_wetdep)
 target_link_libraries(${_lib} PUBLIC CATChem_process_settling)
 target_link_libraries(${_lib} PUBLIC CATChem_process_so4chem)
 target_link_libraries(${_lib} PUBLIC CATChem_process_carbchem)
-# target_link_libraries(${_lib} PUBLIC CATChem_process_chem)
+target_link_libraries(${_lib} PUBLIC CATChem_process_GasChem)
 set_target_properties(
   ${_lib}
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
