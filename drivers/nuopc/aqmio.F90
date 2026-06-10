@@ -48,6 +48,7 @@ module AQMIO
    ! Enhanced direct data I/O functions (no ESMF fields required)
    public :: AQMIO_Write1D
    public :: AQMIO_Read1D
+   public :: AQMIO_ReadTimeCoord
 
    ! Lat/lon stitched output support
    public :: AQMIO_LatlonInit
@@ -3877,6 +3878,189 @@ contains
 #endif
 
    end subroutine AQMIO_Read1D
+
+!------------------------------------------------------------------------------
+
+   subroutine AQMIO_ReadTimeCoord(filename, n_times, dates, secs, rc)
+      character(len=*), intent(in)  :: filename
+      integer,          intent(out) :: n_times
+      integer, allocatable, intent(out) :: dates(:)
+      integer, allocatable, intent(out) :: secs(:)
+      integer, optional,    intent(out) :: rc
+
+#if HAVE_NETCDF
+      ! Local variables
+      integer :: localrc, ncid, varid, ndims, nt, i
+      integer :: since_pos, date_pos
+      integer :: base_yy, base_mm, base_dd, base_hh, base_mn, base_ss
+      integer :: abs_yy, abs_mm, abs_dd, abs_hh, abs_mn, abs_ss
+      integer :: dimids(NF90_MAX_VAR_DIMS)
+      real(ESMF_KIND_R8), allocatable :: tvar(:)
+      real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
+      character(len=256) :: units_str, tmp_str
+      type(ESMF_Time) :: base_time, abs_time
+      type(ESMF_TimeInterval) :: dt_interval
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      n_times = 0
+
+      ! Open file read-only
+      localrc = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+            msg="AQMIO_ReadTimeCoord: Cannot open file: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
+      ! Locate the 'time' variable — silent return if absent
+      localrc = nf90_inq_varid(ncid, 'time', varid)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Get dimension count and first dimension size
+      localrc = nf90_inquire_variable(ncid, varid, ndims=ndims, dimids=dimids)
+      if (localrc /= NF90_NOERR .or. ndims < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+      localrc = nf90_inquire_dimension(ncid, dimids(1), len=nt)
+      if (localrc /= NF90_NOERR .or. nt < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the 'units' attribute
+      units_str = ''
+      localrc = nf90_get_att(ncid, varid, 'units', units_str)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Normalise to lowercase for case-insensitive parsing
+      tmp_str = units_str
+      do i = 1, len_trim(tmp_str)
+         if (tmp_str(i:i) >= 'A' .and. tmp_str(i:i) <= 'Z') &
+            tmp_str(i:i) = achar(iachar(tmp_str(i:i)) + 32)
+      end do
+      ! Collapse double spaces
+      i = index(tmp_str, '  ')
+      do while (i > 0)
+         tmp_str = tmp_str(1:i) // tmp_str(i+2:)
+         i = index(tmp_str, '  ')
+      end do
+
+      ! Detect unit and locate "since" keyword
+      since_pos = index(tmp_str, 'days since')
+      if (since_pos > 0) then
+         unit_to_secs = 86400.0_ESMF_KIND_R8
+         since_pos = since_pos + len('days since')
+      else
+         since_pos = index(tmp_str, 'hours since')
+         if (since_pos > 0) then
+            unit_to_secs = 3600.0_ESMF_KIND_R8
+            since_pos = since_pos + len('hours since')
+         else
+            since_pos = index(tmp_str, 'minutes since')
+            if (since_pos > 0) then
+               unit_to_secs = 60.0_ESMF_KIND_R8
+               since_pos = since_pos + len('minutes since')
+            else
+               since_pos = index(tmp_str, 'seconds since')
+               if (since_pos > 0) then
+                  unit_to_secs = 1.0_ESMF_KIND_R8
+                  since_pos = since_pos + len('seconds since')
+               else
+                  localrc = nf90_close(ncid)
+                  call ESMF_LogSetError(ESMF_RC_NOT_VALID, &
+                     msg="AQMIO_ReadTimeCoord: Unrecognised time units: "//trim(units_str), &
+                     line=__LINE__, file=__FILE__, rcToReturn=rc)
+                  return
+               end if
+            end if
+         end if
+      end if
+
+      ! Skip spaces after "since" and parse reference date: YYYY-MM-DD[ HH:MM:SS]
+      date_pos = since_pos
+      do while (date_pos <= len_trim(tmp_str) .and. tmp_str(date_pos:date_pos) == ' ')
+         date_pos = date_pos + 1
+      end do
+      base_yy = 0;  base_mm = 0;  base_dd = 0
+      base_hh = 0;  base_mn = 0;  base_ss = 0
+      read(tmp_str(date_pos  :date_pos+3), '(I4)', iostat=localrc) base_yy
+      read(tmp_str(date_pos+5:date_pos+6), '(I2)', iostat=localrc) base_mm
+      read(tmp_str(date_pos+8:date_pos+9), '(I2)', iostat=localrc) base_dd
+      if (len_trim(tmp_str) >= date_pos+18) then
+         read(tmp_str(date_pos+11:date_pos+12), '(I2)', iostat=localrc) base_hh
+         read(tmp_str(date_pos+14:date_pos+15), '(I2)', iostat=localrc) base_mn
+         read(tmp_str(date_pos+17:date_pos+18), '(I2)', iostat=localrc) base_ss
+      end if
+      if (base_yy == 0) then
+         localrc = nf90_close(ncid)
+         call ESMF_LogSetError(ESMF_RC_NOT_VALID, &
+            msg="AQMIO_ReadTimeCoord: Cannot parse reference date from: "//trim(units_str), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
+      call ESMF_TimeSet(base_time, yy=base_yy, mm=base_mm, dd=base_dd, &
+         h=base_hh, m=base_mn, s=base_ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the time values
+      allocate(tvar(nt))
+      localrc = nf90_get_var(ncid, varid, tvar)
+      i = nf90_close(ncid)
+      if (localrc /= NF90_NOERR) then
+         deallocate(tvar)
+         return
+      end if
+
+      ! Convert to date/secs arrays
+      allocate(dates(nt), secs(nt))
+
+      do i = 1, nt
+         tsecs_r8 = tvar(i) * unit_to_secs
+         call ESMF_TimeIntervalSet(dt_interval, s_r8=tsecs_r8, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, dates, secs)
+            n_times = 0
+            return
+         end if
+         abs_time = base_time + dt_interval
+         call ESMF_TimeGet(abs_time, yy=abs_yy, mm=abs_mm, dd=abs_dd, &
+            h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, dates, secs)
+            n_times = 0
+            return
+         end if
+         dates(i) = abs_yy*10000 + abs_mm*100 + abs_dd
+         secs(i)  = abs_hh*3600  + abs_mn*60  + abs_ss
+      end do
+
+      n_times = nt
+      deallocate(tvar)
+
+#else
+      if (present(rc)) rc = ESMF_FAILURE
+      n_times = 0
+      call ESMF_LogSetError(ESMF_RC_LIB_NOT_PRESENT, &
+         msg="NetCDF not available", &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)
+#endif
+
+   end subroutine AQMIO_ReadTimeCoord
 
 #endif
 

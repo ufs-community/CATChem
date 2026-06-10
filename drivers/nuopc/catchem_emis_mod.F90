@@ -108,7 +108,7 @@ contains
       ! Check if emission mapping is loaded
       if (.not. config_manager%config_data%emission_mapping%is_loaded) then
          write(msg, '(A,A)') trim(pName), ': Emission mapping not loaded in ConfigManager'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
@@ -118,7 +118,7 @@ contains
       call ext_emis_data%init(0, 'CATChem NUOPC Emission Data', localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to initialize ExtEmisDataType'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
@@ -136,7 +136,7 @@ contains
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to populate category ', &
                   trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
                rc = CC_FAILURE
                return
             end if
@@ -228,7 +228,7 @@ contains
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
             end if
 
             ext_emis_data%categories(i)%last_period_key = period_key
@@ -240,7 +240,7 @@ contains
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to blend time for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
             end if
          end if
 
@@ -250,7 +250,7 @@ contains
          if (localrc /= CC_SUCCESS) then
             write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
                trim(ext_emis_data%categories(i)%category_name)
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
          end if
       end do
       nullify(config_manager, met_state, chem_state) ! Clean up pointers
@@ -305,7 +305,7 @@ contains
 
       if (len_trim(filename) == 0) then
          write(msg, '(A,A,A)') trim(pName), ': No source file specified for category: ', trim(category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
@@ -316,7 +316,7 @@ contains
          inquire(file=trim(filename), exist=file_exists)
          if (.not. file_exists) then
             write(msg, '(A,A,A)') trim(pName), ': File not found (holding last data): ', trim(filename)
-            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
             return
          end if
       end if
@@ -846,6 +846,9 @@ contains
           'aviation_crs', 'AVIATION_CRS')
          ! proceed
        case default
+         call ESMF_LogWrite('distribute_emissions_vertical: Unrecognized vertical_dist option: '// &
+            trim(vertical_dist)//'; skipping vertical distribution', &
+            ESMF_LOGMSG_WARNING)
          return
       end select
 
@@ -1069,7 +1072,7 @@ contains
                call chem_state%MieData(mie_idx)%Query( &
                   550.0e-9, ibin, q_mass(i:i,j:j,:), rh_r4(i:i,j:j,:), &
                   tau=tau(i:i,j:j,:), rc=localrc)
-               if (localrc /= 0) then
+               if (localrc /= CC_SUCCESS) then
                   write(msg, '(A,A,I0,A,I0)') trim(pName), &
                      ': Mie Query failed for species ', species_idx, ' bin ', ibin
                   call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
@@ -1862,7 +1865,7 @@ contains
          'Emission category: '//trim(category_mapping%category_name), localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to initialize category'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
@@ -1875,7 +1878,7 @@ contains
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A,A)') trim(pName), ': Failed to parse category properties: ', &
             trim(category_mapping%category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
          ! Continue anyway with default properties
       end if
 
@@ -1911,7 +1914,7 @@ contains
             call new_category%add_field(new_field, localrc)
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to add field: ', trim(field_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
             end if
          end if
       end do
@@ -1919,7 +1922,7 @@ contains
       call ext_emis_data%add_category(new_category, localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to add category to ExtEmisDataType'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
@@ -2028,7 +2031,7 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer ::  j, icat, ispec
+      integer ::  j, icat, ispec, localrc
       character(len=EMIS_MAXSTR) :: msg
       character(len=*), parameter :: pName = 'catchem_emis_map_species'
 
@@ -2085,7 +2088,7 @@ contains
          ! Unknown mapping
          write(msg, '(A,A,A,A,A)') trim(pName), ': No mapping found for field: ', &
             trim(emis_field_name), ' in category: ', trim(category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=rc)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
       end select
 
    end subroutine catchem_emis_map_species
@@ -2208,163 +2211,32 @@ contains
       type(ExtEmisCategoryType), intent(inout) :: category
       integer,                   intent(out)   :: rc
 
-      integer :: localrc, ncid, varid, ndims, rd_stat
-      integer :: nt, i, since_pos, date_pos
-      integer :: base_yy, base_mm, base_dd, base_hh, base_mn, base_ss
-      integer :: abs_yy, abs_mm, abs_dd, abs_hh, abs_mn, abs_ss
-      integer :: dimids(NF90_MAX_VAR_DIMS)
-      real(ESMF_KIND_R8), allocatable :: tvar(:)
-      character(len=EMIS_MAXSTR) :: units_str, tmp_str
+      integer :: localrc, nt
+      integer, allocatable :: dates(:), secs(:)
       character(len=EMIS_MAXSTR) :: msg
-      real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
-      type(ESMF_Time) :: base_time, abs_time
-      type(ESMF_TimeInterval) :: dt_interval
       character(len=*), parameter :: pName = 'catchem_emis_read_time_coord'
 
       rc = CC_SUCCESS
       category%n_times = 0
 
-      ! Open file read-only on every PE (small metadata read, safe for parallel)
-      localrc = nf90_open(trim(filename), NF90_NOWRITE, ncid)
-      if (localrc /= NF90_NOERR) then
-         write(msg, '(A,A,A)') trim(pName), ': Cannot open file for time coord: ', trim(filename)
-         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
+      call AQMIO_ReadTimeCoord(trim(filename), nt, dates, secs, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) then
+         write(msg, '(A,A,A)') trim(pName), ': Failed reading time coord from: ', trim(filename)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
          return
       end if
 
-      ! Locate the 'time' variable — silent return if absent
-      localrc = nf90_inq_varid(ncid, 'time', varid)
-      if (localrc /= NF90_NOERR) then
-         localrc = nf90_close(ncid)
-         return
-      end if
+      if (nt < 1) return
 
-      ! Get dimension count and first dimension size (time is the unlimited/leading dim)
-      localrc = nf90_inquire_variable(ncid, varid, ndims=ndims, dimids=dimids)
-      if (localrc /= NF90_NOERR .or. ndims < 1) then
-         localrc = nf90_close(ncid)
-         return
-      end if
-      localrc = nf90_inquire_dimension(ncid, dimids(1), len=nt)
-      if (localrc /= NF90_NOERR .or. nt < 1) then
-         localrc = nf90_close(ncid)
-         return
-      end if
-
-      ! Read the 'units' attribute
-      units_str = ''
-      localrc = nf90_get_att(ncid, varid, 'units', units_str)
-      if (localrc /= NF90_NOERR) then
-         localrc = nf90_close(ncid)
-         return
-      end if
-
-      ! Normalise to lowercase for case-insensitive search
-      tmp_str = units_str
-      do i = 1, len_trim(tmp_str)
-         if (tmp_str(i:i) >= 'A' .and. tmp_str(i:i) <= 'Z') &
-            tmp_str(i:i) = achar(iachar(tmp_str(i:i)) + 32)
-      end do
-      call str_replace_all(tmp_str, '  ', ' ')  ! collapse double spaces
-
-      ! Detect unit and locate "since" keyword
-      since_pos = index(tmp_str, 'days since')
-      if (since_pos > 0) then
-         unit_to_secs = 86400.0_ESMF_KIND_R8
-         since_pos = since_pos + len('days since')
-      else
-         since_pos = index(tmp_str, 'hours since')
-         if (since_pos > 0) then
-            unit_to_secs = 3600.0_ESMF_KIND_R8
-            since_pos = since_pos + len('hours since')
-         else
-            since_pos = index(tmp_str, 'minutes since')
-            if (since_pos > 0) then
-               unit_to_secs = 60.0_ESMF_KIND_R8
-               since_pos = since_pos + len('minutes since')
-            else
-               since_pos = index(tmp_str, 'seconds since')
-               if (since_pos > 0) then
-                  unit_to_secs = 1.0_ESMF_KIND_R8
-                  since_pos = since_pos + len('seconds since')
-               else
-                  localrc = nf90_close(ncid)
-                  write(msg, '(A,A,A)') trim(pName), ': Unrecognised time units: ', trim(units_str)
-                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
-                  return
-               end if
-            end if
-         end if
-      end if
-
-      ! Skip spaces after "since" and parse reference date: YYYY-MM-DD[ HH:MM:SS]
-      date_pos = since_pos
-      do while (date_pos <= len_trim(tmp_str) .and. tmp_str(date_pos:date_pos) == ' ')
-         date_pos = date_pos + 1
-      end do
-      base_yy = 0;  base_mm = 0;  base_dd = 0
-      base_hh = 0;  base_mn = 0;  base_ss = 0
-      read(tmp_str(date_pos  :date_pos+3), '(I4)', iostat=localrc) base_yy
-      read(tmp_str(date_pos+5:date_pos+6), '(I2)', iostat=localrc) base_mm
-      read(tmp_str(date_pos+8:date_pos+9), '(I2)', iostat=localrc) base_dd
-      if (len_trim(tmp_str) >= date_pos+18) then
-         read(tmp_str(date_pos+11:date_pos+12), '(I2)', iostat=localrc) base_hh
-         read(tmp_str(date_pos+14:date_pos+15), '(I2)', iostat=localrc) base_mn
-         read(tmp_str(date_pos+17:date_pos+18), '(I2)', iostat=localrc) base_ss
-      end if
-      if (base_yy == 0) then
-         localrc = nf90_close(ncid)
-         write(msg, '(A,A,A)') trim(pName), ': Cannot parse reference date from: ', trim(units_str)
-         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=rc)
-         return
-      end if
-
-      call ESMF_TimeSet(base_time, yy=base_yy, mm=base_mm, dd=base_dd, &
-         h=base_hh, m=base_mn, s=base_ss, rc=localrc)
-      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-         localrc = nf90_close(ncid)
-         return
-      end if
-
-      ! Read the time values
-      allocate(tvar(nt))
-      rd_stat = nf90_get_var(ncid, varid, tvar)
-      localrc = nf90_close(ncid)
-      if (rd_stat /= NF90_NOERR) then
-         deallocate(tvar)
-         return
-      end if
-
-      ! Allocate category cache arrays
+      ! Populate category cache arrays
       if (allocated(category%tc_dates)) deallocate(category%tc_dates)
       if (allocated(category%tc_secs))  deallocate(category%tc_secs)
       allocate(category%tc_dates(nt), category%tc_secs(nt))
-
-      do i = 1, nt
-         tsecs_r8 = tvar(i) * unit_to_secs
-         call ESMF_TimeIntervalSet(dt_interval, s_r8=tsecs_r8, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-            deallocate(tvar, category%tc_dates, category%tc_secs)
-            category%n_times = 0
-            return
-         end if
-         abs_time = base_time + dt_interval
-         call ESMF_TimeGet(abs_time, yy=abs_yy, mm=abs_mm, dd=abs_dd, &
-            h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
-         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-            deallocate(tvar, category%tc_dates, category%tc_secs)
-            category%n_times = 0
-            return
-         end if
-         category%tc_dates(i) = abs_yy*10000 + abs_mm*100 + abs_dd
-         category%tc_secs(i)  = abs_hh*3600  + abs_mn*60  + abs_ss
-      end do
-
+      category%tc_dates(:) = dates(:)
+      category%tc_secs(:)  = secs(:)
       category%n_times = nt
-      deallocate(tvar)
+
+      deallocate(dates, secs)
 
       write(msg, '(A,A,I0,A,A)') trim(pName), ': Cached ', nt, ' time slices from ', trim(filename)
       call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
