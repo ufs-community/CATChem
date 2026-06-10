@@ -37,7 +37,10 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
   # Always disable the deprecation warning for ifort
   list(APPEND _catchem_compiler_options -diag-disable=6379,10448)
   # Also disable problematic flags that might come from external dependencies
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448")
+  set(
+    CMAKE_Fortran_FLAGS
+    "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448,10440"
+  )
 endif()
 
 if(
@@ -94,6 +97,14 @@ if(
   # g++ and icpx both accept standard sanitizer flags
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sanitize=all")
   # Note: Intel Classic C++ (icpc) doesn't use -fsanitize, so we safely do nothing
+endif()
+
+# Disable Intel oneAPI C/C++ warning about -g without -O0
+if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Rno-debug-disables-optimization")
+endif()
+if(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Rno-debug-disables-optimization")
 endif()
 
 # Find external dependencies if not already available (for standalone builds)
