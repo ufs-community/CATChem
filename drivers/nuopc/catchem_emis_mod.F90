@@ -176,6 +176,8 @@ contains
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
       integer :: localrc, i, period_key
+      integer :: blo_year, blo_month
+      real(fp) :: bfrac
       character(len=EMIS_MAXSTR) :: msg, timeString
       character(len=*), parameter :: pName = 'catchem_emis_update'
 
@@ -205,6 +207,18 @@ contains
             current_time, period_key, localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+
+         ! For a single multi-record monthly climatology with linear time
+         ! interpolation, the interpolation bracket changes at mid-month (not at
+         ! the month start), so re-read the two bracketing slices at mid-month.
+         if (trim(ext_emis_data%categories(i)%frequency) == 'monthly' .and. &
+            trim(ext_emis_data%categories(i)%time_interpolation) == 'linear' .and. &
+            ext_emis_data%categories(i)%n_times >= 2) then
+            call catchem_emis_month_bracket(current_time, blo_year, blo_month, bfrac, localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+            period_key = blo_year*100 + blo_month
+         end if
 
          if (period_key /= ext_emis_data%categories(i)%last_period_key) then
 
@@ -2259,6 +2273,8 @@ contains
       integer :: localrc, i, best
       integer :: curr_yy, curr_mm, curr_dd, curr_hh, curr_mn, curr_ss
       integer :: curr_date, curr_secs, tc_date_i, tc_secs_i, slice_month
+      integer :: target_year, target_month
+      real(fp) :: frac_dummy
       character(len=*), parameter :: pName = 'catchem_emis_find_time_index'
 
       rc = CC_SUCCESS
@@ -2271,16 +2287,27 @@ contains
          line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
       if (trim(frequency) == 'monthly') then
+         ! For linear mid-month interpolation on a single multi-record climatology,
+         ! the "current" slice (irec) is the LOWER bracketing month — read_regrid
+         ! uses irec+1 (with Dec->Jan wrap) as the upper. For non-interpolated or
+         ! template data, select the slice for the current calendar month.
+         if (trim(category%time_interpolation) == 'linear' .and. category%n_times >= 2) then
+            call catchem_emis_month_bracket(curr_time, target_year, target_month, frac_dummy, localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         else
+            target_month = curr_mm
+         end if
          ! Match by calendar month only — year-independent climatological use
          do i = 1, category%n_times
             slice_month = mod(category%tc_dates(i) / 100, 100)
-            if (slice_month == curr_mm) then
+            if (slice_month == target_month) then
                irec = i
                return
             end if
          end do
          ! Month not found in file (unusual) — fall back to 1-based month index
-         irec = max(1, min(curr_mm, category%n_times))
+         irec = max(1, min(target_month, category%n_times))
       else
          ! Lower-bound search: largest i whose time <= curr_time
          curr_date = curr_yy*10000 + curr_mm*100 + curr_dd
@@ -2314,6 +2341,7 @@ contains
       integer :: localrc, ifield
       integer :: curr_yy, curr_mm, curr_dd, curr_hh, curr_mn, curr_ss
       integer :: dim_days, nk_blend
+      integer :: blo_year, blo_month
       real(fp) :: w_next, w_curr
 
       rc = CC_SUCCESS
@@ -2327,10 +2355,20 @@ contains
       ! Compute weight based on frequency
       select case (trim(category%frequency))
        case ('monthly')
-         dim_days = days_in_month_func(curr_yy, curr_mm)
-         w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
-            real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
-            real(dim_days, fp)
+         if (category%n_times >= 2) then
+            ! Single multi-record climatology: mid-month interpolation. The value
+            ! passes through each monthly mean exactly at the middle of its month,
+            ! so the monthly mean is preserved (GEOS/GOCART ExtData convention).
+            call catchem_emis_month_bracket(curr_time, blo_year, blo_month, w_next, localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         else
+            ! Multi-file template (one record per file): legacy start-of-month ramp
+            dim_days = days_in_month_func(curr_yy, curr_mm)
+            w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
+               real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
+               real(dim_days, fp)
+         end if
        case ('daily')
          w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
             real(curr_ss, fp)/3600.0_fp) / 24.0_fp
@@ -2353,6 +2391,70 @@ contains
       end do
 
    end subroutine catchem_emis_blend_time
+
+   !> \brief Compute the mid-month interpolation bracket for monthly-mean data
+   !!
+   !! Monthly-mean values are treated as valid at the MIDDLE of their month
+   !! (GEOS/GOCART ExtData convention). For a given model time this returns the
+   !! lower bracketing month (lo_year/lo_month) and the linear weight `frac`
+   !! (0..1) of the upper month, where the bracket endpoints are the midpoints of
+   !! consecutive months:
+   !!   - second half of current month -> bracket [current, next]
+   !!   - first half  of current month -> bracket [previous, current]
+   !! so emission = (1-frac)*M_lo + frac*M_up, which equals M_m exactly at the
+   !! middle of month m and therefore preserves the monthly mean.
+   subroutine catchem_emis_month_bracket(curr_time, lo_year, lo_month, frac, rc)
+      type(ESMF_Time), intent(in)  :: curr_time
+      integer,         intent(out) :: lo_year, lo_month
+      real(fp),        intent(out) :: frac
+      integer,         intent(out) :: rc
+
+      integer  :: localrc, yy, mm, dd, hh, mn, ss
+      integer  :: up_year, up_month, dim_curr, dim_lo, dim_up
+      real(fp) :: pos, mid_curr, span
+      character(len=*), parameter :: pName = 'catchem_emis_month_bracket'
+
+      rc = CC_SUCCESS
+      frac = 0.0_fp
+
+      call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, m=mn, s=ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      dim_curr = days_in_month_func(yy, mm)
+      ! Elapsed days since 00:00 on the 1st (0-based, fractional)
+      pos = real(dd - 1, fp) + real(hh, fp)/24.0_fp + &
+         real(mn, fp)/1440.0_fp + real(ss, fp)/86400.0_fp
+      mid_curr = real(dim_curr, fp) / 2.0_fp
+
+      if (pos >= mid_curr) then
+         ! Second half of the month: interpolate current -> next
+         lo_year = yy;  lo_month = mm
+         up_year = yy;  up_month = mm + 1
+         if (up_month > 12) then
+            up_month = 1;  up_year = yy + 1
+         end if
+         dim_lo = dim_curr
+         dim_up = days_in_month_func(up_year, up_month)
+         span   = real(dim_lo, fp)/2.0_fp + real(dim_up, fp)/2.0_fp
+         frac   = (pos - mid_curr) / span
+      else
+         ! First half of the month: interpolate previous -> current
+         lo_year = yy;  lo_month = mm - 1
+         if (lo_month < 1) then
+            lo_month = 12;  lo_year = yy - 1
+         end if
+         dim_lo = days_in_month_func(lo_year, lo_month)
+         dim_up = dim_curr
+         span   = real(dim_lo, fp)/2.0_fp + real(dim_up, fp)/2.0_fp
+         ! Elapsed from mid(previous): (second half of previous) + pos in current
+         frac   = (real(dim_lo, fp)/2.0_fp + pos) / span
+      end if
+
+      ! Numerical safety: clamp to [0,1]
+      if (frac < 0.0_fp) frac = 0.0_fp
+      if (frac > 1.0_fp) frac = 1.0_fp
+   end subroutine catchem_emis_month_bracket
 
    !> \brief Return the number of days in a given month/year
    pure function days_in_month_func(year, month) result(ndays)

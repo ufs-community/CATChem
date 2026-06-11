@@ -3946,11 +3946,13 @@ contains
          if (tmp_str(i:i) >= 'A' .and. tmp_str(i:i) <= 'Z') &
             tmp_str(i:i) = achar(iachar(tmp_str(i:i)) + 32)
       end do
-      ! Collapse double spaces
-      i = index(tmp_str, '  ')
+      ! Collapse double spaces (search only the trimmed portion so the
+      ! trailing blank padding of the fixed-length string is ignored;
+      ! otherwise the padding always contains "  " and this loops forever)
+      i = index(trim(tmp_str), '  ')
       do while (i > 0)
          tmp_str = tmp_str(1:i) // tmp_str(i+2:)
-         i = index(tmp_str, '  ')
+         i = index(trim(tmp_str), '  ')
       end do
 
       ! Detect unit and locate "since" keyword
