@@ -430,9 +430,14 @@ contains
       species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e9_fp  ! kg/kg ==> ug/kg
       species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassDMS  ! kg/kg ==> ppm
       species_tendencies(:, nDMS_IN) = species_conc(:, nDMS_IN)  !Note: DMS in ocean is unchanged since it is read in through monthly files.
-      species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
+      species_tendencies(:, nOH) = species_conc(:, nOH) !keep OH and NO3 oxidants unchanged (no cross-process consumption modeled)
       species_tendencies(:, nNO3) = species_conc(:, nNO3)
-      species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
+      !H2O2: write the post-chem (afterchem) H2O2 depleted by aqueous SO2 oxidation back into the shared
+      !array so that the downstream wet-deposition process sees the same H2O2 already consumed here, as in
+      !GEOS-Chem/GOCART. The host (catchem_emis_mod) re-imports the time-interpolated GMI climatology into
+      !species_conc(nH2O2) at the start of the next timestep, so this per-step overwrite does NOT corrupt the
+      !climatology baseline; the cross-step/3-hourly H2O2 depletion memory is carried by xh2o2_init above.
+      species_tendencies(:, nH2O2) = xh2o2_init_gocart(1,1,num_layers:1:-1) * 1.0e6_fp  ! mol/mol ==> ppm
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then

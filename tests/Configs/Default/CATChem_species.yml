@@ -13,8 +13,8 @@
   __dd_hstar: 1.0e+5
   molecular weight [kg mol-1]: 64.04e-3
   __dd_DvzAerSnow: 0.03
-  __dd_DvzMinVal_snow: 0.2
-  __dd_DvzMinVal_land: 0.3
+  __dd_DvzMinVal_snow: 0.01  #GEOS-Chem is 0.2; Luo is 0.01
+  __dd_DvzMinVal_land: 0.01  #GEOS-Chem is 0.3; Luo is 0.01
   __viscosity: 0.0 #dummy value
   #This is Luo's scheme for SO2 but adopted here
   __henry_k0: 1.22
@@ -22,7 +22,7 @@
   __wd_retfactor: 5.0e-2
   __wd_LiqAndGas: true
   __wd_convfacI2G: 6.17395e-1
-  __wd_rainouteff: [1.0, 1.0, 1.0]
+  __wd_rainouteff: [1.0, 0.0, 1.0]
 - name: h2o2
   __description: Hydrogen peroxide
   __is_gas: true
@@ -64,7 +64,7 @@
   __dd_DvzMinVal_land: 0.01
   __lower_radius: 0.1
   __upper_radius: 1.0
-  __wd_rainouteff: [1.0, 1.0, 1.0]
+  __wd_rainouteff: [1.0, 0.0, 1.0]
   __mie_name: SU
 - name: dms
   __description: Dimethyl sulfide
