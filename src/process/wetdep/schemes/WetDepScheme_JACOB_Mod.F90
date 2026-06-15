@@ -168,6 +168,7 @@ contains
       real(fp)     :: qdwn       ! cm3 (h2o) / cm2 (air) / s
       real(fp)     :: press      ! pressure [Pa]
       real(fp)     :: delz       ! thickness of layer [m]
+      real(fp)     :: so4_prod   ! [kg/m2] sulfate produced from scavenged SO2 that re-evaporates as SO4
       real(fp)     :: efficiency(3)  ! efficiency factors for rainout
       real(fp), dimension(:), allocatable :: qq      ! precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
       real(fp), dimension(:), allocatable :: pdwn    ! preciptation rate at top of grid cells [cm3 (h2o) / cm2 (air) / s]
@@ -443,6 +444,27 @@ contains
          end do ! End layer loop
 
       end do ! End species loop
+
+      ! ------------------------------------------------------------------
+      ! Credit the SO2 -> SO4 conversion from wet scavenging / re-evaporation.
+      ! When scavenged SO2 re-evaporates it is oxidized and returns as SO4
+      ! (washout_loss / complete_reevap accumulate this into the local SO4
+      ! array, which was initialized as the SO4 column and is in [kg/m2]).
+      ! Previously this produced SO4 was discarded; add it back onto the SO4
+      ! species' updated concentration so the sulfur is conserved as sulfate
+      ! (matching GOCART's SU_Wet_Removal, which adds it to the prognostic SO4).
+      ! ------------------------------------------------------------------
+      if (so4_id >= 1) then
+         do k = kbot, ktop
+            ! sulfate produced from SO2 = current local SO4 minus its initial column value
+            so4_prod = SO4(k) - species_conc(k, so4_id) * 1.e-09_fp * dpog(k)
+            if (so4_prod > zero) then
+               ! convert the [kg/m2] production back to [ug/kg] and add to SO4
+               species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
+                                             + so4_prod / dpog(k) * 1.0e9_fp
+            end if
+         end do
+      end if
 
       deallocate(qq, pdwn, conc, dconc, dpog, delz_cm, c_h2o, cldice, cldliq, SO2, SO4, H2O2, reevap)
 
