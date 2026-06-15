@@ -1934,6 +1934,14 @@ contains
          deallocate(temp_real_array)
       endif
 
+      write(field_path, '(A,A)') trim(species_path), '/__wd_reevap_frac'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_reevap_frac = temp_real
+      else
+         species%wd_reevap_frac = 0.5_fp  ! GEOS-Chem/Luo default (Liu et al., 2001)
+      endif
+
       write(field_path, '(A,A)') trim(species_path), '/__t_chem_loss'
       call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
       if (yaml_rc == 0) then

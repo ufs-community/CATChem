@@ -109,6 +109,7 @@ contains
       species_wd_LiqAndGas, &
       species_wd_convfacI2G, &
       species_wd_rainouteff, &
+      species_wd_reevap_frac, &
       species_radius, &
       species_mw_g, &
       species_conc, &
@@ -139,6 +140,7 @@ contains
       logical, intent(in) :: species_wd_LiqAndGas(:)  ! Species wd_LiqAndGas property
       real(fp), intent(in) :: species_wd_convfacI2G(:)  ! Species wd_convfacI2G property
       real(fp), intent(in) :: species_wd_rainouteff(:,:)  ! Species wd_rainouteff property
+      real(fp), intent(in) :: species_wd_reevap_frac(:)  ! Species wd_reevap_frac property (resuspension fraction)
       real(fp), intent(in) :: species_radius(:)  ! Species radius property
       real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
@@ -377,7 +379,8 @@ contains
 
                   ! -- compute and apply effective loss fraction
                   call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                     delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
+                     delz_cm, conc, dconc, species_short_name(species_idx), SO4, &
+                     species_wd_reevap_frac(species_idx) )
 
                end if
             else
@@ -403,7 +406,8 @@ contains
 
                ! -- compute and apply effective loss fraction
                call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                  delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
+                  delz_cm, conc, dconc, species_short_name(species_idx), SO4, &
+                  species_wd_reevap_frac(species_idx) )
 
             end if
          end if
@@ -1059,7 +1063,7 @@ contains
    !!
    !! \ingroup catchem_wetdep_process
    !!!>
-   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, SO4 )
+   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, SO4, reevap_resusp_frac )
 
       implicit none
 
@@ -1077,6 +1081,7 @@ contains
       real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
       real(fp),  dimension(:), intent(inout) :: SO4     !< SO4 concentration [kg/m2]
       character(len = 20),  intent(in) :: spc           !< Species name
+      real(fp),  intent(in)    :: reevap_resusp_frac    !< fraction of re-evaporated mass resuspended (0.5 GEOS-Chem/Luo default; 1.0 GOCART)
 
       ! -- local variables
       integer    :: km1      !< upper one layer index
@@ -1116,11 +1121,14 @@ contains
             end if
             ! Restrict ALPHA to be less than 1
             alpha = min( one, alpha )
-            ! Assume 50% of the re-evaporated water rains out to aerosols
+            ! Fraction of the re-evaporated water that resuspends aerosol mass.
+            ! GEOS-Chem/Luo use an empirical 0.5 (Liu et al., 2001); GOCART
+            ! resuspends the full re-evaporated fraction (=1.0). The value is
+            ! per-species (species_wd_reevap_frac), configurable via YAML.
             ! GAINED is the rained out aerosol coming down from
             ! grid box (I,J,L+1) that will evaporate and re-enter
             ! the atmosphere in the gas phase in grid box (I,J,L).
-            gain  = 0.5_fp * alpha * dconc(km1)
+            gain  = reevap_resusp_frac * alpha * dconc(km1)
             wetloss  = conc(k) * lossfrac - gain
             ! SO2 in sulfate chemistry is wet-scavenged on the
             ! raindrop and converted to SO4 by aqeuous chem.
