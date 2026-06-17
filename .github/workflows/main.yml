@@ -64,4 +64,5 @@ jobs:
 
   docs:
     needs: [lint, ci-gnu-gcc14, ci-intel, release, docker-develop]
+    if: always() && !failure() && !cancelled()
     uses: ./.github/workflows/docs.yml
