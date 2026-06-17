@@ -76,7 +76,7 @@ contains
       total_rate_per_species_per_level, &
       net_chemical_rate_per_species, &
       diagnostic_species_id &
-   )
+      )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -115,7 +115,7 @@ contains
       micm => micm_t(params%mechanism, solver_type, micm_error)
 
       if (.not. micm_error%is_success()) then
-        write(*,'(A)') "Error creating MICM: ", micm_error%message()
+         write(*,'(A)') "Error creating MICM: ", micm_error%message()
       end if
       state => micm%get_state(num_layers,micm_error)
       nrp = state%rate_parameters_ordering%size()
@@ -135,7 +135,7 @@ contains
             state%rate_parameters(idx) = rate_val
          end do
       end do
-      
+
       ! set up initial conditions for MICM
       do k = 1, num_layers
          state%conditions(k)%temperature = t(k)
@@ -148,7 +148,7 @@ contains
             state%concentrations(micm_sp_idx) = conc
          enddo
       enddo
-      
+
       call micm%solve(REAL(tstep, 8),state,solver_state,solver_stats,micm_error)
 
       do k = 1, num_layers
@@ -157,10 +157,10 @@ contains
             ! convert final concentration back to ppmv from mol/m3
             conc = state%concentrations(micm_sp_idx) * 1e6_fp * (RSTARG * t(k)) / pmid(k)
 
-            species_tendencies(k, species_idx) = conc 
+            species_tendencies(k, species_idx) = conc
             ! Ensure non-negative concentrations
             species_tendencies(k, species_idx) = max(0.0_fp, species_tendencies(k, species_idx))
-            
+
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(total_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
                ! Find position of this species in diagnostic_species_id array

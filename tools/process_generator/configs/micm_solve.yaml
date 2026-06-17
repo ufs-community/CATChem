@@ -41,8 +41,8 @@ schemes:
 
     required_constants:
       - RSTARG
-      - AIRMW 
-   
+      - AIRMW
+
     parameters:
       mechanism:
         default: 'mechanism_config.yaml'

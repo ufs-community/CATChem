@@ -227,7 +227,7 @@ contains
       config_manager => state_manager%get_config_ptr()
       if (.not. associated(config_manager)) then
          call error_manager%report_error(1003, &
-                                        'ConfigManager not available from StateManager', rc)
+            'ConfigManager not available from StateManager', rc)
          return
       end if
 
@@ -319,9 +319,9 @@ contains
 
       ! Delegate to appropriate scheme using unified config
       select case (trim(this%process_config%GasChem_config%scheme))
-      case ('no_phot')
+       case ('no_phot')
          call this%run_no_phot_scheme_column(column, rc)
-      case default
+       case default
          rc = CC_FAILURE
       end select
 
@@ -424,7 +424,7 @@ contains
             tstep(1), &
             species_conc, &
             species_tendencies &
-         )
+            )
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -433,7 +433,7 @@ contains
          do i = 1, n_species
             ! Replacement tendency: new_conc = tendency (tendency is the new value)
             call column%set_chem_field(k, species_indices(i), &
-                                      species_tendencies(k, i))
+               species_tendencies(k, i))
          end do
       end do
 
@@ -457,14 +457,14 @@ contains
 
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%GasChem_config%scheme))
-      case ('no_phot')
+       case ('no_phot')
          scheme_count = 4
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'TSTEP'
          scheme_fields(2) = 'T'
          scheme_fields(3) = 'AIRDEN'
          scheme_fields(4) = 'PMID'
-      case default
+       case default
          scheme_count = 0
          allocate(scheme_fields(0))
       end select
@@ -570,11 +570,11 @@ contains
       if (this%process_config%GasChem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%GasChem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'total_rate_', &
-                  trim(this%process_config%GasChem_config%diagnostic_species(i))
+               trim(this%process_config%GasChem_config%diagnostic_species(i))
             call this%register_diagnostic_field(registry, trim(field_name), &
-                                                'Net chemical change per species per level', &
-                                                'ppmv/s', DIAG_REAL_3D, &
-                                                'GasChem', dims_3d_levels, rc=rc)
+               'Net chemical change per species per level', &
+               'ppmv/s', DIAG_REAL_3D, &
+               'GasChem', dims_3d_levels, rc=rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
@@ -584,23 +584,23 @@ contains
       ! Register scheme-specific diagnostics based on selected scheme
       select case (trim(this%process_config%GasChem_config%scheme))
 
-      case ('no_phot')
+       case ('no_phot')
          ! Register no_phot-specific diagnostics
          ! Register individual 2D fields for each diagnostic species (species-only diagnostics)
          if (this%process_config%GasChem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%GasChem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'net_chemical_rate_', &
-                     trim(this%process_config%GasChem_config%diagnostic_species(i))
+                  trim(this%process_config%GasChem_config%diagnostic_species(i))
                call this%register_diagnostic_field(registry, trim(field_name), &
-                                                   'Net chem rate', &
-                                                   'ppmv/s', DIAG_REAL_2D, &
-                                                   'GasChem', dims_2d, rc=rc)
+                  'Net chem rate', &
+                  'ppmv/s', DIAG_REAL_2D, &
+                  'GasChem', dims_2d, rc=rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if
          if (rc /= CC_SUCCESS) return
 
-      case default
+       case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
 
@@ -623,14 +623,14 @@ contains
 
       ! Allocate scheme-specific diagnostics
       select case (trim(this%process_config%GasChem_config%scheme))
-      case ('no_phot')
+       case ('no_phot')
          ! Scheme-specific diagnostics for no_phot
          ! 1D diagnostic: diagnostic species only - allocated based on n_diagnostic_species
          if (this%process_config%GasChem_config%n_diagnostic_species > 0) then
             allocate(this%column_net_chemical_rate_per_species(this%process_config%GasChem_config%n_diagnostic_species))
          end if
          if (allocated(this%column_net_chemical_rate_per_species)) this%column_net_chemical_rate_per_species = 0.0_fp
-      case default
+       case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
 
@@ -665,25 +665,25 @@ contains
       if (this%process_config%GasChem_config%n_diagnostic_species > 0) then
          do i = 1, this%process_config%GasChem_config%n_diagnostic_species
             write(field_name, '(A,A,A)') 'total_rate_', &
-                  trim(this%process_config%GasChem_config%diagnostic_species(i))
+               trim(this%process_config%GasChem_config%diagnostic_species(i))
             call this%update_1d_diagnostic_column(trim(field_name), &
-                                                 this%column_total_rate_per_species_per_level(:,i), &
-                                                 i_col, j_col, container, rc)
+               this%column_total_rate_per_species_per_level(:,i), &
+               i_col, j_col, container, rc)
             if (rc /= CC_SUCCESS) return
          end do
       end if
       ! Update scheme-specific diagnostic fields based on active scheme
       select case (trim(this%process_config%GasChem_config%scheme))
-      case ("no_phot")
+       case ("no_phot")
          ! Scheme-specific diagnostics for no_phot
          ! Update individual species diagnostic fields (species-only diagnostics)
          if (this%process_config%GasChem_config%n_diagnostic_species > 0) then
             do i = 1, this%process_config%GasChem_config%n_diagnostic_species
                write(field_name, '(A,A,A)') 'net_chemical_rate_', &
-                     trim(this%process_config%GasChem_config%diagnostic_species(i))
+                  trim(this%process_config%GasChem_config%diagnostic_species(i))
                call this%update_scalar_diagnostic_column(trim(field_name), &
-                                                        this%column_net_chemical_rate_per_species(i), &
-                                                        i_col, j_col, container, rc)
+                  this%column_net_chemical_rate_per_species(i), &
+                  i_col, j_col, container, rc)
                if (rc /= CC_SUCCESS) return
             end do
          end if

@@ -23,8 +23,8 @@ program test_GasChem_integration
    use GasChemProcessCreator_Mod, only: register_GasChem_process
    use GasChemCommon_Mod, only: GasChemProcessConfig
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
-                                      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D, &
-                                      DIAG_INTEGER_SCALAR, DIAG_INTEGER_1D, DIAG_INTEGER_2D, DIAG_INTEGER_3D
+      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D, &
+      DIAG_INTEGER_SCALAR, DIAG_INTEGER_1D, DIAG_INTEGER_2D, DIAG_INTEGER_3D
 
    implicit none
 
@@ -247,7 +247,7 @@ contains
       ! Get GasChem process interface
       GasChem_interface => null()
       select type(process => process_mgr%processes(1)%item)
-      type is (ProcessGasChemInterface)
+       type is (ProcessGasChemInterface)
          GasChem_interface => process
       end select
 
@@ -268,7 +268,7 @@ contains
 
       if (.not. associated(config_mgr)) then
          call error_mgr%report_error(1003, &
-                                    'ConfigManager not available from StateManager', rc_arg)
+            'ConfigManager not available from StateManager', rc_arg)
          return
       end if
 
@@ -279,11 +279,11 @@ contains
 
       ! Call the scheme-specific loading function directly
       select case (trim(scheme_name))
-      case ('no_phot')
+       case ('no_phot')
          call GasChem_interface%process_config%load_no_phot_config(config_mgr, error_mgr)
-      case default
+       case default
          call error_mgr%report_error(1004, &
-                                    'Unknown scheme: ' // trim(scheme_name), rc_arg)
+            'Unknown scheme: ' // trim(scheme_name), rc_arg)
          return
       end select
 
@@ -326,7 +326,7 @@ contains
       call diag_mgr%remove_process('GasChem', rc_arg)
       if (rc_arg /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_UNSUPPORTED_OPERATION, &
-                                   'Failed to remove existing diagnostics for GasChem process', rc_arg)
+            'Failed to remove existing diagnostics for GasChem process', rc_arg)
          ! Continue anyway - this might be the first registration
          rc_arg = CC_SUCCESS
       endif
@@ -336,8 +336,8 @@ contains
       call GasChem_interface%register_diagnostics(container, rc_arg)
       if (rc_arg /= CC_SUCCESS) then
          call error_mgr%report_error(ERROR_UNSUPPORTED_OPERATION, &
-                                   'Failed to re-register diagnostics for scheme: ' // &
-                                   trim(current_scheme), rc_arg)
+            'Failed to re-register diagnostics for scheme: ' // &
+            trim(current_scheme), rc_arg)
          return
       endif
 
@@ -414,12 +414,12 @@ contains
 
          ! Get field values and type information directly from DiagnosticManager
          call diag_mgr%get_field_value('GasChem', field_name, &
-                                     scalar_value=scalar_value, &
-                                     array_1d_ptr=array_1d_ptr, &
-                                     array_2d_ptr=array_2d_ptr, &
-                                     array_3d_ptr=array_3d_ptr, &
-                                     data_type=data_type, &
-                                     rc=local_rc)
+            scalar_value=scalar_value, &
+            array_1d_ptr=array_1d_ptr, &
+            array_2d_ptr=array_2d_ptr, &
+            array_3d_ptr=array_3d_ptr, &
+            data_type=data_type, &
+            rc=local_rc)
          if (local_rc /= CC_SUCCESS) then
             write(error_unit,'(A,A)') '    WARNING: Could not retrieve field value: ', trim(field_name)
             validation_passed = .false.
@@ -428,7 +428,7 @@ contains
 
          ! Convert data type to readable name and validate values
          call validate_field_by_type(field_name, data_type, scalar_value, &
-                                   array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose=.false.)
+            array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose=.false.)
 
       end do
 
@@ -450,7 +450,7 @@ contains
 
    !> Validate field values based on type and emission expectations
    subroutine validate_field_by_type(field_name, data_type, scalar_value, &
-                                    array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose)
+      array_1d_ptr, array_2d_ptr, array_3d_ptr, validation_passed, verbose)
       character(len=*), intent(in) :: field_name
       integer, intent(in) :: data_type
       real(fp), intent(in) :: scalar_value
@@ -473,7 +473,7 @@ contains
 
       ! Convert data type to readable name and validate values
       select case (data_type)
-      case (DIAG_REAL_SCALAR)
+       case (DIAG_REAL_SCALAR)
          type_name = 'Real Scalar'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(output_unit,'(A,E12.5)') '        Scalar value: ', scalar_value
@@ -495,7 +495,7 @@ contains
             write(output_unit,'(A,A)') '        ✓ Field has valid finite non-negative value: ', trim(field_name)
          end if
 
-      case (DIAG_REAL_1D)
+       case (DIAG_REAL_1D)
          type_name = 'Real 1D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_1d_ptr)) then
@@ -536,7 +536,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_REAL_2D)
+       case (DIAG_REAL_2D)
          type_name = 'Real 2D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_2d_ptr)) then
@@ -579,7 +579,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_REAL_3D)
+       case (DIAG_REAL_3D)
          type_name = 'Real 3D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_3d_ptr)) then
@@ -624,7 +624,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_SCALAR)
+       case (DIAG_INTEGER_SCALAR)
          type_name = 'Integer Scalar'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(output_unit,'(A,E12.5)') '        Scalar value: ', scalar_value
@@ -640,7 +640,7 @@ contains
             write(output_unit,'(A,A)') '        ✓ Integer field has non-negative value: ', trim(field_name)
          end if
 
-      case (DIAG_INTEGER_1D)
+       case (DIAG_INTEGER_1D)
          type_name = 'Integer 1D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_1d_ptr)) then
@@ -677,7 +677,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_2D)
+       case (DIAG_INTEGER_2D)
          type_name = 'Integer 2D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_2d_ptr)) then
@@ -716,7 +716,7 @@ contains
             field_passed = .false.
          end if
 
-      case (DIAG_INTEGER_3D)
+       case (DIAG_INTEGER_3D)
          type_name = 'Integer 3D Array'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          if (associated(array_3d_ptr)) then
@@ -757,7 +757,7 @@ contains
             field_passed = .false.
          end if
 
-      case default
+       case default
          type_name = 'Unknown Type'
          write(output_unit,'(A,A)') '        Type: ', trim(type_name)
          write(error_unit,'(A,A)') '    ERROR: Unsupported data type for field: ', trim(field_name)
