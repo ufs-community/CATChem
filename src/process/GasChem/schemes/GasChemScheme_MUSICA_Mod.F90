@@ -73,6 +73,7 @@ contains
       tstep, &
       species_conc, &
       species_tendencies, &
+      rc, &
       total_rate_per_species_per_level, &
       net_chemical_rate_per_species, &
       diagnostic_species_id &
@@ -90,6 +91,7 @@ contains
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
+      integer, intent(out) :: rc  ! Return code (0 for success, non-zero for error)
       real(fp), intent(inout), optional :: total_rate_per_species_per_level(:,:)
       real(fp), intent(inout), optional :: net_chemical_rate_per_species(:)
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
@@ -116,6 +118,8 @@ contains
 
       if (.not. micm_error%is_success()) then
          write(*,'(A)') "Error creating MICM: ", micm_error%message()
+         rc = 1
+         return
       end if
       state => micm%get_state(num_layers,micm_error)
       nrp = state%rate_parameters_ordering%size()
@@ -150,6 +154,11 @@ contains
       enddo
 
       call micm%solve(REAL(tstep, 8),state,solver_state,solver_stats,micm_error)
+      if (.not. micm_error%is_success()) then
+         write(*,'(A)') "Error solving MICM: ", micm_error%message()
+         rc = 1
+         return
+      end if
 
       do k = 1, num_layers
          do species_idx = 1, num_species

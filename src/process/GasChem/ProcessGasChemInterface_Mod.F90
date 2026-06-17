@@ -344,6 +344,8 @@ contains
       real(fp), allocatable :: species_tendencies(:,:)
       integer :: n_species, n_levels, n_chem, n_emis, i, k
       integer, allocatable :: species_indices(:)
+      integer :: local_rc
+      character(len=255) :: err_msg
 
       rc = CC_SUCCESS
 
@@ -407,9 +409,11 @@ contains
             tstep(1), &
             species_conc, &
             species_tendencies, &
+            local_rc, &
             this%column_total_rate_per_species_per_level, &
             this%column_net_chemical_rate_per_species, &
-            this%process_config%GasChem_config%diagnostic_species_id         )
+            this%process_config%GasChem_config%diagnostic_species_id &
+            )
       else
          ! Call without diagnostic outputs (optional parameters not passed)
          call compute_no_phot( &
@@ -423,8 +427,15 @@ contains
             t, &
             tstep(1), &
             species_conc, &
-            species_tendencies &
+            species_tendencies, &
+            local_rc &
             )
+      end if
+      if (local_rc /= CC_SUCCESS) then
+         rc = CC_FAILURE
+         err_msg = 'Error computing no_phot scheme'
+         call CC_Error(err_msg, rc)
+         return
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
