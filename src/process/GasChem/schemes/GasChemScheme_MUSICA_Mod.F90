@@ -101,6 +101,7 @@ contains
       integer :: diag_idx  ! For diagnostic species indexing
       real(fp) :: rate_val
       real(fp) :: conc
+      real(fp) :: elapsed, remaining, advanced
       type(string_t) :: solver_state
       type(solver_stats_t) :: solver_stats
       type(error_t) :: micm_error
@@ -154,8 +155,13 @@ contains
             state%concentrations(micm_sp_idx) = conc
          enddo
       enddo
-
-      call micm%solve(REAL(tstep, 8),state,solver_state,solver_stats,micm_error)
+      
+      do while (elapsed < tstep)
+         remaining = tstep - elapsed
+         call micm%solve(REAL(remaining, 8),state,solver_state,solver_stats,micm_error)
+         advanced = solver_stats%final_time()
+         elapsed = elapsed + advanced
+      enddo
       if (.not. micm_error%is_success()) then
          write(*,'(A)') "Error solving MICM: ", micm_error%message()
          rc = 1
@@ -169,8 +175,6 @@ contains
             conc = state%concentrations(micm_sp_idx) * 1e6_fp * (RSTARG * t(k)) / pmid(k)
 
             species_tendencies(k, species_idx) = conc
-            ! Ensure non-negative concentrations
-            species_tendencies(k, species_idx) = max(0.0_fp, species_tendencies(k, species_idx))
 
             ! Per-species-per-level diagnostic: 2D array (levels, species)
             if (present(total_rate_per_species_per_level) .and. present(diagnostic_species_id)) then
