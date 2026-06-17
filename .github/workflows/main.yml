@@ -18,7 +18,6 @@ jobs:
   docker-setup:
     runs-on: ubuntu-latest
     outputs:
-      short_sha: ${{ steps.vars.outputs.short_sha }}
       base_project_name_dev: ${{ steps.vars.outputs.base_project_name_dev }}
       project_name_dev: ${{ steps.vars.outputs.project_name_dev }}
       base_project_name: ${{ steps.vars.outputs.base_project_name }}
@@ -26,7 +25,6 @@ jobs:
     steps:
       - id: vars
         run: |
-          echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
           echo "base_project_name_dev=ufschem-spack-base-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
           echo "project_name_dev=catchem-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
           echo "base_project_name=ufschem-spack-base-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
@@ -45,10 +43,8 @@ jobs:
     needs: [docker-setup]
     uses: ./.github/workflows/docker.yml
     with:
-      short_sha: ${{ needs.docker-setup.outputs.short_sha }}
       base_project_name: ${{ needs.docker-setup.outputs.base_project_name_dev }}
       project_name: catchem-dev
-    secrets: inherit
 
   release:
     needs: [lint, ci-gnu-gcc14, ci-intel, docker-develop]
@@ -69,12 +65,3 @@ jobs:
   docs:
     needs: [lint, ci-gnu-gcc14, ci-intel, release, docker-develop]
     uses: ./.github/workflows/docs.yml
-
-  docker-cleanup:
-    needs: [docker-setup, docker-develop, docker-release, docs]
-    if: always() && needs.docker-develop.result == 'success'
-    uses: ./.github/workflows/docker-cleanup.yml
-    with:
-      short_sha: ${{ needs.docker-setup.outputs.short_sha }}
-      base_project_name: ${{ needs.docker-setup.outputs.base_project_name_dev }}
-    secrets: inherit
