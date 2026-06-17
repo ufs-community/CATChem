@@ -48,7 +48,13 @@ version_toml = [
     "pyproject.toml:project.version",
 ]
 version_variables = []
-branches = { main = { match = "main" } }
 upload_to_pypi = false
-upload_to_release = false
 build_command = ""
+
+[tool.semantic_release.branches.main]
+match = "(^feature/container-build$|^main$)"
+prerelease = false
+
+[tool.semantic_release.branches.develop]
+match = "(^feature/dev-container-build$|^develop$)"
+prerelease = true
