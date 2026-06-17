@@ -6,10 +6,10 @@ project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
 option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 
 # Option to build with MUSICA chemistry library (defaults to OFF)
-option(BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
+option(CATCHEM_BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
 
 # Set C++ standard — MUSICA requires C++20, yaml-cpp needs at least C++11
-if(BUILD_MUSICA)
+if(CATCHEM_BUILD_MUSICA)
   set(CMAKE_CXX_STANDARD 20)
 else()
   set(CMAKE_CXX_STANDARD 11)
