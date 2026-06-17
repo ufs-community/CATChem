@@ -109,6 +109,8 @@ contains
       integer :: solver_type
       character(len=:), allocatable :: rp_name
 
+      rc = 0
+
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
       ! Do not re-initialize them here.
