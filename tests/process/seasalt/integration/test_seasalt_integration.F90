@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the seasalt process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-12-15T16:09:09.864661
+!! Generated on: 2026-05-28T17:43:34.480656
 
 program test_seasalt_integration
    use precision_mod, only: fp, rae
@@ -204,6 +204,8 @@ contains
          ! Calculate latitude for realistic gradients
          lat = -30.0_fp + (j-1) * 60.0_fp / max(1, ny-1)  ! -30°S to 30°N
          do i = 1, nx
+            met_state%LAT(i,j) = lat                           ! Latitude [degrees]
+            met_state%LON(i,j) = -120.0_fp + (i-1) * 240.0_fp / max(1, nx-1)  ! Longitude [degrees]
             met_state%FROCEAN(i,j) = 1.0_fp                    ! Pure ocean everywhere
             met_state%FRSEAICE(i,j) = 0.0_fp                   ! No sea ice
             met_state%SST(i,j) = 298.0_fp + 5.0_fp * cos(lat * 3.14159_fp / 180.0_fp)  ! 293-303K SST

@@ -23,6 +23,7 @@
   __wd_LiqAndGas: true
   __wd_convfacI2G: 6.17395e-1
   __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_reevap_frac: 1.0  #GOCART resuspends full re-evaporated fraction (GEOS-Chem/Luo default 0.5)
 - name: h2o2
   __description: Hydrogen peroxide
   __is_gas: true
@@ -65,6 +66,7 @@
   __lower_radius: 0.1
   __upper_radius: 1.0
   __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_reevap_frac: 1.0  #GOCART resuspends full re-evaporated fraction (GEOS-Chem/Luo default 0.5)
   __mie_name: SU
 - name: dms
   __description: Dimethyl sulfide

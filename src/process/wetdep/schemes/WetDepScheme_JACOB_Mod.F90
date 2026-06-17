@@ -109,6 +109,7 @@ contains
       species_wd_LiqAndGas, &
       species_wd_convfacI2G, &
       species_wd_rainouteff, &
+      species_wd_reevap_frac, &
       species_radius, &
       species_mw_g, &
       species_conc, &
@@ -139,6 +140,7 @@ contains
       logical, intent(in) :: species_wd_LiqAndGas(:)  ! Species wd_LiqAndGas property
       real(fp), intent(in) :: species_wd_convfacI2G(:)  ! Species wd_convfacI2G property
       real(fp), intent(in) :: species_wd_rainouteff(:,:)  ! Species wd_rainouteff property
+      real(fp), intent(in) :: species_wd_reevap_frac(:)  ! Species wd_reevap_frac property (resuspension fraction)
       real(fp), intent(in) :: species_radius(:)  ! Species radius property
       real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
@@ -168,6 +170,7 @@ contains
       real(fp)     :: qdwn       ! cm3 (h2o) / cm2 (air) / s
       real(fp)     :: press      ! pressure [Pa]
       real(fp)     :: delz       ! thickness of layer [m]
+      real(fp)     :: so4_prod   ! [kg/m2] sulfate produced from scavenged SO2 that re-evaporates as SO4
       real(fp)     :: efficiency(3)  ! efficiency factors for rainout
       real(fp), dimension(:), allocatable :: qq      ! precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
       real(fp), dimension(:), allocatable :: pdwn    ! preciptation rate at top of grid cells [cm3 (h2o) / cm2 (air) / s]
@@ -376,7 +379,8 @@ contains
 
                   ! -- compute and apply effective loss fraction
                   call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                     delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
+                     delz_cm, conc, dconc, species_short_name(species_idx), SO4, &
+                     species_wd_reevap_frac(species_idx) )
 
                end if
             else
@@ -402,7 +406,8 @@ contains
 
                ! -- compute and apply effective loss fraction
                call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                  delz_cm, conc, dconc, species_short_name(species_idx), SO4 )
+                  delz_cm, conc, dconc, species_short_name(species_idx), SO4, &
+                  species_wd_reevap_frac(species_idx) )
 
             end if
          end if
@@ -415,11 +420,6 @@ contains
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp
             else
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * AIRMW / species_mw_g(species_idx) * 1.0e6_fp
-            end if
-
-            !!!!!!!!TODO: do not run wetdep on H2O2 since it is read from climatology files for now
-            if (species_idx == h2o2_id) then
-               species_tendencies(k, species_idx) = species_conc(k, species_idx)
             end if
 
             ! Update diagnostic fields here based on your scheme's requirements
@@ -448,6 +448,27 @@ contains
          end do ! End layer loop
 
       end do ! End species loop
+
+      ! ------------------------------------------------------------------
+      ! Credit the SO2 -> SO4 conversion from wet scavenging / re-evaporation.
+      ! When scavenged SO2 re-evaporates it is oxidized and returns as SO4
+      ! (washout_loss / complete_reevap accumulate this into the local SO4
+      ! array, which was initialized as the SO4 column and is in [kg/m2]).
+      ! Previously this produced SO4 was discarded; add it back onto the SO4
+      ! species' updated concentration so the sulfur is conserved as sulfate
+      ! (matching GOCART's SU_Wet_Removal, which adds it to the prognostic SO4).
+      ! ------------------------------------------------------------------
+      if (so4_id >= 1) then
+         do k = kbot, ktop
+            ! sulfate produced from SO2 = current local SO4 minus its initial column value
+            so4_prod = SO4(k) - species_conc(k, so4_id) * 1.e-09_fp * dpog(k)
+            if (so4_prod > zero) then
+               ! convert the [kg/m2] production back to [ug/kg] and add to SO4
+               species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
+                                             + so4_prod / dpog(k) * 1.0e9_fp
+            end if
+         end do
+      end if
 
       deallocate(qq, pdwn, conc, dconc, dpog, delz_cm, c_h2o, cldice, cldliq, SO2, SO4, H2O2, reevap)
 
@@ -1042,7 +1063,7 @@ contains
    !!
    !! \ingroup catchem_wetdep_process
    !!!>
-   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, SO4 )
+   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, SO4, reevap_resusp_frac )
 
       implicit none
 
@@ -1060,6 +1081,7 @@ contains
       real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
       real(fp),  dimension(:), intent(inout) :: SO4     !< SO4 concentration [kg/m2]
       character(len = 20),  intent(in) :: spc           !< Species name
+      real(fp),  intent(in)    :: reevap_resusp_frac    !< fraction of re-evaporated mass resuspended (0.5 GEOS-Chem/Luo default; 1.0 GOCART)
 
       ! -- local variables
       integer    :: km1      !< upper one layer index
@@ -1099,11 +1121,14 @@ contains
             end if
             ! Restrict ALPHA to be less than 1
             alpha = min( one, alpha )
-            ! Assume 50% of the re-evaporated water rains out to aerosols
+            ! Fraction of the re-evaporated water that resuspends aerosol mass.
+            ! GEOS-Chem/Luo use an empirical 0.5 (Liu et al., 2001); GOCART
+            ! resuspends the full re-evaporated fraction (=1.0). The value is
+            ! per-species (species_wd_reevap_frac), configurable via YAML.
             ! GAINED is the rained out aerosol coming down from
             ! grid box (I,J,L+1) that will evaporate and re-enter
             ! the atmosphere in the gas phase in grid box (I,J,L).
-            gain  = 0.5_fp * alpha * dconc(km1)
+            gain  = reevap_resusp_frac * alpha * dconc(km1)
             wetloss  = conc(k) * lossfrac - gain
             ! SO2 in sulfate chemistry is wet-scavenged on the
             ! raindrop and converted to SO4 by aqeuous chem.

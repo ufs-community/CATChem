@@ -2,8 +2,8 @@
 
 **Process Type:** Emission
 **Description:** Process for computing windblown dust emissions
-**Author:** Barry Baker
-**Generated:** 2025-09-09T14:29:24.774850
+**Author:** Wei Li & Barry Baker
+**Generated:** 2026-04-17T13:57:10.461600
 
 ## Overview
 
@@ -15,30 +15,36 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 **Name:** `fengsha`
 **Description:** Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS
-**Author:** Barry Baker
+**Author:** Barry Baker & Wei Li
 **Reference:** Zhang et al. 2022
 #### Parameters
 
 | Parameter | Default | Range | Description |
 |-----------|---------|--------|-------------|
-| `alpha` | 0.16 | 0.001 - 100.0 | linear scaling factor |
-| `beta` | 1.0 | 0.0 - 10.0 | Exponential scaling factor on source parameter |
+| `alpha` | 0.2 | 0.001 - 100.0 | linear scaling factor |
+| `gamma` | 1.0 | 0.0 - 10.0 | Exponential scaling factor on source parameter |
 | `drylimit_factor` | 1.0 | 0 - 10 | Dry Limit factor modifying the Fecan dry limit following Zender 2003 |
+| `moist_correction_factor` | 1.0 | 0 - 10 | Moisture correction factor |
+| `kvhmax` | 0.0002 | 0.0 - 1.0 | Maximum vertical to horizontal flux ratio |
 | `drag_option` | 1 | 1 - 4 | Drag Partition Option: 1 - use input drag, 2 - Darmenova, 3 - Leung 2022, 4 - MB95 |
-| `moist_option` | 1 - fecan | 1 - 3 | Moisture parameterization: 1 - Fecan, 2 - shao, 3 - modified shao |
-| `distribution_option` | 1 | 1 - 2 | Dust Distribution option: 1 - Kok 2011, 2 - Meng 2022 |
+| `horizflux_option` | 1 | 1 - 3 | Horizontal flux option: 1 - White (1979), 2 - Draxler (2001), 3 - Kawamura (1964) |
+| `moist_option` | 1 | 1 - 2 | Moisture parameterization: 1 - Fecan, 2 - Zhao (not implemented yet) |
+| `distribution_option` | 1 | 1 - 1 | Dust Distribution option: 1 - Kok 2011, 2 - Meng 2022 (not implemented yet) |
 
 #### Required Meteorological Fields
 
-- `IsLand` - Meteorological field required for scheme computation
 - `USTAR` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
+- `TSKIN` - Meteorological field required for scheme computation
+- `AIRDEN` - Meteorological field required for scheme computation
+- `SOILM` - Meteorological field required for scheme computation
+- `Z0` - Meteorological field required for scheme computation
 - `GVF` - Meteorological field required for scheme computation
+- `LWI` - Meteorological field required for scheme computation
 - `LAI` - Meteorological field required for scheme computation
-- `FROCEAN` - Meteorological field required for scheme computation
+- `FRLAKE` - Meteorological field required for scheme computation
+- `FRSNO` - Meteorological field required for scheme computation
 - `CLAYFRAC` - Meteorological field required for scheme computation
 - `SANDFRAC` - Meteorological field required for scheme computation
-- `FRSNO` - Meteorological field required for scheme computation
 - `RDRAG` - Meteorological field required for scheme computation
 - `SSM` - Meteorological field required for scheme computation
 - `USTAR_THRESHOLD` - Meteorological field required for scheme computation
@@ -48,17 +54,21 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 **Name:** `ginoux`
 **Description:** Ginoux dust emission scheme
-**Author:** Barry Baker
+**Author:** Barry Baker & Wei Li
 **Reference:** Ginoux et al. [2001]
 #### Parameters
 
 | Parameter | Default | Range | Description |
 |-----------|---------|--------|-------------|
-| `Ch_DU` | [0.1, 0.1, 0.1, 0.1, 0.1] | 0.001 - 100.0 | Dust tuning coefficient per species  |
+| `Ch_DU` | [1.0, 1.0, 1.0, 1.0, 1.0] | 0.001 - 100.0 | Dust tuning coefficient per species bin |
 
 #### Required Meteorological Fields
 
 - `FRLAKE` - Meteorological field required for scheme computation
+- `FRSNO` - Meteorological field required for scheme computation
+- `TSKIN` - Meteorological field required for scheme computation
+- `AIRDEN` - Meteorological field required for scheme computation
+- `LWI` - Meteorological field required for scheme computation
 - `GWETTOP` - Meteorological field required for scheme computation
 - `U10M` - Meteorological field required for scheme computation
 - `V10M` - Meteorological field required for scheme computation
@@ -76,16 +86,15 @@ The dust process operates on the following chemical species:
 ### Required Inputs
 
 #### Meteorological Fields
-- `ustar` - Required meteorological input
-- `solar_zenith_angle` - Required meteorological input
-- `leaf_area_index` - Required meteorological input
+- `DELP` - Required meteorological input
 
 
 ### Process Diagnostics
 
 | Diagnostic | Units | Description |
 |------------|-------|-------------|
-| `total_dust_emission` | kg/m2/s | Total dust emissions for all species |
+| `dust_emission_total` | kg/m2/s | Total dust emissions for all bins |
+| `dust_emission_per_bin` | kg/m2/s | Dust emission flux per bin |
 
 ## Usage
 
@@ -126,14 +135,14 @@ Each scheme is implemented as a pure science kernel with no infrastructure depen
 ! FENGSHA scheme
 pure subroutine compute_fengsha( &
    num_layers, num_species, params, &
-   IsLand, &   USTAR, &   LWI, &   GVF, &   LAI, &   FROCEAN, &   CLAYFRAC, &   SANDFRAC, &   FRSNO, &   RDRAG, &   SSM, &   USTAR_THRESHOLD, &
+   USTAR, &   TSKIN, &   AIRDEN, &   SOILM, &   Z0, &   GVF, &   LWI, &   LAI, &   FRLAKE, &   FRSNO, &   CLAYFRAC, &   SANDFRAC, &   RDRAG, &   SSM, &   USTAR_THRESHOLD, &
    species_conc, emission_flux)
 ```
 ```fortran
 ! GINOUX scheme
 pure subroutine compute_ginoux( &
    num_layers, num_species, params, &
-   FRLAKE, &   GWETTOP, &   U10M, &   V10M, &   SSM, &
+   FRLAKE, &   FRSNO, &   TSKIN, &   AIRDEN, &   LWI, &   GWETTOP, &   U10M, &   V10M, &   SSM, &
    species_conc, emission_flux)
 ```
 
@@ -157,11 +166,14 @@ processes:
     enabled: true
     scheme: "fengsha"
     parameters:
-      alpha: 0.16
-      beta: 1.0
+      alpha: 0.2
+      gamma: 1.0
       drylimit_factor: 1.0
+      moist_correction_factor: 1.0
+      kvhmax: 0.0002
       drag_option: 1
-      moist_option: 1 - fecan
+      horizflux_option: 1
+      moist_option: 1
       distribution_option: 1
     diagnostics:
       enabled: true
@@ -209,4 +221,4 @@ When modifying or extending this process:
 - GINOUX: Ginoux et al. [2001]
 
 ---
-*This documentation was automatically generated by the CATChem Process Generator on 2025-09-09T14:29:24.774850*
+*This documentation was automatically generated by the CATChem Process Generator on 2026-04-17T13:57:10.461600*

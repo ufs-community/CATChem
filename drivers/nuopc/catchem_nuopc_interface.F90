@@ -45,7 +45,9 @@ module catchem_nuopc_interface
    use ExtEmisData_Mod, only: ExtEmisDataType  ! External emissions data type
    use DiagnosticManager_Mod, only: DiagnosticManagerType
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
-   use aqmio, only: AQMIO_Create, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF
+   use aqmio, only: AQMIO_Create, AQMIO_Destroy, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
+      AQMIO_LatlonInit, AQMIO_LatlonCleanup
+   use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
    use catchem_emis_mod
 
    implicit none
@@ -303,6 +305,17 @@ contains
          if (rc /= CC_SUCCESS) return
       end if
 
+      ! Initialize lat/lon stitched output if configured (multi-tile only)
+      if (config_manager%config_data%runtime%latlon_output) then
+         call AQMIO_LatlonInit(cc_wrap%grid, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) then
+            call ESMF_LogWrite('AQMIO_LatlonInit failed, lat/lon output disabled', &
+               ESMF_LOGMSG_WARNING, rc=rc)
+            rc = ESMF_SUCCESS  ! Non-fatal
+         end if
+      end if
+
       ! Set time information if provided
       if (present(stopTime)) then
          cc_wrap%endTime = stopTime
@@ -418,23 +431,53 @@ contains
 
       ! Update extemission data first
       state_mgr => cc_wrap%catchem_model%get_state_manager()
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       !Run CATChem processes
       timestep = timestep + 1
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
          write(errmsg, '(A,I0)') 'Error in run_timestep at timestep = ', timestep
          return
       end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Write NetCDF output diagnostics if needed
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
          errmsg = 'Error writing NetCDF output diagnostics'
          return
       end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
    end subroutine catchem_nuopc_run
 
@@ -483,6 +526,18 @@ contains
       if (allocated(cc_wrap%field_config%import_fields)) deallocate(cc_wrap%field_config%import_fields)
       if (allocated(cc_wrap%field_config%export_fields)) deallocate(cc_wrap%field_config%export_fields)
 
+      ! Deallocate tracer mapping
+      if (allocated(cc_wrap%tracer_map%nuopc_to_cc)) deallocate(cc_wrap%tracer_map%nuopc_to_cc)
+      if (allocated(cc_wrap%tracer_map%names)) deallocate(cc_wrap%tracer_map%names)
+      if (allocated(cc_wrap%tracer_map%units)) deallocate(cc_wrap%tracer_map%units)
+
+      ! Clean up lat/lon stitched output resources
+      call AQMIO_LatlonCleanup(rc=rc)
+
+      ! Destroy the IO component and its per-tile taskComps
+      ! Must happen before the parent component's VM is torn down
+      call AQMIO_Destroy(cc_wrap%iocomp, rc=rc)
+
    end subroutine catchem_nuopc_finalize
 
    ! Transform NUOPC import fields to CATChem states
@@ -522,7 +577,7 @@ contains
       call ESMF_TimeGet(currTime, yy=year, mm=month, dd=day, &
          h=hour, m=minute, s=second, rc=rc)
       call ESMF_TimeIntervalGet(cc_wrap%timeStep, s_i8=timestep_seconds, rc=rc)
-      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds), error_mgr, rc)
+      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds, fp), error_mgr, rc)
       if (rc /= CC_SUCCESS) then
          return !maybe add an error message
       end if
@@ -1091,6 +1146,8 @@ contains
 
       !type(cc_wrap_type), pointer :: cc_wrap
       type(DiagnosticManagerType), pointer :: diag_mgr => null()
+      type(StateManagerType), pointer :: state_mgr_diag => null()
+      type(ConfigManagerType), pointer :: config_mgr_diag => null()
       type(ESMF_Time) :: time_on_file
       character(len=64), allocatable :: process_list(:)
       integer :: num_processes, i
@@ -1099,8 +1156,13 @@ contains
 
       rc = CC_SUCCESS
 
-      ! Get process-local state
-      !cc_wrap => get_cc_wrap()
+      ! Check top-level diagnostics/output/enabled switch before doing anything
+      state_mgr_diag => cc_wrap%catchem_model%get_state_manager()
+      config_mgr_diag => state_mgr_diag%get_config_ptr()
+      if (.not. config_mgr_diag%config_data%runtime%DiagEnabled) then
+         return
+      end if
+      nullify(state_mgr_diag, config_mgr_diag)
 
       ! Initialize output timing if not done
       if (.not. cc_wrap%output_timing_initialized) then
@@ -1112,17 +1174,6 @@ contains
       call check_diagnostic_output_time(cc_wrap, current_time, time_to_write, time_on_file, rc)
       if (rc /= CC_SUCCESS) return
       if (.not. time_to_write) return
-
-      ! Get diagnostic manager
-      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
-      if (.not. associated(diag_mgr)) then
-         rc = CC_FAILURE
-         return
-      end if
-
-      ! Get list of processes with diagnostics
-      call diag_mgr%list_processes(process_list, num_processes, rc)
-      if (rc /= CC_SUCCESS .or. num_processes == 0) return
 
       ! Use grid (must be set during initialization)
       if (.not. ESMF_GridIsCreated(cc_wrap%grid)) then
@@ -1139,15 +1190,20 @@ contains
       call update_time_variable(cc_wrap, filename, time_on_file, cc_wrap%current_time_slice, rc)
       if (rc /= CC_SUCCESS) return
 
-      ! Write diagnostics for each process
-      do i = 1, num_processes
-         call write_process_diagnostics(cc_wrap, trim(process_list(i)), filename, rc)
-         if (rc /= CC_SUCCESS) then
-            ! Log error and return
-            write(*,'(A,A)') 'Error: Failed to write diagnostics for process: ', trim(process_list(i))
-            return
+      ! Write process diagnostics (optional - may have no registered processes)
+      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
+      if (associated(diag_mgr)) then
+         call diag_mgr%list_processes(process_list, num_processes, rc)
+         if (rc == CC_SUCCESS .and. num_processes > 0) then
+            do i = 1, num_processes
+               call write_process_diagnostics(cc_wrap, trim(process_list(i)), filename, rc)
+               if (rc /= CC_SUCCESS) then
+                  write(*,'(A,A)') 'Error: Failed to write diagnostics for process: ', trim(process_list(i))
+                  return
+               end if
+            end do
          end if
-      end do
+      end if
 
       !write extemission fields if needed
       call catchem_emis_write_diagnostics(cc_wrap%ext_emis, cc_wrap%current_time_slice, cc_wrap%iocomp, cc_wrap%grid, filename, rc)
@@ -1606,7 +1662,12 @@ contains
       type(ESMF_TimeInterval) :: time_diff
       integer(ESMF_KIND_I8) :: time_seconds
       type(ESMF_VM) :: vm
+      type(ESMF_Grid) :: grid
       integer :: ibuf(1)  ! Buffer for MPI broadcast
+      integer :: tileCount, tile, localDe, localDeCount, localrc
+      character(len=256) :: tileFilename
+      character(len=16) :: tileSuffix
+      integer :: dotpos
 
       rc = CC_SUCCESS
 
@@ -1621,12 +1682,38 @@ contains
 
       new_time_data(1) = int(time_seconds, ESMF_KIND_I4)
 
-      ! Use the new direct write function with append=true
-      ! This automatically handles reading existing data and appending the new time
-      call AQMIO_Write1D(filename, "time", append=.true., del_old_file=.true., rc=rc, &
-         data_i4=new_time_data, current_size=time_slice, &
-         iocomp=cc_wrap%iocomp)
+      ! Store time value for lat/lon coordinate output
+      if (latlon_diag_is_init()) call latlon_diag_set_time(new_time_data(1))
+
+      ! Determine tile count to match AQMIO's per-tile file naming
+      call ESMF_GridCompGet(cc_wrap%iocomp, grid=grid, rc=rc)
       if (rc /= ESMF_SUCCESS) return
+      call ESMF_GridGet(grid, tileCount=tileCount, rc=rc)
+      if (rc /= ESMF_SUCCESS) return
+
+      if (tileCount > 1 .and. index(filename, '<tile>') == 0) then
+         ! Multi-tile without <tile> placeholder: write time to each per-tile file
+         ! Must match AQMIO_FileNameGet auto-tile naming: "file.nc" -> "file.tileN.nc"
+         do tile = 1, tileCount
+            write(tileSuffix, '(".tile",I0)') tile
+            dotpos = index(filename, '.', back=.true.)
+            if (dotpos > 1) then
+               tileFilename = filename(1:dotpos-1) // trim(tileSuffix) // trim(filename(dotpos:))
+            else
+               tileFilename = trim(filename) // trim(tileSuffix)
+            end if
+            call AQMIO_Write1D(tileFilename, "time", append=.true., del_old_file=.true., rc=rc, &
+               data_i4=new_time_data, current_size=time_slice, &
+               iocomp=cc_wrap%iocomp)
+            if (rc /= ESMF_SUCCESS) return
+         end do
+      else
+         ! Single tile or filename has <tile> placeholder
+         call AQMIO_Write1D(filename, "time", append=.true., del_old_file=.true., rc=rc, &
+            data_i4=new_time_data, current_size=time_slice, &
+            iocomp=cc_wrap%iocomp)
+         if (rc /= ESMF_SUCCESS) return
+      end if
 
       ! Broadcast time_slice from I/O PET to all other PETs so they have the correct value
       ! Get VM from the IOComp for broadcasting
@@ -1763,6 +1850,10 @@ contains
             call system('mkdir -p ' // trim(cc_wrap%output_directory))
          end if
       end if
+
+      ! Barrier to ensure directory is created before any PET tries to write
+      call ESMF_VMBarrier(vm, rc=rc)
+      if (rc /= ESMF_SUCCESS) return
 
       ! Get time components
       call ESMF_TimeGet(time_on_file, yy=year, mm=month, dd=day, &

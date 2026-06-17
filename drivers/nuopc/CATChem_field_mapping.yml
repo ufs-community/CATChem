@@ -204,6 +204,11 @@ import_fields:
     dimensions: 3
     units: "K"
     optional: true
+  - standard_name: "inst_up_sensi_heat_flx"
+    catchem_var: "HFLUX_UP"
+    dimensions: 2
+    units: "w/m2"
+    optional: true
   - standard_name: "inst_tracer_mass_frac"
     catchem_var: "chem"
     dimensions: 4

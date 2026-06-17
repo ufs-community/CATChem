@@ -118,7 +118,15 @@ module {{ config.class_name }}Common_Mod
 {% for param_name, param_info in scheme.parameters.items() %}
 {% set param_type = param_info.type | default('auto') %}
 {% if param_type == 'auto' %}
-{% if param_info.default is sameas true or param_info.default is sameas false %}
+{% if param_info.default is list_type %}
+{% if param_info.default[0] is sameas true or param_info.default[0] is sameas false %}
+{% set param_type = 'logical' %}
+{% elif param_info.default[0] is integer %}
+{% set param_type = 'integer' %}
+{% else %}
+{% set param_type = 'real(fp)' %}
+{% endif %}
+{% elif param_info.default is sameas true or param_info.default is sameas false %}
 {% set param_type = 'logical' %}
 {% elif param_info.default is integer %}
 {% set param_type = 'integer' %}
@@ -126,7 +134,11 @@ module {{ config.class_name }}Common_Mod
 {% set param_type = 'real(fp)' %}
 {% endif %}
 {% endif %}
+{% if param_info.default is list_type %}
+      {{ param_type }} :: {{ param_name }}({{ param_info.default | length }}) = {{ param_info.default | fortran_array_constructor }}  ! {{ param_info.description | default('Parameter') }}
+{% else %}
       {{ param_type }} :: {{ param_name }} = {% if param_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif param_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('0.0_fp') }}{% endif %}  ! {{ param_info.description | default('Parameter') }}
+{% endif %}
 {% endfor %}
 
       ! Required meteorological fields
@@ -975,6 +987,19 @@ contains
 
       ! Load scheme parameters directly from processes/{{ config.name }}/{{ scheme.name }}/ in master YAML
 {% for param_name, param_info in scheme.parameters.items() %}
+{% if param_info.default is list_type %}
+      ! Array parameter: {{ param_name }}
+      block
+         real(fp), allocatable :: temp_array(:)
+         call config_manager%get_real_array("processes/{{ config.name }}/{{ scheme.name }}/{{ param_name }}", &
+              temp_array, rc)
+         if (rc == CC_SUCCESS .and. allocated(temp_array)) then
+            this%{{ scheme.name }}_config%{{ param_name }}(1:min(size(temp_array), size(this%{{ scheme.name }}_config%{{ param_name }}))) = &
+               temp_array(1:min(size(temp_array), size(this%{{ scheme.name }}_config%{{ param_name }})))
+            deallocate(temp_array)
+         end if
+      end block
+{% else %}
 {% set param_type = param_info.type | default('auto') %}
 {% if param_type == 'auto' %}
 {% if param_info.default is sameas true or param_info.default is sameas false %}
@@ -995,6 +1020,7 @@ contains
       call config_manager%get_{{ yaml_type }}("processes/{{ config.name }}/{{ scheme.name }}/{{ param_name }}", &
            this%{{ scheme.name }}_config%{{ param_name }}, rc, {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %})
       if (rc /= CC_SUCCESS) this%{{ scheme.name }}_config%{{ param_name }} = {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %}
+{% endif %}
 
 {% endfor %}
 

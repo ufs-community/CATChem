@@ -61,6 +61,7 @@ module WetDepCommon_Mod
       real(fp), allocatable :: species_wd_convfacI2G(:)      ! wd_convfacI2G for each species
       real(fp), allocatable :: species_wd_rainouteff(:,:)      ! wd_rainouteff for each species
       real(fp), allocatable :: species_wd_retfactor(:)      ! wd_retfactor for each species
+      real(fp), allocatable :: species_wd_reevap_frac(:)      ! wd_reevap_frac for each species
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -217,6 +218,9 @@ contains
       end if
       if (allocated(this%species_wd_retfactor)) then
          deallocate(this%species_wd_retfactor)
+      end if
+      if (allocated(this%species_wd_reevap_frac)) then
+         deallocate(this%species_wd_reevap_frac)
       end if
 
 
@@ -399,6 +403,7 @@ contains
       allocate(this%wetdep_config%species_wd_convfacI2G(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_rainouteff(this%wetdep_config%n_species, 3))
       allocate(this%wetdep_config%species_wd_retfactor(this%wetdep_config%n_species))
+      allocate(this%wetdep_config%species_wd_reevap_frac(this%wetdep_config%n_species))
 
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_wetdep -> WetdepIndex
@@ -431,6 +436,7 @@ contains
          this%wetdep_config%species_wd_convfacI2G(i) = chem_state%ChemSpecies(species_idx)%wd_convfacI2G
          this%wetdep_config%species_wd_rainouteff(i, :) = chem_state%ChemSpecies(species_idx)%wd_rainouteff(:)
          this%wetdep_config%species_wd_retfactor(i) = chem_state%ChemSpecies(species_idx)%wd_retfactor
+         this%wetdep_config%species_wd_reevap_frac(i) = chem_state%ChemSpecies(species_idx)%wd_reevap_frac
       end do
 
    end subroutine load_species_from_chem_state

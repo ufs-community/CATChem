@@ -92,6 +92,7 @@ contains
       z0h, &
       species_density, &
       species_radius, &
+      species_is_dust, &
       species_is_seasalt, &
       species_conc, &
       species_tendencies, &
@@ -122,6 +123,7 @@ contains
       real(fp), intent(in) :: z(num_layers+1)    ! 3D atmospheric field
       real(fp), intent(in) :: species_density(num_species)  ! Species density property
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
+      logical, intent(in) :: species_is_dust(num_species)  ! Species is dust property
       logical, intent(in) :: species_is_seasalt(num_species)  ! Species is seasalt property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
@@ -199,7 +201,11 @@ contains
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (is_gas(species_idx)) cycle
 
-            if (params%resuspension) then
+            ! Apply resuspension based on config flags:
+            ! - dust_resuspension_only=true (default): resuspension only for dust (matches GOCART)
+            ! - dust_resuspension_only=false: resuspension controlled by resuspension flag for all species
+            if ((params%dust_resuspension_only .and. species_is_dust(species_idx)) .or. &
+               (.not. params%dust_resuspension_only .and. params%resuspension)) then
                call DryDeposition(num_layers, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
                   GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, drydepf, RC, &
                   species_radius(species_idx)*1e-6_fp, species_density(species_idx), GOCART_U10, GOCART_V10, &
