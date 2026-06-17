@@ -446,10 +446,23 @@ add_test(
 #add_test(NAME test_chem COMMAND test_chem)
 
 # Process-specific tests - binaries land in build/tests/process/<name>/
+# Processes that require CATCHEM_BUILD_MUSICA
+set(_musica_processes GasChem)
+
 file(GLOB _process_test_dirs LIST_DIRECTORIES true process/*)
 foreach(_dir ${_process_test_dirs})
   if(IS_DIRECTORY "${_dir}" AND EXISTS "${_dir}/CMakeLists.txt")
     get_filename_component(_process_name ${_dir} NAME)
+    if(
+      "${_process_name}" IN_LIST _musica_processes
+      AND NOT CATCHEM_BUILD_MUSICA
+    )
+      message(
+        STATUS
+        "Skipping process tests: ${_process_name} (requires CATCHEM_BUILD_MUSICA)"
+      )
+      continue()
+    endif()
     message(STATUS "Found process tests: ${_process_name}")
     add_subdirectory(${_dir})
   endif()
