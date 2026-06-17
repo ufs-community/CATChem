@@ -52,6 +52,11 @@ configure_file(
   "${CMAKE_CURRENT_BINARY_DIR}/GasChem_config.yaml"
   COPYONLY
 )
+configure_file(
+  "${CMAKE_SOURCE_DIR}/tests/Configs/Default/micm_config.yaml"
+  "${CMAKE_CURRENT_BINARY_DIR}/micm_config.yaml"
+  COPYONLY
+)
 
 # Additional test data files - copy other config files that might be needed
 file(GLOB TEST_DATA_FILES "${CMAKE_SOURCE_DIR}/tests/Configs/Default/*.yml")
