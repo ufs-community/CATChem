@@ -16,16 +16,16 @@
 #   - AIRDEN
 #   - PMID
 
-
 # Scheme validation targets
-add_custom_target(validate_no_phot_scheme
-    COMMAND ${CMAKE_COMMAND} -E echo "Validating no_phot scheme implementation"
-    COMMENT "Validating no_phot scheme"
+add_custom_target(
+  validate_no_phot_scheme
+  COMMAND ${CMAKE_COMMAND} -E echo "Validating no_phot scheme implementation"
+  COMMENT "Validating no_phot scheme"
 )
 
 # Combined validation target
-add_custom_target(validate_all_schemes
-    DEPENDS
-        validate_no_phot_scheme
-    COMMENT "Validating all GasChem schemes"
+add_custom_target(
+  validate_all_schemes
+  DEPENDS validate_no_phot_scheme
+  COMMENT "Validating all GasChem schemes"
 )

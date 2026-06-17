@@ -8,4 +8,7 @@ add_subdirectory(wetdep)
 add_subdirectory(settling)
 add_subdirectory(so4chem)
 add_subdirectory(carbchem)
-add_subdirectory(GasChem)
+
+if(CATCHEM_BUILD_MUSICA)
+  add_subdirectory(GasChem)
+endif()

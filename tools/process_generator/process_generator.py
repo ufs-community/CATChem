@@ -1438,7 +1438,7 @@ class ProcessGenerator:
 
         # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
-        
+
         content = template.render(
             config=config,
             all_required_species_properties=all_required_species_properties,
@@ -1454,7 +1454,7 @@ class ProcessGenerator:
 
         filename = f"{config.class_name}Common_Mod.F90"
         output_file = process_dir / filename
-        
+
         with open(output_file, 'w') as f:
             f.write(content)
 
