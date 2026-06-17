@@ -88,7 +88,7 @@ jobs:
           - build-label: NUOPC
             cmake-flags: -DBUILD_NUOPC=ON
           - build-label: NUOPC + MUSICA
-            cmake-flags: -DBUILD_NUOPC=ON -DBUILD_MUSICA=ON
+            cmake-flags: -DBUILD_NUOPC=ON -DCATCHEM_BUILD_MUSICA=ON
     defaults:
       run:
         shell: bash -l {0}

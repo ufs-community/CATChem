@@ -6,10 +6,10 @@ project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
 option(BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 
 # Option to build with MUSICA chemistry library (defaults to OFF)
-option(BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
+option(CATCHEM_BUILD_MUSICA "Build with MUSICA chemistry library" OFF)
 
 # Set C++ standard — MUSICA requires C++20, yaml-cpp needs at least C++11
-if(BUILD_MUSICA)
+if(CATCHEM_BUILD_MUSICA)
   set(CMAKE_CXX_STANDARD 20)
 else()
   set(CMAKE_CXX_STANDARD 11)
@@ -33,11 +33,14 @@ cmake_print_variables(
 set(_catchem_compiler_options "")
 
 # Handle Intel compiler deprecation warnings
-if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
   # Always disable the deprecation warning for ifort
   list(APPEND _catchem_compiler_options -diag-disable=6379,10448)
   # Also disable problematic flags that might come from external dependencies
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448")
+  set(
+    CMAKE_Fortran_FLAGS
+    "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448,10440"
+  )
 endif()
 
 if(
@@ -52,13 +55,14 @@ if(
     -Wextra
     -pedantic
     -fcheck=all
+    -fno-sanitize=all
     -ffpe-trap=invalid,zero,overflow
     -fbacktrace
     -fmax-errors=0
     -ffree-line-length-none
   )
 elseif(
-  CMAKE_Fortran_COMPILER_ID MATCHES "Intel"
+  CMAKE_Fortran_COMPILER_ID MATCHES "^Intel"
   AND CMAKE_BUILD_TYPE MATCHES "Debug"
 )
   list(
@@ -68,25 +72,7 @@ elseif(
     -warn
     all
     -check
-    all
-    -implicitnone
-    -fpe0
-    -traceback
-    -error-limit
-    0
-  )
-elseif(
-  CMAKE_Fortran_COMPILER_ID MATCHES "IntelLLVM"
-  AND CMAKE_BUILD_TYPE MATCHES "Debug"
-)
-  list(
-    APPEND
-    _catchem_compiler_options
-    -O0
-    -warn
-    all
-    -check
-    all
+    all,nouninit
     -implicitnone
     -fpe0
     -traceback
@@ -96,17 +82,6 @@ elseif(
 endif()
 
 # Disable memory sanitizer to avoid linking issues
-# For Intel, must come _after_ `-check all` to have an effect
-if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  # gfortran uses standard sanitizer flags
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-sanitize=all")
-elseif(
-  CMAKE_Fortran_COMPILER_ID STREQUAL "Intel"
-  OR CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM"
-)
-  # ifort (Intel) and ifx (IntelLLVM) both use -check
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -check nouninit")
-endif()
 if(
   CMAKE_C_COMPILER_ID STREQUAL "GNU"
   OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"
@@ -122,6 +97,14 @@ if(
   # g++ and icpx both accept standard sanitizer flags
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sanitize=all")
   # Note: Intel Classic C++ (icpc) doesn't use -fsanitize, so we safely do nothing
+endif()
+
+# Disable Intel oneAPI C/C++ warning about -g without -O0
+if(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Rno-debug-disables-optimization")
+endif()
+if(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Rno-debug-disables-optimization")
 endif()
 
 # Find external dependencies if not already available (for standalone builds)
