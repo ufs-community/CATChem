@@ -465,7 +465,7 @@ contains
             if (so4_prod > zero) then
                ! convert the [kg/m2] production back to [ug/kg] and add to SO4
                species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
-                                             + so4_prod / dpog(k) * 1.0e9_fp
+                  + so4_prod / dpog(k) * 1.0e9_fp
             end if
          end do
       end if
