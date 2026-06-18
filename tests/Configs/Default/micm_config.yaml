@@ -1,0 +1,11 @@
+version: "1.1.0"
+name: so2_loss
+species:
+  files:
+    - CATChem_species.yml
+reactions:
+  files:
+    - reactions.yaml
+phases:
+  files:
+    - phases.yaml

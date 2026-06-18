@@ -26,7 +26,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass, field
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, select_autoescape, TemplateSyntaxError
 import json
 from datetime import datetime
 import re
@@ -1903,6 +1903,7 @@ Features:
         return 1
     except Exception as e:
         logger.error(f"Error: {e}")
+        print(e.lineno)
         if hasattr(args, 'verbose') and args.verbose:
             import traceback
             traceback.print_exc()

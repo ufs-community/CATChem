@@ -122,11 +122,13 @@ module {{ config.class_name }}Common_Mod
 {% set param_type = 'logical' %}
 {% elif param_info.default is integer %}
 {% set param_type = 'integer' %}
+{% elif param_info.default is string %}
+{% set param_type = 'character(len=256)' %}
 {% else %}
 {% set param_type = 'real(fp)' %}
 {% endif %}
 {% endif %}
-      {{ param_type }} :: {{ param_name }} = {% if param_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif param_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('0.0_fp') }}{% endif %}  ! {{ param_info.description | default('Parameter') }}
+      {{ param_type }} :: {{ param_name }} = {% if param_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif param_type == 'integer' %}{{ param_info.default | default('0') }}{% elif 'character' in param_type %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('0.0_fp') }}{% endif %}  ! {{ param_info.description | default('Parameter') }}
 {% endfor %}
 
       ! Required meteorological fields
@@ -473,6 +475,8 @@ contains
 {% set yaml_type = 'logical' %}
 {% elif param_info.default is integer %}
 {% set yaml_type = 'integer' %}
+{% elif param_info.default is string %}
+{% set yaml_type = 'string' %}
 {% else %}
 {% set yaml_type = 'real' %}
 {% endif %}
@@ -480,7 +484,7 @@ contains
 {% set yaml_type = param_info.yaml_type | default('real') %}
 {% endif %}
       call config_manager%get_{{ yaml_type }}("processes/{{ config.name }}/{{ param_name }}", &
-           this%{{ config.name }}_config%{{ param_name }}, ierr, {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %})
+           this%{{ config.name }}_config%{{ param_name }}, ierr, {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% elif yaml_type == 'string' %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %})
 {% endfor %}
 {% endif %}
 
@@ -981,6 +985,8 @@ contains
 {% set yaml_type = 'logical' %}
 {% elif param_info.default is integer %}
 {% set yaml_type = 'integer' %}
+{% elif param_info.default is string %}
+{% set yaml_type = 'string' %}
 {% else %}
 {% set yaml_type = 'real' %}
 {% endif %}
@@ -990,11 +996,13 @@ contains
 {% set yaml_type = 'logical' %}
 {% elif param_type == 'integer' %}
 {% set yaml_type = 'integer' %}
+{% elif param_type == 'string' %}
+{% set yaml_type = 'string' %}
 {% endif %}
 {% endif %}
       call config_manager%get_{{ yaml_type }}("processes/{{ config.name }}/{{ scheme.name }}/{{ param_name }}", &
-           this%{{ scheme.name }}_config%{{ param_name }}, rc, {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %})
-      if (rc /= CC_SUCCESS) this%{{ scheme.name }}_config%{{ param_name }} = {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %}
+           this%{{ scheme.name }}_config%{{ param_name }}, rc, {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% elif yaml_type == 'string' %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %})
+      if (rc /= CC_SUCCESS) this%{{ scheme.name }}_config%{{ param_name }} = {% if yaml_type == 'logical' %}{% if param_info.default %}{% if param_info.default is sameas true %}.true.{% else %}.false.{% endif %}{% else %}.false.{% endif %}{% elif yaml_type == 'integer' %}{{ param_info.default | default('0') }}{% elif yaml_type == 'string' %}"{{ param_info.default | default('') }}"{% else %}{{ param_info.default | default('1.0') }}_fp{% endif %}
 
 {% endfor %}
 
