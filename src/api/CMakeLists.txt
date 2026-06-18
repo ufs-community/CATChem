@@ -12,7 +12,10 @@ target_link_libraries(${_lib} PUBLIC CATChem_process_wetdep)
 target_link_libraries(${_lib} PUBLIC CATChem_process_settling)
 target_link_libraries(${_lib} PUBLIC CATChem_process_so4chem)
 target_link_libraries(${_lib} PUBLIC CATChem_process_carbchem)
-target_link_libraries(${_lib} PUBLIC CATChem_process_GasChem)
+if(CATCHEM_BUILD_MUSICA)
+  target_link_libraries(${_lib} PUBLIC CATChem_process_GasChem)
+  target_compile_definitions(${_lib} PRIVATE MUSICA)
+endif()
 set_target_properties(
   ${_lib}
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include

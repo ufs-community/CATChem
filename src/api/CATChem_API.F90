@@ -50,7 +50,9 @@ module CATChem_API
    use SettlingProcessCreator_Mod, only: register_settling_process
    use so4ChemProcessCreator_Mod, only: register_so4chem_process
    use CarbChemProcessCreator_Mod, only: register_carbchem_process
+#ifdef MUSICA
    use GasChemProcessCreator_Mod, only: register_GasChem_process
+#endif
 
    implicit none
    private
@@ -392,7 +394,12 @@ contains
             call this%error_manager%pop_context()
          endif
        case ('GasChem')
+#ifdef MUSICA
          call register_GasChem_process(process_mgr, rc)
+#else
+         write(*, '(A)') 'CATChem was not built with MUSICA enabled, GasChem process cannot be registered'
+         rc = CC_FAILURE
+#endif
          if (rc /= CC_SUCCESS) then
             call this%error_manager%push_context('model_register_process', 'registering GasChem process')
             call this%error_manager%report_error(1014, 'Failed to register GasChem process', rc)
