@@ -155,7 +155,7 @@ contains
             state%concentrations(micm_sp_idx) = conc
          enddo
       enddo
-      
+
       do while (elapsed < tstep)
          remaining = tstep - elapsed
          call micm%solve(REAL(remaining, 8),state,solver_state,solver_stats,micm_error)
