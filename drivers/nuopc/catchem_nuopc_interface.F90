@@ -248,9 +248,22 @@ contains
             type(ESMF_Field) :: areaField
             real(ESMF_KIND_R8), pointer :: areaPtr(:,:)
             integer :: arc
+            logical :: areaIsPresent
             nullify(areaPtr)
+            ! Query whether the grid actually carries an AREA item before
+            ! retrieving it. Requesting farrayPtr on a grid that has no
+            ! ESMF_GRIDITEM_AREA attached makes ESMF dereference an unset
+            ! coord/item array and log a NULL-pointer ERROR. The FV3 import
+            ! grid on the NUOPC path does not attach areas, so check first.
+            areaIsPresent = .false.
             call ESMF_GridGetItem(input_grid, itemflag=ESMF_GRIDITEM_AREA, &
-               staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=areaPtr, rc=arc)
+               staggerloc=ESMF_STAGGERLOC_CENTER, isPresent=areaIsPresent, rc=arc)
+            if (arc == ESMF_SUCCESS .and. areaIsPresent) then
+               call ESMF_GridGetItem(input_grid, itemflag=ESMF_GRIDITEM_AREA, &
+                  staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=areaPtr, rc=arc)
+            else
+               arc = ESMF_RC_NOT_FOUND
+            end if
             if (arc == ESMF_SUCCESS .and. associated(areaPtr)) then
                if (size(areaPtr,1) == nx .and. size(areaPtr,2) == ny) then
                   met_state%AREA_M2 = real(areaPtr, fp)
