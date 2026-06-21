@@ -41,10 +41,13 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
   target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
   # Chemistry processes may benefit from aggressive optimization
-  target_compile_options(${_lib} PRIVATE -O3 -funroll-loops)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<CONFIG:Release>:-O3;-funroll-loops>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
   target_compile_options(${_lib} PRIVATE -r8)
-  target_compile_options(${_lib} PRIVATE -O3 -unroll)
+  target_compile_options(${_lib} PRIVATE $<$<CONFIG:Release>:-O3;-unroll>)
 endif()
 
 # Add preprocessor definitions

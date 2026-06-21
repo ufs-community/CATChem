@@ -1539,9 +1539,9 @@ contains
       character(len=len(category%format)) :: fmt
       fmt = trim(emis_lower(category%format))
       is_point = (fmt == 'volcano'    .or. &
-                  fmt == 'point'      .or. &
-                  fmt == 'point_rc'   .or. &
-                  fmt == 'volcano_rc')
+         fmt == 'point'      .or. &
+         fmt == 'point_rc'   .or. &
+         fmt == 'volcano_rc')
    end function is_point_category
 
    !> \brief Find the model layer (1..nz) whose edge interval contains altitude h
@@ -1814,7 +1814,7 @@ contains
 
       do it = 1, npts
          if (locmind(it) <= glomind(it) + real(dtol, ESMF_KIND_R8) .and. &
-             nint(glopet(it)) == localPet) then
+            nint(glopet(it)) == localPet) then
             ip(it) = lmi(it)
             jp(it) = lmj(it)
          end if
@@ -1836,7 +1836,7 @@ contains
    !! to the target species (e.g. kg S/s -> kg SO2/s, scale=2.0) is supplied through
    !! the species-map scale factor, exactly as for gridded emissions.
    subroutine catchem_emis_apply_points(category, icat, global_scale, config_manager, &
-                                        chem_state, met_state, dt, rc)
+      chem_state, met_state, dt, rc)
       use Constants, only: g0, AIRMW
       implicit none
 
@@ -1936,7 +1936,7 @@ contains
                ! divided by cell area, then category + global + species-map scaling
                ! (the map scale converts file units to the target species mass).
                fluxcol = category%fields(ifield)%pemis(it) / area * &
-                         scale_factor * category%global_scale * global_scale
+                  scale_factor * category%global_scale * global_scale
                if (fluxcol <= 0.0_fp) cycle
 
                hlow = category%fields(ifield)%pbot(it)
