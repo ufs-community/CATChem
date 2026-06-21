@@ -385,8 +385,8 @@ contains
 
                   ! -- sulfate-only below-cloud washout efficiency knob (SO4 column tuning; default 1.0)
                   if ( species_short_name(species_idx) == 'SO4' .or. species_short_name(species_idx) == 'so4' .or. &
-                       species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
-                       species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
+                     species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
+                     species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
                      lossfrac = lossfrac * params%so4_washout_eff
                   end if
 
@@ -419,8 +419,8 @@ contains
 
                ! -- sulfate-only below-cloud washout efficiency knob (SO4 column tuning; default 1.0)
                if ( species_short_name(species_idx) == 'SO4' .or. species_short_name(species_idx) == 'so4' .or. &
-                    species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
-                    species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
+                  species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
+                  species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
                   lossfrac = lossfrac * params%so4_washout_eff
                end if
 
@@ -485,7 +485,7 @@ contains
             if (so4_prod > zero) then
                ! convert the [kg/m2] production back to [ug/kg] and add to SO4
                species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
-                                             + so4_prod / dpog(k) * 1.0e9_fp
+                  + so4_prod / dpog(k) * 1.0e9_fp
             end if
          end do
       end if
@@ -507,7 +507,7 @@ contains
             if (h2o2_used > zero) then
                ! convert the consumed [kg/kg] back to [ppmv] and remove from H2O2
                species_tendencies(k, h2o2_id) = max( 0.0_fp, species_tendencies(k, h2o2_id) &
-                                              - h2o2_used * AIRMW / species_mw_g(h2o2_id) * 1.0e6_fp )
+                  - h2o2_used * AIRMW / species_mw_g(h2o2_id) * 1.0e6_fp )
             end if
          end do
       end if
@@ -1168,8 +1168,8 @@ contains
             ! Define ALPHA, the fraction of the raindrops that
             ! re-evaporate when falling from (I,J,L+1) to (I,J,L)
             if ( so4_gocart_resusp .and. &
-                 ( spc == 'SO4' .or. spc == 'so4' .or. spc == 'ASO4J' .or. spc == 'aso4j' .or. &
-                   spc == 'SO2' .or. spc == 'so2' ) ) then
+               ( spc == 'SO4' .or. spc == 'so4' .or. spc == 'ASO4J' .or. spc == 'aso4j' .or. &
+               spc == 'SO2' .or. spc == 'so2' ) ) then
                ! --- Sulfate only: replicate GOCART SU_Wet_Removal resuspension ---
                ! GOCART resuspends a fraction A = |dprecip(k)/dprecip(km1)| of the falling
                ! scavenged mass, applied only at the transition where precipitation forms in

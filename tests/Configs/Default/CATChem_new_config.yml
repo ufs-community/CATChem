@@ -334,7 +334,7 @@ processes:
       source_file: "ExtData/volcanic/so2_volcanic_emissions_Carns.%y4%m2%d2.rc"
       format: "volcano"      # triggers the point-source reader + 3D injector
       gridded: false
-      frequency: "daily"     # "static" if for climatology 
+      frequency: "daily"     # "static" if for climatology
       diagnostics: false     #current will all be zeros
       diag_list: [SO2]
     fire_so2:
