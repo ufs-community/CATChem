@@ -88,6 +88,8 @@ module WetDepCommon_Mod
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! Washout tuning factor
       real(fp) :: radius_threshold = 1.0  ! Radius threshold for aerosol wet deposition (um)
+      logical :: so4_gocart_resusp = .true.  ! Use GOCART SU_Wet_Removal resuspension (alpha) for sulfate (SO4/SO2) only
+      real(fp) :: so4_washout_eff = 1.0  ! Sulfate-only below-cloud washout efficiency multiplier (SO4 column tuning; 1.0 = unchanged)
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 8
@@ -457,6 +459,15 @@ contains
       call config_manager%get_real("processes/wetdep/jacob/radius_threshold", &
          this%jacob_config%radius_threshold, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%jacob_config%radius_threshold = 1.0_fp
+      ! Sulfate-only GOCART-style resuspension toggle (default on)
+      call config_manager%get_logical("processes/wetdep/jacob/so4_gocart_resusp", &
+         this%jacob_config%so4_gocart_resusp, rc, .true.)
+      if (rc /= CC_SUCCESS) this%jacob_config%so4_gocart_resusp = .true.
+
+      ! Sulfate-only below-cloud washout efficiency multiplier (default 1.0 = unchanged)
+      call config_manager%get_real("processes/wetdep/jacob/so4_washout_eff", &
+         this%jacob_config%so4_washout_eff, rc, 1.0_fp)
+      if (rc /= CC_SUCCESS) this%jacob_config%so4_washout_eff = 1.0_fp
 
 
    end subroutine load_jacob_config

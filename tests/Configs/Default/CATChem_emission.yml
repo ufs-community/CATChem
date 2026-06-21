@@ -181,6 +181,12 @@ dms:
     units: "nmol/l"
     scale: [1.0]
     map: ["dms_in"]
+volcano:
+  SO2:
+    long_name: "Volcanic Sulfur Dioxide (degassing)"
+    units: "kg/m2/s"
+    scale: [2.0]   # file rate is kg S/s; 2.0 = fMassSO2/fMassSulfur (64/32) -> kg SO2/s
+    map: ["so2"]
 dust:
   clayfrac:
     long_name: "Clay Fraction"

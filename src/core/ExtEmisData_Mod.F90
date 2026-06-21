@@ -56,6 +56,10 @@ MODULE ExtEmisData_Mod
       INTEGER,  ALLOCATABLE         :: ip(:)               !< i-indices for point sources
       INTEGER,  ALLOCATABLE         :: jp(:)               !< j-indices for point sources
       INTEGER,  ALLOCATABLE         :: ijmap(:)            !< Number of point sources within the model domain
+      INTEGER                       :: npts = 0            !< Number of point sources read from file (all PEs)
+      REAL(fp), ALLOCATABLE         :: pemis(:)            !< Per-point emission rate from file [kg/s] (e.g. kg S/s for volcanoes)
+      REAL(fp), ALLOCATABLE         :: pbot(:)             !< Per-point base/vent elevation [m above sea level]
+      REAL(fp), ALLOCATABLE         :: ptop(:)             !< Per-point plume/cloud-column top [m above sea level]
       INTEGER                       :: n_times = 0         !< Number of time steps in file
       INTEGER                       :: current_time_idx = 1 !< Current time index
       LOGICAL                       :: time_interpolate = .true. !< Enable time interpolation
@@ -297,6 +301,10 @@ CONTAINS
       if (allocated(this%ip)) deallocate(this%ip)
       if (allocated(this%jp)) deallocate(this%jp)
       if (allocated(this%ijmap)) deallocate(this%ijmap)
+      if (allocated(this%pemis)) deallocate(this%pemis)
+      if (allocated(this%pbot)) deallocate(this%pbot)
+      if (allocated(this%ptop)) deallocate(this%ptop)
+      this%npts = 0
 
       this%field_name = ''
       this%long_name = ''

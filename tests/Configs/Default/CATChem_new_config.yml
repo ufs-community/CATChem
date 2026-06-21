@@ -328,6 +328,15 @@ processes:
       frequency: "monthly"
       diagnostics: true
       diag_list: [conc]
+    volcano:
+      activate: true
+      scale_factor: 1.0
+      source_file: "ExtData/volcanic/so2_volcanic_emissions_Carns.%y4%m2%d2.rc"
+      format: "volcano"      # triggers the point-source reader + 3D injector
+      gridded: false
+      frequency: "daily"     # "static" if for climatology 
+      diagnostics: false     #current will all be zeros
+      diag_list: [SO2]
     fire_so2:
       activate: true
       scale_factor: 0.7778
@@ -463,6 +472,8 @@ processes:
     jacob:
       scale_factor: 1.0
       radius_threshold: 0.05
+      so4_gocart_resusp: true #sulfate-only GOCART-style resuspension toggle (default on)
+      so4_washout_eff: 0.3 #wash out factor for SO4 only
   settling:
     activate: true
     diagnostics: true

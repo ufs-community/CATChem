@@ -33,7 +33,7 @@ module catchem_nuopc_interface
    ! use catchem_nuopc_netcdf_out
    ! use machine, only: kind_phys
    use precision_mod, only: fp
-   use Constants, only: g0, Rd
+   use Constants, only: g0, Rd, Re
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -236,6 +236,45 @@ contains
       where (met_state%lon > 180.0_fp)
          met_state%lon = met_state%lon - 360.0_fp
       end where
+
+      ! Populate grid-cell areas [m2] used for point-source emissions and other
+      ! per-area conversions (the NUOPC path does not import an area field).
+      ! Preference order:
+      !   1) ESMF_GRIDITEM_AREA attached to the grid (true FV3 cell areas [m2]).
+      !   2) ESMF_FieldRegridGetArea, which returns areas on the unit sphere
+      !      (steradians); scale by Re^2 to obtain m2.
+      if (allocated(met_state%AREA_M2)) then
+         block
+            type(ESMF_Field) :: areaField
+            real(ESMF_KIND_R8), pointer :: areaPtr(:,:)
+            integer :: arc
+            nullify(areaPtr)
+            call ESMF_GridGetItem(input_grid, itemflag=ESMF_GRIDITEM_AREA, &
+               staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=areaPtr, rc=arc)
+            if (arc == ESMF_SUCCESS .and. associated(areaPtr)) then
+               if (size(areaPtr,1) == nx .and. size(areaPtr,2) == ny) then
+                  met_state%AREA_M2 = real(areaPtr, fp)
+               end if
+            else
+               ! Fall back to computing cell areas from the grid geometry.
+               nullify(areaPtr)
+               areaField = ESMF_FieldCreate(input_grid, typekind=ESMF_TYPEKIND_R8, &
+                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=arc)
+               if (arc == ESMF_SUCCESS) call ESMF_FieldRegridGetArea(areaField, rc=arc)
+               if (arc == ESMF_SUCCESS) call ESMF_FieldGet(areaField, farrayPtr=areaPtr, rc=arc)
+               if (arc == ESMF_SUCCESS .and. associated(areaPtr)) then
+                  if (size(areaPtr,1) == nx .and. size(areaPtr,2) == ny) then
+                     met_state%AREA_M2 = real(areaPtr, fp) * Re * Re
+                  end if
+               else
+                  call ESMF_LogWrite('catchem_nuopc_init: could not determine grid-cell '// &
+                     'areas; AREA_M2 left unset (point emissions will be skipped)', &
+                     ESMF_LOGMSG_WARNING, rc=arc)
+               end if
+               call ESMF_FieldDestroy(areaField, rc=arc)
+            end if
+         end block
+      end if
 
       !initialize extemission data here
       config_manager => state_mgr%get_config_ptr()
