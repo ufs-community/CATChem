@@ -334,7 +334,9 @@ contains
        case ('geos12')
          call this%run_geos12_scheme_column(column, rc)
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown seasalt scheme "' // &
+            trim(this%process_config%seasalt_config%scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessSeaSaltInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column

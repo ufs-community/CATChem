@@ -335,7 +335,9 @@ contains
        case ('ginoux')
          call this%run_ginoux_scheme_column(column, rc)
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown dust scheme "' // &
+            trim(this%process_config%dust_config%scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessDustInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column

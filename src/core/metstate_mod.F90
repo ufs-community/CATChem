@@ -1576,6 +1576,7 @@ CONTAINS
          enddo
        case ('CLAYFRAC', 'clayfrac', 'SANDFRAC', 'sandfrac', 'SSM', 'ssm', 'RDRAG', 'rdrag', 'USTAR_THRESHOLD', 'ustar_threshold')
          !place holder. These are read in from emission read module for now. Here is to make sure required_met is all set.
+         write(*,'(A)') 'Warning: Some Fengsha related met fields are read in from emission module, which will be disabled in the future!'
        case ('SALINITY', 'salinity')
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
 

@@ -547,9 +547,9 @@ contains
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
                   if (category%is_2d) then
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1), error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
                   else
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux, error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A)') trim(pName), ': Failed to set met_state'
