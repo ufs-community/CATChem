@@ -337,7 +337,7 @@ processes:
       frequency: "daily"     # "static" if for climatology
       diagnostics: false     #current will all be zeros
       diag_list: [SO2]
-    fire_so2:
+    fire:
       activate: true
       scale_factor: 0.7778
       topfraction: -1.0
@@ -346,42 +346,9 @@ processes:
       gridded: true
       is_2d: true
       regrid_method: conserve
+      time_interpolation: linear
       diurnal_bb: true
-      lat_name: "lat"
-      lon_name: "lon"
-      vertical_dist: "Ppbl"
-      frequency: "daily"
-      plume_rise: "sofiev"
-      diagnostics: true
-      diag_list: [biomass]
-    fire_oc:
-      activate: true
-      scale_factor: 0.7778
-      topfraction: -1.0
-      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_oc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
-      format: "netcdf"
-      gridded: true
-      is_2d: true
-      regrid_method: conserve
-      lat_name: "lat"
-      lon_name: "lon"
-      vertical_dist: "Ppbl"
-      frequency: "daily"
-      use_oc_fbb: true  #apply Mie-based BB emission scaling for OC following GOCART2G CAEmission
-      diurnal_bb: true
-      plume_rise: "sofiev"
-      diagnostics: true
-      diag_list: [biomass]
-    fire_bc:
-      activate: true
-      scale_factor: 0.7778
-      topfraction: -1.0
-      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_bc.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
-      format: "netcdf"
-      gridded: true
-      is_2d: true
-      regrid_method: conserve
-      diurnal_bb: true
+      use_oc_fbb: true
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "Ppbl"
