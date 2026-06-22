@@ -328,7 +328,9 @@ contains
          call this%run_wesely_scheme_column(column, rc)
          if (rc /= CC_SUCCESS) return
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown drydep gas scheme "' // &
+            trim(this%process_config%drydep_config%gas_scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessDryDepInterface_Mod.F90)')
          return
       end select
 
@@ -339,7 +341,9 @@ contains
        case ('zhang')
          call this%run_zhang_scheme_column(column, rc)
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown drydep aerosol scheme "' // &
+            trim(this%process_config%drydep_config%aero_scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessDryDepInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column
