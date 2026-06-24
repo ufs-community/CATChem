@@ -174,7 +174,11 @@ contains
 
       rc = CC_SUCCESS
 
-      ! Finalize all process registries (handled by finalizer)
+      ! Explicitly clean up each registry before deallocation to ensure
+      ! allocatable subcomponents within the fixed-size fields(:) array are freed
+      do i = 1, this%num_processes
+         call this%process_registries(i)%cleanup()
+      end do
 
       ! Deallocate arrays
       if (allocated(this%process_registries)) then
@@ -297,13 +301,16 @@ contains
       ! Find and remove process
       do i = 1, this%num_processes
          if (trim(this%process_names(i)) == trim(process_name)) then
-            ! Finalize registry (handled by finalizer)
-
             ! Shift remaining processes
+            ! (intrinsic assignment frees allocatable components of the overwritten slot at each step)
             do j = i, this%num_processes - 1
                this%process_names(j) = this%process_names(j + 1)
                this%process_registries(j) = this%process_registries(j + 1)
             enddo
+
+            ! The tail slot is now a duplicate; clean it up
+            ! so its allocatable field data is freed immediately rather than at finalize
+            call this%process_registries(this%num_processes)%cleanup()
 
             this%num_processes = this%num_processes - 1
             rc = CC_SUCCESS

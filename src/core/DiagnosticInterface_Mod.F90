@@ -827,8 +827,8 @@ contains
       if (present(rc)) rc = 0
       this%process_name = ''
       if (present(process_name)) this%process_name = trim(process_name)
+      call this%cleanup()  ! Free any previously allocated field data before resetting
       this%n_fields = 0
-      call this%cleanup()  ! Clean up any previous state
       this%is_initialized = .true.
    end subroutine diag_registry_init
 
