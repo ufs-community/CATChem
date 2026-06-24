@@ -170,7 +170,7 @@ contains
       class(DiagnosticManagerType), intent(inout) :: this
       integer, intent(out) :: rc
 
-      integer :: i, local_rc
+      integer :: i
 
       rc = CC_SUCCESS
 
@@ -294,7 +294,7 @@ contains
       character(len=*), intent(in) :: process_name
       integer, intent(out) :: rc
 
-      integer :: i, j, local_rc
+      integer :: i, j
 
       rc = CC_FAILURE
 
