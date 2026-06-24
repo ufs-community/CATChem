@@ -1777,56 +1777,56 @@ contains
 
       select case (trim(name))
          ! --- Mineral dust (5 bins) ---
-      case ('dust1', 'DUST1')
+       case ('dust1', 'DUST1')
          w = one                                   ! fully in PM2.5 and PM10
-      case ('dust2', 'DUST2')
+       case ('dust2', 'DUST2')
          if (is25) then
             w = w25_du2                            ! partial in PM2.5
          else
             w = one
          end if
-      case ('dust3', 'DUST3')
+       case ('dust3', 'DUST3')
          if (.not. is25) w = one                   ! PM10 only
-      case ('dust4', 'DUST4')
+       case ('dust4', 'DUST4')
          if (.not. is25) w = w_du4                 ! partial in PM10
-      case ('dust5', 'DUST5')
+       case ('dust5', 'DUST5')
          w = 0.0_fp                                ! coarser than PM10
 
          ! --- Sea salt (5 bins) ---
-      case ('seas1', 'SEAS1', 'seas2', 'SEAS2')
+       case ('seas1', 'SEAS1', 'seas2', 'SEAS2')
          w = one
-      case ('seas3', 'SEAS3')
+       case ('seas3', 'SEAS3')
          if (is25) then
             w = w25_ss3                            ! partial in PM2.5
          else
             w = one
          end if
-      case ('seas4', 'SEAS4')
+       case ('seas4', 'SEAS4')
          if (.not. is25) w = one                   ! PM10 only
-      case ('seas5', 'SEAS5')
+       case ('seas5', 'SEAS5')
          w = 0.0_fp                                ! coarser than PM10
 
          ! --- Sulfate ---
-      case ('so4', 'SO4')
+       case ('so4', 'SO4')
          w = w_so4                                 ! (NH4)2SO4 mass scaling
 
          ! --- Nitrate aerosols (present in extended mechanisms) ---
-      case ('NO3an1', 'no3an1','NO3AN1')
+       case ('NO3an1', 'no3an1','NO3AN1')
          w = w_no3
-      case ('NO3an2', 'no3an2', 'NO3AN2')
+       case ('NO3an2', 'no3an2', 'NO3AN2')
          if (is25) then
             w = w25_no3an2
          else
             w = w10_no3an2
          end if
-      case ('NO3an3', 'no3an3', 'NO3AN3')
+       case ('NO3an3', 'no3an3', 'NO3AN3')
          w = w10_no3an3                            ! same weight for PM2.5/PM10
 
          ! --- Carbonaceous aerosols (BC/OC, all fine mode) ---
-      case ('bc1', 'bc2', 'oc1', 'oc2', 'BC1', 'BC2', 'OC1', 'OC2')
+       case ('bc1', 'bc2', 'oc1', 'oc2', 'BC1', 'BC2', 'OC1', 'OC2')
          w = one
 
-      case default
+       case default
          w = 0.0_fp
       end select
 
