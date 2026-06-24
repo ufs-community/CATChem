@@ -19,6 +19,8 @@ jobs:
         gcc-version: ["13"]
         nuopc: [true, false]
         include:
+          - gcc-version: "12"
+            nuopc: false
           - gcc-version: "14"
             nuopc: false
     defaults:
