@@ -44,7 +44,8 @@ module catchem_nuopc_interface
    use TimeState_Mod, only: TimeStateType
    use ExtEmisData_Mod, only: ExtEmisDataType  ! External emissions data type
    use DiagnosticManager_Mod, only: DiagnosticManagerType
-   use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
+   use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
+      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
    use aqmio, only: AQMIO_Create, AQMIO_Destroy, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
       AQMIO_LatlonInit, AQMIO_LatlonCleanup
    use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
@@ -510,6 +511,26 @@ contains
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
+
+      ! Update PM2.5/PM10 aerosol diagnostics. These are stored in the
+      ! DiagnosticManager so they are available both for NetCDF output and for
+      ! NUOPC export, and must be computed after run_timestep (so concentrations
+      ! are current) and before the export transform.
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("update_pm_diagnostics", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
+      call update_pm_diagnostics(cc_wrap, rc)
+      if (rc /= CC_SUCCESS) then
+         errmsg = 'Error updating PM2.5/PM10 aerosol diagnostics'
+         return
+      end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("update_pm_diagnostics", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
@@ -1149,6 +1170,35 @@ contains
          nv = size(fptr4d, 4)
          ! Reverse vertical layers
          do v = 1, nv
+            ! PM2.5/PM10 are carried as slots inside the tracer mass-fraction
+            ! array (following GOCART), but they are diagnostics rather than
+            ! CATChem species, so they are not present in the tracer_map. Fill
+            ! these slots directly from the 'aerosol' PM diagnostics that were
+            ! computed and stored in the DiagnosticManager this timestep.
+            if (trim(cc_wrap%tracer_map%names(v)) == 'pm25' .or. &
+               trim(cc_wrap%tracer_map%names(v)) == 'pm10') then
+               found_index = cc_wrap%catchem_model%get_diag_index_from_field(trim(cc_wrap%tracer_map%names(v)))
+               if (found_index > 0) then
+                  if (allocated(cc_diag_data)) deallocate(cc_diag_data)
+                  call cc_wrap%catchem_model%get_diagnostic(diagnostic_names(found_index), cc_diag_data, rc)
+                  if (rc /= ESMF_SUCCESS) then
+                     call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+                        msg="Failed to get diagnostic data for: " // trim(diagnostic_names(found_index)), &
+                        line=__LINE__, file=__FILE__, rcToReturn=rc)
+                     return
+                  end if
+                  do k = 1, nk
+                     kk = k   ! no vertical reversal (CATChem and NUOPC share orientation)
+                     do j = 1, nj
+                        do i = 1, ni
+                           fptr4d(i,j,kk,v) = cc_diag_data(i,j,k)
+                        end do
+                     end do
+                  end do
+               end if
+               cycle   ! handled; move to next tracer
+            end if
+
             v_cc = cc_wrap%tracer_map%nuopc_to_cc(v)
             if (v_cc > 0) then
                if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
@@ -1687,6 +1737,287 @@ contains
       end if
 
    end subroutine write_chem_diagnostics
+
+   !> \brief PM mass weight for a single aerosol species/bin
+   !!
+   !! \details
+   !! Returns the fractional contribution of an aerosol species (or size bin)
+   !! to a given particulate-matter size class (PM2.5 or PM10). This mirrors
+   !! the weighted-sum approach of the GOCART UFS Aerosol_Diag_Mod ComputePM /
+   !! PMGetTracerWeight routine, but is keyed on CATChem per-bin species
+   !! short_names (dust1..dust5, seas1..seas5, so4, bc1/bc2, oc1/oc2, and the
+   !! NO3an* nitrate aerosols) instead of contiguous tracer indices.
+   !!
+   !! A weight of 0 means the species does not contribute to that size class.
+   !!
+   !! \param name    Aerosol species short_name (e.g. 'dust2', 'seas3', 'so4')
+   !! \param pm_size Size class string: 'PM25' or 'PM10'
+   !! \return w      Mass weight (dimensionless multiplier)
+   function pm_tracer_weight(name, pm_size) result(w)
+      character(len=*), intent(in) :: name
+      character(len=*), intent(in) :: pm_size
+      real(fp) :: w
+
+      ! Partial-bin mass fractions (log-ratio of size cutoff to bin upper edge),
+      ! taken directly from the GOCART Aerosol_Diag_Mod PMGetTracerWeight routine.
+      real(fp), parameter :: one        = 1.0_fp
+      real(fp), parameter :: w25_du2    = log(1.250_fp) / log(1.8_fp)
+      real(fp), parameter :: w_du4      = log(1.667_fp) / log(2.0_fp)
+      real(fp), parameter :: w25_ss3    = log(2.50_fp)  / log(3.0_fp)
+      real(fp), parameter :: w_so4      = 132.14_fp / 96.06_fp
+      real(fp), parameter :: w_no3      = 80.043_fp / 62.0_fp
+      real(fp), parameter :: w10_no3an2 = 0.808_fp * w_no3
+      real(fp), parameter :: w25_no3an2 = 0.138_fp * w_no3
+      real(fp), parameter :: w10_no3an3 = 0.164_fp * w_no3
+
+      logical :: is25
+
+      w = 0.0_fp
+      is25 = (trim(pm_size) == 'PM25')
+
+      select case (trim(name))
+         ! --- Mineral dust (5 bins) ---
+      case ('dust1', 'DUST1')
+         w = one                                   ! fully in PM2.5 and PM10
+      case ('dust2', 'DUST2')
+         if (is25) then
+            w = w25_du2                            ! partial in PM2.5
+         else
+            w = one
+         end if
+      case ('dust3', 'DUST3')
+         if (.not. is25) w = one                   ! PM10 only
+      case ('dust4', 'DUST4')
+         if (.not. is25) w = w_du4                 ! partial in PM10
+      case ('dust5', 'DUST5')
+         w = 0.0_fp                                ! coarser than PM10
+
+         ! --- Sea salt (5 bins) ---
+      case ('seas1', 'SEAS1', 'seas2', 'SEAS2')
+         w = one
+      case ('seas3', 'SEAS3')
+         if (is25) then
+            w = w25_ss3                            ! partial in PM2.5
+         else
+            w = one
+         end if
+      case ('seas4', 'SEAS4')
+         if (.not. is25) w = one                   ! PM10 only
+      case ('seas5', 'SEAS5')
+         w = 0.0_fp                                ! coarser than PM10
+
+         ! --- Sulfate ---
+      case ('so4', 'SO4')
+         w = w_so4                                 ! (NH4)2SO4 mass scaling
+
+         ! --- Nitrate aerosols (present in extended mechanisms) ---
+      case ('NO3an1', 'no3an1','NO3AN1')
+         w = w_no3
+      case ('NO3an2', 'no3an2', 'NO3AN2')
+         if (is25) then
+            w = w25_no3an2
+         else
+            w = w10_no3an2
+         end if
+      case ('NO3an3', 'no3an3', 'NO3AN3')
+         w = w10_no3an3                            ! same weight for PM2.5/PM10
+
+         ! --- Carbonaceous aerosols (BC/OC, all fine mode) ---
+      case ('bc1', 'bc2', 'oc1', 'oc2', 'BC1', 'BC2', 'OC1', 'OC2')
+         w = one
+
+      case default
+         w = 0.0_fp
+      end select
+
+   end function pm_tracer_weight
+
+   !> \brief Compute 3D PM2.5 and PM10 aerosol mass concentrations
+   !!
+   !! \details
+   !! Computes particulate-matter mass concentrations (ug m-3) as a weighted
+   !! sum over aerosol species:  PM = sum_s w_s * conc_s * air_density, where
+   !! conc_s is the aerosol mixing ratio (ug kg-1) and air_density is the dry
+   !! air density (kg m-3). Weights are obtained from pm_tracer_weight and the
+   !! sum runs over every aerosol species in the chemistry state. No vertical
+   !! flip is applied (CATChem concentrations and AIRDEN share orientation).
+   !!
+   !! \param cc_wrap CATChem wrapper containing the model state
+   !! \param pm25    (out) allocatable 3D PM2.5 mass concentration (ug m-3)
+   !! \param pm10    (out) allocatable 3D PM10 mass concentration (ug m-3)
+   !! \param rc      Return code
+   subroutine compute_pm_diagnostics(cc_wrap, pm25, pm10, rc)
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      real(fp), allocatable, intent(out) :: pm25(:,:,:)
+      real(fp), allocatable, intent(out) :: pm10(:,:,:)
+      integer, intent(out) :: rc
+
+      type(StateManagerType), pointer :: state_mgr => null()
+      type(ChemStateType), pointer :: chem_state => null()
+      type(MetStateType), pointer :: met_state => null()
+      real(fp), pointer :: air_density(:,:,:) => null()
+      real(fp), pointer :: conc_data(:,:,:) => null()
+      integer :: i, ni, nj, nk
+      real(fp) :: w25, w10
+
+      rc = CC_SUCCESS
+
+      ! Get state manager and the chemistry / meteorology states
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      if (.not. associated(state_mgr)) then
+         write(*,'(A)') 'Error: StateManager not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      chem_state => state_mgr%get_chem_state_ptr()
+      if (.not. associated(chem_state)) then
+         write(*,'(A)') 'Error: ChemState not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      met_state => state_mgr%get_met_state_ptr()
+      if (.not. associated(met_state)) then
+         write(*,'(A)') 'Error: MetState not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      air_density => met_state%AIRDEN
+      if (.not. associated(air_density)) then
+         write(*,'(A)') 'Error: AIRDEN not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      ni = size(air_density, 1)
+      nj = size(air_density, 2)
+      nk = size(air_density, 3)
+
+      allocate(pm25(ni, nj, nk))
+      allocate(pm10(ni, nj, nk))
+      pm25 = 0.0_fp
+      pm10 = 0.0_fp
+
+      ! Weighted sum over all aerosol species
+      do i = 1, size(chem_state%ChemSpecies)
+         if (.not. chem_state%ChemSpecies(i)%is_aerosol) cycle
+
+         w25 = pm_tracer_weight(trim(chem_state%ChemSpecies(i)%short_name), 'PM25')
+         w10 = pm_tracer_weight(trim(chem_state%ChemSpecies(i)%short_name), 'PM10')
+         if (w25 == 0.0_fp .and. w10 == 0.0_fp) cycle
+
+         conc_data => chem_state%ChemSpecies(i)%conc
+         if (.not. associated(conc_data)) cycle
+
+         ! conc_data (ug kg-1) * air_density (kg m-3) -> ug m-3
+         if (w25 /= 0.0_fp) pm25 = pm25 + w25 * conc_data * air_density
+         if (w10 /= 0.0_fp) pm10 = pm10 + w10 * conc_data * air_density
+
+         nullify(conc_data)
+      end do
+
+   end subroutine compute_pm_diagnostics
+
+   !> \brief Register (lazily) and update PM2.5/PM10 diagnostics each timestep
+   !!
+   !! \details
+   !! On first invocation this registers an 'aerosol' diagnostic process in the
+   !! DiagnosticManager and creates two 3D fields, 'pm25' and 'pm10'. On every
+   !! invocation it recomputes the PM mass concentrations and stores them in the
+   !! DiagnosticManager. Storing the fields here makes them available both for
+   !! NetCDF file output (via the standard process-diagnostics writer) and for
+   !! NUOPC export (via transform_catchem_to_field). Must be called after the
+   !! chemistry timestep has run and before the export transform.
+   !!
+   !! \param cc_wrap CATChem wrapper containing the model state
+   !! \param rc      Return code
+   subroutine update_pm_diagnostics(cc_wrap, rc)
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      integer, intent(out) :: rc
+
+      logical, save :: pm_diag_registered = .false.
+
+      type(DiagnosticManagerType), pointer :: diag_mgr => null()
+      type(DiagnosticRegistryType), pointer :: registry => null()
+      type(DiagnosticFieldType), pointer :: field_ptr => null()
+      type(DiagnosticFieldType) :: pm_field
+      real(fp), allocatable :: pm25(:,:,:), pm10(:,:,:)
+      integer :: ni, nj, nk
+
+      rc = CC_SUCCESS
+
+      ! Compute current PM mass concentrations
+      call compute_pm_diagnostics(cc_wrap, pm25, pm10, rc)
+      if (rc /= CC_SUCCESS) return
+
+      ni = size(pm25, 1)
+      nj = size(pm25, 2)
+      nk = size(pm25, 3)
+
+      ! Get the diagnostic manager
+      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
+      if (.not. associated(diag_mgr)) then
+         write(*,'(A)') 'Error: DiagnosticManager not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      ! Lazily register the 'aerosol' process and its PM fields
+      if (.not. pm_diag_registered) then
+         ! register_process is a no-op-with-error if already present; ignore dup
+         call diag_mgr%register_process('aerosol', rc)
+         rc = CC_SUCCESS
+
+         call diag_mgr%get_process_registry('aerosol', registry, rc)
+         if (rc /= CC_SUCCESS .or. .not. associated(registry)) then
+            write(*,'(A)') 'Error: could not get aerosol diagnostic registry'
+            rc = CC_FAILURE
+            return
+         end if
+
+         ! PM2.5 field
+         call pm_field%create('pm25', 'PM2.5 aerosol mass concentration', &
+            'ug m-3', DIAG_REAL_3D, process_name='aerosol', rc=rc)
+         if (rc /= CC_SUCCESS) return
+         call pm_field%initialize_data((/ni, nj, nk/), rc)
+         if (rc /= CC_SUCCESS) return
+         call registry%register_field(pm_field, rc)
+         if (rc /= CC_SUCCESS) return
+
+         ! PM10 field
+         call pm_field%create('pm10', 'PM10 aerosol mass concentration', &
+            'ug m-3', DIAG_REAL_3D, process_name='aerosol', rc=rc)
+         if (rc /= CC_SUCCESS) return
+         call pm_field%initialize_data((/ni, nj, nk/), rc)
+         if (rc /= CC_SUCCESS) return
+         call registry%register_field(pm_field, rc)
+         if (rc /= CC_SUCCESS) return
+
+         pm_diag_registered = .true.
+      end if
+
+      ! Update the stored PM fields with the current values
+      call diag_mgr%get_process_registry('aerosol', registry, rc)
+      if (rc /= CC_SUCCESS .or. .not. associated(registry)) then
+         write(*,'(A)') 'Error: could not get aerosol diagnostic registry for update'
+         rc = CC_FAILURE
+         return
+      end if
+
+      field_ptr => registry%get_field_ptr('pm25')
+      if (associated(field_ptr)) call field_ptr%update_data(array_3d=pm25)
+      nullify(field_ptr)
+
+      field_ptr => registry%get_field_ptr('pm10')
+      if (associated(field_ptr)) call field_ptr%update_data(array_3d=pm10)
+      nullify(field_ptr)
+
+      if (allocated(pm25)) deallocate(pm25)
+      if (allocated(pm10)) deallocate(pm10)
+
+   end subroutine update_pm_diagnostics
 
    !> \brief Update time variable in NetCDF file
    !!
