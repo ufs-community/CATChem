@@ -318,8 +318,8 @@ contains
                ! Find position of this species in diagnostic_species_id array
                do diag_idx = 1, size(diagnostic_species_id)
                   if (diagnostic_species_id(diag_idx) == curr_idx) then
-                     ! Add your custom production mass (negative for loss) per species per level calculation
-                     Production_mass_per_species_per_level(:, diag_idx) = -delq(num_layers:1:-1) !turns to negative since it is always loss here
+                     ! Add your custom production mass (loss here) per species per level calculation
+                     Production_mass_per_species_per_level(:, diag_idx) = delq(num_layers:1:-1) !note it is always loss here
                      exit
                   end if
                end do

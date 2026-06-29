@@ -446,8 +446,8 @@ add_test(
 #add_test(NAME test_chem COMMAND test_chem)
 
 # Process-specific tests - binaries land in build/tests/process/<name>/
-# Processes that require CATCHEM_BUILD_MUSICA
-set(_musica_processes GasChem)
+set(CATCHEM_TESTS_DIR "${CMAKE_CURRENT_LIST_DIR}")
+set(CATCHEM_TESTS_CONFIG_DIR "${CATCHEM_TESTS_DIR}/Configs/Default")
 
 file(GLOB _process_test_dirs LIST_DIRECTORIES true process/*)
 foreach(_dir ${_process_test_dirs})

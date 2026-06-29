@@ -4,6 +4,7 @@
 !! Provides timekeeping, solar zenith angle, and calendar utilities for CATChem.
 !!
 module TimeState_Mod
+   use Precision_Mod, only: fp
    use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE
    use constants, only: PI, PI_180
    implicit none
@@ -22,9 +23,9 @@ module TimeState_Mod
       integer :: hour = 0
       integer :: minute = 0
       integer :: second = 0
-      real    :: timestep = 3600.0 !< seconds
-      real    :: julian_date = 0.0
-      integer :: doy = 1
+      real(fp) :: timestep = 3600.0_fp !< seconds
+      real(fp) :: julian_date = 0.0_fp
+      integer  :: doy = 1
    contains
       procedure :: get_sza
       procedure :: get_cos_sza
@@ -50,16 +51,16 @@ module TimeState_Mod
 contains
 
    !> \brief Compute solar zenith angle (degrees) using latitude, longitude, and time of day
-   real function get_cos_sza(this, lat, lon, mid_timestep) result(cos_sza_val)
+   real(fp) function get_cos_sza(this, lat, lon, mid_timestep) result(cos_sza_val)
       class(TimeStateType), intent(in) :: this
-      real, intent(in) :: lat, lon
+      real(fp), intent(in) :: lat, lon
       logical, intent(in), optional :: mid_timestep
       ! Accurate solar zenith angle calculation
       ! Inputs: lat, lon in degrees; time from this%hour, this%minute, this%second; day of year from this%doy
-      real :: lat_rad, lon_rad, decl_rad, ha_rad
-      real :: decl, eqtime, time_offset, tst, ha
-      !real :: cos_sza_val
-      real :: fractional_hour, gamma
+      real(fp) :: lat_rad, lon_rad, decl_rad, ha_rad
+      real(fp) :: decl, eqtime, time_offset, tst, ha
+      !real(fp) :: cos_sza_val
+      real(fp) :: fractional_hour, gamma
 
       ! Convert latitude and longitude to radians
       lat_rad = lat * PI_180
@@ -68,56 +69,56 @@ contains
       ! Calculate fractional hour of the day (UTC)
       if (present(mid_timestep)) then
          if (mid_timestep) then
-            fractional_hour = real(this%hour) + real(this%minute)/60.0 + real(this%second)/3600.0 + (this%timestep/2.0)/3600.0
+            fractional_hour = real(this%hour, fp) + real(this%minute, fp)/60.0_fp + real(this%second, fp)/3600.0_fp + (this%timestep/2.0_fp)/3600.0_fp
          end if
       else
-         fractional_hour = real(this%hour) + real(this%minute)/60.0 + real(this%second)/3600.0
+         fractional_hour = real(this%hour, fp) + real(this%minute, fp)/60.0_fp + real(this%second, fp)/3600.0_fp
       end if
 
       ! Calculate day angle (in radians)
-      gamma = 2.0 * PI * (real(this%doy) - 1.0) / 365.0
+      gamma = 2.0_fp * PI * (real(this%doy, fp) - 1.0_fp) / 365.0_fp
 
       ! Solar declination (in degrees, then radians)
-      !decl = 23.44 * sin(2.0 * PI * (real(this%doy) - 81.0) / 365.0)
+      !decl = 23.44 * sin(2.0 * PI * (real(this%doy, fp) - 81.0) / 365.0)
       !decl_rad = decl * PI_180
 
       !use a more accurate formula for declination
-      decl = 0.006918 - 0.399912*cos(gamma) + 0.070257*sin(gamma) &
-         - 0.006758*cos(2.0*gamma) + 0.000907*sin(2.0*gamma) &
-         - 0.002697*cos(3.0*gamma) + 0.00148*sin(3.0*gamma)
+      decl = 0.006918_fp - 0.399912_fp*cos(gamma) + 0.070257_fp*sin(gamma) &
+         - 0.006758_fp*cos(2.0_fp*gamma) + 0.000907_fp*sin(2.0_fp*gamma) &
+         - 0.002697_fp*cos(3.0_fp*gamma) + 0.00148_fp*sin(3.0_fp*gamma)
       decl_rad = decl
 
       ! Equation of time (in minutes).
-      eqtime = 229.18 * (0.000075 + 0.001868 * cos(gamma) - 0.032077 * sin(gamma) \
-      - 0.014615 * cos(2.0*gamma) - 0.040849 * sin(2.0*gamma))
+      eqtime = 229.18_fp * (0.000075_fp + 0.001868_fp * cos(gamma) - 0.032077_fp * sin(gamma) &
+         - 0.014615_fp * cos(2.0_fp*gamma) - 0.040849_fp * sin(2.0_fp*gamma))
 
       ! Time offset (in minutes). Note here we assume longitude between -180 and 180 degrees
-      time_offset = eqtime + 4.0 * lon
+      time_offset = eqtime + 4.0_fp * lon
 
       ! True solar time (in minutes)
-      tst = fractional_hour * 60.0 + time_offset
+      tst = fractional_hour * 60.0_fp + time_offset
 
       ! Hour angle (in degrees, then radians)
-      ha = (tst / 4.0) - 180.0
+      ha = (tst / 4.0_fp) - 180.0_fp
       ha_rad = ha * PI_180
 
       ! Solar zenith angle calculation
       cos_sza_val = sin(lat_rad) * sin(decl_rad) + cos(lat_rad) * cos(decl_rad) * cos(ha_rad)
-      cos_sza_val = max(-1.0, min(1.0, cos_sza_val)) ! Clamp for safety
+      cos_sza_val = max(-1.0_fp, min(1.0_fp, cos_sza_val)) ! Clamp for safety
    end function get_cos_sza
 
    !> \brief Compute cosine of solar zenith angle
-   real function get_sza(this, lat, lon) result(sza)
+   real(fp) function get_sza(this, lat, lon) result(sza)
       class(TimeStateType), intent(in) :: this
-      real, intent(in) :: lat, lon
-      real :: cos_sza_val
+      real(fp), intent(in) :: lat, lon
+      real(fp) :: cos_sza_val
       cos_sza_val = this%get_cos_sza(lat, lon)
       sza = acos(cos_sza_val) / PI_180
-      sza = min(max(sza, 0.0), 90.0) ! clamp to [0, 90] (daylight) degrees
+      sza = min(max(sza, 0.0_fp), 90.0_fp) ! clamp to [0, 90] (daylight) degrees
    end function get_sza
 
    !> \brief Get model timestep (seconds)
-   real function get_timestep(this) result(dt)
+   real(fp) function get_timestep(this) result(dt)
       class(TimeStateType), intent(in) :: this
       dt = this%timestep
    end function get_timestep
@@ -132,7 +133,7 @@ contains
    end subroutine get_current_date
 
    !> \brief Get Julian date
-   real function get_julian_date(this) result(jd)
+   real(fp) function get_julian_date(this) result(jd)
       class(TimeStateType), intent(in) :: this
       jd = this%julian_date
    end function get_julian_date
@@ -150,7 +151,7 @@ contains
 
       class(TimeStateType), intent(inout) :: this
       integer, optional, intent(in) :: year, month, day, hour, minute, second
-      real, optional, intent(in) :: timestep
+      real(fp), optional, intent(in) :: timestep
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
@@ -168,7 +169,7 @@ contains
       this%hour = 0
       this%minute = 0
       this%second = 0
-      this%timestep = 3600.0  ! 1 hour default
+      this%timestep = 3600.0_fp  ! 1 hour default
 
       if (present(year)) this%year = year
       if (present(month)) this%month = month
@@ -307,8 +308,8 @@ contains
       this%hour = -1
       this%minute = -1
       this%second = -1
-      this%timestep = -1.0
-      this%julian_date = -1.0
+      this%timestep = -1.0_fp
+      this%julian_date = -1.0_fp
       this%doy = -1
 
       call error_mgr%pop_context()
@@ -336,7 +337,7 @@ contains
       this%hour = 0
       this%minute = 0
       this%second = 0
-      this%timestep = 3600.0  ! 1 hour
+      this%timestep = 3600.0_fp  ! 1 hour
 
       ! Recalculate derived quantities
       call this%calculate_derived_fields(error_mgr, rc)
@@ -432,9 +433,9 @@ contains
    !> \brief Calculate local timezone offset (hours) from longitude (robust, clamped)
    pure integer function get_timezone_offset(this, lon) result(tz_offset)
       class(TimeStateType), intent(in) :: this
-      real, intent(in) :: lon
+      real(fp), intent(in) :: lon
       ! Truncate toward zero, clamp to [-12, 14] (real-world timezones)
-      tz_offset = int(lon / 15.0)
+      tz_offset = int(lon / 15.0_fp)
       tz_offset = max(-12, min(14, tz_offset))
    end function get_timezone_offset
 
@@ -469,7 +470,7 @@ contains
       jdn = int(365.25 * (y + 4716)) + int(30.6001 * (m + 1)) + this%day - 1524 - a
 
       ! Julian Date (with fractional day)
-      this%julian_date = real(jdn) + (this%hour + this%minute/60.0 + this%second/3600.0) / 24.0
+      this%julian_date = real(jdn, fp) + (this%hour + this%minute/60.0_fp + this%second/3600.0_fp) / 24.0_fp
 
       ! Calculate day of year
       this%doy = calculate_day_of_year(this%year, this%month, this%day)

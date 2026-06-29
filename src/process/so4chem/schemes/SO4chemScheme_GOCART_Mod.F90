@@ -275,8 +275,8 @@ contains
          end if
       end do
 
-      if (nSO2 == -1 .or. nSO4 == -1 .or. nDMS == -1 .or. nMSA == -1 .or. nOH == -1 .or. nNO3 == -1 .or. nH2O2 == -1) then
-         errMsg = 'Error in compute_gocart: SO2, SO4, DMS, MSA, OH, NO3, and H2O2 must be present in species list.'
+      if (nSO2 == -1 .or. nSO4 == -1 .or. nDMS == -1 .or. nDMS_IN == -1 .or. nMSA == -1 .or. nOH == -1 .or. nNO3 == -1 .or. nH2O2 == -1) then
+         errMsg = 'Error in compute_gocart: SO2, SO4, DMS, DMS_IN, MSA, OH, NO3, and H2O2 must be present in species list.'
          !call CC_Error(trim(errMsg), RC, thisLoc)
          write(*,'(A)') trim(errMsg)
          return
@@ -297,7 +297,12 @@ contains
       h2o2_clim(1,1,:) = species_conc(num_layers:1:-1, nH2O2) * 1.0e-6_fp !change from ppm to mol/mol.
       ! Initialize some variables for the first time
       if (firsttime) then
-         nymd_last = nymd
+         ! IMPORTANT: nymd_last must NOT equal nymd_current so that the
+         ! "if (nymd_last == nymd_current)" block inside SulfateUpdateOxidants
+         ! does NOT fire every timestep. In the original GOCART, nymd_oxidants
+         ! is initialized to -1 and never updated (the condition is never true).
+         ! H2O2 is only recycled via recycle_h2o2 every 3 hours.
+         nymd_last = -1
          ! First time, set initial recycle time
          nhms_last_recycle = nhms
          !allocate and initialize xh2o2_init to climatology for the first time step
@@ -308,16 +313,12 @@ contains
          firsttime = .false.
       end if
 
-      !update nymd_last. This is important for H2O2 reading because the SulfateUpdateOxidants below will check this, although
-      !I think that is a bug in that function. We have to force nymd_last = nymd_current here.
-      if (nymd /= nymd_last) then
-         nymd_last = nymd
-         nhms_last_recycle = nhms  !reset recycle timer when day changes
-      end if
-
+      ! Recycle H2O2 every 3 hours (matching GOCART's daily_alarm(clock,30000) behavior).
+      ! Do NOT update nymd_last - it must stay at -1 to prevent SulfateUpdateOxidants
+      ! from resetting xh2o2 to climatology every timestep.
       recycle_h2o2 = .false.
-      !check if first time step or 3 hours have passed since last H2O2 recycle using actual time
-      if ((nhms == nhms_last_recycle) .or. (nhms - nhms_last_recycle >= 30000)) then
+      if ((nhms - nhms_last_recycle >= 30000) .or. &
+         (nhms < nhms_last_recycle)) then  ! handles day rollover (e.g., 230000 -> 010000)
          nhms_last_recycle = nhms
          recycle_h2o2 = .true.
       end if
@@ -379,10 +380,12 @@ contains
       fMassDMS = species_mw_g(nDMS)
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
-      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg
+      !dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg
+      dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-6_fp * fMassDMS / AIRMW  !ppm ==> kg/kg
       so2(1,1,:) = species_conc(num_layers:1:-1, nSO2) * 1.0e-6_fp * fMassSO2 / AIRMW  ! ppm ==> kg/kg
       so4(1,1,:) = species_conc(num_layers:1:-1, nSO4) * 1.0e-9_fp  !ug/kg ==> kg/kg
-      msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
+      !msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
+      msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-9_fp  ! ug/kg ==> kg/kg
 
       !run DMS emission scheme
       dmso_conc = species_conc(1, nDMS_IN) !in [nmol/L]. Note this is a special unit case since it is not atmospheric composition.
@@ -424,12 +427,17 @@ contains
          species_tendencies(:, nSO2) = species_conc(:, nSO2)  !keep SO2 unchanged.
       end if
       species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1) * 1.0e9_fp  !kg/kg ==> ug/kg
-      species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassMSA  ! kg/kg ==> ppm
-      species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) * 1.0e9_fp  ! kg/kg ==> ug/kg
+      species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e9_fp  ! kg/kg ==> ug/kg
+      species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassDMS  ! kg/kg ==> ppm
       species_tendencies(:, nDMS_IN) = species_conc(:, nDMS_IN)  !Note: DMS in ocean is unchanged since it is read in through monthly files.
-      species_tendencies(:, nOH) = species_conc(:, nOH) !keep three oxidants unchanged due to same reason as above
+      species_tendencies(:, nOH) = species_conc(:, nOH) !keep OH and NO3 oxidants unchanged (no cross-process consumption modeled)
       species_tendencies(:, nNO3) = species_conc(:, nNO3)
-      species_tendencies(:, nH2O2) = species_conc(:, nH2O2)
+      !H2O2: write the post-chem (afterchem) H2O2 depleted by aqueous SO2 oxidation back into the shared
+      !array so that the downstream wet-deposition process sees the same H2O2 already consumed here, as in
+      !GEOS-Chem/GOCART. The host (catchem_emis_mod) re-imports the time-interpolated GMI climatology into
+      !species_conc(nH2O2) at the start of the next timestep, so this per-step overwrite does NOT corrupt the
+      !climatology baseline; the cross-step/3-hourly H2O2 depletion memory is carried by xh2o2_init above.
+      species_tendencies(:, nH2O2) = xh2o2_init_gocart(1,1,num_layers:1:-1) * 1.0e6_fp  ! mol/mol ==> ppm
 
       ! Per-species-per-level diagnostic: 2D array (levels, species)
       if (present(Production_rate_per_species_per_level) .and. present(diagnostic_species_id)) then

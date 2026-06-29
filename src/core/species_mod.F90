@@ -105,6 +105,7 @@ module species_mod
       logical       :: wd_LiqAndGas         !< whether the ice-to-gas ratio can be computed for this species by co-condensation
       real(kind=fp) :: wd_convfacI2G        !< conversion factor for computing the ice-to-gas ratio by co-condensation when wd_LiqAndGas = .true.
       real(kind=fp) :: wd_rainouteff(3)     !< temperature-dependent (T < 237k;  237 <= T < 258k;  T >= 258k) scale factor for the fraction of rainout.
+      real(kind=fp) :: wd_reevap_frac       !< fraction of re-evaporated (washout) mass resuspended to the gas/aerosol phase. GEOS-Chem/Luo default 0.5 (Liu et al., 2001); GOCART uses 1.0.
 
       !used for settling
       character(len=30) :: mie_name         !< Mie data name associated with this species for settling velocity calculation
@@ -241,6 +242,7 @@ contains
       this%wd_LiqAndGas = .false.
       this%wd_convfacI2G = 0.0_fp
       this%wd_rainouteff(:) = 0.0_fp
+      this%wd_reevap_frac = 0.5_fp
 
       !carbon chem loss in days
       this%t_chem_loss = -1.0_fp
@@ -621,6 +623,7 @@ contains
       this%wd_LiqAndGas = source%wd_LiqAndGas
       this%wd_convfacI2G = source%wd_convfacI2G
       this%wd_rainouteff = source%wd_rainouteff
+      this%wd_reevap_frac = source%wd_reevap_frac
 
       !gocart carbon loss
       this%t_chem_loss = source%t_chem_loss

@@ -1,5 +1,5 @@
 # SeaSalt Process CMakeLists.txt
-# Generated on: 2025-11-14T23:01:21.792441
+# Generated on: 2026-05-28T17:43:34.385596
 # Author: Barry Baker & Wei Li
 # Description: Process for computing sea salt aerosol emissions over ocean surfaces
 
@@ -71,9 +71,6 @@ install(
 
 # Add subdirectories
 # Note: tests are registered via tests/CMakeLists.txt (tests/process/seasalt/)
-if(BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
 
 # Documentation
 if(BUILD_DOCUMENTATION)
@@ -132,4 +129,4 @@ message(STATUS "  Has size bins: No")
 message(STATUS "  Multiphase: No")
 message(STATUS "  Generate tests: Yes")
 message(STATUS "  Generate docs: Yes")
-message(STATUS "  Generate examples: Yes")
+message(STATUS "  Generate examples: No")

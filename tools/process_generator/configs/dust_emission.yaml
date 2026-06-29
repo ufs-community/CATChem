@@ -2,12 +2,35 @@ name: "dust"
 description: "Process for computing windblown dust emissions"
 class_name: "Dust"
 process_type: "emission"
-author: "Barry Baker"
+author: "Wei Li & Barry Baker"
 
-required_met_fields:
-  - "ustar"
-  - "solar_zenith_angle"
-  - "leaf_area_index"
+# Explicit process behavior configuration with species filtering
+process_behavior:
+  type: "source" #is not doing anything now
+  tendency_mode: "additive" #additive or multiplicative or replacement;
+  species_filter:
+    #type: "all_species"
+    type: "by_metadata"
+    metadata_flags:
+      - "is_dust"  # Filter for species with is_dust=true property
+    #type: "by_list"
+    #species_list:
+      # - "oc1"    #hydrophobic organic carbon
+      # - "oc2"    #hydrophilic organic carbon
+      # - "bc1"    #hydrophobic black carbon
+      # - "bc2"    #hydrophilic black carbon
+  gas_aero_differentiation: false  # Use different schemes for gas and aerosol species
+  tendency_calculation: "rates" #is not doing anything now
+  timestep_dependency: "independent" #is not doing anything now
+  spatial_scope: "column" #is not doing anything now
+  #only 'column' is supported for now
+  parallelization: "column"  #column: (extends(ColumnProcessInterface); use VirtualColumnType ) or global: (extends(ProcessInterface))
+  memory_requirements: "low" #is not doing anything now
+
+required_met_fields:  #needed for other purposes, such as unit conversion
+  - DELP
+required_constants: #needed for other purposes, such as unit conversion
+  - AIRMW
 
 schemes:
   fengsha:
@@ -15,30 +38,42 @@ schemes:
     class_name: "FENGSHA"
     description: "Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS"
     algorithm_type: "explicit"
+    affects_full_column: false
     reference: "Zhang et al. 2022"
-    author: "Barry Baker"
+    author: "Barry Baker & Wei Li"
 
     required_met_fields:
-      - IsLand
       - USTAR
-      - LWI
+      - TSKIN
+      - AIRDEN
+      - SOILM
+      - Z0
       - GVF
+      - LWI
       - LAI
-      - FROCEAN
+      - FRLAKE
+      - FRSNO
       - CLAYFRAC
       - SANDFRAC
-      - FRSNO
       - RDRAG
       - SSM
       - USTAR_THRESHOLD
 
+    required_species_properties:
+      - radius
+      - lower_radius
+      - upper_radius
+
+    required_constants:
+      - g0
+
     parameters:
       alpha:
-        default: 0.16
+        default: 0.20
         min: 0.001
         max: 100.0
         description: "linear scaling factor"
-      beta:
+      gamma:
         default: 1.0
         min: 0.0
         max: 10.0
@@ -48,21 +83,36 @@ schemes:
         min: 0
         max: 10
         description: "Dry Limit factor modifying the Fecan dry limit following Zender 2003"
+      moist_correction_factor:
+        default: 1.0
+        min: 0
+        max: 10
+        description: "Moisture correction factor"
+      kvhmax:
+        default: 0.0002
+        min: 0.0
+        max: 1.0
+        description: "Maximum vertical to horizontal flux ratio"
       drag_option:
         default: 1
         min: 1
         max: 4
         description: "Drag Partition Option: 1 - use input drag, 2 - Darmenova, 3 - Leung 2022, 4 - MB95"
-      moist_option:
-        default: 1 - fecan
+      horizflux_option:
+        default: 1
         min: 1
         max: 3
-        description: "Moisture parameterization: 1 - Fecan, 2 - shao, 3 - modified shao"
-      distribution_option:
+        description: "Horizontal flux option: 1 - White (1979), 2 - Draxler (2001), 3 - Kawamura (1964)"
+      moist_option:
         default: 1
         min: 1
         max: 2
-        description: "Dust Distribution option: 1 - Kok 2011, 2 - Meng 2022"
+        description: "Moisture parameterization: 1 - Fecan, 2 - Zhao"
+      distribution_option:
+        default: 1
+        min: 1
+        max: 1
+        description: "Dust Distribution option: 1 - Kok 2011, 2 - Meng 2022 (not implemented yet)"
 
     diagnostics:
       - name: "dust_horizontal_flux"
@@ -70,7 +120,7 @@ schemes:
         units: "kg/m2/s"
       - name: "dust_moisture_correction"
         description: "Moisture Correction - H"
-        units: "dimensionless"
+        units: "1.0"
       - name: "dust_effective_threshold"
         description: "Effective Dust threshold friction velocity: u_thres * H / R"
         units: "m/s"
@@ -80,35 +130,44 @@ schemes:
     class_name: "GINOUX"
     description: "Ginoux dust emission scheme"
     algorithm_type: "explicit"
+    affects_full_column: false
     reference: "Ginoux et al. [2001]"
-    author: "Barry Baker"
+    author: "Barry Baker & Wei Li"
 
     required_met_fields:
       - FRLAKE
+      - FRSNO
+      - TSKIN
+      - AIRDEN
+      - LWI
       - GWETTOP
       - U10M
       - V10M
       - SSM
 
+    required_species_properties:
+      - density
+      - radius
+
+    required_constants:
+      - g0
+
     parameters:
       Ch_DU:
-        default: [0.1, 0.1, 0.1, 0.1, 0.1]
+        default: [1.0, 1.0, 1.0, 1.0, 1.0] #Note this is different from GOCART [Ch_DU: 0.2 0.2 0.07 0.07 0.07 0.056] in [kg s2 m-5] since it has du_src in it
         min: 0.001
         max: 100.0
-        description: "Dust tuning coefficient per species "
+        description: "Dust tuning coefficient per species bin"
 
     diagnostics:
-      - name: "dust_horizontal_flux"
-        description: "Total horizontal flux - Q"
-        units: "kg/m2/s"
-      - name: "dust_moisture_correction"
-        description: "Moisture Correction - H"
-        units: "dimensionless"
-      - name: "dust_effective_threshold"
-        description: "Effective Dust threshold friction velocity: u_thres * H / R"
+      - name: "utar_threshold_per_bin"
+        description: "Friction velocity threshold per bin to initiate dust emission"
         units: "m/s"
 
 diagnostics:
-  - name: "total_dust_emission"
-    description: "Total dust emissions for all species"
+  - name: "dust_emission_total"
+    description: "Total dust emissions for all bins"
+    units: "kg/m2/s"
+  - name: "dust_emission_per_bin"
+    description: "Dust emission flux per bin"
     units: "kg/m2/s"

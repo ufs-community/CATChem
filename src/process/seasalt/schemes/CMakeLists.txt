@@ -1,5 +1,5 @@
 # SeaSalt Schemes CMakeLists.txt
-# Generated on: 2025-11-14T23:01:21.797764
+# Generated on: 2026-05-28T17:43:34.389435
 
 # This file is included by the parent CMakeLists.txt
 # Schemes are built as part of the main process library
@@ -18,6 +18,8 @@
 #   - SST
 #   - U10M
 #   - V10M
+#   - LAT
+#   - LON
 
 # GONG03 scheme configuration
 # Required meteorological fields for GONG03:
@@ -26,6 +28,8 @@
 #   - SST
 #   - U10M
 #   - V10M
+#   - LAT
+#   - LON
 
 # GEOS12 scheme configuration
 # Required meteorological fields for GEOS12:
@@ -33,6 +37,10 @@
 #   - FRSEAICE
 #   - SST
 #   - USTAR
+#   - U10M
+#   - V10M
+#   - LAT
+#   - LON
 
 # Scheme validation targets
 add_custom_target(
