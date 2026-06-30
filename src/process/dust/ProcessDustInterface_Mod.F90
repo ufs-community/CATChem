@@ -720,12 +720,12 @@ contains
 
 
    !> Get required meteorological fields for this process
-   function get_required_met_fields(this) result(field_names)
+   subroutine get_required_met_fields(this, field_names)
       class(ProcessDustInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
-      character(len=32), allocatable :: scheme_fields(:)
-      character(len=32), allocatable :: process_fields(:)
-      character(len=32), allocatable :: unique_fields(:)
+      character(len=64), allocatable, intent(out) :: field_names(:)
+      character(len=64), allocatable :: scheme_fields(:)
+      character(len=64), allocatable :: process_fields(:)
+      character(len=64), allocatable :: unique_fields(:)
       integer :: total_fields, scheme_count, process_count, i, j, unique_count
       logical :: is_duplicate
 
@@ -807,7 +807,7 @@ contains
       if (allocated(process_fields)) deallocate(process_fields)
       if (allocated(scheme_fields)) deallocate(scheme_fields)
 
-   end function get_required_met_fields
+   end subroutine get_required_met_fields
 
    !> Get required diagnostic fields for this process
    function get_required_diagnostic_fields(this) result(field_names)
