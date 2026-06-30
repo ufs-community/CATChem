@@ -56,24 +56,12 @@ ship:
     units: "kg/m2/s"
     scale: [0.8, 0.2] #There is no 1.8 factor for BC
     map: ["bc1", "bc2"]
-fire_so2:
+fire:
   biomass:
     long_name: "Sulfur Dioxide from Biomass Burning"
     units: "kg/m2/s"
-    scale: [1.0]
-    map: ["so2"]
-fire_oc:
-  biomass:
-    long_name: "Organic Carbon from Biomass Burning"
-    units: "kg/m2/s"
-    scale: [0.9, 0.9]  #TODO: double check
-    map: ["oc1", "oc2"]
-fire_bc:
-  biomass:
-    long_name: "Black Carbon from Biomass Burning"
-    units: "kg/m2/s"
-    scale: [0.8, 0.2]  #There is no 1.8 factor for BC
-    map: ["bc1", "bc2"]
+    scale: [1.0,0.9,0.9,0.8,0.2]
+    map: ["so2","oc1","oc2","bc1","bc2"]
 so2_aviation_lto:
   so2_aviation:
     long_name: "Sulfur Dioxide from Aviation LTO"
@@ -181,6 +169,12 @@ dms:
     units: "nmol/l"
     scale: [1.0]
     map: ["dms_in"]
+volcano:
+  SO2:
+    long_name: "Volcanic Sulfur Dioxide (degassing)"
+    units: "kg/m2/s"
+    scale: [2.0]   # file rate is kg S/s; 2.0 = fMassSO2/fMassSulfur (64/32) -> kg SO2/s
+    map: ["so2"]
 dust:
   clayfrac:
     long_name: "Clay Fraction"

@@ -22,7 +22,7 @@ foreach(test_source ${TEST_SOURCES})
     testing
   )
 
-  # Set Fortran module directory
+  # Set Fortran module directory and force Fortran linker
   set_target_properties(
     ${test_name}
     PROPERTIES

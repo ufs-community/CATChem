@@ -54,12 +54,12 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
     target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
     {% if config.process_type == "chemistry" %}
     # Chemistry processes may benefit from aggressive optimization
-    target_compile_options(${_lib} PRIVATE -O3 -funroll-loops)
+    target_compile_options(${_lib} PRIVATE $<$<CONFIG:Release>:-O3;-funroll-loops>)
     {% endif %}
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
     target_compile_options(${_lib} PRIVATE -r8)
     {% if config.process_type == "chemistry" %}
-    target_compile_options(${_lib} PRIVATE -O3 -unroll)
+    target_compile_options(${_lib} PRIVATE $<$<CONFIG:Release>:-O3;-unroll>)
     {% endif %}
 endif()
 

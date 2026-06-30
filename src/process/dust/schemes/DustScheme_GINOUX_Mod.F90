@@ -164,6 +164,9 @@ contains
          ! Apply to each species
          do species_idx = 1, num_species
 
+            !initialize emission_temp to zero for this species and layer
+            emission_temp = 0.0_fp
+
             ! get threshold friction velocity following MB97
             call MB97_threshold_velocity(species_density(species_idx), AIRDEN(1), species_radius(species_idx), g0, u_thresh0)
 

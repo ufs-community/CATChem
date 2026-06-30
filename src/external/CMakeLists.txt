@@ -82,10 +82,10 @@ if(TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
 endif()
 
 #
-# MUSICA Fortran API (optional, controlled by BUILD_MUSICA)
+# MUSICA Fortran API (optional, controlled by CATCHEM_BUILD_MUSICA)
 #
 
-if(BUILD_MUSICA)
+if(CATCHEM_BUILD_MUSICA)
   # Set MUSICA build options before adding the subdirectory
   set(MICM_ENABLE_TESTS OFF)
   set(MUSICA_BUILD_C_CXX_INTERFACE ON)

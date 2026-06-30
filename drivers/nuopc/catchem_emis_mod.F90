@@ -54,6 +54,7 @@ module catchem_emis_mod
    public :: catchem_emis_update
    public :: catchem_emis_finalize
    public :: catchem_emis_write_diagnostics
+   public :: catchem_map_points_to_grid
 
 
    !> \brief Parameters for emission handling
@@ -307,6 +308,14 @@ contains
       rc = CC_SUCCESS
 
       category_name = trim(category%category_name)
+
+      ! Point/volcanic categories are read from an ASCII point table (.rc), not a
+      ! gridded NetCDF file, and are injected directly into the 3D column at apply
+      ! time.  Dispatch to the dedicated reader and skip the gridded I/O path.
+      if (is_point_category(category)) then
+         call catchem_emis_read_points(category, curr_time, rc)
+         return
+      end if
 
       ! Resolve filename: substitute date tokens if the template contains '%'
       if (index(trim(category%source_file), '%') > 0) then
@@ -1287,6 +1296,14 @@ contains
 
       rc = CC_SUCCESS
 
+      ! Point/volcanic categories inject directly into the 3D column at their
+      ! mapped grid cells and plume altitude; dispatch to the dedicated handler.
+      if (is_point_category(category)) then
+         call catchem_emis_apply_points(category, icat, global_scale, config_manager, &
+            chem_state, met_state, dt, rc)
+         return
+      end if
+
       ! Get dimensions
       nx = size(met_state%DELP, 1)
       ny = size(met_state%DELP, 2)
@@ -1390,9 +1407,9 @@ contains
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
                   if (category%is_2d) then
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1), error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
                   else
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux, error_manager, localrc)
+                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A)') trim(pName), ': Failed to set met_state'
@@ -1499,7 +1516,467 @@ contains
       if (allocated(f_bb)) deallocate(f_bb)
    end subroutine catchem_emis_apply
 
-   !> \brief Write emission diagnostics to NetCDF file
+   !> \brief Lowercase a string (ASCII only)
+   pure function emis_lower(str) result(low)
+      character(len=*), intent(in) :: str
+      character(len=len(str)) :: low
+      integer :: i, ic
+      low = str
+      do i = 1, len(str)
+         ic = iachar(str(i:i))
+         if (ic >= iachar('A') .and. ic <= iachar('Z')) low(i:i) = achar(ic + 32)
+      end do
+   end function emis_lower
+
+   !> \brief Test whether an emission category is a point/volcanic source
+   !!
+   !! Point categories are read from an ASCII point table (.rc) rather than a
+   !! gridded NetCDF file and are injected directly into the 3D column at the
+   !! mapped grid cell(s).  A category is treated as a point source when its
+   !! `format` is volcano / point / point_rc / volcano_rc (case-insensitive).
+   pure logical function is_point_category(category) result(is_point)
+      type(ExtEmisCategoryType), intent(in) :: category
+      character(len=len(category%format)) :: fmt
+      fmt = trim(emis_lower(category%format))
+      is_point = (fmt == 'volcano'    .or. &
+         fmt == 'point'      .or. &
+         fmt == 'point_rc'   .or. &
+         fmt == 'volcano_rc')
+   end function is_point_category
+
+   !> \brief Find the model layer (1..nz) whose edge interval contains altitude h
+   !!
+   !! Orientation-agnostic: each layer k spans [min(zedge(k),zedge(k+1)),
+   !! max(zedge(k),zedge(k+1))].  Altitudes below the lowest edge clamp to the
+   !! surface layer (k=1, UFS/FV3 convention) and altitudes above the highest
+   !! edge clamp to the model top (k=nz).
+   pure integer function find_point_layer(zedge, h, nz) result(ksel)
+      real(fp), intent(in) :: zedge(:)   ! geopotential height at layer edges [m], size nz+1
+      real(fp), intent(in) :: h          ! target altitude [m above sea level]
+      integer,  intent(in) :: nz
+      integer :: k
+      real(fp) :: zb, zt, zmin, zmax
+      ksel = 1
+      zmin = min(zedge(1), zedge(nz+1))
+      zmax = max(zedge(1), zedge(nz+1))
+      if (h <= zmin) then
+         ksel = 1                 ! at/below surface
+         return
+      else if (h >= zmax) then
+         ksel = nz                ! at/above model top
+         return
+      end if
+      do k = 1, nz
+         zb = min(zedge(k), zedge(k+1))
+         zt = max(zedge(k), zedge(k+1))
+         if (h >= zb .and. h < zt) then
+            ksel = k
+            return
+         end if
+      end do
+   end function find_point_layer
+
+   !> \brief Read a point-source (.rc) emission table for a point/volcanic category
+   !!
+   !! Parses the ASCII `label::` ... `::` table block of a GOCART-style point
+   !! emission resource file.  Each data row is
+   !!   LAT  LON  EMIS  BASE_ELEVATION  TOP_ELEVATION
+   !! where EMIS is the per-point source rate in the file's native mass units
+   !! (kg S/s for the CARN volcanic degassing file), BASE/TOP are altitudes in
+   !! metres above sea level (BASE==TOP for degassing; TOP>BASE for an explosive
+   !! plume column).  All PEs read the full list; ownership is resolved later in
+   !! catchem_map_points_to_grid.  The block label defaults to 'volcano' and may
+   !! be overridden via the category's plume_rise key.
+   subroutine catchem_emis_read_points(category, curr_time, rc)
+      implicit none
+
+      type(ExtEmisCategoryType), intent(inout) :: category
+      type(ESMF_Time), intent(in) :: curr_time
+      integer, intent(out) :: rc
+
+      ! Local variables
+      integer :: localrc, iounit, ios, npts, n, ifield
+      logical :: file_exists, in_table
+      character(len=EMIS_MAXSTR) :: filename, msg, line, label
+      real(fp) :: vlat, vlon, vemis, vbot, vtop
+      real(fp), allocatable :: tlat(:), tlon(:), temis(:), tbot(:), ttop(:)
+      character(len=*), parameter :: pName = 'catchem_emis_read_points'
+
+      rc = CC_SUCCESS
+
+      ! Resolve filename: substitute date tokens if the template contains '%'
+      if (index(trim(category%source_file), '%') > 0) then
+         call resolve_filename_template(category%source_file, curr_time, filename, localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      else
+         filename = trim(category%source_file)
+      end if
+
+      inquire(file=trim(filename), exist=file_exists)
+      if (.not. file_exists) then
+         call ESMF_LogWrite(trim(pName)//': point file not found (holding last data): '// &
+            trim(filename), ESMF_LOGMSG_WARNING, rc=localrc)
+         return
+      end if
+
+      ! Block label to read inside the .rc file (GOCART convention: 'volcano')
+      label = 'volcano'
+
+      open(newunit=iounit, file=trim(filename), status='old', action='read', iostat=ios)
+      if (ios /= 0) then
+         call ESMF_LogWrite(trim(pName)//': cannot open point file: '//trim(filename), &
+            ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
+      end if
+
+      ! ---- First pass: count data rows inside the label:: ... :: block ----
+      in_table = .false.
+      npts = 0
+      do
+         read(iounit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         line = adjustl(line)
+         if (len_trim(line) == 0) cycle
+         if (line(1:1) == '#') cycle
+         if (.not. in_table) then
+            if (index(line, trim(label)//'::') > 0) in_table = .true.
+            cycle
+         else
+            if (trim(line) == '::') exit
+            npts = npts + 1
+         end if
+      end do
+
+      if (npts <= 0) then
+         call ESMF_LogWrite(trim(pName)//': no points found in block "'//trim(label)// &
+            '" of '//trim(filename), ESMF_LOGMSG_WARNING, rc=localrc)
+         close(iounit)
+         return
+      end if
+
+      allocate(tlat(npts), tlon(npts), temis(npts), tbot(npts), ttop(npts))
+
+      ! ---- Second pass: parse the data rows ----
+      rewind(iounit)
+      in_table = .false.
+      n = 0
+      do
+         read(iounit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         line = adjustl(line)
+         if (len_trim(line) == 0) cycle
+         if (line(1:1) == '#') cycle
+         if (.not. in_table) then
+            if (index(line, trim(label)//'::') > 0) in_table = .true.
+            cycle
+         else
+            if (trim(line) == '::') exit
+            read(line, *, iostat=ios) vlat, vlon, vemis, vbot, vtop
+            if (ios /= 0) then
+               call ESMF_LogWrite(trim(pName)//': skipping malformed row: '//trim(line), &
+                  ESMF_LOGMSG_WARNING, rc=localrc)
+               cycle
+            end if
+            n = n + 1
+            tlat(n)  = real(vlat,  fp)
+            tlon(n)  = real(vlon,  fp)
+            temis(n) = real(vemis, fp)
+            tbot(n)  = real(vbot,  fp)
+            ttop(n)  = real(vtop,  fp)
+         end if
+      end do
+      close(iounit)
+      npts = n
+
+      ! ---- Store the point geometry on every field of this category ----
+      ! (per-species partitioning happens at apply time via the species map scale)
+      do ifield = 1, category%n_fields
+         if (allocated(category%fields(ifield)%lat))   deallocate(category%fields(ifield)%lat)
+         if (allocated(category%fields(ifield)%lon))   deallocate(category%fields(ifield)%lon)
+         if (allocated(category%fields(ifield)%pemis)) deallocate(category%fields(ifield)%pemis)
+         if (allocated(category%fields(ifield)%pbot))  deallocate(category%fields(ifield)%pbot)
+         if (allocated(category%fields(ifield)%ptop))  deallocate(category%fields(ifield)%ptop)
+         ! Drop any stale grid mapping so apply re-maps for the new point set
+         if (allocated(category%fields(ifield)%ip))    deallocate(category%fields(ifield)%ip)
+         if (allocated(category%fields(ifield)%jp))    deallocate(category%fields(ifield)%jp)
+
+         allocate(category%fields(ifield)%lat(npts),   source=tlat(1:npts))
+         allocate(category%fields(ifield)%lon(npts),   source=tlon(1:npts))
+         allocate(category%fields(ifield)%pemis(npts), source=temis(1:npts))
+         allocate(category%fields(ifield)%pbot(npts),  source=tbot(1:npts))
+         allocate(category%fields(ifield)%ptop(npts),  source=ttop(1:npts))
+         category%fields(ifield)%npts = npts
+         category%fields(ifield)%is_loaded = .true.
+      end do
+
+      deallocate(tlat, tlon, temis, tbot, ttop)
+
+      write(msg, '(A,I0,A,A)') trim(pName)//': read ', npts, ' point sources from ', trim(filename)
+      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+
+   end subroutine catchem_emis_read_points
+
+   !> \brief Map point (lat,lon) locations to local grid (i,j) indices
+   !!
+   !! General-purpose, distributed-memory point-to-grid locator (the CATChem
+   !! analogue of MAPL_GetHorzIJIndex).  For each point it finds the nearest
+   !! local cell centre using chordal distance on the unit sphere (robust to
+   !! 0..360 vs -180..180 longitude conventions and to dateline/pole wrapping),
+   !! then resolves global ownership with an ESMF VM all-reduce so that every
+   !! point is owned by exactly one PE.  Points not owned by this PE return
+   !! ip = jp = -1.
+   !!
+   !! \param[in]  plat,plon  Point coordinates [degrees], size npts
+   !! \param[in]  npts       Number of points (identical on all PEs)
+   !! \param[in]  gridlat,gridlon  Local cell-centre coordinates [degrees] (nx,ny)
+   !! \param[out] ip,jp      Local i,j indices for owned points, else -1 (allocated here)
+   !! \param[out] rc         Return code
+   subroutine catchem_map_points_to_grid(plat, plon, npts, gridlat, gridlon, ip, jp, rc)
+      implicit none
+
+      real(fp), intent(in) :: plat(:), plon(:)
+      integer,  intent(in) :: npts
+      real(fp), intent(in) :: gridlat(:,:), gridlon(:,:)
+      integer, allocatable, intent(out) :: ip(:), jp(:)
+      integer, intent(out) :: rc
+
+      ! Local variables
+      type(ESMF_VM) :: vm
+      integer :: localrc, i, j, it, nx, ny, localPet
+      real(fp) :: dtor, px, py, pz, gx, gy, gz, d, dmin
+      real(ESMF_KIND_R8), allocatable :: locmind(:), glomind(:), locpet(:), glopet(:)
+      integer, allocatable :: lmi(:), lmj(:)
+      real(fp), parameter :: dtol = 1.0e-9_fp
+      character(len=*), parameter :: pName = 'catchem_map_points_to_grid'
+
+      rc = CC_SUCCESS
+
+      nx = size(gridlat, 1)
+      ny = size(gridlat, 2)
+
+      allocate(ip(max(npts,1)), jp(max(npts,1)))
+      ip = -1
+      jp = -1
+      if (npts <= 0) return
+
+      allocate(locmind(npts), glomind(npts), locpet(npts), glopet(npts), lmi(npts), lmj(npts))
+      locmind = huge(1.0_ESMF_KIND_R8)
+      lmi = -1
+      lmj = -1
+      dtor = acos(-1.0_fp) / 180.0_fp
+
+      ! Local nearest cell-centre search (chordal distance on the unit sphere)
+      do it = 1, npts
+         px = cos(plat(it)*dtor) * cos(plon(it)*dtor)
+         py = cos(plat(it)*dtor) * sin(plon(it)*dtor)
+         pz = sin(plat(it)*dtor)
+         dmin = huge(1.0_fp)
+         do j = 1, ny
+            do i = 1, nx
+               gx = cos(gridlat(i,j)*dtor) * cos(gridlon(i,j)*dtor)
+               gy = cos(gridlat(i,j)*dtor) * sin(gridlon(i,j)*dtor)
+               gz = sin(gridlat(i,j)*dtor)
+               d = (px-gx)**2 + (py-gy)**2 + (pz-gz)**2
+               if (d < dmin) then
+                  dmin = d
+                  lmi(it) = i
+                  lmj(it) = j
+               end if
+            end do
+         end do
+         locmind(it) = real(dmin, ESMF_KIND_R8)
+      end do
+
+      ! Global minimum distance per point across all PEs
+      call ESMF_VMGetCurrent(vm, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      call ESMF_VMGet(vm, localPet=localPet, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      call ESMF_VMAllReduce(vm, locmind, glomind, npts, ESMF_REDUCE_MIN, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      ! PET tiebreak: among PEs holding the global-min cell, the lowest PET owns
+      do it = 1, npts
+         if (locmind(it) <= glomind(it) + real(dtol, ESMF_KIND_R8)) then
+            locpet(it) = real(localPet, ESMF_KIND_R8)
+         else
+            locpet(it) = huge(1.0_ESMF_KIND_R8)
+         end if
+      end do
+      call ESMF_VMAllReduce(vm, locpet, glopet, npts, ESMF_REDUCE_MIN, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      do it = 1, npts
+         if (locmind(it) <= glomind(it) + real(dtol, ESMF_KIND_R8) .and. &
+            nint(glopet(it)) == localPet) then
+            ip(it) = lmi(it)
+            jp(it) = lmj(it)
+         end if
+      end do
+
+      deallocate(locmind, glomind, locpet, glopet, lmi, lmj)
+
+   end subroutine catchem_map_points_to_grid
+
+   !> \brief Inject point/volcanic emissions into the 3D chemical state
+   !!
+   !! For each point owned by this PE (ip>0), converts the per-point source rate
+   !! to a column-integrated flux [kg/m2/s] (rate / cell area), distributes it in
+   !! the vertical, and adds the resulting tendency to each mapped species.
+   !! Degassing points (TOP==BASE) deposit all mass in the layer containing the
+   !! vent elevation; explosive points (TOP>BASE) spread mass over the top third
+   !! of the cloud column, following GOCART2G's SUvolcanicEmissions.  The per-point
+   !! rate (pemis) is taken in the file's native units [kg/s]; any mass conversion
+   !! to the target species (e.g. kg S/s -> kg SO2/s, scale=2.0) is supplied through
+   !! the species-map scale factor, exactly as for gridded emissions.
+   subroutine catchem_emis_apply_points(category, icat, global_scale, config_manager, &
+      chem_state, met_state, dt, rc)
+      use Constants, only: g0, AIRMW
+      implicit none
+
+      type(ExtEmisCategoryType), intent(inout) :: category
+      integer, intent(in) :: icat
+      real(fp), intent(in) :: global_scale
+      type(ConfigManagerType), intent(in) :: config_manager
+      type(ChemStateType), intent(inout) :: chem_state
+      type(MetStateType), intent(inout) :: met_state
+      real(fp), intent(in) :: dt
+      integer, intent(out) :: rc
+
+      ! Local variables
+      integer :: localrc, nx, ny, nz, n_species, ifield, ispec, it, k, i, j
+      integer :: npts, species_idx, ksel, n_mapped
+      real(fp), allocatable :: concentrations(:,:,:,:)
+      real(fp) :: area, fluxcol, hlow, hup, dzv, zb, zt, ovlp, frac
+      real(fp) :: converter, scale_factor, dmr
+      character(len=64) :: mapped_species_name
+      character(len=EMIS_MAXSTR) :: msg
+      character(len=*), parameter :: pName = 'catchem_emis_apply_points'
+
+      rc = CC_SUCCESS
+
+      nx = size(met_state%DELP, 1)
+      ny = size(met_state%DELP, 2)
+      nz = size(met_state%DELP, 3)
+      n_species = chem_state%nSpecies
+
+      ! Map points to the local grid once per read (ip is dropped on each re-read)
+      do ifield = 1, category%n_fields
+         if (category%fields(ifield)%npts <= 0) cycle
+         if (.not. allocated(category%fields(ifield)%ip)) then
+            call catchem_map_points_to_grid(category%fields(ifield)%lat, &
+               category%fields(ifield)%lon, category%fields(ifield)%npts, &
+               met_state%LAT, met_state%LON, category%fields(ifield)%ip, &
+               category%fields(ifield)%jp, localrc)
+            if (localrc /= CC_SUCCESS) then
+               call ESMF_LogWrite(trim(pName)//': point-to-grid mapping failed', &
+                  ESMF_LOGMSG_ERROR, rc=localrc)
+               rc = CC_FAILURE
+               return
+            end if
+         end if
+      end do
+
+      allocate(concentrations(nx, ny, nz, n_species))
+      call chem_state%get_all_concentrations(concentrations, localrc)
+      if (localrc /= CC_SUCCESS) then
+         call ESMF_LogWrite(trim(pName)//': failed to get concentrations', &
+            ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         deallocate(concentrations)
+         return
+      end if
+
+      do ifield = 1, category%n_fields
+         if (.not. category%fields(ifield)%is_loaded) cycle
+         npts = category%fields(ifield)%npts
+         if (npts <= 0) cycle
+
+         n_mapped = config_manager%config_data%emission_mapping% &
+            categories(icat)%species_mappings(ifield)%n_mappings
+
+         do ispec = 1, n_mapped
+            mapped_species_name = config_manager%config_data%emission_mapping% &
+               categories(icat)%species_mappings(ifield)%map(ispec)
+            scale_factor = config_manager%config_data%emission_mapping% &
+               categories(icat)%species_mappings(ifield)%scale(ispec)
+            species_idx = config_manager%config_data%emission_mapping% &
+               categories(icat)%species_mappings(ifield)%index(ispec)
+
+            if (len_trim(mapped_species_name) == 0) cycle
+            if (species_idx <= 0) species_idx = chem_state%find_species(trim(mapped_species_name))
+            if (species_idx <= 0) then
+               call ESMF_LogWrite(trim(pName)//': species not found: '// &
+                  trim(mapped_species_name), ESMF_LOGMSG_WARNING, rc=localrc)
+               cycle
+            end if
+
+            ! kg/kg -> model units (ppmv for gases, ug/kg for aerosols)
+            if (chem_state%ChemSpecies(species_idx)%is_gas) then
+               converter = AIRMW / chem_state%ChemSpecies(species_idx)%mw_g * 1.0e6_fp
+            else
+               converter = 1.0e9_fp
+            end if
+
+            do it = 1, npts
+               i = category%fields(ifield)%ip(it)
+               j = category%fields(ifield)%jp(it)
+               if (i < 1 .or. j < 1) cycle      ! not owned by this PE
+
+               area = met_state%AREA_M2(i,j)
+               if (area <= 1.0_fp) cycle
+
+               ! Column-integrated flux [kg species/m2/s]: raw per-point rate
+               ! divided by cell area, then category + global + species-map scaling
+               ! (the map scale converts file units to the target species mass).
+               fluxcol = category%fields(ifield)%pemis(it) / area * &
+                  scale_factor * category%global_scale * global_scale
+               if (fluxcol <= 0.0_fp) cycle
+
+               hlow = category%fields(ifield)%pbot(it)
+               hup  = category%fields(ifield)%ptop(it)
+
+               if (hup > hlow) then
+                  ! Explosive plume: emit in the top third of the cloud column
+                  hlow = hup - (hup - hlow) / 3.0_fp
+                  dzv  = max(hup - hlow, tiny(1.0_fp))
+                  do k = 1, nz
+                     zb = min(met_state%Z(i,j,k), met_state%Z(i,j,k+1))
+                     zt = max(met_state%Z(i,j,k), met_state%Z(i,j,k+1))
+                     ovlp = min(zt, hup) - max(zb, hlow)
+                     if (ovlp <= 0.0_fp) cycle
+                     frac = ovlp / dzv
+                     dmr = fluxcol * frac * dt * g0 / met_state%DELP(i,j,k)
+                     concentrations(i,j,k,species_idx) = &
+                        concentrations(i,j,k,species_idx) + dmr * converter
+                  end do
+               else
+                  ! Degassing: deposit all mass in the layer containing the vent
+                  ksel = find_point_layer(met_state%Z(i,j,:), hlow, nz)
+                  dmr = fluxcol * dt * g0 / met_state%DELP(i,j,ksel)
+                  concentrations(i,j,ksel,species_idx) = &
+                     concentrations(i,j,ksel,species_idx) + dmr * converter
+               end if
+            end do
+         end do
+      end do
+
+      call chem_state%set_all_concentrations(concentrations, localrc)
+      if (localrc /= CC_SUCCESS) then
+         call ESMF_LogWrite(trim(pName)//': failed to set concentrations', &
+            ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+      end if
+
+      deallocate(concentrations)
+
+   end subroutine catchem_emis_apply_points
    !!
    !! Loops through all emission categories and fields, writing diagnostic
    !! output for fields where diagnostics are enabled. Uses AQMIO for NetCDF output.
