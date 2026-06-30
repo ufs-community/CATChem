@@ -13,8 +13,8 @@
   __dd_hstar: 1.0e+5
   molecular weight [kg mol-1]: 64.04e-3
   __dd_DvzAerSnow: 0.03
-  __dd_DvzMinVal_snow: 0.2
-  __dd_DvzMinVal_land: 0.3
+  __dd_DvzMinVal_snow: 0.2  #GEOS-Chem is 0.2; Luo is 0.01
+  __dd_DvzMinVal_land: 0.3  #GEOS-Chem is 0.3; Luo is 0.01
   __viscosity: 0.0 #dummy value
   #This is Luo's scheme for SO2 but adopted here
   __henry_k0: 1.22
@@ -23,6 +23,7 @@
   __wd_LiqAndGas: true
   __wd_convfacI2G: 6.17395e-1
   __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_reevap_frac: 1.0  #GOCART resuspends full re-evaporated fraction (GEOS-Chem/Luo default 0.5)
 - name: h2o2
   __description: Hydrogen peroxide
   __is_gas: true
@@ -44,7 +45,7 @@
   __is_advected: false
   molecular weight [kg mol-1]: 17.01e-3
 - name: no3
-  description: Nitrate radical
+  __description: Nitrate radical
   __is_gas: true
   __is_photolysis: true
   __is_advected: false
@@ -57,33 +58,47 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 96.06e-3
-  __radius: 0.087
-  __density: 1500.0
+  __radius: 0.35
+  __density: 1700.0
   __dd_DvzAerSnow: 0.03
   __dd_DvzMinVal_snow: 0.01
   __dd_DvzMinVal_land: 0.01
   __lower_radius: 0.1
   __upper_radius: 1.0
   __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_reevap_frac: 1.0  #GOCART resuspends full re-evaporated fraction (GEOS-Chem/Luo default 0.5)
   __mie_name: SU
 - name: dms
   __description: Dimethyl sulfide
   molecular weight [kg mol-1]: 62.13e-3
-  __radius: 8.7e-2
+  __radius: 0.0
+  __is_gas: true   #gocart treat it as a gas without dry and wet deposition
   __is_dust: false
-  __is_aerosol: true
+  __is_aerosol: false
   __is_drydep: false
   __henry_k0: 0.48
   __henry_cr: 3100.0
   __mie_name: SU
 - name: dms_in
   __description: Dimethyl sulfide in ocean water (climatology for emissions calculation)
+  __is_advected: false
   molecular weight [kg mol-1]: 62.13e-3
   __radius: 8.7e-2
 - name: msa
   __description: methanesulphonic acid
-  __is_gas: true   #gocart treat it as a gas while GEOS-Chem as aerosol
+  __is_aerosol: true   #gocart treat it as a gas, but we treat it as aerosol
+  __is_drydep: true
+  __is_wetdep: true
+  __radius: 0.0 #placeholder
+  __density: 0.0 #placeholder
+  __dd_f0: 0.0
+  __dd_hstar: 0.0
+  __dd_DvzAerSnow: 0.03
+  __dd_DvzMinVal_snow: 0.01
+  __dd_DvzMinVal_land: 0.01
   molecular weight [kg mol-1]: 96.10e-3
+  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __mie_name: SU
 - name: bc1
   __description: BC1
   __is_aerosol: true
@@ -97,7 +112,7 @@
   __dd_DvzAerSnow: 0.03
   __lower_radius: 0.1
   __upper_radius: 1.0
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [0.0, 0.0, 0.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   __mie_name: BC
 - name: bc2
@@ -113,7 +128,7 @@
   __dd_DvzAerSnow: 0.03
   __lower_radius: 0.1
   __upper_radius: 1.0
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   __mie_name: BC
 - name: oc1
@@ -129,7 +144,7 @@
   __dd_DvzAerSnow: 0.03
   __lower_radius: 0.1
   __upper_radius: 1.0
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [0.0, 0.0, 0.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   __mie_name: OC
 - name: oc2
@@ -145,7 +160,7 @@
   __dd_DvzAerSnow: 0.03
   __lower_radius: 0.1
   __upper_radius: 1.0
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
   __mie_name: OC
 - name: dust1
@@ -162,7 +177,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 1.0, 0.0]
+  __wd_rainouteff: [0.8, 0.8, 0.8]
   __mie_name: DU
 - name: dust2
   __long_name: dust2
@@ -178,7 +193,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 1.0, 0.0]
+  __wd_rainouteff: [0.8, 0.8, 0.8]
   __mie_name: DU
 - name: dust3
   __long_name: dust3
@@ -194,7 +209,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 1.0, 0.0]
+  __wd_rainouteff: [0.8, 0.8, 0.8]
   __mie_name: DU
 - name: dust4
   __long_name: dust4
@@ -210,7 +225,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 1.0, 0.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: DU
 - name: dust5
   __long_name: dust5
@@ -226,7 +241,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 1.0, 0.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: DU
 - name: seas1
   __long_name: seas1
@@ -242,7 +257,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: SS
 - name: seas2
   __long_name: seas2
@@ -258,7 +273,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: SS
 - name: seas3
   __long_name: seas3
@@ -274,7 +289,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: SS
 - name: seas4
   __long_name: seas4
@@ -290,7 +305,7 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: SS
 - name: seas5
   __long_name: seas5
@@ -306,5 +321,5 @@
   __is_aerosol: true
   __is_drydep: true
   __is_wetdep: true
-  __wd_rainouteff: [1.0, 0.0, 1.0]
+  __wd_rainouteff: [1.0, 1.0, 1.0]
   __mie_name: SS

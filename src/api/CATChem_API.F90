@@ -45,6 +45,7 @@ module CATChem_API
    use ProcessInterface_Mod, only: ProcessInterface
    ! Import process registration functions
    use SeaSaltProcessCreator_Mod, only: register_seasalt_process
+   use DustProcessCreator_Mod, only: register_dust_process
    use DryDepProcessCreator_Mod, only: register_drydep_process
    use WetDepProcessCreator_Mod, only: register_wetdep_process
    use SettlingProcessCreator_Mod, only: register_settling_process
@@ -351,10 +352,13 @@ contains
             call this%error_manager%report_error(1014, 'Failed to register seasalt process', rc)
             call this%error_manager%pop_context()
          endif
-
-         ! Add more processes here as they become available
-         ! case ('dust')
-         !    call register_dust_process(process_mgr, rc)
+       case ('dust')
+         call register_dust_process(process_mgr, rc)
+         if (rc /= CC_SUCCESS) then
+            call this%error_manager%push_context('model_register_process', 'registering dust process')
+            call this%error_manager%report_error(1014, 'Failed to register dust process', rc)
+            call this%error_manager%pop_context()
+         endif
        case ('drydep')
          call register_drydep_process(process_mgr, rc)
          if (rc /= CC_SUCCESS) then
@@ -396,7 +400,7 @@ contains
        case default
          call this%error_manager%push_context('model_register_process', 'validating process type')
          call this%error_manager%report_error(1016, 'Unknown process type: ' // trim(process_name) // &
-            '. Supported processes: seasalt, drydep, wetdep, settling, so4chem, carbchem', rc)
+            '. Supported processes: seasalt, dust, drydep, wetdep, settling, so4chem, carbchem', rc)
          call this%error_manager%pop_context()
       end select
 

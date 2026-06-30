@@ -2,6 +2,8 @@
 module AQMIO
 
    use ESMF
+   use catchem_latlon_output_mod, only: latlon_diag_init, latlon_diag_write_2d, &
+      latlon_diag_write_3d, latlon_diag_cleanup, latlon_diag_is_init
 #if HAVE_NETCDF
    use netcdf
 #endif
@@ -46,6 +48,11 @@ module AQMIO
    ! Enhanced direct data I/O functions (no ESMF fields required)
    public :: AQMIO_Write1D
    public :: AQMIO_Read1D
+   public :: AQMIO_ReadTimeCoord
+
+   ! Lat/lon stitched output support
+   public :: AQMIO_LatlonInit
+   public :: AQMIO_LatlonCleanup
 
 contains
 
@@ -430,6 +437,16 @@ contains
             if (tileCount > 1) then
                call AQMIO_FileNameGet(fullName, fileName, filePath=filePath, &
                   tile=is % IO % IOLayout(localDe) % tile)
+               ! For read mode: if per-tile file doesn't exist, fall back to original filename
+               if (.not. create .and. cmode == NF90_NOWRITE) then
+                  block
+                     logical :: tile_file_exists
+                     inquire(file=trim(fullName), exist=tile_file_exists)
+                     if (.not. tile_file_exists) then
+                        call AQMIO_FileNameGet(fullName, fileName, filePath=filePath)
+                     end if
+                  end block
+               end if
             else
                call AQMIO_FileNameGet(fullName, fileName, filePath=filePath)
             end if
@@ -824,11 +841,22 @@ contains
       end if
 
       if (present(fileName)) then
+         ! Write grid coordinate variables (grid_xt, grid_yt, grid_lont, grid_latt)
+         ! to each tile file before closing. Skips if coords already exist.
+         call AQMIO_TileWriteCoords(IOComp, localrc)
+         ! Non-fatal — don't propagate errors from coord writing
+
          call AQMIO_Close(IOComp, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, &
             file=__FILE__, &
             rcToReturn=rc)) return  ! bail out
+      end if
+
+      ! --- Lat/lon stitched output: regrid each field and write to .latlon.nc ---
+      if (latlon_diag_is_init() .and. present(fileName)) then
+         call AQMIO_LatlonWrite(fieldList, fieldNameList, fileName, filePath, timeSlice, localrc)
+         ! Lat/lon write errors are non-fatal — do not propagate to rc
       end if
 
    end subroutine AQMIO_Write
@@ -1277,6 +1305,8 @@ contains
       real(ESMF_KIND_R8),    dimension(:,:),   pointer     :: fp2d_r8 => null()
       real(ESMF_KIND_R8),    dimension(:,:,:), pointer     :: fp3d_r8 => null()
       character(len=ESMF_MAXSTR) :: fieldName, dataSetName
+      character(len=ESMF_MAXSTR) :: dimName
+      integer :: timeDimLen
       type(ESMF_TypeKind_Flag) :: typekind
       type(ESMF_VM) :: vm
 
@@ -1395,59 +1425,77 @@ contains
             elemStart = 1
             elemCount = 1
 
-            if (uid == -1) then
+            ! Get variable dimension IDs (needed for both unlimited and fixed time dims)
+            allocate(dimids(ndims), stat=localrc)
+            if (ESMF_LogFoundAllocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, &
+               file=__FILE__, &
+               rcToReturn=rc)) return  ! bail out
+            ncStatus = nf90_inquire_variable(IO % IOLayout(lde) % ncid, varId, dimIds=dimids)
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+                  msg="NetCDF error inquiring dimIds for "//trim(fieldName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               deallocate(dimids)
+               return
+            end if
+
+            if (uid /= -1 .and. dimids(ndims) == uid) then
+               ! Variable has unlimited time dimension as its last dim
+               if (present(timeSlice)) elemStart(ndims) = timeSlice
+               ndims = ndims - 1
+            else
+               ! No unlimited dim, or variable's last dim is not the unlimited dim.
+               ! Check if the last dimension is a fixed-size time dimension
+               ! by looking at its name (time, Time, month, etc.) or simply
+               ! checking if timeSlice is requested and the last dim can hold it.
                if (present(timeSlice)) then
-                  if (timeSlice == 1) then
-                     call ESMF_LogWrite("No time record found in "//trim(dataSetName) &
-                        // " - proceed only for first time step", &
+                  dimName = ''
+                  ncStatus = nf90_inquire_dimension(IO % IOLayout(lde) % ncid, &
+                     dimids(ndims), name=dimName, len=timeDimLen)
+                  if (ncStatus == NF90_NOERR .and. &
+                     (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
+                     index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                     index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                     index(dimName,'Record') > 0)) then
+                     ! Found a fixed time dimension by name
+                     if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
+                        elemStart(ndims) = timeSlice
+                        ndims = ndims - 1
+                     else
+                        call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
+                           msg="timeSlice out of range for fixed time dim in "//trim(fieldName), &
+                           line=__LINE__, &
+                           file=__FILE__, &
+                           rcToReturn=rc)
+                        deallocate(dimids)
+                        return  ! bail out
+                     end if
+                  else if (timeSlice == 1) then
+                     ! No recognizable time dimension, allow only first slice
+                     call ESMF_LogWrite("No time dimension found for "//trim(fieldName) &
+                        //" in "//trim(dataSetName) &
+                        //" - proceed only for first time step", &
                         ESMF_LOGMSG_WARNING, rc=localrc)
-                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)) return  ! bail out
                   else
                      call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found in "//dataSetName, &
+                        msg="No time record found for variable "//trim(fieldName), &
                         line=__LINE__, &
                         file=__FILE__, &
                         rcToReturn=rc)
+                     deallocate(dimids)
                      return  ! bail out
                   end if
                end if
-            else
-               allocate(dimids(ndims), stat=localrc)
-               if (ESMF_LogFoundAllocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, &
-                  file=__FILE__, &
-                  rcToReturn=rc)) return  ! bail out
-               ncStatus = nf90_inquire_variable(IO % IOLayout(lde) % ncid, varId, dimIds=dimids)
-               if (ncStatus /= NF90_NOERR) then
-                  call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
-                     msg="NetCDF error", &
-                     line=__LINE__, &
-                     file=__FILE__, &
-                     rcToReturn=rc)
-                  return
-               end if
-               if (dimids(ndims) == uid) then
-                  if (present(timeSlice)) elemStart(ndims) = timeSlice
-                  ndims = ndims - 1
-               else
-                  if (present(timeSlice)) then
-                     call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found for variable "//fieldName, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)
-                     return  ! bail out
-                  end if
-               end if
-               deallocate(dimids, stat=localrc)
-               if (ESMF_LogFoundDeallocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, &
-                  file=__FILE__, &
-                  rcToReturn=rc)) return  ! bail out
             end if
+
+            deallocate(dimids, stat=localrc)
+            if (ESMF_LogFoundDeallocError(statusToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, &
+               file=__FILE__, &
+               rcToReturn=rc)) return  ! bail out
 
             if (klen > 1) then
                if (rank /= ndims) localrc = ESMF_RC_ARG_INCOMP
@@ -1751,6 +1799,8 @@ contains
       real(ESMF_KIND_R4),    dimension(:),     allocatable :: buf
       real(ESMF_KIND_R4),    dimension(:),     pointer     :: fp
       character(len=ESMF_MAXSTR) :: dataSetName
+      character(len=ESMF_MAXSTR) :: dimName
+      integer :: timeDimLen
       type(ESMF_VM)         :: vm
       type(ioWrapper)       :: is
       type(ioData), pointer :: IO
@@ -1846,36 +1896,47 @@ contains
                return
             end if
 
-            if (uid == -1) then
+            if (uid /= -1 .and. dimids(ndims) == uid) then
+               ! Variable has unlimited time dimension as its last dim
+               if (present(timeSlice)) elemStart(ndims) = timeSlice
+               ndims = ndims - 1
+            else
+               ! No unlimited dim, or variable's last dim is not the unlimited dim.
+               ! Check if the last dimension is a fixed-size time dimension.
                if (present(timeSlice)) then
-                  if (timeSlice == 1) then
-                     call ESMF_LogWrite("No time record found in "//trim(dataSetName) &
-                        // " - proceed only for first time step", &
+                  dimName = ''
+                  ncStatus = nf90_inquire_dimension(IO % IOLayout(lde) % ncid, &
+                     dimids(ndims), name=dimName, len=timeDimLen)
+                  if (ncStatus == NF90_NOERR .and. &
+                     (index(dimName,'time') > 0 .or. index(dimName,'Time') > 0 .or. &
+                     index(dimName,'TIME') > 0 .or. index(dimName,'month') > 0 .or. &
+                     index(dimName,'Month') > 0 .or. index(dimName,'record') > 0 .or. &
+                     index(dimName,'Record') > 0)) then
+                     ! Found a fixed time dimension by name
+                     if (timeSlice >= 1 .and. timeSlice <= timeDimLen) then
+                        elemStart(ndims) = timeSlice
+                        ndims = ndims - 1
+                     else
+                        call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
+                           msg="timeSlice out of range for fixed time dim in "//trim(variableName), &
+                           line=__LINE__, &
+                           file=__FILE__, &
+                           rcToReturn=rc)
+                        deallocate(dimids)
+                        return  ! bail out
+                     end if
+                  else if (timeSlice == 1) then
+                     call ESMF_LogWrite("No time dimension found for "//trim(variableName) &
+                        //" in "//trim(dataSetName) &
+                        //" - proceed only for first time step", &
                         ESMF_LOGMSG_WARNING, rc=localrc)
-                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)) return  ! bail out
                   else
                      call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found in "//dataSetName, &
+                        msg="No time record found for variable "//trim(variableName), &
                         line=__LINE__, &
                         file=__FILE__, &
                         rcToReturn=rc)
-                     return  ! bail out
-                  end if
-               end if
-            else
-               if (dimids(ndims) == uid) then
-                  if (present(timeSlice)) elemStart(ndims) = timeSlice
-                  ndims = ndims - 1
-               else
-                  if (present(timeSlice)) then
-                     call ESMF_LogSetError(ESMF_RC_NOT_FOUND, &
-                        msg="No time record found for variable "// variableName, &
-                        line=__LINE__, &
-                        file=__FILE__, &
-                        rcToReturn=rc)
+                     deallocate(dimids)
                      return  ! bail out
                   end if
                end if
@@ -2989,6 +3050,8 @@ contains
 
       ! -- local variables
       integer :: lstr
+      character(len=16) :: tileSuffix
+      character(len=ESMF_MAXPATHLEN) :: tmpName
 
       ! -- begin
       fullName = fileName
@@ -3005,7 +3068,20 @@ contains
       end if
 
       if (present(tile)) then
-         fullName = AQMIO_StringReplaceWithInt(fullName, "<tile>", tile)
+         if (index(fullName, "<tile>") > 0) then
+            fullName = AQMIO_StringReplaceWithInt(fullName, "<tile>", tile)
+         else
+            ! Auto-insert tile number before file extension (UFS convention)
+            ! e.g. "output.nc" -> "output.tile1.nc"
+            write(tileSuffix, '(".tile",I0)') tile
+            lstr = index(fullName, '.', back=.true.)
+            if (lstr > 1) then
+               tmpName = fullName(1:lstr-1) // trim(tileSuffix) // trim(fullName(lstr:))
+            else
+               tmpName = trim(fullName) // trim(tileSuffix)
+            end if
+            fullName = tmpName
+         end if
       else
          fullName = AQMIO_StringReplaceWithString(fullName, "/<tile>/", "/")
          fullName = AQMIO_StringReplaceWithString(fullName, ".<tile>.", ".")
@@ -3160,30 +3236,16 @@ contains
       end if
 
 
-      do dimId = 1, ndims
-         ncStatus = nf90_inquire_dimension(IOLayout % ncid, dimId, len=length)
-         if (ncStatus /= NF90_NOERR) then
-            call ESMF_LogSetError(ESMF_RC_FILE_READ, &
-               msg="Error inquiring existing dimension", &
-               line=__LINE__, &
-               file=__FILE__, &
-               rcToReturn=rc)
-            return  ! bail out
+      ! -- Look up or create named shared dimensions.
+      ! dim1 = grid_xt, dim2 = grid_yt, dim3 (ungridded) = lev
+      do item = 1, dimCount
+         if (item == 1) then
+            dimName = 'grid_xt'
+         else
+            dimName = 'grid_yt'
          end if
-         do item = 1, rank
-            if (length == dimLen(item)) then
-               dimIds(item) = dimId
-               exit
-            end if
-         end do
-      end do
-
-      dimId = ndims
-      do item = 1, rank
-         if (dimIds(item) < 0) then
-            dimid = dimid + 1
-            dimName = ""
-            write(dimName, '("x",i0.2)') dimid
+         ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(item))
+         if (ncStatus /= NF90_NOERR) then
             ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(item), dimIds(item))
             if (ncStatus /= NF90_NOERR) then
                call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
@@ -3195,6 +3257,22 @@ contains
             end if
          end if
       end do
+      ! Ungridded dimension (vertical levels)
+      if (rank > dimCount) then
+         dimName = 'lev'
+         ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
+         if (ncStatus /= NF90_NOERR) then
+            ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+                  msg="Error defining dimension "//trim(dimName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               return  ! bail out
+            end if
+         end if
+      end if
 
 
       deallocate(dimLen, stat=stat)
@@ -3801,7 +3879,511 @@ contains
 
    end subroutine AQMIO_Read1D
 
+!------------------------------------------------------------------------------
+
+   subroutine AQMIO_ReadTimeCoord(filename, n_times, dates, secs, rc)
+      character(len=*), intent(in)  :: filename
+      integer,          intent(out) :: n_times
+      integer, allocatable, intent(out) :: dates(:)
+      integer, allocatable, intent(out) :: secs(:)
+      integer, optional,    intent(out) :: rc
+
+#if HAVE_NETCDF
+      ! Local variables
+      integer :: localrc, ncid, varid, ndims, nt, i
+      integer :: since_pos, date_pos
+      integer :: base_yy, base_mm, base_dd, base_hh, base_mn, base_ss
+      integer :: abs_yy, abs_mm, abs_dd, abs_hh, abs_mn, abs_ss
+      integer :: dimids(NF90_MAX_VAR_DIMS)
+      real(ESMF_KIND_R8), allocatable :: tvar(:)
+      real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
+      character(len=256) :: units_str, tmp_str
+      type(ESMF_Time) :: base_time, abs_time
+      type(ESMF_TimeInterval) :: dt_interval
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      n_times = 0
+
+      ! Open file read-only
+      localrc = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+            msg="AQMIO_ReadTimeCoord: Cannot open file: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
+      ! Locate the 'time' variable — silent return if absent
+      localrc = nf90_inq_varid(ncid, 'time', varid)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Get dimension count and first dimension size
+      localrc = nf90_inquire_variable(ncid, varid, ndims=ndims, dimids=dimids)
+      if (localrc /= NF90_NOERR .or. ndims < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+      localrc = nf90_inquire_dimension(ncid, dimids(1), len=nt)
+      if (localrc /= NF90_NOERR .or. nt < 1) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the 'units' attribute
+      units_str = ''
+      localrc = nf90_get_att(ncid, varid, 'units', units_str)
+      if (localrc /= NF90_NOERR) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Normalise to lowercase for case-insensitive parsing
+      tmp_str = units_str
+      do i = 1, len_trim(tmp_str)
+         if (tmp_str(i:i) >= 'A' .and. tmp_str(i:i) <= 'Z') &
+            tmp_str(i:i) = achar(iachar(tmp_str(i:i)) + 32)
+      end do
+      ! Collapse double spaces (search only the trimmed portion so the
+      ! trailing blank padding of the fixed-length string is ignored;
+      ! otherwise the padding always contains "  " and this loops forever)
+      i = index(trim(tmp_str), '  ')
+      do while (i > 0)
+         tmp_str = tmp_str(1:i) // tmp_str(i+2:)
+         i = index(trim(tmp_str), '  ')
+      end do
+
+      ! Detect unit and locate "since" keyword
+      since_pos = index(tmp_str, 'days since')
+      if (since_pos > 0) then
+         unit_to_secs = 86400.0_ESMF_KIND_R8
+         since_pos = since_pos + len('days since')
+      else
+         since_pos = index(tmp_str, 'hours since')
+         if (since_pos > 0) then
+            unit_to_secs = 3600.0_ESMF_KIND_R8
+            since_pos = since_pos + len('hours since')
+         else
+            since_pos = index(tmp_str, 'minutes since')
+            if (since_pos > 0) then
+               unit_to_secs = 60.0_ESMF_KIND_R8
+               since_pos = since_pos + len('minutes since')
+            else
+               since_pos = index(tmp_str, 'seconds since')
+               if (since_pos > 0) then
+                  unit_to_secs = 1.0_ESMF_KIND_R8
+                  since_pos = since_pos + len('seconds since')
+               else
+                  localrc = nf90_close(ncid)
+                  call ESMF_LogSetError(ESMF_RC_NOT_VALID, &
+                     msg="AQMIO_ReadTimeCoord: Unrecognised time units: "//trim(units_str), &
+                     line=__LINE__, file=__FILE__, rcToReturn=rc)
+                  return
+               end if
+            end if
+         end if
+      end if
+
+      ! Skip spaces after "since" and parse reference date: YYYY-MM-DD[ HH:MM:SS]
+      date_pos = since_pos
+      do while (date_pos <= len_trim(tmp_str) .and. tmp_str(date_pos:date_pos) == ' ')
+         date_pos = date_pos + 1
+      end do
+      base_yy = 0;  base_mm = 0;  base_dd = 0
+      base_hh = 0;  base_mn = 0;  base_ss = 0
+      read(tmp_str(date_pos  :date_pos+3), '(I4)', iostat=localrc) base_yy
+      read(tmp_str(date_pos+5:date_pos+6), '(I2)', iostat=localrc) base_mm
+      read(tmp_str(date_pos+8:date_pos+9), '(I2)', iostat=localrc) base_dd
+      if (len_trim(tmp_str) >= date_pos+18) then
+         read(tmp_str(date_pos+11:date_pos+12), '(I2)', iostat=localrc) base_hh
+         read(tmp_str(date_pos+14:date_pos+15), '(I2)', iostat=localrc) base_mn
+         read(tmp_str(date_pos+17:date_pos+18), '(I2)', iostat=localrc) base_ss
+      end if
+      if (base_yy == 0) then
+         localrc = nf90_close(ncid)
+         call ESMF_LogSetError(ESMF_RC_NOT_VALID, &
+            msg="AQMIO_ReadTimeCoord: Cannot parse reference date from: "//trim(units_str), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
+      call ESMF_TimeSet(base_time, yy=base_yy, mm=base_mm, dd=base_dd, &
+         h=base_hh, m=base_mn, s=base_ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+         localrc = nf90_close(ncid)
+         return
+      end if
+
+      ! Read the time values
+      allocate(tvar(nt))
+      localrc = nf90_get_var(ncid, varid, tvar)
+      i = nf90_close(ncid)
+      if (localrc /= NF90_NOERR) then
+         deallocate(tvar)
+         return
+      end if
+
+      ! Convert to date/secs arrays
+      allocate(dates(nt), secs(nt))
+
+      do i = 1, nt
+         tsecs_r8 = tvar(i) * unit_to_secs
+         call ESMF_TimeIntervalSet(dt_interval, s_r8=tsecs_r8, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, dates, secs)
+            n_times = 0
+            return
+         end if
+         abs_time = base_time + dt_interval
+         call ESMF_TimeGet(abs_time, yy=abs_yy, mm=abs_mm, dd=abs_dd, &
+            h=abs_hh, m=abs_mn, s=abs_ss, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) then
+            deallocate(tvar, dates, secs)
+            n_times = 0
+            return
+         end if
+         dates(i) = abs_yy*10000 + abs_mm*100 + abs_dd
+         secs(i)  = abs_hh*3600  + abs_mn*60  + abs_ss
+      end do
+
+      n_times = nt
+      deallocate(tvar)
+
+#else
+      if (present(rc)) rc = ESMF_FAILURE
+      n_times = 0
+      call ESMF_LogSetError(ESMF_RC_LIB_NOT_PRESENT, &
+         msg="NetCDF not available", &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)
 #endif
+
+   end subroutine AQMIO_ReadTimeCoord
+
+#endif
+
+!------------------------------------------------------------------------------
+! Tile coordinate writing
+!------------------------------------------------------------------------------
+
+   !> \brief Write grid coordinate variables to per-tile diagnostic files
+   !!
+   !! Adds grid_xt(grid_xt), grid_yt(grid_yt), grid_lont(grid_yt,grid_xt),
+   !! and grid_latt(grid_yt,grid_xt) coordinate variables with CF attributes
+   !! to each open tile file. Reads actual lon/lat from the model ESMF Grid.
+   !! Skips if grid_xt variable already exists in the file.
+   subroutine AQMIO_TileWriteCoords(IOComp, rc)
+      type(ESMF_GridComp), intent(inout) :: IOComp
+      integer,             intent(out)   :: rc
+
+      integer :: localrc, ncStatus, localDe, localDeCount
+      integer :: ncid, xtDimId, ytDimId, varId
+      integer :: i, j, nx, ny, de, tile, deCount, dimCount, tileCount, lbuf
+      integer :: elb(2), eub(2)
+      integer, allocatable :: deToTileMap(:), localDeToDeMap(:)
+      integer, allocatable :: minIndexPDe(:,:), maxIndexPDe(:,:)
+      integer, allocatable :: minIndexPTile(:,:), maxIndexPTile(:,:)
+      real(ESMF_KIND_R8), pointer :: ptrCoord(:,:) => null()
+      real(ESMF_KIND_R8), allocatable :: lonBuf(:,:), latBuf(:,:), xt(:), yt(:)
+      real(ESMF_KIND_R8), allocatable :: sendbuf(:), recvbuf(:)
+      real(ESMF_KIND_R8), parameter :: rad2deg = 180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
+      type(ioWrapper) :: is
+      type(ESMF_Grid) :: grid
+      type(ESMF_DistGrid) :: distgrid
+      type(ESMF_VM) :: vm
+
+      rc = ESMF_SUCCESS
+      if (.not. ESMF_GridCompIsPetLocal(IOComp)) return
+
+      call ESMF_GridCompGetInternalState(IOComp, is, localrc)
+      if (localrc /= ESMF_SUCCESS) return
+      if (.not. associated(is % IO)) return
+      if (.not. associated(is % IO % IOLayout)) return
+
+      localDeCount = size(is % IO % IOLayout)
+
+      ! Get grid and its decomposition info
+      call ESMF_GridCompGet(IOComp, grid=grid, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+
+      call ESMF_GridGet(grid, ESMF_STAGGERLOC_CENTER, distgrid=distgrid, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+
+      call ESMF_DistGridGet(distgrid, deCount=deCount, dimCount=dimCount, &
+         tileCount=tileCount, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+      if (dimCount /= 2) return
+
+      allocate(minIndexPDe(dimCount, deCount), maxIndexPDe(dimCount, deCount), &
+         minIndexPTile(dimCount, tileCount), maxIndexPTile(dimCount, tileCount), &
+         deToTileMap(deCount), localDeToDeMap(localDeCount))
+
+      call ESMF_DistGridGet(distgrid, &
+         minIndexPDe=minIndexPDe, maxIndexPDe=maxIndexPDe, &
+         minIndexPTile=minIndexPTile, maxIndexPTile=maxIndexPTile, &
+         deToTileMap=deToTileMap, localDeToDeMap=localDeToDeMap, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) then
+         deallocate(minIndexPDe, maxIndexPDe, minIndexPTile, maxIndexPTile, &
+            deToTileMap, localDeToDeMap)
+         return
+      end if
+
+      do localDe = 0, localDeCount - 1
+         de   = localDeToDeMap(localDe + 1) + 1
+         tile = deToTileMap(de)
+         nx   = maxIndexPTile(1, tile) - minIndexPTile(1, tile) + 1
+         ny   = maxIndexPTile(2, tile) - minIndexPTile(2, tile) + 1
+         lbuf = nx * ny
+
+         ! Get VM for this tile — ALL PETs will participate in collective
+         call ESMF_GridCompGet(is % IO % IOLayout(localDe) % taskComp, vm=vm, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) cycle
+
+         ! --- Gather longitude (coordDim=1) from all PETs ---
+         allocate(lonBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
+            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         lonBuf = 0._ESMF_KIND_R8
+
+         call ESMF_GridGetCoord(grid, coordDim=1, localDE=localDe, &
+            staggerloc=ESMF_STAGGERLOC_CENTER, &
+            exclusiveLBound=elb, exclusiveUBound=eub, &
+            farrayPtr=ptrCoord, rc=localrc)
+         if (localrc == ESMF_SUCCESS) then
+            lonBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
+               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               ptrCoord(elb(1):eub(1), elb(2):eub(2))
+         end if
+
+         allocate(sendbuf(lbuf), recvbuf(lbuf))
+         sendbuf = reshape(lonBuf, (/lbuf/))
+         recvbuf = 0._ESMF_KIND_R8
+         call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
+            ESMF_REDUCE_SUM, 0, rc=localrc)
+         lonBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         deallocate(sendbuf, recvbuf)
+
+         ! --- Gather latitude (coordDim=2) from all PETs ---
+         allocate(latBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
+            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         latBuf = 0._ESMF_KIND_R8
+
+         call ESMF_GridGetCoord(grid, coordDim=2, localDE=localDe, &
+            staggerloc=ESMF_STAGGERLOC_CENTER, &
+            exclusiveLBound=elb, exclusiveUBound=eub, &
+            farrayPtr=ptrCoord, rc=localrc)
+         if (localrc == ESMF_SUCCESS) then
+            latBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
+               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+               ptrCoord(elb(1):eub(1), elb(2):eub(2))
+         end if
+
+         allocate(sendbuf(lbuf), recvbuf(lbuf))
+         sendbuf = reshape(latBuf, (/lbuf/))
+         recvbuf = 0._ESMF_KIND_R8
+         call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
+            ESMF_REDUCE_SUM, 0, rc=localrc)
+         latBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         deallocate(sendbuf, recvbuf)
+
+         ! --- Only I/O PET writes coordinate variables to file ---
+         if (is % IO % IOLayout(localDe) % localIOflag) then
+            ncid = is % IO % IOLayout(localDe) % ncid
+            if (ncid > 0) then
+               ! Skip if already written
+               if (nf90_inq_varid(ncid, 'grid_lont', varId) /= NF90_NOERR) then
+
+                  ncStatus = nf90_inq_dimid(ncid, 'grid_xt', xtDimId)
+                  if (ncStatus == NF90_NOERR) then
+                     ncStatus = nf90_inq_dimid(ncid, 'grid_yt', ytDimId)
+                  end if
+
+                  if (ncStatus == NF90_NOERR) then
+                     ! Enter define mode
+                     ncStatus = nf90_redef(ncid)
+                     if (ncStatus == NF90_NOERR .or. ncStatus == NF90_EINDEFINE) then
+
+                        ! 1-D index coordinate variables
+                        ncStatus = nf90_def_var(ncid, 'grid_xt', NF90_DOUBLE, &
+                           (/xtDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell longitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_E')
+                        end if
+
+                        ncStatus = nf90_def_var(ncid, 'grid_yt', NF90_DOUBLE, &
+                           (/ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell latitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_N')
+                        end if
+
+                        ! 2-D coordinate variables with real lon/lat
+                        ncStatus = nf90_def_var(ncid, 'grid_lont', NF90_DOUBLE, &
+                           (/xtDimId, ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell longitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_E')
+                        end if
+
+                        ncStatus = nf90_def_var(ncid, 'grid_latt', NF90_DOUBLE, &
+                           (/xtDimId, ytDimId/), varId)
+                        if (ncStatus == NF90_NOERR) then
+                           ncStatus = nf90_put_att(ncid, varId, 'long_name', &
+                              'T-cell latitude')
+                           ncStatus = nf90_put_att(ncid, varId, 'units', 'degrees_N')
+                        end if
+
+                        ncStatus = nf90_enddef(ncid)
+                     end if
+
+                     ! Write 1-D index arrays
+                     allocate(xt(nx), yt(ny))
+                     do i = 1, nx
+                        xt(i) = real(i, ESMF_KIND_R8)
+                     end do
+                     do j = 1, ny
+                        yt(j) = real(j, ESMF_KIND_R8)
+                     end do
+                     ncStatus = nf90_inq_varid(ncid, 'grid_xt', varId)
+                     if (ncStatus == NF90_NOERR) ncStatus = nf90_put_var(ncid, varId, xt)
+                     ncStatus = nf90_inq_varid(ncid, 'grid_yt', varId)
+                     if (ncStatus == NF90_NOERR) ncStatus = nf90_put_var(ncid, varId, yt)
+                     deallocate(xt, yt)
+
+                     ! Write 2-D lon/lat arrays
+                     ncStatus = nf90_inq_varid(ncid, 'grid_lont', varId)
+                     if (ncStatus == NF90_NOERR) &
+                        ncStatus = nf90_put_var(ncid, varId, lonBuf)
+                     ncStatus = nf90_inq_varid(ncid, 'grid_latt', varId)
+                     if (ncStatus == NF90_NOERR) &
+                        ncStatus = nf90_put_var(ncid, varId, latBuf)
+                  end if
+               end if
+            end if
+         end if
+
+         deallocate(lonBuf, latBuf)
+      end do
+
+      deallocate(minIndexPDe, maxIndexPDe, minIndexPTile, maxIndexPTile, &
+         deToTileMap, localDeToDeMap)
+
+   end subroutine AQMIO_TileWriteCoords
+
+!------------------------------------------------------------------------------
+! Lat/lon stitched output routines
+!------------------------------------------------------------------------------
+
+   !> \brief Initialize lat/lon diagnostic output (call once after grid is available)
+   !!
+   !! Creates a global lat/lon grid and computes regrid weights from the model
+   !! cubed-sphere grid. Skips initialization if tile count <= 1.
+   subroutine AQMIO_LatlonInit(grid, rc)
+      type(ESMF_Grid), intent(inout) :: grid
+      integer,         intent(out), optional :: rc
+
+      integer :: localrc
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      if (latlon_diag_is_init()) return
+
+      call latlon_diag_init(grid, localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+   end subroutine AQMIO_LatlonInit
+
+!------------------------------------------------------------------------------
+
+   !> \brief Clean up lat/lon diagnostic output resources
+   subroutine AQMIO_LatlonCleanup(rc)
+      integer, intent(out), optional :: rc
+
+      integer :: localrc
+
+      if (present(rc)) rc = ESMF_SUCCESS
+      if (.not. latlon_diag_is_init()) return
+
+      call latlon_diag_cleanup(localrc)
+      if (present(rc)) rc = localrc
+
+   end subroutine AQMIO_LatlonCleanup
+
+!------------------------------------------------------------------------------
+
+   !> \brief Write fields to lat/lon stitched output file
+   !!
+   !! Internal routine called by AQMIO_Write when lat/lon output is active.
+   !! Regrids each field from cubed-sphere to lat/lon and writes to a
+   !! .latlon.nc file derived from the per-tile filename.
+   subroutine AQMIO_LatlonWrite(fieldList, fieldNameList, fileName, filePath, timeSlice, rc)
+      type(ESMF_Field),      intent(in)            :: fieldList(:)
+      character(len=*),      intent(in),  optional :: fieldNameList(:)
+      character(len=*),      intent(in)            :: fileName
+      character(len=*),      intent(in),  optional :: filePath
+      integer,               intent(in),  optional :: timeSlice
+      integer,               intent(out), optional :: rc
+
+      integer :: localrc, item, fieldRank, dot_pos, ltimeslice
+      character(len=ESMF_MAXPATHLEN) :: ll_filename, varname
+
+      if (present(rc)) rc = ESMF_SUCCESS
+
+      ltimeslice = 1
+      if (present(timeSlice)) ltimeslice = timeSlice
+
+      ! Derive lat/lon filename: strip tile suffix pattern and add .latlon
+      ! Input fileName is the base name (without tile suffix, AQMIO adds that internally)
+      dot_pos = index(fileName, '.nc', back=.true.)
+      if (dot_pos > 0) then
+         ll_filename = fileName(1:dot_pos-1) // '.latlon.nc'
+      else
+         ll_filename = trim(fileName) // '.latlon.nc'
+      end if
+
+      ! Prepend path if provided
+      if (present(filePath)) then
+         if (len_trim(filePath) > 0) then
+            if (filePath(len_trim(filePath):len_trim(filePath)) == '/') then
+               ll_filename = trim(filePath) // trim(ll_filename)
+            else
+               ll_filename = trim(filePath) // '/' // trim(ll_filename)
+            end if
+         end if
+      end if
+
+      ! Process each field
+      do item = 1, size(fieldList)
+         ! Get variable name
+         if (present(fieldNameList)) then
+            varname = fieldNameList(item)
+         else
+            call ESMF_FieldGet(fieldList(item), name=varname, rc=localrc)
+            if (localrc /= ESMF_SUCCESS) cycle
+         end if
+
+         ! Get field rank to determine 2D vs 3D
+         call ESMF_FieldGet(fieldList(item), rank=fieldRank, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) cycle
+
+         if (fieldRank == 2) then
+            call latlon_diag_write_2d(fieldList(item), trim(varname), &
+               trim(ll_filename), ltimeslice, localrc)
+         else if (fieldRank == 3) then
+            call latlon_diag_write_3d(fieldList(item), trim(varname), &
+               trim(ll_filename), ltimeslice, localrc)
+         end if
+         ! Ignore errors from lat/lon write — don't fail the main write
+      end do
+
+   end subroutine AQMIO_LatlonWrite
 
 !------------------------------------------------------------------------------
 

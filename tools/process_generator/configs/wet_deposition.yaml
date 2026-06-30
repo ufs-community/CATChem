@@ -60,6 +60,7 @@ schemes:
       - wd_LiqAndGas
       - wd_convfacI2G
       - wd_rainouteff
+      - wd_reevap_frac
       - radius
       - mw_g
 
@@ -70,6 +71,12 @@ schemes:
       radius_threshold:
         default: 1.0
         description: "Radius threshold for aerosol wet deposition (um)"
+      so4_gocart_resusp:
+        default: true
+        description: "Sulfate-only GOCART-style resuspension toggle (default on)"
+      so4_washout_eff:
+        default: 1.0
+        description: "Sulfate-only below-cloud washout efficiency (1.0=unchanged); reduce to cut excess SO4 washout"
 
     diagnostics: []
 

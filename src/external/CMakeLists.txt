@@ -22,6 +22,16 @@ set(_lib GOCART2G)
 add_library(${_lib} ${_srcs})
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
   target_compile_options(${_lib} PRIVATE -ffree-line-length-none)
+  # Detect if parent build promotes default real to 8-byte and propagate to GOCART2G
+  if(CMAKE_Fortran_FLAGS MATCHES "-fdefault-real-8")
+    target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  endif()
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+  # Detect if parent build promotes default real to 8-byte and propagate to GOCART2G
+  # Intel supports: -r8, -real-size 64, and ifx also accepts -fdefault-real-8
+  if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
+    target_compile_options(${_lib} PRIVATE -r8)
+  endif()
 endif()
 
 #find_package(NetCDF REQUIRED COMPONENTS Fortran)

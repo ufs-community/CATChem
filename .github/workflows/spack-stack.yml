@@ -92,7 +92,7 @@ jobs:
           export MPICH_CXX=g++-13
           cd catchem
           mkdir -p build && cd build
-          cmake -DCMAKE_INSTALL_PREFIX=../install -DBUILD_NUOPC=ON ..
+          cmake -DCMAKE_INSTALL_PREFIX=../install -DCATCHEM_BUILD_NUOPC=ON ..
           make -j2 VERBOSE=1
           make install
 
