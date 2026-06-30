@@ -27,6 +27,7 @@ module catchem_nuopc_interface
 
    use ESMF
    use NUOPC
+   use MPI
    use CATChem_API, only: CATChem_Model
    ! use catchem_nuopc_cf_input
    ! use catchem_nuopc_netcdf_out
@@ -355,17 +356,6 @@ contains
       if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
          cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
          if (rc /= CC_SUCCESS) return
-      end if
-
-      ! Initialize lat/lon stitched output if configured (multi-tile only)
-      if (config_manager%config_data%runtime%latlon_output) then
-         call AQMIO_LatlonInit(cc_wrap%grid, rc=rc)
-         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) then
-            call ESMF_LogWrite('AQMIO_LatlonInit failed, lat/lon output disabled', &
-               ESMF_LOGMSG_WARNING, rc=rc)
-            rc = ESMF_SUCCESS  ! Non-fatal
-         end if
       end if
 
       ! Initialize lat/lon stitched output if configured (multi-tile only)
