@@ -13,8 +13,6 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-      - name: Install conventional-pre-commit
-        run: pip install conventional-pre-commit
       - uses: pre-commit/action@v3.0.1
 
   validate-pr-title:
