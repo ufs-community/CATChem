@@ -13,7 +13,7 @@ RUN source /opt/ufschem/spack-stack/setup.sh && \
     cmake .. \
       -DCATCHEM_BUILD_TESTING=ON \
       -DCATCHEM_BUILD_NUOPC=ON \
-      -DBUILD_MUSICA=ON \
+      -DCATCHEM_BUILD_MUSICA=ON \
       -DCMAKE_INSTALL_PREFIX=/opt/catchem/install \
       -DCMAKE_BUILD_TYPE=Debug && \
     make -j$(nproc) && \

@@ -52,9 +52,9 @@ upload_to_pypi = false
 build_command = ""
 
 [tool.semantic_release.branches.main]
-match = "(^feature/container-build$|^main$)"
+match = "(^main$)"
 prerelease = false
 
 [tool.semantic_release.branches.develop]
-match = "(^feature/dev-container-build$|^develop$)"
+match = "(^develop$)"
 prerelease = true

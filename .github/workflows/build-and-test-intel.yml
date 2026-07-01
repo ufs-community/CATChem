@@ -28,24 +28,21 @@ jobs:
 
       - name: Configure
         run: |
-          set -e
           . /entrypoint.sh
           mkdir build && cd build
           cmake .. \
             -DCATCHEM_BUILD_TESTING=ON \
             -DCATCHEM_BUILD_NUOPC=ON \
-            -DBUILD_MUSICA=ON \
+            -DCATCHEM_BUILD_MUSICA=ON \
             -DCMAKE_INSTALL_PREFIX=../install \
             -DCMAKE_BUILD_TYPE=Debug
 
       - name: Build
         run: |
-          set -e
           . /entrypoint.sh
           cmake --build build -j2
 
       - name: Test
         run: |
-          set -e
           . /entrypoint.sh
           ctest --test-dir build --output-on-failure

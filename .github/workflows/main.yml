@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/lint.yml
 
   ci-gnu-gcc14:
-    uses: ./.github/workflows/build-and-test-gcc-14.yml
+    uses: ./.github/workflows/build-and-test-gcc.yml
 
   ci-intel:
     uses: ./.github/workflows/build-and-test-intel.yml

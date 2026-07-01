@@ -1,4 +1,4 @@
-name: CI (GNU-GCC-14)
+name: CI (GNU-GCC)
 
 on:
   workflow_dispatch:
@@ -15,9 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         gcc-version: ["14"]
-    defaults:
-      run:
-        shell: bash -l {0}
 
     steps:
       - uses: actions/checkout@v6

@@ -50,9 +50,6 @@ set_target_properties(
 # yaml-cpp
 #
 
-# Try to find a system yaml-cpp first
-find_package(yaml-cpp QUIET)
-
 if(NOT yaml-cpp_FOUND AND NOT TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
   #  message(
   #    FATAL_ERROR

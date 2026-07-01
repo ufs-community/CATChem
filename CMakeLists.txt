@@ -6,18 +6,17 @@ string(REGEX MATCH "version = \"([^\"]+)\"" _ ${PYPROJECT_TOML})
 set(CATCHEM_VERSION_FULL ${CMAKE_MATCH_1})
 
 # CMake project() VERSION requires numeric format: major[.minor[.patch[.tweak]]]
-# We strip any semver suffixes (like -rc.1) for the project command.
 if(CATCHEM_VERSION_FULL MATCHES "^([0-9]+(\\.[0-9]+)*)")
   set(CATCHEM_VERSION "${CMAKE_MATCH_1}")
 else()
+  message(
+    WARNING
+    "${CATCHEM_VERSION_FULL} includes strings or other characters (likely a release candidate), defaulting to 0.0.0"
+  )
   set(CATCHEM_VERSION "0.0.0")
 endif()
 
 project(CATChem VERSION ${CATCHEM_VERSION} LANGUAGES Fortran C CXX)
-
-# Global variables for path management
-set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
-set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 
 # Global variables for path management
 set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
@@ -68,11 +67,6 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
     CMAKE_Fortran_FLAGS
     "${CMAKE_Fortran_FLAGS} -diag-disable=6379,10448,10440"
   )
-endif()
-
-# No Fortran line length restrictions on all GNU build types
-if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
-  list(APPEND _catchem_compiler_options -ffree-line-length-none)
 endif()
 
 # No Fortran line length restrictions on all GNU build types
@@ -159,24 +153,6 @@ if(CATCHEM_BUILD_NUOPC)
   else()
     find_package(ESMF REQUIRED)
     set(CATCHEM_ESMF_TARGET esmf)
-  endif()
-  message(STATUS "CATChem: using ESMF target '${CATCHEM_ESMF_TARGET}'")
-endif()
-
-# Auto-detect if default real is promoted to 8-byte by the parent build
-# or by per-target flags, and define USE_REAL8 so precision_mod sets fp=f8.
-if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
-  if(CMAKE_Fortran_FLAGS MATCHES "-fdefault-real-8")
-    add_compile_definitions(USE_REAL8)
-    message(STATUS "CATChem: detected -fdefault-real-8, enabling USE_REAL8")
-  endif()
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
-  if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
-    add_compile_definitions(USE_REAL8)
-    message(
-      STATUS
-      "CATChem: detected real-8 promotion flag, enabling USE_REAL8"
-    )
   endif()
   message(STATUS "CATChem: using ESMF target '${CATCHEM_ESMF_TARGET}'")
 endif()
