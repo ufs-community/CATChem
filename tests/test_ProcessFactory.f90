@@ -4,6 +4,7 @@
 !!!>
 program test_ProcessFactory
    use testing_mod, only: assert, assert_close
+   use constants, only: MAX_LEN_NAME
    use ProcessFactory_Mod
    use StateManager_Mod, only: StateManagerType
    use Error_Mod, only: CC_SUCCESS
@@ -37,7 +38,7 @@ program test_ProcessFactory
    ! Test 3: List available processes
    write(*,*) 'Test 3: List available processes'
    block
-      character(len=64), allocatable :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_names(:)
 
       call factory%list_available(process_names, rc)
       call assert(rc == CC_SUCCESS, "Listing available processes should succeed")

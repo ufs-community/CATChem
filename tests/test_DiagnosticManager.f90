@@ -4,6 +4,7 @@
 !!!>
 program test_DiagnosticManager
    use testing_mod, only: assert, assert_close
+   use constants, only: MAX_LEN_NAME
    use DiagnosticManager_Mod
    use StateManager_Mod, only: StateManagerType
    use Error_Mod, only: CC_SUCCESS, ErrorManagerType
@@ -71,7 +72,7 @@ program test_DiagnosticManager
    ! Test 7: List processes
    write(*,*) 'Test 7: List processes'
    block
-      character(len=64), allocatable :: process_list(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_list(:)
       integer :: num_processes
 
       call diag_mgr%list_processes(process_list, num_processes, rc)

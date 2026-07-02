@@ -39,6 +39,7 @@
 !!
 module DiagnosticManager_Mod
    use precision_mod, only: fp
+   use constants, only: MAX_LEN_NAME, MAX_LEN_PATH
    use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, &
       ERROR_INVALID_INPUT, ERROR_NOT_FOUND, ERROR_MEMORY_ALLOCATION
    use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
@@ -64,14 +65,14 @@ module DiagnosticManager_Mod
 
       ! Process registries management
       type(DiagnosticRegistryType), allocatable :: process_registries(:)
-      character(len=64), allocatable :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_names(:)
       integer :: num_processes = 0
       integer :: max_processes = 50
 
       ! Configuration and output management
       logical :: output_enabled = .true.
-      character(len=256) :: output_prefix = 'catchem_diag'
-      character(len=256) :: output_directory = './'
+      character(len=MAX_LEN_NAME) :: output_prefix = 'catchem_diag'
+      character(len=MAX_LEN_PATH) :: output_directory = './'
       integer :: output_frequency = 1  ! timesteps
 
       ! Collection state
@@ -328,7 +329,7 @@ contains
    !! \param[out] rc Return code
    subroutine diagnostic_manager_list_processes(this, process_list, num_processes, rc)
       class(DiagnosticManagerType), intent(in) :: this
-      character(len=64), allocatable, intent(out) :: process_list(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: process_list(:)
       integer, intent(out) :: num_processes
       integer, intent(out) :: rc
 
@@ -433,7 +434,7 @@ contains
       integer, intent(out) :: rc
 
       integer :: i, local_rc, total_fields
-      character(len=64) :: current_process
+      character(len=MAX_LEN_NAME) :: current_process
 
       rc = CC_SUCCESS
 
@@ -483,13 +484,13 @@ contains
       integer, intent(out) :: rc
 
       type(DiagnosticRegistryType), pointer :: registry
-      character(len=64), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: field_names(:)
       integer :: num_fields, i, local_rc, data_type
       real(fp) :: scalar_value
       real(fp), pointer :: array_1d_ptr(:) => null()
       real(fp), pointer :: array_2d_ptr(:,:) => null()
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
-      character(len=64) :: field_name
+      character(len=MAX_LEN_NAME) :: field_name
 
       rc = CC_SUCCESS
 

@@ -74,6 +74,15 @@ module Constants
    REAL(fp), PARAMETER, PUBLIC :: MWCARB = 12.01e-3_fp             !< Molecular weight of carbon [kg/mol]
    ! \}
 
+   ! \name Character lengths
+   !! \brief Standard maximum lengths for character strings
+   !! \{
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_NAME = 256  !< Maximum length for names (fields, config keys, etc.)
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_DESC = 1024  !< Maximum length for descriptions
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_VERS = 64  !< Maximum length for version strings
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_PATH = 512  !< Maximum length for file paths
+   ! \}
+
 contains
 
    !> \brief Validate atmospheric constants for physical consistency
