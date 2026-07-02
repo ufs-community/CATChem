@@ -62,6 +62,11 @@ def parse_metstate_type(filename):
         elif in_type and 'end type' in line.lower():
             break
         elif in_type:
+            # Skip internal bookkeeping components that are not met fields. These
+            # are tagged with a trailing "!macro-skip" marker so they are not
+            # treated as allocatable/scalar met fields by the generator.
+            if 'macro-skip' in line.lower():
+                continue
             # Match different field types: real(fp), integer, logical, character
             # REAL(fp), ALLOCATABLE :: name(dimensions) or name
             m_real_alloc = re.match(r'\s*REAL\(fp\),\s*ALLOCATABLE\s*::\s*(\w+)(?:\s*\(([^)]*)\))?\s*', line, re.IGNORECASE)

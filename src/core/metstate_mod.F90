@@ -21,6 +21,16 @@ MODULE MetState_Mod
    IMPLICIT NONE
    PRIVATE
 
+   ! Recognised prefixes for per-layer soil-moisture fields that some offline
+   ! datasets provide (e.g. SOILW1..SOILW4, SMOIS1..., SOILMOIST1...). Matching is
+   ! case-insensitive; a trailing positive integer selects the SOILM layer. Add
+   ! new conventions here as needed. Keep any shorter prefix that is a leading
+   ! substring of a longer one (e.g. SOILM vs SOILMOIST) - the digit-suffix test
+   ! disambiguates them.
+   INTEGER, PARAMETER :: N_SOILM_PREFIX = 4
+   CHARACTER(len=9), PARAMETER :: SOILM_PREFIXES(N_SOILM_PREFIX) = &
+      [ CHARACTER(len=9) :: 'SOILW', 'SOILM', 'SMOIS', 'SOILMOIST' ]
+
    !PUBLIC :: MetStateType           ! Main data type
 
    !=========================================================================
@@ -196,6 +206,13 @@ MODULE MetState_Mod
       REAL(fp), ALLOCATABLE        :: PEDGE(:,:,:)      !< Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
       REAL(fp), ALLOCATABLE        :: PMID(:,:,:)       !< Average wet air pressure [Pa] defined as arithmetic average of edge pressures
       REAL(fp), ALLOCATABLE        :: PMID_DRY(:,:,:)   !< Dry air partial pressure [Pa] defined as arithmetic avg of edge pressures
+
+      ! Registry of field names populated (read/imported/derived) in the current
+      ! timestep. Used by derive_field to self-ensure prerequisites (e.g. PEDGE
+      ! before PMID, PMID before AIRDEN) without relying on external ordering.
+      ! Reset at the start of each import cycle; marked by set_field/derive_field.
+      CHARACTER(len=32), ALLOCATABLE :: set_field_names(:) !macro-skip Populated field names (upper-case)
+      INTEGER                        :: n_set_fields = 0   !macro-skip Count of populated fields
    contains
       procedure :: init => metstate_init
       procedure :: cleanup => metstate_cleanup
@@ -205,6 +222,9 @@ MODULE MetState_Mod
       procedure :: get_memory_usage => metstate_get_memory_usage
       procedure :: print_summary => metstate_print_summary
       procedure :: get_dimensions => metstate_get_dimensions
+      procedure, public :: mark_field_set => metstate_mark_field_set
+      procedure, public :: is_field_set => metstate_is_field_set
+      procedure, public :: reset_field_set => metstate_reset_field_set
       procedure :: get_field_ptr => metstate_get_field_ptr
       procedure :: get_field_ptr_int => metstate_get_field_ptr_int
       procedure :: get_field_ptr_logical => metstate_get_field_ptr_logical
@@ -998,6 +1018,7 @@ CONTAINS
             end select
          end select
       end select
+      if (rc == CC_SUCCESS) call this%mark_field_set(field_name)
    end subroutine metstate_set_field_scalar_real
 
    !> @brief Set a scalar INTEGER field
@@ -1074,8 +1095,25 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
+      integer :: soil_layer
+
       ! Generated include file for 2D REAL field assignment
       rc = CC_SUCCESS
+
+      ! Some offline datasets (e.g. GFS) provide soil moisture as separate
+      ! per-layer 2D fields SOILW1..SOILW4 instead of a single 3D SOILM(:,:,nsoil).
+      ! Route each 2D layer into the matching SOILM slice, lazily allocating SOILM
+      ! on first use so offline runs work without a pre-allocated array.
+      soil_layer = soilm_layer_from_name(field_name)
+      if (soil_layer > 0) then
+         call metstate_set_soilm_layer(this, field_name, soil_layer, field_data, error_mgr, rc)
+         if (rc == CC_SUCCESS) then
+            call this%mark_field_set(field_name)
+            call this%mark_field_set('SOILM')
+         end if
+         return
+      end if
+
       select case (trim(adjustl(field_name)))
 #include "metstate_set_field_2d_real.inc"
        case default
@@ -1083,6 +1121,7 @@ CONTAINS
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
+      if (rc == CC_SUCCESS) call this%mark_field_set(field_name)
    end subroutine metstate_set_field_2d_real
 
    !> @brief Set a 2D INTEGER field
@@ -1146,6 +1185,7 @@ CONTAINS
             "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
+      if (rc == CC_SUCCESS) call this%mark_field_set(field_name)
    end subroutine metstate_set_field_3d_real
 
    !> @brief Set a 3D INTEGER field
@@ -1193,6 +1233,212 @@ CONTAINS
 ! Include the auto-generated multiple fields interface
 #include "metstate_multiple_fields_interface.inc"
 
+   !> \brief Reset the per-timestep populated-field registry
+   !!
+   !! Clears the record of which fields have been provided (read/imported) or
+   !! derived. Call this before a fresh import/read cycle so is_field_set reflects
+   !! only the current timestep.
+   subroutine metstate_reset_field_set(this)
+      class(MetStateType), intent(inout) :: this
+      this%n_set_fields = 0
+   end subroutine metstate_reset_field_set
+
+   !> \brief Record that a met field has been populated this timestep
+   !! \param[in] name Field name (compared case-insensitively)
+   subroutine metstate_mark_field_set(this, name)
+      class(MetStateType), intent(inout) :: this
+      character(len=*), intent(in) :: name
+
+      character(len=32), allocatable :: tmp(:)
+      character(len=32) :: uname
+      integer :: cap
+
+      uname = to_upper_local(trim(adjustl(name)))
+      if (this%is_field_set(uname)) return
+
+      if (.not. allocated(this%set_field_names)) allocate(this%set_field_names(16))
+      cap = size(this%set_field_names)
+      if (this%n_set_fields >= cap) then
+         allocate(tmp(2 * cap))
+         tmp(1:cap) = this%set_field_names
+         call move_alloc(tmp, this%set_field_names)
+      end if
+
+      this%n_set_fields = this%n_set_fields + 1
+      this%set_field_names(this%n_set_fields) = uname
+   end subroutine metstate_mark_field_set
+
+   !> \brief Query whether a met field has been populated this timestep
+   !! \param[in] name Field name (compared case-insensitively)
+   !! \return .true. if the field was read/imported or derived this timestep
+   logical function metstate_is_field_set(this, name) result(is_set)
+      class(MetStateType), intent(in) :: this
+      character(len=*), intent(in) :: name
+
+      character(len=32) :: uname
+      integer :: i
+
+      is_set = .false.
+      uname = to_upper_local(trim(adjustl(name)))
+      do i = 1, this%n_set_fields
+         if (trim(this%set_field_names(i)) == trim(uname)) then
+            is_set = .true.
+            return
+         end if
+      end do
+   end function metstate_is_field_set
+
+   !> \brief Upper-case a string (module-local helper for field-name matching)
+   pure function to_upper_local(str) result(upper)
+      character(len=*), intent(in) :: str
+      character(len=len(str)) :: upper
+      integer :: i, ic
+      upper = str
+      do i = 1, len(str)
+         ic = iachar(str(i:i))
+         if (ic >= iachar('a') .and. ic <= iachar('z')) upper(i:i) = achar(ic - 32)
+      end do
+   end function to_upper_local
+
+   !> \brief Map a soil-moisture layer field name to its 1-based layer index.
+   !!
+   !! Recognises per-layer soil-moisture fields written as <prefix><n> where
+   !! <prefix> is any entry of SOILM_PREFIXES (SOILW, SOILM, SMOIS, SOILMOIST,
+   !! case-insensitive) and <n> is any positive integer. The number of layers is
+   !! NOT fixed - it is taken from whatever the input file supplies. Returns 0 for
+   !! any name that is not a recognised soil-moisture layer field.
+   !!
+   !! \param[in] field_name Candidate field name
+   !! \return Positive layer index, or 0 if not a soil-moisture layer field
+   pure function soilm_layer_from_name(field_name) result(layer)
+      character(len=*), intent(in) :: field_name
+      integer :: layer
+      character(len=len(field_name)) :: uname
+      integer :: slen, plen, ios, n, ip
+      layer = 0
+      uname = to_upper_local(trim(adjustl(field_name)))
+      slen  = len_trim(uname)
+      do ip = 1, N_SOILM_PREFIX
+         plen = len_trim(SOILM_PREFIXES(ip))
+         ! Require <prefix> followed by one or more digits (e.g. SOILW1, SMOIS12).
+         if (slen > plen) then
+            if (uname(1:plen) == trim(SOILM_PREFIXES(ip))) then
+               if (verify(uname(plen+1:slen), '0123456789') == 0) then
+                  read(uname(plen+1:slen), *, iostat=ios) n
+                  if (ios == 0 .and. n >= 1) then
+                     layer = n
+                     return
+                  end if
+               end if
+            end if
+         end if
+      end do
+   end function soilm_layer_from_name
+
+   !> \brief Route a single soil-moisture layer into the 3D SOILM array.
+   !!
+   !! Assembles the per-layer offline fields (see soilm_layer_from_name) into
+   !! SOILM(:,:,n). SOILM is allocated lazily on the first layer received and its
+   !! soil-layer dimension is grown on demand (preserving already-stored layers),
+   !! so an arbitrary number of soil layers is supported without hardcoding a
+   !! count. nSOIL is kept in sync with the current number of layers. In coupled
+   !! runs SOILM is provided directly as a full 3D field and this path is not used.
+   !!
+   !! \param[inout] this       MetStateType object
+   !! \param[in]    field_name Original field name (for the informational warning)
+   !! \param[in]    layer      Soil layer index (1-based)
+   !! \param[in]    field_data 2D horizontal field for this layer [m3/m3]
+   !! \param[inout] error_mgr  Error manager
+   !! \param[out]   rc         Return code (CC_SUCCESS or error code)
+   subroutine metstate_set_soilm_layer(this, field_name, layer, field_data, error_mgr, rc)
+      use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, ERROR_INVALID_INPUT, CC_Warning
+      class(MetStateType), intent(inout) :: this
+      character(len=*), intent(in) :: field_name
+      integer, intent(in) :: layer
+      real(fp), intent(in) :: field_data(:,:)
+      type(ErrorManagerType), pointer, intent(inout) :: error_mgr
+      integer, intent(out) :: rc
+
+      integer :: nx, ny, nl_old
+      real(fp), allocatable :: tmp(:,:,:)
+      character(len=256) :: thisLoc
+      character(len=256) :: warnMsg
+      logical :: is_new_layer
+
+      rc = CC_SUCCESS
+      thisLoc = 'metstate_set_soilm_layer (in core/metstate_mod.F90)'
+      nx = size(field_data, 1)
+      ny = size(field_data, 2)
+      is_new_layer = .false.
+
+      if (layer < 1) then
+         call error_mgr%report_error(ERROR_INVALID_INPUT, &
+            'Soil-moisture layer index must be >= 1', rc, thisLoc)
+         rc = CC_FAILURE
+         return
+      end if
+
+      if (.not. allocated(this%SOILM)) then
+         ! First layer received: size the soil dimension to this layer index.
+         allocate(this%SOILM(nx, ny, layer))
+         this%SOILM = 0.0_fp
+         is_new_layer = .true.
+      else if (size(this%SOILM, 1) /= nx .or. size(this%SOILM, 2) /= ny) then
+         call error_mgr%report_error(ERROR_INVALID_INPUT, &
+            'SOILM horizontal dimensions do not match incoming soil layer', rc, thisLoc)
+         rc = CC_FAILURE
+         return
+      else if (layer > size(this%SOILM, 3)) then
+         ! Grow the soil-layer dimension, preserving already-stored layers.
+         nl_old = size(this%SOILM, 3)
+         allocate(tmp(nx, ny, layer))
+         tmp = 0.0_fp
+         tmp(:, :, 1:nl_old) = this%SOILM
+         call move_alloc(tmp, this%SOILM)
+         is_new_layer = .true.
+      end if
+
+      ! Warn once per distinct layer (only when it is first added, not on every
+      ! subsequent timestep), so a field name accidentally matching one of the
+      ! SOILM_PREFIXES patterns is surfaced without flooding the log.
+      if (is_new_layer) then
+         write(warnMsg, '(A,I0,A)') 'Field "' // trim(adjustl(field_name)) // &
+            '" interpreted as a per-layer soil-moisture field and routed into ' // &
+            'SOILM(:,:,', layer, ').'
+         call CC_Warning(trim(warnMsg), rc, thisLoc, &
+            'Layer index is inferred from the trailing integer of the field name ' // &
+            '(e.g. SOILW1 -> SOILM(:,:,1)). Rename the field if this is unintended.')
+      end if
+
+      this%SOILM(:, :, layer) = field_data
+      this%nSOIL = size(this%SOILM, 3)
+   end subroutine metstate_set_soilm_layer
+
+   !> \brief Ensure a prerequisite met field is populated, deriving it on demand
+   !!
+   !! If \p name was already provided (read/imported) or derived this timestep it
+   !! is left untouched; otherwise it is derived. This lets derive_field resolve
+   !! its own dependency chain (PS -> PEDGE -> PMID -> AIRDEN/DELP/...) regardless
+   !! of ordering, while never overwriting a value supplied by the host/reader.
+   !!
+   !! \param[inout] this        MetStateType object
+   !! \param[in]    name        Name of the prerequisite field to ensure
+   !! \param[inout] error_mgr   Error manager
+   !! \param[inout] time_state  Time state (needed by some derivations)
+   !! \param[out]   rc          Return code (CC_SUCCESS or error code)
+   recursive subroutine metstate_ensure_field(this, name, error_mgr, time_state, rc)
+      use error_mod, only: ErrorManagerType, CC_SUCCESS
+      class(MetStateType), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      type(ErrorManagerType), pointer, intent(inout) :: error_mgr
+      type(TimeStateType), pointer, intent(inout) :: time_state
+      integer, intent(out) :: rc
+
+      rc = CC_SUCCESS
+      if (this%is_field_set(name)) return
+      call metstate_derive_field(this, name, error_mgr, time_state, rc)
+   end subroutine metstate_ensure_field
+
    !> \brief Derive meteorological fields from existing data
    !!
    !! Calculates derived fields using existing meteorological variables.
@@ -1202,7 +1448,7 @@ CONTAINS
    !! \param[in]    field_name  Name of the field to derive
    !! \param[inout] error_mgr   Error manager for context and error reporting
    !! \param[out]   rc          Return code (CC_SUCCESS or error code)
-   subroutine metstate_derive_field(this, field_name, error_mgr, time_state, rc)
+   recursive subroutine metstate_derive_field(this, field_name, error_mgr, time_state, rc)
       use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE, ERROR_INVALID_INPUT, ERROR_NOT_FOUND
       use constants, only: g0, Rd, Rdg0, AIRMW, H2OMW
 
@@ -1216,6 +1462,7 @@ CONTAINS
       character(len=256) :: thisLoc
       integer :: nx, ny, nz, i, j, k, nlanduse
       real(fp) :: airden, rh, air_mass
+      logical :: has_phis
       real(fp) :: avgw ! Water vapor volume mixing ratio [v/v dry air]
       real(fp) :: xh2o ! Water vapor mole fraction [mol (H2O) / mol (moist air)]
       !some variables used for reevaporation calculations
@@ -1237,6 +1484,12 @@ CONTAINS
        case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
+         ! Ensure pressure prerequisite (PMID) is populated, deriving on demand
+         call metstate_ensure_field(this, 'PMID', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PMID and T fields required for MAIRDEN/AIRDEN calculation', rc, &
@@ -1265,6 +1518,13 @@ CONTAINS
        case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
+         ! Ensure pressure prerequisites (PMID, PEDGE) are populated, deriving on demand
+         call metstate_ensure_field(this, 'PMID', error_mgr, time_state, rc)
+         if (rc == CC_SUCCESS) call metstate_ensure_field(this, 'PEDGE', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PMID and T fields required for AIRDEN_DRY calculation', rc, &
@@ -1300,6 +1560,12 @@ CONTAINS
 
        case ('RH', 'rh')
          ! Calculate virtual temperature from temperature and humidity
+         ! Ensure pressure prerequisite (PMID) is populated, deriving on demand
+         call metstate_ensure_field(this, 'PMID', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          if (.not. allocated(this%T) .or. .not. allocated(this%QV) .or. .not. allocated(this%PMID)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'T, PMID and QV fields required for RH calculation', rc, &
@@ -1427,8 +1693,68 @@ CONTAINS
             enddo
          enddo
 
+       case ('PEDGE', 'pedge')
+         ! Reconstruct wet-air pressure at layer edges from the surface pressure
+         ! using the hybrid-sigma Ap/Bp terms (see met_utilities_mod::get_pedge).
+         ! PS is a primary field and cannot be derived: require it was provided.
+         if (.not. this%is_field_set('PS')) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'PS must be provided before PEDGE can be reconstructed', rc, &
+               thisLoc, 'Ensure surface pressure is read/imported this timestep')
+            call error_mgr%pop_context()
+            return
+         endif
+         if (.not. allocated(this%PS)) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'PS field required for PEDGE calculation', rc, &
+               thisLoc, 'Ensure surface pressure is available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         if (.not. allocated(this%PEDGE)) then
+            call error_mgr%report_error(rc, 'PEDGE field needs to be allocated first!', rc, thisLoc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         if (.not. hybrid_grid_supported(nz)) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'No hybrid-sigma Ap/Bp coefficients for this level count', rc, &
+               thisLoc, 'Add the coefficients to met_utilities_mod::get_hybrid_ab or provide PEDGE directly')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         this%PEDGE = get_pedge(this%PS, nz)
+
+       case ('PMID', 'pmid')
+         ! Layer mid-point pressure = mean of the bounding edge pressures
+         ! (see met_utilities_mod::get_pmid). PEDGE must be available first; when
+         ! running offline it is derived from PS via the Ap/Bp reconstruction.
+         call metstate_ensure_field(this, 'PEDGE', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
+         if (.not. allocated(this%PEDGE) .or. .not. allocated(this%PMID)) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'PEDGE and PMID fields required for PMID calculation', rc, &
+               thisLoc, 'Ensure PEDGE is available/derived before PMID')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         this%PMID = get_pmid(this%PEDGE)
+
        case ('DELP', 'delp')
          ! Calculate box height from geopotential heights
+         ! Ensure pressure edges are populated, deriving on demand
+         call metstate_ensure_field(this, 'PEDGE', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          if (.not. allocated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PEDGE field required for DELP calculation', rc, &
@@ -1456,6 +1782,12 @@ CONTAINS
 
        case ('BXHEIGHT', 'bxheight')
          ! Calculate box height from geopotential heights
+         ! Ensure pressure edges are populated, deriving on demand
+         call metstate_ensure_field(this, 'PEDGE', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          if (.not. allocated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PEDGE field required for BXHEIGHT calculation', rc, &
@@ -1492,7 +1824,7 @@ CONTAINS
          this%Z0H(:,:) = this%Z0(:,:)  !just copy Z0 to Z0H
 
        case ('CLDFRC', 'cldfrc')
-         this%CLDFRC(:,:) = this%CLDF(:,:, 1)  !just copy surface CLDF to CLDFRC
+         this%CLDFRC(:,:) = SUM(this%CLDF, DIM=3)  !column total cloud fraction
 
        case ('IsLand', 'island', 'ISLAND')
          do j = 1, ny
@@ -1582,6 +1914,13 @@ CONTAINS
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
 
        case ('REEVAPLS', 'reevapls')
+         ! Ensure pressure prerequisites (PMID, PEDGE) are populated, deriving on demand
+         call metstate_ensure_field(this, 'PMID', error_mgr, time_state, rc)
+         if (rc == CC_SUCCESS) call metstate_ensure_field(this, 'PEDGE', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
          this%REEVAPLS(:,:,:) = 0.0_fp  !I did not find data from GFS. Try to calculate it here.
          do k = 1, nz
             do j = 1, ny
@@ -1658,12 +1997,67 @@ CONTAINS
             enddo
          enddo
 
+       case ('Z', 'z', 'ZMID', 'zmid')
+         ! Geopotential heights from grid-box thicknesses (hypsometric relation).
+         ! BXHEIGHT already holds each layer's thickness [m] (Rd/g0 * Tv * ln(Pedge
+         ! ratio)); integrate it upward from the surface to get the edge heights Z,
+         ! then average adjacent edges for the mid-layer heights ZMID. Ensure
+         ! BXHEIGHT (and its PEDGE/T/QV prerequisites) are populated first.
+         call metstate_ensure_field(this, 'BXHEIGHT', error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call error_mgr%pop_context()
+            return
+         end if
+         if (.not. allocated(this%BXHEIGHT)) then
+            call error_mgr%report_error(ERROR_INVALID_INPUT, &
+               'BXHEIGHT field required for Z/ZMID calculation', rc, &
+               thisLoc, 'Ensure grid box heights are available')
+            call error_mgr%pop_context()
+            return
+         endif
+
+         if (.not. allocated(this%Z) .or. .not. allocated(this%ZMID)) then
+            call error_mgr%report_error(rc, 'Z and ZMID fields need to be allocated first!', rc, thisLoc)
+            call error_mgr%pop_context()
+            return
+         endif
+
+         ! Reference the surface edge to the terrain height (PHIS/g0) so that
+         ! Z/ZMID are geopotential heights above mean sea level, then integrate the
+         ! box heights (BXHEIGHT, from PEDGE and Tv) upward. If PHIS is unavailable
+         ! for a column, fall back to ground level (Z = 0), i.e. height above the
+         ! surface for that column.
+         has_phis = allocated(this%PHIS)
+         if (has_phis) has_phis = this%is_field_set('PHIS')
+
+         do j = 1, ny
+            do i = 1, nx
+               if (has_phis) then
+                  this%Z(i, j, 1) = this%PHIS(i, j) / g0
+               else
+                  this%Z(i, j, 1) = 0.0_fp
+               endif
+               do k = 1, nz
+                  this%Z(i, j, k+1)  = this%Z(i, j, k) + this%BXHEIGHT(i, j, k)
+                  this%ZMID(i, j, k) = 0.5_fp * (this%Z(i, j, k) + this%Z(i, j, k+1))
+               enddo
+            enddo
+         enddo
+
+         ! Both edge and mid heights are produced together; record both so a later
+         ! ensure of the sibling field does not trigger a redundant re-derivation.
+         call this%mark_field_set('Z')
+         call this%mark_field_set('ZMID')
+
        case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             'Unknown derived field: ' // trim(field_name), rc, &
-            thisLoc, 'Supported fields: AIRDEN,  TV,  BXHEIGHT')
+            thisLoc, 'Supported fields: AIRDEN,  TV,  BXHEIGHT,  Z,  ZMID')
          rc = CC_FAILURE
       end select
+
+      ! Record successful derivation so subsequent self-ensure calls skip it
+      if (rc == CC_SUCCESS) call this%mark_field_set(field_name)
 
       call error_mgr%pop_context()
    end subroutine metstate_derive_field

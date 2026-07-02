@@ -10,6 +10,8 @@ set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
 option(CATCHEM_TRACE_NUOPC "Enable ESMF trace regions in NUOPC cap" OFF)
+# Option to build the standalone ESMF/NUOPC driver + application (requires NUOPC)
+option(CATCHEM_BUILD_STANDALONE "Build standalone ESMF/NUOPC driver and app" OFF)
 
 if(CATCHEM_TRACE_NUOPC)
   add_compile_definitions(CATCHEM_TRACE_NUOPC)
@@ -128,15 +130,39 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
 endif()
 
 if(CATCHEM_BUILD_NUOPC)
-  # Resolve ESMF target: prefer uppercase ESMF (FindESMF), fall back to
-  # lowercase esmf (MPAS internal), or find_package as last resort.
-  if(TARGET ESMF)
-    set(CATCHEM_ESMF_TARGET ESMF)
-  elseif(TARGET esmf)
+  # Resolve ESMF target. Providers expose ESMF under different target names:
+  #   - esmf        : UFS-weather-model FindESMF.cmake (coupled build) + MPAS
+  #   - ESMF::ESMF  : Homebrew / upstream ESMF CMake package (+ ESMF alias)
+  #   - ESMF        : alias / some host builds
+  # The UFS-coupled build is the highest-priority target, so check the
+  # lowercase `esmf` target FIRST and keep its behaviour byte-for-byte
+  # identical to before (UFS defines only `esmf`). The ESMF::ESMF / ESMF
+  # names are only reached on systems that do not provide `esmf` (e.g. the
+  # standalone build against Homebrew/upstream ESMF). The provider naming is
+  # disjoint in practice, so this ordering never changes the UFS result; it
+  # only adds support for the standalone case. find_package is a last resort
+  # when no ESMF target has been defined by a parent build.
+  if(TARGET esmf)
     set(CATCHEM_ESMF_TARGET esmf)
+  elseif(TARGET ESMF::ESMF)
+    set(CATCHEM_ESMF_TARGET ESMF::ESMF)
+  elseif(TARGET ESMF)
+    set(CATCHEM_ESMF_TARGET ESMF)
   else()
     find_package(ESMF REQUIRED)
-    set(CATCHEM_ESMF_TARGET esmf)
+    if(TARGET esmf)
+      set(CATCHEM_ESMF_TARGET esmf)
+    elseif(TARGET ESMF::ESMF)
+      set(CATCHEM_ESMF_TARGET ESMF::ESMF)
+    elseif(TARGET ESMF)
+      set(CATCHEM_ESMF_TARGET ESMF)
+    else()
+      message(
+        FATAL_ERROR
+        "find_package(ESMF) succeeded but created no usable target "
+        "(expected esmf, ESMF::ESMF, or ESMF)."
+      )
+    endif()
   endif()
   message(STATUS "CATChem: using ESMF target '${CATCHEM_ESMF_TARGET}'")
 endif()
@@ -253,6 +279,11 @@ if(CATCHEM_BUILD_NUOPC)
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
   )
+
+  # Standalone ESMF/NUOPC driver + application (built on top of cc_nuopc)
+  if(CATCHEM_BUILD_STANDALONE)
+    add_subdirectory(drivers/standalone)
+  endif()
 endif()
 
 # Install module files to both locations for compatibility

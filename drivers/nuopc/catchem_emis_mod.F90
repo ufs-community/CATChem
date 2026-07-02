@@ -275,6 +275,80 @@ contains
 
    end subroutine catchem_emis_update
 
+   subroutine catchem_emis_detect_field_ranks(category, filename, rc)
+      !> \brief Auto-detect each field's 2D/3D rank from the NetCDF file.
+      !!
+      !! Opens the file for metadata inspection only (no data is read) and, for
+      !! every field in the category, sets \c field%is_2d based on the actual
+      !! variable rank after stripping a trailing time/record dimension.  This
+      !! lets a single file/category mix 2D and 3D variables while still being
+      !! read in a single data-open.  If the file or a variable cannot be
+      !! inspected, the field keeps the category-level \c is_2d as a fallback.
+      implicit none
+
+      type(ExtEmisCategoryType), intent(inout) :: category
+      character(len=*),          intent(in)    :: filename
+      integer,                   intent(out)   :: rc
+
+      integer :: ncStatus, ncid, ifield, varId, ndims, uid, spatial_ndims
+      integer, allocatable :: dimids(:)
+      character(len=NF90_MAX_NAME) :: dimName
+      logical :: is_time
+
+      rc = CC_SUCCESS
+
+      ! Default every field to the category setting first, so any field we
+      ! cannot inspect below simply inherits the configured is_2d.
+      do ifield = 1, category%n_fields
+         category%fields(ifield)%is_2d = category%is_2d
+      end do
+
+      ncStatus = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (ncStatus /= NF90_NOERR) return  ! keep category defaults
+
+      ! Identify the unlimited (record) dimension, if any
+      uid = -1
+      ncStatus = nf90_inquire(ncid, unlimitedDimId=uid)
+
+      do ifield = 1, category%n_fields
+         ncStatus = nf90_inq_varid(ncid, trim(category%fields(ifield)%field_name), varId)
+         if (ncStatus /= NF90_NOERR) cycle  ! variable absent -> keep default
+
+         ncStatus = nf90_inquire_variable(ncid, varId, ndims=ndims)
+         if (ncStatus /= NF90_NOERR .or. ndims < 1) cycle
+
+         allocate(dimids(ndims))
+         ncStatus = nf90_inquire_variable(ncid, varId, dimIds=dimids)
+         if (ncStatus /= NF90_NOERR) then
+            deallocate(dimids)
+            cycle
+         end if
+
+         ! Strip a trailing time/record dimension (unlimited or name-based)
+         spatial_ndims = ndims
+         is_time = .false.
+         if (uid /= -1 .and. dimids(ndims) == uid) then
+            is_time = .true.
+         else
+            dimName = ''
+            ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName)
+            if (ncStatus == NF90_NOERR) then
+               if (index(dimName, 'time')   > 0 .or. index(dimName, 'Time')   > 0 .or. &
+                   index(dimName, 'TIME')   > 0 .or. index(dimName, 'month')  > 0 .or. &
+                   index(dimName, 'Month')  > 0 .or. index(dimName, 'record') > 0 .or. &
+                   index(dimName, 'Record') > 0) is_time = .true.
+            end if
+         end if
+         if (is_time) spatial_ndims = ndims - 1
+
+         category%fields(ifield)%is_2d = (spatial_ndims <= 2)
+         deallocate(dimids)
+      end do
+
+      ncStatus = nf90_close(ncid)
+
+   end subroutine catchem_emis_detect_field_ranks
+
    !> \brief Read emission data from files
    !!
    !! Reads emission data from NetCDF files using AQMIO module
@@ -362,6 +436,12 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
+      ! Detect each field's rank (2D vs 3D) from the actual NetCDF variable so a
+      ! single file/category can mix 2D and 3D fields and still be read in one
+      ! open.  Falls back to the category-level is_2d when a variable cannot be
+      ! inspected.  This is a cheap metadata-only open (no data is read here).
+      call catchem_emis_detect_field_ranks(category, filename, localrc)
+
       ! Determine if this category needs runtime regridding.
       ! When regrid_method is set to anything other than 'none' (e.g.
       ! bilinear, neareststod, conserve, ...) the file is assumed to be
@@ -391,7 +471,7 @@ contains
 
       do ifield = 1, category%n_fields
          !create field to receive data
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
                typekind=ESMF_TYPEKIND_R4, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -413,7 +493,7 @@ contains
             return  ! bail out
          end if
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             !get data pointer and assign to emission field array
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -489,6 +569,7 @@ contains
       logical :: multi_file_interp   ! t2 comes from a different file
       integer :: irec_next
       integer :: nx, ny
+      integer :: n_hours
       character(len=EMIS_MAXSTR) :: filename_next
       type(ESMF_Time) :: next_time
       type(ESMF_TimeInterval) :: period_step
@@ -529,7 +610,12 @@ contains
              case ('hourly')
                call ESMF_TimeIntervalSet(period_step, h=1, rc=localrc)
              case default
-               call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+               n_hours = parse_hourly_interval(category%frequency)
+               if (n_hours > 0) then
+                  call ESMF_TimeIntervalSet(period_step, h=n_hours, rc=localrc)
+               else
+                  call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+               end if
             end select
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -576,7 +662,7 @@ contains
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             ! --- 2D field ---
             call catchem_regrid_field( &
                cache     = emis_regrid_cache, &
@@ -1406,7 +1492,7 @@ contains
                !and set the met state instead of chem state. The rest of the name after "MET_" should match the field name in met state.
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
-                  if (category%is_2d) then
+                  if (category%fields(ifield)%is_2d) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
                   else
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
@@ -2035,7 +2121,8 @@ contains
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
 
             ! Write field based on whether it's gridded (2D) or not (3D)
-            if (ext_emis_data%categories(icat)%gridded .and. ext_emis_data%categories(icat)%is_2d) then
+            if (ext_emis_data%categories(icat)%gridded .and. &
+                ext_emis_data%categories(icat)%fields(ifield)%is_2d) then
                ! 2D gridded emission field
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
@@ -2443,6 +2530,7 @@ contains
 
       integer            :: localrc
       integer            :: curr_month, curr_year, start_month, start_year
+      integer            :: n_hours
       type(ESMF_Time)         :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
       character(len=*), parameter :: pName = 'catchem_emis_setup_timing'
@@ -2486,7 +2574,13 @@ contains
          select case (trim(category%frequency))
           case ('hourly');  call ESMF_TimeIntervalSet(timeInterval, h=1,   rc=localrc)
           case ('weekly');  call ESMF_TimeIntervalSet(timeInterval, d=7,   rc=localrc)
-          case default;     call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
+          case default
+            n_hours = parse_hourly_interval(category%frequency)
+            if (n_hours > 0) then
+               call ESMF_TimeIntervalSet(timeInterval, h=n_hours, rc=localrc)
+            else
+               call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
+            end if
          end select
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -2591,18 +2685,24 @@ contains
    !! last_period_key) always differs from a real key, forcing the first read.
    !!
    !! Key encoding:
-   !!   hourly   -> yyyymmddhh
-   !!   daily    -> yyyymmdd
-   !!   weekly   -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
+   !!   hourly            -> yyyymmddhh
+   !!   <N>hourly         -> yyyymmdd * 100 + (hh / N)  (e.g. 3hourly, 6hourly, 12hourly)
+   !!   daily             -> yyyymmdd
+   !!   weekly            -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
    !!   monthly / yearmonth -> yyyymm
-   !!   static   -> 0  (constant; first read triggered by last_period_key=-1)
+   !!   static            -> 0  (constant; first read triggered by last_period_key=-1)
+   !!
+   !! Note: the gate only controls WHEN a re-read is triggered.  The actual time
+   !! slice is always chosen by catchem_emis_find_time_index via time-coordinate
+   !! matching, so it is correct for any cadence; the frequency just avoids
+   !! redundant reads (e.g. "3hourly" re-reads only on 3-hour boundaries).
    subroutine catchem_emis_period_key(frequency, curr_time, key, rc)
       character(len=*), intent(in)  :: frequency
       type(ESMF_Time),  intent(in)  :: curr_time
       integer,          intent(out) :: key
       integer,          intent(out) :: rc
 
-      integer :: localrc, yy, mm, dd, hh, doy
+      integer :: localrc, yy, mm, dd, hh, doy, n_hours
       character(len=*), parameter :: pName = 'catchem_emis_period_key'
 
       rc = CC_SUCCESS
@@ -2625,10 +2725,54 @@ contains
        case ('static')
          key = 0   ! never changes; first read triggered by last_period_key = -1
        case default
-         key = yy*10000 + mm*100 + dd   ! treat unknown as daily
+         ! Sub-daily "<N>hourly" cadence (e.g. 3hourly, 6hourly): change the key
+         ! only when the model crosses an N-hour boundary.  Unrecognized strings
+         ! fall back to daily (previous behavior).
+         n_hours = parse_hourly_interval(frequency)
+         if (n_hours > 0) then
+            key = yy*1000000 + mm*10000 + dd*100 + (hh / n_hours)
+         else
+            key = yy*10000 + mm*100 + dd   ! treat unknown as daily
+         end if
       end select
 
    end subroutine catchem_emis_period_key
+
+   !> \brief Parse a sub-daily "<N>hourly" frequency string.
+   !!
+   !! Recognizes strings of the form \c "<int>hourly" (case-insensitive suffix),
+   !! such as "3hourly", "6hourly", "12hourly".  Returns the integer N (>0) on
+   !! success, or -1 when the string is not of that form.
+   pure integer function parse_hourly_interval(frequency) result(nhr)
+      character(len=*), intent(in) :: frequency
+      integer :: i, ndig, ios
+      character(len=len(frequency)) :: f, suffix
+
+      nhr = -1
+      f = adjustl(frequency)
+
+      ! Count the leading run of digits
+      ndig = 0
+      do i = 1, len_trim(f)
+         if (f(i:i) >= '0' .and. f(i:i) <= '9') then
+            ndig = i
+         else
+            exit
+         end if
+      end do
+      if (ndig == 0 .or. ndig >= len_trim(f)) return
+
+      ! Case-insensitive check that the remainder is exactly "hourly"
+      suffix = f(ndig+1:len_trim(f))
+      do i = 1, len_trim(suffix)
+         if (suffix(i:i) >= 'A' .and. suffix(i:i) <= 'Z') &
+            suffix(i:i) = achar(iachar(suffix(i:i)) + 32)
+      end do
+      if (trim(suffix) /= 'hourly') return
+
+      read(f(1:ndig), *, iostat=ios) nhr
+      if (ios /= 0 .or. nhr <= 0) nhr = -1
+   end function parse_hourly_interval
 
    !> \brief Replace all occurrences of old_str with new_str in str (in-place)
    subroutine str_replace_all(str, old_str, new_str)

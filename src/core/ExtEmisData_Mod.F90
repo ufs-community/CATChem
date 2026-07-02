@@ -46,6 +46,7 @@ MODULE ExtEmisData_Mod
       INTEGER                       :: nx = 0              !< Number of longitude points
       INTEGER                       :: ny = 0              !< Number of latitude points
       INTEGER                       :: nz = 1              !< Number of vertical levels (usually 1 for surface)
+      LOGICAL                       :: is_2d = .true.      !< Is this field 2D (surface) or 3D? Auto-detected from the file variable rank; defaults to the parent category's is_2d
       REAL(fp)                      :: factors = 1.0_fp    !< Scaling factors for non-chemical variables
       REAL(fp), ALLOCATABLE         :: lat(:)              !< Latitude coordinates [degrees]
       REAL(fp), ALLOCATABLE         :: lon(:)              !< Longitude coordinates [degrees]
@@ -135,7 +136,7 @@ MODULE ExtEmisData_Mod
       LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
       ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
       LOGICAL                                   :: diurnal_bb = .false. !< Apply diurnal cycle to biomass burning emissions?
-      CHARACTER(LEN=16)                          :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
+      CHARACTER(LEN=16)                         :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
       LOGICAL                                   :: needs_time_blend = .false. !< Per-timestep temporal blending needed
 
    CONTAINS

@@ -181,7 +181,7 @@ contains
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lat
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lon
       integer, intent(in) :: nlev
-      type(ESMF_Info), intent(in) :: tracerinfo
+      type(ESMF_Info), intent(in), optional :: tracerinfo
       type(ESMF_Grid), intent(in) :: input_grid
       type(ESMF_Time), intent(in), optional :: startTime,stopTime
       type(ESMF_TimeInterval), intent(in), optional :: timeStep
@@ -301,29 +301,44 @@ contains
       cc_wrap%output_prefix = config_manager%config_data%file_paths%Output_Prefix
 
       !populate tracer mapping using process-local tracer_map
-      call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_names)) then
-         call ESMF_LogWrite("Unable to retrieve imported tracer list", &
-            ESMF_LOGMSG_WARNING, line=__LINE__, file=__FILE__, rc=rc)
+      if (present(tracerinfo)) then
+         call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         return
-      end if
-
-      ! - import tracer units if available
-      call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_units)) then
-         allocate(tracer_units(size(tracer_names)), stat=stat)
-         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
-            msg="Unable to allocate internal workspace", &
             line=__LINE__,  file=__FILE__)) return  ! bail out
-         tracer_units = 'n/a'
+
+         if (.not.allocated(tracer_names)) then
+            call ESMF_LogWrite("Unable to retrieve imported tracer list", &
+               ESMF_LOGMSG_WARNING, line=__LINE__, file=__FILE__, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            return
+         end if
+
+         ! - import tracer units if available
+         call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+
+         if (.not.allocated(tracer_units)) then
+            allocate(tracer_units(size(tracer_names)), stat=stat)
+            if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+               msg="Unable to allocate internal workspace", &
+               line=__LINE__,  file=__FILE__)) return  ! bail out
+            tracer_units = 'n/a'
+         end if
+      else
+         ! Standalone (no coupling partner): there is no imported tracer list to
+         ! map onto. Build empty name/unit lists so the (unused) NUOPC<->CATChem
+         ! tracer map is well-defined. A single CATChem model owns its species
+         ! through its YAML configuration rather than through coupling.
+         allocate(tracer_names(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer name list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+         allocate(tracer_units(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer unit list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
       end if
 
       !copy to cc_wrap
@@ -497,6 +512,29 @@ contains
          line=__LINE__, file=__FILE__)) return
 #endif
 
+      ! In standalone/offline mode some required met fields are populated by the
+      ! emission reader (mappings whose target begins with "MET_"). Now that
+      ! catchem_emis_update has run, derive any remaining required met fields and
+      ! verify completeness. For coupled runs (no emission-provided met) this
+      ! block is skipped, so behavior is unchanged.
+      if (allocated(cc_wrap%catchem_model%required_fields)) then
+         block
+            logical, allocatable :: emis_met_mask(:)
+            logical :: any_emis_met
+            allocate(emis_met_mask(size(cc_wrap%catchem_model%required_fields)))
+            call emission_provided_met_mask(cc_wrap, emis_met_mask, any_emis_met)
+            if (any_emis_met) then
+               call finalize_required_met(cc_wrap, emis_met_mask, rc)
+               if (rc /= ESMF_SUCCESS) then
+                  write(errmsg, '(A)') 'Error finalizing required met fields after emission update'
+                  deallocate(emis_met_mask)
+                  return
+               end if
+            end if
+            deallocate(emis_met_mask)
+         end block
+      end if
+
       !Run CATChem processes
       timestep = timestep + 1
 #ifdef CATCHEM_TRACE_NUOPC
@@ -634,6 +672,8 @@ contains
       type(TimeStateType), pointer :: time_state
       type(MetStateType), pointer :: met_state
       logical, allocatable :: set_required_met(:)
+      logical, allocatable :: emis_met_mask(:)
+      logical :: any_emis_met
       integer(ESMF_KIND_I8) :: timestep_seconds
       integer :: year, month, day, hour, minute, second
       integer :: i, n, n_met
@@ -646,6 +686,10 @@ contains
       error_mgr => state_mgr%get_error_manager()
       time_state => state_mgr%get_time_state_ptr()
       met_state => state_mgr%get_met_state_ptr()
+
+      ! Clear the per-timestep record of which met fields have been populated so
+      ! that "is field set" reflects only fields provided/derived this timestep.
+      call met_state%reset_field_set()
 
       call ESMF_TimeGet(currTime, yy=year, mm=month, dd=day, &
          h=hour, m=minute, s=second, rc=rc)
@@ -688,38 +732,161 @@ contains
       end do
 
       !derive some met fields if required after reading from NUOPC
+      ! Some required met fields may instead be supplied by the offline emission
+      ! reader (emission-mapping targets that begin with "MET_"). Those are not
+      ! available yet at this point, so defer the derive/verify step until after
+      ! catchem_emis_update has populated them (handled in catchem_nuopc_run).
+      ! When no met fields are emission-provided (the standard coupled case),
+      ! derive and verify here exactly as before via the shared routine.
       if (allocated(cc_wrap%catchem_model%required_fields)) then
-         do i = 1, n_met
-            if (.not. set_required_met(i)) then
-               call met_state%derive_field(trim(cc_wrap%catchem_model%required_fields(i)), error_mgr, time_state, rc)
-               if (rc /= CC_SUCCESS) then
-                  call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-                     msg="Error deriving required met field: "// trim(cc_wrap%catchem_model%required_fields(i)), &
-                     line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  return  ! bail out
-               else
-                  set_required_met(i) = .true.
-               end if
-            end if
-         end do
-      end if
-
-      !check if all require met fields are set
-      if (allocated(cc_wrap%catchem_model%required_fields)) then
-         do i = 1, n_met
-            if (.not. set_required_met(i)) then
-               !write(*,*) 'Wait. A required field is not set: ' // trim(cc_wrap%catchem_model%required_fields(i))
-               call ESMF_LogWrite("Required met field not set yet: "// &
-                  trim(cc_wrap%catchem_model%required_fields(i)), ESMF_LOGMSG_ERROR, rc=rc)
-               rc = ESMF_FAILURE
-               return
-            end if
-         end do
-         !deallocate array
+         allocate(emis_met_mask(n_met))
+         call emission_provided_met_mask(cc_wrap, emis_met_mask, any_emis_met)
+         if (.not. any_emis_met) then
+            call finalize_required_met(cc_wrap, set_required_met, rc)
+            if (rc /= ESMF_SUCCESS) return
+         end if
+         deallocate(emis_met_mask)
          deallocate(set_required_met)
       end if
 
    end subroutine transform_nuopc_to_catchem
+
+   !> \brief Derive any still-missing required met fields, then verify completeness
+   !!
+   !! Shared "tail" used by both the coupled path (after importing met from the
+   !! NUOPC import state) and the standalone/offline path (after the emission
+   !! reader has populated met fields via "MET_" mappings). On entry,
+   !! set_required_met(i) must be .true. for every required field that has
+   !! already been provided (read from import and/or supplied by the emission
+   !! reader). Each remaining required field is derived from already-available
+   !! fields; the routine then verifies that all required fields are set.
+   !!
+   !! Ordering is handled inside MetState: derive_field self-resolves its own
+   !! prerequisites via the per-timestep populated registry (PS -> PEDGE -> PMID
+   !! -> {AIRDEN, DELP, RH, BXHEIGHT, REEVAPLS, ...}), so this generic loop is
+   !! order-independent. A field already populated this timestep (provided by the
+   !! import state or emission reader, or derived earlier as another field's
+   !! prerequisite) is skipped and never recomputed, which keeps the coupled path
+   !! unaffected.
+   !!
+   !! \param[inout] cc_wrap            CATChem NUOPC wrapper
+   !! \param[inout] set_required_met   Mask of already-provided required fields
+   !! \param[out]   rc                 ESMF return code
+   subroutine finalize_required_met(cc_wrap, set_required_met, rc)
+
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      logical, intent(inout) :: set_required_met(:)
+      integer, intent(out) :: rc
+
+      type(StateManagerType), pointer :: state_mgr
+      type(ErrorManagerType), pointer :: error_mgr
+      type(TimeStateType), pointer :: time_state
+      type(MetStateType), pointer :: met_state
+      integer :: i, n_met
+
+      rc = ESMF_SUCCESS
+
+      if (.not. allocated(cc_wrap%catchem_model%required_fields)) return
+
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      error_mgr => state_mgr%get_error_manager()
+      time_state => state_mgr%get_time_state_ptr()
+      met_state => state_mgr%get_met_state_ptr()
+
+      n_met = size(cc_wrap%catchem_model%required_fields)
+
+      ! Derive any remaining required met field that has not been provided yet.
+      ! derive_field self-resolves its own prerequisites via MetState's populated
+      ! registry, so this loop is order-independent. A field already populated
+      ! this timestep (from the import state, the emission reader, or derived
+      ! earlier as another field's prerequisite) is skipped and never recomputed.
+      do i = 1, n_met
+         if (set_required_met(i)) cycle
+         if (met_state%is_field_set(trim(cc_wrap%catchem_model%required_fields(i)))) then
+            set_required_met(i) = .true.
+            cycle
+         end if
+         call met_state%derive_field(trim(cc_wrap%catchem_model%required_fields(i)), error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+               msg="Error deriving required met field: "// trim(cc_wrap%catchem_model%required_fields(i)), &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            return  ! bail out
+         else
+            set_required_met(i) = .true.
+         end if
+      end do
+
+      ! Verify that all required met fields are now set.
+      do i = 1, n_met
+         if (.not. set_required_met(i)) then
+            call ESMF_LogWrite("Required met field not set yet: "// &
+               trim(cc_wrap%catchem_model%required_fields(i)), ESMF_LOGMSG_ERROR, rc=rc)
+            rc = ESMF_FAILURE
+            return
+         end if
+      end do
+
+   end subroutine finalize_required_met
+
+   !> \brief Mark required met fields that are supplied by the emission reader
+   !!
+   !! Scans the loaded emission-to-species mapping for targets whose name begins
+   !! with "MET_"/"met_". The text after the prefix names a meteorological field
+   !! that catchem_emis_update writes into the MetState (see catchem_emis_apply).
+   !! For each such target that is also a required met field, the corresponding
+   !! entry of mask is set .true. This lets the derive/verify step skip fields
+   !! that come from offline files instead of from coupling or derivation.
+   !!
+   !! The result depends only on static configuration (not on whether a given
+   !! timestep actually read the file), so for the standard coupled case with no
+   !! "MET_" mappings it returns all-.false. and any_provided=.false., leaving
+   !! the coupled behavior unchanged.
+   !!
+   !! \param[inout] cc_wrap        CATChem NUOPC wrapper
+   !! \param[out]   mask           Per-required-field mask (must be sized n_met)
+   !! \param[out]   any_provided   .true. if at least one required field is met-mapped
+   subroutine emission_provided_met_mask(cc_wrap, mask, any_provided)
+
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      logical, intent(out) :: mask(:)
+      logical, intent(out) :: any_provided
+
+      type(StateManagerType), pointer :: state_mgr
+      type(ConfigManagerType), pointer :: config_mgr
+      character(len=64) :: tgt
+      integer :: icat, ifield, ispec, idx
+
+      mask = .false.
+      any_provided = .false.
+
+      if (.not. allocated(cc_wrap%catchem_model%required_fields)) return
+
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      config_mgr => state_mgr%get_config_ptr()
+      if (.not. associated(config_mgr)) return
+      if (.not. config_mgr%config_data%emission_mapping%is_loaded) return
+
+      associate (em => config_mgr%config_data%emission_mapping)
+         do icat = 1, em%n_categories
+            do ifield = 1, em%categories(icat)%n_emission_species
+               do ispec = 1, em%categories(icat)%species_mappings(ifield)%n_mappings
+                  tgt = em%categories(icat)%species_mappings(ifield)%map(ispec)
+                  if (len_trim(tgt) > 4) then
+                     if (tgt(1:4) == 'MET_' .or. tgt(1:4) == 'met_') then
+                        idx = cc_wrap%catchem_model%get_required_met_index(trim(tgt(5:)))
+                        if (idx > 0) then
+                           mask(idx) = .true.
+                           any_provided = .true.
+                        end if
+                     end if
+                  end if
+               end do
+            end do
+         end do
+      end associate
+
+   end subroutine emission_provided_met_mask
 
    ! Transform CATChem states to NUOPC export fields
    !!
