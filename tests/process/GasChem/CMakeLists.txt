@@ -48,22 +48,22 @@ endforeach()
 
 # Test data files
 configure_file(
-  "${CMAKE_SOURCE_DIR}/tests/Configs/Default/CATChem_new_config.yml"
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/CATChem_new_config.yml"
   "${CMAKE_CURRENT_BINARY_DIR}/GasChem_config.yaml"
   COPYONLY
 )
 configure_file(
-  "${CMAKE_SOURCE_DIR}/tests/Configs/Default/micm_config.yaml"
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/micm_config.yaml"
   "${CMAKE_CURRENT_BINARY_DIR}/micm_config.yaml"
   COPYONLY
 )
 configure_file(
-  "${CMAKE_SOURCE_DIR}/tests/Configs/Default/phases.yaml"
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/phases.yaml"
   "${CMAKE_CURRENT_BINARY_DIR}/phases.yaml"
   COPYONLY
 )
 configure_file(
-  "${CMAKE_SOURCE_DIR}/tests/Configs/Default/reactions.yaml"
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/reactions.yaml"
   "${CMAKE_CURRENT_BINARY_DIR}/reactions.yaml"
   COPYONLY
 )
