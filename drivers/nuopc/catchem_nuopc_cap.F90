@@ -192,6 +192,7 @@ contains
       character(len=*), parameter :: routine = 'InitializeP1'
       integer :: i
       character(len=218) :: errmsg
+      logical :: have_mapping
 
       rc = ESMF_SUCCESS
 
@@ -200,10 +201,25 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      ! Load field configuration
-      call load_field_config(field_mapping_file, rc, errmsg)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
+      ! Load field configuration.
+      ! Coupled runs (e.g. UFS) supply a field-mapping YAML listing the fields
+      ! exchanged with other components. A single standalone CATChem component
+      ! exchanges no NUOPC fields, so it has no mapping file: in that case we
+      ! advertise zero import/export fields instead of failing to open the file.
+      inquire(file=trim(field_mapping_file), exist=have_mapping)
+      if (have_mapping) then
+         call load_field_config(field_mapping_file, rc, errmsg)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+      else
+         call ESMF_LogWrite(trim(routine)//': field-mapping file "'// &
+            trim(field_mapping_file)//'" not found; running standalone with no '// &
+            'advertised import/export fields.', ESMF_LOGMSG_INFO, rc=rc)
+         if (.not. allocated(field_config%import_fields)) allocate(field_config%import_fields(0))
+         if (.not. allocated(field_config%export_fields)) allocate(field_config%export_fields(0))
+         field_config%n_import_fields = 0
+         field_config%n_export_fields = 0
+      end if
 
       !retrieve member list from import state, if any
       !nullify(fieldList)
@@ -217,20 +233,22 @@ contains
       ! Advertise import fields only when it has nothing
       !if (size(fieldList) == 0) then
       ! Advertise import fields using MPI-safe accessor functions
-      do i = 1, size(field_config%import_fields)
-         !   block
-         !     character(len=128) :: standard_name
-         !     logical :: optional
-         !     if (get_import_field_info(i, standard_name, optional)) then
-         call NUOPC_Advertise(importState, &
-            StandardName=trim(field_config%import_fields(i)%standard_name), &
-            TransferOfferGeomObject="cannot provide", &
-            SharePolicyField="share", rc=rc)
-         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         !     end if
-         !   end block
-      end do
+      if (allocated(field_config%import_fields)) then
+         do i = 1, size(field_config%import_fields)
+            !   block
+            !     character(len=128) :: standard_name
+            !     logical :: optional
+            !     if (get_import_field_info(i, standard_name, optional)) then
+            call NUOPC_Advertise(importState, &
+               StandardName=trim(field_config%import_fields(i)%standard_name), &
+               TransferOfferGeomObject="cannot provide", &
+               SharePolicyField="share", rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            !     end if
+            !   end block
+         end do
+      end if
       !end if
 
       ! retrieve member list from export state, if any
@@ -244,20 +262,22 @@ contains
       ! Advertise export fields only when it has nothing
       !if (size(fieldList) == 0) then
       ! Advertise export fields using MPI-safe accessor functions
-      do i = 1, size(field_config%export_fields)
-         !   block
-         !     character(len=128) :: standard_name
-         !     logical :: optional
-         !     if (get_export_field_info(i, standard_name, optional)) then
-         call NUOPC_Advertise(exportState, &
-            StandardName=trim(field_config%export_fields(i)%standard_name), &
-            TransferOfferGeomObject="cannot provide", &
-            SharePolicyField="share", rc=rc)
-         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         !     end if
-         !   end block
-      end do
+      if (allocated(field_config%export_fields)) then
+         do i = 1, size(field_config%export_fields)
+            !   block
+            !     character(len=128) :: standard_name
+            !     logical :: optional
+            !     if (get_export_field_info(i, standard_name, optional)) then
+            call NUOPC_Advertise(exportState, &
+               StandardName=trim(field_config%export_fields(i)%standard_name), &
+               TransferOfferGeomObject="cannot provide", &
+               SharePolicyField="share", rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            !     end if
+            !   end block
+         end do
+      end if
       !end if
 
       ! Log successful completion
