@@ -41,6 +41,17 @@ grid_nz:    72
 column_lon:  0.0
 column_lat:  0.0
 
+# Nominal single-column cell width in degrees (used when grid_mode = column).
+# A single column is a point and has no intrinsic horizontal size. Corner
+# coordinates are only created when BOTH column_dlon and column_dlat are > 0.
+# WARNING: if either column_dlon or column_dlat is 0 (the default), the column
+# grid has NO cell corners, so conservative regridding and grid-cell area
+# (AREA_M2, needed for point emissions) are NOT supported. In that case use
+# neareststod/bilinear regridding for emissions. Set both > 0 (e.g. to match
+# your emission input resolution) to enable conservative regridding / AREA_M2.
+column_dlon: 0.0
+column_dlat: 0.0
+
 # Horizontal grid (used when grid_mode = gridded)
 grid_nx:        72
 grid_ny:        36

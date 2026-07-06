@@ -129,6 +129,11 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
   find_package(NetCDF REQUIRED COMPONENTS Fortran)
 endif()
 
+#find MPI for standalone builds
+if(CATCHEM_BUILD_STANDALONE)
+  find_package(MPI REQUIRED)
+endif()
+
 if(CATCHEM_BUILD_NUOPC)
   # Resolve ESMF target. Providers expose ESMF under different target names:
   #   - esmf        : UFS-weather-model FindESMF.cmake (coupled build) + MPAS

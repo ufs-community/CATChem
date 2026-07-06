@@ -332,6 +332,19 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=u_FILE_u)) return
 
+      ! Nominal column cell width (deg). Defaults to 0, which disables CORNER
+      ! coordinates so conservative regridding / AREA_M2 are unavailable in
+      ! column mode. Set both > 0 to enable them.
+      call ESMF_ConfigGetAttribute(config, gridCfg%column_dlon, &
+         label="column_dlon:", default=0.0_ESMF_KIND_R8, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=u_FILE_u)) return
+
+      call ESMF_ConfigGetAttribute(config, gridCfg%column_dlat, &
+         label="column_dlat:", default=0.0_ESMF_KIND_R8, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=u_FILE_u)) return
+
    end subroutine read_driver_config
 
    !> \brief Return .true. if the configure object contains the given label

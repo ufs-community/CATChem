@@ -50,6 +50,8 @@ module catchem_standalone_grid_mod
       real(ESMF_KIND_R8) :: lat_end   =  90.0_ESMF_KIND_R8 !< northern edge (deg)
       real(ESMF_KIND_R8) :: column_lon = 0.0_ESMF_KIND_R8  !< single-column longitude (deg)
       real(ESMF_KIND_R8) :: column_lat = 0.0_ESMF_KIND_R8  !< single-column latitude (deg)
+      real(ESMF_KIND_R8) :: column_dlon = 0.0_ESMF_KIND_R8 !< nominal column width in lon (deg); 0 disables corners
+      real(ESMF_KIND_R8) :: column_dlat = 0.0_ESMF_KIND_R8 !< nominal column width in lat (deg); 0 disables corners
    end type CATChemGridConfig
 
 contains
@@ -153,9 +155,28 @@ contains
       integer,                 intent(out) :: rc
 
       real(ESMF_KIND_R8), pointer :: lonPtr(:,:), latPtr(:,:)
+      real(ESMF_KIND_R8), pointer :: lonCorner(:,:), latCorner(:,:)
       integer :: localDECount
+      integer :: clbnd(2), cubnd(2)
+      integer :: ci, cj
+      logical :: have_corners
 
       rc = ESMF_SUCCESS
+
+      ! A single column is conceptually a point, so it has no intrinsic cell
+      ! width. Corner coordinates (needed for conservative regridding and
+      ! ESMF_FieldRegridGetArea) can only be defined if the user supplies a
+      ! nominal column width via column_dlon/column_dlat. When either is <= 0
+      ! we skip corners and warn that conservative regridding is unsupported.
+      have_corners = (cfg%column_dlon > 0.0_ESMF_KIND_R8 .and. &
+                      cfg%column_dlat > 0.0_ESMF_KIND_R8)
+      if (.not. have_corners) then
+         call ESMF_LogWrite('create_column_grid: column_dlon/column_dlat not '// &
+            'set (or <= 0); no CORNER coordinates added. Conservative regridding '// &
+            'and grid-cell area (AREA_M2) are not supported in column mode -- use '// &
+            'neareststod/bilinear regridding for emissions.', &
+            ESMF_LOGMSG_WARNING, rc=rc)
+      end if
 
       grid = ESMF_GridCreateNoPeriDim( &
          maxIndex=(/1, 1/), &
@@ -169,6 +190,12 @@ contains
       call ESMF_GridAddCoord(grid, staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+
+      if (have_corners) then
+         call ESMF_GridAddCoord(grid, staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+      end if
 
       ! A 1x1 grid has a single decomposition element (DE) that lives on one
       ! PET only. When the job is launched with more PETs than DEs, every other
@@ -192,6 +219,30 @@ contains
 
          if (associated(lonPtr)) lonPtr = cfg%column_lon
          if (associated(latPtr)) latPtr = cfg%column_lat
+
+         ! Fill the four cell corners around the center using the nominal
+         ! column width (only present when have_corners is true).
+         if (have_corners) then
+            call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CORNER, &
+               computationalLBound=clbnd, computationalUBound=cubnd, farrayPtr=lonCorner, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+
+            call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CORNER, &
+               farrayPtr=latCorner, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+
+            ! Corner (1,1) is the SW edge, (2,2) the NE edge of the single cell.
+            do cj = clbnd(2), cubnd(2)
+               do ci = clbnd(1), cubnd(1)
+                  lonCorner(ci, cj) = cfg%column_lon + &
+                     (real(ci, ESMF_KIND_R8) - 1.5_ESMF_KIND_R8) * cfg%column_dlon
+                  latCorner(ci, cj) = cfg%column_lat + &
+                     (real(cj, ESMF_KIND_R8) - 1.5_ESMF_KIND_R8) * cfg%column_dlat
+               end do
+            end do
+         end if
       end if
 
    end subroutine create_column_grid
@@ -210,10 +261,12 @@ contains
 
       type(ESMF_VM) :: vm
       real(ESMF_KIND_R8), pointer :: lonPtr(:,:), latPtr(:,:)
+      real(ESMF_KIND_R8), pointer :: lonCorner(:,:), latCorner(:,:)
       real(ESMF_KIND_R8) :: dlon, dlat
       integer :: petCount, decompX, decompY
       integer :: i, j
       integer :: lbnd(2), ubnd(2)
+      integer :: clbnd(2), cubnd(2)
       integer :: localDECount
 
       rc = ESMF_SUCCESS
@@ -251,6 +304,14 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
+      ! Conservative regridding and grid-cell area calculation
+      ! (ESMF_FieldRegridGetArea) require coordinates at the CORNER stagger
+      ! location, not just cell centers. Add and fill them so emission
+      ! remapping and AREA_M2 succeed.
+      call ESMF_GridAddCoord(grid, staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
       dlon = (cfg%lon_end - cfg%lon_start) / real(cfg%nx, ESMF_KIND_R8)
       dlat = (cfg%lat_end - cfg%lat_start) / real(cfg%ny, ESMF_KIND_R8)
 
@@ -279,6 +340,26 @@ contains
             do i = lbnd(1), ubnd(1)
                lonPtr(i, j) = cfg%lon_start + (real(i, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlon
                latPtr(i, j) = cfg%lat_start + (real(j, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlat
+            end do
+         end do
+
+         ! Fill cell-corner coordinates. Corner (i, j) sits at the lower-left
+         ! edge of cell (i, j), so it is offset by a full index from the
+         ! domain origin (no half-cell shift).
+         call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CORNER, &
+            computationalLBound=clbnd, computationalUBound=cubnd, farrayPtr=lonCorner, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+
+         call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CORNER, &
+            farrayPtr=latCorner, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+
+         do j = clbnd(2), cubnd(2)
+            do i = clbnd(1), cubnd(1)
+               lonCorner(i, j) = cfg%lon_start + (real(i, ESMF_KIND_R8) - 1.0_ESMF_KIND_R8) * dlon
+               latCorner(i, j) = cfg%lat_start + (real(j, ESMF_KIND_R8) - 1.0_ESMF_KIND_R8) * dlat
             end do
          end do
       end if
