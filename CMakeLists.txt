@@ -227,7 +227,6 @@ if(CATCHEM_BUILD_NUOPC)
     list(APPEND CATCHEM_LIBRARIES
       $<TARGET_FILE:musica-fortran>
       $<TARGET_FILE:musica>
-      $<TARGET_FILE:micm>
       $<TARGET_FILE:mechanism_configuration>
       $<TARGET_FILE:yaml-cpp>
     )
