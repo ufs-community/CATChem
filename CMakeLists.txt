@@ -229,6 +229,7 @@ if(CATCHEM_BUILD_NUOPC)
       $<TARGET_FILE:musica>
       $<TARGET_FILE:mechanism_configuration>
       $<TARGET_FILE:yaml-cpp>
+      $<TARGET_FILE:fmt>
     )
   endif()
 
