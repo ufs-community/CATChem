@@ -153,6 +153,7 @@ contains
       integer,                 intent(out) :: rc
 
       real(ESMF_KIND_R8), pointer :: lonPtr(:,:), latPtr(:,:)
+      integer :: localDECount
 
       rc = ESMF_SUCCESS
 
@@ -169,26 +170,39 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CENTER, &
-         farrayPtr=lonPtr, rc=rc)
+      ! A 1x1 grid has a single decomposition element (DE) that lives on one
+      ! PET only. When the job is launched with more PETs than DEs, every other
+      ! PET owns no local DE (localDECount == 0) and must NOT try to retrieve a
+      ! coordinate array pointer -- doing so raises "localDeCount <= 0 prohibits
+      ! request" and deadlocks the run. Only the owning PET fills coordinates.
+      call ESMF_GridGet(grid, localDECount=localDECount, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CENTER, &
-         farrayPtr=latPtr, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
+      if (localDECount > 0) then
+         call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CENTER, &
+            farrayPtr=lonPtr, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
 
-      if (associated(lonPtr)) lonPtr = cfg%column_lon
-      if (associated(latPtr)) latPtr = cfg%column_lat
+         call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CENTER, &
+            farrayPtr=latPtr, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+
+         if (associated(lonPtr)) lonPtr = cfg%column_lon
+         if (associated(latPtr)) latPtr = cfg%column_lat
+      end if
 
    end subroutine create_column_grid
 
    !> \brief Create a regular lat-lon ESMF grid (periodic in longitude)
    !!
    !! Cell centers are placed at the midpoint of each cell. The grid is
-   !! decomposed across all PETs of the current VM in the latitude direction,
-   !! keeping longitude undecomposed for simplicity.
+   !! decomposed across the PETs of the current VM using an automatic 2D
+   !! factorization of the PET count (longitude x latitude), bounded by nx
+   !! and ny. PETs left over when petCount cannot be fully used simply own no
+   !! local DE and are skipped below.
    subroutine create_gridded_grid(cfg, grid, rc)
       type(CATChemGridConfig), intent(in)  :: cfg
       type(ESMF_Grid),         intent(out) :: grid
@@ -197,9 +211,10 @@ contains
       type(ESMF_VM) :: vm
       real(ESMF_KIND_R8), pointer :: lonPtr(:,:), latPtr(:,:)
       real(ESMF_KIND_R8) :: dlon, dlat
-      integer :: petCount, decompY
+      integer :: petCount, decompX, decompY
       integer :: i, j
       integer :: lbnd(2), ubnd(2)
+      integer :: localDECount
 
       rc = ESMF_SUCCESS
 
@@ -218,14 +233,15 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      ! Decompose latitude across PETs, but never more than ny blocks.
-      decompY = min(petCount, cfg%ny)
-      if (decompY < 1) decompY = 1
+      ! Decompose the grid into a 2D block layout (decompX x decompY) using an
+      ! automatic factorization of petCount, bounded by nx and ny. The layout
+      ! never asks for more blocks than PETs, so decompX*decompY <= petCount.
+      call factor_2d(petCount, cfg%nx, cfg%ny, decompX, decompY)
 
       grid = ESMF_GridCreate1PeriDim( &
          maxIndex=(/cfg%nx, cfg%ny/), &
          coordSys=ESMF_COORDSYS_SPH_DEG, &
-         regDecomp=(/1, decompY/), &
+         regDecomp=(/decompX, decompY/), &
          indexflag=ESMF_INDEX_GLOBAL, &
          name="catchem_latlon_grid", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -238,24 +254,74 @@ contains
       dlon = (cfg%lon_end - cfg%lon_start) / real(cfg%nx, ESMF_KIND_R8)
       dlat = (cfg%lat_end - cfg%lat_start) / real(cfg%ny, ESMF_KIND_R8)
 
-      call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CENTER, &
-         computationalLBound=lbnd, computationalUBound=ubnd, farrayPtr=lonPtr, rc=rc)
+      ! The grid is decomposed into `decompY` blocks in latitude. When the job
+      ! runs with more PETs than blocks (petCount > decompY), the surplus PETs
+      ! own no local DE (localDECount == 0). Retrieving a coordinate pointer on
+      ! such a PET raises "localDeCount <= 0 prohibits request" and hangs the
+      ! run, so only PETs that hold a DE fill coordinates.
+      call ESMF_GridGet(grid, localDECount=localDECount, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CENTER, &
-         farrayPtr=latPtr, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
+      if (localDECount > 0) then
+         call ESMF_GridGetCoord(grid, coordDim=1, staggerloc=ESMF_STAGGERLOC_CENTER, &
+            computationalLBound=lbnd, computationalUBound=ubnd, farrayPtr=lonPtr, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
 
-      ! Fill cell-center coordinates using global indices (ESMF_INDEX_GLOBAL)
-      do j = lbnd(2), ubnd(2)
-         do i = lbnd(1), ubnd(1)
-            lonPtr(i, j) = cfg%lon_start + (real(i, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlon
-            latPtr(i, j) = cfg%lat_start + (real(j, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlat
+         call ESMF_GridGetCoord(grid, coordDim=2, staggerloc=ESMF_STAGGERLOC_CENTER, &
+            farrayPtr=latPtr, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+
+         ! Fill cell-center coordinates using global indices (ESMF_INDEX_GLOBAL)
+         do j = lbnd(2), ubnd(2)
+            do i = lbnd(1), ubnd(1)
+               lonPtr(i, j) = cfg%lon_start + (real(i, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlon
+               latPtr(i, j) = cfg%lat_start + (real(j, ESMF_KIND_R8) - 0.5_ESMF_KIND_R8) * dlat
+            end do
          end do
-      end do
+      end if
 
    end subroutine create_gridded_grid
+
+   !> \brief Factor petCount into a 2D block layout (px x py) for an nx x ny grid
+   !!
+   !! Chooses px in [1, nx] and py in [1, ny] so that px*py <= petCount and the
+   !! number of used PETs (px*py) is maximised; ties are broken toward a block
+   !! aspect ratio close to nx/ny. Any PETs not covered by the layout own no
+   !! local DE and are handled gracefully by the localDECount guard.
+   subroutine factor_2d(petCount, nx, ny, px, py)
+      integer, intent(in)  :: petCount, nx, ny
+      integer, intent(out) :: px, py
+
+      integer :: cx, cy, used, best_used
+      real    :: target_ratio, ratio, best_score, score
+
+      px = 1
+      py = 1
+      best_used = 0
+      best_score = huge(1.0)
+      target_ratio = real(max(nx, 1)) / real(max(ny, 1))
+
+      ! Try every candidate number of longitude blocks and take the largest
+      ! matching latitude block count that still fits within petCount and ny.
+      do cx = 1, min(petCount, nx)
+         cy = min(petCount / cx, ny)
+         if (cy < 1) cycle
+         used = cx * cy
+         ratio = real(cx) / real(cy)
+         score = abs(ratio - target_ratio)
+         if (used > best_used .or. (used == best_used .and. score < best_score)) then
+            best_used = used
+            best_score = score
+            px = cx
+            py = cy
+         end if
+      end do
+
+      if (px < 1) px = 1
+      if (py < 1) py = 1
+   end subroutine factor_2d
 
 end module catchem_standalone_grid_mod
