@@ -2354,7 +2354,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
-      integer :: i, j
       !character(len=*), parameter :: pName = 'write_emission_field_2d'
 
       rc = CC_SUCCESS
@@ -2381,11 +2380,10 @@ contains
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do j = 1, size(emission_data, 2)
-         do i = 1, size(emission_data, 1)
-            field_data_2d(i, j) = real(emission_data(i, j), ESMF_KIND_R4)
-         end do
-      end do
+      ! Whole-array (shape-based) copy: on a decomposed grid the ESMF field
+      ! pointer has DE-local/global index bounds (lower bound /= 1) while
+      ! emission_data is 1-based; intrinsic assignment copies by position.
+      field_data_2d(:,:) = real(emission_data(:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
@@ -2427,7 +2425,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k
       !character(len=*), parameter :: pName = 'write_emission_field_3d'
 
       rc = CC_SUCCESS
@@ -2456,13 +2453,9 @@ contains
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do k = 1, size(emission_data, 3)
-         do j = 1, size(emission_data, 2)
-            do i = 1, size(emission_data, 1)
-               field_data_3d(i, j, k) = real(emission_data(i, j, k), ESMF_KIND_R4)
-            end do
-         end do
-      end do
+      ! Whole-array (shape-based) copy: see write_emission_field_2d. The
+      ! decomposed ESMF field pointer has non-1 horizontal lower bounds.
+      field_data_3d(:,:,:) = real(emission_data(:,:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &

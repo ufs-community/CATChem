@@ -1576,7 +1576,7 @@ contains
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k, time_slice
+      integer :: time_slice
 
       rc = CC_SUCCESS
 
@@ -1611,11 +1611,11 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do j = 1, size(array_2d_ptr, 2)
-            do i = 1, size(array_2d_ptr, 1)
-               field_data_2d(i, j) = real(array_2d_ptr(i, j), ESMF_KIND_R4)
-            end do
-         end do
+         ! Whole-array (shape-based) copy: on a decomposed grid the ESMF field
+         ! pointer carries DE-local/global index bounds (lower bound /= 1), while
+         ! the CATChem diagnostic array is 1-based. Intrinsic assignment copies
+         ! element-by-element by position and ignores the differing lower bounds.
+         field_data_2d(:,:) = real(array_2d_ptr(:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
@@ -1647,13 +1647,10 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do k = 1, size(array_3d_ptr, 3)
-            do j = 1, size(array_3d_ptr, 2)
-               do i = 1, size(array_3d_ptr, 1)
-                  field_data_3d(i, j, k) = real(array_3d_ptr(i, j, k), ESMF_KIND_R4)
-               end do
-            end do
-         end do
+         ! Whole-array (shape-based) copy: see the 2D case above. The decomposed
+         ! ESMF field pointer has non-1 horizontal lower bounds, so index-by-1
+         ! loops would run off the DE-local tile; intrinsic assignment is safe.
+         field_data_3d(:,:,:) = real(array_3d_ptr(:,:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
