@@ -1051,6 +1051,35 @@ def write_set_field_2d_real(fields, output_file):
                 f.write(f"   this%{name} = field_data\n")
                 f.write(f"   rc = CC_SUCCESS\n\n")
 
+        # Integer fields: callers (e.g. the offline emission reader) always supply
+        # real data, so accept it here and convert with nint(). This makes the
+        # real set_field a universal entry point for integer 2D met fields such as
+        # LWI (land/water/ice mask) and DLUSE (dominant land-use type), which would
+        # otherwise hit "Unknown field name" because they are absent from this
+        # real-typed case list.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 2 and type_name == 'integer':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call this%allocate_arrays('{name}', error_mgr, rc)\n")
+                f.write(f"      if (rc /= CC_SUCCESS) return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = nint(field_data)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Logical fields: convert real data to logical via a > 0.5 threshold.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 2 and type_name == 'logical':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call this%allocate_arrays('{name}', error_mgr, rc)\n")
+                f.write(f"      if (rc /= CC_SUCCESS) return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = (field_data > 0.5_fp)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
 def write_set_field_2d_int(fields, output_file):
     """
     Write a macro for setting 2D INTEGER field values.
@@ -1182,6 +1211,33 @@ def write_set_field_3d_real(fields, output_file):
                     f.write(f"   end if\n")
                     f.write(f"   this%{name} = field_data\n")
                     f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Integer fields: callers always supply real data, so convert with nint().
+        # Makes the real set_field a universal entry point for integer 3D met fields.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 3 and type_name == 'integer':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                f.write(f"         'Field {name} not allocated', rc)\n")
+                f.write(f"      return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = nint(field_data)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Logical fields: convert real data to logical via a > 0.5 threshold.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 3 and type_name == 'logical':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                f.write(f"         'Field {name} not allocated', rc)\n")
+                f.write(f"      return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = (field_data > 0.5_fp)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
 
 def write_set_field_3d_int(fields, output_file):
     """

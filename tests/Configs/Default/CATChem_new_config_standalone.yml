@@ -499,8 +499,8 @@ processes:
       gridded: true
       regrid_method: neareststod
       time_interpolation: linear
-      lat_name: "lat"
-      lon_name: "lon"
+      lat_name: "grid_yt"
+      lon_name: "grid_xt"
       is_2d: true
       apply_method: "replace"
       frequency: "hourly"

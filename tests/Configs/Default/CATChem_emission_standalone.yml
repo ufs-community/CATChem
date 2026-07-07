@@ -207,7 +207,7 @@ dust:
     scale: [1.0]
     map: ["MET_USTAR_THRESHOLD"]
 fengsha:
-  PC:
+  albedo_drag:
     long_name: "Drag Partition"
     units: "1"
     scale: [1.0]
@@ -320,7 +320,7 @@ met3:
     units: "m"
     scale: [1.0]
     map: ["MET_PBLH"]
-  GFN:
+  GRN:
     long_name: "Greeness Fraction"
     units: "1"
     scale: [1.0]
@@ -340,7 +340,7 @@ met3:
     units: "1"
     scale: [1.0]
     map: ["MET_FRSEAICE"]
-  FRSNOW:
+  FRSNO:
     long_name: "Area Fraction of Snow"
     units: "1"
     scale: [1.0]
