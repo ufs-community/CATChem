@@ -43,6 +43,7 @@ module catchem_emis_mod
    use StateManager_Mod, only: StateManagerType
    use ChemState_Mod, only: ChemStateType
    use MetState_Mod, only: MetStateType
+   use Met_Utilities_Mod, only: hybrid_grid_supported, get_pedge, get_pmid, vertical_interp_pressure
    use TimeState_Mod, only: TimeStateType
    use ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
    use Constants, only: AIRMW, AVO
@@ -492,6 +493,126 @@ contains
          end if
       end if
    end subroutine catchem_emis_size_field_vertical
+
+   !> \brief Pressure-interpolate a 3D field from file levels onto the model grid
+   !!
+   !! Fills \c field%emission_data_model (nx,ny,nz,1) by remapping the current
+   !! slice \c field%emission_data(:,:,:,1) from its native file levels to the
+   !! model's \c nz layers using linear-in-pressure interpolation.  Source-layer
+   !! pressures are reconstructed for \c vertical_pressure_mode=='construct' as
+   !! P = ap + bp*PS from the built-in hybrid coefficients (met_utilities_mod)
+   !! for the file's level count; the target pressures are the model mid-layer
+   !! pressures (\c met_state%PMID, or reconstructed from PS when unavailable).
+   !!
+   !! On any inability to build the pressures (unsupported grid, mismatched
+   !! horizontal shape, or the not-yet-implemented 'file' mode) it falls back to
+   !! a size-safe level copy so the field is still delivered at the model nz
+   !! (never wider than nz), which keeps the collective diagnostic write valid.
+   subroutine catchem_emis_vinterp_field(category, field, met_state, nz, rc)
+      implicit none
+      type(ExtEmisCategoryType), intent(in)    :: category
+      type(ExtEmisFieldType),    intent(inout) :: field
+      type(MetStateType),        intent(in)    :: met_state
+      integer,                   intent(in)    :: nz
+      integer,                   intent(out)   :: rc
+
+      integer :: localrc, nx, ny, nsrc, kcopy
+      logical :: ok, have_src, have_dst
+      real(fp), allocatable :: src_pmid(:,:,:), dst_pmid(:,:,:)
+      character(len=EMIS_MAXSTR) :: msg
+      character(len=32) :: pmode
+      character(len=*), parameter :: pName = 'catchem_emis_vinterp_field'
+
+      rc = CC_SUCCESS
+      if (.not. allocated(field%emission_data)) return
+
+      nx   = size(field%emission_data, 1)
+      ny   = size(field%emission_data, 2)
+      nsrc = size(field%emission_data, 3)
+
+      ! (Re)allocate the model-level buffer to (nx,ny,nz,1).
+      if (allocated(field%emission_data_model)) then
+         if (size(field%emission_data_model,1) /= nx .or. &
+             size(field%emission_data_model,2) /= ny .or. &
+             size(field%emission_data_model,3) /= nz) then
+            deallocate(field%emission_data_model)
+         end if
+      end if
+      if (.not. allocated(field%emission_data_model)) &
+         allocate(field%emission_data_model(nx, ny, nz, 1))
+      field%emission_data_model = 0.0_fp
+
+      ! The horizontal grid of the field must match met_state (PS/PMID) for the
+      ! per-column pressures to be meaningful.  Otherwise fall back to a copy.
+      have_src = .false.
+      have_dst = .false.
+      if (allocated(met_state%PS)) then
+         if (size(met_state%PS,1) == nx .and. size(met_state%PS,2) == ny) then
+
+            ! ---- Source-layer pressures --------------------------------------
+            pmode = adjustl(category%vertical_pressure_mode)
+            call to_lower_str(pmode)
+            select case (trim(pmode))
+            case ('construct', 'hybrid', '')
+               if (hybrid_grid_supported(nsrc)) then
+                  src_pmid = get_pmid(get_pedge(met_state%PS, nsrc))
+                  have_src = (size(src_pmid,3) == nsrc)
+               else
+                  write(msg,'(A,A,I0,A,A)') trim(pName), ': no built-in hybrid grid for ', &
+                     nsrc, ' levels (category ', trim(category%category_name)//')'
+                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+               end if
+            case default
+               write(msg,'(A,A,A,A)') trim(pName), &
+                  ': vertical_pressure_mode="', trim(category%vertical_pressure_mode), &
+                  '" not implemented; falling back to a level copy'
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            end select
+
+            ! ---- Target (model) layer pressures ------------------------------
+            if (have_src) then
+               if (allocated(met_state%PMID)) then
+                  if (size(met_state%PMID,1) == nx .and. size(met_state%PMID,2) == ny .and. &
+                      size(met_state%PMID,3) == nz .and. met_state%is_field_set('PMID')) then
+                     dst_pmid = met_state%PMID
+                     have_dst = .true.
+                  end if
+               end if
+               if (.not. have_dst .and. hybrid_grid_supported(nz)) then
+                  dst_pmid = get_pmid(get_pedge(met_state%PS, nz))
+                  have_dst = (size(dst_pmid,3) == nz)
+               end if
+            end if
+         end if
+      end if
+
+      if (have_src .and. have_dst) then
+         call vertical_interp_pressure(src_pmid, field%emission_data(:,:,:,1), &
+            dst_pmid, field%emission_data_model(:,:,:,1))
+      else
+         ! Safe fallback: copy the lowest min(nz,nsrc) levels so the field is
+         ! still nz-sized (avoids a native-depth collective write) even though
+         ! the pressures could not be built.
+         kcopy = min(nz, nsrc)
+         field%emission_data_model(:,:,1:kcopy,1) = field%emission_data(:,:,1:kcopy,1)
+         write(msg,'(A,A,A)') trim(pName), &
+            ': pressure interpolation unavailable, used level copy for ', &
+            trim(category%category_name)//'/'//trim(field%field_name)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+      end if
+
+   end subroutine catchem_emis_vinterp_field
+
+   !> \brief Lowercase an in-place string (ASCII)
+   subroutine to_lower_str(s)
+      implicit none
+      character(len=*), intent(inout) :: s
+      integer :: i, ic
+      do i = 1, len_trim(s)
+         ic = iachar(s(i:i))
+         if (ic >= iachar('A') .and. ic <= iachar('Z')) s(i:i) = achar(ic + 32)
+      end do
+   end subroutine to_lower_str
 
    !> \brief Read emission data from files
    !!
@@ -1574,16 +1695,34 @@ contains
 
          field_name = trim(category%fields(ifield)%field_name)
 
+         ! Optionally remap a native-level 3D field (e.g. a 127-level oxidant)
+         ! onto the model nz grid by linear-in-pressure interpolation.  This
+         ! (re)builds emission_data_model each timestep from the current PS/PMID
+         ! and the (possibly time-blended) emission_data, so the field is used
+         ! and diagnosed on the model grid rather than truncated.
+         if (category%vertical_interp .and. .not. category%fields(ifield)%is_2d .and. &
+             size(category%fields(ifield)%emission_data, 3) /= nz) then
+            call catchem_emis_vinterp_field(category, category%fields(ifield), met_state, nz, localrc)
+         else if (allocated(category%fields(ifield)%emission_data_model)) then
+            ! No longer needed (config changed or size now matches) -> drop it.
+            deallocate(category%fields(ifield)%emission_data_model)
+         end if
+
          ! Get emission data for entire domain [kg/m2/s]
-         ! Copy up to the model's nz levels into the working buffer.  Fields read
-         ! at their native vertical size (e.g. nz+1 edge met fields) can have more
-         ! levels than nz; those are passed straight from emission_data in the
-         ! MET_ 3D branch below, so a size-safe partial copy here keeps the
-         ! chemistry/2D paths (which operate on nz) valid and crash-free.
-         nlev_f = size(category%fields(ifield)%emission_data, 3)
-         kcopy = min(nz, nlev_f)
-         emission_flux(:,:,:) = 0.0_fp
-         emission_flux(:,:,1:kcopy) = category%fields(ifield)%emission_data(:,:,1:kcopy,1)
+         ! Prefer the model-grid buffer when a pressure remap was performed;
+         ! otherwise copy up to the model's nz levels into the working buffer.
+         ! Fields read at their native vertical size (e.g. nz+1 edge met fields)
+         ! can have more levels than nz; those are passed straight from
+         ! emission_data in the MET_ 3D branch below, so a size-safe partial copy
+         ! here keeps the chemistry/2D paths (which operate on nz) valid.
+         if (allocated(category%fields(ifield)%emission_data_model)) then
+            emission_flux(:,:,:) = category%fields(ifield)%emission_data_model(:,:,:,1)
+         else
+            nlev_f = size(category%fields(ifield)%emission_data, 3)
+            kcopy = min(nz, nlev_f)
+            emission_flux(:,:,:) = 0.0_fp
+            emission_flux(:,:,1:kcopy) = category%fields(ifield)%emission_data(:,:,1:kcopy,1)
+         end if
 
          ! Apply category and global scaling factors
          emission_flux = emission_flux * category%global_scale * global_scale
@@ -1655,7 +1794,11 @@ contains
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
                   if (category%fields(ifield)%is_2d) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
-                  else if (size(category%fields(ifield)%emission_data, 3) == nz) then
+                  else if (allocated(category%fields(ifield)%emission_data_model) .or. &
+                           size(category%fields(ifield)%emission_data, 3) == nz) then
+                     ! Model-grid data: either pressure-interpolated into
+                     ! emission_data_model (already in emission_flux above) or a
+                     ! native nz-level field.  Both are nz-sized in emission_flux.
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
                   else
                      ! Native-size 3D met field (e.g. nz+1 edge fields like
@@ -2298,6 +2441,14 @@ contains
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
                   description, units, filename, time_slice, localrc)
+            else if (allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data_model)) then
+               ! 3D field remapped onto the model grid (pressure interpolation):
+               ! write the model-level buffer so the field's vertical dimension
+               ! matches the model nz (and the diagnostic file), keeping the
+               ! collective parallel write consistent across PEs.
+               call write_emission_field_3d(IO, grid, field_name, &
+                  ext_emis_data%categories(icat)%fields(ifield)%emission_data_model(:,:,:,1), &
+                  description, units, filename, time_slice, localrc)
             else
                ! 3D point source or vertical emission field
                call write_emission_field_3d(IO, grid, field_name, &
@@ -2545,6 +2696,14 @@ contains
       call config_manager%get_string(trim(config_path)//'/time_interpolation', category%time_interpolation, localrc, 'none')
       call config_manager%get_string(trim(config_path)//'/vertical_dist', category%vertical_dist, localrc, 'none')
       call config_manager%get_logical(trim(config_path)//'/reverse_vertical', category%reverse_vertical, localrc, .false.)
+
+      ! Pressure-based vertical interpolation of 3D fields onto the model grid.
+      call config_manager%get_logical(trim(config_path)//'/vertical_interp', &
+         category%vertical_interp, localrc, .false.)
+      call config_manager%get_string(trim(config_path)//'/vertical_pressure_mode', &
+         category%vertical_pressure_mode, localrc, 'construct')
+      call config_manager%get_string(trim(config_path)//'/vertical_pressure_var', &
+         category%vertical_pressure_var, localrc, '')
 
       ! Read stack parameter names (for point sources)
       call config_manager%get_string(trim(config_path)//'/stack_diameter', category%stkdmname, localrc, '')

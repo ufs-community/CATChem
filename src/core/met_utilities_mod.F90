@@ -70,6 +70,7 @@ module Met_Utilities_Mod
    public :: get_hybrid_ab
    public :: get_pedge
    public :: get_pmid
+   public :: vertical_interp_pressure
 
    !=========================================================================
    ! Hybrid-sigma vertical grid coefficients
@@ -680,5 +681,76 @@ contains
          end do
       end do
    end function get_pmid
+
+   !> \brief Linearly interpolate a 3D field from source to target pressures
+   !! \param[in]  src_p    Source layer pressures [Pa], shape (nx,ny,nsrc)
+   !! \param[in]  src_data Source field values,        shape (nx,ny,nsrc)
+   !! \param[in]  dst_p    Target layer pressures [Pa], shape (nx,ny,ndst)
+   !! \param[out] dst_data Interpolated field values,   shape (nx,ny,ndst)
+   !!
+   !! Column-by-column linear interpolation in pressure.  Each source column is
+   !! assumed monotonic in pressure (either order); the bracketing source layers
+   !! for every target pressure are found by value, so the routine is agnostic to
+   !! surface-first vs top-first storage as long as \c src_p and \c src_data share
+   !! the same ordering.  Target pressures that fall outside the source range use
+   !! constant (nearest-layer) extrapolation so no spurious values are produced
+   !! above the model top or below the surface.
+   subroutine vertical_interp_pressure(src_p, src_data, dst_p, dst_data)
+      real(fp), intent(in)  :: src_p(:,:,:)
+      real(fp), intent(in)  :: src_data(:,:,:)
+      real(fp), intent(in)  :: dst_p(:,:,:)
+      real(fp), intent(out) :: dst_data(:,:,:)
+
+      integer  :: i, j, k, l, ll, nx, ny, nsrc, ndst
+      real(fp) :: pt, p1, p2, w
+
+      nx   = size(dst_data, 1)
+      ny   = size(dst_data, 2)
+      ndst = size(dst_data, 3)
+      nsrc = size(src_p, 3)
+
+      do j = 1, ny
+         do i = 1, nx
+            do k = 1, ndst
+               pt = dst_p(i, j, k)
+
+               if (nsrc == 1) then
+                  dst_data(i, j, k) = src_data(i, j, 1)
+                  cycle
+               end if
+
+               ! Locate the source interval [l, l+1] whose pressures bracket pt.
+               l = 0
+               bracket_search: do ll = 1, nsrc - 1
+                  p1 = src_p(i, j, ll)
+                  p2 = src_p(i, j, ll + 1)
+                  if ((pt - p1) * (pt - p2) <= 0.0_fp) then
+                     l = ll
+                     exit bracket_search
+                  end if
+               end do bracket_search
+
+               if (l == 0) then
+                  ! Outside the source column -> nearest-layer (constant) value.
+                  if (abs(pt - src_p(i, j, 1)) <= abs(pt - src_p(i, j, nsrc))) then
+                     dst_data(i, j, k) = src_data(i, j, 1)
+                  else
+                     dst_data(i, j, k) = src_data(i, j, nsrc)
+                  end if
+               else
+                  p1 = src_p(i, j, l)
+                  p2 = src_p(i, j, l + 1)
+                  if (p2 == p1) then
+                     w = 0.0_fp
+                  else
+                     w = (pt - p1) / (p2 - p1)
+                  end if
+                  dst_data(i, j, k) = src_data(i, j, l) &
+                     + w * (src_data(i, j, l + 1) - src_data(i, j, l))
+               end if
+            end do
+         end do
+      end do
+   end subroutine vertical_interp_pressure
 
 end module met_utilities_mod

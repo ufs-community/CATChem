@@ -67,6 +67,7 @@ MODULE ExtEmisData_Mod
       LOGICAL                       :: time_interpolate = .true. !< Enable time interpolation
       LOGICAL                       :: diagnostic = .false. !< Enable diagnostic output of this field
       REAL(fp), ALLOCATABLE         :: emission_data(:,:,:,:) !< Emission flux [kg/m2/s] (nx,ny,nz,n_times)
+      REAL(fp), ALLOCATABLE         :: emission_data_model(:,:,:,:) !< Model-vertical-grid copy of emission_data(:,:,:,1), pressure-interpolated from the file's native levels to the model nz. Only allocated/used when the parent category has vertical_interp enabled; apply and diagnostics read this instead of emission_data so a deep source grid (e.g. 127 levels) is remapped rather than truncated.
       REAL(fp), ALLOCATABLE         :: interp_data_t1(:,:,:,:) !< Regridded current time slice for temporal blending
       REAL(fp), ALLOCATABLE         :: interp_data_t2(:,:,:,:) !< Regridded next time slice for temporal blending
       LOGICAL                       :: is_loaded = .false. !< Data loading status
@@ -121,6 +122,9 @@ MODULE ExtEmisData_Mod
       CHARACTER(LEN=32)                         :: time_interpolation = 'none' !< Temporal interpolation (none, linear)
       CHARACTER(LEN=32)                         :: vertical_dist = 'none' !< Vertical distribution method (none, P100, P500, Ppbl, aviation)
       LOGICAL                                   :: reverse_vertical = .false. !< Reverse vertical levels after reading (e.g. top-down to bottom-up)
+      LOGICAL                                   :: vertical_interp = .false. !< Pressure-interpolate 3D fields from the file's native levels onto the model nz grid (instead of truncating). Needed for deep source grids such as the 127-level GMI oxidants.
+      CHARACTER(LEN=32)                         :: vertical_pressure_mode = 'construct' !< How source-level pressures are obtained when vertical_interp is on: 'construct' = P=ak+bk*PS from the built-in hybrid coefficients (met_utilities_mod) for the file's level count; 'file' = read from a file variable (vertical_pressure_var).
+      CHARACTER(LEN=64)                         :: vertical_pressure_var = '' !< Name of the source-file variable holding level pressures (reserved for vertical_pressure_mode=='file').
       CHARACTER(LEN=128)                        :: stkdmname = ''      !< Stack dimension name in the file
       CHARACTER(LEN=128)                        :: stkhtname = ''      !< Stack height variable name in the file
       CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
@@ -294,6 +298,7 @@ CONTAINS
       rc = CC_SUCCESS
 
       if (allocated(this%emission_data)) deallocate(this%emission_data)
+      if (allocated(this%emission_data_model)) deallocate(this%emission_data_model)
       if (allocated(this%lat)) deallocate(this%lat)
       if (allocated(this%lon)) deallocate(this%lon)
       if (allocated(this%stkdm)) deallocate(this%stkdm)

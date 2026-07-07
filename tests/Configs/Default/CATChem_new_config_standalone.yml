@@ -309,6 +309,8 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "none"
+      vertical_interp: true          # remap the 127-level file onto the model nz (pressure-based)
+      vertical_pressure_mode: construct  # P = ak + bk*PS using the built-in 127-level hybrid coefficients (met_utilities_mod)
       frequency: "monthly" # 14 months (Dec+Jan padding); time-coord matching selects the right slice
       diagnostics: true
       diag_list: [oh, h2o2]
