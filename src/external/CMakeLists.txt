@@ -75,6 +75,7 @@ else()
   # This prevents MUSICA from fetching their own copy
   FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
   FetchContent_MakeAvailable(yaml-cpp)
+  target_compile_definitions(yaml-cpp PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:YAML=CATChem_YAML>")
 endif()
 
 #
