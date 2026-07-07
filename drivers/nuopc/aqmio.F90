@@ -3257,11 +3257,46 @@ contains
             end if
          end if
       end do
-      ! Ungridded dimension (vertical levels)
+      ! Ungridded dimension (vertical levels).
+      ! Different 3D fields may have different vertical extents in the same file
+      ! (e.g. layer-mid fields at nz vs. layer-edge fields at nz+1). A single
+      ! shared 'lev' dimension cannot represent both, so the canonical name
+      ! 'lev' is claimed by the first vertical size written and any field with a
+      ! different vertical extent gets its own size-suffixed dimension
+      ! (e.g. 'lev73'). This lets nz and nz+1 fields coexist instead of the
+      ! write failing with a dimension-length mismatch in nf90_put_var.
       if (rank > dimCount) then
          dimName = 'lev'
          ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
-         if (ncStatus /= NF90_NOERR) then
+         if (ncStatus == NF90_NOERR) then
+            ! 'lev' exists: reuse it only if its length matches this field.
+            ncStatus = nf90_inquire_dimension(IOLayout % ncid, dimIds(dimCount+1), len=length)
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_READ, &
+                  msg="Error inquiring dimension "//trim(dimName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               return  ! bail out
+            end if
+            if (length /= dimLen(dimCount+1)) then
+               ! Mismatch: use a size-specific dimension (create or reuse).
+               write(dimName, '("lev",i0)') dimLen(dimCount+1)
+               ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
+               if (ncStatus /= NF90_NOERR) then
+                  ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
+                  if (ncStatus /= NF90_NOERR) then
+                     call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+                        msg="Error defining dimension "//trim(dimName), &
+                        line=__LINE__, &
+                        file=__FILE__, &
+                        rcToReturn=rc)
+                     return  ! bail out
+                  end if
+               end if
+            end if
+         else
+            ! 'lev' not present yet: define it at this field's vertical size.
             ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
             if (ncStatus /= NF90_NOERR) then
                call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
