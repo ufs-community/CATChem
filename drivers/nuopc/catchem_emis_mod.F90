@@ -43,6 +43,7 @@ module catchem_emis_mod
    use StateManager_Mod, only: StateManagerType
    use ChemState_Mod, only: ChemStateType
    use MetState_Mod, only: MetStateType
+   use TimeState_Mod, only: TimeStateType
    use ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
    use Constants, only: AIRMW, AVO
 
@@ -176,6 +177,7 @@ contains
       type(ErrorManagerType), pointer :: error_manager
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
+      type(TimeStateType), pointer :: time_state
       integer :: localrc, i, period_key
       integer :: blo_year, blo_month
       real(fp) :: bfrac
@@ -192,8 +194,14 @@ contains
       error_manager => state_manager%get_error_manager()
       met_state => state_manager%get_met_state_ptr()
       chem_state => state_manager%get_chem_state_ptr()
+      time_state => state_manager%get_time_state_ptr()
 
-      ! Loop through all emission categories and check if updates are needed
+      ! Pass 1: read/blend every active category and apply ONLY the
+      ! meteorology-providing categories (those whose mappings all target
+      ! met_state via MET_ prefixes).  This guarantees the primary met fields
+      ! (PS, T, QV, ...) are populated before the pressure-derived fields
+      ! (PEDGE/PMID/DELP/AIRDEN) that the emission tendencies below require.
+      ! Applying emissions first would divide by an unpopulated (zero) DELP.
       do i = 1, ext_emis_data%n_categories
          if (.not. ext_emis_data%categories(i)%is_active) cycle
 
@@ -259,8 +267,57 @@ contains
             end if
          end if
 
-         ! Apply emissions to chemical state every timestep
-         ! (data is read only when the period changes, but applied every step)
+         ! Apply meteorology-providing categories now (pass 1) so that every
+         ! met_state primary they supply (PS, T, QV, ...) is populated before we
+         ! ensure the pressure-derived fields below.  Non-met (emission)
+         ! categories are deferred to pass 2.
+         if (emis_category_is_met(config_manager, i)) then
+            call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
+            if (localrc /= CC_SUCCESS) then
+               write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
+                  trim(ext_emis_data%categories(i)%category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            end if
+         end if
+      end do
+
+      ! Ensure the pressure-derived met fields used by the emission unit
+      ! conversions are available before the chemistry categories (pass 2) apply:
+      ! DELP (for kg/m2/s mass-flux -> mixing-ratio) and AIRDEN (for #/cm3
+      ! number-flux).  Derive each ONLY when it was not already populated this
+      ! timestep, which keeps the logic source-agnostic rather than keyed to any
+      ! particular category/field:
+      !   * coupled runs: the NUOPC import transform (run immediately before this
+      !     routine) already set DELP/AIRDEN, so is_field_set is .true. and the
+      !     imported values are left untouched;
+      !   * standalone/offline runs: the met categories above populated the
+      !     primaries and derive_field self-resolves the PS -> PEDGE -> PMID ->
+      !     {DELP, AIRDEN} chain from whichever category supplied them.
+      ! MetState's registry is reset each timestep, so this re-derives every step
+      ! from the current PS/T in the offline case (no staleness).
+      if (.not. met_state%is_field_set('DELP')) then
+         call met_state%derive_field('DELP', error_manager, time_state, localrc)
+         if (localrc /= CC_SUCCESS) then
+            call ESMF_LogWrite(trim(pName)//': could not derive DELP (surface pressure '// &
+               'PS may be unavailable); kg/m2/s emission unit conversion may be invalid', &
+               ESMF_LOGMSG_WARNING, rc=localrc)
+         end if
+      end if
+      if (.not. met_state%is_field_set('AIRDEN')) then
+         call met_state%derive_field('AIRDEN', error_manager, time_state, localrc)
+         if (localrc /= CC_SUCCESS) then
+            call ESMF_LogWrite(trim(pName)//': could not derive AIRDEN (PMID/T may be '// &
+               'unavailable); #/cm3 emission unit conversion may be invalid', &
+               ESMF_LOGMSG_WARNING, rc=localrc)
+         end if
+      end if
+
+      ! Pass 2: apply the remaining (non-met) emission categories to the chemical
+      ! state.  DELP/AIRDEN are now valid for the mass-flux unit conversions.
+      do i = 1, ext_emis_data%n_categories
+         if (.not. ext_emis_data%categories(i)%is_active) cycle
+         if (emis_category_is_met(config_manager, i)) cycle
+
          call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
          if (localrc /= CC_SUCCESS) then
             write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
@@ -268,12 +325,47 @@ contains
             call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
          end if
       end do
-      nullify(config_manager, met_state, chem_state) ! Clean up pointers
+      nullify(config_manager, met_state, chem_state, time_state) ! Clean up pointers
 
       call ESMF_LogWrite(trim(pName)//': Emission data updated', &
          ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_update
+
+   !> \brief Classify an emission-mapping category as meteorology-providing.
+   !!
+   !! Returns .true. when every species mapping in the category targets a
+   !! meteorological field (name prefixed with 'MET_'/'met_'), meaning the
+   !! category populates met_state rather than the chemical state.  Such met
+   !! categories must be applied before the chemistry emission categories so
+   !! that the primary met fields (PS, T, QV, ...) are available for deriving
+   !! DELP/AIRDEN used in the emission unit conversions.
+   logical function emis_category_is_met(config_manager, icat) result(is_met)
+      type(ConfigManagerType), pointer, intent(in) :: config_manager
+      integer, intent(in) :: icat
+      integer :: ifield, ispec, nmap
+      character(len=64) :: tgt
+
+      is_met = .false.
+      if (.not. associated(config_manager)) return
+      if (.not. config_manager%config_data%emission_mapping%is_loaded) return
+      if (icat < 1 .or. icat > config_manager%config_data%emission_mapping%n_categories) return
+
+      associate (cat => config_manager%config_data%emission_mapping%categories(icat))
+         ! A category with no mappings is not treated as meteorology-providing.
+         if (cat%n_emission_species <= 0) return
+         do ifield = 1, cat%n_emission_species
+            nmap = cat%species_mappings(ifield)%n_mappings
+            if (nmap <= 0) return
+            do ispec = 1, nmap
+               tgt = adjustl(cat%species_mappings(ifield)%map(ispec))
+               if (len_trim(tgt) <= 4) return
+               if (tgt(1:4) /= 'MET_' .and. tgt(1:4) /= 'met_') return
+            end do
+         end do
+         is_met = .true.
+      end associate
+   end function emis_category_is_met
 
    subroutine catchem_emis_detect_field_ranks(category, filename, rc)
       !> \brief Auto-detect each field's 2D/3D rank from the NetCDF file.

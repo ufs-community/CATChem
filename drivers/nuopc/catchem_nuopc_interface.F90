@@ -489,7 +489,6 @@ contains
       integer, intent(out) :: rc
 
       ! Get process-local state
-      type(StateManagerType), pointer :: state_mgr => null()
       integer, save :: timestep = 0
 
       !cc_wrap => get_cc_wrap()
@@ -497,43 +496,12 @@ contains
       rc = CC_SUCCESS
       errmsg = ''
 
-      ! Update extemission data first
-      state_mgr => cc_wrap%catchem_model%get_state_manager()
-#ifdef CATCHEM_TRACE_NUOPC
-      call ESMF_TraceRegionEnter("catchem_emis_update", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
-#endif
-      call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
-         cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
-#ifdef CATCHEM_TRACE_NUOPC
-      call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
-#endif
-
-      ! In standalone/offline mode some required met fields are populated by the
-      ! emission reader (mappings whose target begins with "MET_"). Now that
-      ! catchem_emis_update has run, derive any remaining required met fields and
-      ! verify completeness. For coupled runs (no emission-provided met) this
-      ! block is skipped, so behavior is unchanged.
-      if (allocated(cc_wrap%catchem_model%required_fields)) then
-         block
-            logical, allocatable :: emis_met_mask(:)
-            logical :: any_emis_met
-            allocate(emis_met_mask(size(cc_wrap%catchem_model%required_fields)))
-            call emission_provided_met_mask(cc_wrap, emis_met_mask, any_emis_met)
-            if (any_emis_met) then
-               call finalize_required_met(cc_wrap, emis_met_mask, rc)
-               if (rc /= ESMF_SUCCESS) then
-                  write(errmsg, '(A)') 'Error finalizing required met fields after emission update'
-                  deallocate(emis_met_mask)
-                  return
-               end if
-            end if
-            deallocate(emis_met_mask)
-         end block
-      end if
+      ! NOTE: Emission reading, emission-provided meteorology, pressure-field
+      ! derivation (DELP/AIRDEN) and required-met finalization are all performed
+      ! in transform_nuopc_to_catchem (called from ModelAdvance immediately before
+      ! this routine). This gives coupled and standalone/offline runs an identical
+      ! sequence: transform fully populates MetState and applies emissions, and
+      ! this routine only advances the CATChem processes.
 
       !Run CATChem processes
       timestep = timestep + 1
@@ -672,8 +640,6 @@ contains
       type(TimeStateType), pointer :: time_state
       type(MetStateType), pointer :: met_state
       logical, allocatable :: set_required_met(:)
-      logical, allocatable :: emis_met_mask(:)
-      logical :: any_emis_met
       integer(ESMF_KIND_I8) :: timestep_seconds
       integer :: year, month, day, hour, minute, second
       integer :: i, n, n_met
@@ -731,21 +697,28 @@ contains
 
       end do
 
-      !derive some met fields if required after reading from NUOPC
-      ! Some required met fields may instead be supplied by the offline emission
-      ! reader (emission-mapping targets that begin with "MET_"). Those are not
-      ! available yet at this point, so defer the derive/verify step until after
-      ! catchem_emis_update has populated them (handled in catchem_nuopc_run).
-      ! When no met fields are emission-provided (the standard coupled case),
-      ! derive and verify here exactly as before via the shared routine.
+      ! Populate any meteorology supplied by the offline emission reader and apply
+      ! chemical emissions. Running this here (immediately after importing met from
+      ! the NUOPC import state) makes the coupled and standalone/offline forms share
+      ! one sequence: transform fully populates MetState -- import + emission-provided
+      ! met + derived pressure fields (DELP/AIRDEN) -- and applies emissions, after
+      ! which catchem_nuopc_run only advances the processes. In coupled runs with no
+      ! "MET_" mappings this reads/applies nothing extra and leaves imported met
+      ! untouched (catchem_emis_update derives DELP/AIRDEN only when they were not
+      ! already provided this timestep, so host-imported values are preserved).
+      call catchem_emis_update(cc_wrap%ext_emis, currTime, state_mgr, &
+         cc_wrap%iocomp, cc_wrap%grid, real(timestep_seconds, fp), rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      ! Derive any still-missing required met fields and verify completeness. This
+      ! single, unconditional call serves both run forms: import-provided and
+      ! emission-provided fields are detected through MetState's per-timestep
+      ! registry inside finalize_required_met, and derive_field self-resolves its
+      ! own prerequisites, so already-set fields are skipped and never recomputed.
       if (allocated(cc_wrap%catchem_model%required_fields)) then
-         allocate(emis_met_mask(n_met))
-         call emission_provided_met_mask(cc_wrap, emis_met_mask, any_emis_met)
-         if (.not. any_emis_met) then
-            call finalize_required_met(cc_wrap, set_required_met, rc)
-            if (rc /= ESMF_SUCCESS) return
-         end if
-         deallocate(emis_met_mask)
+         call finalize_required_met(cc_wrap, set_required_met, rc)
+         if (rc /= ESMF_SUCCESS) return
          deallocate(set_required_met)
       end if
 
