@@ -344,7 +344,7 @@ met3:
     long_name: "Area Fraction of Snow"
     units: "1"
     scale: [1.0]
-    map: ["MET_FRSNOW"]
+    map: ["MET_FRSNO"]
   PRECLSC:
     long_name: "Large Scale Precipitation Rate"
     units: "kg/m2/s"

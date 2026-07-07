@@ -383,6 +383,7 @@ contains
       integer,                   intent(out)   :: rc
 
       integer :: ncStatus, ncid, ifield, varId, ndims, uid, spatial_ndims
+      integer :: nlev_var
       integer, allocatable :: dimids(:)
       character(len=NF90_MAX_NAME) :: dimName
       logical :: is_time
@@ -434,12 +435,63 @@ contains
          if (is_time) spatial_ndims = ndims - 1
 
          category%fields(ifield)%is_2d = (spatial_ndims <= 2)
+
+         ! Record the source variable's vertical extent so 3D fields can be read
+         ! at their native resolution.  Storage order is (lon, lat, lev[, time]),
+         ! so the vertical is the last spatial dimension.  This lets edge met
+         ! fields (nz+1 levels, e.g. PFILSAN/PFLLSAN) be read at full size and
+         ! copied cleanly into the MetState without truncation.
+         if (spatial_ndims >= 3) then
+            ncStatus = nf90_inquire_dimension(ncid, dimids(spatial_ndims), len=nlev_var)
+            if (ncStatus == NF90_NOERR) then
+               category%fields(ifield)%nlev_file = nlev_var
+            else
+               category%fields(ifield)%nlev_file = 0
+            end if
+         else
+            category%fields(ifield)%nlev_file = 1
+         end if
+
          deallocate(dimids)
       end do
 
       ncStatus = nf90_close(ncid)
 
    end subroutine catchem_emis_detect_field_ranks
+
+   !> \brief Ensure a 3D field's storage matches its native file vertical size.
+   !!
+   !! Returns the vertical level count the field should be read at (\c nlev_f)
+   !! and, if the field's \c emission_data is sized differently, reallocates it
+   !! (preserving nx/ny/n_times) so the file's native levels can be stored
+   !! without truncation.  This lets edge met fields with nz+1 levels
+   !! (e.g. PFILSAN/PFLLSAN) be read and copied verbatim into the MetState,
+   !! mirroring the coupled path.  For 2D fields, or when the vertical size
+   !! could not be detected, the model default \c nlev_default is used and no
+   !! reallocation occurs.
+   subroutine catchem_emis_size_field_vertical(field, nlev_default, nlev_f)
+      implicit none
+      type(ExtEmisFieldType), intent(inout) :: field
+      integer,                intent(in)    :: nlev_default
+      integer,                intent(out)   :: nlev_f
+      integer :: exnx, exny, ext
+
+      nlev_f = nlev_default
+      if (field%is_2d) return
+      if (field%nlev_file > 0) nlev_f = field%nlev_file
+
+      if (allocated(field%emission_data)) then
+         if (size(field%emission_data, 3) /= nlev_f) then
+            exnx = size(field%emission_data, 1)
+            exny = size(field%emission_data, 2)
+            ext  = size(field%emission_data, 4)
+            deallocate(field%emission_data)
+            allocate(field%emission_data(exnx, exny, nlev_f, ext))
+            field%emission_data = 0.0_fp
+            field%nz = nlev_f
+         end if
+      end if
+   end subroutine catchem_emis_size_field_vertical
 
    !> \brief Read emission data from files
    !!
@@ -461,6 +513,7 @@ contains
 
       ! Local variables
       integer :: localrc,   ifield
+      integer :: nlev_f
       character(len=EMIS_MAXSTR) :: msg, filename
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -569,8 +622,12 @@ contains
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          else !3D field
+            ! Read at the file's native vertical size so nz+1 edge fields
+            ! (e.g. PFILSAN/PFLLSAN) are stored in full; falls back to the model
+            ! nlev when the file's vertical extent was not detected.
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
-               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev/), rc=localrc)
+               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev_f/), rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          end if
@@ -607,7 +664,7 @@ contains
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
             if (category%reverse_vertical) then
-               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev:1:-1), fp)  !reverse vertical level
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev_f:1:-1), fp)  !reverse vertical level
             else
                category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)
             end if
@@ -649,6 +706,7 @@ contains
 
       ! Local variables
       integer :: localrc, ifield, klev
+      integer :: nlev_f
       character(len=EMIS_MAXSTR) :: msg
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -838,7 +896,10 @@ contains
             end if
          else
             ! --- 3D field: regrid each vertical level as a 2D slab ---
-            do klev = 1, nlev
+            ! Size storage to the file's native vertical extent so nz+1 edge
+            ! fields are held in full (falls back to model nlev if undetected).
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
+            do klev = 1, nlev_f
                call catchem_regrid_field( &
                   cache     = emis_regrid_cache, &
                   filename  = trim(filename), &
@@ -868,7 +929,7 @@ contains
                   nx = size(field_data_2d, 1)
                   ny = size(field_data_2d, 2)
                   if (.not. allocated(category%fields(ifield)%interp_data_t1)) then
-                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t1(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -906,7 +967,7 @@ contains
                   end if
 
                   if (.not. allocated(category%fields(ifield)%interp_data_t2)) then
-                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t2(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -921,12 +982,12 @@ contains
             ! Reverse vertical levels if configured (apply to both stored slices)
             if (category%reverse_vertical) then
                category%fields(ifield)%emission_data(:,:,:,1) = &
-                  category%fields(ifield)%emission_data(:,:,nlev:1:-1,1)
+                  category%fields(ifield)%emission_data(:,:,nlev_f:1:-1,1)
                if (do_time_interp) then
                   category%fields(ifield)%interp_data_t1(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t1(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t1(:,:,nlev_f:1:-1,1)
                   category%fields(ifield)%interp_data_t2(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t2(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t2(:,:,nlev_f:1:-1,1)
                end if
             end if
          end if
@@ -1459,6 +1520,7 @@ contains
       ! Local variables
       integer :: localrc, ifield, ispec, n_mapped_species, species_idx
       integer :: nx, ny, nz, n_species, i, j, k
+      integer :: nlev_f, kcopy
       character(len=EMIS_MAXSTR) :: msg, field_name, category_name
       character(len=64) :: mapped_species_name  ! Single species name
       real(fp) :: scale_factor  ! Single scale factor
@@ -1513,8 +1575,15 @@ contains
          field_name = trim(category%fields(ifield)%field_name)
 
          ! Get emission data for entire domain [kg/m2/s]
-         ! Assuming surface emissions (k=1, t=1) for now
-         emission_flux(:,:,:) = category%fields(ifield)%emission_data(:,:,:,1)
+         ! Copy up to the model's nz levels into the working buffer.  Fields read
+         ! at their native vertical size (e.g. nz+1 edge met fields) can have more
+         ! levels than nz; those are passed straight from emission_data in the
+         ! MET_ 3D branch below, so a size-safe partial copy here keeps the
+         ! chemistry/2D paths (which operate on nz) valid and crash-free.
+         nlev_f = size(category%fields(ifield)%emission_data, 3)
+         kcopy = min(nz, nlev_f)
+         emission_flux(:,:,:) = 0.0_fp
+         emission_flux(:,:,1:kcopy) = category%fields(ifield)%emission_data(:,:,1:kcopy,1)
 
          ! Apply category and global scaling factors
          emission_flux = emission_flux * category%global_scale * global_scale
@@ -1586,8 +1655,18 @@ contains
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
                   if (category%fields(ifield)%is_2d) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
-                  else
+                  else if (size(category%fields(ifield)%emission_data, 3) == nz) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
+                  else
+                     ! Native-size 3D met field (e.g. nz+1 edge fields like
+                     ! PFILSAN/PFLLSAN): pass the full column straight from
+                     ! emission_data so set_field copies every level verbatim,
+                     ! matching the coupled path.  Apply the same category/global
+                     ! scaling that emission_flux received above.
+                     call met_state%set_field(trim(mapped_species_name(5:)), &
+                        category%fields(ifield)%emission_data(:,:,:,1) &
+                           * category%global_scale * global_scale * scale_factor, &
+                        error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A)') trim(pName), ': Failed to set met_state'

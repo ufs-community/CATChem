@@ -46,6 +46,7 @@ MODULE ExtEmisData_Mod
       INTEGER                       :: nx = 0              !< Number of longitude points
       INTEGER                       :: ny = 0              !< Number of latitude points
       INTEGER                       :: nz = 1              !< Number of vertical levels (usually 1 for surface)
+      INTEGER                       :: nlev_file = 0       !< Vertical level count of the source NetCDF variable (0 = unknown/not detected). Auto-detected in catchem_emis_detect_field_ranks; lets edge fields (nz+1) be read at their native resolution.
       LOGICAL                       :: is_2d = .true.      !< Is this field 2D (surface) or 3D? Auto-detected from the file variable rank; defaults to the parent category's is_2d
       REAL(fp)                      :: factors = 1.0_fp    !< Scaling factors for non-chemical variables
       REAL(fp), ALLOCATABLE         :: lat(:)              !< Latitude coordinates [degrees]

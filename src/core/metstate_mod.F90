@@ -1179,7 +1179,9 @@ CONTAINS
       ! Generated include file for 3D REAL field assignment
       rc = CC_SUCCESS
       select case (trim(adjustl(field_name)))
+#define METSTATE_FIELD_DATA_RANK3 1
 #include "metstate_set_field_3d_real.inc"
+#undef METSTATE_FIELD_DATA_RANK3
        case default
          call error_mgr%report_error(ERROR_NOT_FOUND, &
             "Unknown field name: " // trim(field_name), rc)
