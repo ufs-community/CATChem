@@ -4118,6 +4118,7 @@ contains
       integer :: localrc, ncStatus, localDe, localDeCount
       integer :: ncid, xtDimId, ytDimId, varId
       integer :: i, j, nx, ny, de, tile, deCount, dimCount, tileCount, lbuf
+      integer :: i0, j0
       integer :: elb(2), eub(2)
       integer, allocatable :: deToTileMap(:), localDeToDeMap(:)
       integer, allocatable :: minIndexPDe(:,:), maxIndexPDe(:,:)
@@ -4194,9 +4195,18 @@ contains
          call ESMF_GridCompGet(is % IO % IOLayout(localDe) % taskComp, vm=vm, rc=localrc)
          if (localrc /= ESMF_SUCCESS) cycle
 
+         ! Tile-origin offsets. DistGrid tile indices are GLOBAL: a cubed-sphere
+         ! tile > 1 does not start at (1,1) (e.g. tile 2 spans j=193..288). Build
+         ! the stitch buffers 1-based (1..nx, 1..ny) and shift each DE's global
+         ! index block by the tile origin, so the reshape and the
+         ! rectilinear-detection / coordinate-fill loops below can safely assume
+         ! 1-based bounds. For the standalone single regular lat/lon tile the
+         ! origin is (1,1), so this is a no-op there.
+         i0 = minIndexPTile(1, tile)
+         j0 = minIndexPTile(2, tile)
+
          ! --- Gather longitude (coordDim=1) from all PETs ---
-         allocate(lonBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         allocate(lonBuf(nx, ny))
          lonBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=1, localDE=localDe, &
@@ -4204,8 +4214,8 @@ contains
             exclusiveLBound=elb, exclusiveUBound=eub, &
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
-            lonBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+            lonBuf(minIndexPDe(1,de)-i0+1:maxIndexPDe(1,de)-i0+1, &
+               minIndexPDe(2,de)-j0+1:maxIndexPDe(2,de)-j0+1) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 
@@ -4218,8 +4228,7 @@ contains
          deallocate(sendbuf, recvbuf)
 
          ! --- Gather latitude (coordDim=2) from all PETs ---
-         allocate(latBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         allocate(latBuf(nx, ny))
          latBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=2, localDE=localDe, &
@@ -4227,8 +4236,8 @@ contains
             exclusiveLBound=elb, exclusiveUBound=eub, &
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
-            latBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+            latBuf(minIndexPDe(1,de)-i0+1:maxIndexPDe(1,de)-i0+1, &
+               minIndexPDe(2,de)-j0+1:maxIndexPDe(2,de)-j0+1) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 
