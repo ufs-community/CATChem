@@ -282,7 +282,9 @@ contains
        case ('jacob')
          call this%run_jacob_scheme_column(column, rc)
        case default
-         rc = cc_failure
+         call cc_error('Unknown wetdep scheme "' // &
+            trim(this%process_config%wetdep_config%scheme), rc, &
+            thisloc='run_active_scheme_column (in module ProcessWetDepInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column
@@ -312,6 +314,7 @@ contains
       logical, allocatable :: species_wd_LiqAndGas(:)
       real(fp), allocatable :: species_wd_convfacI2G(:)
       real(fp), allocatable :: species_wd_rainouteff(:,:)
+      real(fp), allocatable :: species_wd_reevap_frac(:)
       real(fp), allocatable :: species_radius(:)
       real(fp), allocatable :: species_mw_g(:)
       real(fp), allocatable :: species_conc(:,:)
@@ -354,6 +357,7 @@ contains
       allocate(species_wd_liqandgas(n_species))
       allocate(species_wd_convfaci2g(n_species))
       allocate(species_wd_rainouteff(n_species, 3))
+      allocate(species_wd_reevap_frac(n_species))
       allocate(species_radius(n_species))
       allocate(species_mw_g(n_species))
       species_tendencies = 0.0_fp
@@ -399,6 +403,8 @@ contains
       ! Use species properties from process configuration
       species_wd_rainouteff(1:n_species, :) = this%process_config%wetdep_config%species_wd_rainouteff(1:n_species, :)
       ! Use species properties from process configuration
+      species_wd_reevap_frac(1:n_species) = this%process_config%wetdep_config%species_wd_reevap_frac(1:n_species)
+      ! Use species properties from process configuration
       species_radius(1:n_species) = this%process_config%wetdep_config%species_radius(1:n_species)
       ! Use species properties from process configuration
       species_mw_g(1:n_species) = this%process_config%wetdep_config%species_mw_g(1:n_species)
@@ -430,6 +436,7 @@ contains
             species_wd_liqandgas, &
             species_wd_convfaci2g, &
             species_wd_rainouteff, &
+            species_wd_reevap_frac, &
             species_radius, &
             species_mw_g, &
             species_conc, &
@@ -460,6 +467,7 @@ contains
             species_wd_liqandgas, &
             species_wd_convfaci2g, &
             species_wd_rainouteff, &
+            species_wd_reevap_frac, &
             species_radius, &
             species_mw_g, &
             species_conc, &

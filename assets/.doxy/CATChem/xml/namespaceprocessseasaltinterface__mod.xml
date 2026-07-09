@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="119" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="120" bodyend="169"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="119" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="120" bodyend="170"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a8fcb712f6798ea59040a866ef0f2672d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="178" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="179" bodyend="196"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="179" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="180" bodyend="197"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a22ddd89244b9beabc9c89a34ea7ba6ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="200" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="201" bodyend="219"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="201" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="202" bodyend="220"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a449c650c675b8e62195c902564dc4abd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="224" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="225" bodyend="248"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="225" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="226" bodyend="249"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a6211ecdddc0accf54ec9bd40b23b2ae0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="259" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="260" bodyend="272"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="260" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="261" bodyend="273"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a292ce5606b36ef1b1da0fc76076c7b5d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="280" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="281" bodyend="298"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="281" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="282" bodyend="299"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a3a272991a799884228b1056cabe071fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="304" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="305" bodyend="314"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="305" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="306" bodyend="315"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a8780058c5a3bfcb05ae3d0e1359748ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="321" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="322" bodyend="339"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="322" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="323" bodyend="342"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1ae17d1b4be306d351c67b4649a7b4c273" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,7 +251,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="343" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="344" bodyend="493"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="346" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="347" bodyend="508"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a4292228f022242e4fd1f5e6ae5399ef6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -278,7 +278,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="497" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="498" bodyend="647"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="512" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="513" bodyend="674"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a167f65d98d1728feafe026a777509f75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -305,7 +305,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="651" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="652" bodyend="796"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="678" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="679" bodyend="845"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a2e23472acd950cd548bae30d6b0995c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=32) function, dimension(:), allocatable</type>
@@ -324,7 +324,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="802" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="803" bodyend="881"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="851" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="852" bodyend="938"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a28147a7649bb097a952d7b430e3d4436" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=64) function, dimension(:), allocatable</type>
@@ -343,7 +343,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="885" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="886" bodyend="892"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="942" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="943" bodyend="949"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a64aa2fae00805af538d4392ffe4dd318" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -370,7 +370,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="897" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="898" bodyend="1116"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="954" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="955" bodyend="1173"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a9ad74213c6844b38282bb4c0ab3f3c7a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -402,7 +402,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1124" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1125" bodyend="1228"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1181" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1182" bodyend="1285"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1afb7a4a388016d0cb41a22579f8509931" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -444,7 +444,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1239" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1240" bodyend="1244"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1296" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1297" bodyend="1301"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessseasaltinterface__mod_1a63ab118a1d0226c787765ad26757d0de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>character(len=64) function</type>
@@ -476,7 +476,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1254" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1255" bodyend="1259"/>
+        <location file="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" line="1311" column="1" bodyfile="src/process/seasalt/ProcessSeaSaltInterface_Mod.F90" bodystart="1312" bodyend="1316"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -485,7 +485,7 @@
     <detaileddescription>
 <para>This module provides the seasalt process interface for the CATChem library. The interface leverages CATChem&apos;s core infrastructure for data marshaling and process management. All algorithmic calculations are performed in separate scheme modules.</para>
 <para>DIAGNOSTIC INTERFACE: The compute_scheme functions support optional diagnostic parameters. When diagnostics are enabled in the configuration, these parameters are passed to capture emission/tendency data. When diagnostics are disabled, the scheme calls use the original interface without diagnostics. This approach maintains backward compatibility while providing flexible diagnostic capabilities.</para>
-<para>This code was generated by the CATChem Process Generator. Generation date: 2025-12-15T16:09:09.402672 Configuration: seasalt</para>
+<para>This code was generated by the CATChem Process Generator. Generation date: 2026-05-28T17:43:34.162612 Configuration: seasalt</para>
 <para><simplesect kind="author"><para>CATChem Process Generator </para>
 </simplesect>
 <simplesect kind="version"><para>1.0.0 </para>

@@ -5,6 +5,7 @@
     <basecompoundref refid="structprocessinterface__mod_1_1processinterface" prot="public" virt="non-virtual">processinterface_mod::processinterface</basecompoundref>
     <derivedcompoundref refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface" prot="public" virt="non-virtual">processcarbcheminterface_mod::processcarbcheminterface</derivedcompoundref>
     <derivedcompoundref refid="structprocessdrydepinterface__mod_1_1processdrydepinterface" prot="public" virt="non-virtual">processdrydepinterface_mod::processdrydepinterface</derivedcompoundref>
+    <derivedcompoundref refid="structprocessdustinterface__mod_1_1processdustinterface" prot="public" virt="non-virtual">processdustinterface_mod::processdustinterface</derivedcompoundref>
     <derivedcompoundref refid="structprocessseasaltinterface__mod_1_1processseasaltinterface" prot="public" virt="non-virtual">processseasaltinterface_mod::processseasaltinterface</derivedcompoundref>
     <derivedcompoundref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" prot="public" virt="non-virtual">processsettlinginterface_mod::processsettlinginterface</derivedcompoundref>
     <derivedcompoundref refid="structprocessso4cheminterface__mod_1_1processso4cheminterface" prot="public" virt="non-virtual">processso4cheminterface_mod::processso4cheminterface</derivedcompoundref>
@@ -855,6 +856,12 @@
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="5">
+        <label>processdustinterface_mod::processdustinterface</label>
+        <link refid="structprocessdustinterface__mod_1_1processdustinterface"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
       <node id="1">
         <label>processinterface_mod::columnprocessinterface</label>
         <link refid="structprocessinterface__mod_1_1columnprocessinterface"/>
@@ -865,25 +872,25 @@
         <label>processinterface_mod::processinterface</label>
         <link refid="structprocessinterface__mod_1_1processinterface"/>
       </node>
-      <node id="5">
+      <node id="6">
         <label>processseasaltinterface_mod::processseasaltinterface</label>
         <link refid="structprocessseasaltinterface__mod_1_1processseasaltinterface"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="6">
+      <node id="7">
         <label>processsettlinginterface_mod::processsettlinginterface</label>
         <link refid="structprocesssettlinginterface__mod_1_1processsettlinginterface"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="7">
+      <node id="8">
         <label>processso4cheminterface_mod::processso4cheminterface</label>
         <link refid="structprocessso4cheminterface__mod_1_1processso4cheminterface"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="8">
+      <node id="9">
         <label>processwetdepinterface_mod::processwetdepinterface</label>
         <link refid="structprocesswetdepinterface__mod_1_1processwetdepinterface"/>
         <childnode refid="1" relation="public-inheritance">

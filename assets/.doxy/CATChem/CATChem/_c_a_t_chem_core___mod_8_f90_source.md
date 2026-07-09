@@ -544,6 +544,14 @@ contains
 
       ! Clean up components in reverse order
       if (this%is_configured) then
+         ! Clean up process manager first, since processes depend on the
+         ! diagnostic, state, grid, and config managers cleaned up below
+         call this%process_mgr%finalize(local_rc)
+         if (local_rc /= cc_success) then
+            call this%error_mgr%report_error(error_process_initialization, &
+               'Failed to finalize process manager', local_rc)
+         endif
+
          ! Clean up diagnostic manager
          call this%diag_mgr%finalize(local_rc)
          if (local_rc /= cc_success) then

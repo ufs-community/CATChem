@@ -11,9 +11,8 @@
 
 module seasaltscheme_geos12_mod
 
-   use precision_mod, only: fp, zero
+   use precision_mod, only: fp, zero, rae
    use seasaltcommon_mod, only: seasaltschemegeos12config
-   use constants, only: pi  !load the constants needed for this scheme
 
    implicit none
    private
@@ -21,20 +20,21 @@ module seasaltscheme_geos12_mod
    ! Public interface - pure science only
    public :: compute_geos12
 
-   ! Additional physical constants (modify as needed for your scheme)
-   real(fp), parameter :: T_STANDARD = 303.15_fp    ! Standard reference temperature [K]
-   real(fp), parameter :: DEFAULT_SCALING = 1.0e-9_fp ! Default emission scaling factor
-
 contains
 
-   pure subroutine compute_geos12( &
+   subroutine compute_geos12( &
       num_layers, &
       num_species, &
       params, &
+      PI, &
       frocean, &
       frseaice, &
+      lat, &
+      lon, &
       sst, &
+      u10m, &
       ustar, &
+      v10m, &
       species_density, &
       species_radius, &
       species_lower_radius, &
@@ -52,10 +52,15 @@ contains
       integer, intent(in) :: num_layers
       integer, intent(in) :: num_species
       type(SeaSaltSchemeGEOS12Config), intent(in) :: params
+      real(fp), intent(in) :: PI  ! Required constant from Constants module
       real(fp), intent(in) :: frocean  ! Surface field - scalar
       real(fp), intent(in) :: frseaice  ! Surface field - scalar
+      real(fp), intent(in) :: lat  ! Surface field - scalar
+      real(fp), intent(in) :: lon  ! Surface field - scalar
       real(fp), intent(in) :: sst  ! Surface field - scalar
+      real(fp), intent(in) :: u10m  ! Surface field - scalar
       real(fp), intent(in) :: ustar  ! Surface field - scalar
+      real(fp), intent(in) :: v10m  ! Surface field - scalar
       real(fp), intent(in) :: species_density(num_species)  ! Species density property
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
       real(fp), intent(in) :: species_lower_radius(num_species)  ! Species lower_radius property
@@ -73,6 +78,7 @@ contains
       integer :: diag_idx  ! For diagnostic species indexing
       logical :: do_seasalt
       integer :: n, ir
+      real(fp) :: w10m
       integer, parameter :: nr = 10
       real(fp), parameter    :: r80fac = 1.65_fp       
       real(fp) :: DryRadius
@@ -89,6 +95,9 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
+      real(fp) :: gweibull
+      real(fp) :: deep_lakes_mask
+      real(fp) :: dummylon
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale
@@ -103,6 +112,15 @@ contains
       numberemissions = 0.0_fp
       fsstemis = 1.0_fp
       fhoppel = 1.0_fp
+      gweibull = 1.0_fp
+      deep_lakes_mask = 1.0_fp
+      dummylon = lon
+
+      !initialize diagnostics if present
+      if (present(seasalt_mass_emission_total)) seasalt_mass_emission_total = 0.0_fp
+      if (present(seasalt_number_emission_total)) seasalt_number_emission_total = 0.0_fp
+      if (present(seasalt_mass_emission_per_bin)) seasalt_mass_emission_per_bin = 0.0_fp
+      if (present(seasalt_number_emission_per_bin)) seasalt_number_emission_per_bin = 0.0_fp
 
       do_seasalt = .true. ! Default value for all cases
 
@@ -121,20 +139,42 @@ contains
          exppow   = 1.607_fp
          wpow     = 3.41_fp - 1._fp
 
-         ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
+         ! get 10m mean wind speed
+         !------------------------
+         w10m = sqrt(u10m ** 2 + v10m ** 2)
+
+         ! Weibull Distribution following Fan and Toon 2011 if WeibullFlag
+         !----------------------------------------------------------------------------
+         call weibulldistribution(gweibull, params%weibull_flag, w10m, rc)
+         if (rc /= 0) then
+            rc = -1
+            print *, 'Error in weibullDistribution'
+            return
+         endif
+
+         ! Get Jeagle SST Correction
+         call jeaglesstcorrection(fsstemis, sst, 2, rc)
+         if (rc /= 0) then
+            rc = -1
+            !print *, 'Error in jeagleSSTcorrection'
+            return
+         endif
+
+         ! Deep Lakes Mask for Great Lakes lon = [93W,75W], lat = [40.5N, 50N]
+         if( dummylon < 0.0 ) dummylon = dummylon + 360.0_fp
+         if (lat >= 40.5_fp .and. lat <= 50.0_fp .and. dummylon >= 267.0_fp .and. dummylon <= 285.0_fp) then
+            deep_lakes_mask = 0.0_fp
+         endif
+         ! The Caspian Sea: lon = [45.0, 56], lat = 35, 48]
+         if (lat >= 35.0_fp .and. lat <= 48.0_fp .and. dummylon >= 45.0_fp .and. dummylon <= 56.0_fp) then
+            deep_lakes_mask = 0.0_fp
+         endif
+
+         ! Compute final scale factor with all corrections (once, outside k-loop)
+         scale = min(max(0.0_fp, scale * deep_lakes_mask), 1.0_fp) * gweibull * fsstemis * params%scale_factor
+
+         ! Main computation loop
          do k = 1, num_layers
-
-            ! TODO: Replace this generic implementation with your scheme's algorithm
-            ! This is a placeholder that demonstrates the expected structure
-            ! Get Jeagle SST Correction
-            call jeaglesstcorrection(fsstemis, sst,1, rc)
-            if (rc /= 0) then
-               rc = -1
-               !print *, 'Error in jeagleSSTcorrection'
-               return
-            endif
-
-            scale = scale * fsstemis * params%scale_factor
 
             ! Apply to each species
             do n = 1, num_species
@@ -146,9 +186,6 @@ contains
                !-------------------
                dryradius = species_lower_radius(n) + 0.5_fp * deltadryradius
 
-               ! Mass scale fcator
-               massscalefac = scalefac * 4._fp/3._fp*pi*species_density(n)*(dryradius**3._fp) * 1.e-18_fp
-
                do ir = 1, nr ! SubSteps
 
                   ! Effective Wet Radius in Sub Step
@@ -158,7 +195,10 @@ contains
                   drwet = r80fac * deltadryradius
 
                   afac = 4.7_fp*(1._fp + 30._fp*rwet)**(-0.017_fp*rwet**(-1.44_fp))
-                  bfac = (0.380_fp-log10(rwet))/0.65_fp
+                  bfac = (0.433_fp-log10(rwet))/0.433_fp
+
+                  ! Mass scale factor (must use current DryRadius, not initial)
+                  massscalefac = scalefac * 4._fp/3._fp*pi*species_density(n)*(dryradius**3._fp) * 1.e-18_fp
 
                   ! Number emissions flux (# m-2 s-1)
                   numberemissions = numberemissions + seasaltemissiongong( rwet, drwet, ustar, scalefac, &
@@ -314,6 +354,97 @@ contains
       seasaltemissiongong = w**wpow * seasaltemissiongong
 
    end function seasaltemissiongong
+
+   subroutine weibulldistribution(gweibull, weibullFlag, wm, RC)
+
+      implicit none
+
+      ! Input/Output
+      !-------------
+      real(fp), intent(inout) :: gweibull
+
+      ! Input
+      !------
+      logical,  intent(in)    :: weibullFlag
+      real(fp), intent(in)    :: wm
+
+      ! Output
+      !-------
+      integer,  intent(out)   :: RC
+
+      ! Local Variables
+      real(fp) :: a, c, k, wt, x
+      character(len=256) :: errMsg, thisLoc !  needed for error handling thisLoc
+      ! Initialize
+      errmsg = ''
+      thisloc = ' -> at weibullDistribution (in util/metutils_mod.F90)'
+      rc = 0
+      gweibull = 1.0_fp
+
+      wt = 4.0_fp
+
+      if (weibullflag) then
+         gweibull = 0.0_fp
+
+         if (wm > 0.01_fp) then
+            k = 0.94_fp * sqrt(wm)
+            c = wm / gamma(1.0_fp + 1.0_fp / k)
+            x = (wt / c) ** k
+            a = 3.41_fp / k + 1.0_fp
+            gweibull = (c / wm) ** 3.41_fp * igamma(a, x, rc)
+         endif
+      endif
+
+
+   end subroutine weibulldistribution
+
+   real(fp) function igamma(A, X, RC)
+
+      IMPLICIT NONE
+
+      REAL(fp), INTENT(in) :: A
+      REAL(fp), INTENT(IN) :: X
+      integer, intent(out) :: rc
+
+      ! LOCAL VARIABLE
+      REAL(fp) :: XAM, GIN, S, R, T0
+      INTEGER K
+      rc = 0
+      igamma = 0
+
+      xam=-x+a*log(x)
+      IF (xam.GT.700.0_fp.OR.a.GT.170.0_fp) THEN
+         WRITE(*,*)'IGAMMA: a and/or x too large, X = ', x
+         WRITE(*,*) 'A = ', a
+         rc = -1
+         return
+      ENDIF
+
+      IF (rae(x, 0.0_fp)) THEN
+         !IF ( X == 0.0_fp) THEN
+         igamma=gamma(a)
+
+      ELSE IF (x.LE.1.0_fp+a) THEN
+         s=1.0_fp/a
+         r=s
+         DO  k=1,60
+            r=r*x/(a+k)
+            s=s+r
+            IF (abs(r/s).LT.1.0e-15_fp) EXIT
+         END DO
+         gin=exp(xam)*s
+         igamma=gamma(a)-gin
+      ELSE IF (x.GT.1.0_fp+a) THEN
+         t0=0.0_fp
+         DO k=60,1,-1
+            t0=(k-a)/(1.0_fp+k/(x+t0))
+         end do
+
+         igamma=exp(xam)/(x+t0)
+
+      ENDIF
+
+   end function igamma
 
 end module seasaltscheme_geos12_mod
 ```

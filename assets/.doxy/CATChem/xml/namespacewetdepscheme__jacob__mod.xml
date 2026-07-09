@@ -140,10 +140,10 @@
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aa000bda136b406ffc27eeac128d5a17b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a42d728ba6a054ecf2d73f2b0630ff052" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public wetdepscheme_jacob_mod::compute_jacob</definition>
-        <argsstring>(num_layers, num_species, params, airden_dry, mairden, pedge, pfilsan, pfllsan, reevapls, t, tstep, species_is_aerosol, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
+        <argsstring>(num_layers, num_species, params, airden_dry, mairden, pedge, pfilsan, pfllsan, reevapls, t, tstep, species_is_aerosol, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_wd_reevap_frac, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
         <name>compute_jacob</name>
         <qualifiedname>wetdepscheme_jacob_mod::compute_jacob</qualifiedname>
         <param>
@@ -225,6 +225,10 @@
         <param>
           <type>real(fp), dimension(:,:), intent(in)</type>
           <defname>species_wd_rainouteff</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_wd_reevap_frac</defname>
         </param>
         <param>
           <type>real(fp), dimension(:), intent(in)</type>
@@ -496,7 +500,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="91" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="120" bodyend="453"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="91" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="121" bodyend="516"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1af307da7d5e4119228d08c898d565d3a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -519,7 +523,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="463" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="464" bodyend="481"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="526" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="527" bodyend="544"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae1714cc88cf0808f25bb60f24af2bcf9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -600,7 +604,7 @@
           <defname>so2</defname>
         </param>
         <param>
-          <type>real(fp), intent(in)</type>
+          <type>real(fp), intent(inout)</type>
           <defname>h2o2</defname>
         </param>
         <briefdescription>
@@ -902,15 +906,15 @@
 <parametername direction="in">so2</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>SO2 concentration [kg/kg] </para>
+<para>SO2 concentration [kg/kg]; depleted in rainout_loss, not here </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">h2o2</parametername>
+<parametername direction="inout">h2o2</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>H2O2 concentration [kg/kg] </para>
+<para>H2O2 concentration [kg/kg]; depleted by SO2 oxidation (written back) </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -918,7 +922,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="509" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="510" bodyend="627"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="572" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="573" bodyend="698"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aeace337974ab33c9edd078b02706d19d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -991,7 +995,7 @@
           <defname>so2</defname>
         </param>
         <param>
-          <type>real(fp), intent(in)</type>
+          <type>real(fp), intent(inout)</type>
           <defname>h2o2</defname>
         </param>
         <briefdescription>
@@ -1258,10 +1262,10 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">h2o2</parametername>
+<parametername direction="inout">h2o2</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>H2O2 conc [kg/kg] TODO: conc&apos;s after aqueous rxns are applied. These are computed </para>
+<para>H2O2 conc [kg/kg]; afterchem value, depleted by SO2 oxidation (written back) </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
@@ -1269,7 +1273,7 @@
 <parametername direction="in">so2</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>SO2 conc [kg/kg] in the sulfate chemistry module and passed here (not considered by now) </para>
+<para>SO2 conc [kg/kg]; depleted in washout_loss, not here </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -1277,7 +1281,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="654" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="655" bodyend="762"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="725" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="726" bodyend="836"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a78e3462f1160a2f85e70b7d5955ed828" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1356,7 +1360,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="774" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="775" bodyend="783"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="848" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="849" bodyend="857"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a3474f3af4fb555b60da841cba80e5192" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1475,7 +1479,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="798" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="799" bodyend="822"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="872" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="873" bodyend="896"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aabdac1bad6bd731152117d4052edabbf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1634,7 +1638,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="838" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="839" bodyend="880"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="912" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="913" bodyend="954"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aa3a5e4c4e27f9e1e3a5c007e260d3ad8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1733,7 +1737,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="893" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="894" bodyend="911"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="967" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="968" bodyend="985"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ac18ce2a4d102e591cca3d026d3ff31d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1952,7 +1956,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="930" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="931" bodyend="981"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1004" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1005" bodyend="1055"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a50c5047734777471251b34ef0d9d4d21" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2051,12 +2055,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="994" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="995" bodyend="1024"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1068" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1069" bodyend="1098"/>
       </memberdef>
-      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a00ee288c6af55128362fa686b6eac853" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1abe20bd695ee2b868cd92781165aad0a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
         <definition>subroutine wetdepscheme_jacob_mod::washout_loss</definition>
-        <argsstring>(k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, so4)</argsstring>
+        <argsstring>(k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, dprecip, conc, dconc, spc, so4, reevap_resusp_frac, so4_gocart_resusp)</argsstring>
         <name>washout_loss</name>
         <qualifiedname>wetdepscheme_jacob_mod::washout_loss</qualifiedname>
         <param>
@@ -2092,6 +2096,10 @@
           <defname>delz_cm</defname>
         </param>
         <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>dprecip</defname>
+        </param>
+        <param>
           <type>real(fp), dimension(:), intent(inout)</type>
           <defname>conc</defname>
         </param>
@@ -2106,6 +2114,14 @@
         <param>
           <type>real(fp), dimension(:), intent(inout)</type>
           <defname>so4</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>reevap_resusp_frac</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>so4_gocart_resusp</defname>
         </param>
         <briefdescription>
 <para>Computes the concentrations of species lost to washout. </para>
@@ -2275,6 +2291,14 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">dprecip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>precip-formation flux per layer [kg/m2/s] (&gt;0 forming, &lt;0 evaporating); sulfate resuspension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="inout">conc</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -2305,12 +2329,28 @@
 <para>Species name </para>
 </parameterdescription>
 </parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reevap_resusp_frac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>fraction of re-evaporated mass resuspended (0.5 GEOS-Chem/Luo default; 1.0 GOCART) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">so4_gocart_resusp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if .true., sulfate (SO4/SO2) uses GOCART SU_Wet_Removal resuspension alpha </para>
+</parameterdescription>
+</parameteritem>
 </parameterlist>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1045" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1046" bodyend="1135"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1119" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1120" bodyend="1232"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae9afb1ac4fc9fc90e634ff50939f4a0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2429,7 +2469,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1149" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1150" bodyend="1179"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1246" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1247" bodyend="1276"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

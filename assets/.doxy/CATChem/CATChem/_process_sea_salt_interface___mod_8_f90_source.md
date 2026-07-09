@@ -21,7 +21,7 @@ module processseasaltinterface_mod
    use diagnosticmanager_mod, only: diagnosticmanagertype
    use diagnosticinterface_mod, only: diagnosticregistrytype, diagnosticfieldtype, diagnosticdatatype
    use virtualcolumn_mod, only: virtualcolumntype, virtualmettype
-   use constants, only: g0, airmw  ! Gravitational acceleration for tendency physics and air molecular weight for unit conversion
+   use constants, only: airmw, pi, g0  ! Required constants for scheme calculations
 
    ! Core utilities (leverage existing infrastructure)
    use configmanager_mod, only: configmanagertype
@@ -142,6 +142,7 @@ contains
       ! Validate the configuration with StateManager
       call this%process_config%validate(container, error_manager)
       ! Note: validate doesn't return rc, but error_manager tracks errors
+
 
       ! Register diagnostics for this process (only if diagnostics enabled)
       call this%register_diagnostics(container, rc)
@@ -294,7 +295,9 @@ contains
        case ('geos12')
          call this%run_geos12_scheme_column(column, rc)
        case default
-         rc = cc_failure
+         call cc_error('Unknown seasalt scheme "' // &
+            trim(this%process_config%seasalt_config%scheme), rc, &
+            thisloc='run_active_scheme_column (in module ProcessSeaSaltInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column
@@ -309,6 +312,8 @@ contains
       ! Meteorological fields
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
+      real(fp), allocatable :: lat(:)
+      real(fp), allocatable :: lon(:)
       real(fp), allocatable :: sst(:)
       real(fp), allocatable :: u10m(:)
       real(fp), allocatable :: v10m(:)
@@ -345,6 +350,8 @@ contains
       ! Allocate meteorological field arrays based on field type and process configuration
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
+      allocate(lat(1))  ! Surface field - always scalar
+      allocate(lon(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
       allocate(u10m(1))  ! Surface field - always scalar
       allocate(v10m(1))  ! Surface field - always scalar
@@ -362,6 +369,8 @@ contains
       ! Extract required fields from met pointer based on field type and processing mode
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
+      lat(1) = met%LAT  ! Surface field - scalar access
+      lon(1) = met%LON  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
       u10m(1) = met%U10M  ! Surface field - scalar access
       v10m(1) = met%V10M  ! Surface field - scalar access
@@ -392,8 +401,11 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong97_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
             u10m(1), &
             v10m(1)            , &
@@ -414,8 +426,11 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong97_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
             u10m(1), &
             v10m(1)            , &
@@ -462,6 +477,8 @@ contains
       ! Meteorological fields
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
+      real(fp), allocatable :: lat(:)
+      real(fp), allocatable :: lon(:)
       real(fp), allocatable :: sst(:)
       real(fp), allocatable :: u10m(:)
       real(fp), allocatable :: v10m(:)
@@ -498,6 +515,8 @@ contains
       ! Allocate meteorological field arrays based on field type and process configuration
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
+      allocate(lat(1))  ! Surface field - always scalar
+      allocate(lon(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
       allocate(u10m(1))  ! Surface field - always scalar
       allocate(v10m(1))  ! Surface field - always scalar
@@ -515,6 +534,8 @@ contains
       ! Extract required fields from met pointer based on field type and processing mode
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
+      lat(1) = met%LAT  ! Surface field - scalar access
+      lon(1) = met%LON  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
       u10m(1) = met%U10M  ! Surface field - scalar access
       v10m(1) = met%V10M  ! Surface field - scalar access
@@ -545,8 +566,11 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong03_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
             u10m(1), &
             v10m(1)            , &
@@ -567,8 +591,11 @@ contains
             n_levels, &
             n_species, &
             this%process_config%gong03_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
             u10m(1), &
             v10m(1)            , &
@@ -615,8 +642,12 @@ contains
       ! Meteorological fields
       real(fp), allocatable :: frocean(:)
       real(fp), allocatable :: frseaice(:)
+      real(fp), allocatable :: lat(:)
+      real(fp), allocatable :: lon(:)
       real(fp), allocatable :: sst(:)
+      real(fp), allocatable :: u10m(:)
       real(fp), allocatable :: ustar(:)
+      real(fp), allocatable :: v10m(:)
       ! Species properties
       real(fp), allocatable :: species_density(:)
       real(fp), allocatable :: species_radius(:)
@@ -650,8 +681,12 @@ contains
       ! Allocate meteorological field arrays based on field type and process configuration
       allocate(frocean(1))  ! Surface field - always scalar
       allocate(frseaice(1))  ! Surface field - always scalar
+      allocate(lat(1))  ! Surface field - always scalar
+      allocate(lon(1))  ! Surface field - always scalar
       allocate(sst(1))  ! Surface field - always scalar
+      allocate(u10m(1))  ! Surface field - always scalar
       allocate(ustar(1))  ! Surface field - always scalar
+      allocate(v10m(1))  ! Surface field - always scalar
       allocate(species_density(n_species))
       allocate(species_radius(n_species))
       allocate(species_lower_radius(n_species))
@@ -666,8 +701,12 @@ contains
       ! Extract required fields from met pointer based on field type and processing mode
       frocean(1) = met%FROCEAN  ! Surface field - scalar access
       frseaice(1) = met%FRSEAICE  ! Surface field - scalar access
+      lat(1) = met%LAT  ! Surface field - scalar access
+      lon(1) = met%LON  ! Surface field - scalar access
       sst(1) = met%SST  ! Surface field - scalar access
+      u10m(1) = met%U10M  ! Surface field - scalar access
       ustar(1) = met%USTAR  ! Surface field - scalar access
+      v10m(1) = met%V10M  ! Surface field - scalar access
 
       ! Get species concentrations from virtual column
       ! Surface-only processing - get surface level concentrations
@@ -695,10 +734,15 @@ contains
             n_levels, &
             n_species, &
             this%process_config%geos12_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
-            ustar(1)            , &
+            u10m(1), &
+            ustar(1), &
+            v10m(1)            , &
             species_density, &
             species_radius, &
             species_lower_radius, &
@@ -716,10 +760,15 @@ contains
             n_levels, &
             n_species, &
             this%process_config%geos12_config, &
+            pi, &
             frocean(1), &
             frseaice(1), &
+            lat(1), &
+            lon(1), &
             sst(1), &
-            ustar(1)            , &
+            u10m(1), &
+            ustar(1), &
+            v10m(1)            , &
             species_density, &
             species_radius, &
             species_lower_radius, &
@@ -772,28 +821,36 @@ contains
       ! Get scheme-specific fields based on selected scheme
       select case (trim(this%process_config%seasalt_config%scheme))
        case ('gong97')
-         scheme_count = 5
+         scheme_count = 7
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
          scheme_fields(2) = 'FRSEAICE'
          scheme_fields(3) = 'SST'
          scheme_fields(4) = 'U10M'
          scheme_fields(5) = 'V10M'
+         scheme_fields(6) = 'LAT'
+         scheme_fields(7) = 'LON'
        case ('gong03')
-         scheme_count = 5
+         scheme_count = 7
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
          scheme_fields(2) = 'FRSEAICE'
          scheme_fields(3) = 'SST'
          scheme_fields(4) = 'U10M'
          scheme_fields(5) = 'V10M'
+         scheme_fields(6) = 'LAT'
+         scheme_fields(7) = 'LON'
        case ('geos12')
-         scheme_count = 4
+         scheme_count = 8
          allocate(scheme_fields(scheme_count))
          scheme_fields(1) = 'FROCEAN'
          scheme_fields(2) = 'FRSEAICE'
          scheme_fields(3) = 'SST'
          scheme_fields(4) = 'USTAR'
+         scheme_fields(5) = 'U10M'
+         scheme_fields(6) = 'V10M'
+         scheme_fields(7) = 'LAT'
+         scheme_fields(8) = 'LON'
        case default
          scheme_count = 0
          allocate(scheme_fields(0))

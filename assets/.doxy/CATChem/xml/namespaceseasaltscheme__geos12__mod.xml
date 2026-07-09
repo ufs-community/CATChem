@@ -2,43 +2,11 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="namespaceseasaltscheme__geos12__mod" kind="namespace" language="Fortran">
     <compoundname>seasaltscheme_geos12_mod</compoundname>
-    <sectiondef kind="var">
-      <memberdef kind="variable" id="namespaceseasaltscheme__geos12__mod_1a9b1f987ae1c8dfdd6143797e7bbcc518" prot="private" static="no" mutable="no">
-        <type>real(fp), parameter</type>
-        <definition>real(fp), parameter seasaltscheme_geos12_mod::t_standard</definition>
-        <argsstring></argsstring>
-        <name>t_standard</name>
-        <qualifiedname>seasaltscheme_geos12_mod::t_standard</qualifiedname>
-        <initializer>= 303.15_fp</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="36" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="36" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="variable" id="namespaceseasaltscheme__geos12__mod_1a5bb0b187ae9c751ced85713589d91e81" prot="private" static="no" mutable="no">
-        <type>real(fp), parameter</type>
-        <definition>real(fp), parameter seasaltscheme_geos12_mod::default_scaling</definition>
-        <argsstring></argsstring>
-        <name>default_scaling</name>
-        <qualifiedname>seasaltscheme_geos12_mod::default_scaling</qualifiedname>
-        <initializer>= 1.0e-9_fp</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="37" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="37" bodyend="37"/>
-      </memberdef>
-    </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ae2b692e020f519d6d5d0092868b9d575" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>pure subroutine, public</type>
-        <definition>pure subroutine, public seasaltscheme_geos12_mod::compute_geos12</definition>
-        <argsstring>(num_layers, num_species, params, frocean, frseaice, sst, ustar, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ac2a828c60b4462aa0600aad17c0e36ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public seasaltscheme_geos12_mod::compute_geos12</definition>
+        <argsstring>(num_layers, num_species, params, pi, frocean, frseaice, lat, lon, sst, u10m, ustar, v10m, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
         <name>compute_geos12</name>
         <qualifiedname>seasaltscheme_geos12_mod::compute_geos12</qualifiedname>
         <param>
@@ -55,6 +23,10 @@
         </param>
         <param>
           <type>real(fp), intent(in)</type>
+          <defname>pi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
           <defname>frocean</defname>
         </param>
         <param>
@@ -63,11 +35,27 @@
         </param>
         <param>
           <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
           <defname>sst</defname>
         </param>
         <param>
           <type>real(fp), intent(in)</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
           <defname>ustar</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>v10m</defname>
         </param>
         <param>
           <type>real(fp), dimension(num_species), intent(in)</type>
@@ -144,6 +132,14 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">PI</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">frocean</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -160,6 +156,22 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">lat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LAT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lon</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LON field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">sst</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -168,10 +180,26 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>U10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">ustar</parametername>
 </parameternamelist>
 <parameterdescription>
 <para>USTAR field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>V10M field [appropriate units] </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
@@ -267,7 +295,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="85" bodyend="253"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="90" bodyend="298"/>
       </memberdef>
       <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ac09cc3e8dab33327e43ca0c559f9418a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure real(fp) function</type>
@@ -290,7 +318,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="263" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="264" bodyend="270"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="308" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="309" bodyend="315"/>
       </memberdef>
       <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>pure real(fp) function</type>
@@ -313,10 +341,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="274" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="275" bodyend="288"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="319" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="320" bodyend="333"/>
       </memberdef>
       <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
       <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
+      <member refid="group__catchem__seasalt__process_1ga1c9253f7a0a5f329eb6d9b4917554121" kind="function"><name>weibulldistribution</name></member>
+      <member refid="group__catchem__seasalt__process_1ga39f0e23516bfb86049ef258b8ce3be75" kind="function"><name>igamma</name></member>
     </sectiondef>
     <briefdescription>
     </briefdescription>

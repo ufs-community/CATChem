@@ -794,6 +794,7 @@
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a8e9051ad8ad37e08077b6ccc5ca30cf2" kind="variable"><name>affects_full_column</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a6420dc089c246985a2f94abe5c5c2d1a" kind="variable"><name>scale_factor</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aa327a00316f47dbafd0b6487708c9aa8" kind="variable"><name>resuspension</name></member>
+    <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0c8f7d6f7a1c3b33832a61f5d79db37f" kind="variable"><name>dust_resuspension_only</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" kind="variable"><name>n_required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a3d5b2661b8c2161fbe56fb8e55e04325" kind="variable"><name>required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0ac83d08c0b217811533103d232f3625" kind="function"><name>validate</name></member>
@@ -825,6 +826,76 @@
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a04ae21fe4a7002611b30067e03f31c9c" kind="variable"><name>required_met_fields</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a2cf11dcdb5b76147a6a348c40d723220" kind="function"><name>validate</name></member>
     <member refid="structdrydepcommon__mod_1_1drydepschemezhangconfig_1a7c750a1149c53487e7540a5370102a96" kind="function"><name>finalize</name></member>
+  </compound>
+  <compound refid="structdustcommon__mod_1_1dustconfig" kind="type"><name>dustcommon_mod::dustconfig</name>
+    <member refid="structdustcommon__mod_1_1dustconfig_1aa4ec37a5669c304689dc4f7e492612fc" kind="variable"><name>scheme</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a7ff704c57921e63205cf19616317d185" kind="variable"><name>is_active</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a2baf0283eaf5082cb4fbb7248ee0322f" kind="variable"><name>diagnostics</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1af22c4822d6ea808a117526870f6c9172" kind="variable"><name>n_diagnostic_species</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a83429fa74bce154dc6351ec239019fb1" kind="variable"><name>diagnostic_species</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1ad14091dce65ca5ea56cbcbf80f033c5d" kind="variable"><name>diagnostic_species_id</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a252d0e15dac515122a525f637579f236" kind="variable"><name>dt_min</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a70e483e6df2810576fab7d836d3eb8fa" kind="variable"><name>dt_max</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1ab3143f741274d08bcbeae87b3a2ec548" kind="variable"><name>n_species</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1ac5a7e11a193ea4427878436d33fcaea9" kind="variable"><name>species_names</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a6dc676f4ad6b02adf9fc0acd67eccf36" kind="variable"><name>species_indices</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1ad02ab6b5ccc239994292d736c612b06e" kind="variable"><name>species_density</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1ad5959151e041ad0603e2449cb9a46767" kind="variable"><name>species_lower_radius</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a3d16cf60de3ed533047b35fdf56c4e95" kind="variable"><name>species_radius</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a2051db5f97466bc8f781e56d48cc88b4" kind="variable"><name>species_upper_radius</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a7769932eb78ce2fdeff45d37070a4051" kind="variable"><name>output_diagnostics</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a155acccafc39d16b6599a45189117261" kind="variable"><name>diagnostic_frequency</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a65088b2257c30b96a0d12a9f00041203" kind="function"><name>validate</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1aba87ee429005e9f079acfae687151780" kind="function"><name>finalize</name></member>
+    <member refid="structdustcommon__mod_1_1dustconfig_1a3e7fe7a4284ef1daecaacb67f348f3cd" kind="function"><name>print_summary</name></member>
+  </compound>
+  <compound refid="structdustcommon__mod_1_1dustprocessconfig" kind="type"><name>dustcommon_mod::dustprocessconfig</name>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a457a1004faab30ce3efeb5f6823e04fc" kind="variable"><name>process_name</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a8b1eef1e6454791f71d74664bd760ca4" kind="variable"><name>process_version</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a1d5eada300456f00d8bdc8c92cc66002" kind="variable"><name>is_active</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a8c662779d13cd88e4fe9c8e0b4b851fb" kind="variable"><name>dust_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a27f94ff674d2cf841072ed65bb30339a" kind="variable"><name>fengsha_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a160347f64b26079eb60bd911bfd334e4" kind="variable"><name>ginoux_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a56ae5410599827be1a0e15c6ed66462f" kind="function"><name>load_from_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a3bbeaf543cb16fd6c347f2c89447bcb5" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a55c6c8bef7ad527851f8146a62078625" kind="function"><name>validate</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1ab1703045b6eba6101791ccba063e34b2" kind="function"><name>finalize</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1a63f84c0ac9ecc734318c6cb1630a2211" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1ab7acff4473ea469b4217d73924255a4f" kind="function"><name>load_fengsha_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1af58daf4d36edf60e286f7a2576a91d86" kind="function"><name>load_ginoux_config</name></member>
+    <member refid="structdustcommon__mod_1_1dustprocessconfig_1ab3ab0a3378b556de7eac22a5f05330e2" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="structdustcommon__mod_1_1dustschemefengshaconfig" kind="type"><name>dustcommon_mod::dustschemefengshaconfig</name>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a2c1eeaf0cc981e5305bdfa39b97cea6b" kind="variable"><name>scheme_name</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a34f5b311d644813e58c61aac6293f91d" kind="variable"><name>description</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a90a3ec73fa396c4920f3c2691e18a7d8" kind="variable"><name>author</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a7bf8b452846183f45f61301829a92cc0" kind="variable"><name>algorithm_type</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a349100c06efaf792caabd4ffdbb4a5fc" kind="variable"><name>affects_full_column</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1af68b503a4426524aee01ecdc59b01411" kind="variable"><name>alpha</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1af341253af7aeb7b18cc3257e18e6fca5" kind="variable"><name>gamma</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a4382620d995b040c0571221801f4fa15" kind="variable"><name>drylimit_factor</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a49e9e843139458563c46b6906e9bec72" kind="variable"><name>moist_correction_factor</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1aa4218f8d910a11eaf2dc905f35e9c33c" kind="variable"><name>kvhmax</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1ad98002d7c62f32d20add70bd8226f7ae" kind="variable"><name>drag_option</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a008a7a33f7d41b916f7e2d18b8609153" kind="variable"><name>horizflux_option</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a26da6d69780ba8f56c6a1329b55981b5" kind="variable"><name>moist_option</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a526a06dab669f05c4bf380d9e1213ff2" kind="variable"><name>distribution_option</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a6d6a0db5cf13f4f496b6735a5ab78349" kind="variable"><name>n_required_met_fields</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a070e7e747675d5380cbc0f400acef2dc" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1aef0631f31ffa3856730038d257e2ebf2" kind="function"><name>validate</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a6ade2ecdf8e338bbc702dd4c4cf77fa5" kind="function"><name>finalize</name></member>
+  </compound>
+  <compound refid="structdustcommon__mod_1_1dustschemeginouxconfig" kind="type"><name>dustcommon_mod::dustschemeginouxconfig</name>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1aa9d06babd22e5775c5cae051ab119338" kind="variable"><name>scheme_name</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad47ab6a39fa9dc1e485d40be504d6c26" kind="variable"><name>description</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad17bd78e565f46633bc27c8fe43ef669" kind="variable"><name>author</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad40baea1636730ca7b463ab1786bb442" kind="variable"><name>algorithm_type</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a804def066738c9b4aac88def41d0fd9d" kind="variable"><name>affects_full_column</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a3a74f29d35827504ad8c2f8e92b5ad6b" kind="variable"><name>ch_du</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1afa08c9c7b832a29b2e7557327ca587c3" kind="variable"><name>n_required_met_fields</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad71441e6fa19a0745a3936de2ecb427f" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a29804ef756f95f56579d878de0495a34" kind="function"><name>validate</name></member>
+    <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1abc64e4f13a530942fae803f8af1e821d" kind="function"><name>finalize</name></member>
   </compound>
   <compound refid="structconfigmanager__mod_1_1emissioncategorymapping" kind="type"><name>configmanager_mod::emissioncategorymapping</name>
     <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a9c3174bf8e77df46d4118ec525a79a4c" kind="variable"><name>category_name</name></member>
@@ -931,11 +1002,24 @@
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a8b027ac1c63ab3a3a5982647bf8791db" kind="variable"><name>frequency</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a90a4db5678f0fc544d1a9d2f0dff3f14" kind="variable"><name>latname</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a1bd768e1193128232f71fa82550eed5e" kind="variable"><name>lonname</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a2ac099c1633acafe1d319035167f37ec" kind="variable"><name>regrid_method</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a118455ad025ad2bffea5c283f77159ae" kind="variable"><name>time_interpolation</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1afc45a838e630c2a82985c359064671ae" kind="variable"><name>vertical_dist</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1afd34f6618937cda3c992dac0781340d5" kind="variable"><name>reverse_vertical</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1ad75eff292086a37a5308519e24ed2143" kind="variable"><name>stkdmname</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1ae906f40fb1bf6e4319313ff70c3b772d" kind="variable"><name>stkhtname</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a550d0ff0f4c194d9784c8f2d7e182174" kind="variable"><name>stktkname</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5fc90313efb09d50f1f5bbbf343f314a" kind="variable"><name>stkvename</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1abd8b72b860723af290e2a95c3fecf25e" kind="variable"><name>plumerise</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1ac704a48005ba679cfa02402e97ebb571" kind="variable"><name>n_times</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a70382b12c31c398c8c0843518157e45e" kind="variable"><name>tc_dates</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a60297c37fc3c910fcd39363448f8efce" kind="variable"><name>tc_secs</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a3f3498bd38c5c5e9c893ba42e27accfe" kind="variable"><name>last_resolved_file</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a479c14fcdf6e240eb840d7de4166a0fe" kind="variable"><name>last_period_key</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1ab5bd898f98bfa05daed6c52a760bf3a4" kind="variable"><name>use_oc_fbb</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1a0d737af8cd9e029a73c54b80e7d55115" kind="variable"><name>diurnal_bb</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1aecbbe84930f285cb25f4cb71bac7709b" kind="variable"><name>apply_method</name></member>
+    <member refid="structextemisdata__mod_1_1extemiscategorytype_1ac5311f8500985d32a1bf76b995c78ffa" kind="variable"><name>needs_time_blend</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a45767146b911877f11baa230bc2c34d9" kind="function"><name>init</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a9377637c7707bf844557e977009a9ea2" kind="function"><name>cleanup</name></member>
     <member refid="structextemisdata__mod_1_1extemiscategorytype_1a5dde2a6e5628898f7cc93411328238f7" kind="function"><name>validate</name></member>
@@ -978,11 +1062,17 @@
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a03831a5a1b378ab80aa9e5eccf8a7bef" kind="variable"><name>ip</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a4b0e79418178d361779f457632b29b2b" kind="variable"><name>jp</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1ac4b37b6b9244fd1e9b5be24201f73607" kind="variable"><name>ijmap</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1a6f27e810622f75d9815ec2ced27880c9" kind="variable"><name>npts</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1adb36dfcb4fb6889f0f4cb62f3580aa12" kind="variable"><name>pemis</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1abc6780e19859e74ec362ebe267dea5f8" kind="variable"><name>pbot</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1a6fbf4cddc5c02afbd3e367c63f79410e" kind="variable"><name>ptop</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a8ab819d746b83553f1b097d64e69beba" kind="variable"><name>n_times</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a2b9599df2fee915b7787f819d01a5a8b" kind="variable"><name>current_time_idx</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a3b48c04582a4aef3dc49d692b9dceadf" kind="variable"><name>time_interpolate</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1ad2fe5254c21191ace1ec9689bde23c71" kind="variable"><name>diagnostic</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1ae18bde912b23d1377cbb1f6c937d009c" kind="variable"><name>emission_data</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1a374c8fa0424d53bd245fa555d06cb41b" kind="variable"><name>interp_data_t1</name></member>
+    <member refid="structextemisdata__mod_1_1extemisfieldtype_1a516c619947e2fe88d6bab532bcb24dc9" kind="variable"><name>interp_data_t2</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1afdeb15943e6fd994d52bcd5c91508d36" kind="variable"><name>is_loaded</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1a7a43f4cdc8454331f511d5aaba294246" kind="variable"><name>is_valid</name></member>
     <member refid="structextemisdata__mod_1_1extemisfieldtype_1af68519cb467a3a322bb052f34dd2e312" kind="variable"><name>interpolation_method</name></member>
@@ -1276,6 +1366,7 @@
     <member refid="structmetstate__mod_1_1metstatetype_1ac8459b064cf07d953816dfb500e5c4dc" kind="variable"><name>swgdn</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1a708bd815648efe04e51b3652e22eb880" kind="variable"><name>eflux</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1abcab5222e32b683b27787c0e5de96a6a" kind="variable"><name>hflux</name></member>
+    <member refid="structmetstate__mod_1_1metstatetype_1ae57fbddcb5d4c954bf6d2a4ded6bd89a" kind="variable"><name>hflux_up</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1aa3c16058259bdd389e4d331978666de7" kind="variable"><name>u10m</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1afd606b02bb3975c1041d9c598f7d199e" kind="variable"><name>ustar</name></member>
     <member refid="structmetstate__mod_1_1metstatetype_1afee465df2620f22a8c5087b4f768ce1e" kind="variable"><name>v10m</name></member>
@@ -1533,6 +1624,36 @@
     <member refid="structprocessdrydepinterface__mod_1_1processdrydepinterface_1a56f2c728cd1a08af523fd13c3269f0cd" kind="function"><name>register_and_allocate_diagnostics</name></member>
     <member refid="structprocessdrydepinterface__mod_1_1processdrydepinterface_1adab444c16c2addbf94f23ebe4e2a7242" kind="function"><name>calculate_and_update_diagnostics</name></member>
   </compound>
+  <compound refid="structprocessdustinterface__mod_1_1processdustinterface" kind="type"><name>processdustinterface_mod::processdustinterface</name>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a6daf65a134f688d73f13267d2fedbfa5" kind="variable"><name>process_config</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a5354fc8557102ed3cd5b4a074e969900" kind="variable"><name>chem_state</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1aa843984dc5aa09bf84f9ce3e9b89ced5" kind="variable"><name>met_state</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ae3a40c62472efb44e63920a3e3638a00" kind="variable"><name>diag_dust_emission_total_idx</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1abd0f37865e904d571105cc28bdbe93f7" kind="variable"><name>diag_dust_emission_per_bin_idx</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a782e87b9355cfdcf408cddf8be5087ea" kind="variable"><name>column_dust_emission_total</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1aae54b413206c0a6ac7c086a80ceb87e7" kind="variable"><name>column_dust_emission_per_bin</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ab3aacd1a3ba8d70489978cbc4c41d90d" kind="variable"><name>column_dust_horizontal_flux</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ad192fc7de4e7a57d45332ea025282db3" kind="variable"><name>column_dust_moisture_correction</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a57851ad9c1d2fc408efe2961fdd0db03" kind="variable"><name>column_dust_effective_threshold</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ac0e868c6c51a6e9fddb9a0e26284f768" kind="variable"><name>column_utar_threshold_per_bin</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a0a8994ab886e209f760810992fbbb240" kind="function"><name>init</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ad5b716052c81c8186f05368d289e1526" kind="function"><name>run</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1abd0b806b76d97eba65df4afdae213582" kind="function"><name>finalize</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a04ab1547bd1b63532ba52cdd1e8cfab6" kind="function"><name>parse_process_config</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a06e3ea06b581c1e9efc4a619abc8e849" kind="function"><name>init_column_processing</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a30cfd44130947a10926f6cad0ab704fd" kind="function"><name>run_column</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a5ad2fd70db21adc2c0e140e068c91064" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ab50b00a29c65bb026e4b8a45a576cbdc" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a941bb5092cde2d1813355f0b5f2ec1b5" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a02cc1c1374d13a58aa9fd82e153f2416" kind="function"><name>set_scheme</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ac9de3b822f72647abf11fa723c91ca11" kind="function"><name>get_scheme</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a3558e98cfa652a2795989e1fdab1eb63" kind="function"><name>register_diagnostics</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a756bbaac896466f70dedf1dbc6fc42e8" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a8484cf4252ecec4154b8b1975fd09340" kind="function"><name>run_fengsha_scheme_column</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a25d16d36fd1b7ec5f8f2e6f47ccc12d0" kind="function"><name>run_ginoux_scheme_column</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ae9761198937d750ec76fb8bb2301b9bc" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ac423b65fe97cebc77ba43834eb39cba1" kind="function"><name>calculate_and_update_diagnostics</name></member>
+  </compound>
   <compound refid="structprocessfactory__mod_1_1processfactorytype" kind="type"><name>processfactory_mod::processfactorytype</name>
     <member refid="structprocessfactory__mod_1_1processfactorytype_1ad77010da4096a426eeab24760a76be05" kind="variable"><name>registry</name></member>
     <member refid="structprocessfactory__mod_1_1processfactorytype_1a11ee7050a179e74ee77a7078ff2fe8d7" kind="function"><name>init</name></member>
@@ -1776,6 +1897,7 @@
     <member refid="structconfigmanager__mod_1_1runtimeconfig_1abaf80178cefaf0c279803ea7406c1153" kind="variable"><name>nspecies_drydep</name></member>
     <member refid="structconfigmanager__mod_1_1runtimeconfig_1a0dce6d78f091e2494d38039cf4bc3f3b" kind="variable"><name>nemissioncategories</name></member>
     <member refid="structconfigmanager__mod_1_1runtimeconfig_1a62536e7f4edc64127ec6a7637dcc6f26" kind="variable"><name>nemissionspecies</name></member>
+    <member refid="structconfigmanager__mod_1_1runtimeconfig_1aafbe16e9c5e4b58097a0501838c879fe" kind="variable"><name>latlon_output</name></member>
   </compound>
   <compound refid="structseasaltcommon__mod_1_1seasaltconfig" kind="type"><name>seasaltcommon_mod::seasaltconfig</name>
     <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a016487b75f92d342a64e459101da1114" kind="variable"><name>scheme</name></member>
@@ -1824,8 +1946,9 @@
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a4d039e1695eb1d5b5d40c6ac5e8437a2" kind="variable"><name>algorithm_type</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a9e4f5ad560529413159827f445ff1530" kind="variable"><name>affects_full_column</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a2a1a63ec35c4edb2eb1bde0926409b5e" kind="variable"><name>scale_factor</name></member>
+    <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a2229e3a4ea9fb5b84712e8bee6032c4a" kind="variable"><name>weibull_flag</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a73c4862c7d9407d008c301dc8a0a4c07" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a727e73e134c8d7bdc5835e7d91dad415" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a599cb94922bd30d685382abf4718d46e" kind="variable"><name>required_met_fields</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a77a4e2aefa9805da1fc53273a7fcce57" kind="function"><name>validate</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegeos12config_1a459bf5d9825a6c3f8e68df5b3f90d2b2" kind="function"><name>finalize</name></member>
   </compound>
@@ -1838,7 +1961,7 @@
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1ac74e6b87778927b33333aa6503f69f66" kind="variable"><name>scale_factor</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4af6e289347ef8b4701e94f640c385ff" kind="variable"><name>weibull_flag</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1abd6eb6a1992211a21e33ac99e6b63389" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a4658ad90b9fab212faacb8f292ec0672" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a2183eb6df0dad15bdf723afd901db536" kind="variable"><name>required_met_fields</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1a69068c5439345867e813f7e11a0b19b8" kind="function"><name>validate</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong03config_1aeb6e73b52c40be00525a18abe45e8709" kind="function"><name>finalize</name></member>
   </compound>
@@ -1851,7 +1974,7 @@
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a95c8e032462ccb5d7ce2ab86f09988e5" kind="variable"><name>scale_factor</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a5ca73922913953a25915e7fd37478ea6" kind="variable"><name>weibull_flag</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac5f74119c3a857379623744e32e9d656" kind="variable"><name>n_required_met_fields</name></member>
-    <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a4bf7d2249b28c7ddf43d8ee4cdc5bcb7" kind="variable"><name>required_met_fields</name></member>
+    <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a2efa127ae144b9dc5d678b39f3b31f81" kind="variable"><name>required_met_fields</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1adee98f9d109ce63edb7d57ca8cf99c01" kind="function"><name>validate</name></member>
     <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a9a34911ed62242c4e5d13dede61cc7e1" kind="function"><name>finalize</name></member>
   </compound>
@@ -2004,6 +2127,7 @@
     <member refid="structspecies__mod_1_1speciestype_1a51dbea0e0caf99aa6e8d4d2f9fd73abf" kind="variable"><name>wd_liqandgas</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a685e9d2b12e6dfefaceaab4d8ee45338" kind="variable"><name>wd_convfaci2g</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a97d4bb5fa2e2f9a66dfe9a4926075dd4" kind="variable"><name>wd_rainouteff</name></member>
+    <member refid="structspecies__mod_1_1speciestype_1aae15b14677c861ff5470ab36013f462e" kind="variable"><name>wd_reevap_frac</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a96875d4738ef4b082591953496a0b07e" kind="variable"><name>mie_name</name></member>
     <member refid="structspecies__mod_1_1speciestype_1a20e7550ceb2d8132250f7c5c60a137dd" kind="variable"><name>t_chem_loss</name></member>
     <member refid="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" kind="variable"><name>backgroundvv</name></member>
@@ -2076,8 +2200,8 @@
     <member refid="structtimestate__mod_1_1timestatetype_1abffd136b46389e7f0cc7d0013dc8034a" kind="variable"><name>hour</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1ac3a88f312937ee15d9fd7f447da57b00" kind="variable"><name>minute</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1af0c4d900e62630c87e9782de3fbdb07b" kind="variable"><name>second</name></member>
-    <member refid="structtimestate__mod_1_1timestatetype_1ac41cdc538496b1df7e0fe3e8f756bcb6" kind="variable"><name>timestep</name></member>
-    <member refid="structtimestate__mod_1_1timestatetype_1a51b7a74db1dc506281938f433a8533e1" kind="variable"><name>julian_date</name></member>
+    <member refid="structtimestate__mod_1_1timestatetype_1ac545e7eb58029c2145f4b2ab9b63354d" kind="variable"><name>timestep</name></member>
+    <member refid="structtimestate__mod_1_1timestatetype_1a1c6ae6482da0476670246d4cc8206dbd" kind="variable"><name>julian_date</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1afb51ab63bd9c15e7b10bc934a1cef50e" kind="variable"><name>doy</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1af0040ffba7d2ec326c8ad01032c511d6" kind="function"><name>get_sza</name></member>
     <member refid="structtimestate__mod_1_1timestatetype_1aac2cb2c8fefbf21c9bfb7383d3fc59b4" kind="function"><name>get_cos_sza</name></member>
@@ -2174,6 +2298,7 @@
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1af2d0ebef1e07de1d3146b2f5da4f46ed" kind="variable"><name>species_wd_convfaci2g</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a712d43317822e30a1177e3631614c0f1" kind="variable"><name>species_wd_rainouteff</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a154b845ec927de7d614f60c698aa9b72" kind="variable"><name>species_wd_retfactor</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepconfig_1abd6e81edf106667244898b8a260e01e0" kind="variable"><name>species_wd_reevap_frac</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a6c448d6f7c2fb8154d62aa83504ec63d" kind="variable"><name>output_diagnostics</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a9642b4a81b43d7da59a7664dca658a3a" kind="variable"><name>diagnostic_frequency</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepconfig_1a83975e17b5734d61eed9c05e6dffb4a9" kind="function"><name>validate</name></member>
@@ -2202,6 +2327,8 @@
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" kind="variable"><name>affects_full_column</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" kind="variable"><name>scale_factor</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a9c644720bc6669580cfdaa05d990b253" kind="variable"><name>radius_threshold</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a8da3b302251c9ec6f5a896e5162e8e04" kind="variable"><name>so4_gocart_resusp</name></member>
+    <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a634b8d582bc1c6572e33cf4a5915bd64" kind="variable"><name>so4_washout_eff</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a361b7882ced5fde798b1b25d7b8c1415" kind="variable"><name>n_required_met_fields</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" kind="variable"><name>required_met_fields</name></member>
     <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1ae45321fda598963adc17760a4ea165e3" kind="function"><name>validate</name></member>
@@ -2737,7 +2864,7 @@
     <member refid="namespacedrydepscheme__gocart__mod_1a1c8df74b7ac13bc852ce0679d5087b48" kind="variable"><name>ocean</name></member>
     <member refid="namespacedrydepscheme__gocart__mod_1aa88a4589edb5ae5d0153a0a5d14eb5ee" kind="variable"><name>land</name></member>
     <member refid="namespacedrydepscheme__gocart__mod_1a59798a68610fbdf53c21ac6148229778" kind="variable"><name>sea_ice</name></member>
-    <member refid="namespacedrydepscheme__gocart__mod_1a3b8125152f1a6a60e25722e264ff4f3d" kind="function"><name>compute_gocart</name></member>
+    <member refid="namespacedrydepscheme__gocart__mod_1a9ad8428025511cd80460ddcdc9042c43" kind="function"><name>compute_gocart</name></member>
     <member refid="group__core__modules_1gaf3456b2605a4a5fe70dd90e0c147c83e" kind="function"><name>prepmetvarsforgocart</name></member>
   </compound>
   <compound refid="namespacedrydepscheme__wesely__mod" kind="namespace"><name>drydepscheme_wesely_mod</name>
@@ -2774,6 +2901,7 @@
     <member refid="namespacedrydepscheme__zhang__mod_1a9c27d6dbf486238c1201dc772e9a2b32" kind="variable"><name>lucindex_igbp</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1a1f0bc94b2b5203760d3a0d9e31e781e0" kind="variable"><name>idep_iolson</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1aa8effaace19506cce394e6ed7b8075d8" kind="variable"><name>two_thirds</name></member>
+    <member refid="namespacedrydepscheme__zhang__mod_1aa84b4233446db1d1cf368af02e35f471" kind="variable"><name>small</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1a89a9dc14a781593ab408eb28ed16ed98" kind="variable"><name>alpha</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1ac865c6454d84d74ab2b83b6c6abdaef7" kind="variable"><name>a</name></member>
     <member refid="namespacedrydepscheme__zhang__mod_1ac5211a7bf190aaf4d1519f76e0fb229b" kind="variable"><name>seasalt_lower_bin</name></member>
@@ -2787,6 +2915,52 @@
     <member refid="group__catchem__drydep__process_1ga31f90ce328557eb96b3975cd67d96399" kind="function"><name>init_weightss</name></member>
     <member refid="group__catchem__drydep__process_1ga6f1331fa961eb4ad5ee1e37d4150933d" kind="function"><name>diffg</name></member>
     <member refid="group__catchem__drydep__process_1ga7aa56e85f6ccbecfde9bfd243e48ac75" kind="function"><name>wesely_ra_rb</name></member>
+  </compound>
+  <compound refid="namespacedustcommon__mod" kind="namespace"><name>dustcommon_mod</name>
+    <member refid="namespacedustcommon__mod_1ac1835e1617ad210ad82168ad36c470fd" kind="function"><name>validate_dust_config</name></member>
+    <member refid="namespacedustcommon__mod_1a48c91be0eed433fc8f4999b068f1e010" kind="function"><name>print_dust_config_summary</name></member>
+    <member refid="namespacedustcommon__mod_1a54c5cc8f5847303f0c40137dd561a64f" kind="function"><name>finalize_dust_config</name></member>
+    <member refid="namespacedustcommon__mod_1a2a1a1445bc36b085cbb02695add7d4b6" kind="function"><name>validate_fengsha_config</name></member>
+    <member refid="namespacedustcommon__mod_1a35ce91486d9dbd2ca970caa68482a97d" kind="function"><name>finalize_fengsha_config</name></member>
+    <member refid="namespacedustcommon__mod_1a41c4ca55c4e76b0fcce19503ee1a3067" kind="function"><name>validate_ginoux_config</name></member>
+    <member refid="namespacedustcommon__mod_1af483ca1682b5d42020f903834fd6b98a" kind="function"><name>finalize_ginoux_config</name></member>
+    <member refid="namespacedustcommon__mod_1a224a2ce9aa943e14bc6bd6650f70f477" kind="function"><name>int_to_string</name></member>
+    <member refid="namespacedustcommon__mod_1a61cd1997109253fbd9cb4d73a4035217" kind="function"><name>dust_process_load_config</name></member>
+    <member refid="namespacedustcommon__mod_1a5975101a3094396c69dd27d3d8924510" kind="function"><name>load_species_from_chem_state</name></member>
+    <member refid="namespacedustcommon__mod_1a0060ed6ba7be7a5182468001f4621d29" kind="function"><name>load_fengsha_config</name></member>
+    <member refid="namespacedustcommon__mod_1a59f04c7f699db825e4a11215e40e12af" kind="function"><name>load_ginoux_config</name></member>
+    <member refid="namespacedustcommon__mod_1a284d811900ce57750293b2ac6aec75a1" kind="function"><name>dust_process_validate</name></member>
+    <member refid="namespacedustcommon__mod_1a0e225913a0aeb4fd306af88b0cf339b5" kind="function"><name>dust_process_finalize</name></member>
+    <member refid="namespacedustcommon__mod_1ae0d447350a4d424d4045df2efb73dab6" kind="function"><name>get_active_scheme_config</name></member>
+    <member refid="namespacedustcommon__mod_1a4ac33c9b4b802b33903c346d1db4a9f6" kind="function"><name>map_diagnostic_species_indices</name></member>
+  </compound>
+  <compound refid="namespacedustprocesscreator__mod" kind="namespace"><name>dustprocesscreator_mod</name>
+    <member refid="namespacedustprocesscreator__mod_1a259d3ada1ccdf590144ae514eea9d333" kind="function"><name>create_dust_process</name></member>
+    <member refid="namespacedustprocesscreator__mod_1ada27bd1703f8510fb75729228ca9b856" kind="function"><name>register_dust_process</name></member>
+    <member refid="namespacedustprocesscreator__mod_1a4c227d02096fd80f0109993f56d8ff67" kind="function"><name>get_dust_default_config</name></member>
+  </compound>
+  <compound refid="namespacedustscheme__fengsha__mod" kind="namespace"><name>dustscheme_fengsha_mod</name>
+    <member refid="namespacedustscheme__fengsha__mod_1a2b22a7aad2c2ebb5203ebad0142114c3" kind="variable"><name>ssm_thresh</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a491f7ca167c16b611123fc65a5ae6674" kind="variable"><name>veg_thresh</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a31c537adae61db87ea4f2fb36ef73dd1" kind="variable"><name>small</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1ae31f53659207e9b8a4660da9fdfa537b" kind="variable"><name>max_rdrag</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a97f0631854bbf7d01c9a5dd323ddbb98" kind="variable"><name>clay_thresh</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a3df39f456226f80eb4a3259ef5fecd45" kind="function"><name>compute_fengsha</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a8a995c308da38dbeba8e13f74b830289" kind="function"><name>kokdistribution</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a7f0159ab89f558241b060ec22cfac098" kind="function"><name>fecan_soilmoisture</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a968d0d48d5d191ce203c0cd390391d8f" kind="function"><name>zhao_soilmoisture</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a0851e859a329a63bc0a94e606bb4c591" kind="function"><name>calc_drag_partition</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a71ddfab2ff22e77d4880609e1c7820c9" kind="function"><name>darmenovadragpartition</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1a68cf8a875f583154a56026c5016e3ec0" kind="function"><name>leungdragpartition</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1ad28b713b24965816ffe04cea0702960d" kind="function"><name>mb95_dragpartition</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1ae0af7b50432663d5cc170c24f159dfd3" kind="function"><name>draxler_horizflux</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1aabfa842da856030454c39ec636074595" kind="function"><name>kawamura_horizflux</name></member>
+    <member refid="namespacedustscheme__fengsha__mod_1add272b1e970f432dbef5344e744dfa16" kind="function"><name>white_horizflux</name></member>
+  </compound>
+  <compound refid="namespacedustscheme__ginoux__mod" kind="namespace"><name>dustscheme_ginoux_mod</name>
+    <member refid="namespacedustscheme__ginoux__mod_1aa2ec63e16937e08c7af87fca65331478" kind="variable"><name>ssm_thresh</name></member>
+    <member refid="namespacedustscheme__ginoux__mod_1aeb4fa577d0e88a0f9c31255c1e30cc4d" kind="function"><name>compute_ginoux</name></member>
+    <member refid="namespacedustscheme__ginoux__mod_1ab03e8ccc944b60ea8c6d48dd3183222c" kind="function"><name>mb97_threshold_velocity</name></member>
   </compound>
   <compound refid="namespaceemissionconfigvalidator__mod" kind="namespace"><name>emissionconfigvalidator_mod</name>
     <member refid="namespaceemissionconfigvalidator__mod_1af50c701b91cec7b8f03b66af95c09b5f" kind="variable"><name>validation_success</name></member>
@@ -3100,6 +3274,32 @@
     <member refid="namespaceprocessdrydepinterface__mod_1ac0e0cefe1e11158d16543ff98737374d" kind="function"><name>set_drydep_scheme</name></member>
     <member refid="namespaceprocessdrydepinterface__mod_1a7c167d99800d9e0cde4700b5cfba9ef8" kind="function"><name>get_drydep_scheme</name></member>
   </compound>
+  <compound refid="namespaceprocessdustinterface__mod" kind="namespace"><name>processdustinterface_mod</name>
+    <member refid="namespaceprocessdustinterface__mod_1ab2a6d6cd561d45bb60c5c58419804d2a" kind="variable"><name>dbg_dust_print_count</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a89320a625dc94c3c808d3734f71adc0f" kind="variable"><name>dbg_best_dist</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a96f696e753874987c406c9e5340d53a8" kind="variable"><name>dbg_best_lat</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a256e9baee64349467e8f13172afc1f87" kind="variable"><name>dbg_best_lon</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1aad10d51d2182fa96b2095a16dc9162a7" kind="variable"><name>dbg_dust_found</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1add1231bed8a58c416528bc62d311d78d" kind="variable"><name>dbg_target_lat</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a8d4a4b6b8b8e58603e133d3415850d9c" kind="variable"><name>dbg_target_lon</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1ab7a7b29db0e08b84bfbf5a85a80973c9" kind="variable"><name>dbg_tolerance</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a9869b82814eb38248ac61aef551a57a0" kind="function"><name>process_init</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1ad9de1602c8694e8d9281b73977e73380" kind="function"><name>process_run</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a54114900d6ab0268c3eb8f0e1b33d7d9" kind="function"><name>process_finalize</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a4c175d7358f31cbe71dd47b6999e7ca9" kind="function"><name>parse_dust_config</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a5c56c2ad22e49cb32338ea4c73090927" kind="function"><name>init_column_processing</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1aa75cd047e735c359be502310f43a5010" kind="function"><name>run_column</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1ab835bcee8c014d5041bb2bef8b7cc3ed" kind="function"><name>finalize_column_processing</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a21c5a81addde8374aafcb20943833d2e" kind="function"><name>run_active_scheme_column</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a5ac9a71658c2c638dac054755b57e9a9" kind="function"><name>run_fengsha_scheme_column</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a69bbd84020c305ff335813ff0b82855b" kind="function"><name>run_ginoux_scheme_column</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a3dc475eb37d8fc00a68790c9425d3e5f" kind="function"><name>get_required_met_fields</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1acaf95e11159c71e293bb6f34664c41a7" kind="function"><name>get_required_diagnostic_fields</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1aec58ff1b1f36646a4590bc863503fff0" kind="function"><name>register_and_allocate_diagnostics</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1ab0c2f088b670778debec606e1a7eb69c" kind="function"><name>calculate_and_update_diagnostics</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1a9e255a71e53b6e350f0f9135155538e9" kind="function"><name>set_dust_scheme</name></member>
+    <member refid="namespaceprocessdustinterface__mod_1ab9e4a8791f040debaf1b848af261df8f" kind="function"><name>get_dust_scheme</name></member>
+  </compound>
   <compound refid="namespaceprocessfactory__mod" kind="namespace"><name>processfactory_mod</name>
     <member refid="namespaceprocessfactory__mod_1afd1079e0741e933d58f3c96c19763e24" kind="function"><name>factory_init</name></member>
     <member refid="namespaceprocessfactory__mod_1a030135b924017c2d066a65d3c956e879" kind="function"><name>factory_create_process</name></member>
@@ -3284,18 +3484,18 @@
     <member refid="namespaceseasaltprocesscreator__mod_1aebf662116882f98a338a4c2617fba21d" kind="function"><name>get_seasalt_default_config</name></member>
   </compound>
   <compound refid="namespaceseasaltscheme__geos12__mod" kind="namespace"><name>seasaltscheme_geos12_mod</name>
-    <member refid="namespaceseasaltscheme__geos12__mod_1a9b1f987ae1c8dfdd6143797e7bbcc518" kind="variable"><name>t_standard</name></member>
-    <member refid="namespaceseasaltscheme__geos12__mod_1a5bb0b187ae9c751ced85713589d91e81" kind="variable"><name>default_scaling</name></member>
-    <member refid="namespaceseasaltscheme__geos12__mod_1ae2b692e020f519d6d5d0092868b9d575" kind="function"><name>compute_geos12</name></member>
+    <member refid="namespaceseasaltscheme__geos12__mod_1ac2a828c60b4462aa0600aad17c0e36ef" kind="function"><name>compute_geos12</name></member>
     <member refid="namespaceseasaltscheme__geos12__mod_1ac09cc3e8dab33327e43ca0c559f9418a" kind="function"><name>compute_environmental_response_geos12</name></member>
     <member refid="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" kind="function"><name>compute_species_scaling_geos12</name></member>
     <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
+    <member refid="group__catchem__seasalt__process_1ga1c9253f7a0a5f329eb6d9b4917554121" kind="function"><name>weibulldistribution</name></member>
+    <member refid="group__catchem__seasalt__process_1ga39f0e23516bfb86049ef258b8ce3be75" kind="function"><name>igamma</name></member>
   </compound>
   <compound refid="namespaceseasaltscheme__gong03__mod" kind="namespace"><name>seasaltscheme_gong03_mod</name>
     <member refid="namespaceseasaltscheme__gong03__mod_1ac25aa661a74d1b26ee9f919f4520f941" kind="variable"><name>t_standard</name></member>
     <member refid="namespaceseasaltscheme__gong03__mod_1a218abb8d830e8a26416c76fd120ef34e" kind="variable"><name>default_scaling</name></member>
-    <member refid="namespaceseasaltscheme__gong03__mod_1a2d4c3cab7dcbda8e525dab52f9b3d741" kind="function"><name>compute_gong03</name></member>
+    <member refid="namespaceseasaltscheme__gong03__mod_1af2cd356fd801d80e7962cd08cd89567d" kind="function"><name>compute_gong03</name></member>
     <member refid="group__catchem__seasalt__process_1ga47b81e2f8cc2a605f8beb8c6368f66dd" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1ga55b0406d4268801b93ab5661d70c9678" kind="function"><name>seasaltemissiongong</name></member>
     <member refid="group__catchem__seasalt__process_1gafc8b2b984c59ea821ef30355745b6160" kind="function"><name>weibulldistribution</name></member>
@@ -3304,7 +3504,7 @@
   <compound refid="namespaceseasaltscheme__gong97__mod" kind="namespace"><name>seasaltscheme_gong97_mod</name>
     <member refid="namespaceseasaltscheme__gong97__mod_1a4ee68051d41f9ee28db0e4b0311c5a00" kind="variable"><name>t_standard</name></member>
     <member refid="namespaceseasaltscheme__gong97__mod_1a73ef77bd3619411141c2e555f0da16fb" kind="variable"><name>default_scaling</name></member>
-    <member refid="namespaceseasaltscheme__gong97__mod_1ad64e3fe3ee9ed7d960cd3704e558cfa2" kind="function"><name>compute_gong97</name></member>
+    <member refid="namespaceseasaltscheme__gong97__mod_1af75b9f24c3bc35970e56238e9e04b07e" kind="function"><name>compute_gong97</name></member>
     <member refid="group__catchem__seasalt__process_1gad2a381db0330f3833d43caac0f17e7d6" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1ga629c594ab4c0dc374f9799f34e758a34" kind="function"><name>seasaltemissiongong</name></member>
     <member refid="group__catchem__seasalt__process_1ga41b7c404993f8068fa1c4d37786a3262" kind="function"><name>weibulldistribution</name></member>
@@ -3448,11 +3648,11 @@
   <compound refid="namespacetimestate__mod" kind="namespace"><name>timestate_mod</name>
     <member refid="namespacetimestate__mod_1aab718d4e73453c52c7e6be2a26c946a8" kind="variable"><name>state_status_uninitialized</name></member>
     <member refid="namespacetimestate__mod_1a47d8e8f67c7244d42936d2142a27adcb" kind="variable"><name>state_status_initialized</name></member>
-    <member refid="namespacetimestate__mod_1a30f158b84774a230829bd9b75c1a5dc0" kind="function"><name>get_cos_sza</name></member>
-    <member refid="namespacetimestate__mod_1acd97df36e5c9ec3c7d29742a3e2876b6" kind="function"><name>get_sza</name></member>
-    <member refid="namespacetimestate__mod_1ab6f609d433551aea1c0ed53836a470cd" kind="function"><name>get_timestep</name></member>
+    <member refid="namespacetimestate__mod_1aeb1cf3569daa4854453305a9c4192344" kind="function"><name>get_cos_sza</name></member>
+    <member refid="namespacetimestate__mod_1a39938b8198b560d74b3402d9055e3de8" kind="function"><name>get_sza</name></member>
+    <member refid="namespacetimestate__mod_1a5fa4cc5a6590d122eba288e90ff24c2b" kind="function"><name>get_timestep</name></member>
     <member refid="namespacetimestate__mod_1ab57be13f6431ef9f5a7a0c0f720a80f9" kind="function"><name>get_current_date</name></member>
-    <member refid="namespacetimestate__mod_1a51da21920195ad8771ceb1ee1e2b86c5" kind="function"><name>get_julian_date</name></member>
+    <member refid="namespacetimestate__mod_1aaba49fb7d7e94de9af36c8ed913ca199" kind="function"><name>get_julian_date</name></member>
     <member refid="namespacetimestate__mod_1a518432fd6c36e13d6b3b763fca2fb36c" kind="function"><name>get_doy</name></member>
     <member refid="namespacetimestate__mod_1a2541be67db1e6758caff1bf27d9a01e9" kind="function"><name>timestate_init</name></member>
     <member refid="namespacetimestate__mod_1a04d68590bd35d542596e6a4820052658" kind="function"><name>timestate_validate</name></member>
@@ -3594,7 +3794,7 @@
     <member refid="namespacewetdepscheme__jacob__mod_1a10fa8a67c0c1d8ec1e1ff060efb7b459" kind="variable"><name>pdwn_thr</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1a584e7ab53259275436d62f80e695666f" kind="variable"><name>k_min</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1a283ce186368e5460d57ae4ebbbe2d16f" kind="variable"><name>cwc</name></member>
-    <member refid="namespacewetdepscheme__jacob__mod_1aa000bda136b406ffc27eeac128d5a17b" kind="function"><name>compute_jacob</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1a42d728ba6a054ecf2d73f2b0630ff052" kind="function"><name>compute_jacob</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1af307da7d5e4119228d08c898d565d3a9" kind="function"><name>find_species_ind</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1ae1714cc88cf0808f25bb60f24af2bcf9" kind="function"><name>rainout</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1aeace337974ab33c9edd078b02706d19d" kind="function"><name>washout</name></member>
@@ -3604,7 +3804,7 @@
     <member refid="namespacewetdepscheme__jacob__mod_1aa3a5e4c4e27f9e1e3a5c007e260d3ad8" kind="function"><name>washfrac_hno3</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1ac18ce2a4d102e591cca3d026d3ff31d3" kind="function"><name>washfrac_liq_gas</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1a50c5047734777471251b34ef0d9d4d21" kind="function"><name>rainout_loss</name></member>
-    <member refid="namespacewetdepscheme__jacob__mod_1a00ee288c6af55128362fa686b6eac853" kind="function"><name>washout_loss</name></member>
+    <member refid="namespacewetdepscheme__jacob__mod_1abe20bd695ee2b868cd92781165aad0a7" kind="function"><name>washout_loss</name></member>
     <member refid="namespacewetdepscheme__jacob__mod_1ae9afb1ac4fc9fc90e634ff50939f4a0e" kind="function"><name>complete_reevap</name></member>
   </compound>
   <compound refid="namespaceyaml__interface__mod" kind="namespace"><name>yaml_interface_mod</name>
@@ -3738,6 +3938,16 @@
   </compound>
   <compound refid="_dry_dep_scheme___z_h_a_n_g___mod_8_f90" kind="file"><name>DryDepScheme_ZHANG_Mod.F90</name>
   </compound>
+  <compound refid="_dust_common___mod_8_f90" kind="file"><name>DustCommon_Mod.F90</name>
+  </compound>
+  <compound refid="_dust_process_creator___mod_8_f90" kind="file"><name>DustProcessCreator_Mod.F90</name>
+  </compound>
+  <compound refid="_process_dust_interface___mod_8_f90" kind="file"><name>ProcessDustInterface_Mod.F90</name>
+  </compound>
+  <compound refid="_dust_scheme___f_e_n_g_s_h_a___mod_8_f90" kind="file"><name>DustScheme_FENGSHA_Mod.F90</name>
+  </compound>
+  <compound refid="_dust_scheme___g_i_n_o_u_x___mod_8_f90" kind="file"><name>DustScheme_GINOUX_Mod.F90</name>
+  </compound>
   <compound refid="_process_sea_salt_interface___mod_8_f90" kind="file"><name>ProcessSeaSaltInterface_Mod.F90</name>
   </compound>
   <compound refid="_sea_salt_scheme___g_e_o_s12___mod_8_f90" kind="file"><name>SeaSaltScheme_GEOS12_Mod.F90</name>
@@ -3792,6 +4002,8 @@
   <compound refid="group__catchem__seasalt__process" kind="group"><name>catchem_seasalt_process</name>
     <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
+    <member refid="group__catchem__seasalt__process_1ga1c9253f7a0a5f329eb6d9b4917554121" kind="function"><name>weibulldistribution</name></member>
+    <member refid="group__catchem__seasalt__process_1ga39f0e23516bfb86049ef258b8ce3be75" kind="function"><name>igamma</name></member>
     <member refid="group__catchem__seasalt__process_1ga47b81e2f8cc2a605f8beb8c6368f66dd" kind="function"><name>jeaglesstcorrection</name></member>
     <member refid="group__catchem__seasalt__process_1ga55b0406d4268801b93ab5661d70c9678" kind="function"><name>seasaltemissiongong</name></member>
     <member refid="group__catchem__seasalt__process_1gafc8b2b984c59ea821ef30355745b6160" kind="function"><name>weibulldistribution</name></member>
@@ -3825,6 +4037,8 @@
   </compound>
   <compound refid="dir_57fb5aa14ddb2cd518a6d90b65ffd000" kind="dir"><name>src/process/drydep</name>
   </compound>
+  <compound refid="dir_1c14dfbaca1e3f4c2e26e74290119ebd" kind="dir"><name>src/process/dust</name>
+  </compound>
   <compound refid="dir_805a0af995e93a362739e98abd740eb2" kind="dir"><name>src/external</name>
   </compound>
   <compound refid="dir_c0cd66d8ddae4fc5bc5dc2f24e29763b" kind="dir"><name>src/process</name>
@@ -3832,6 +4046,8 @@
   <compound refid="dir_2aa0506a6ee0350ff25dc7952f19a30f" kind="dir"><name>src/process/carbchem/schemes</name>
   </compound>
   <compound refid="dir_5a3c86e36f17958630366ebc2b7ca21b" kind="dir"><name>src/process/drydep/schemes</name>
+  </compound>
+  <compound refid="dir_11b2254edcf6ee5df673de29b129f986" kind="dir"><name>src/process/dust/schemes</name>
   </compound>
   <compound refid="dir_ec083b49fedbd640552af85049fd7226" kind="dir"><name>src/process/seasalt/schemes</name>
   </compound>

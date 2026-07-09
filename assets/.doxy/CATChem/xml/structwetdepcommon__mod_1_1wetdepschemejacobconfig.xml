@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="79" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="79" bodyend="79"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="80" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7a1e68de03b952d996484f86656227d7" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="80" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="80" bodyend="80"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="81" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="81" bodyend="81"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1aab8d01b9e48026aa7a632b0868dbc534" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="81" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="81" bodyend="81"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a70c8da892dfe6a298c6feb9551dc67ef" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="82" bodyend="82"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="83" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="83" bodyend="83"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="85" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="85" bodyend="85"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="86" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="86" bodyend="86"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="88" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="88" bodyend="88"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="89" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="89" bodyend="89"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a9c644720bc6669580cfdaa05d990b253" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -106,7 +106,37 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="89" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="89" bodyend="89"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="90" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a8da3b302251c9ec6f5a896e5162e8e04" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical wetdepcommon_mod::wetdepschemejacobconfig::so4_gocart_resusp</definition>
+        <argsstring></argsstring>
+        <name>so4_gocart_resusp</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::so4_gocart_resusp</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="91" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a634b8d582bc1c6572e33cf4a5915bd64" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) wetdepcommon_mod::wetdepschemejacobconfig::so4_washout_eff</definition>
+        <argsstring></argsstring>
+        <name>so4_washout_eff</name>
+        <qualifiedname>wetdepcommon_mod::wetdepschemejacobconfig::so4_washout_eff</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="92" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="92" bodyend="92"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a361b7882ced5fde798b1b25d7b8c1415" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -121,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="92" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="92" bodyend="92"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="95" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="95" bodyend="95"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(8)</type>
@@ -135,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="93" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="93" bodyend="93"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="96" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="96" bodyend="96"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -160,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="96" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="96" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="99" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="99" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a7edfee8399405578460919ebff16bc99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -179,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="97" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="97" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="100" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="100" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -187,7 +217,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="76" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="76" bodyend="98"/>
+    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="77" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="77" bodyend="101"/>
     <listofallmembers>
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a19874cb4dd2d54cb6bdc155adc6cab58" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>affects_full_column</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a70c8da892dfe6a298c6feb9551dc67ef" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>algorithm_type</name></member>
@@ -199,6 +229,8 @@
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a757be71eccea1f78ac611f54a00eddaf" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>required_met_fields</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a6d66026bae61d1e6866788a32c72448e" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>scale_factor</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a16690ad20995067988b52008581e91e6" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>scheme_name</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a8da3b302251c9ec6f5a896e5162e8e04" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>so4_gocart_resusp</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1a634b8d582bc1c6572e33cf4a5915bd64" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>so4_washout_eff</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig_1ae45321fda598963adc17760a4ea165e3" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepschemejacobconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>

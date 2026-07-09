@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="154" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="154" bodyend="154"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="155" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="155" bodyend="155"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1adc2dc027ce9800532e35344cb7b7cf5f" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="155" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="155" bodyend="155"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="156" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="156" bodyend="156"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1a3d9b631806d7448feb815acf6006478a" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structconfigmanager__mod_1_1emisspeciesmappingentry" kindref="compound">emisspeciesmappingentry</ref>), dimension(:), allocatable</type>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="156" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="156" bodyend="156"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="157" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="157" bodyend="157"/>
       </memberdef>
       <memberdef kind="variable" id="structconfigmanager__mod_1_1emissioncategorymapping_1acfeee0e4a5ed00e89593902dbb44fd39" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -64,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="157" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="157" bodyend="157"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="158" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="158" bodyend="158"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="159" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="159" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="160" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="160" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1emissioncategorymapping_1a242466fcb8d3cbbb968ce6c9eacea9fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="160" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="160" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="161" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="161" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structconfigmanager__mod_1_1emissioncategorymapping_1aa572ccbd8b27142163de4cca1904b8b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -127,7 +127,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ConfigManager_Mod.F90" line="161" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="161" bodyend="-1"/>
+        <location file="src/core/ConfigManager_Mod.F90" line="162" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="162" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -149,7 +149,7 @@
         <link refid="structconfigmanager__mod_1_1emisspeciesmappingentry"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/ConfigManager_Mod.F90" line="153" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="153" bodyend="162"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="154" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="154" bodyend="163"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a9c3174bf8e77df46d4118ec525a79a4c" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>category_name</name></member>
       <member refid="structconfigmanager__mod_1_1emissioncategorymapping_1a242466fcb8d3cbbb968ce6c9eacea9fe" prot="public" virt="non-virtual"><scope>configmanager_mod::emissioncategorymapping</scope><name>cleanup</name></member>

@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedustcommon__mod" kind="namespace" language="Fortran">
+    <compoundname>dustcommon_mod</compoundname>
+    <innerclass refid="structdustcommon__mod_1_1dustconfig" prot="public">dustcommon_mod::dustconfig</innerclass>
+    <innerclass refid="structdustcommon__mod_1_1dustprocessconfig" prot="public">dustcommon_mod::dustprocessconfig</innerclass>
+    <innerclass refid="structdustcommon__mod_1_1dustschemefengshaconfig" prot="public">dustcommon_mod::dustschemefengshaconfig</innerclass>
+    <innerclass refid="structdustcommon__mod_1_1dustschemeginouxconfig" prot="public">dustcommon_mod::dustschemeginouxconfig</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedustcommon__mod_1ac1835e1617ad210ad82168ad36c470fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::validate_dust_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_dust_config</name>
+        <qualifiedname>dustcommon_mod::validate_dust_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate dust configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="162" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="163" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a48c91be0eed433fc8f4999b068f1e010" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::print_dust_config_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_dust_config_summary</name>
+        <qualifiedname>dustcommon_mod::print_dust_config_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="195" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="196" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a54c5cc8f5847303f0c40137dd561a64f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::finalize_dust_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_dust_config</name>
+        <qualifiedname>dustcommon_mod::finalize_dust_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize dust configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="209" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="210" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a2a1a1445bc36b085cbb02695add7d4b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::validate_fengsha_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_fengsha_config</name>
+        <qualifiedname>dustcommon_mod::validate_fengsha_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustschemefengshaconfig" kindref="compound">dustschemefengshaconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate fengsha scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="250" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="251" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a35ce91486d9dbd2ca970caa68482a97d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::finalize_fengsha_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_fengsha_config</name>
+        <qualifiedname>dustcommon_mod::finalize_fengsha_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustschemefengshaconfig" kindref="compound">dustschemefengshaconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize fengsha scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="259" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="260" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a41c4ca55c4e76b0fcce19503ee1a3067" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::validate_ginoux_config</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate_ginoux_config</name>
+        <qualifiedname>dustcommon_mod::validate_ginoux_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate ginoux scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="268" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="269" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1af483ca1682b5d42020f903834fd6b98a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::finalize_ginoux_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize_ginoux_config</name>
+        <qualifiedname>dustcommon_mod::finalize_ginoux_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize ginoux scheme configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="277" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="278" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a224a2ce9aa943e14bc6bd6650f70f477" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=32) function, public</type>
+        <definition>character(len=32) function, public dustcommon_mod::int_to_string</definition>
+        <argsstring>(int_val)</argsstring>
+        <name>int_to_string</name>
+        <qualifiedname>dustcommon_mod::int_to_string</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>int_val</defname>
+        </param>
+        <briefdescription>
+<para>Convert integer to string (utility function) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="287" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="288" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a61cd1997109253fbd9cb4d73a4035217" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::dust_process_load_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>dust_process_load_config</name>
+        <qualifiedname>dustcommon_mod::dust_process_load_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="299" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="300" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a5975101a3094396c69dd27d3d8924510" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::load_species_from_chem_state</definition>
+        <argsstring>(this, chem_state, error_handler)</argsstring>
+        <name>load_species_from_chem_state</name>
+        <qualifiedname>dustcommon_mod::load_species_from_chem_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load species from ChemState This function is used for dynamic species discovery (by_metadata or all_species) For &apos;all_species&apos; mode: loads all species using nSpecies and SpeciesIndex For &apos;by_metadata&apos; mode: loads species by type using nSpeciesDust and DustIndex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="374" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="375" bodyend="457"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a0060ed6ba7be7a5182468001f4621d29" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::load_fengsha_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_fengsha_config</name>
+        <qualifiedname>dustcommon_mod::load_fengsha_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load fengsha scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="462" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="463" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a59f04c7f699db825e4a11215e40e12af" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::load_ginoux_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_ginoux_config</name>
+        <qualifiedname>dustcommon_mod::load_ginoux_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load ginoux scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="502" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="503" bodyend="523"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a284d811900ce57750293b2ac6aec75a1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::dust_process_validate</definition>
+        <argsstring>(this, state_manager, error_handler)</argsstring>
+        <name>dust_process_validate</name>
+        <qualifiedname>dustcommon_mod::dust_process_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
+          <defname>state_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="528" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="529" bodyend="543"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a0e225913a0aeb4fd306af88b0cf339b5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::dust_process_finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>dust_process_finalize</name>
+        <qualifiedname>dustcommon_mod::dust_process_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize unified process configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="547" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="548" bodyend="554"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1ae0d447350a4d424d4045df2efb73dab6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class(*) function, allocatable</type>
+        <definition>class(*) function, allocatable dustcommon_mod::get_active_scheme_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_active_scheme_config</name>
+        <qualifiedname>dustcommon_mod::get_active_scheme_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get active scheme configuration (polymorphic return) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="559" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="560" bodyend="571"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustcommon__mod_1a4ac33c9b4b802b33903c346d1db4a9f6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine dustcommon_mod::map_diagnostic_species_indices</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>map_diagnostic_species_indices</name>
+        <qualifiedname>dustcommon_mod::map_diagnostic_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustprocessconfig" kindref="compound">dustprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="577" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="578" bodyend="632"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/dust/DustCommon_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

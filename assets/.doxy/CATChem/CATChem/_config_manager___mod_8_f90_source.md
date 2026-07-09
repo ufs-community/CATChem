@@ -69,6 +69,7 @@ module configmanager_mod
       integer :: nSpecies_drydep = 20
       integer :: nEmissionCategories = 10
       integer :: nEmissionSpecies = 50
+      logical :: latlon_output = .false.              
    end type runtimeconfig
 
    type :: filepathconfig
@@ -1346,6 +1347,9 @@ contains
       call safe_yaml_get_integer(this%yaml_data, 'diagnostics/output/frequency', this%config_data%runtime%Output_Frequency, local_rc)
       if (local_rc /= 0) this%config_data%runtime%Output_Frequency = 3600  ! default value
 
+      call safe_yaml_get_logical(this%yaml_data, 'diagnostics/output/latlon_output', this%config_data%runtime%latlon_output, local_rc)
+      if (local_rc /= 0) this%config_data%runtime%latlon_output = .false.  ! default value
+
       call this%get_array('diagnostics/output/diag_list', this%config_data%runtime%diag_species, local_rc, default_values=["All"])
       if (local_rc /= 0) then
          ! Default to all species if not specified
@@ -1796,6 +1800,14 @@ contains
          ! Return missing array
          species%wd_rainouteff(:) = missing
          deallocate(temp_real_array)
+      endif
+
+      write(field_path, '(A,A)') trim(species_path), '/__wd_reevap_frac'
+      call safe_yaml_get_real(yaml_root, trim(field_path), temp_real, yaml_rc)
+      if (yaml_rc == 0) then
+         species%wd_reevap_frac = temp_real
+      else
+         species%wd_reevap_frac = 0.5_fp  ! GEOS-Chem/Luo default (Liu et al., 2001)
       endif
 
       write(field_path, '(A,A)') trim(species_path), '/__t_chem_loss'

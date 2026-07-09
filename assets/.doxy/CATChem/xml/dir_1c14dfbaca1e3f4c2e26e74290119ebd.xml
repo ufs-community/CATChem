@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_1c14dfbaca1e3f4c2e26e74290119ebd" kind="dir">
+    <compoundname>src/process/dust</compoundname>
+    <innerdir refid="dir_11b2254edcf6ee5df673de29b129f986">src/process/dust/schemes</innerdir>
+    <innerfile refid="_dust_common___mod_8_f90">DustCommon_Mod.F90</innerfile>
+    <innerfile refid="_dust_process_creator___mod_8_f90">DustProcessCreator_Mod.F90</innerfile>
+    <innerfile refid="_process_dust_interface___mod_8_f90">ProcessDustInterface_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/dust/"/>
+  </compounddef>
+</doxygen>

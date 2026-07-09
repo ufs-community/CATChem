@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structdustcommon__mod_1_1dustconfig" kind="type" language="Fortran" prot="public">
+    <compoundname>dustcommon_mod::dustconfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1aa4ec37a5669c304689dc4f7e492612fc" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) dustcommon_mod::dustconfig::scheme</definition>
+        <argsstring></argsstring>
+        <name>scheme</name>
+        <qualifiedname>dustcommon_mod::dustconfig::scheme</qualifiedname>
+        <initializer>= &apos;fengsha&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="36" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a7ff704c57921e63205cf19616317d185" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical dustcommon_mod::dustconfig::is_active</definition>
+        <argsstring></argsstring>
+        <name>is_active</name>
+        <qualifiedname>dustcommon_mod::dustconfig::is_active</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="37" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a2baf0283eaf5082cb4fbb7248ee0322f" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical dustcommon_mod::dustconfig::diagnostics</definition>
+        <argsstring></argsstring>
+        <name>diagnostics</name>
+        <qualifiedname>dustcommon_mod::dustconfig::diagnostics</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="38" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1af22c4822d6ea808a117526870f6c9172" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer dustcommon_mod::dustconfig::n_diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>n_diagnostic_species</name>
+        <qualifiedname>dustcommon_mod::dustconfig::n_diagnostic_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="41" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a83429fa74bce154dc6351ec239019fb1" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable dustcommon_mod::dustconfig::diagnostic_species</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species</name>
+        <qualifiedname>dustcommon_mod::dustconfig::diagnostic_species</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="42" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad14091dce65ca5ea56cbcbf80f033c5d" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable dustcommon_mod::dustconfig::diagnostic_species_id</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_species_id</name>
+        <qualifiedname>dustcommon_mod::dustconfig::diagnostic_species_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="43" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a252d0e15dac515122a525f637579f236" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) dustcommon_mod::dustconfig::dt_min</definition>
+        <argsstring></argsstring>
+        <name>dt_min</name>
+        <qualifiedname>dustcommon_mod::dustconfig::dt_min</qualifiedname>
+        <initializer>= 1.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="44" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a70e483e6df2810576fab7d836d3eb8fa" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) dustcommon_mod::dustconfig::dt_max</definition>
+        <argsstring></argsstring>
+        <name>dt_max</name>
+        <qualifiedname>dustcommon_mod::dustconfig::dt_max</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="45" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ab3143f741274d08bcbeae87b3a2ec548" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer dustcommon_mod::dustconfig::n_species</definition>
+        <argsstring></argsstring>
+        <name>n_species</name>
+        <qualifiedname>dustcommon_mod::dustconfig::n_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="48" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ac5a7e11a193ea4427878436d33fcaea9" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable</type>
+        <definition>character(len=32), dimension(:), allocatable dustcommon_mod::dustconfig::species_names</definition>
+        <argsstring></argsstring>
+        <name>species_names</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="49" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a6dc676f4ad6b02adf9fc0acd67eccf36" prot="public" static="no" mutable="no">
+        <type>integer, dimension(:), allocatable</type>
+        <definition>integer, dimension(:), allocatable dustcommon_mod::dustconfig::species_indices</definition>
+        <argsstring></argsstring>
+        <name>species_indices</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="50" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad02ab6b5ccc239994292d736c612b06e" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable dustcommon_mod::dustconfig::species_density</definition>
+        <argsstring></argsstring>
+        <name>species_density</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="55" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad5959151e041ad0603e2449cb9a46767" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable dustcommon_mod::dustconfig::species_lower_radius</definition>
+        <argsstring></argsstring>
+        <name>species_lower_radius</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_lower_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="56" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a3d16cf60de3ed533047b35fdf56c4e95" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable dustcommon_mod::dustconfig::species_radius</definition>
+        <argsstring></argsstring>
+        <name>species_radius</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="57" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a2051db5f97466bc8f781e56d48cc88b4" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable dustcommon_mod::dustconfig::species_upper_radius</definition>
+        <argsstring></argsstring>
+        <name>species_upper_radius</name>
+        <qualifiedname>dustcommon_mod::dustconfig::species_upper_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="58" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a7769932eb78ce2fdeff45d37070a4051" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical dustcommon_mod::dustconfig::output_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>output_diagnostics</name>
+        <qualifiedname>dustcommon_mod::dustconfig::output_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="61" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a155acccafc39d16b6599a45189117261" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) dustcommon_mod::dustconfig::diagnostic_frequency</definition>
+        <argsstring></argsstring>
+        <name>diagnostic_frequency</name>
+        <qualifiedname>dustcommon_mod::dustconfig::diagnostic_frequency</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="62" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1a65088b2257c30b96a0d12a9f00041203" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public dustcommon_mod::dustconfig::validate</definition>
+        <argsstring>(this, error_handler)</argsstring>
+        <name>validate</name>
+        <qualifiedname>dustcommon_mod::dustconfig::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Validate dust configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="65" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1aba87ee429005e9f079acfae687151780" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public dustcommon_mod::dustconfig::finalize</definition>
+        <argsstring>(this)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>dustcommon_mod::dustconfig::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Finalize dust configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="66" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1a3e7fe7a4284ef1daecaacb67f348f3cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public dustcommon_mod::dustconfig::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>dustcommon_mod::dustconfig::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print configuration summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="67" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="67" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main configuration type for dust process. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/dust/DustCommon_Mod.F90" line="33" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="33" bodyend="68"/>
+    <listofallmembers>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a155acccafc39d16b6599a45189117261" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostic_frequency</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a83429fa74bce154dc6351ec239019fb1" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostic_species</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1ad14091dce65ca5ea56cbcbf80f033c5d" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostic_species_id</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a2baf0283eaf5082cb4fbb7248ee0322f" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostics</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a70e483e6df2810576fab7d836d3eb8fa" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>dt_max</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a252d0e15dac515122a525f637579f236" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>dt_min</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1aba87ee429005e9f079acfae687151780" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>finalize</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a7ff704c57921e63205cf19616317d185" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>is_active</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1af22c4822d6ea808a117526870f6c9172" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>n_diagnostic_species</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1ab3143f741274d08bcbeae87b3a2ec548" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>n_species</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a7769932eb78ce2fdeff45d37070a4051" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>output_diagnostics</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a3e7fe7a4284ef1daecaacb67f348f3cd" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>print_summary</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1aa4ec37a5669c304689dc4f7e492612fc" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>scheme</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1ad02ab6b5ccc239994292d736c612b06e" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_density</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a6dc676f4ad6b02adf9fc0acd67eccf36" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_indices</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1ad5959151e041ad0603e2449cb9a46767" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_lower_radius</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1ac5a7e11a193ea4427878436d33fcaea9" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_names</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a3d16cf60de3ed533047b35fdf56c4e95" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_radius</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a2051db5f97466bc8f781e56d48cc88b4" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_upper_radius</name></member>
+      <member refid="structdustcommon__mod_1_1dustconfig_1a65088b2257c30b96a0d12a9f00041203" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

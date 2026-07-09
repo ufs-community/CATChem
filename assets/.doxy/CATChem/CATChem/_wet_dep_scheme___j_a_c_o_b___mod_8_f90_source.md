@@ -57,6 +57,7 @@ contains
       species_wd_LiqAndGas, &
       species_wd_convfacI2G, &
       species_wd_rainouteff, &
+      species_wd_reevap_frac, &
       species_radius, &
       species_mw_g, &
       species_conc, &
@@ -87,6 +88,7 @@ contains
       logical, intent(in) :: species_wd_LiqAndGas(:)  ! Species wd_LiqAndGas property
       real(fp), intent(in) :: species_wd_convfacI2G(:)  ! Species wd_convfacI2G property
       real(fp), intent(in) :: species_wd_rainouteff(:,:)  ! Species wd_rainouteff property
+      real(fp), intent(in) :: species_wd_reevap_frac(:)  ! Species wd_reevap_frac property (resuspension fraction)
       real(fp), intent(in) :: species_radius(:)  ! Species radius property
       real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
@@ -116,6 +118,8 @@ contains
       real(fp)     :: qdwn       ! cm3 (h2o) / cm2 (air) / s
       real(fp)     :: press      ! pressure [Pa]
       real(fp)     :: delz       ! thickness of layer [m]
+      real(fp)     :: so4_prod   ! [kg/m2] sulfate produced from scavenged SO2 that re-evaporates as SO4
+      real(fp)     :: h2o2_used  ! [kg/kg] H2O2 consumed oxidizing scavenged SO2 (propagated to the H2O2 tracer)
       real(fp)     :: efficiency(3)  ! efficiency factors for rainout
       real(fp), dimension(:), allocatable :: qq      ! precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
       real(fp), dimension(:), allocatable :: pdwn    ! preciptation rate at top of grid cells [cm3 (h2o) / cm2 (air) / s]
@@ -130,6 +134,7 @@ contains
       real(fp), dimension(:), allocatable :: cldliq  ! liquid water concentration
       real(fp), dimension(:), allocatable :: reevap  ! evaporation rate [cm3 (h2o) / cm2 (air) / s]
       real(fp), dimension(:), allocatable :: delz_cm ! thickness of layer [cm]
+      real(fp), dimension(:), allocatable :: dprecip ! GOCART-style precip formation flux per layer [kg/m2/s] (sulfate resuspension)
       !
       character(len=255)       :: thisLoc
       character(len=512)       :: ErrMsg
@@ -146,7 +151,8 @@ contains
       dt = tstep
 
       allocate(qq(kbot:ktop), pdwn(kbot:ktop), conc(kbot:ktop), dconc(kbot:ktop), dpog(kbot:ktop), c_h2o(kbot:ktop), &
-         cldice(kbot:ktop), cldliq(kbot:ktop), delz_cm(kbot:ktop), so2(kbot:ktop), so4(kbot:ktop), h2o2(kbot:ktop), reevap(kbot:ktop))
+         cldice(kbot:ktop), cldliq(kbot:ktop), delz_cm(kbot:ktop), so2(kbot:ktop), so4(kbot:ktop), h2o2(kbot:ktop), reevap(kbot:ktop), &
+         dprecip(kbot:ktop))
 
       ! find species indices for SO2, SO4, and H2O2
       so2_id = -1
@@ -194,6 +200,9 @@ contains
          ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
          dqls = pfllsan(k) - pfllsan(km1)
          dqis = pfilsan(k) - pfilsan(km1)
+         ! -- GOCART-style precip-formation flux divergence [kg/m2/s] (>0 forming, <0 evaporating)
+         !    used by the sulfate resuspension branch in washout_loss
+         dprecip(k) = dqls + dqis
          ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
          pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
 
@@ -322,9 +331,17 @@ contains
                      species_is_aerosol(species_idx), species_henry_k0(species_idx), species_henry_cr(species_idx), &
                      species_henry_pka(species_idx), params%scale_factor, params%radius_threshold, lossfrac, kin, so2(k), h2o2(k))
 
+                  ! -- sulfate-only below-cloud washout efficiency knob (SO4 column tuning; default 1.0)
+                  if ( species_short_name(species_idx) == 'SO4' .or. species_short_name(species_idx) == 'so4' .or. &
+                     species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
+                     species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
+                     lossfrac = lossfrac * params%so4_washout_eff
+                  end if
+
                   ! -- compute and apply effective loss fraction
                   call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                     delz_cm, conc, dconc, species_short_name(species_idx), so4 )
+                     delz_cm, dprecip, conc, dconc, species_short_name(species_idx), so4, &
+                     species_wd_reevap_frac(species_idx), params%so4_gocart_resusp )
 
                end if
             else
@@ -348,9 +365,17 @@ contains
                   species_is_aerosol(species_idx), species_henry_k0(species_idx), species_henry_cr(species_idx), &
                   species_henry_pka(species_idx), params%scale_factor, params%radius_threshold, lossfrac, kin, so2(k), h2o2(k))
 
+               ! -- sulfate-only below-cloud washout efficiency knob (SO4 column tuning; default 1.0)
+               if ( species_short_name(species_idx) == 'SO4' .or. species_short_name(species_idx) == 'so4' .or. &
+                  species_short_name(species_idx) == 'ASO4J' .or. species_short_name(species_idx) == 'aso4j' .or. &
+                  species_short_name(species_idx) == 'SULF' .or. species_short_name(species_idx) == 'sulf') then
+                  lossfrac = lossfrac * params%so4_washout_eff
+               end if
+
                ! -- compute and apply effective loss fraction
                call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
-                  delz_cm, conc, dconc, species_short_name(species_idx), so4 )
+                  delz_cm, dprecip, conc, dconc, species_short_name(species_idx), so4, &
+                  species_wd_reevap_frac(species_idx), params%so4_gocart_resusp )
 
             end if
          end if
@@ -363,11 +388,6 @@ contains
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp
             else
                species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * airmw / species_mw_g(species_idx) * 1.0e6_fp
-            end if
-
-            !!!!!!!!TODO: do not run wetdep on H2O2 since it is read from climatology files for now
-            if (species_idx == h2o2_id) then
-               species_tendencies(k, species_idx) = species_conc(k, species_idx)
             end if
 
             ! Update diagnostic fields here based on your scheme's requirements
@@ -397,7 +417,50 @@ contains
 
       end do ! End species loop
 
-      deallocate(qq, pdwn, conc, dconc, dpog, delz_cm, c_h2o, cldice, cldliq, so2, so4, h2o2, reevap)
+      ! ------------------------------------------------------------------
+      ! Credit the SO2 -> SO4 conversion from wet scavenging / re-evaporation.
+      ! When scavenged SO2 re-evaporates it is oxidized and returns as SO4
+      ! (washout_loss / complete_reevap accumulate this into the local SO4
+      ! array, which was initialized as the SO4 column and is in [kg/m2]).
+      ! Previously this produced SO4 was discarded; add it back onto the SO4
+      ! species' updated concentration so the sulfur is conserved as sulfate
+      ! (matching GOCART's SU_Wet_Removal, which adds it to the prognostic SO4).
+      ! ------------------------------------------------------------------
+      if (so4_id >= 1) then
+         do k = kbot, ktop
+            ! sulfate produced from SO2 = current local SO4 minus its initial column value
+            so4_prod = so4(k) - species_conc(k, so4_id) * 1.e-09_fp * dpog(k)
+            if (so4_prod > zero) then
+               ! convert the [kg/m2] production back to [ug/kg] and add to SO4
+               species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
+                  + so4_prod / dpog(k) * 1.0e9_fp
+            end if
+         end do
+      end if
+
+      ! ------------------------------------------------------------------
+      ! Propagate the H2O2 consumed by the SO2 wet-scavenging limiter back
+      ! onto the H2O2 tracer. rainout/washout depleted the local H2O2 working
+      ! array (1 mol H2O2 per mol SO2 oxidized); subtract that consumption from
+      ! the H2O2 tendency so the reduced oxidant persists across the model time
+      ! steps that occur between H2O2 climatology recycles. The H2O2 array is in
+      ! [kg/kg]; species_tendencies holds the updated concentration in [ppmv]
+      ! and already includes H2O2's own gas-phase wet removal, so we only need to
+      ! remove the additional limiter consumption here (floored at zero).
+      ! ------------------------------------------------------------------
+      if (h2o2_id >= 1) then
+         do k = kbot, ktop
+            ! H2O2 consumed = initial - final local working value, in [kg/kg]
+            h2o2_used = species_conc(k, h2o2_id) * species_mw_g(h2o2_id) * 1.0e-6_fp / airmw - h2o2(k)
+            if (h2o2_used > zero) then
+               ! convert the consumed [kg/kg] back to [ppmv] and remove from H2O2
+               species_tendencies(k, h2o2_id) = max( 0.0_fp, species_tendencies(k, h2o2_id) &
+                  - h2o2_used * airmw / species_mw_g(h2o2_id) * 1.0e6_fp )
+            end if
+         end do
+      end if
+
+      deallocate(qq, pdwn, conc, dconc, dpog, delz_cm, c_h2o, cldice, cldliq, so2, so4, h2o2, reevap, dprecip)
 
    end subroutine compute_jacob
 
@@ -450,7 +513,7 @@ contains
       character(len = 20),  intent(in)  :: spc
       real(fp),   intent(out) :: lossfrac
       real(fp),   intent(in) :: SO2
-      real(fp),   intent(in) :: H2O2
+      real(fp),   intent(inout) :: H2O2
 
       ! Local Variables
       !----------------
@@ -495,11 +558,18 @@ contains
                lossfrac     = so2loss * lossfrac / so2s
                lossfrac     = max( lossfrac, 0e+0_fp )
 
-               ! Update saved H2O2 concentration
-               !TODO:: comment out the depletion since we may not have afterchem H2O2 like in GOES-Chem
-               !       Otherwise, the depletion will do twice with the later one in washout_loss subroutine
-               !H2O2s = H2O2s - ( SO2s * lossfrac )
-               !H2O2s = MAX( H2O2s, TINY_ )
+               ! Update saved H2O2 concentration.
+               ! Deplete the H2O2 consumed in oxidizing the scavenged SO2 to SO4
+               ! (1 mol H2O2 per mol SO2; Chin et al. 1996). H2O2 is intent(inout):
+               ! the depleted value is written back (mol/mol -> kg/kg) so a
+               ! subsequent washout at this same level sees the reduced oxidant.
+               ! This depletes only the LOCAL wetdep working copy used by the SO2
+               ! limiter; it is NOT fed back to the H2O2 tracer (H2O2 is a recycled
+               ! climatology here). REQUIRES wetdep to run AFTER the sulfate
+               ! chemistry (so4chem) so this H2O2 is the afterchem remainder.
+               h2o2s = h2o2s - ( so2s * lossfrac )
+               h2o2s = max( h2o2s, tiny_ )
+               h2o2  = h2o2s * ( 34.02_fp / airmw )   ! mol/mol -> kg/kg writeback
 
             else
 
@@ -508,9 +578,10 @@ contains
 
             endif
 
-            ! Update saved SO2 concentration
-            !TODO:: comment out the depletion since we may not have afterchem SO2 like in GOES-Chem
-            !       Otherwise, the depletion will do twice with the later one in washout_loss subroutine
+            ! SO2 itself is depleted by the limiter-adjusted loss fraction in the
+            ! rainout_loss subroutine (conc(k) = conc(k) - lossfrac*conc(k), where
+            ! conc is the SO2 column for this species iteration). It must NOT be
+            ! depleted again here, or SO2 would be removed twice.
             !SO2s     = SO2s * ( 1.0_fp - lossfrac )
             !SO2s     = MAX( SO2s, TINY_ )
          end if
@@ -569,7 +640,7 @@ contains
       real(fp),  intent(in)  :: radius_thr
       real(fp),  intent(out) :: washfrac
       logical,   intent(out)  :: kin
-      real(fp),  intent(in) :: H2O2
+      real(fp),  intent(inout) :: H2O2
       real(fp),  intent(in) :: SO2
       ! -- local variables
       real(fp)               :: SO2LOSS
@@ -621,20 +692,23 @@ contains
                washfrac = so2loss * washfrac / so2s
                washfrac = max( washfrac, 0e+0_fp )
 
-               ! Deplete H2O2s the same as SO2s
-               !TODO:: comment out the depletion since we may not have afterchem H2O2 like in GOES-Chem
-               !       Otherwise, the depletion will do twice with the later one in washout_loss subroutine
-               !H2O2s = H2O2s - ( SO2s * WASHFRAC )
-               !H2O2s = MAX( H2O2s, TINY_ )
+               ! Deplete the H2O2 consumed in oxidizing the scavenged SO2 to SO4
+               ! (1 mol H2O2 per mol SO2; Chin et al. 1996). H2O2 is intent(inout)
+               ! and the depleted value is written back (mol/mol -> kg/kg). Local
+               ! wetdep working copy only (H2O2 is recycled climatology, not fed
+               ! back to the tracer). REQUIRES wetdep AFTER so4chem (afterchem H2O2).
+               h2o2s = h2o2s - ( so2s * washfrac )
+               h2o2s = max( h2o2s, tiny_ )
+               h2o2  = h2o2s * ( 34.02_fp / airmw )   ! mol/mol -> kg/kg writeback
 
             ELSE
                washfrac = 0e+0_fp
 
             ENDIF
 
-            ! Update saved SO2 concentration
-            !TODO:: comment out the depletion since we may not have afterchem SO2 like in GOES-Chem
-            !       Otherwise, the depletion will do twice with the later one in washout_loss subroutine
+            ! SO2 itself is depleted by the limiter-adjusted WASHFRAC in the
+            ! washout_loss subroutine (SO2 branch: conc(k) = conc(k)*(1-lossfrac)).
+            ! Do NOT deplete it again here or SO2 would be removed twice.
             !SO2s = SO2s * ( 1e+0_fp - WASHFRAC )
             !SO2s = MAX( SO2s, TINY_ )
          END IF
@@ -853,7 +927,7 @@ contains
 
    end subroutine rainout_loss
 
-   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, conc, dconc, spc, SO4 )
+   subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, dprecip, conc, dconc, spc, SO4, reevap_resusp_frac, so4_gocart_resusp )
 
       implicit none
 
@@ -867,10 +941,13 @@ contains
       !real(fp), dimension(:), intent(in)    :: qq      !< precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
       real(fp)                 :: reevap
       real(fp),  dimension(:), intent(in)    :: delz_cm
+      real(fp),  dimension(:), intent(in)    :: dprecip
       real(fp),  dimension(:), intent(inout) :: conc
       real(fp),  dimension(:), intent(inout) :: dconc
       real(fp),  dimension(:), intent(inout) :: SO4
       character(len = 20),  intent(in) :: spc
+      real(fp),  intent(in)    :: reevap_resusp_frac
+      logical,   intent(in)    :: so4_gocart_resusp
 
       ! -- local variables
       integer    :: km1
@@ -901,20 +978,40 @@ contains
 
             ! Define ALPHA, the fraction of the raindrops that
             ! re-evaporate when falling from (I,J,L+1) to (I,J,L)
-            if ( pdwn(km1) - zero > zero  ) then !avoid divide by zero
-               !TODO: is qq(k) right in here? We have our own calculations now
-               !alpha = abs( qq(k) ) * delz_cm(k) / pdwn(km1)
-               alpha = abs( reevap ) * delz_cm(k) / pdwn(km1)
+            if ( so4_gocart_resusp .and. &
+               ( spc == 'SO4' .or. spc == 'so4' .or. spc == 'ASO4J' .or. spc == 'aso4j' .or. &
+               spc == 'SO2' .or. spc == 'so2' ) ) then
+               ! --- Sulfate only: replicate GOCART SU_Wet_Removal resuspension ---
+               ! GOCART resuspends a fraction A = |dprecip(k)/dprecip(km1)| of the falling
+               ! scavenged mass, applied only at the transition where precipitation forms in
+               ! the layer above (dprecip(km1)>0) and evaporates in this layer (dprecip(k)<0).
+               ! The Abel-Boutle reevap/pdwn estimate used for other aerosols yields a far
+               ! smaller alpha (~1-3% vs GOCART ~36%) and made sulfate wet removal ~1.5-4x
+               ! too strong relative to GOCART. Other aerosol species are unchanged.
+               if ( dprecip(k) < zero .and. dprecip(km1) > zero ) then
+                  alpha = min( one, abs( dprecip(k) / dprecip(km1) ) )
+               else
+                  alpha = zero
+               end if
             else
-               alpha = one
+               if ( pdwn(km1) - zero > zero  ) then !avoid divide by zero
+                  !TODO: is qq(k) right in here? We have our own calculations now
+                  !alpha = abs( qq(k) ) * delz_cm(k) / pdwn(km1)
+                  alpha = abs( reevap ) * delz_cm(k) / pdwn(km1)
+               else
+                  alpha = one
+               end if
+               ! Restrict ALPHA to be less than 1
+               alpha = min( one, alpha )
             end if
-            ! Restrict ALPHA to be less than 1
-            alpha = min( one, alpha )
-            ! Assume 50% of the re-evaporated water rains out to aerosols
+            ! Fraction of the re-evaporated water that resuspends aerosol mass.
+            ! GEOS-Chem/Luo use an empirical 0.5 (Liu et al., 2001); GOCART
+            ! resuspends the full re-evaporated fraction (=1.0). The value is
+            ! per-species (species_wd_reevap_frac), configurable via YAML.
             ! GAINED is the rained out aerosol coming down from
             ! grid box (I,J,L+1) that will evaporate and re-enter
             ! the atmosphere in the gas phase in grid box (I,J,L).
-            gain  = 0.5_fp * alpha * dconc(km1)
+            gain  = reevap_resusp_frac * alpha * dconc(km1)
             wetloss  = conc(k) * lossfrac - gain
             ! SO2 in sulfate chemistry is wet-scavenged on the
             ! raindrop and converted to SO4 by aqeuous chem.

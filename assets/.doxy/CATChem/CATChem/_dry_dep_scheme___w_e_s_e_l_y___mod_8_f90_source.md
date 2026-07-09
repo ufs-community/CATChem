@@ -1171,7 +1171,11 @@ contains
             dummy2 = (1.e+0_fp - 15.e+0_fp*z0obk)**0.5e+0_fp
             dummy3 = abs((dummy1 - 1.e+0_fp)/(dummy1 + 1.e+0_fp))
             dummy4 = abs((dummy2 - 1.e+0_fp)/(dummy2 + 1.e+0_fp))
-            ra = 1.e+0_fp * (1.e+0_fp/ckustr) * log(dummy3/dummy4)
+            IF (dummy4 > small) THEN
+               ra = 1.e+0_fp * (1.e+0_fp/ckustr) * log(dummy3/dummy4)
+            ELSE
+               ra = 1.e+4_fp
+            END IF
 
          ELSEIF((corr1.GE.0.0e+0_fp).AND.(corr1.LE.1.0e+0_fp)) THEN
             !coef_a=1.e+0_fp

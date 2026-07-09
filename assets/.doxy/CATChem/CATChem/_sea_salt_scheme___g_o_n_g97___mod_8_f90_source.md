@@ -31,8 +31,11 @@ contains
       num_layers, &
       num_species, &
       params, &
+      PI, &
       frocean, &
       frseaice, &
+      lat, &
+      lon, &
       sst, &
       u10m, &
       v10m, &
@@ -53,8 +56,11 @@ contains
       integer, intent(in) :: num_layers
       integer, intent(in) :: num_species
       type(SeaSaltSchemeGONG97Config), intent(in) :: params
+      real(fp), intent(in) :: PI  ! Required constant from Constants module
       real(fp), intent(in) :: frocean  ! Surface field - scalar
       real(fp), intent(in) :: frseaice  ! Surface field - scalar
+      real(fp), intent(in) :: lat  ! Surface field - scalar
+      real(fp), intent(in) :: lon  ! Surface field - scalar
       real(fp), intent(in) :: sst  ! Surface field - scalar
       real(fp), intent(in) :: u10m  ! Surface field - scalar
       real(fp), intent(in) :: v10m  ! Surface field - scalar
@@ -77,7 +83,7 @@ contains
       integer :: n, ir
       real(fp) :: w10m
       integer, parameter :: nr = 10
-      real(fp), parameter    :: r80fac = 1.65_fp       
+      real(fp), parameter    :: r80fac = 1.65_fp           
       real(fp) :: DryRadius
       real(fp) :: DeltaDryRadius
       real(fp) :: rwet, drwet
@@ -93,6 +99,7 @@ contains
       real(fp) :: wpow
       real(fp) :: MassScaleFac
       real(fp) :: gweibull
+      real(fp) :: deep_lakes_mask, dummylon
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale
@@ -107,7 +114,14 @@ contains
       gweibull = 1.0_fp
       fsstemis = 1.0_fp
       fhoppel = 1.0_fp
+      deep_lakes_mask = 1.0_fp
+      dummylon = lon
 
+      !initialize diagnostics if present
+      if (present(seasalt_mass_emission_total)) seasalt_mass_emission_total = 0.0_fp
+      if (present(seasalt_number_emission_total)) seasalt_number_emission_total = 0.0_fp
+      if (present(seasalt_mass_emission_per_bin)) seasalt_mass_emission_per_bin = 0.0_fp
+      if (present(seasalt_number_emission_per_bin)) seasalt_number_emission_per_bin = 0.0_fp
 
       do_seasalt = .true. ! Default value for all cases
 
@@ -126,31 +140,42 @@ contains
          exppow   = 1.19_fp
          wpow     = 3.41_fp
 
-         ! Main computation loop - CUSTOMIZE THIS SECTION FOR YOUR SCHEME
+         ! get 10m mean wind speed
+         !------------------------
+         w10m = sqrt(u10m ** 2 + v10m ** 2)
+
+         ! Weibull Distribution following Fan and Toon 2011 if WeibullFlag
+         !----------------------------------------------------------------------------
+         call weibulldistribution(gweibull, params%weibull_flag, w10m, rc)
+         if (rc /= 0) then
+            rc = -1
+            print *, 'Error in weibullDistribution' !TODO: this may not allowed in a pure function
+            return
+         endif
+
+         ! Get Jeagle SST Correction
+         call jeaglesstcorrection(fsstemis, sst,1, rc)
+         if (rc /= 0) then
+            rc = -1
+            print *, 'Error in jeagleSSTcorrection'
+            return
+         endif
+
+         ! Deep Lakes Mask for Great Lakes lon = [93W,75W], lat = [40.5N, 50N]
+         if( dummylon < 0.0 ) dummylon = dummylon + 360.0_fp
+         if (lat >= 40.5_fp .and. lat <= 50.0_fp .and. dummylon >= 267.0_fp .and. dummylon <= 285.0_fp) then
+            deep_lakes_mask = 0.0_fp
+         endif
+         ! The Caspian Sea: lon = [45.0, 56], lat = 35, 48]
+         if (lat >= 35.0_fp .and. lat <= 48.0_fp .and. dummylon >= 45.0_fp .and. dummylon <= 56.0_fp) then
+            deep_lakes_mask = 0.0_fp
+         endif
+
+         !update scale factor with all corrections
+         scale = min(max(0.0_fp, scale * deep_lakes_mask), 1.0_fp) * gweibull * fsstemis * params%scale_factor
+
+         ! Main computation loop
          do k = 1, num_layers
-
-            ! get 10m mean wind speed
-            !------------------------
-            w10m = sqrt(u10m ** 2 + v10m ** 2)
-
-            ! Weibull Distribution following Fan and Toon 2011 if WeibullFlag
-            !----------------------------------------------------------------------------
-            call weibulldistribution(gweibull, params%weibull_flag, w10m, rc)
-            if (rc /= 0) then
-               rc = -1
-               print *, 'Error in weibullDistribution' !TODO: this may not allowed in a pure function
-               return
-            endif
-
-            ! Get Jeagle SST Correction
-            call jeaglesstcorrection(fsstemis, sst,1, rc)
-            if (rc /= 0) then
-               rc = -1
-               print *, 'Error in jeagleSSTcorrection'
-               return
-            endif
-
-            scale = scale * gweibull * fsstemis * params%scale_factor
 
             ! Apply to each species
             do n = 1, num_species
@@ -336,7 +361,7 @@ contains
       if (weibullflag) then
          gweibull = 0.0_fp
 
-         if (wm > 0.012_fp) then
+         if (wm > 0.01_fp) then
             k = 0.94_fp * sqrt(wm)
             c = wm / gamma(1.0_fp + 1.0_fp / k)
             x = (wt / c) ** k

@@ -293,7 +293,9 @@ contains
        case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
        case default
-         rc = cc_failure
+         call cc_error('Unknown so4chem scheme "' // &
+            trim(this%process_config%so4chem_config%scheme), rc, &
+            thisloc='run_active_scheme_column (in module ProcessSO4chemInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column

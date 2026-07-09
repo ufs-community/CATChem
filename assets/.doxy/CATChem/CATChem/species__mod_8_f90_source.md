@@ -66,6 +66,7 @@ module species_mod
       logical       :: wd_LiqAndGas
       real(kind=fp) :: wd_convfaci2g        
       real(kind=fp) :: wd_rainouteff(3)     
+      real(kind=fp) :: wd_reevap_frac       
 
       !used for settling
       character(len=30) :: mie_name
@@ -188,6 +189,7 @@ contains
       this%wd_LiqAndGas = .false.
       this%wd_convfacI2G = 0.0_fp
       this%wd_rainouteff(:) = 0.0_fp
+      this%wd_reevap_frac = 0.5_fp
 
       !carbon chem loss in days
       this%t_chem_loss = -1.0_fp
@@ -496,6 +498,7 @@ contains
       this%wd_LiqAndGas = source%wd_LiqAndGas
       this%wd_convfacI2G = source%wd_convfacI2G
       this%wd_rainouteff = source%wd_rainouteff
+      this%wd_reevap_frac = source%wd_reevap_frac
 
       !gocart carbon loss
       this%t_chem_loss = source%t_chem_loss

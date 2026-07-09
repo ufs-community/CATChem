@@ -48,15 +48,17 @@ MODULE extemisdata_mod
       INTEGER,  ALLOCATABLE         :: ip(:)
       INTEGER,  ALLOCATABLE         :: jp(:)
       INTEGER,  ALLOCATABLE         :: ijmap(:)
+      INTEGER                       :: npts = 0
+      REAL(fp), ALLOCATABLE         :: pemis(:)
+      REAL(fp), ALLOCATABLE         :: pbot(:)
+      REAL(fp), ALLOCATABLE         :: ptop(:)
       INTEGER                       :: n_times = 0
       INTEGER                       :: current_time_idx = 1
       LOGICAL                       :: time_interpolate = .true. 
       LOGICAL                       :: diagnostic = .false. 
       REAL(fp), ALLOCATABLE         :: emission_data(:,:,:,:)
-      ! REAL(fp), ALLOCATABLE         :: longitude(:,:)         !< Longitude coordinates [degrees]
-      ! REAL(fp), ALLOCATABLE         :: latitude(:,:)          !< Latitude coordinates [degrees]
-      ! REAL(fp), ALLOCATABLE         :: vertical(:,:)          !< Vertical coordinates (if applicable)
-      ! REAL(fp), ALLOCATABLE         :: time_coords(:,:)       !< Time coordinates
+      REAL(fp), ALLOCATABLE         :: interp_data_t1(:,:,:,:)
+      REAL(fp), ALLOCATABLE         :: interp_data_t2(:,:,:,:)
       LOGICAL                       :: is_loaded = .false. 
       LOGICAL                       :: is_valid = .false.  
       CHARACTER(LEN=32)             :: interpolation_method = 'bilinear'
@@ -86,12 +88,28 @@ MODULE extemisdata_mod
       CHARACTER(LEN=128)                        :: frequency = ''
       CHARACTER(LEN=128)                        :: latname = ''
       CHARACTER(LEN=128)                        :: lonname = ''
+      CHARACTER(LEN=32)                         :: regrid_method = 'none'
+      CHARACTER(LEN=32)                         :: time_interpolation = 'none'
+      CHARACTER(LEN=32)                         :: vertical_dist = 'none'
+      LOGICAL                                   :: reverse_vertical = .false. 
       CHARACTER(LEN=128)                        :: stkdmname = ''
       CHARACTER(LEN=128)                        :: stkhtname = ''
       CHARACTER(LEN=128)                        :: stktkname = ''
       CHARACTER(LEN=128)                        :: stkvename = ''
       CHARACTER(LEN=128)                        :: plumerise = ''
-
+      ! Time coordinate cache — populated on first file open, used for smart time-index matching
+      INTEGER                                   :: n_times = 0
+      INTEGER, ALLOCATABLE                      :: tc_dates(:)
+      INTEGER, ALLOCATABLE                      :: tc_secs(:)
+      CHARACTER(LEN=256)                        :: last_resolved_file = ''
+      ! Calendar-period tracking — drives file/slice updates without alarm drift
+      INTEGER                                   :: last_period_key = -1
+      ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
+      LOGICAL                                   :: use_oc_fbb = .false. 
+      ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
+      LOGICAL                                   :: diurnal_bb = .false. 
+      CHARACTER(LEN=16)                          :: apply_method = 'add'
+      LOGICAL                                   :: needs_time_blend = .false. 
 
    CONTAINS
       PROCEDURE :: init => extemicat_init
@@ -193,6 +211,10 @@ CONTAINS
       if (allocated(this%ip)) deallocate(this%ip)
       if (allocated(this%jp)) deallocate(this%jp)
       if (allocated(this%ijmap)) deallocate(this%ijmap)
+      if (allocated(this%pemis)) deallocate(this%pemis)
+      if (allocated(this%pbot)) deallocate(this%pbot)
+      if (allocated(this%ptop)) deallocate(this%ptop)
+      this%npts = 0
 
       this%field_name = ''
       this%long_name = ''
@@ -366,6 +388,9 @@ CONTAINS
          deallocate(this%fields)
       endif
 
+      if (allocated(this%tc_dates)) deallocate(this%tc_dates)
+      if (allocated(this%tc_secs))  deallocate(this%tc_secs)
+
       this%category_name = ''
       this%description = ''
       this%n_fields = 0
@@ -384,6 +409,9 @@ CONTAINS
       this%stktkname = ''
       this%stkvename = ''
       this%plumerise = ''
+      this%n_times = 0
+      this%last_resolved_file = ''
+      this%last_period_key = -1
 
    end subroutine extemicat_cleanup
 

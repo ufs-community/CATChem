@@ -26,6 +26,10 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
 * **namespace** [**drydepscheme\_gocart\_mod**](namespacedrydepscheme__gocart__mod.md)     
 * **namespace** [**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md)     
 * **namespace** [**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md)     
+* **namespace** [**dustcommon\_mod**](namespacedustcommon__mod.md)     
+* **namespace** [**dustprocesscreator\_mod**](namespacedustprocesscreator__mod.md)     
+* **namespace** [**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md)     
+* **namespace** [**dustscheme\_ginoux\_mod**](namespacedustscheme__ginoux__mod.md)     
 * **namespace** [**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md)     
 * **namespace** [**error\_mod**](namespaceerror__mod.md)     
 * **namespace** [**extemisdata\_mod**](namespaceextemisdata__mod.md)     
@@ -41,6 +45,7 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
     * **interface** [**rae**](interfaceprecision__mod_1_1rae.md)     
 * **namespace** [**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md) _Process for computing chemical production and loss of carbon species._     
 * **namespace** [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md) _Process for computing dry deposition of gas and aerosol species._     
+* **namespace** [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md) _Process for computing windblown dust emissions._     
 * **namespace** [**processfactory\_mod**](namespaceprocessfactory__mod.md)     
 * **namespace** [**processinterface\_mod**](namespaceprocessinterface__mod.md)     
     * **interface** [**init\_interface**](interfaceprocessinterface__mod_1_1init__interface.md) _Initialize the process with given container._     

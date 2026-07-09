@@ -60,6 +60,13 @@ Here is a list of all files with brief descriptions:
                 * **file** [**DryDepScheme\_GOCART\_Mod.F90**](_dry_dep_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART-2G aerosol dry deposition scheme._     
                 * **file** [**DryDepScheme\_WESELY\_Mod.F90**](_dry_dep_scheme___w_e_s_e_l_y___mod_8_f90.md) _Wesely 1989 gas dry deposition scheme._     
                 * **file** [**DryDepScheme\_ZHANG\_Mod.F90**](_dry_dep_scheme___z_h_a_n_g___mod_8_f90.md) _Zhang et al._     
+        * **dir** [**dust**](dir_1c14dfbaca1e3f4c2e26e74290119ebd.md)     
+            * **file** [**DustCommon\_Mod.F90**](_dust_common___mod_8_f90.md) _Common types and utilities for dust process._     
+            * **file** [**DustProcessCreator\_Mod.F90**](_dust_process_creator___mod_8_f90.md) _Factory for creating dust process instances._     
+            * **file** [**ProcessDustInterface\_Mod.F90**](_process_dust_interface___mod_8_f90.md)     
+            * **dir** [**schemes**](dir_11b2254edcf6ee5df673de29b129f986.md)     
+                * **file** [**DustScheme\_FENGSHA\_Mod.F90**](_dust_scheme___f_e_n_g_s_h_a___mod_8_f90.md) _Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS._     
+                * **file** [**DustScheme\_GINOUX\_Mod.F90**](_dust_scheme___g_i_n_o_u_x___mod_8_f90.md) _Ginoux dust emission scheme._     
         * **dir** [**seasalt**](dir_3e6fd2e121e43ca7d4114b6c0b4e05b6.md)     
             * **file** [**ProcessSeaSaltInterface\_Mod.F90**](_process_sea_salt_interface___mod_8_f90.md)     
             * **file** [**SeaSaltCommon\_Mod.F90**](_sea_salt_common___mod_8_f90.md) _Common types and utilities for seasalt process._     

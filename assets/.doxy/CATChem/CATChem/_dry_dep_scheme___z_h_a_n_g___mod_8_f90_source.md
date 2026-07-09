@@ -56,6 +56,7 @@ module drydepscheme_zhang_mod
       3, 6,   6,  4,  4,  2,  6,  2,  4,  9,  4,  4,  4,  5, 5,   5,  2,  5, 9,  5,   5,  2,  8,  8,  5, &
       5, 7,   2,  4,  2,  2,  2,  5,  2,  2,  3,  5,  5,  9, 9,   9,  9,  8, 8,  8,   9,  11/
    real(fp), parameter :: TWO_THIRDS  = 2.0_fp / 3.0_fp
+   real(fp), parameter :: SMALL = 1.0e-10_fp 
 
    !=======================================================================
    !   LUC       1,    2,    3,    4,    5,    6,    7,    8,
@@ -852,7 +853,11 @@ contains
          rs   = 1.e+0_fp / (ustar**2.e+0_fp/ (w10*von_karman) * &
             (eb + eim ) + vts)
       ELSE
-         rs   = 1.e0_fp / (e0 * ustar * (eb + eim + ein) * r1 )
+         IF ((eb + eim + ein) * r1 > small) THEN !avoid RS = infinity when the collection efficiency is very small under very low TEMP and AA < 0 (Wei Li)
+            rs = 1.e0_fp / (e0 * ustar * (eb + eim + ein) * r1 )
+         ELSE
+            rs = 1.0e+10_fp !assign a very large value to RS
+         ENDIF
       ENDIF
 
    END FUNCTION aero_sfcrsii
@@ -1419,7 +1424,11 @@ contains
             dummy2 = (1.e+0_fp - 15.e+0_fp*z0obk)**0.5e+0_fp
             dummy3 = abs((dummy1 - 1.e+0_fp)/(dummy1 + 1.e+0_fp))
             dummy4 = abs((dummy2 - 1.e+0_fp)/(dummy2 + 1.e+0_fp))
-            ra = 1.e+0_fp * (1.e+0_fp/ckustr) * log(dummy3/dummy4)
+            IF (dummy4 > small) THEN
+               ra = 1.e+0_fp * (1.e+0_fp/ckustr) * log(dummy3/dummy4)
+            ELSE
+               ra = 1.e+4_fp
+            END IF
 
          ELSEIF((corr1.GE.0.0e+0_fp).AND.(corr1.LE.1.0e+0_fp)) THEN
             !coef_a=1.e+0_fp

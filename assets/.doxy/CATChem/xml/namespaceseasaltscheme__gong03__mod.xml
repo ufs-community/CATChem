@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="36" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="36" bodyend="36"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="35" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="35" bodyend="35"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceseasaltscheme__gong03__mod_1a218abb8d830e8a26416c76fd120ef34e" prot="private" static="no" mutable="no">
         <type>real(fp), parameter</type>
@@ -31,14 +31,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="37" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="37" bodyend="37"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="36" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="36" bodyend="36"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespaceseasaltscheme__gong03__mod_1a2d4c3cab7dcbda8e525dab52f9b3d741" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespaceseasaltscheme__gong03__mod_1af2cd356fd801d80e7962cd08cd89567d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public seasaltscheme_gong03_mod::compute_gong03</definition>
-        <argsstring>(num_layers, num_species, params, frocean, frseaice, sst, u10m, v10m, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
+        <argsstring>(num_layers, num_species, params, pi, frocean, frseaice, lat, lon, sst, u10m, v10m, species_density, species_radius, species_lower_radius, species_upper_radius, species_conc, species_tendencies, seasalt_mass_emission_total, seasalt_number_emission_total, seasalt_mass_emission_per_bin, seasalt_number_emission_per_bin, diagnostic_species_id)</argsstring>
         <name>compute_gong03</name>
         <qualifiedname>seasaltscheme_gong03_mod::compute_gong03</qualifiedname>
         <param>
@@ -55,11 +55,23 @@
         </param>
         <param>
           <type>real(fp), intent(in)</type>
+          <defname>pi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
           <defname>frocean</defname>
         </param>
         <param>
           <type>real(fp), intent(in)</type>
           <defname>frseaice</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lat</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>lon</defname>
         </param>
         <param>
           <type>real(fp), intent(in)</type>
@@ -148,6 +160,14 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">PI</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">frocean</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -160,6 +180,22 @@
 </parameternamelist>
 <parameterdescription>
 <para>FRSEAICE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LAT field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lon</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LON field [appropriate units] </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
@@ -279,7 +315,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="66" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="87" bodyend="269"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" line="68" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90" bodystart="92" bodyend="297"/>
       </memberdef>
       <member refid="group__catchem__seasalt__process_1ga47b81e2f8cc2a605f8beb8c6368f66dd" kind="function"><name>jeaglesstcorrection</name></member>
       <member refid="group__catchem__seasalt__process_1ga55b0406d4268801b93ab5661d70c9678" kind="function"><name>seasaltemissiongong</name></member>

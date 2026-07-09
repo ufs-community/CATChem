@@ -291,7 +291,9 @@ contains
        case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
        case default
-         rc = cc_failure
+         call cc_error('Unknown carbchem scheme "' // &
+            trim(this%process_config%carbchem_config%scheme), rc, &
+            thisloc='run_active_scheme_column (in module ProcessCarbChemInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column

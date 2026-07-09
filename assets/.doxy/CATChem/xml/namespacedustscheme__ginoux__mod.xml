@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedustscheme__ginoux__mod" kind="namespace" language="Fortran">
+    <compoundname>dustscheme_ginoux_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacedustscheme__ginoux__mod_1aa2ec63e16937e08c7af87fca65331478" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter dustscheme_ginoux_mod::ssm_thresh</definition>
+        <argsstring></argsstring>
+        <name>ssm_thresh</name>
+        <qualifiedname>dustscheme_ginoux_mod::ssm_thresh</qualifiedname>
+        <initializer>= 1.0E-02_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" line="35" column="1" bodyfile="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedustscheme__ginoux__mod_1aeb4fa577d0e88a0f9c31255c1e30cc4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine, public</type>
+        <definition>pure subroutine, public dustscheme_ginoux_mod::compute_ginoux</definition>
+        <argsstring>(num_layers, num_species, params, g0, airden, frlake, frsno, gwettop, lwi, ssm, tskin, u10m, v10m, species_density, species_radius, species_conc, species_tendencies, dust_emission_total, dust_emission_per_bin, utar_threshold_per_bin, diagnostic_species_id)</argsstring>
+        <name>compute_ginoux</name>
+        <qualifiedname>dustscheme_ginoux_mod::compute_ginoux</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_layers</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>num_species</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref>), intent(in)</type>
+          <defname>params</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>g0</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers), intent(in)</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frlake</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>frsno</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>gwettop</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>lwi</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ssm</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>tskin</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>u10m</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>v10m</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
+          <defname>species_conc</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(num_layers, num_species), intent(inout)</type>
+          <defname>species_tendencies</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(inout), optional</type>
+          <defname>dust_emission_total</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>dust_emission_per_bin</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(inout), optional</type>
+          <defname>utar_threshold_per_bin</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in), optional</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <briefdescription>
+<para>Pure science computation for ginoux scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is a pure computational kernel implementing Ginoux dust emission scheme. NO error checking, validation, or infrastructure concerns. Host model must ensure all inputs are valid before calling.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">num_layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of vertical layers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">num_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of chemical species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scheme parameters (pre-validated by host) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">g0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Required constant from Constants module </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">airden</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>AIRDEN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frlake</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRLAKE field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frsno</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FRSNO field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gwettop</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>GWETTOP field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lwi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>LWI field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SSM field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tskin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>TSKIN field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">u10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>U10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">v10m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>V10M field [appropriate units] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species density property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species radius property </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_conc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species concentrations [ppm or ug/kg] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">species_tendencies</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species tendency terms [mol/mol/s] (num_layers, num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">dust_emission_total</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total dust emissions for all bins [kg/m2/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">dust_emission_per_bin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dust emission flux per bin [kg/m2/s] (num_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">utar_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Threshold friction velocity to have dust emission [m/s] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">diagnostic_species_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Indices mapping diagnostic species to species array (optional, for per-species diagnostics) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" line="66" column="1" bodyfile="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" bodystart="89" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacedustscheme__ginoux__mod_1ab03e8ccc944b60ea8c6d48dd3183222c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine</type>
+        <definition>pure subroutine dustscheme_ginoux_mod::mb97_threshold_velocity</definition>
+        <argsstring>(soil_density, air_density, radius, g0, ustar_threshold)</argsstring>
+        <name>mb97_threshold_velocity</name>
+        <qualifiedname>dustscheme_ginoux_mod::mb97_threshold_velocity</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>soil_density</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>air_density</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>radius</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>g0</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>ustar_threshold</defname>
+        </param>
+        <briefdescription>
+<para>Computes the Threshold Friction Velocity from MB97. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:<orderedlist>
+<listitem><para>Design of a soil-derived dust emission scheme, J. Geophys. Res.-Atmos., 100, 16415–16430, <ulink url="https://doi.org/10.1029/95JD00690">https://doi.org/10.1029/95JD00690</ulink>, 1995 | TODO fix with correct reference</para>
+</listitem></orderedlist>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>soil_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>soil density </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>air_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air density </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>particle radius </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ustar_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>threshold friction velocity</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>particle radius </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">soil_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>soil density </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">air_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>air density </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">g0</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>gravitational acceleration </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">ustar_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>threshold friction velocity </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" line="244" column="1" bodyfile="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" bodystart="245" bodyend="267"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/dust/schemes/DustScheme_GINOUX_Mod.F90" line="23" column="1"/>
+  </compounddef>
+</doxygen>

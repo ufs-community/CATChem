@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_11b2254edcf6ee5df673de29b129f986" kind="dir">
+    <compoundname>src/process/dust/schemes</compoundname>
+    <innerfile refid="_dust_scheme___f_e_n_g_s_h_a___mod_8_f90">DustScheme_FENGSHA_Mod.F90</innerfile>
+    <innerfile refid="_dust_scheme___g_i_n_o_u_x___mod_8_f90">DustScheme_GINOUX_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/dust/schemes/"/>
+  </compounddef>
+</doxygen>

@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**drydepschemegocartconfig**](namespacedrydepcommon__mod.md#none-drydepschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden, real(fp), intent(in) frlake, real(fp), intent(in) gwettop, real(fp), intent(in) hflux, integer, intent(in) lwi, real(fp), intent(in) pblh, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, real(fp), intent(in) u10m, real(fp), intent(in) ustar, real(fp), intent(in) v10m, real(fp), dimension(num\_layers+1), intent(in) z, real(fp), intent(in) z0h, real(fp), dimension(num\_species), intent(in) species\_density, real(fp), dimension(num\_species), intent(in) species\_radius, logical, dimension(num\_species), intent(in) species\_is\_seasalt, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, logical, dimension(num\_species), intent(in) is\_gas, real(fp), dimension(:), intent(inout), optional drydep\_con\_per\_species, real(fp), dimension(:), intent(inout), optional drydep\_velocity\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for gocart scheme._  |
+|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**drydepschemegocartconfig**](namespacedrydepcommon__mod.md#none-drydepschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden, real(fp), intent(in) frlake, real(fp), intent(in) gwettop, real(fp), intent(in) hflux, integer, intent(in) lwi, real(fp), intent(in) pblh, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, real(fp), intent(in) u10m, real(fp), intent(in) ustar, real(fp), intent(in) v10m, real(fp), dimension(num\_layers+1), intent(in) z, real(fp), intent(in) z0h, real(fp), dimension(num\_species), intent(in) species\_density, real(fp), dimension(num\_species), intent(in) species\_radius, logical, dimension(num\_species), intent(in) species\_is\_dust, logical, dimension(num\_species), intent(in) species\_is\_seasalt, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, logical, dimension(num\_species), intent(in) is\_gas, real(fp), dimension(:), intent(inout), optional drydep\_con\_per\_species, real(fp), dimension(:), intent(inout), optional drydep\_velocity\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for gocart scheme._  |
 
 
 
@@ -108,6 +108,7 @@ subroutine, public drydepscheme_gocart_mod::compute_gocart (
     real(fp), intent(in) z0h,
     real(fp), dimension(num_species), intent(in) species_density,
     real(fp), dimension(num_species), intent(in) species_radius,
+    logical, dimension(num_species), intent(in) species_is_dust,
     logical, dimension(num_species), intent(in) species_is_seasalt,
     real(fp), dimension(num_layers, num_species), intent(in) species_conc,
     real(fp), dimension(num_layers, num_species), intent(inout) species_tendencies,

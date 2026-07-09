@@ -86,7 +86,7 @@ _Common types and utilities for seasalt process._ [More...](#detailed-descriptio
 This module defines the configuration types used by the seasalt process and its schemes.
 
 
-Generated on: 2025-11-14T23:01:21.563867 Author: Barry Baker & Wei Li Version: 1.0.0 
+Generated on: 2026-05-28T17:43:34.271954 Author: Barry Baker & Wei Li Version: 1.0.0 
 
 
     

@@ -114,7 +114,7 @@
         <argsstring></argsstring>
         <name>n_required_met_fields</name>
         <qualifiedname>seasaltcommon_mod::seasaltschemegong97config::n_required_met_fields</qualifiedname>
-        <initializer>= 5</initializer>
+        <initializer>= 7</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -123,9 +123,9 @@
         </inbodydescription>
         <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="88" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="88" bodyend="88"/>
       </memberdef>
-      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a4bf7d2249b28c7ddf43d8ee4cdc5bcb7" prot="public" static="no" mutable="no">
-        <type>character(len=32), dimension(5)</type>
-        <definition>character(len=32), dimension(5) seasaltcommon_mod::seasaltschemegong97config::required_met_fields</definition>
+      <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a2efa127ae144b9dc5d678b39f3b31f81" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(7)</type>
+        <definition>character(len=32), dimension(7) seasaltcommon_mod::seasaltschemegong97config::required_met_fields</definition>
         <argsstring></argsstring>
         <name>required_met_fields</name>
         <qualifiedname>seasaltcommon_mod::seasaltschemegong97config::required_met_fields</qualifiedname>
@@ -195,7 +195,7 @@
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a575a88fd646c057235ff9de62534da75" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>description</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a9a34911ed62242c4e5d13dede61cc7e1" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>finalize</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac5f74119c3a857379623744e32e9d656" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>n_required_met_fields</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a4bf7d2249b28c7ddf43d8ee4cdc5bcb7" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>required_met_fields</name></member>
+      <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a2efa127ae144b9dc5d678b39f3b31f81" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>required_met_fields</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a95c8e032462ccb5d7ce2ab86f09988e5" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>scale_factor</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a93bff33a8fd19eee15b019ba0ead6e8a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>scheme_name</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1adee98f9d109ce63edb7d57ca8cf99c01" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>validate</name></member>

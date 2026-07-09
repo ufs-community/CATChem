@@ -468,6 +468,22 @@
         </inbodydescription>
         <location file="src/core/species_mod.F90" line="107" column="1" bodyfile="src/core/species_mod.F90" bodystart="107" bodyend="107"/>
       </memberdef>
+      <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1aae15b14677c861ff5470ab36013f462e" prot="public" static="no" mutable="no">
+        <type>real(kind=fp)</type>
+        <definition>real(kind=fp) species_mod::speciestype::wd_reevap_frac</definition>
+        <argsstring></argsstring>
+        <name>wd_reevap_frac</name>
+        <qualifiedname>species_mod::speciestype::wd_reevap_frac</qualifiedname>
+        <briefdescription>
+<para>fraction of re-evaporated (washout) mass resuspended to the gas/aerosol phase. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>GEOS-Chem/Luo default 0.5 (Liu et al., 2001); GOCART uses 1.0. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/species_mod.F90" line="108" column="1" bodyfile="src/core/species_mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a96875d4738ef4b082591953496a0b07e" prot="public" static="no" mutable="no">
         <type>character(len=30)</type>
         <definition>character(len=30) species_mod::speciestype::mie_name</definition>
@@ -481,7 +497,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="110" column="1" bodyfile="src/core/species_mod.F90" bodystart="110" bodyend="110"/>
+        <location file="src/core/species_mod.F90" line="111" column="1" bodyfile="src/core/species_mod.F90" bodystart="111" bodyend="111"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a20e7550ceb2d8132250f7c5c60a137dd" prot="public" static="no" mutable="no">
         <type>real(kind=fp)</type>
@@ -496,7 +512,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="113" column="1" bodyfile="src/core/species_mod.F90" bodystart="113" bodyend="113"/>
+        <location file="src/core/species_mod.F90" line="114" column="1" bodyfile="src/core/species_mod.F90" bodystart="114" bodyend="114"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" prot="public" static="no" mutable="no">
         <type>real(kind=fp)</type>
@@ -511,7 +527,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="116" column="1" bodyfile="src/core/species_mod.F90" bodystart="116" bodyend="116"/>
+        <location file="src/core/species_mod.F90" line="117" column="1" bodyfile="src/core/species_mod.F90" bodystart="117" bodyend="117"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a9133ba1e9bc04616dff46121b41d4221" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -526,7 +542,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="119" column="1" bodyfile="src/core/species_mod.F90" bodystart="119" bodyend="119"/>
+        <location file="src/core/species_mod.F90" line="120" column="1" bodyfile="src/core/species_mod.F90" bodystart="120" bodyend="120"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a255661e560792422d0021da2175384b9" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -541,7 +557,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="120" column="1" bodyfile="src/core/species_mod.F90" bodystart="120" bodyend="120"/>
+        <location file="src/core/species_mod.F90" line="121" column="1" bodyfile="src/core/species_mod.F90" bodystart="121" bodyend="121"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a6e93043ffd787faeeb908828e47844aa" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -556,7 +572,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="121" column="1" bodyfile="src/core/species_mod.F90" bodystart="121" bodyend="121"/>
+        <location file="src/core/species_mod.F90" line="122" column="1" bodyfile="src/core/species_mod.F90" bodystart="122" bodyend="122"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1ac9649a3440d9eacc57a45a592d749670" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -571,7 +587,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="122" column="1" bodyfile="src/core/species_mod.F90" bodystart="122" bodyend="122"/>
+        <location file="src/core/species_mod.F90" line="123" column="1" bodyfile="src/core/species_mod.F90" bodystart="123" bodyend="123"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1a32c8023d47107d602be305c0a9eb2b09" prot="public" static="no" mutable="no">
         <type>real(kind=fp), dimension(:,:,:), pointer</type>
@@ -586,7 +602,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="125" column="1" bodyfile="src/core/species_mod.F90" bodystart="125" bodyend="125"/>
+        <location file="src/core/species_mod.F90" line="126" column="1" bodyfile="src/core/species_mod.F90" bodystart="126" bodyend="126"/>
       </memberdef>
       <memberdef kind="variable" id="structspecies__mod_1_1speciestype_1afaba774ce775aecd8907eabf24f94fc9" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -602,7 +618,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="128" column="1" bodyfile="src/core/species_mod.F90" bodystart="128" bodyend="128"/>
+        <location file="src/core/species_mod.F90" line="129" column="1" bodyfile="src/core/species_mod.F90" bodystart="129" bodyend="129"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -682,7 +698,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="132" column="1" bodyfile="src/core/species_mod.F90" bodystart="132" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="133" column="1" bodyfile="src/core/species_mod.F90" bodystart="133" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1ae419adf67067c55651d83f3ad326a47f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -724,7 +740,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="133" column="1" bodyfile="src/core/species_mod.F90" bodystart="133" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="134" column="1" bodyfile="src/core/species_mod.F90" bodystart="134" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a80e31ff7f30b2e1fdce6fea3b4866e4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -766,7 +782,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="134" column="1" bodyfile="src/core/species_mod.F90" bodystart="134" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="135" column="1" bodyfile="src/core/species_mod.F90" bodystart="135" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a0d3bbcb962b585998fb9ee3fd31751eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -832,7 +848,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="135" column="1" bodyfile="src/core/species_mod.F90" bodystart="135" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="136" column="1" bodyfile="src/core/species_mod.F90" bodystart="136" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1a38ad7242574bd24d91e9ed7d0c5e2119" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -888,7 +904,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="136" column="1" bodyfile="src/core/species_mod.F90" bodystart="136" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="137" column="1" bodyfile="src/core/species_mod.F90" bodystart="137" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1af20cb6abaa42c4875d52a57dcd6f117f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -942,7 +958,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="137" column="1" bodyfile="src/core/species_mod.F90" bodystart="137" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="138" column="1" bodyfile="src/core/species_mod.F90" bodystart="138" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structspecies__mod_1_1speciestype_1ad382920d60edbdd8cf83c5c98802a1ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -972,7 +988,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/species_mod.F90" line="138" column="1" bodyfile="src/core/species_mod.F90" bodystart="138" bodyend="-1"/>
+        <location file="src/core/species_mod.F90" line="139" column="1" bodyfile="src/core/species_mod.F90" bodystart="139" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -1175,7 +1191,7 @@
 </parameterlist>
 </para>
     </detaileddescription>
-    <location file="src/core/species_mod.F90" line="65" column="1" bodyfile="src/core/species_mod.F90" bodystart="65" bodyend="140"/>
+    <location file="src/core/species_mod.F90" line="65" column="1" bodyfile="src/core/species_mod.F90" bodystart="65" bodyend="141"/>
     <listofallmembers>
       <member refid="structspecies__mod_1_1speciestype_1ae05fe06bb8f1d2729ef336a838470657" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>backgroundvv</name></member>
       <member refid="structspecies__mod_1_1speciestype_1a80e31ff7f30b2e1fdce6fea3b4866e4d" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>cleanup</name></member>
@@ -1223,6 +1239,7 @@
       <member refid="structspecies__mod_1_1speciestype_1a685e9d2b12e6dfefaceaab4d8ee45338" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>wd_convfaci2g</name></member>
       <member refid="structspecies__mod_1_1speciestype_1a51dbea0e0caf99aa6e8d4d2f9fd73abf" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>wd_liqandgas</name></member>
       <member refid="structspecies__mod_1_1speciestype_1a97d4bb5fa2e2f9a66dfe9a4926075dd4" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>wd_rainouteff</name></member>
+      <member refid="structspecies__mod_1_1speciestype_1aae15b14677c861ff5470ab36013f462e" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>wd_reevap_frac</name></member>
       <member refid="structspecies__mod_1_1speciestype_1a26aaa6ae2ce509f2b19bf2d18aa20088" prot="public" virt="non-virtual"><scope>species_mod::speciestype</scope><name>wd_retfactor</name></member>
     </listofallmembers>
   </compounddef>

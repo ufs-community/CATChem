@@ -531,6 +531,8 @@ contains
       do i = 1, this%num_processes
          call this%processes(i)%item%finalize(local_rc)
          if (local_rc /= cc_success) then
+            write(*,*) 'ERROR: Failed to finalize process "', &
+               trim(this%processes(i)%item%get_name()), '" with code: ', local_rc
             rc = local_rc
          endif
       enddo

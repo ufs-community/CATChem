@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  pure subroutine, public | [**compute\_geos12**](#function-compute_geos12) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**seasaltschemegeos12config**](namespaceseasaltcommon__mod.md#none-seasaltschemegeos12config)), intent(in) params, real(fp), intent(in) frocean, real(fp), intent(in) frseaice, real(fp), intent(in) sst, real(fp), intent(in) ustar, real(fp), dimension(num\_species), intent(in) species\_density, real(fp), dimension(num\_species), intent(in) species\_radius, real(fp), dimension(num\_species), intent(in) species\_lower\_radius, real(fp), dimension(num\_species), intent(in) species\_upper\_radius, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), intent(inout), optional seasalt\_mass\_emission\_total, real(fp), intent(inout), optional seasalt\_number\_emission\_total, real(fp), dimension(:), intent(inout), optional seasalt\_mass\_emission\_per\_bin, real(fp), dimension(:), intent(inout), optional seasalt\_number\_emission\_per\_bin, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for geos12 scheme._  |
+|  subroutine, public | [**compute\_geos12**](#function-compute_geos12) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**seasaltschemegeos12config**](namespaceseasaltcommon__mod.md#none-seasaltschemegeos12config)), intent(in) params, real(fp), intent(in) pi, real(fp), intent(in) frocean, real(fp), intent(in) frseaice, real(fp), intent(in) lat, real(fp), intent(in) lon, real(fp), intent(in) sst, real(fp), intent(in) u10m, real(fp), intent(in) ustar, real(fp), intent(in) v10m, real(fp), dimension(num\_species), intent(in) species\_density, real(fp), dimension(num\_species), intent(in) species\_radius, real(fp), dimension(num\_species), intent(in) species\_lower\_radius, real(fp), dimension(num\_species), intent(in) species\_upper\_radius, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), intent(inout), optional seasalt\_mass\_emission\_total, real(fp), intent(inout), optional seasalt\_number\_emission\_total, real(fp), dimension(:), intent(inout), optional seasalt\_mass\_emission\_per\_bin, real(fp), dimension(:), intent(inout), optional seasalt\_number\_emission\_per\_bin, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for geos12 scheme._  |
 
 
 
@@ -89,14 +89,19 @@
 
 _Pure science computation for geos12 scheme._ 
 ```Fortran
-pure subroutine, public seasaltscheme_geos12_mod::compute_geos12 (
+subroutine, public seasaltscheme_geos12_mod::compute_geos12 (
     integer, intent(in) num_layers,
     integer, intent(in) num_species,
     type( seasaltschemegeos12config ), intent(in) params,
+    real(fp), intent(in) pi,
     real(fp), intent(in) frocean,
     real(fp), intent(in) frseaice,
+    real(fp), intent(in) lat,
+    real(fp), intent(in) lon,
     real(fp), intent(in) sst,
+    real(fp), intent(in) u10m,
     real(fp), intent(in) ustar,
+    real(fp), intent(in) v10m,
     real(fp), dimension(num_species), intent(in) species_density,
     real(fp), dimension(num_species), intent(in) species_radius,
     real(fp), dimension(num_species), intent(in) species_lower_radius,
@@ -124,10 +129,15 @@ This is a pure computational kernel implementing GEOS-Chem 2012 sea salt emissio
 * `num_layers` Number of vertical layers 
 * `num_species` Number of chemical species 
 * `params` Scheme parameters (pre-validated by host) 
+* `PI` Required constant from Constants module 
 * `frocean` FROCEAN field [appropriate units] 
 * `frseaice` FRSEAICE field [appropriate units] 
+* `lat` LAT field [appropriate units] 
+* `lon` LON field [appropriate units] 
 * `sst` SST field [appropriate units] 
+* `u10m` U10M field [appropriate units] 
 * `ustar` USTAR field [appropriate units] 
+* `v10m` V10M field [appropriate units] 
 * `species_density` Species density property 
 * `species_radius` Species radius property 
 * `species_lower_radius` Species lower\_radius property 

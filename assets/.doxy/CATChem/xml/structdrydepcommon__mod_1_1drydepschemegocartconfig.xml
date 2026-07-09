@@ -108,6 +108,21 @@
         </inbodydescription>
         <location file="src/process/drydep/DryDepCommon_Mod.F90" line="124" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="124" bodyend="124"/>
       </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0c8f7d6f7a1c3b33832a61f5d79db37f" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemegocartconfig::dust_resuspension_only</definition>
+        <argsstring></argsstring>
+        <name>dust_resuspension_only</name>
+        <qualifiedname>drydepcommon_mod::drydepschemegocartconfig::dust_resuspension_only</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="125" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="125" bodyend="125"/>
+      </memberdef>
       <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" prot="public" static="no" mutable="no">
         <type>integer</type>
         <definition>integer drydepcommon_mod::drydepschemegocartconfig::n_required_met_fields</definition>
@@ -121,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="127" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="127" bodyend="127"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="128" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="128" bodyend="128"/>
       </memberdef>
       <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a3d5b2661b8c2161fbe56fb8e55e04325" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(13)</type>
@@ -135,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="128" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="128" bodyend="128"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="129" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="129" bodyend="129"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -160,7 +175,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="131" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="131" bodyend="-1"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="132" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="132" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ae5a580d73cae7c80a51dc0e5a8f36fe1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -179,7 +194,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="132" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="132" bodyend="-1"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="133" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="133" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -187,12 +202,13 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="111" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="111" bodyend="133"/>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="111" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="111" bodyend="134"/>
     <listofallmembers>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a8e9051ad8ad37e08077b6ccc5ca30cf2" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>affects_full_column</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a17703ce0a6e55ac3f7290e5a3fd217a1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>algorithm_type</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a38e01ec796f19940b29c3535fe7158aa" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>author</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ab1d07af8982a8a2f626437f7f35cff63" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>description</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a0c8f7d6f7a1c3b33832a61f5d79db37f" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>dust_resuspension_only</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1ae5a580d73cae7c80a51dc0e5a8f36fe1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>finalize</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1aebf9a7b0d6b75423414d566ea89527e1" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>n_required_met_fields</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemegocartconfig_1a3d5b2661b8c2161fbe56fb8e55e04325" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemegocartconfig</scope><name>required_met_fields</name></member>

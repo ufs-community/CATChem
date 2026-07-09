@@ -369,13 +369,29 @@
         </inbodydescription>
         <location file="src/core/ConfigManager_Mod.F90" line="108" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="108" bodyend="108"/>
       </memberdef>
+      <memberdef kind="variable" id="structconfigmanager__mod_1_1runtimeconfig_1aafbe16e9c5e4b58097a0501838c879fe" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical configmanager_mod::runtimeconfig::latlon_output</definition>
+        <argsstring></argsstring>
+        <name>latlon_output</name>
+        <qualifiedname>configmanager_mod::runtimeconfig::latlon_output</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Stitch cubed-sphere tiles to single lat/lon file? </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ConfigManager_Mod.F90" line="109" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="109" bodyend="109"/>
+      </memberdef>
     </sectiondef>
     <briefdescription>
 <para>Runtime and MPI configuration. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ConfigManager_Mod.F90" line="83" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="83" bodyend="109"/>
+    <location file="src/core/ConfigManager_Mod.F90" line="83" column="1" bodyfile="src/core/ConfigManager_Mod.F90" bodystart="83" bodyend="110"/>
     <listofallmembers>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ae23d92c719aa71dacc1bad7a5840fba7" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>amiroot</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a2222efb0d40436c27435178779ef75df" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>compresslev</name></member>
@@ -383,6 +399,7 @@
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad43abbd040a324346b17b1729b30be44" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>diagenabled</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a15f6d4dec3cce344313877f60c3f0910" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>dryrun</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1ad04ade4a51bb15f1e3c7b9a0f9414f67" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>ismpi</name></member>
+      <member refid="structconfigmanager__mod_1_1runtimeconfig_1aafbe16e9c5e4b58097a0501838c879fe" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>latlon_output</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a91b1e059cf347b085b8391bfc4bf3fcd" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>maxspecies</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1adeb01d9c1caea6f6b486b2744ecfeb7e" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>mpicomm</name></member>
       <member refid="structconfigmanager__mod_1_1runtimeconfig_1a664847963aa457bd6f25dc1cca377589" prot="public" virt="non-virtual"><scope>configmanager_mod::runtimeconfig</scope><name>n_diag_species</name></member>

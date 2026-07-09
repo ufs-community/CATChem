@@ -135,10 +135,14 @@
 * **create\_drydep\_process** ([**drydepprocesscreator\_mod**](namespacedrydepprocesscreator__mod.md))
 * **compute\_wesely** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
 * **compute\_zhang** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
+* **create\_dust\_process** ([**dustprocesscreator\_mod**](namespacedustprocesscreator__mod.md))
+* **calc\_drag\_partition** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+* **compute\_fengsha** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+* **compute\_ginoux** ([**dustscheme\_ginoux\_mod**](namespacedustscheme__ginoux__mod.md))
 * **check\_species\_in\_mechanism** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **cc\_error** ([**error\_mod**](namespaceerror__mod.md))
 * **cunningham\_correction\_factor** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
-* **calculate\_and\_update\_diagnostics** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **calculate\_and\_update\_diagnostics** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **create\_process** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **column\_process\_disable** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **column\_process\_enable** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
@@ -274,6 +278,11 @@
 * **drydep\_process\_finalize** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **drydep\_process\_load\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **drydep\_process\_validate** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **dust\_process\_finalize** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **dust\_process\_load\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **dust\_process\_validate** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **darmenovadragpartition** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+* **draxler\_horizflux** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
 * **decomp\_get\_local\_bounds** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **decomp\_init** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **decomp\_is\_local\_column** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
@@ -336,9 +345,13 @@
 * **finalize\_drydep\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **finalize\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **finalize\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **finalize\_dust\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **finalize\_fengsha\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **finalize\_ginoux\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **fecan\_soilmoisture** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
 * **finalize\_catchem** ([**init\_mod**](namespaceinit__mod.md))
 * **friction\_velocity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
-* **finalize\_column\_processing** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **finalize\_column\_processing** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **factory\_create\_process** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **factory\_init** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **factory\_list\_available** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
@@ -357,7 +370,7 @@
 
 ## g
 
-* **get\_active\_scheme\_config** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **get\_active\_scheme\_config** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**dustcommon\_mod**](namespacedustcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **get\_carbchem\_default\_config** ([**carbchemprocesscreator\_mod**](namespacecarbchemprocesscreator__mod.md))
 * **get\_aerosol\_species\_list** ([**chemspeciesutils\_mod**](namespacechemspeciesutils__mod.md))
 * **get\_dust\_species\_list** ([**chemspeciesutils\_mod**](namespacechemspeciesutils__mod.md))
@@ -370,6 +383,7 @@
 * **get\_tracer\_species\_list** ([**chemspeciesutils\_mod**](namespacechemspeciesutils__mod.md))
 * **get\_drydep\_default\_config** ([**drydepprocesscreator\_mod**](namespacedrydepprocesscreator__mod.md))
 * **get\_seasalt\_bin\_boundaries** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
+* **get\_dust\_default\_config** ([**dustprocesscreator\_mod**](namespacedustprocesscreator__mod.md))
 * **get\_validation\_summary** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **get\_error\_properties** ([**error\_mod**](namespaceerror__mod.md))
 * **get\_dimensions** ([**gridgeometry\_mod**](namespacegridgeometry__mod.md))
@@ -404,9 +418,10 @@
 * **grid\_manager\_print\_info** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_manager\_validate** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **get\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
-* **get\_required\_diagnostic\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
-* **get\_required\_met\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **get\_required\_diagnostic\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **get\_required\_met\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **get\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
+* **get\_dust\_scheme** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
 * **get\_global\_registry** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
 * **get\_seasalt\_scheme** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
 * **get\_settling\_scheme** ([**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
@@ -437,7 +452,7 @@
 
 ## i
 
-* **int\_to\_string** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **int\_to\_string** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**dustcommon\_mod**](namespacedustcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **instance\_add\_field\_mapping** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
 * **instance\_add\_process** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
 * **instance\_configure\_process\_manager** ([**catchemapi\_mod**](namespacecatchemapi__mod.md))
@@ -489,7 +504,7 @@
 * **initialize\_catchem** ([**init\_mod**](namespaceinit__mod.md))
 * **initialize\_core\_states** ([**init\_mod**](namespaceinit__mod.md))
 * **initialize\_processes** ([**init\_mod**](namespaceinit__mod.md))
-* **init\_column\_processing** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **init\_column\_processing** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **init\_process** ([**run\_mod**](namespacerun__mod.md))
 * **is\_global\_holiday** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **is\_leap\_year** ([**timestate\_mod**](namespacetimestate__mod.md))
@@ -498,14 +513,23 @@
 * **is\_valid\_temperature** ([**utilities\_mod**](namespaceutilities__mod.md))
 
 
+## k
+
+* **kawamura\_horizflux** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+* **kokdistribution** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+
+
 ## l
 
 * **load\_gocart\_config** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md))
 * **load\_species\_from\_list** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md))
 * **load\_species\_properties** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
-* **load\_species\_from\_chem\_state** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **load\_species\_from\_chem\_state** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**dustcommon\_mod**](namespacedustcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **load\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **load\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **load\_fengsha\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **load\_ginoux\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **leungdragpartition** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
 * **load\_configuration** ([**init\_mod**](namespaceinit__mod.md))
 * **latent\_heat\_vaporization** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **load\_geos12\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
@@ -517,7 +541,7 @@
 
 ## m
 
-* **map\_diagnostic\_species\_indices** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
+* **map\_diagnostic\_species\_indices** ([**carbchemcommon\_mod**](namespacecarbchemcommon__mod.md), [**drydepcommon\_mod**](namespacedrydepcommon__mod.md), [**dustcommon\_mod**](namespacedustcommon__mod.md), [**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md), [**settlingcommon\_mod**](namespacesettlingcommon__mod.md), [**so4chemcommon\_mod**](namespaceso4chemcommon__mod.md), [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **model\_add\_process** ([**catchem\_api**](namespacecatchem__api.md), [**catchem\_highlevel\_api**](namespacecatchem__highlevel__api.md))
 * **model\_finalize** ([**catchem\_api**](namespacecatchem__api.md), [**catchem\_highlevel\_api**](namespacecatchem__highlevel__api.md))
 * **model\_get\_all\_diagnostics** ([**catchem\_api**](namespacecatchem__api.md))
@@ -554,6 +578,8 @@
 * **model\_set\_meteorology** ([**catchem\_highlevel\_api**](namespacecatchem__highlevel__api.md))
 * **model\_validate\_inputs** ([**catchem\_highlevel\_api**](namespacecatchem__highlevel__api.md))
 * **mpi\_netcdf\_available** ([**catchemnetcdf\_mod**](namespacecatchemnetcdf__mod.md))
+* **mb95\_dragpartition** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
+* **mb97\_threshold\_velocity** ([**dustscheme\_ginoux\_mod**](namespacedustscheme__ginoux__mod.md))
 * **mapping\_add** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
 * **mapping\_check\_required** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
 * **mapping\_cleanup** ([**fieldmapping\_mod**](namespacefieldmapping__mod.md))
@@ -706,6 +732,7 @@
 * **preset\_load\_from\_string** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **preset\_save\_to\_file** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **print\_drydep\_config\_summary** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **print\_dust\_config\_summary** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
 * **photolysis\_rate\_scaling** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **potential\_temperature** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **ppm\_to\_ugm3** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
@@ -713,10 +740,11 @@
 * **psi\_m\_businger** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **psychrometric\_constant** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **parse\_carbchem\_config** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
-* **process\_finalize** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
-* **process\_init** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
-* **process\_run** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **process\_finalize** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **process\_init** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **process\_run** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **parse\_drydep\_config** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
+* **parse\_dust\_config** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
 * **process\_accumulate\_emissions** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **process\_activate** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
 * **process\_apply\_emission\_scaling** ([**processinterface\_mod**](namespaceprocessinterface__mod.md))
@@ -765,16 +793,19 @@
 * **read\_file\_info** ([**catchemnetcdf\_mod**](namespacecatchemnetcdf__mod.md))
 * **remove\_duplicates\_from\_array** ([**configmanager\_mod**](namespaceconfigmanager__mod.md))
 * **register\_drydep\_process** ([**drydepprocesscreator\_mod**](namespacedrydepprocesscreator__mod.md))
+* **register\_dust\_process** ([**dustprocesscreator\_mod**](namespacedustprocesscreator__mod.md))
 * **reset\_counters** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **relative\_humidity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **rae\_f4** ([**precision\_mod**](namespaceprecision__mod.md))
 * **rae\_f8** ([**precision\_mod**](namespaceprecision__mod.md))
-* **register\_and\_allocate\_diagnostics** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
-* **run\_active\_scheme\_column** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
-* **run\_column** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **register\_and\_allocate\_diagnostics** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **run\_active\_scheme\_column** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
+* **run\_column** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **run\_gocart\_scheme\_column** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md))
 * **run\_wesely\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **run\_zhang\_scheme\_column** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
+* **run\_fengsha\_scheme\_column** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
+* **run\_ginoux\_scheme\_column** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
 * **register\_builtin\_processes** ([**processfactory\_mod**](namespaceprocessfactory__mod.md))
 * **registry\_create\_process** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
 * **registry\_ensure\_capacity** ([**processregistry\_mod**](namespaceprocessregistry__mod.md))
@@ -825,6 +856,7 @@
 * **stokes\_settling\_velocity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **set\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
 * **set\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
+* **set\_dust\_scheme** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
 * **set\_seasalt\_scheme** ([**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md))
 * **set\_settling\_scheme** ([**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md))
 * **set\_so4chem\_scheme** ([**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md))
@@ -905,6 +937,9 @@
 * **validate\_drydep\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **validate\_wesely\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
 * **validate\_zhang\_config** ([**drydepcommon\_mod**](namespacedrydepcommon__mod.md))
+* **validate\_dust\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **validate\_fengsha\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
+* **validate\_ginoux\_config** ([**dustcommon\_mod**](namespacedustcommon__mod.md))
 * **validate\_emission\_config** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validate\_emission\_sources** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validate\_mass\_conservation** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
@@ -944,6 +979,7 @@
 
 ## w
 
+* **white\_horizflux** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
 * **wind\_profile\_loglaw** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **wetdep\_process\_finalize** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
 * **wetdep\_process\_load\_config** ([**wetdepcommon\_mod**](namespacewetdepcommon__mod.md))
@@ -990,6 +1026,11 @@
 * **yaml\_set\_real\_dp\_generic** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_set\_string** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
 * **yaml\_set\_string\_generic** ([**yaml\_interface\_mod**](namespaceyaml__interface__mod.md))
+
+
+## z
+
+* **zhao\_soilmoisture** ([**dustscheme\_fengsha\_mod**](namespacedustscheme__fengsha__mod.md))
 
 
 

@@ -125,6 +125,7 @@ MODULE metstate_mod
       REAL(fp), ALLOCATABLE        :: SWGDN(:,:)
       REAL(fp), ALLOCATABLE        :: EFLUX(:,:)
       REAL(fp), ALLOCATABLE        :: HFLUX(:,:)
+      REAL(fp), ALLOCATABLE        :: HFLUX_UP(:,:)
       REAL(fp), ALLOCATABLE        :: U10M(:,:)
       REAL(fp), ALLOCATABLE        :: USTAR(:,:)
       REAL(fp), ALLOCATABLE        :: V10M(:,:)
@@ -1178,9 +1179,9 @@ CONTAINS
                   this%PMID_DRY(i, j, k) = this%PMID(i, j, k) * ( 1.e+0_fp - xh2o )
                   this%AIRDEN_DRY(i, j, k) = this%PMID_DRY(i, j, k) / rd / this%T(i, j, k)
                   this%PEDGE_DRY(i, j, k) = this%PEDGE(i, j, k) * ( 1.e+0_fp - xh2o )
-                  if (k == nz) then
-                     this%PEDGE_DRY(i, j, k+1) = this%PEDGE(i, j, k+1) * ( 1.e+0_fp - xh2o )
-                  end if
+                  !if (k == nz) then
+                  this%PEDGE_DRY(i, j, k+1) = this%PEDGE(i, j, k+1) * ( 1.e+0_fp - xh2o )
+                  !end if
                   this%DELP_DRY(i, j, k) = this%PEDGE_DRY(i, j, k) - this%PEDGE_DRY(i, j, k+1)
                enddo
             enddo
@@ -1411,6 +1412,14 @@ CONTAINS
             enddo
          enddo
 
+       case ('FRLANDIC', 'frlandic')
+         this%FRLANDIC(:,:) = 0.0_fp !set to zero if IsIce is false
+         do j = 1, ny
+            do i = 1, nx
+               if (abs(this%LWI(i, j) - 2.0_fp) < 0.5_fp) this%FRLANDIC(i, j) = 1.0_fp
+            enddo
+         enddo
+
        case ('LUCNAME', 'lucname')
          this%LUCNAME = 'NOAH'
        case ('nLNDTYPE', 'nlndtype', 'NLNDTYPE')
@@ -1455,6 +1464,9 @@ CONTAINS
                this%FRLAI(i, j, 15:17) = 0.0 !manually give index 15(snow and ice), 16(barren), 17(water) zeros
             enddo
          enddo
+       case ('CLAYFRAC', 'clayfrac', 'SANDFRAC', 'sandfrac', 'SSM', 'ssm', 'RDRAG', 'rdrag', 'USTAR_THRESHOLD', 'ustar_threshold')
+         !place holder. These are read in from emission read module for now. Here is to make sure required_met is all set.
+         write(*,'(A)') 'Warning: Some Fengsha related met fields are read in from emission module, which will be disabled in the future!'
        case ('SALINITY', 'salinity')
          this%SALINITY(:,:) = 0.0_fp  !set to zero for now, which will turn off O3 dry deposition over ocean with iodine.
 
