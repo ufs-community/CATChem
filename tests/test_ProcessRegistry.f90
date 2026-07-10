@@ -4,7 +4,7 @@
 !!!>
 program test_ProcessRegistry
    use testing_mod, only: assert, assert_close
-   use constants, only: MAX_LEN_NAME, MAX_LEN_VERS
+   use constants, only: MAX_LEN_NAME
    use ProcessRegistry_Mod
    use Error_Mod, only: CC_SUCCESS
 
@@ -39,7 +39,7 @@ program test_ProcessRegistry
    write(*,*) 'Test 3: Get registry info'
    block
       character(len=MAX_LEN_NAME) :: name
-      character(len=MAX_LEN_VERS) :: version
+      character(len=MAX_LEN_NAME) :: version
       integer :: num_processes
 
       call registry%get_registry_info(name, version, num_processes, rc)

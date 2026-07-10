@@ -31,7 +31,7 @@
 !!
 module ProcessRegistry_Mod
    use precision_mod
-   use constants, only : MAX_LEN_NAME, MAX_LEN_DESC, MAX_LEN_VERS
+   use constants, only : MAX_LEN_NAME, MAX_LEN_DESC
    use error_mod, only : ErrorManagerType, CC_SUCCESS, CC_FAILURE
    use ProcessInterface_Mod, only : ProcessInterface
 
@@ -76,7 +76,7 @@ module ProcessRegistry_Mod
 
       ! Registry metadata
       character(len=MAX_LEN_NAME) :: registry_name = 'CATChem Process Registry'
-      character(len=MAX_LEN_VERS) :: version = '2.0'
+      character(len=MAX_LEN_NAME) :: version = '2.0'
       logical :: is_initialized = .false.
 
    contains

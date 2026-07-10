@@ -11,7 +11,7 @@
 !!
 module ProcessInterface_Mod
    use precision_mod
-   use constants, only : MAX_LEN_NAME, MAX_LEN_DESC, MAX_LEN_VERS
+   use constants, only : MAX_LEN_NAME, MAX_LEN_DESC
    use StateManager_Mod, only : StateManagerType
    use error_mod
    use ColumnInterface_Mod, only : ColumnProcessorType
@@ -34,7 +34,7 @@ module ProcessInterface_Mod
    type, abstract :: ProcessInterface
       private
       character(len=MAX_LEN_NAME), public :: name = ''         !< Process name
-      character(len=MAX_LEN_VERS), public :: version = ''      !< Version string
+      character(len=MAX_LEN_NAME), public :: version = ''      !< Version string
       character(len=MAX_LEN_DESC), public :: description = '' !< Process description
       logical :: is_initialized = .false.    !< Initialization status
       logical :: is_active = .false.         !< Active status
@@ -192,7 +192,7 @@ contains
    !> \brief Get process version
    function process_get_version(this) result(version)
       class(ProcessInterface), intent(in) :: this
-      character(len=MAX_LEN_VERS) :: version
+      character(len=MAX_LEN_NAME) :: version
       version = this%version
    end function process_get_version
 
