@@ -1,0 +1,69 @@
+name: Build and test (Docker image)
+
+on:
+  workflow_call:
+    inputs:
+      base_project_name:
+        description: 'The base project name'
+        required: true
+        type: string
+      project_name:
+        description: 'The project name'
+        required: true
+        type: string
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout source code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetches full history for better caching/context
+          submodules: recursive
+
+      # 2. Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          driver-opts: network=host
+
+      # 3. Start local registry
+      - name: Start local registry
+        run: |
+          docker run -d -p 5000:5000 --name registry registry:2
+
+      # 5. Build Spack Base image
+      - name: Spack Base image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./docker/Dockerfile-Spack-Base
+          push: true
+          tags: localhost:5000/${{ inputs.base_project_name }}:latest
+          platforms: linux/amd64
+          cache-from: |
+            type=gha,scope=spack-base
+            type=registry,ref=noaaepic/${{ inputs.base_project_name }}:latest
+          cache-to: |
+            type=gha,scope=spack-base,mode=max
+            type=inline
+
+      # 6. Build CATChem image
+      - name: CATChem image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: false
+          platforms: linux/amd64
+          build-args: |
+            BASE_IMAGE=localhost:5000/${{ inputs.base_project_name }}:latest
+          tags: ${{ inputs.project_name }}
+          cache-from: |
+            type=gha,scope=catchem
+          cache-to: |
+            type=gha,scope=catchem,mode=max
+            type=inline

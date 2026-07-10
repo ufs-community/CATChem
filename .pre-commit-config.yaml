@@ -63,5 +63,6 @@ repos:
                 drivers/ccpp/.*\.F90|
                 parameters/.*\.F90|
                 src/external/GOCART/.*|
-                src/external/yaml-cpp/.*
+                src/external/yaml-cpp/.*|
+                CHANGELOG.md
             )$

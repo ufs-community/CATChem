@@ -23,6 +23,28 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ## Quick Start
 
+### Container
+
+The official UFS-Chem and CATChem images are recommended for developers and interested users.
+
+1. Base image for developers:
+
+    ```bash
+    # Mounts the CATChem root directory to /opt/project inside the container
+    docker run -it --rm --platform linux/amd64 -v <CATChem root directory>:/opt/project noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
+    # Now inside the container...
+    cd /opt/project # <-- changes made in this directory will be reflected in the local file system
+    ```
+
+2. Running a pre-installed and tested CATChem:
+
+    ```bash
+    # Mounts the CATChem root directory to /opt/project inside the container
+    docker run -it --rm --platform linux/amd64 -v <CATChem root directory>:/opt/project noaaepic/catchem-ubuntu-gcc-13:latest
+    # Now inside the container...
+    cd /opt/catchem
+    ```
+
 ### NUOPC Interface
 
 ```bash

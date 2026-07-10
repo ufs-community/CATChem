@@ -1,0 +1,68 @@
+name: main
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  docker-setup:
+    runs-on: ubuntu-latest
+    outputs:
+      base_project_name_dev: ${{ steps.vars.outputs.base_project_name_dev }}
+      project_name_dev: ${{ steps.vars.outputs.project_name_dev }}
+      base_project_name: ${{ steps.vars.outputs.base_project_name }}
+      project_name: ${{ steps.vars.outputs.project_name }}
+    steps:
+      - id: vars
+        run: |
+          echo "base_project_name_dev=ufschem-spack-base-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
+          echo "project_name_dev=catchem-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
+          echo "base_project_name=ufschem-spack-base-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
+          echo "project_name=catchem-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
+
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  ci-gnu-gcc14:
+    uses: ./.github/workflows/build-and-test-gcc.yml
+
+  ci-intel:
+    uses: ./.github/workflows/build-and-test-intel.yml
+
+  docker-develop:
+    needs: [docker-setup]
+    uses: ./.github/workflows/docker.yml
+    with:
+      base_project_name: ${{ needs.docker-setup.outputs.base_project_name_dev }}
+      project_name: catchem-dev
+
+  release:
+    needs: [lint, ci-gnu-gcc14, ci-intel, docker-develop]
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/semantic-release.yml
+    secrets: inherit
+
+  docker-release:
+    needs: [docker-setup, release, docker-develop]
+    if: needs.release.outputs.new_release_published == 'true'
+    uses: ./.github/workflows/docker-release.yml
+    with:
+      release_version: ${{ needs.release.outputs.new_release_version }}
+      base_project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.base_project_name_dev || needs.docker-setup.outputs.base_project_name }}
+      project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.project_name_dev || needs.docker-setup.outputs.project_name }}
+    secrets: inherit
+
+  docs:
+    needs: [lint, ci-gnu-gcc14, ci-intel, release, docker-develop]
+    if: always() && !failure() && !cancelled()
+    uses: ./.github/workflows/docs.yml

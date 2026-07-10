@@ -1,0 +1,46 @@
+name: Semantic Release
+
+on:
+  workflow_call:
+    outputs:
+      new_release_version:
+        description: "The version of the new release"
+        value: ${{ jobs.release.outputs.new_release_version }}
+      new_release_published:
+        description: "Whether a new release was published"
+        value: ${{ jobs.release.outputs.new_release_published }}
+      is_prerelease:
+        description: "Whether this is a pre-release"
+        value: ${{ jobs.release.outputs.is_prerelease }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    outputs:
+      new_release_version: ${{ steps.release.outputs.version }}
+      new_release_published: ${{ steps.release.outputs.released }}
+      is_prerelease: ${{ steps.release.outputs.is_prerelease }}
+
+    steps:
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.SEMVER_APP_ID }}
+          private-key: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Python Semantic Release
+        uses: python-semantic-release/python-semantic-release@v10
+        id: release
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}

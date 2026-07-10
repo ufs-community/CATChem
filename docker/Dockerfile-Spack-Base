@@ -1,0 +1,95 @@
+FROM ubuntu:24.04
+
+# Install system packages for spack reuse
+RUN apt-get update --yes && apt-get install --yes \
+  tmux \
+  vim \
+  less \
+  git \
+  build-essential \
+  python3 \
+  python3-dev \
+  gfortran \
+  cmake \
+  curl \
+  ca-certificates \
+  libopenmpi-dev \
+  libcurl4-openssl-dev \
+  tar \
+  gettext \
+  libgettextpo-dev \
+  nco \
+  libxml2 \
+  libxml2-dev \
+  libxml2-utils \
+  libnetcdf-dev \
+  libnetcdff-dev \
+  liblapack-dev \
+  libopenblas-dev \
+  cython3 \
+  python3-venv \
+  python3-pip \
+  && apt-get purge -y --auto-remove \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install a more recent version of rust
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain stable
+
+# Clone spack-stack (version 2.1.1)
+WORKDIR /opt/ufschem
+RUN git clone https://github.com/JCSDA/spack-stack && \
+    cd spack-stack && \
+    git checkout 37c009d && \
+    git submodule update --init --recursive
+
+WORKDIR /opt/ufschem/spack-stack
+ENV SPACK_ROOT=/opt/ufschem/spack-stack/spack
+
+SHELL ["/bin/bash", "-c"]
+
+RUN <<INSTALL_ALL
+  set -eu
+  . ./setup.sh
+  spack compiler find
+  spack external find rust curl perl git python py-cython cmake gettext findutils tar libxml2 openssl openmpi
+  spack config add "packages:rust:buildable:false"
+  spack config add "packages:curl:buildable:false"
+  spack config add "packages:perl:buildable:false"
+  spack config add "packages:git:buildable:false"
+  spack config add "packages:python:buildable:false"
+  spack config add "packages:py-cython:buildable:false"
+  spack config add "packages:cmake:buildable:false"
+  spack config add "packages:gettext:buildable:false"
+  spack config add "packages:findutils:buildable:false"
+  spack config add "packages:tar:buildable:false"
+  spack config add "packages:libxml2:buildable:false"
+  spack config add "packages:openssl:buildable:false"
+  spack config add "packages:openmpi:buildable:false"
+
+  # Parallelio needs to build these...
+#  spack config add "packages:netcdf-c:buildable:false"
+#  spack config add "packages:netcdf-fortran:buildable:false"
+
+  spack config add "packages:esmf:require:^openmpi"
+
+  spack env create ufschem
+  spack env activate ufschem
+  spack add esmf yaml-cpp parallelio+pnetcdf py-pip
+  spack concretize
+  spack install --fail-fast
+  spack gc -y
+  spack clean --all
+INSTALL_ALL
+
+RUN cat <<EOF >> ~/.bashrc
+# enable spack env by default
+source /opt/ufschem/spack-stack/setup.sh
+spack env activate ufschem
+EOF
+
+WORKDIR /opt
+
+CMD ["/bin/bash"]
