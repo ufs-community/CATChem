@@ -33,7 +33,7 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
 
-  ci-gnu-gcc14:
+  ci-gnu:
     uses: ./.github/workflows/build-and-test-gcc.yml
 
   ci-intel:
@@ -47,7 +47,7 @@ jobs:
       project_name: catchem-dev
 
   release:
-    needs: [lint, ci-gnu-gcc14, ci-intel, docker-develop]
+    needs: [lint, ci-gnu, ci-intel, docker-develop]
     if: github.event_name == 'push'
     uses: ./.github/workflows/semantic-release.yml
     secrets: inherit
@@ -63,6 +63,6 @@ jobs:
     secrets: inherit
 
   docs:
-    needs: [lint, ci-gnu-gcc14, ci-intel, release, docker-develop]
+    needs: [lint, ci-gnu, ci-intel, release, docker-develop]
     if: always() && !failure() && !cancelled()
     uses: ./.github/workflows/docs.yml
