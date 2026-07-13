@@ -35,7 +35,7 @@ module ProcessInterface_Mod
       private
       character(len=MAX_LEN_NAME), public :: name = ''         !< Process name
       character(len=MAX_LEN_NAME), public :: version = ''      !< Version string
-      character(len=MAX_LEN_DESC), public :: description = '' !< Process description
+      character(len=MAX_LEN_DESC), public :: description = ''  !< Process description
       logical :: is_initialized = .false.    !< Initialization status
       logical :: is_active = .false.         !< Active status
       real(fp) :: dt = 0.0_fp                !< Process timestep
