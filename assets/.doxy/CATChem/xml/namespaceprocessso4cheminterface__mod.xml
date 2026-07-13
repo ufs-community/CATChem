@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="116" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="117" bodyend="172"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="117" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="118" bodyend="173"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a06e1a055df951359a8702250374b8b6a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="181" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="182" bodyend="199"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="182" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="183" bodyend="200"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1aab63f80a27bb8ae8ad5150a24f906607" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="203" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="204" bodyend="222"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="204" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="205" bodyend="223"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a77ceeb92ea28b1aa890bd1274965bbe1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="227" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="228" bodyend="251"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="228" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="229" bodyend="252"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a888e1f7973295bc0e534e61f4bef59b9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="262" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="263" bodyend="275"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="263" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="264" bodyend="276"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a5f5ad1b0a689d9e53d3ae5816506d9fb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="283" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="284" bodyend="301"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="284" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="285" bodyend="302"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a796474d38000f1e611e5b6b2a5b0793c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="307" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="308" bodyend="317"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="308" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="309" bodyend="318"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1afd84ca4a8a9be53576125a0edbb50fea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="324" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="325" bodyend="340"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="325" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="326" bodyend="341"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a5d9b367387b23d1480cf36ef329a6f25" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,17 +251,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="344" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="345" bodyend="552"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="345" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="346" bodyend="553"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1abd18ae0a6ae13c23d5d77e8fd9513dd6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processso4cheminterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a81bc68a64d4a25a207d1153de7395d4a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processso4cheminterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processso4cheminterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocessso4cheminterface__mod_1_1processso4cheminterface" kindref="compound">processso4cheminterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -270,11 +274,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="558" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="559" bodyend="632"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="559" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="560" bodyend="633"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a2885efa805923aa1e533f92bfd98bec8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processso4cheminterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1ab22ae2d01643e59c6ed2dc45ad328a12" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processso4cheminterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processso4cheminterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -289,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="636" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="637" bodyend="642"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="637" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="638" bodyend="643"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a5416aac2ce9eb27e92106e1ae037747e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -316,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="647" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="648" bodyend="773"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="648" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="649" bodyend="774"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a78ef0894b03ca275f1d734503bb7436e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -348,7 +352,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="781" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="782" bodyend="831"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="782" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="783" bodyend="832"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a50c234bad6a33401f9f31a6587ac589b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -390,11 +394,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="842" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="843" bodyend="847"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="843" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="844" bodyend="848"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a7f3585e75bb16a6654f83e99f1b4cb9f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processso4cheminterface_mod::get_so4chem_scheme</definition>
+      <memberdef kind="function" id="namespaceprocessso4cheminterface__mod_1a1165a8a77b4d64614c41528d196a3d5e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processso4cheminterface_mod::get_so4chem_scheme</definition>
         <argsstring>(this)</argsstring>
         <name>get_so4chem_scheme</name>
         <qualifiedname>processso4cheminterface_mod::get_so4chem_scheme</qualifiedname>
@@ -422,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="857" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="858" bodyend="862"/>
+        <location file="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" line="858" column="1" bodyfile="src/process/so4chem/ProcessSO4chemInterface_Mod.F90" bodystart="859" bodyend="863"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

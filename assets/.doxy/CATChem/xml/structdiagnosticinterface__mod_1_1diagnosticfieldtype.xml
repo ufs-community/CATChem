@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="118" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="118" bodyend="118"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="117" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="117" bodyend="117"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -35,7 +35,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="119" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="119" bodyend="119"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="118" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="118" bodyend="118"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acc38ddbb92dc4beece9e6e7b164a08bd" prot="public" static="no" mutable="no">
         <type>character(len=32)</type>
@@ -51,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="120" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="120" bodyend="120"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="119" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="119" bodyend="119"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad3b6b46a96d7cdea9edfb5a3e4bf6ebf" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -67,7 +67,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="121" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="121" bodyend="121"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="120" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="120" bodyend="120"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2875bbe5430ed37cb50aa486d989becc" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -83,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="122" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="122" bodyend="122"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="121" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="121" bodyend="121"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a91b8f4efb5eb7d4e8f36ef80e015906e" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -99,7 +99,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="123" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="123" bodyend="123"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="122" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="122" bodyend="122"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a5657757efbd077f181a4c4e70aca090e" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -115,7 +115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="124" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="124" bodyend="124"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="123" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="123" bodyend="123"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a86143305d212fe7fba5a73c97683578a" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -131,7 +131,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="125" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="125" bodyend="125"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="124" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="124" bodyend="124"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c51cb01fae7f1f4d3cd37c8e6aa5d9" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -147,7 +147,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="126" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="126" bodyend="126"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="125" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="125" bodyend="125"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd519a4f951ea17fe10de549f99d4c39" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>)</type>
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="127" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="127" bodyend="127"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="126" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="126" bodyend="126"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a02eb2d84746c173b9ddea4c606ad5419" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(:), allocatable</type>
@@ -177,7 +177,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="130" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="130" bodyend="130"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="129" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="129" bodyend="129"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac5bb6ac2d63ef1700fe82dcf1200b926" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -192,7 +192,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="131" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="131" bodyend="131"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="130" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="130" bodyend="130"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -319,7 +319,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="134" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="134" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="133" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="133" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ae8c8d00327b53c5796256fdeef10dde2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -372,7 +372,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="135" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="135" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="134" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="134" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a64943ae046c3f133da52aa7008032630" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -391,7 +391,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="136" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="136" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="135" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="135" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2e055b18549ad54c640c23cbf8c6548d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -410,7 +410,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="137" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="137" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="136" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="136" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac13bbf58b8f1b3cec1b4614448cec9c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -429,7 +429,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="138" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="138" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="137" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="137" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a3cc393bfe5467ef0686f42146cde08e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -448,7 +448,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="139" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="139" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="138" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="138" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ad7076242603c6a183165082fea120a34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -467,7 +467,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="140" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="140" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="139" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="139" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1afae96b89fc3843fd7004de3ee9d6a840" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -486,7 +486,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="141" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="141" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="140" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="140" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a80c7ad43bbe2149e3c538b3a209694c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -505,7 +505,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="142" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="142" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="141" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="141" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ab910d5b3de3d731bf35620fc2c9a4b04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -524,7 +524,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="143" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="143" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="142" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="142" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a611c5c201b281d678ea72c879c707a3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -547,7 +547,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="144" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="144" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="143" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="143" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a9a52c989e602e2ca95822c394b756399" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -566,7 +566,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="145" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="145" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="144" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="144" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a36a8a57ad2898995eaabcbfa271300bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -593,7 +593,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="146" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="146" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="145" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="145" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a6e86e2878dff3cc89c1b9d4dfffc315a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -629,7 +629,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="147" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="147" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="146" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="146" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1aef754c88431c671f501772ffc5dd9eb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -670,7 +670,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="148" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="148" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="147" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="147" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a28be360f729b2ca7e07541c488162fa2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -723,7 +723,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="149" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="149" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="148" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="148" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a14c9fef551fd5298b98e12516e0f5a96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -742,7 +742,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="150" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="150" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="149" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="149" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a260a7497ed0e4ef6ef7ebd525f9bdb22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -761,26 +761,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="151" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="151" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac690920777dd3d3d92f738304749abe0" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
-        <type>final</type>
-        <definition>final diagnosticinterface_mod::diagnosticfieldtype::diag_field_finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>diag_field_finalize</name>
-        <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::diag_field_finalize</qualifiedname>
-        <param>
-          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype" kindref="compound">diagnosticfieldtype</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalizer for DiagnosticFieldType. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="152" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="152" bodyend="-1"/>
+        <location file="src/core/DiagnosticInterface_Mod.F90" line="150" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="150" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -802,7 +783,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/DiagnosticInterface_Mod.F90" line="116" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="116" bodyend="153"/>
+    <location file="src/core/DiagnosticInterface_Mod.F90" line="115" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="115" bodyend="151"/>
     <listofallmembers>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a64943ae046c3f133da52aa7008032630" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>cleanup</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a8a44cf93aeb2b3ce98407fdfea175fad" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>create</name></member>
@@ -810,7 +791,6 @@
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd519a4f951ea17fe10de549f99d4c39" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>data</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a2875bbe5430ed37cb50aa486d989becc" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>data_type</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a360af7486cce259ff4c73d72b0a10292" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>description</name></member>
-      <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac690920777dd3d3d92f738304749abe0" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diag_field_finalize</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1a02eb2d84746c173b9ddea4c606ad5419" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diagnostic_species</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1ac5bb6ac2d63ef1700fe82dcf1200b926" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>diagnostic_species_id</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype_1acd53781518b2d7d99bd37ffaf92b6dce" prot="private" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticfieldtype</scope><name>field_name</name></member>

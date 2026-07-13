@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="116" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="117" bodyend="170"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="117" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="118" bodyend="171"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a7fb7d1332255318472d0faad1e7d0634" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="179" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="180" bodyend="197"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="180" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="181" bodyend="198"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a8d2baae8bef564af4ba60d4f0d419fe4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="201" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="202" bodyend="220"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="202" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="203" bodyend="221"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1ac9efb41d85823f0ebc448b995d4267dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="225" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="226" bodyend="249"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="226" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="227" bodyend="250"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1af31a539f7869377d9b8027bb24a7ea67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="260" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="261" bodyend="273"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="261" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="262" bodyend="274"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a34f4c7295b92be30ada15457c73e1b0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="281" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="282" bodyend="299"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="282" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="283" bodyend="300"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a8e41790a04d2eee368181315bf2e220d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="305" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="306" bodyend="315"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="306" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="307" bodyend="316"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1af9d16f7eb598252d052747d7c80d6d0c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="322" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="323" bodyend="338"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="323" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="324" bodyend="339"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a5c0fe639259e8d53e8878cd2e393182d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,17 +251,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="342" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="343" bodyend="472"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="343" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="344" bodyend="473"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1af3a82cfc677c57be64301c5e5a0989d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processcarbcheminterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1adf611e72953c4c64f58ba63b9e0fee90" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processcarbcheminterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processcarbcheminterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocesscarbcheminterface__mod_1_1processcarbcheminterface" kindref="compound">processcarbcheminterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -270,11 +274,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="478" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="479" bodyend="540"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="479" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="480" bodyend="541"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1ad598e11a60cc7b34cbd87af28749927e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processcarbcheminterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a9aed97b8122817787579216137ae3303" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processcarbcheminterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processcarbcheminterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -289,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="544" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="545" bodyend="550"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="545" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="546" bodyend="551"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1abd50ea542f5d3e85f9a5bc379c74f1ff" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -316,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="555" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="556" bodyend="709"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="556" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="557" bodyend="710"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a2a50e3599572d502821f1230f0875085" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -348,7 +352,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="717" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="718" bodyend="786"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="718" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="719" bodyend="787"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1ac34b990c7f29a5932efe2f74fcc9efd4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -390,11 +394,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="797" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="798" bodyend="802"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="798" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="799" bodyend="803"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1ac4e11bf243c1c68b5fd3d80769e9891e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processcarbcheminterface_mod::get_carbchem_scheme</definition>
+      <memberdef kind="function" id="namespaceprocesscarbcheminterface__mod_1a2b271b4076280299aa808eede24b972f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processcarbcheminterface_mod::get_carbchem_scheme</definition>
         <argsstring>(this)</argsstring>
         <name>get_carbchem_scheme</name>
         <qualifiedname>processcarbcheminterface_mod::get_carbchem_scheme</qualifiedname>
@@ -422,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="812" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="813" bodyend="817"/>
+        <location file="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" line="813" column="1" bodyfile="src/process/carbchem/ProcessCarbChemInterface_Mod.F90" bodystart="814" bodyend="818"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

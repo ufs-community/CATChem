@@ -11,6 +11,7 @@
 
 module processinterface_mod
    use precision_mod
+   use constants, only : max_len_name, max_len_desc
    use statemanager_mod, only : statemanagertype
    use error_mod
    use columninterface_mod, only : columnprocessortype
@@ -27,9 +28,9 @@ module processinterface_mod
 
    type, abstract :: processinterface
       private
-      character(len=64), public :: name = ''
-      character(len=64), public :: version = ''
-      character(len=256), public :: description = ''
+      character(len=MAX_LEN_NAME), public :: name = ''
+      character(len=MAX_LEN_NAME), public :: version = ''
+      character(len=MAX_LEN_DESC), public :: description = ''
       logical :: is_initialized = .false.    
       logical :: is_active = .false.         
       real(fp) :: dt = 0.0_fp                
@@ -157,30 +158,30 @@ module processinterface_mod
    end interface
 
    abstract interface
-      function get_required_met_fields_interface(this) result(field_names)
-         import :: processinterface
+      subroutine get_required_met_fields_interface(this, field_names)
+         import :: processinterface, max_len_name
          class(ProcessInterface), intent(in) :: this
-         character(len=32), allocatable :: field_names(:)
-      end function get_required_met_fields_interface
+         character(len=MAX_LEN_NAME), allocatable, intent(out) :: field_names(:)
+      end subroutine get_required_met_fields_interface
    end interface
 
 contains
 
    function process_get_name(this) result(name)
       class(ProcessInterface), intent(in) :: this
-      character(len=64) :: name
+      character(len=MAX_LEN_NAME) :: name
       name = this%name
    end function process_get_name
 
    function process_get_version(this) result(version)
       class(ProcessInterface), intent(in) :: this
-      character(len=64) :: version
+      character(len=MAX_LEN_NAME) :: version
       version = this%version
    end function process_get_version
 
    function process_get_description(this) result(description)
       class(ProcessInterface), intent(in) :: this
-      character(len=256) :: description
+      character(len=MAX_LEN_DESC) :: description
       description = this%description
    end function process_get_description
 
@@ -223,17 +224,17 @@ contains
    end function process_get_timestep
 
 
-   function process_get_required_met_fields(this) result(field_names)
+   subroutine process_get_required_met_fields(this, field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: field_names(:)
 
       ! Default implementation - no met fields required
       allocate(field_names(0))
-   end function process_get_required_met_fields
+   end subroutine process_get_required_met_fields
 
    function process_get_required_diagnostic_fields(this) result(field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=64), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: field_names(:)
 
       ! Default implementation - no diagnostic fields required
       allocate(field_names(0))
@@ -720,7 +721,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_2d(:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
 
       rc = cc_success
 
@@ -785,7 +786,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_3d(:,:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
       integer :: k, n_dim3
 
       rc = cc_success
@@ -861,7 +862,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_3d(:,:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
       integer :: k, l, n_levels, n_species, flat_index
 
       rc = cc_success

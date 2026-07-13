@@ -84,7 +84,6 @@ module diagnosticinterface_mod
       procedure :: get_real_2d_ptr => diag_data_get_real_2d_ptr
       procedure :: set_real_3d => diag_data_set_real_3d
       procedure :: get_real_3d_ptr => diag_data_get_real_3d_ptr
-      final :: diag_data_finalize
    end type diagnosticdatatype
 
    type :: diagnosticfieldtype
@@ -123,7 +122,6 @@ module diagnosticinterface_mod
       procedure :: validate_field => diag_field_validate_field
       procedure :: get_diagnostic_species => diag_field_get_diagnostic_species
       procedure :: get_diagnostic_species_id => diag_field_get_diagnostic_species_id
-      final :: diag_field_finalize
    end type diagnosticfieldtype
 
    type :: diagnosticregistrytype
@@ -136,7 +134,6 @@ module diagnosticinterface_mod
    contains
       procedure :: init => diag_registry_init
       procedure :: cleanup => diag_registry_cleanup
-      procedure :: finalize => diag_registry_finalize
       procedure :: register_field => diag_registry_register
       procedure :: get_field => diag_registry_get_field
       procedure :: get_field_ptr => diag_registry_get_field_ptr
@@ -433,11 +430,6 @@ contains
       end if
    end function diag_data_get_real_3d_ptr
 
-   subroutine diag_data_finalize(this)
-      type(DiagnosticDataType), intent(inout) :: this
-      call this%deallocate_data()
-   end subroutine diag_data_finalize
-
    subroutine diag_field_create(this, field_name, description, units, data_type, process_name, &
       diagnostic_species, diagnostic_species_id, rc)
       class(DiagnosticFieldType), intent(inout) :: this
@@ -683,11 +675,6 @@ contains
 
    end subroutine diag_field_update_data
 
-   subroutine diag_field_finalize(this)
-      type(DiagnosticFieldType), intent(inout) :: this
-      call this%cleanup()
-   end subroutine diag_field_finalize
-
    subroutine diag_field_reset_data(this, rc)
       class(DiagnosticFieldType), intent(inout) :: this
       integer, intent(out) :: rc
@@ -753,8 +740,8 @@ contains
       if (present(rc)) rc = 0
       this%process_name = ''
       if (present(process_name)) this%process_name = trim(process_name)
+      call this%cleanup()  ! Free any previously allocated field data before resetting
       this%n_fields = 0
-      call this%cleanup()  ! Clean up any previous state
       this%is_initialized = .true.
    end subroutine diag_registry_init
 
@@ -767,13 +754,6 @@ contains
       this%n_fields = 0
       this%is_initialized = .false.
    end subroutine diag_registry_cleanup
-
-   subroutine diag_registry_finalize(this, rc)
-      class(DiagnosticRegistryType), intent(inout) :: this
-      integer, intent(out) :: rc
-      rc = 0
-      call this%cleanup()
-   end subroutine diag_registry_finalize
 
    subroutine diag_registry_register(this, field, rc)
       class(DiagnosticRegistryType), intent(inout) :: this

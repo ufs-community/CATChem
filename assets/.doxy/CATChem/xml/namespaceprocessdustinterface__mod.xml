@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="49" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="49" bodyend="49"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="50" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="50" bodyend="50"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1a89320a625dc94c3c808d3734f71adc0f" prot="private" static="no" mutable="no">
         <type>real(fp), save</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="50" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="50" bodyend="50"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="51" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="51" bodyend="51"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1a96f696e753874987c406c9e5340d53a8" prot="private" static="no" mutable="no">
         <type>real(fp), save</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="51" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="51" bodyend="51"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="52" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="52" bodyend="52"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1a256e9baee64349467e8f13172afc1f87" prot="private" static="no" mutable="no">
         <type>real(fp), save</type>
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="51" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="51" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="52" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="52" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1aad10d51d2182fa96b2095a16dc9162a7" prot="private" static="no" mutable="no">
         <type>logical, save</type>
@@ -77,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="52" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="52" bodyend="52"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="53" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="53" bodyend="53"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1add1231bed8a58c416528bc62d311d78d" prot="private" static="no" mutable="no">
         <type>real(fp), parameter</type>
@@ -92,7 +92,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="54" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="54" bodyend="54"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="55" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="55" bodyend="55"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1a8d4a4b6b8b8e58603e133d3415850d9c" prot="private" static="no" mutable="no">
         <type>real(fp), parameter</type>
@@ -107,7 +107,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="55" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="55" bodyend="55"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="56" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="56" bodyend="56"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessdustinterface__mod_1ab7a7b29db0e08b84bfbf5a85a80973c9" prot="private" static="no" mutable="no">
         <type>real(fp), parameter</type>
@@ -122,7 +122,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="56" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="56" bodyend="56"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="57" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="57" bodyend="57"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -152,7 +152,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="129" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="130" bodyend="180"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="130" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="131" bodyend="181"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1ad9de1602c8694e8d9281b73977e73380" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="189" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="190" bodyend="207"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="190" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="191" bodyend="208"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a54114900d6ab0268c3eb8f0e1b33d7d9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -203,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="211" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="212" bodyend="232"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="212" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="213" bodyend="233"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a4c175d7358f31cbe71dd47b6999e7ca9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -234,7 +234,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="237" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="238" bodyend="261"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="238" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="239" bodyend="262"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a5c56c2ad22e49cb32338ea4c73090927" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -262,7 +262,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="272" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="273" bodyend="285"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="273" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="274" bodyend="286"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1aa75cd047e735c359be502310f43a5010" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -294,7 +294,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="293" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="294" bodyend="311"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="294" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="295" bodyend="312"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1ab835bcee8c014d5041bb2bef8b7cc3ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -318,7 +318,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="317" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="318" bodyend="327"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="318" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="319" bodyend="328"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a21c5a81addde8374aafcb20943833d2e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -346,7 +346,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="334" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="335" bodyend="352"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="335" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="336" bodyend="353"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a5ac9a71658c2c638dac054755b57e9a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -373,7 +373,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="356" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="357" bodyend="554"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="357" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="358" bodyend="555"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a69bbd84020c305ff335813ff0b82855b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -400,17 +400,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="558" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="559" bodyend="717"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="559" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="560" bodyend="718"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a3dc475eb37d8fc00a68790c9425d3e5f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processdustinterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a22af36d3a64cfaa52c3cdbfa926585b7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processdustinterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processdustinterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocessdustinterface__mod_1_1processdustinterface" kindref="compound">processdustinterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -419,11 +423,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="723" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="724" bodyend="809"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="724" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="725" bodyend="810"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1acaf95e11159c71e293bb6f34664c41a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processdustinterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a08e86069c1bbd2eae213d8e1c1c4e6b9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processdustinterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processdustinterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -438,7 +442,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="813" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="814" bodyend="820"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="814" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="815" bodyend="821"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1aec58ff1b1f36646a4590bc863503fff0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -465,7 +469,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="825" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="826" bodyend="986"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="826" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="827" bodyend="987"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1ab0c2f088b670778debec606e1a7eb69c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -497,7 +501,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="994" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="995" bodyend="1063"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="995" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="996" bodyend="1064"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a9e255a71e53b6e350f0f9135155538e9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -539,11 +543,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="1074" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="1075" bodyend="1079"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="1075" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="1076" bodyend="1080"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1ab9e4a8791f040debaf1b848af261df8f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processdustinterface_mod::get_dust_scheme</definition>
+      <memberdef kind="function" id="namespaceprocessdustinterface__mod_1a05e6bb0abe8adc597447c5838e764840" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processdustinterface_mod::get_dust_scheme</definition>
         <argsstring>(this)</argsstring>
         <name>get_dust_scheme</name>
         <qualifiedname>processdustinterface_mod::get_dust_scheme</qualifiedname>
@@ -571,7 +575,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="1089" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="1090" bodyend="1094"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="1090" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="1091" bodyend="1095"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

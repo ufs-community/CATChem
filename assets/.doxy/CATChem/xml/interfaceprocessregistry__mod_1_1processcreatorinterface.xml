@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="47" bodyend="49"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="47" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="48" bodyend="50"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -31,7 +31,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ProcessRegistry_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="46" bodyend="49"/>
+    <location file="src/core/ProcessRegistry_Mod.F90" line="47" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="47" bodyend="50"/>
     <listofallmembers>
       <member refid="interfaceprocessregistry__mod_1_1processcreatorinterface_1a9531f2e50f7977bd26051e3af7b734d4" prot="public" virt="virtual"><scope>processregistry_mod::processcreatorinterface</scope><name>processcreatorinterface</name></member>
     </listofallmembers>

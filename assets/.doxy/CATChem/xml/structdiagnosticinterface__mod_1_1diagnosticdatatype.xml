@@ -500,25 +500,6 @@
         </inbodydescription>
         <location file="src/core/DiagnosticInterface_Mod.F90" line="109" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="109" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a21adf20397893a6a368b4a459c861499" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
-        <type>final</type>
-        <definition>final diagnosticinterface_mod::diagnosticdatatype::diag_data_finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>diag_data_finalize</name>
-        <qualifiedname>diagnosticinterface_mod::diagnosticdatatype::diag_data_finalize</qualifiedname>
-        <param>
-          <type>type(<ref refid="structdiagnosticinterface__mod_1_1diagnosticdatatype" kindref="compound">diagnosticdatatype</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalizer for DiagnosticDataType. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/DiagnosticInterface_Mod.F90" line="110" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="110" bodyend="-1"/>
-      </memberdef>
     </sectiondef>
     <briefdescription>
 <para>Type for diagnostic data storage. </para>
@@ -526,12 +507,11 @@
     <detaileddescription>
 <para>Union-like type that can hold different data types and dimensions. Only one component should be allocated at a time. </para>
     </detaileddescription>
-    <location file="src/core/DiagnosticInterface_Mod.F90" line="74" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="74" bodyend="111"/>
+    <location file="src/core/DiagnosticInterface_Mod.F90" line="74" column="1" bodyfile="src/core/DiagnosticInterface_Mod.F90" bodystart="74" bodyend="110"/>
     <listofallmembers>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a213a1f1b214b157af6473c485200958e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>allocate_data</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a1c1dd581b78fb07719d6895038e3535c" prot="private" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>data_type</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a66b50a9608e4c1086570cca93f8c729a" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>deallocate_data</name></member>
-      <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a21adf20397893a6a368b4a459c861499" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>diag_data_finalize</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a7ac3916691d35cf156f65574c4bc239f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_data_type</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1aca705d097a4f44d38552ffbc6d7c5a4e" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_1d_ptr</name></member>
       <member refid="structdiagnosticinterface__mod_1_1diagnosticdatatype_1a2f0ed5c8839a785998a72297cd58241f" prot="public" virt="non-virtual"><scope>diagnosticinterface_mod::diagnosticdatatype</scope><name>get_real_2d_ptr</name></member>

@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="117" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="118" bodyend="167"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="118" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="119" bodyend="168"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1ae1bb6e8fe4240377becaf1977812bb4e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="176" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="177" bodyend="194"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="177" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="178" bodyend="195"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a4ca4ea5e6537ba052e958055b317894d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="198" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="199" bodyend="215"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="199" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="200" bodyend="216"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1ab43c8e6116c402ed1ee527ff99c09acb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="220" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="221" bodyend="244"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="221" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="222" bodyend="245"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1af311c73a7f8a252b0906a5170c883239" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="255" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="256" bodyend="268"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="256" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="257" bodyend="269"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a37a3028079b5d722d026c435cac306f7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="276" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="277" bodyend="294"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="277" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="278" bodyend="295"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a49c1f60385282b4c20592141312c04e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="300" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="301" bodyend="310"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="301" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="302" bodyend="311"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a3fd3e8e3e75945decf4a0b9a31aa402f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="317" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="318" bodyend="348"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="318" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="319" bodyend="349"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1ad7fac9c4e727fc2a4d601fd8a8b33457" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,7 +251,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="352" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="353" bodyend="588"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="353" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="354" bodyend="589"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a5aa31fcdc81877167af4d75594e6ac3f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -278,7 +278,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="592" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="593" bodyend="771"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="593" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="594" bodyend="772"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1aaf6eaa6554cad3b78f8f1d0f9d40db67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -305,17 +305,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="775" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="776" bodyend="1010"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="776" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="777" bodyend="1011"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1ab47acde97b71b0e4c8517de035aaecd9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processdrydepinterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a1a9e61e704cfdf0702d70799e26cbc52" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processdrydepinterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processdrydepinterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocessdrydepinterface__mod_1_1processdrydepinterface" kindref="compound">processdrydepinterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -324,11 +328,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1016" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1017" bodyend="1154"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1017" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1018" bodyend="1155"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a4857b3f2a7e1963cc7b4e241a56bf971" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processdrydepinterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1af0fdf75c7d55884adaf799bea4a6076d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processdrydepinterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processdrydepinterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -343,7 +347,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1158" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1159" bodyend="1165"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1159" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1160" bodyend="1166"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a4a0d1bb88fc56ac810ea974b5e24ebcc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -370,7 +374,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1170" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1171" bodyend="1303"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1171" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1172" bodyend="1304"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a8d87bb4666eb28864dbb844d43d18b78" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -402,7 +406,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1311" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1312" bodyend="1372"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1312" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1313" bodyend="1373"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1ac0e0cefe1e11158d16543ff98737374d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -456,11 +460,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1384" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1385" bodyend="1400"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1385" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1386" bodyend="1401"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a7c167d99800d9e0cde4700b5cfba9ef8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processdrydepinterface_mod::get_drydep_scheme</definition>
+      <memberdef kind="function" id="namespaceprocessdrydepinterface__mod_1a53fd448944edc24ffc5c91ec2d9953d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processdrydepinterface_mod::get_drydep_scheme</definition>
         <argsstring>(this, gas_scheme)</argsstring>
         <name>get_drydep_scheme</name>
         <qualifiedname>processdrydepinterface_mod::get_drydep_scheme</qualifiedname>
@@ -500,7 +504,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1411" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1412" bodyend="1427"/>
+        <location file="src/process/drydep/ProcessDryDepInterface_Mod.F90" line="1412" column="1" bodyfile="src/process/drydep/ProcessDryDepInterface_Mod.F90" bodystart="1413" bodyend="1428"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

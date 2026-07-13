@@ -4,9 +4,9 @@
     <compoundname>processinterface_mod::processinterface</compoundname>
     <derivedcompoundref refid="structprocessinterface__mod_1_1columnprocessinterface" prot="public" virt="non-virtual">processinterface_mod::columnprocessinterface</derivedcompoundref>
     <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" static="no" mutable="no">
-        <type>character(len=64), public</type>
-        <definition>character(len=64), public processinterface_mod::processinterface::name</definition>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1a096af6852458fa5b84e3897ceec7a934" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_name), public</type>
+        <definition>character(len=max_len_name), public processinterface_mod::processinterface::name</definition>
         <argsstring></argsstring>
         <name>name</name>
         <qualifiedname>processinterface_mod::processinterface::name</qualifiedname>
@@ -18,11 +18,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="35" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="35" bodyend="35"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="36" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="36" bodyend="36"/>
       </memberdef>
-      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" static="no" mutable="no">
-        <type>character(len=64), public</type>
-        <definition>character(len=64), public processinterface_mod::processinterface::version</definition>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1aef0d503dfa461464d8fdb6dee1fe471d" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_name), public</type>
+        <definition>character(len=max_len_name), public processinterface_mod::processinterface::version</definition>
         <argsstring></argsstring>
         <name>version</name>
         <qualifiedname>processinterface_mod::processinterface::version</qualifiedname>
@@ -34,11 +34,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="36" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="36" bodyend="36"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="37" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="37" bodyend="37"/>
       </memberdef>
-      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" static="no" mutable="no">
-        <type>character(len=256), public</type>
-        <definition>character(len=256), public processinterface_mod::processinterface::description</definition>
+      <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1ababf15c437b149b048f7afe328b69c21" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_desc), public</type>
+        <definition>character(len=max_len_desc), public processinterface_mod::processinterface::description</definition>
         <argsstring></argsstring>
         <name>description</name>
         <qualifiedname>processinterface_mod::processinterface::description</qualifiedname>
@@ -50,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="37" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="37" bodyend="37"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="38" bodyend="38"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="38" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="38" bodyend="38"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="39" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="39" bodyend="39"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -82,7 +82,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="39" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="39" bodyend="39"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="40" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="40" bodyend="40"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="40" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="40" bodyend="40"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="41" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="41" bodyend="41"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -126,7 +126,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="44" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="44" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="45" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="45" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ad9f91407f116f0132f911f86ad79b617" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>procedure(run_interface), deferred</type>
@@ -152,7 +152,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="45" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="45" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>procedure(finalize_interface), deferred</type>
@@ -174,17 +174,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="46" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="46" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="47" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="47" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a0fe0cd625797dee716d226dd075ca7f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
         <definition>procedure processinterface_mod::processinterface::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processinterface_mod::processinterface::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Set species names that this process handles. </para>
@@ -195,7 +199,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="49" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="49" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="50" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="50" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -215,7 +219,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="50" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="50" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="51" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="51" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -234,7 +238,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="53" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="53" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="54" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -253,7 +257,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="54" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="54" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="55" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="55" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -272,7 +276,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="55" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="55" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="56" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="56" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -291,7 +295,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="56" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="56" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="57" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="57" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -310,7 +314,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="57" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="57" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="58" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -329,7 +333,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="58" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="58" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="59" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="59" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac8b2e542df97a721b4f588934be5e3f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -352,7 +356,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="59" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="59" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="60" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="60" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -371,7 +375,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="60" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="60" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="61" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="61" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -398,7 +402,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="61" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="61" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="62" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="62" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -452,7 +456,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="64" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="64" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="65" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="65" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a0128b392b36390b94ef7714337f2d972" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -506,7 +510,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="65" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="65" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="66" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="66" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -656,7 +660,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="66" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="66" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="67" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="67" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a03de1e9dbb9ac11422314e2f5a35898a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -745,7 +749,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="69" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="69" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="70" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="70" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -839,7 +843,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="70" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="70" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="71" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="71" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa7d419cc2e40ae2fdf8873cb0663979f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -933,7 +937,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="71" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="71" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="72" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="72" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a0073988041bd832da3aed2c70a0ba094" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1047,7 +1051,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="72" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="72" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="73" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="73" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1125,7 +1129,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="73" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="73" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="74" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="74" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1179,7 +1183,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="74" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="74" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="75" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="75" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1293,7 +1297,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="77" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="77" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="78" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="78" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1383,7 +1387,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="78" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="78" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="79" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="79" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a7074b14a820348304ce2f175c61f3c32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1461,7 +1465,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="79" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="79" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="80" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="80" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1ab2371a427fb673428cae8910dbdc5ccc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1480,7 +1484,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="83" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="83" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="84" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="84" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1507,7 +1511,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessInterface_Mod.F90" line="84" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="84" bodyend="-1"/>
+        <location file="src/core/ProcessInterface_Mod.F90" line="85" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="85" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -1570,7 +1574,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="src/core/ProcessInterface_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="33" bodyend="85"/>
+    <location file="src/core/ProcessInterface_Mod.F90" line="34" column="1" bodyfile="src/core/ProcessInterface_Mod.F90" bodystart="34" bodyend="86"/>
     <listofallmembers>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>accumulate_emissions</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>activate</name></member>
@@ -1581,20 +1585,20 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
       <member refid="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>convert_concentration_units</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>convert_flux_units</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>deactivate</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ababf15c437b149b048f7afe328b69c21" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>description</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a7e55c2ce994bc3162d1386dc598fbcad" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>dt</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a18c36cc7c2d73d950d8b8f5cb07110c6" prot="public" virt="pure-virtual"><scope>processinterface_mod::processinterface</scope><name>finalize</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ae0c24d630ca82efe1aa6dc4b93cff757" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_description</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_name</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_required_diagnostic_fields</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0fe0cd625797dee716d226dd075ca7f2" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_required_met_fields</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_timestep</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>get_version</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a07fa2dd16cefbff358d53d6f5caa6d21" prot="public" virt="pure-virtual"><scope>processinterface_mod::processinterface</scope><name>init</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac7923a35243ca4c48299531525cff6fc" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_active</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_initialized</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>is_ready</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a096af6852458fa5b84e3897ceec7a934" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>name</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>process_column</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a523870e613f4d31f61292508adb8bc80" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>register_diagnostic_field</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a173655872cdd1eeab40dc3e9f7cc7e66" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>register_diagnostics</name></member>
@@ -1605,7 +1609,7 @@ Apply emission scaling factors (deprecated - placeholder implementation)</para>
       <member refid="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_config</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_physical_ranges</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>validate_species_availability</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>version</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aef0d503dfa461464d8fdb6dee1fe471d" prot="public" virt="non-virtual"><scope>processinterface_mod::processinterface</scope><name>version</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

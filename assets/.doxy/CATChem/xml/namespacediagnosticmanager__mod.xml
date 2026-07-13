@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="120" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="121" bodyend="162"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="121" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="122" bodyend="163"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a5d2ebac77242e1d61b6c13e0ec7ab4de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -96,7 +96,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="169" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="170" bodyend="195"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="170" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="171" bodyend="194"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1ac6613b3620b2f2c8d096ae63437d6b5e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="202" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="203" bodyend="219"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="201" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="202" bodyend="218"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1ad74e58e41c4ffc32a1f7074e5c160aa7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -190,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="227" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="228" bodyend="258"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="226" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="227" bodyend="257"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a231133b64be151edb44f9a7cbba0b3c4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -255,7 +255,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="267" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="268" bodyend="286"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="266" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="267" bodyend="285"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1acb0f930a6d8031b86be290bf2793780e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -308,7 +308,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="294" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="295" bodyend="320"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="293" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="294" bodyend="321"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1aeb88f340b17b931d6f5f303172546080" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -321,7 +321,7 @@
           <defname>this</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>process_list</defname>
         </param>
         <param>
@@ -373,7 +373,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="329" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="330" bodyend="347"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="330" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="331" bodyend="348"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a81799009494f044204faf5b96259974d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -450,7 +450,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="357" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="359" bodyend="378"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="358" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="360" bodyend="379"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a41b04a33ff06944a82156e8cae818ca0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -503,7 +503,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="386" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="387" bodyend="398"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="387" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="388" bodyend="399"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2568ff7921cac4d5be773f672470d699" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -544,7 +544,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="405" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="406" bodyend="411"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="406" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="407" bodyend="412"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2ffa04e57fd5b046ad0e5495730de461" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -585,7 +585,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="418" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="419" bodyend="424"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="419" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="420" bodyend="425"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a0647fc4a45aa26516ffd09ac3e947e8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -626,7 +626,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="431" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="432" bodyend="472"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="432" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="433" bodyend="473"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a802513d0b4b7ae42058dfb5d2603f063" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -679,7 +679,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="480" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="481" bodyend="557"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="481" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="482" bodyend="558"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a2ab758850306ca02d59c1e979a810e6e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -828,7 +828,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="573" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="576" bodyend="671"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="574" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="577" bodyend="672"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a508ec86e43fa870068ee0a09e5c1391c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -869,7 +869,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="678" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="679" bodyend="697"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="679" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="680" bodyend="698"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a6ca1dcc880693a1cbeea867422ae0b11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -910,7 +910,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="704" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="705" bodyend="710"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="705" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="706" bodyend="711"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a3340d2a4adc201a77788ae51576b9ef9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -941,7 +941,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="717" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="718" bodyend="728"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="718" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="719" bodyend="729"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a33bae4a47818981b5588d1e6cc68b9a2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -970,7 +970,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="734" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="735" bodyend="754"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="735" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="736" bodyend="755"/>
       </memberdef>
       <memberdef kind="function" id="namespacediagnosticmanager__mod_1a72e9a48c6a36c72ad66e42c38e73a838" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1011,7 +1011,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="761" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="762" bodyend="779"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="762" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="763" bodyend="780"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

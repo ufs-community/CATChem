@@ -11,6 +11,7 @@
 
 module processregistry_mod
    use precision_mod
+   use constants, only : max_len_name, max_len_desc
    use error_mod, only : errormanagertype, cc_success, cc_failure
    use processinterface_mod, only : processinterface
 
@@ -30,9 +31,9 @@ module processregistry_mod
    end interface
 
    type :: processregistryentry
-      character(len=64) :: name = ''
-      character(len=32) :: category = ''
-      character(len=256) :: description = ''
+      character(len=MAX_LEN_NAME) :: name = ''
+      character(len=MAX_LEN_NAME) :: category = ''
+      character(len=MAX_LEN_DESC) :: description = ''
       procedure(ProcessCreatorInterface), pointer, nopass :: creator => null() 
       logical :: is_available = .false.                       
    end type processregistryentry
@@ -46,8 +47,8 @@ module processregistry_mod
       integer :: max_entries = 100
 
       ! Registry metadata
-      character(len=64) :: registry_name = 'CATChem Process Registry'
-      character(len=32) :: version = '2.0'
+      character(len=MAX_LEN_NAME) :: registry_name = 'CATChem Process Registry'
+      character(len=MAX_LEN_NAME) :: version = '2.0'
       logical :: is_initialized = .false.
 
    contains
@@ -244,7 +245,7 @@ contains
       class(ProcessRegistryType), intent(in) :: this
       character(len=*), intent(in) :: name
       integer, optional, intent(out) :: rc
-      character(len=256) :: description
+      character(len=MAX_LEN_DESC) :: description
 
       integer :: idx
 
@@ -261,7 +262,7 @@ contains
    subroutine registry_list_processes(this, process_names, rc)
       implicit none
       class(ProcessRegistryType), intent(in) :: this
-      character(len=64), allocatable, intent(out) :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: process_names(:)
       integer, optional, intent(out) :: rc
 
       integer :: i, local_rc
@@ -287,10 +288,10 @@ contains
    subroutine registry_list_categories(this, categories, rc)
       implicit none
       class(ProcessRegistryType), intent(in) :: this
-      character(len=32), allocatable, intent(out) :: categories(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: categories(:)
       integer, optional, intent(out) :: rc
 
-      character(len=32) :: unique_categories(this%num_entries)
+      character(len=MAX_LEN_NAME) :: unique_categories(this%num_entries)
       integer :: i, j, num_unique, local_rc
       logical :: found
 
@@ -327,10 +328,10 @@ contains
       implicit none
       class(ProcessRegistryType), intent(in) :: this
       character(len=*), intent(in) :: category
-      character(len=64), allocatable, intent(out) :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: process_names(:)
       integer, optional, intent(out) :: rc
 
-      character(len=64) :: temp_names(this%num_entries)
+      character(len=MAX_LEN_NAME) :: temp_names(this%num_entries)
       integer :: i, count, local_rc
 
       local_rc = cc_success

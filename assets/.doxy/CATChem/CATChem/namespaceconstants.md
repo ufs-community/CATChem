@@ -49,6 +49,9 @@
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**g0**](#variable-g0)   = `9.80665[**e**](namespaceconstants.md#variable-e)+0\_fp`<br>_Standard gravity acceleration [m/s^2]._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**g0\_100**](#variable-g0_100)   = `100.0\_fp / [**g0**](namespaceconstants.md#variable-g0)`<br>_100 divided by standard gravity_  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**h2omw**](#variable-h2omw)   = `18.016\_fp`<br>_Molecular weight of water [g/mol]._  |
+|  integer, parameter, public | [**max\_len\_desc**](#variable-max_len_desc)   = `1024`<br>_Maximum length for descriptions._  |
+|  integer, parameter, public | [**max\_len\_name**](#variable-max_len_name)   = `256`<br>_Maximum length for names (fields, config keys, etc.)_  |
+|  integer, parameter, public | [**max\_len\_path**](#variable-max_len_path)   = `512`<br>_Maximum length for file paths._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**mwcarb**](#variable-mwcarb)   = `12.01[**e**](namespaceconstants.md#variable-e)-3\_fp`<br>_Molecular weight of carbon [kg/mol]._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**pi**](#variable-pi)   = `3.14159265358979323\_fp`<br>_Pi (dimensionless)_  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)), parameter, public | [**pi\_180**](#variable-pi_180)   = `PI / 180.0\_fp`<br>_Radians per degree conversion factor._  |
@@ -298,6 +301,48 @@ real(fp), parameter, public constants::g0_100;
 _Molecular weight of water [g/mol]._ 
 ```Fortran
 real(fp), parameter, public constants::h2omw;
+```
+
+
+
+
+<hr>
+
+
+
+### variable max\_len\_desc 
+
+_Maximum length for descriptions._ 
+```Fortran
+integer, parameter, public constants::max_len_desc;
+```
+
+
+
+
+<hr>
+
+
+
+### variable max\_len\_name 
+
+_Maximum length for names (fields, config keys, etc.)_ 
+```Fortran
+integer, parameter, public constants::max_len_name;
+```
+
+
+
+
+<hr>
+
+
+
+### variable max\_len\_path 
+
+_Maximum length for file paths._ 
+```Fortran
+integer, parameter, public constants::max_len_path;
 ```
 
 

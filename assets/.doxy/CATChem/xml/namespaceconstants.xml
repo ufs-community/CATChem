@@ -435,6 +435,54 @@
         </inbodydescription>
         <location file="src/core/constants.F90" line="74" column="1" bodyfile="src/core/constants.F90" bodystart="74" bodyend="74"/>
       </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a8c5d2a28e7d9be73c91b5f7971d6f475" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public constants::max_len_name</definition>
+        <argsstring></argsstring>
+        <name>max_len_name</name>
+        <qualifiedname>constants::max_len_name</qualifiedname>
+        <initializer>= 256</initializer>
+        <briefdescription>
+<para>Maximum length for names (fields, config keys, etc.) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="80" column="1" bodyfile="src/core/constants.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1a6783a14e8ebc2e2a9481bd8a86441eb8" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public constants::max_len_desc</definition>
+        <argsstring></argsstring>
+        <name>max_len_desc</name>
+        <qualifiedname>constants::max_len_desc</qualifiedname>
+        <initializer>= 1024</initializer>
+        <briefdescription>
+<para>Maximum length for descriptions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="81" column="1" bodyfile="src/core/constants.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceconstants_1aa303e1be7a97b69d17bb7ac8fc3405bf" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public constants::max_len_path</definition>
+        <argsstring></argsstring>
+        <name>max_len_path</name>
+        <qualifiedname>constants::max_len_path</qualifiedname>
+        <initializer>= 512</initializer>
+        <briefdescription>
+<para>Maximum length for file paths. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/constants.F90" line="82" column="1" bodyfile="src/core/constants.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
     </sectiondef>
     <sectiondef kind="func">
       <memberdef kind="function" id="namespaceconstants_1a4baf67839fd0e478a05adceea7f58eb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
@@ -465,7 +513,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/constants.F90" line="85" column="1" bodyfile="src/core/constants.F90" bodystart="86" bodyend="121"/>
+        <location file="src/core/constants.F90" line="93" column="1" bodyfile="src/core/constants.F90" bodystart="94" bodyend="129"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

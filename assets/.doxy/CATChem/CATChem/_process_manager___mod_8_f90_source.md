@@ -11,6 +11,7 @@
 
 module processmanager_mod
    use precision_mod
+   use constants, only : max_len_name
    use statemanager_mod, only : statemanagertype
    use error_mod, only : cc_success, cc_failure
    use processinterface_mod, only : processinterface, columnprocessinterface
@@ -38,7 +39,7 @@ module processmanager_mod
       integer :: max_processes = 50
       type(ProcessFactoryType) :: factory
       type(ColumnProcessorType) :: column_processor
-      character(len=64), public, allocatable :: required_met_fields(:)
+      character(len=MAX_LEN_NAME), public, allocatable :: required_met_fields(:)
    contains
       procedure :: init => manager_init
       procedure :: add_process => manager_add_process
@@ -452,7 +453,7 @@ contains
       integer, intent(out) :: rc
 
       integer :: phase_idx, local_rc
-      character(len=64) :: phase_name
+      character(len=MAX_LEN_NAME) :: phase_name
 
       rc = cc_success
 
@@ -547,7 +548,7 @@ contains
 
    subroutine manager_list_processes(this, process_names, count)
       class(ProcessManagerType), intent(in) :: this
-      character(len=64), intent(out) :: process_names(:)
+      character(len=MAX_LEN_NAME), intent(out) :: process_names(:)
       integer, intent(out) :: count
 
       integer :: i, max_count
@@ -575,15 +576,15 @@ contains
       class(ProcessInterface), intent(in) :: process
       integer, intent(out) :: rc
 
-      character(len=64), allocatable :: new_fields(:), merged_fields(:)
-      character(len=64), allocatable :: current_fields(:)
+      character(len=MAX_LEN_NAME), allocatable :: new_fields(:), merged_fields(:)
+      character(len=MAX_LEN_NAME), allocatable :: current_fields(:)
       integer :: i, j, current_size, new_size, merged_size
       logical :: field_exists
 
       rc = cc_success
 
       ! Get required fields from the new process
-      new_fields = process%get_required_met_fields()
+      call process%get_required_met_fields(new_fields)
       new_size = size(new_fields)
 
       ! If no new fields, nothing to do

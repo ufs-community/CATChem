@@ -11,6 +11,7 @@
 
 module diagnosticmanager_mod
    use precision_mod, only: fp
+   use constants, only: max_len_name, max_len_path
    use error_mod, only: errormanagertype, cc_success, cc_failure, &
       error_invalid_input, error_not_found, error_memory_allocation
    use diagnosticinterface_mod, only: diagnosticregistrytype, diagnosticfieldtype, &
@@ -31,14 +32,14 @@ module diagnosticmanager_mod
 
       ! Process registries management
       type(DiagnosticRegistryType), allocatable :: process_registries(:)
-      character(len=64), allocatable :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_names(:)
       integer :: num_processes = 0
       integer :: max_processes = 50
 
       ! Configuration and output management
       logical :: output_enabled = .true.
-      character(len=256) :: output_prefix = 'catchem_diag'
-      character(len=256) :: output_directory = './'
+      character(len=MAX_LEN_NAME) :: output_prefix = 'catchem_diag'
+      character(len=MAX_LEN_PATH) :: output_directory = './'
       integer :: output_frequency = 1  ! timesteps
 
       ! Collection state
@@ -128,17 +129,15 @@ contains
       class(DiagnosticManagerType), intent(inout) :: this
       integer, intent(out) :: rc
 
-      integer :: i, local_rc
+      integer :: i
 
       rc = cc_success
 
-      ! Finalize all process registries
+      ! Explicitly clean up each registry before deallocation to ensure
+      ! allocatable subcomponents within the fixed-size fields(:) array are freed
       do i = 1, this%num_processes
-         call this%process_registries(i)%finalize(local_rc)
-         if (local_rc /= cc_success) then
-            rc = local_rc
-         endif
-      enddo
+         call this%process_registries(i)%cleanup()
+      end do
 
       ! Deallocate arrays
       if (allocated(this%process_registries)) then
@@ -234,21 +233,23 @@ contains
       character(len=*), intent(in) :: process_name
       integer, intent(out) :: rc
 
-      integer :: i, j, local_rc
+      integer :: i, j
 
       rc = cc_failure
 
       ! Find and remove process
       do i = 1, this%num_processes
          if (trim(this%process_names(i)) == trim(process_name)) then
-            ! Finalize registry
-            call this%process_registries(i)%finalize(local_rc)
-
             ! Shift remaining processes
+            ! (intrinsic assignment frees allocatable components of the overwritten slot at each step)
             do j = i, this%num_processes - 1
                this%process_names(j) = this%process_names(j + 1)
                this%process_registries(j) = this%process_registries(j + 1)
             enddo
+
+            ! The tail slot is now a duplicate; clean it up
+            ! so its allocatable field data is freed immediately rather than at finalize
+            call this%process_registries(this%num_processes)%cleanup()
 
             this%num_processes = this%num_processes - 1
             rc = cc_success
@@ -260,7 +261,7 @@ contains
 
    subroutine diagnostic_manager_list_processes(this, process_list, num_processes, rc)
       class(DiagnosticManagerType), intent(in) :: this
-      character(len=64), allocatable, intent(out) :: process_list(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: process_list(:)
       integer, intent(out) :: num_processes
       integer, intent(out) :: rc
 
@@ -341,7 +342,7 @@ contains
       integer, intent(out) :: rc
 
       integer :: i, local_rc, total_fields
-      character(len=64) :: current_process
+      character(len=MAX_LEN_NAME) :: current_process
 
       rc = cc_success
 
@@ -386,13 +387,13 @@ contains
       integer, intent(out) :: rc
 
       type(DiagnosticRegistryType), pointer :: registry
-      character(len=64), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: field_names(:)
       integer :: num_fields, i, local_rc, data_type
       real(fp) :: scalar_value
       real(fp), pointer :: array_1d_ptr(:) => null()
       real(fp), pointer :: array_2d_ptr(:,:) => null()
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
-      character(len=64) :: field_name
+      character(len=MAX_LEN_NAME) :: field_name
 
       rc = cc_success
 

@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="68" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="68" bodyend="68"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="69" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="69" bodyend="69"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1a5354fc8557102ed3cd5b4a074e969900" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), pointer</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="71" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="71" bodyend="71"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="72" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="72" bodyend="72"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1aa843984dc5aa09bf84f9ce3e9b89ced5" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), pointer</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="72" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="72" bodyend="72"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="73" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="73" bodyend="73"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1ae3a40c62472efb44e63920a3e3638a00" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="76" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="76" bodyend="76"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="77" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="77" bodyend="77"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1abd0f37865e904d571105cc28bdbe93f7" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="77" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="77" bodyend="77"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="78" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="78" bodyend="78"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1a782e87b9355cfdcf408cddf8be5087ea" prot="public" static="no" mutable="no">
         <type>real(fp), allocatable</type>
@@ -90,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="82" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="82" bodyend="82"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="83" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="83" bodyend="83"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1aae54b413206c0a6ac7c086a80ceb87e7" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="83" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="83" bodyend="83"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="84" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="84" bodyend="84"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1ab3aacd1a3ba8d70489978cbc4c41d90d" prot="public" static="no" mutable="no">
         <type>real(fp), allocatable</type>
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="86" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="86" bodyend="86"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="87" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="87" bodyend="87"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1ad192fc7de4e7a57d45332ea025282db3" prot="public" static="no" mutable="no">
         <type>real(fp), allocatable</type>
@@ -132,7 +132,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="87" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="87" bodyend="87"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="88" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="88" bodyend="88"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1a57851ad9c1d2fc408efe2961fdd0db03" prot="public" static="no" mutable="no">
         <type>real(fp), allocatable</type>
@@ -146,7 +146,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="88" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="88" bodyend="88"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="89" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="89" bodyend="89"/>
       </memberdef>
       <memberdef kind="variable" id="structprocessdustinterface__mod_1_1processdustinterface_1ac0e868c6c51a6e9fddb9a0e26284f768" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -160,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="89" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="89" bodyend="89"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="90" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="90" bodyend="90"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -190,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="93" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="93" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="94" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="94" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ad5b716052c81c8186f05368d289e1526" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -218,7 +218,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="94" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="94" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="95" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1abd0b806b76d97eba65df4afdae213582" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -241,7 +241,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="95" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="95" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="96" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="96" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a04ab1547bd1b63532ba52cdd1e8cfab6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -272,7 +272,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="96" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="96" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="97" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="97" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a06e3ea06b581c1e9efc4a619abc8e849" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -300,7 +300,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="99" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="99" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="100" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="100" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a30cfd44130947a10926f6cad0ab704fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -332,7 +332,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="100" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="100" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="101" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="101" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a5ad2fd70db21adc2c0e140e068c91064" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -356,17 +356,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="101" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="101" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="102" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="102" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ab50b00a29c65bb026e4b8a45a576cbdc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ae107d0a3347a62b48bb0a36c74fe6634" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
         <definition>procedure processdustinterface_mod::processdustinterface::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processdustinterface_mod::processdustinterface::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocessdustinterface__mod_1_1processdustinterface" kindref="compound">processdustinterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -375,7 +379,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="104" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="105" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a941bb5092cde2d1813355f0b5f2ec1b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -394,7 +398,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="105" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="105" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="106" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a02cc1c1374d13a58aa9fd82e153f2416" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -436,7 +440,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="108" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="108" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="109" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ac9de3b822f72647abf11fa723c91ca11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -468,7 +472,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="109" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="109" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="110" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="110" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a3558e98cfa652a2795989e1fdab1eb63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -495,7 +499,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="117" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="117" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="118" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="118" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -525,7 +529,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="112" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="112" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="113" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="113" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a8484cf4252ecec4154b8b1975fd09340" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
@@ -552,7 +556,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="113" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="113" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="114" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="114" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1a25d16d36fd1b7ec5f8f2e6f47ccc12d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
@@ -579,7 +583,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="114" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="114" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="115" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="115" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ae9761198937d750ec76fb8bb2301b9bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
@@ -606,7 +610,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="118" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="118" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="119" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="119" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessdustinterface__mod_1_1processdustinterface_1ac423b65fe97cebc77ba43834eb39cba1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
@@ -638,7 +642,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="119" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="119" bodyend="-1"/>
+        <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="120" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="120" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -748,7 +752,7 @@
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>
     </collaborationgraph>
-    <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="64" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="64" bodyend="121"/>
+    <location file="src/process/dust/ProcessDustInterface_Mod.F90" line="65" column="1" bodyfile="src/process/dust/ProcessDustInterface_Mod.F90" bodystart="65" bodyend="122"/>
     <listofallmembers>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>accumulate_emissions</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>activate</name></member>
@@ -768,7 +772,7 @@
       <member refid="structprocessinterface__mod_1_1processinterface_1aa26bf16adcb8b374922812965bbbea60" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>convert_concentration_units</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a57f979bf1e223d3924328fa317ab76ee" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>convert_flux_units</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a98b0758e75c71d1a5d70b3113167cb13" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>deactivate</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1ac784b638ee893e29d9c93ea2d9326060" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>description</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1ababf15c437b149b048f7afe328b69c21" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>description</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1abd0f37865e904d571105cc28bdbe93f7" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>diag_dust_emission_per_bin_idx</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ae3a40c62472efb44e63920a3e3638a00" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>diag_dust_emission_total_idx</name></member>
       <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a4fd168b0e470e14d71726a007e91b4fc" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>disable_column_processing</name></member>
@@ -783,8 +787,8 @@
       <member refid="structprocessinterface__mod_1_1processinterface_1ae7cb07d8f645f4cb51ebe18213bd7f86" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_name</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a941bb5092cde2d1813355f0b5f2ec1b5" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_diagnostic_fields</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1aaee0c2a36265363f084887f74b3af1dc" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_diagnostic_fields</name></member>
-      <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ab50b00a29c65bb026e4b8a45a576cbdc" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_met_fields</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1a6375c47d7ab90246c9d8f5cf13e04f0b" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ae107d0a3347a62b48bb0a36c74fe6634" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_met_fields</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a0fe0cd625797dee716d226dd075ca7f2" prot="public" virt="non-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processdustinterface_mod::processdustinterface</scope><name>get_required_met_fields</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1ac9de3b822f72647abf11fa723c91ca11" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_scheme</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ae37301734200ece8a0fae4280b9d86f9" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_timestep</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a4f391be046b660ad279b513fa1953cf6" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>get_version</name></member>
@@ -797,7 +801,7 @@
       <member refid="structprocessinterface__mod_1_1processinterface_1aafa8a83edf7855df017432599e72d78b" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>is_initialized</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a5fc486e6f586560bb327d782887b5c11" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>is_ready</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1aa843984dc5aa09bf84f9ce3e9b89ced5" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>met_state</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1a1ce18a0663f48b2d8ddc02f99262fc25" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>name</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1a096af6852458fa5b84e3897ceec7a934" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>name</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a04ab1547bd1b63532ba52cdd1e8cfab6" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>parse_process_config</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a219070721308db6774b0c8edb103e615" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>process_column</name></member>
       <member refid="structprocessdustinterface__mod_1_1processdustinterface_1a6daf65a134f688d73f13267d2fedbfa5" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>process_config</name></member>
@@ -826,7 +830,7 @@
       <member refid="structprocessinterface__mod_1_1processinterface_1aa8560d3a21708a24ece06f9bbfa5c660" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>validate_config</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a4dd3b95cc2ee24fea38fae71e03cb74a" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>validate_physical_ranges</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac9eb59d294bd804a5d35bbd94f3cf35e" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>validate_species_availability</name></member>
-      <member refid="structprocessinterface__mod_1_1processinterface_1aca60e00f0fd73fb2ed3a6045854c2305" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>version</name></member>
+      <member refid="structprocessinterface__mod_1_1processinterface_1aef0d503dfa461464d8fdb6dee1fe471d" prot="public" virt="non-virtual"><scope>processdustinterface_mod::processdustinterface</scope><name>version</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

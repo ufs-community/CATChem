@@ -18,7 +18,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="107" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="107" bodyend="107"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="108" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="108" bodyend="108"/>
       </memberdef>
       <memberdef kind="variable" id="namespaceprocessregistry__mod_1a82ee71fb178a85cb67cbc257ed4a3e16" prot="private" static="no" mutable="no">
         <type>logical, save</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="108" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="108" bodyend="108"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="109" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="109" bodyend="109"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -50,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="113" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="114" bodyend="121"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="114" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="115" bodyend="122"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a63535cfac3569f669d85a2f04d7cfdb6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="125" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="126" bodyend="150"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="126" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="127" bodyend="151"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1ad0a82cce5cef132e30c074e65671e644" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -96,7 +96,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="154" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="155" bodyend="166"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="155" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="156" bodyend="167"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a226ee9e53f0dc57bc70e53cddd391d36" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -135,7 +135,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="170" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="171" bodyend="217"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="171" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="172" bodyend="218"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1af43d00747e7b9812a77a7e057aa6d402" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="221" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="222" bodyend="239"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="222" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="223" bodyend="240"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a03a89a5ac1116de8fa7df0e6e3d65a6a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -193,7 +193,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="243" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="244" bodyend="261"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="244" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="245" bodyend="262"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a9d2146bb71b007a3d26b0a1f0724b05b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -216,11 +216,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="265" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="266" bodyend="274"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="266" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="267" bodyend="275"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocessregistry__mod_1acfb692464b4a9007023fcca3d1dea1af" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=256) function</type>
-        <definition>character(len=256) function processregistry_mod::registry_get_process_description</definition>
+      <memberdef kind="function" id="namespaceprocessregistry__mod_1ab8eacde3e8d285689e8e5161e405ac6e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_desc) function</type>
+        <definition>character(len=max_len_desc) function processregistry_mod::registry_get_process_description</definition>
         <argsstring>(this, name, rc)</argsstring>
         <name>registry_get_process_description</name>
         <qualifiedname>processregistry_mod::registry_get_process_description</qualifiedname>
@@ -243,7 +243,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="278" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="279" bodyend="294"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="279" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="280" bodyend="295"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a86f279eddb7f3166174e964c687bf3d5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -256,7 +256,7 @@
           <defname>this</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>process_names</defname>
         </param>
         <param>
@@ -270,7 +270,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="298" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="299" bodyend="321"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="299" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="300" bodyend="322"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a9c09c5112e4ac3af55a09d06c0283208" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -283,7 +283,7 @@
           <defname>this</defname>
         </param>
         <param>
-          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>categories</defname>
         </param>
         <param>
@@ -297,7 +297,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="325" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="326" bodyend="361"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="326" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="327" bodyend="362"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a3da5def79aa7757c7f8b808ba4e8af6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -314,7 +314,7 @@
           <defname>category</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>process_names</defname>
         </param>
         <param>
@@ -328,7 +328,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="365" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="366" bodyend="392"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="366" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="367" bodyend="393"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1af7f69c24ae87164d1f9bf23bf057a0cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -363,7 +363,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="396" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="397" bodyend="407"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="397" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="398" bodyend="408"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a39d9857a79124b4c1833825980e963bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -382,7 +382,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="411" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="412" bodyend="430"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="412" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="413" bodyend="431"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a4138a40ca30a1dee0e88ed25fb36698b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -405,7 +405,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="434" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="435" bodyend="457"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="435" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="436" bodyend="458"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a2a8d1eaa9dd024d5f3dbcc08dd598736" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -432,7 +432,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="461" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="462" bodyend="475"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="462" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="463" bodyend="476"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocessregistry__mod_1a8de151bf131ee528eb395cc232fd7b50" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -455,7 +455,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessRegistry_Mod.F90" line="479" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="480" bodyend="500"/>
+        <location file="src/core/ProcessRegistry_Mod.F90" line="480" column="1" bodyfile="src/core/ProcessRegistry_Mod.F90" bodystart="481" bodyend="501"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

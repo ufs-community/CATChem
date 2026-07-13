@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="113" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="114" bodyend="163"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="114" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="115" bodyend="164"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1adc1f52eafb09abd388b30aabe6525d12" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="172" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="173" bodyend="190"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="173" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="174" bodyend="191"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1ae1773e8652c62f2d776f4bab4d2ca7c4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="194" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="195" bodyend="211"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="195" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="196" bodyend="212"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1aa96265ab8a1a8009f4d20fe1710bfd19" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="216" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="217" bodyend="240"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="217" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="218" bodyend="241"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a4d3815e8751a2212f5f75600cdf386aa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="251" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="252" bodyend="264"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="252" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="253" bodyend="265"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a1fa7a62819180e608caef4841c2d5287" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="272" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="273" bodyend="290"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="273" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="274" bodyend="291"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a3e9c4e422acacc5912b995afcf0ace59" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="296" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="297" bodyend="306"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="297" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="298" bodyend="307"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a5322921d2b728b4f97d32fc8f92a9361" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="313" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="314" bodyend="329"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="314" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="315" bodyend="330"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1ac665daeeeb296e5d15018665f94bb375" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,17 +251,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="333" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="334" bodyend="528"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="334" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="335" bodyend="529"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a1090aa44b1f77aa3403f7e96b804d00b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processwetdepinterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a07efaaebcdc58eb8c193d66a3aef1c6d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processwetdepinterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processwetdepinterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocesswetdepinterface__mod_1_1processwetdepinterface" kindref="compound">processwetdepinterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -270,11 +274,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="534" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="535" bodyend="600"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="535" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="536" bodyend="601"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a2927157f9cd3c80b1022d24a1ef56d0b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processwetdepinterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1ac56f1272554109aeff23c6d574950e63" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processwetdepinterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processwetdepinterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -289,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="604" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="605" bodyend="611"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="605" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="606" bodyend="612"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a24bc8be5829cbe2384d418bbf751ff55" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -316,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="616" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="617" bodyend="726"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="617" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="618" bodyend="727"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1ac8b7e8d8ada95b74674c0e40036c85a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -348,7 +352,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="734" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="735" bodyend="780"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="735" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="736" bodyend="781"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a31ba6129b12a5a0c694a00f538cba5bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -390,11 +394,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="791" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="792" bodyend="796"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="792" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="793" bodyend="797"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a5ab20f5a47dca90e053f033efcf7ca63" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processwetdepinterface_mod::get_wetdep_scheme</definition>
+      <memberdef kind="function" id="namespaceprocesswetdepinterface__mod_1a0b626dc261f02ae83fb3f681df58bad6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processwetdepinterface_mod::get_wetdep_scheme</definition>
         <argsstring>(this)</argsstring>
         <name>get_wetdep_scheme</name>
         <qualifiedname>processwetdepinterface_mod::get_wetdep_scheme</qualifiedname>
@@ -422,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="806" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="807" bodyend="811"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="807" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="808" bodyend="812"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

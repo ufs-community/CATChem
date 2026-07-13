@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="27" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="27" bodyend="27"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="28" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="28" bodyend="28"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -39,7 +39,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="29" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="29" bodyend="-1"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="30" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="30" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessfactory__mod_1_1processfactorytype_1abb4648501f072d1ac670d3d088ee23c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="30" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="30" bodyend="-1"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="31" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="31" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessfactory__mod_1_1processfactorytype_1a7e9c6338a05fec4cd3a4bf5d937400aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -86,7 +86,7 @@
           <defname>this</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>process_names</defname>
         </param>
         <param>
@@ -99,7 +99,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="31" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="31" bodyend="-1"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="32" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="32" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocessfactory__mod_1_1processfactorytype_1a931e9d7da92ecb3447b8288589bbf783" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="32" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="32" bodyend="-1"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="33" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -163,14 +163,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/ProcessFactory_Mod.F90" line="33" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="33" bodyend="-1"/>
+        <location file="src/core/ProcessFactory_Mod.F90" line="34" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="34" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/ProcessFactory_Mod.F90" line="25" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="25" bodyend="34"/>
+    <location file="src/core/ProcessFactory_Mod.F90" line="26" column="1" bodyfile="src/core/ProcessFactory_Mod.F90" bodystart="26" bodyend="35"/>
     <listofallmembers>
       <member refid="structprocessfactory__mod_1_1processfactorytype_1abb4648501f072d1ac670d3d088ee23c7" prot="public" virt="non-virtual"><scope>processfactory_mod::processfactorytype</scope><name>create_process</name></member>
       <member refid="structprocessfactory__mod_1_1processfactorytype_1a11ee7050a179e74ee77a7078ff2fe8d7" prot="public" virt="non-virtual"><scope>processfactory_mod::processfactorytype</scope><name>init</name></member>

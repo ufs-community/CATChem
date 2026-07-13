@@ -51,7 +51,7 @@ _Interface for getting required met fields for a process._
 
 | Type | Name |
 | ---: | :--- |
-| virtual character(len=32) function, dimension(:), allocatable | [**get\_required\_met\_fields\_interface**](#function-get_required_met_fields_interface) (class([**processinterface**](namespaceprocessinterface__mod.md#none-processinterface)), intent(in) this) <br> |
+| virtual subroutine | [**get\_required\_met\_fields\_interface**](#function-get_required_met_fields_interface) (class([**processinterface**](namespaceprocessinterface__mod.md#none-processinterface)), intent(in) this, character(len=max\_len\_name), dimension(:), intent(out), allocatable field\_names) <br> |
 
 
 
@@ -88,8 +88,9 @@ _Interface for getting required met fields for a process._
 ### function get\_required\_met\_fields\_interface 
 
 ```Fortran
-virtual character(len=32) function, dimension(:), allocatable get_required_met_fields_interface::get_required_met_fields_interface (
-    class( processinterface ), intent(in) this
+virtual subroutine get_required_met_fields_interface::get_required_met_fields_interface (
+    class( processinterface ), intent(in) this,
+    character(len=max_len_name), dimension(:), intent(out), allocatable field_names
 ) 
 ```
 

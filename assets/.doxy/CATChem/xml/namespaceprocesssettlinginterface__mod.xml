@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="113" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="114" bodyend="163"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="114" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="115" bodyend="164"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a8e7c00c08a2167cd9c43e1ef76aa86ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="172" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="173" bodyend="190"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="173" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="174" bodyend="191"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1aed6d9dcd74d974a2ef35e022ed5507bd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="194" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="195" bodyend="211"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="195" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="196" bodyend="212"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1aa7abceca7b2056a5d7b3df9bae968381" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -112,7 +112,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="216" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="217" bodyend="240"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="217" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="218" bodyend="241"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a10889339b0fdb7c78a66c43407dd29e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -140,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="251" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="252" bodyend="264"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="252" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="253" bodyend="265"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a56b7c4266112b176b8ffb7a2ec63f698" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="272" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="273" bodyend="290"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="273" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="274" bodyend="291"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a7b3b4fa30a4411508843ae7914710199" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="296" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="297" bodyend="306"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="297" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="298" bodyend="307"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1af931d0eacb706b6105a0d6d55ba8048f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="313" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="314" bodyend="329"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="314" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="315" bodyend="330"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a41e15f8a2df66c995f5620dc7bf6e206" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -251,17 +251,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="333" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="334" bodyend="477"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="334" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="335" bodyend="478"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a82fa763f7d6360d811b3776d334936f4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=32) function, dimension(:), allocatable</type>
-        <definition>character(len=32) function, dimension(:), allocatable processsettlinginterface_mod::get_required_met_fields</definition>
-        <argsstring>(this)</argsstring>
+      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a25907e8b8df7d71ed14e569dc0402911" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine processsettlinginterface_mod::get_required_met_fields</definition>
+        <argsstring>(this, field_names)</argsstring>
         <name>get_required_met_fields</name>
         <qualifiedname>processsettlinginterface_mod::get_required_met_fields</qualifiedname>
         <param>
           <type>class(<ref refid="structprocesssettlinginterface__mod_1_1processsettlinginterface" kindref="compound">processsettlinginterface</ref>), intent(in)</type>
           <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
+          <defname>field_names</defname>
         </param>
         <briefdescription>
 <para>Get required meteorological fields for this process. </para>
@@ -270,11 +274,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="483" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="484" bodyend="548"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="484" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="485" bodyend="549"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1ac3aff16830343d1d699c3c462a0a0e2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function, dimension(:), allocatable</type>
-        <definition>character(len=64) function, dimension(:), allocatable processsettlinginterface_mod::get_required_diagnostic_fields</definition>
+      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1afd26400cf117289ae75717ffafe89f04" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function, dimension(:), allocatable</type>
+        <definition>character(len=max_len_name) function, dimension(:), allocatable processsettlinginterface_mod::get_required_diagnostic_fields</definition>
         <argsstring>(this)</argsstring>
         <name>get_required_diagnostic_fields</name>
         <qualifiedname>processsettlinginterface_mod::get_required_diagnostic_fields</qualifiedname>
@@ -289,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="552" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="553" bodyend="559"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="553" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="554" bodyend="560"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1ac19b75914efaadc5400ac046351efa6c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -316,7 +320,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="564" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="565" bodyend="674"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="565" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="566" bodyend="675"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a4deb73f3ef6d5fb75e63addee3ac4d5a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -348,7 +352,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="682" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="683" bodyend="728"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="683" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="684" bodyend="729"/>
       </memberdef>
       <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1a4096c3e8f8e785656c22a57bc3efd2f4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -390,11 +394,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="739" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="740" bodyend="744"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="740" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="741" bodyend="745"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1ae9450d6c915aa7220f080f962c42f382" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>character(len=64) function</type>
-        <definition>character(len=64) function processsettlinginterface_mod::get_settling_scheme</definition>
+      <memberdef kind="function" id="namespaceprocesssettlinginterface__mod_1ace85ed982690aebcc9a55758ba062f64" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=max_len_name) function</type>
+        <definition>character(len=max_len_name) function processsettlinginterface_mod::get_settling_scheme</definition>
         <argsstring>(this)</argsstring>
         <name>get_settling_scheme</name>
         <qualifiedname>processsettlinginterface_mod::get_settling_scheme</qualifiedname>
@@ -422,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="754" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="755" bodyend="759"/>
+        <location file="src/process/settling/ProcessSettlingInterface_Mod.F90" line="755" column="1" bodyfile="src/process/settling/ProcessSettlingInterface_Mod.F90" bodystart="756" bodyend="760"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

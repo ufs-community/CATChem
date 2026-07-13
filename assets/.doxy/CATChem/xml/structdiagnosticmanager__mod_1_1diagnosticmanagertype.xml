@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="63" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="63" bodyend="63"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="64" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="64" bodyend="64"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -32,11 +32,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="66" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="66" bodyend="66"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="67" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="67" bodyend="67"/>
       </memberdef>
-      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a22583bd21bc682c4f83d6f3ab7f71f4a" prot="public" static="no" mutable="no">
-        <type>character(len=64), dimension(:), allocatable</type>
-        <definition>character(len=64), dimension(:), allocatable diagnosticmanager_mod::diagnosticmanagertype::process_names</definition>
+      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a41a79bda776b3d263696f88edae6e241" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_name), dimension(:), allocatable</type>
+        <definition>character(len=max_len_name), dimension(:), allocatable diagnosticmanager_mod::diagnosticmanagertype::process_names</definition>
         <argsstring></argsstring>
         <name>process_names</name>
         <qualifiedname>diagnosticmanager_mod::diagnosticmanagertype::process_names</qualifiedname>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="67" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="67" bodyend="67"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="68" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="68" bodyend="68"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a823026d57809503e4a1bbb05e649b965" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="68" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="68" bodyend="68"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="69" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="69" bodyend="69"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a02dcf6e45f3508d0a66e14241c8b5831" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="69" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="69" bodyend="69"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="70" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="70" bodyend="70"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a9338764e05056c96d42168e78e8468dd" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -91,11 +91,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="72" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="72" bodyend="72"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="73" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="73" bodyend="73"/>
       </memberdef>
-      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1af4b87dcfd5c3ffc3248c47ae57f25ae2" prot="public" static="no" mutable="no">
-        <type>character(len=256)</type>
-        <definition>character(len=256) diagnosticmanager_mod::diagnosticmanagertype::output_prefix</definition>
+      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a35419b456543299a7407b78eedc8d03b" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_name)</type>
+        <definition>character(len=max_len_name) diagnosticmanager_mod::diagnosticmanagertype::output_prefix</definition>
         <argsstring></argsstring>
         <name>output_prefix</name>
         <qualifiedname>diagnosticmanager_mod::diagnosticmanagertype::output_prefix</qualifiedname>
@@ -106,11 +106,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="73" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="73" bodyend="73"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="74" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="74" bodyend="74"/>
       </memberdef>
-      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ac7c2a5e412703ab6e3d7b4bcd120eb9e" prot="public" static="no" mutable="no">
-        <type>character(len=256)</type>
-        <definition>character(len=256) diagnosticmanager_mod::diagnosticmanagertype::output_directory</definition>
+      <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a5497a447a14a01a4b168a6a19a48cf35" prot="public" static="no" mutable="no">
+        <type>character(len=max_len_path)</type>
+        <definition>character(len=max_len_path) diagnosticmanager_mod::diagnosticmanagertype::output_directory</definition>
         <argsstring></argsstring>
         <name>output_directory</name>
         <qualifiedname>diagnosticmanager_mod::diagnosticmanagertype::output_directory</qualifiedname>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="74" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="74" bodyend="74"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="75" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1af393afdba7a331a90ecbc1e5ac9381b9" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -136,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="75" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="76" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a2052af6caf1dc9d33bf897e2db17516d" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -151,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="78" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="78" bodyend="78"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="79" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="79" bodyend="79"/>
       </memberdef>
       <memberdef kind="variable" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a560cbe8d6ad26ecccba48d5637081a6c" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -166,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="79" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="79" bodyend="79"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="80" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -221,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="83" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="83" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="84" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="84" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1aed9621e76ec969864fd33dbc3f2a3c81" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -262,7 +262,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="84" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="84" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="85" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="85" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a6902ad90734da2015f2cc727b4760b70" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -303,7 +303,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="85" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="85" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="86" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="86" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ac830924a7bc8317a8c1aa42f36259c46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -356,7 +356,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="88" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="88" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="89" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="89" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ae2c8d365979b2386fc0129d040d85ba9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -421,7 +421,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="89" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="89" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="90" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="90" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1adf71a06d02c1c0fd35fb41e7df21e0d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -474,7 +474,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="90" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="90" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="91" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="91" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a280695083d4038bbf274fcda4d71ba4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -487,7 +487,7 @@
           <defname>this</defname>
         </param>
         <param>
-          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <type>character(len=max_len_name), dimension(:), intent(out), allocatable</type>
           <defname>process_list</defname>
         </param>
         <param>
@@ -539,7 +539,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="91" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="91" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="92" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="92" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a5cb3f5098d311309ffb92a6ccc8802eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -616,7 +616,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="94" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="94" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="95" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1aa20c82090278edb503a62e09fdee9770" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -669,7 +669,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="95" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="95" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="96" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="96" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ac10918cad4048b2930bdf57c9614ce36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -710,7 +710,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="96" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="96" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="97" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="97" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a4270386b2fa1ddef19cfaf258583d8fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -751,7 +751,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="97" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="97" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="98" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="98" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1aa3fd09b429bdccec112e2ee2bf33521d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -792,7 +792,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="100" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="100" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="101" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="101" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ab3aebfb1bedf736e0b442127b2e0264b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -845,7 +845,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="101" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="101" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="102" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="102" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a77318276fc8fb15e2e67058d430e4159" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -994,7 +994,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="102" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="102" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="103" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="103" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a437dd759d470cbff217be44e9b1b5167" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1035,7 +1035,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="103" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="103" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="104" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a358db6fd8c678632922aa3b3e5239df9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1076,7 +1076,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="104" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="105" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a2b81b9305bfb91a4dc6daa0d5da4c320" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1107,7 +1107,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="107" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="107" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="108" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="108" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a3757e7fb074d5ed4f872e3d0cc58e597" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1136,7 +1136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="108" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="108" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="109" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a826f81ea38f2ad4396442e7f4c02c117" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure</type>
@@ -1177,7 +1177,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/DiagnosticManager_Mod.F90" line="109" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="109" bodyend="-1"/>
+        <location file="src/core/DiagnosticManager_Mod.F90" line="110" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="110" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -1213,7 +1213,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/DiagnosticManager_Mod.F90" line="59" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="59" bodyend="111"/>
+    <location file="src/core/DiagnosticManager_Mod.F90" line="60" column="1" bodyfile="src/core/DiagnosticManager_Mod.F90" bodystart="60" bodyend="112"/>
     <listofallmembers>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a358db6fd8c678632922aa3b3e5239df9" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>advance_timestep</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1aa3fd09b429bdccec112e2ee2bf33521d" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>collect_all_diagnostics</name></member>
@@ -1232,12 +1232,12 @@
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a280695083d4038bbf274fcda4d71ba4b" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>list_processes</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a02dcf6e45f3508d0a66e14241c8b5831" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>max_processes</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a823026d57809503e4a1bbb05e649b965" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>num_processes</name></member>
-      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ac7c2a5e412703ab6e3d7b4bcd120eb9e" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_directory</name></member>
+      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a5497a447a14a01a4b168a6a19a48cf35" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_directory</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a9338764e05056c96d42168e78e8468dd" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_enabled</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1af393afdba7a331a90ecbc1e5ac9381b9" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_frequency</name></member>
-      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1af4b87dcfd5c3ffc3248c47ae57f25ae2" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_prefix</name></member>
+      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a35419b456543299a7407b78eedc8d03b" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>output_prefix</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a3757e7fb074d5ed4f872e3d0cc58e597" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>print_summary</name></member>
-      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a22583bd21bc682c4f83d6f3ab7f71f4a" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>process_names</name></member>
+      <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1a41a79bda776b3d263696f88edae6e241" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>process_names</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1abfdea8fc9b7823170dbbd854a5b852fa" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>process_registries</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1ac830924a7bc8317a8c1aa42f36259c46" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>register_process</name></member>
       <member refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype_1adf71a06d02c1c0fd35fb41e7df21e0d0" prot="public" virt="non-virtual"><scope>diagnosticmanager_mod::diagnosticmanagertype</scope><name>remove_process</name></member>
