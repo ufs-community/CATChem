@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catchem-docs"
-version = "0.1.0-rc.2"
+version = "2.0.0-rc.1"
 description = "CATChem (Configurable Atmospheric Chemistry) Documentation"
 readme = "README.md"
 requires-python = ">=3.8"
