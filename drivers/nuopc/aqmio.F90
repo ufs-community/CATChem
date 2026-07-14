@@ -4315,7 +4315,7 @@ contains
                      do j = 1, ny
                         do i = 1, nx
                            if (abs(lonBuf(i,j) - lonBuf(i,1)) > coordTol .or. &
-                               abs(latBuf(i,j) - latBuf(1,j)) > coordTol) then
+                              abs(latBuf(i,j) - latBuf(1,j)) > coordTol) then
                               rectilinear = .false.
                            end if
                         end do

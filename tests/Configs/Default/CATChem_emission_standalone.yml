@@ -224,7 +224,7 @@ met1:
     scale: [1.0]
     map: ["MET_QV"]
   PS:
-    long_name: "Surface Pressure" ###TODO: double check 2d field can be read in 
+    long_name: "Surface Pressure" ###TODO: double check 2d field can be read in
     units: "Pa"
     scale: [1.0]
     map: ["MET_PS"]
@@ -435,4 +435,3 @@ met8:
     units: "1"
     scale: [1.0]
     map: ["MET_DLUSE"]
-

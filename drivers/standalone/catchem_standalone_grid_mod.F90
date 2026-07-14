@@ -71,11 +71,11 @@ contains
       rc = ESMF_SUCCESS
 
       select case (trim(cfg%mode))
-      case (GRID_MODE_COLUMN)
+       case (GRID_MODE_COLUMN)
          call create_column_grid(cfg, grid, rc)
-      case (GRID_MODE_GRIDDED)
+       case (GRID_MODE_GRIDDED)
          call create_gridded_grid(cfg, grid, rc)
-      case default
+       case default
          call ESMF_LogSetError(ESMF_RC_ARG_BAD, &
             msg="Unknown grid mode '"//trim(cfg%mode)//"' (expected 'column' or 'gridded')", &
             line=__LINE__, file=__FILE__, rcToReturn=rc)
@@ -169,7 +169,7 @@ contains
       ! nominal column width via column_dlon/column_dlat. When either is <= 0
       ! we skip corners and warn that conservative regridding is unsupported.
       have_corners = (cfg%column_dlon > 0.0_ESMF_KIND_R8 .and. &
-                      cfg%column_dlat > 0.0_ESMF_KIND_R8)
+         cfg%column_dlat > 0.0_ESMF_KIND_R8)
       if (.not. have_corners) then
          call ESMF_LogWrite('create_column_grid: column_dlon/column_dlat not '// &
             'set (or <= 0); no CORNER coordinates added. Conservative regridding '// &

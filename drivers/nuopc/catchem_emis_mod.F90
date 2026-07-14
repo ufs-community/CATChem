@@ -428,9 +428,9 @@ contains
             ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName)
             if (ncStatus == NF90_NOERR) then
                if (index(dimName, 'time')   > 0 .or. index(dimName, 'Time')   > 0 .or. &
-                   index(dimName, 'TIME')   > 0 .or. index(dimName, 'month')  > 0 .or. &
-                   index(dimName, 'Month')  > 0 .or. index(dimName, 'record') > 0 .or. &
-                   index(dimName, 'Record') > 0) is_time = .true.
+                  index(dimName, 'TIME')   > 0 .or. index(dimName, 'month')  > 0 .or. &
+                  index(dimName, 'Month')  > 0 .or. index(dimName, 'record') > 0 .or. &
+                  index(dimName, 'Record') > 0) is_time = .true.
             end if
          end if
          if (is_time) spatial_ndims = ndims - 1
@@ -533,8 +533,8 @@ contains
       ! (Re)allocate the model-level buffer to (nx,ny,nz,1).
       if (allocated(field%emission_data_model)) then
          if (size(field%emission_data_model,1) /= nx .or. &
-             size(field%emission_data_model,2) /= ny .or. &
-             size(field%emission_data_model,3) /= nz) then
+            size(field%emission_data_model,2) /= ny .or. &
+            size(field%emission_data_model,3) /= nz) then
             deallocate(field%emission_data_model)
          end if
       end if
@@ -553,7 +553,7 @@ contains
             pmode = adjustl(category%vertical_pressure_mode)
             call to_lower_str(pmode)
             select case (trim(pmode))
-            case ('construct', 'hybrid', '')
+             case ('construct', 'hybrid', '')
                if (hybrid_grid_supported(nsrc)) then
                   src_pmid = get_pmid(get_pedge(met_state%PS, nsrc))
                   have_src = (size(src_pmid,3) == nsrc)
@@ -562,7 +562,7 @@ contains
                      nsrc, ' levels (category ', trim(category%category_name)//')'
                   call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
                end if
-            case default
+             case default
                write(msg,'(A,A,A,A)') trim(pName), &
                   ': vertical_pressure_mode="', trim(category%vertical_pressure_mode), &
                   '" not implemented; falling back to a level copy'
@@ -573,7 +573,7 @@ contains
             if (have_src) then
                if (allocated(met_state%PMID)) then
                   if (size(met_state%PMID,1) == nx .and. size(met_state%PMID,2) == ny .and. &
-                      size(met_state%PMID,3) == nz .and. met_state%is_field_set('PMID')) then
+                     size(met_state%PMID,3) == nz .and. met_state%is_field_set('PMID')) then
                      dst_pmid = met_state%PMID
                      have_dst = .true.
                   end if
@@ -1701,7 +1701,7 @@ contains
          ! and the (possibly time-blended) emission_data, so the field is used
          ! and diagnosed on the model grid rather than truncated.
          if (category%vertical_interp .and. .not. category%fields(ifield)%is_2d .and. &
-             size(category%fields(ifield)%emission_data, 3) /= nz) then
+            size(category%fields(ifield)%emission_data, 3) /= nz) then
             call catchem_emis_vinterp_field(category, category%fields(ifield), met_state, nz, localrc)
          else if (allocated(category%fields(ifield)%emission_data_model)) then
             ! No longer needed (config changed or size now matches) -> drop it.
@@ -1795,7 +1795,7 @@ contains
                   if (category%fields(ifield)%is_2d) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
                   else if (allocated(category%fields(ifield)%emission_data_model) .or. &
-                           size(category%fields(ifield)%emission_data, 3) == nz) then
+                     size(category%fields(ifield)%emission_data, 3) == nz) then
                      ! Model-grid data: either pressure-interpolated into
                      ! emission_data_model (already in emission_flux above) or a
                      ! native nz-level field.  Both are nz-sized in emission_flux.
@@ -1808,7 +1808,7 @@ contains
                      ! scaling that emission_flux received above.
                      call met_state%set_field(trim(mapped_species_name(5:)), &
                         category%fields(ifield)%emission_data(:,:,:,1) &
-                           * category%global_scale * global_scale * scale_factor, &
+                        * category%global_scale * global_scale * scale_factor, &
                         error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
@@ -2436,7 +2436,7 @@ contains
 
             ! Write field based on whether it's gridded (2D) or not (3D)
             if (ext_emis_data%categories(icat)%gridded .and. &
-                ext_emis_data%categories(icat)%fields(ifield)%is_2d) then
+               ext_emis_data%categories(icat)%fields(ifield)%is_2d) then
                ! 2D gridded emission field
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &

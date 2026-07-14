@@ -10,6 +10,7 @@
 !!
 module ProcessFactory_Mod
    use precision_mod
+   use constants, only : MAX_LEN_NAME
    use StateManager_Mod, only : StateManagerType
    use MetState_Mod, only : MetStateType
    use error_mod
@@ -54,7 +55,7 @@ contains
       integer, intent(out) :: rc
 
       type(ErrorManagerType), pointer :: error_mgr
-      character(len=32), allocatable :: met_fields(:)
+      character(len=MAX_LEN_NAME), allocatable :: met_fields(:)
       integer :: i, alloc_rc
       type(MetStateType), pointer :: met_state
 
@@ -74,7 +75,7 @@ contains
       endif
 
       ! Allocate only required met fields for this process
-      met_fields = process%get_required_met_fields()
+      call process%get_required_met_fields(met_fields)
       met_state => container%get_met_state_ptr()
       if (associated(met_state) .and. allocated(met_fields)) then
          do i = 1, size(met_fields)
@@ -88,7 +89,7 @@ contains
 
    subroutine factory_list_available(this, process_names, rc)
       class(ProcessFactoryType), intent(in) :: this
-      character(len=64), allocatable, intent(out) :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: process_names(:)
       integer, intent(out) :: rc
 
       call this%registry%list_processes(process_names, rc)

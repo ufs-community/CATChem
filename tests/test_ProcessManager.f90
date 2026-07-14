@@ -4,6 +4,7 @@
 !!!>
 program test_ProcessManager
    use testing_mod, only: assert, assert_close
+   use constants, only: MAX_LEN_NAME
    use ProcessManager_Mod
    use StateManager_Mod, only: StateManagerType
    use Error_Mod, only: CC_SUCCESS, ErrorManagerType
@@ -78,7 +79,7 @@ program test_ProcessManager
    ! Test 7: List processes (should be empty)
    write(*,*) 'Test 7: List processes (should be empty)'
    block
-      character(len=64) :: process_names(10)
+      character(len=MAX_LEN_NAME) :: process_names(10)
       integer :: count
 
       call process_mgr%list_processes(process_names, count)
@@ -106,7 +107,7 @@ program test_ProcessManager
    ! Test 9: Configure run phases (not doing anything)
    write(*,*) 'Test 9: Configure run phases'
    block
-      character(len=64) :: phase_names(3)
+      character(len=MAX_LEN_NAME) :: phase_names(3)
       phase_names(1) = 'Initialization'
       phase_names(2) = 'MainLoop'
       phase_names(3) = 'Finalization'

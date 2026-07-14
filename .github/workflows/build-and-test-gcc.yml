@@ -1,0 +1,39 @@
+name: CI (GNU-GCC)
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  BUILD_DIR: build
+
+jobs:
+  build-and-test:
+    name: Build and test (GCC ${{ matrix.gcc-version }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc-version: ["12", "14"]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev
+
+      - name: Configure
+        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF
+        env:
+          FC: gfortran-${{ matrix.gcc-version }}
+          CC: gcc-${{ matrix.gcc-version }}
+          CXX: g++-${{ matrix.gcc-version }}
+
+      - name: Build
+        run: cmake --build $BUILD_DIR -j2
+
+      - name: Test
+        run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure

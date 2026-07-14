@@ -28,6 +28,11 @@ We follow an issue-driven development workflow. Here is the process for making a
 
 - **Fork and Clone**: Fork the [CATChem repository](https://github.com/UFS-Community/CATChem) on GitHub, and then clone your fork to your local machine.
 - **Create a Branch**: Create a new branch for your feature or bugfix. The branch name should be descriptive, e.g., `feature/new-settling-scheme` or `bugfix/fix-memory-leak`.
+- **Install Pre-commit Hooks**: We use `pre-commit` to ensure code quality. Install the hooks by running:
+  ```bash
+  pip install pre-commit
+  pre-commit install
+  ```
 - **Build the Code**: Follow the instructions in the [User Guide](../user-guide/index.md) to build CATChem. For development, it is recommended to build in debug mode.
 
 ### 2. Make Your Changes

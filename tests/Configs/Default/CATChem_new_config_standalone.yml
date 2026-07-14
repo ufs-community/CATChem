@@ -336,7 +336,7 @@ processes:
       source_file: "ExtData/nexus/VOLCANO/v2021-09/so2_volcanic_emissions_CARN_v202005.degassing_only.rc"
       format: "volcano"      # triggers the point-source reader + 3D injector
       gridded: false
-      frequency: "static"     # "daily" if seperated by day
+      frequency: "static"     # "daily" if separated by day
       diagnostics: false     #current will all be zeros
       diag_list: [SO2]
     fire:

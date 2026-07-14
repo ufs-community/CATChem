@@ -21,6 +21,7 @@ module ProcessDustInterface_Mod
 
    ! Core CATChem infrastructure
    use precision_mod, only: fp
+   use constants, only: MAX_LEN_NAME
    use ProcessInterface_Mod, only: ProcessInterface, ColumnProcessInterface
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType
@@ -720,12 +721,12 @@ contains
 
 
    !> Get required meteorological fields for this process
-   function get_required_met_fields(this) result(field_names)
+   subroutine get_required_met_fields(this, field_names)
       class(ProcessDustInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
-      character(len=32), allocatable :: scheme_fields(:)
-      character(len=32), allocatable :: process_fields(:)
-      character(len=32), allocatable :: unique_fields(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: scheme_fields(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_fields(:)
+      character(len=MAX_LEN_NAME), allocatable :: unique_fields(:)
       integer :: total_fields, scheme_count, process_count, i, j, unique_count
       logical :: is_duplicate
 
@@ -807,12 +808,12 @@ contains
       if (allocated(process_fields)) deallocate(process_fields)
       if (allocated(scheme_fields)) deallocate(scheme_fields)
 
-   end function get_required_met_fields
+   end subroutine get_required_met_fields
 
    !> Get required diagnostic fields for this process
    function get_required_diagnostic_fields(this) result(field_names)
       class(ProcessDustInterface), intent(in) :: this
-      character(len=64), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: field_names(:)
 
       allocate(field_names(2))
       field_names(1) = 'dust_emission_total'
@@ -832,7 +833,7 @@ contains
       type(DiagnosticManagerType), pointer :: diag_mgr
       type(DiagnosticRegistryType), pointer :: registry
       type(GridManagerType), pointer :: grid_mgr
-      character(len=256) :: field_name  ! For constructing species-specific field names
+      character(len=MAX_LEN_NAME) :: field_name  ! For constructing species-specific field names
       integer :: i  ! Loop variable for diagnostic species
       integer :: nx, ny, nz
       integer :: n_species
@@ -999,8 +1000,8 @@ contains
 
       integer :: i_col, j_col  ! Column grid position
       integer :: i  ! Loop variable for diagnostic species
-      character(len=256) :: field_name  ! For constructing species-specific field names
-      character(len=64) :: selected_scheme
+      character(len=MAX_LEN_NAME) :: field_name  ! For constructing species-specific field names
+      character(len=MAX_LEN_NAME) :: selected_scheme
 
       rc = CC_SUCCESS
 
@@ -1088,7 +1089,7 @@ contains
    !! @returns The current scheme name
    function get_dust_scheme(this) result(scheme_name)
       class(ProcessDustInterface), intent(in) :: this
-      character(len=64) :: scheme_name
+      character(len=MAX_LEN_NAME) :: scheme_name
 
       scheme_name = trim(this%process_config%dust_config%scheme)
 

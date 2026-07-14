@@ -4,6 +4,7 @@
 !!!>
 program test_ProcessRegistry
    use testing_mod, only: assert, assert_close
+   use constants, only: MAX_LEN_NAME
    use ProcessRegistry_Mod
    use Error_Mod, only: CC_SUCCESS
 
@@ -37,8 +38,8 @@ program test_ProcessRegistry
    ! Test 3: Get registry info
    write(*,*) 'Test 3: Get registry info'
    block
-      character(len=64) :: name
-      character(len=32) :: version
+      character(len=MAX_LEN_NAME) :: name
+      character(len=MAX_LEN_NAME) :: version
       integer :: num_processes
 
       call registry%get_registry_info(name, version, num_processes, rc)
@@ -60,7 +61,7 @@ program test_ProcessRegistry
    ! Test 5: List processes (should be empty)
    write(*,*) 'Test 5: List processes (should be empty)'
    block
-      character(len=64), allocatable :: process_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: process_names(:)
       integer :: num_processes
 
       call registry%list_processes(process_names, rc)
@@ -79,7 +80,7 @@ program test_ProcessRegistry
    ! Test 6: List categories (should be empty)
    write(*,*) 'Test 6: List categories (should be empty)'
    block
-      character(len=32), allocatable :: categories(:)
+      character(len=MAX_LEN_NAME), allocatable :: categories(:)
       integer :: num_categories
 
       call registry%list_categories(categories, rc)

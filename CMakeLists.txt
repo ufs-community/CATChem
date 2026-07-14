@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(CATChem VERSION 0.1.0 LANGUAGES Fortran C CXX)
+# Extract version from pyproject.toml
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml" PYPROJECT_TOML)
+string(REGEX MATCH "version = \"([^\"]+)\"" _ ${PYPROJECT_TOML})
+set(CATCHEM_VERSION_FULL ${CMAKE_MATCH_1})
+
+# CMake project() VERSION requires numeric format: major[.minor[.patch[.tweak]]]
+if(CATCHEM_VERSION_FULL MATCHES "^([0-9]+(\\.[0-9]+)*)")
+  set(CATCHEM_VERSION "${CMAKE_MATCH_1}")
+else()
+  message(
+    WARNING
+    "${CATCHEM_VERSION_FULL} includes strings or other characters (likely a release candidate), defaulting to 0.0.0"
+  )
+  set(CATCHEM_VERSION "0.0.0")
+endif()
+
+project(CATChem VERSION ${CATCHEM_VERSION} LANGUAGES Fortran C CXX)
 
 # Global variables for path management
 set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
@@ -11,7 +27,11 @@ option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
 option(CATCHEM_TRACE_NUOPC "Enable ESMF trace regions in NUOPC cap" OFF)
 # Option to build the standalone ESMF/NUOPC driver + application (requires NUOPC)
-option(CATCHEM_BUILD_STANDALONE "Build standalone ESMF/NUOPC driver and app" OFF)
+option(
+  CATCHEM_BUILD_STANDALONE
+  "Build standalone ESMF/NUOPC driver and app"
+  OFF
+)
 
 if(CATCHEM_TRACE_NUOPC)
   add_compile_definitions(CATCHEM_TRACE_NUOPC)
@@ -135,26 +155,21 @@ if(CATCHEM_BUILD_STANDALONE)
 endif()
 
 if(CATCHEM_BUILD_NUOPC)
-  # Resolve ESMF target. Providers expose ESMF under different target names:
-  #   - esmf        : UFS-weather-model FindESMF.cmake (coupled build) + MPAS
-  #   - ESMF::ESMF  : Homebrew / upstream ESMF CMake package (+ ESMF alias)
-  #   - ESMF        : alias / some host builds
-  # The UFS-coupled build is the highest-priority target, so check the
-  # lowercase `esmf` target FIRST and keep its behaviour byte-for-byte
-  # identical to before (UFS defines only `esmf`). The ESMF::ESMF / ESMF
-  # names are only reached on systems that do not provide `esmf` (e.g. the
-  # standalone build against Homebrew/upstream ESMF). The provider naming is
-  # disjoint in practice, so this ordering never changes the UFS result; it
-  # only adds support for the standalone case. find_package is a last resort
-  # when no ESMF target has been defined by a parent build.
-  if(TARGET esmf)
+  # Resolve ESMF target: prefer uppercase ESMF (FindESMF), fall back to
+  # lowercase esmf (MPAS internal), or find_package as last resort.
+  if(TARGET ESMF)
+    set(CATCHEM_ESMF_TARGET ESMF)
+  elseif(TARGET esmf)
     set(CATCHEM_ESMF_TARGET esmf)
   elseif(TARGET ESMF::ESMF)
     set(CATCHEM_ESMF_TARGET ESMF::ESMF)
-  elseif(TARGET ESMF)
-    set(CATCHEM_ESMF_TARGET ESMF)
   else()
     find_package(ESMF REQUIRED)
+    # find_package may create the target under different names depending on the
+    # provider: the repo's FindESMF.cmake creates `esmf`, while an installed
+    # ESMF CMake config package (e.g. Homebrew/upstream) creates `ESMF::ESMF`
+    # (or `ESMF`). Re-resolve the actual target instead of assuming `esmf`,
+    # otherwise CMake passes a bogus `-lesmf` flag and the link fails.
     if(TARGET esmf)
       set(CATCHEM_ESMF_TARGET esmf)
     elseif(TARGET ESMF::ESMF)
@@ -187,6 +202,11 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
       "CATChem: detected real-8 promotion flag, enabling USE_REAL8"
     )
   endif()
+endif()
+
+# Find yaml-cpp for configuration parsing
+if(NOT TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
+  find_package(yaml-cpp QUIET)
 endif()
 
 add_subdirectory(src)

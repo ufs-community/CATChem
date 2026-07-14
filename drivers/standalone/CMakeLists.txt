@@ -18,11 +18,7 @@ if(NOT TARGET cc_nuopc)
   )
 endif()
 
-set(
-  _srcs
-  catchem_standalone_grid_mod.F90
-  catchem_driver.F90
-)
+set(_srcs catchem_standalone_grid_mod.F90 catchem_driver.F90)
 
 add_library(catchem_standalone_driver STATIC ${_srcs})
 add_dependencies(catchem_standalone_driver cc_nuopc)
@@ -44,9 +40,7 @@ target_link_libraries(
 # to <build>/include. Make both visible.
 target_include_directories(
   catchem_standalone_driver
-  PRIVATE
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/../mod
+  PRIVATE ${CMAKE_BINARY_DIR}/include ${CMAKE_BINARY_DIR}/../mod
 )
 
 set_target_properties(
@@ -54,7 +48,10 @@ set_target_properties(
   PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
 
-target_compile_options(catchem_standalone_driver PRIVATE ${_catchem_compiler_options})
+target_compile_options(
+  catchem_standalone_driver
+  PRIVATE ${_catchem_compiler_options}
+)
 
 # ---------------------------------------------------------------------
 # Standalone executable
@@ -91,7 +88,10 @@ configure_file(
 # which is the build root where catchem_standalone.configure lives. The
 # canonical set lives under tests/Configs/Default, the same files the process
 # tests use.
-file(GLOB _catchem_standalone_yml "${PROJECT_SOURCE_DIR}/tests/Configs/Default/*.yml")
+file(
+  GLOB _catchem_standalone_yml
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/*.yml"
+)
 foreach(_yml ${_catchem_standalone_yml})
   get_filename_component(_yml_name ${_yml} NAME)
   configure_file(${_yml} ${CMAKE_BINARY_DIR}/${_yml_name} COPYONLY)
@@ -100,14 +100,12 @@ endforeach()
 # ---------------------------------------------------------------------
 # Installation
 # ---------------------------------------------------------------------
-install(
-  TARGETS catchem_app
-  RUNTIME DESTINATION bin COMPONENT drivers
-)
+install(TARGETS catchem_app RUNTIME DESTINATION bin COMPONENT drivers)
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/catchem_standalone.configure
-  DESTINATION share/catchem COMPONENT drivers
+  DESTINATION share/catchem
+  COMPONENT drivers
 )
 
 message(STATUS "CATChem: standalone driver/app (catchem_app) enabled")

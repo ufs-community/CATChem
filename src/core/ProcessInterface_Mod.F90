@@ -11,6 +11,7 @@
 !!
 module ProcessInterface_Mod
    use precision_mod
+   use constants, only : MAX_LEN_NAME, MAX_LEN_DESC
    use StateManager_Mod, only : StateManagerType
    use error_mod
    use ColumnInterface_Mod, only : ColumnProcessorType
@@ -32,9 +33,9 @@ module ProcessInterface_Mod
    !!
    type, abstract :: ProcessInterface
       private
-      character(len=64), public :: name = ''         !< Process name
-      character(len=64), public :: version = ''      !< Version string
-      character(len=256), public :: description = '' !< Process description
+      character(len=MAX_LEN_NAME), public :: name = ''         !< Process name
+      character(len=MAX_LEN_NAME), public :: version = ''      !< Version string
+      character(len=MAX_LEN_DESC), public :: description = ''  !< Process description
       logical :: is_initialized = .false.    !< Initialization status
       logical :: is_active = .false.         !< Active status
       real(fp) :: dt = 0.0_fp                !< Process timestep
@@ -172,11 +173,11 @@ module ProcessInterface_Mod
 
    !> \brief Interface for getting required met fields for a process
    abstract interface
-      function get_required_met_fields_interface(this) result(field_names)
-         import :: ProcessInterface
+      subroutine get_required_met_fields_interface(this, field_names)
+         import :: ProcessInterface, MAX_LEN_NAME
          class(ProcessInterface), intent(in) :: this
-         character(len=32), allocatable :: field_names(:)
-      end function get_required_met_fields_interface
+         character(len=MAX_LEN_NAME), allocatable, intent(out) :: field_names(:)
+      end subroutine get_required_met_fields_interface
    end interface
 
 contains
@@ -184,21 +185,21 @@ contains
    !> \brief Get process name
    function process_get_name(this) result(name)
       class(ProcessInterface), intent(in) :: this
-      character(len=64) :: name
+      character(len=MAX_LEN_NAME) :: name
       name = this%name
    end function process_get_name
 
    !> \brief Get process version
    function process_get_version(this) result(version)
       class(ProcessInterface), intent(in) :: this
-      character(len=64) :: version
+      character(len=MAX_LEN_NAME) :: version
       version = this%version
    end function process_get_version
 
    !> \brief Get process description
    function process_get_description(this) result(description)
       class(ProcessInterface), intent(in) :: this
-      character(len=256) :: description
+      character(len=MAX_LEN_DESC) :: description
       description = this%description
    end function process_get_description
 
@@ -252,13 +253,13 @@ contains
    !!
    !! Override this method in concrete processes to specify which met fields are needed.
    !! The framework will only allocate the fields that are required.
-   function process_get_required_met_fields(this) result(field_names)
+   subroutine process_get_required_met_fields(this, field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=32), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable, intent(out) :: field_names(:)
 
       ! Default implementation - no met fields required
       allocate(field_names(0))
-   end function process_get_required_met_fields
+   end subroutine process_get_required_met_fields
 
    !> \brief Get required diagnostic fields for this process
    !!
@@ -266,7 +267,7 @@ contains
    !! should be created and made available.
    function process_get_required_diagnostic_fields(this) result(field_names)
       class(ProcessInterface), intent(in) :: this
-      character(len=64), allocatable :: field_names(:)
+      character(len=MAX_LEN_NAME), allocatable :: field_names(:)
 
       ! Default implementation - no diagnostic fields required
       allocate(field_names(0))
@@ -907,7 +908,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_2d(:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
 
       rc = CC_SUCCESS
 
@@ -984,7 +985,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_3d(:,:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
       integer :: k, n_dim3
 
       rc = CC_SUCCESS
@@ -1073,7 +1074,7 @@ contains
       type(DiagnosticFieldType), pointer :: diag_field => null()
       type(DiagnosticDataType), pointer :: diag_data => null()
       real(fp), pointer :: field_data_3d(:,:,:) => null()
-      character(len=64) :: process_name
+      character(len=MAX_LEN_NAME) :: process_name
       integer :: k, l, n_levels, n_species, flat_index
 
       rc = CC_SUCCESS
