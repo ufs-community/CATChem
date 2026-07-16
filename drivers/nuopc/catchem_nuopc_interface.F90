@@ -33,7 +33,7 @@ module catchem_nuopc_interface
    ! use catchem_nuopc_netcdf_out
    ! use machine, only: kind_phys
    use precision_mod, only: fp
-   use Constants, only: g0, Rd, Re
+   use Constants, only: g0, Rd, Re, MAX_LEN_NAME
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -1391,7 +1391,11 @@ contains
       type(StateManagerType), pointer :: state_mgr_diag => null()
       type(ConfigManagerType), pointer :: config_mgr_diag => null()
       type(ESMF_Time) :: time_on_file
-      character(len=64), allocatable :: process_list(:)
+      ! NOTE: element length MUST match DiagnosticManager%list_processes, whose
+      ! intent(out) allocatable dummy is character(len=MAX_LEN_NAME). A shorter
+      ! length here corrupts the returned array (blank names, heap/descriptor
+      ! damage) and deadlocks the parallel diagnostic write.
+      character(len=MAX_LEN_NAME), allocatable :: process_list(:)
       integer :: num_processes, i
       logical :: time_to_write
       character(len=256) :: filename
