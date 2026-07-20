@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout current repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Git user
         run: |
@@ -57,7 +57,7 @@ jobs:
           # 2. Update internal string references now that files are renamed
           find modulefiles/ -type f -exec sed -i 's/ufs_common/catchem_common/g' {} +
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
 
@@ -83,7 +83,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.changes.outputs.no_changes == 'false'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Automated update: Sync modulefiles and clean up references"
