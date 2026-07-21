@@ -92,6 +92,8 @@ if(CATCHEM_BUILD_MUSICA)
   set(MUSICA_ENABLE_MICM ON)
   set(MUSICA_ENABLE_TUVX OFF)
   set(MUSICA_ENABLE_CARMA OFF)
+  set(MUSICA_ENABLE_MPI ON)
+  set(MUSICA_ENABLE_OPENMP ON)
 
   # Add MUSICA as a subdirectory
   add_subdirectory(musica)

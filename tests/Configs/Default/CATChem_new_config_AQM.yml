@@ -76,6 +76,7 @@ run_phases:
       - drydep
       - so4chem
       - wetdep
+      - GasChem
   # test2:
   #   description: "Test phase 2"
   #   processes:
@@ -87,6 +88,12 @@ run_phases:
 # Settings for CATChem processes
 #============================================================================
 processes:
+  GasChem:
+    activate: true
+    diagnostics: true
+    scheme: 'no_phot'
+    no_phot:
+      mechanism: "micm_config.yaml"
   extemis:
     activate: true
     diagnostics: true

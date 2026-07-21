@@ -111,6 +111,7 @@ contains
       character(len=:), allocatable :: rp_name
 
       rc = 0
+      elapsed = 0.0_fp
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
@@ -136,9 +137,12 @@ contains
          if (rp_name(1:min(5,len(rp_name))) == 'LOSS.') then
             rate_val = 1.0_8
          endif
-
+         target_rp_internal_idx = state%rate_parameters_ordering%index(state%rate_parameters_ordering%name(rp_idx), micm_error)
+      
          do k = 1, num_layers
-            idx = 1 + (k - 1) * state%rate_parameters_strides%grid_cell + (state%rate_parameters_ordering%index(rp_name, micm_error) - 1) * state%rate_parameters_strides%variable
+            ! 1-Based Struct Match: 1 + Grid Layer Stride + (Zero-indexed Variable Position * Variable Stride)
+            idx = 1 + (k - 1) * state%rate_parameters_strides%grid_cell + &
+               (target_rp_internal_idx - 1) * state%rate_parameters_strides%variable
             state%rate_parameters(idx) = rate_val
          end do
       end do
@@ -147,10 +151,10 @@ contains
       do k = 1, num_layers
          state%conditions(k)%temperature = t(k)
          state%conditions(k)%pressure = pmid(k)
-         state%conditions(k)%air_density = airden(k) / AIRMW
+         state%conditions(k)%air_density = airden(k) / (AIRMW / 1000.0_fp)
          do species_idx = 1, num_species
             ! convert species concentrations from ppmv to mol/m3
-            conc = species_conc(k,species_idx) * 1e-6_fp * pmid(k) / (RSTARG * t(k))
+            conc = species_conc(k, species_idx) * 1.0e-6_fp * state%conditions(k)%air_density
             micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + (species_idx-1)*state%species_strides%variable
             state%concentrations(micm_sp_idx) = conc
          enddo
@@ -172,7 +176,7 @@ contains
          do species_idx = 1, num_species
             micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + (species_idx-1)*state%species_strides%variable
             ! convert final concentration back to ppmv from mol/m3
-            conc = state%concentrations(micm_sp_idx) * 1e6_fp * (RSTARG * t(k)) / pmid(k)
+            conc = state%concentrations(micm_sp_idx)  / state%conditions(k)%air_density * 1e6_fp
 
             species_tendencies(k, species_idx) = conc
 
@@ -200,6 +204,17 @@ contains
          end do
 
       end do
+
+      if (associated(state)) then
+         deallocate(state)
+         state => null()
+      end if
+
+      if (associated(micm)) then
+         deallocate(micm)
+         micm => null()
+      end if
+      if (allocated(rp_name)) deallocate(rp_name)
    end subroutine compute_no_phot
 
    ! =======================================================================
