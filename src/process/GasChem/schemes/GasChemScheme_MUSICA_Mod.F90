@@ -138,7 +138,7 @@ contains
             rate_val = 1.0_8
          endif
          target_rp_internal_idx = state%rate_parameters_ordering%index(state%rate_parameters_ordering%name(rp_idx), micm_error)
-      
+
          do k = 1, num_layers
             ! 1-Based Struct Match: 1 + Grid Layer Stride + (Zero-indexed Variable Position * Variable Stride)
             idx = 1 + (k - 1) * state%rate_parameters_strides%grid_cell + &

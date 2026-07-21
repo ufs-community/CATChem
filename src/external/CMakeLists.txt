@@ -79,7 +79,7 @@ else()
   FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
   FetchContent_MakeAvailable(yaml-cpp)
   target_compile_definitions(
-    yaml-cpp 
+    yaml-cpp
     PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:YAML=CATChem_YAML>"
   )
 endif()
