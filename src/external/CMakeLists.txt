@@ -63,7 +63,10 @@ if(yaml-cpp_FOUND OR TARGET yaml-cpp OR TARGET yaml-cpp::yaml-cpp)
     add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
   endif()
 else()
-  message(STATUS "CATChem: yaml-cpp not found, building from source via FetchContent")
+  message(
+    STATUS
+    "CATChem: yaml-cpp not found, building from source via FetchContent"
+  )
   include(FetchContent)
 
   # Configure yaml-cpp build options
@@ -75,7 +78,10 @@ else()
   # This prevents MUSICA from fetching their own copy
   FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
   FetchContent_MakeAvailable(yaml-cpp)
-  target_compile_definitions(yaml-cpp PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:YAML=CATChem_YAML>")
+  target_compile_definitions(
+    yaml-cpp 
+    PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:YAML=CATChem_YAML>"
+  )
 endif()
 
 #

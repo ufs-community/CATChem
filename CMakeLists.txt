@@ -203,7 +203,8 @@ if(CATCHEM_BUILD_NUOPC)
   add_dependencies(cc_nuopc CATChem)
 
   # Link to library files in dependency order (most dependent first)
-  set(CATCHEM_LIBRARIES
+  set(
+    CATCHEM_LIBRARIES
     $<TARGET_FILE:CATChem>
     $<TARGET_FILE:CATChem_process_seasalt>
     $<TARGET_FILE:CATChem_process_dust>
@@ -214,17 +215,19 @@ if(CATCHEM_BUILD_NUOPC)
     $<TARGET_FILE:CATChem_process_carbchem>
   )
   if(CATCHEM_BUILD_MUSICA)
-    list(APPEND CATCHEM_LIBRARIES
-      $<TARGET_FILE:CATChem_process_GasChem>
-    )
+    list(APPEND CATCHEM_LIBRARIES $<TARGET_FILE:CATChem_process_GasChem>)
   endif()
-  list(APPEND CATCHEM_LIBRARIES
+  list(
+    APPEND
+    CATCHEM_LIBRARIES
     $<TARGET_FILE:CATChem_core>
     $<TARGET_FILE:yaml_interface>
     $<TARGET_FILE:catchem_utilities>
   )
   if(CATCHEM_BUILD_MUSICA)
-    list(APPEND CATCHEM_LIBRARIES
+    list(
+      APPEND
+      CATCHEM_LIBRARIES
       $<TARGET_FILE:musica-fortran>
       $<TARGET_FILE:musica>
       $<TARGET_FILE:mechanism_configuration>
@@ -233,11 +236,7 @@ if(CATCHEM_BUILD_NUOPC)
     )
   endif()
 
-  target_link_libraries(
-    cc_nuopc
-    PRIVATE
-      ${CATCHEM_LIBRARIES}
-  )
+  target_link_libraries(cc_nuopc PRIVATE ${CATCHEM_LIBRARIES})
 
   # Link GOCART2G library if available (needed for drydep process)
   if(TARGET GOCART2G)

@@ -52,38 +52,6 @@ schemes:
       - name: "net_chemical_rate_per_species"
         description: "Net chem rate"
         units: "ppmv/s"
-  tuvx:
-    name: "tuvx"
-    class_name: "MUSICA"
-    description: "MICM gas phase chemistry solver with TUVx photolysis rates"
-    #gas_or_aero: gas     #gas, aero or both; only applies when gas_aero_differentiation is true
-    algorithm_type: "explicit"
-    affects_full_column: true
-    reference: "MUSICA library"
-    author: "Maggie Bruckner"
-
-    required_met_fields: #needed for scheme calculations
-      - TSTEP
-      - T
-      - AIRDEN
-      - PMID
-
-    required_constants:
-      - RSTARG
-      - AIRMW
-
-    parameters:
-      mechanism:
-        default: 'mechanism_config.yaml'
-        description: "MICM yaml file for chemical mechanism"
-      tuvx: 
-        default: 'tuvx.yaml'
-        description: "TUVx yaml file for chemical mechanism"
-
-    diagnostics:
-      - name: "photolysis_rate_per_<>_per_level "
-        description: "Photolysis rate"
-        units: ""
 
 diagnostics:
   - name: "total_rate_per_species_per_level"
