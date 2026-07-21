@@ -28,6 +28,9 @@ process_behavior:
 
 required_met_fields: #needed for other purposes, such as unit conversion
   - DELP
+required_constants: #needed for other purposes, such as unit conversion
+  - AIRMW
+  - g0
 
 schemes:
   gong97:
@@ -45,12 +48,17 @@ schemes:
       - SST
       - U10M
       - V10M
+      - LAT
+      - LON
 
     required_species_properties:
       - density
       - radius
       - lower_radius
       - upper_radius
+
+    required_constants:
+      - PI
 
     parameters:
       scale_factor:
@@ -86,12 +94,17 @@ schemes:
       - SST
       - U10M
       - V10M
+      - LAT
+      - LON
 
     required_species_properties:
       - density
       - radius
       - lower_radius
       - upper_radius
+
+    required_constants:
+      - PI
 
     parameters:
       scale_factor:
@@ -125,6 +138,10 @@ schemes:
       - FRSEAICE
       - SST
       - USTAR
+      - U10M
+      - V10M
+      - LAT
+      - LON
 
     required_species_properties:
       - density
@@ -132,12 +149,18 @@ schemes:
       - lower_radius
       - upper_radius
 
+    required_constants:
+      - PI
+
     parameters:
       scale_factor:
         default: 1.0
         min: 0.1
         max: 10.0
         description: "Emission scale factor"
+      weibull_flag:
+        default: false
+        description: "Apply Weibull distribution for particle size"
 
     diagnostics:
       - name: "seasalt_mass_emission_per_bin"

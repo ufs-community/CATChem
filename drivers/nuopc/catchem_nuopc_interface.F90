@@ -33,7 +33,7 @@ module catchem_nuopc_interface
    ! use catchem_nuopc_netcdf_out
    ! use machine, only: kind_phys
    use precision_mod, only: fp
-   use Constants, only: g0, Rd
+   use Constants, only: g0, Rd, Re
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -44,8 +44,11 @@ module catchem_nuopc_interface
    use TimeState_Mod, only: TimeStateType
    use ExtEmisData_Mod, only: ExtEmisDataType  ! External emissions data type
    use DiagnosticManager_Mod, only: DiagnosticManagerType
-   use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
-   use aqmio, only: AQMIO_Create, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF
+   use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
+      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D
+   use aqmio, only: AQMIO_Create, AQMIO_Destroy, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
+      AQMIO_LatlonInit, AQMIO_LatlonCleanup
+   use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
    use catchem_emis_mod
 
    implicit none
@@ -235,6 +238,58 @@ contains
          met_state%lon = met_state%lon - 360.0_fp
       end where
 
+      ! Populate grid-cell areas [m2] used for point-source emissions and other
+      ! per-area conversions (the NUOPC path does not import an area field).
+      ! Preference order:
+      !   1) ESMF_GRIDITEM_AREA attached to the grid (true FV3 cell areas [m2]).
+      !   2) ESMF_FieldRegridGetArea, which returns areas on the unit sphere
+      !      (steradians); scale by Re^2 to obtain m2.
+      if (allocated(met_state%AREA_M2)) then
+         block
+            type(ESMF_Field) :: areaField
+            real(ESMF_KIND_R8), pointer :: areaPtr(:,:)
+            integer :: arc
+            logical :: areaIsPresent
+            nullify(areaPtr)
+            ! Query whether the grid actually carries an AREA item before
+            ! retrieving it. Requesting farrayPtr on a grid that has no
+            ! ESMF_GRIDITEM_AREA attached makes ESMF dereference an unset
+            ! coord/item array and log a NULL-pointer ERROR. The FV3 import
+            ! grid on the NUOPC path does not attach areas, so check first.
+            areaIsPresent = .false.
+            call ESMF_GridGetItem(input_grid, itemflag=ESMF_GRIDITEM_AREA, &
+               staggerloc=ESMF_STAGGERLOC_CENTER, isPresent=areaIsPresent, rc=arc)
+            if (arc == ESMF_SUCCESS .and. areaIsPresent) then
+               call ESMF_GridGetItem(input_grid, itemflag=ESMF_GRIDITEM_AREA, &
+                  staggerloc=ESMF_STAGGERLOC_CENTER, farrayPtr=areaPtr, rc=arc)
+            else
+               arc = ESMF_RC_NOT_FOUND
+            end if
+            if (arc == ESMF_SUCCESS .and. associated(areaPtr)) then
+               if (size(areaPtr,1) == nx .and. size(areaPtr,2) == ny) then
+                  met_state%AREA_M2 = real(areaPtr, fp)
+               end if
+            else
+               ! Fall back to computing cell areas from the grid geometry.
+               nullify(areaPtr)
+               areaField = ESMF_FieldCreate(input_grid, typekind=ESMF_TYPEKIND_R8, &
+                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=arc)
+               if (arc == ESMF_SUCCESS) call ESMF_FieldRegridGetArea(areaField, rc=arc)
+               if (arc == ESMF_SUCCESS) call ESMF_FieldGet(areaField, farrayPtr=areaPtr, rc=arc)
+               if (arc == ESMF_SUCCESS .and. associated(areaPtr)) then
+                  if (size(areaPtr,1) == nx .and. size(areaPtr,2) == ny) then
+                     met_state%AREA_M2 = real(areaPtr, fp) * Re * Re
+                  end if
+               else
+                  call ESMF_LogWrite('catchem_nuopc_init: could not determine grid-cell '// &
+                     'areas; AREA_M2 left unset (point emissions will be skipped)', &
+                     ESMF_LOGMSG_WARNING, rc=arc)
+               end if
+               call ESMF_FieldDestroy(areaField, rc=arc)
+            end if
+         end block
+      end if
+
       !initialize extemission data here
       config_manager => state_mgr%get_config_ptr()
       call catchem_emis_init(cc_wrap%ext_emis, config_manager, nx, ny, nlev, clock, rc)
@@ -301,6 +356,17 @@ contains
       if (.not. ESMF_GridCompIsCreated(cc_wrap%iocomp)) then
          cc_wrap%iocomp = AQMIO_Create(cc_wrap%grid, rc =rc)
          if (rc /= CC_SUCCESS) return
+      end if
+
+      ! Initialize lat/lon stitched output if configured (multi-tile only)
+      if (config_manager%config_data%runtime%latlon_output) then
+         call AQMIO_LatlonInit(cc_wrap%grid, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) then
+            call ESMF_LogWrite('AQMIO_LatlonInit failed, lat/lon output disabled', &
+               ESMF_LOGMSG_WARNING, rc=rc)
+            rc = ESMF_SUCCESS  ! Non-fatal
+         end if
       end if
 
       ! Set time information if provided
@@ -418,23 +484,73 @@ contains
 
       ! Update extemission data first
       state_mgr => cc_wrap%catchem_model%get_state_manager()
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       !Run CATChem processes
       timestep = timestep + 1
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
          write(errmsg, '(A,I0)') 'Error in run_timestep at timestep = ', timestep
          return
       end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
+
+      ! Update PM2.5/PM10 aerosol diagnostics. These are stored in the
+      ! DiagnosticManager so they are available both for NetCDF output and for
+      ! NUOPC export, and must be computed after run_timestep (so concentrations
+      ! are current) and before the export transform.
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("update_pm_diagnostics", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
+      call update_pm_diagnostics(cc_wrap, rc)
+      if (rc /= CC_SUCCESS) then
+         errmsg = 'Error updating PM2.5/PM10 aerosol diagnostics'
+         return
+      end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("update_pm_diagnostics", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Write NetCDF output diagnostics if needed
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
          errmsg = 'Error writing NetCDF output diagnostics'
          return
       end if
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("catchem_diagnostics_write", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
    end subroutine catchem_nuopc_run
 
@@ -483,6 +599,18 @@ contains
       if (allocated(cc_wrap%field_config%import_fields)) deallocate(cc_wrap%field_config%import_fields)
       if (allocated(cc_wrap%field_config%export_fields)) deallocate(cc_wrap%field_config%export_fields)
 
+      ! Deallocate tracer mapping
+      if (allocated(cc_wrap%tracer_map%nuopc_to_cc)) deallocate(cc_wrap%tracer_map%nuopc_to_cc)
+      if (allocated(cc_wrap%tracer_map%names)) deallocate(cc_wrap%tracer_map%names)
+      if (allocated(cc_wrap%tracer_map%units)) deallocate(cc_wrap%tracer_map%units)
+
+      ! Clean up lat/lon stitched output resources
+      call AQMIO_LatlonCleanup(rc=rc)
+
+      ! Destroy the IO component and its per-tile taskComps
+      ! Must happen before the parent component's VM is torn down
+      call AQMIO_Destroy(cc_wrap%iocomp, rc=rc)
+
    end subroutine catchem_nuopc_finalize
 
    ! Transform NUOPC import fields to CATChem states
@@ -522,7 +650,7 @@ contains
       call ESMF_TimeGet(currTime, yy=year, mm=month, dd=day, &
          h=hour, m=minute, s=second, rc=rc)
       call ESMF_TimeIntervalGet(cc_wrap%timeStep, s_i8=timestep_seconds, rc=rc)
-      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds), error_mgr, rc)
+      call time_state%init(year, month, day, hour, minute, second, real(timestep_seconds, fp), error_mgr, rc)
       if (rc /= CC_SUCCESS) then
          return !maybe add an error message
       end if
@@ -1042,6 +1170,35 @@ contains
          nv = size(fptr4d, 4)
          ! Reverse vertical layers
          do v = 1, nv
+            ! PM2.5/PM10 are carried as slots inside the tracer mass-fraction
+            ! array (following GOCART), but they are diagnostics rather than
+            ! CATChem species, so they are not present in the tracer_map. Fill
+            ! these slots directly from the 'aerosol' PM diagnostics that were
+            ! computed and stored in the DiagnosticManager this timestep.
+            if (trim(cc_wrap%tracer_map%names(v)) == 'pm25' .or. &
+               trim(cc_wrap%tracer_map%names(v)) == 'pm10') then
+               found_index = cc_wrap%catchem_model%get_diag_index_from_field(trim(cc_wrap%tracer_map%names(v)))
+               if (found_index > 0) then
+                  if (allocated(cc_diag_data)) deallocate(cc_diag_data)
+                  call cc_wrap%catchem_model%get_diagnostic(diagnostic_names(found_index), cc_diag_data, rc)
+                  if (rc /= ESMF_SUCCESS) then
+                     call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+                        msg="Failed to get diagnostic data for: " // trim(diagnostic_names(found_index)), &
+                        line=__LINE__, file=__FILE__, rcToReturn=rc)
+                     return
+                  end if
+                  do k = 1, nk
+                     kk = k   ! no vertical reversal (CATChem and NUOPC share orientation)
+                     do j = 1, nj
+                        do i = 1, ni
+                           fptr4d(i,j,kk,v) = cc_diag_data(i,j,k)
+                        end do
+                     end do
+                  end do
+               end if
+               cycle   ! handled; move to next tracer
+            end if
+
             v_cc = cc_wrap%tracer_map%nuopc_to_cc(v)
             if (v_cc > 0) then
                if (.not. chem_state%ChemSpecies(v_cc)%is_advected) cycle !if not advected, go to next cycle
@@ -1091,6 +1248,8 @@ contains
 
       !type(cc_wrap_type), pointer :: cc_wrap
       type(DiagnosticManagerType), pointer :: diag_mgr => null()
+      type(StateManagerType), pointer :: state_mgr_diag => null()
+      type(ConfigManagerType), pointer :: config_mgr_diag => null()
       type(ESMF_Time) :: time_on_file
       character(len=64), allocatable :: process_list(:)
       integer :: num_processes, i
@@ -1099,8 +1258,13 @@ contains
 
       rc = CC_SUCCESS
 
-      ! Get process-local state
-      !cc_wrap => get_cc_wrap()
+      ! Check top-level diagnostics/output/enabled switch before doing anything
+      state_mgr_diag => cc_wrap%catchem_model%get_state_manager()
+      config_mgr_diag => state_mgr_diag%get_config_ptr()
+      if (.not. config_mgr_diag%config_data%runtime%DiagEnabled) then
+         return
+      end if
+      nullify(state_mgr_diag, config_mgr_diag)
 
       ! Initialize output timing if not done
       if (.not. cc_wrap%output_timing_initialized) then
@@ -1112,17 +1276,6 @@ contains
       call check_diagnostic_output_time(cc_wrap, current_time, time_to_write, time_on_file, rc)
       if (rc /= CC_SUCCESS) return
       if (.not. time_to_write) return
-
-      ! Get diagnostic manager
-      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
-      if (.not. associated(diag_mgr)) then
-         rc = CC_FAILURE
-         return
-      end if
-
-      ! Get list of processes with diagnostics
-      call diag_mgr%list_processes(process_list, num_processes, rc)
-      if (rc /= CC_SUCCESS .or. num_processes == 0) return
 
       ! Use grid (must be set during initialization)
       if (.not. ESMF_GridIsCreated(cc_wrap%grid)) then
@@ -1139,15 +1292,20 @@ contains
       call update_time_variable(cc_wrap, filename, time_on_file, cc_wrap%current_time_slice, rc)
       if (rc /= CC_SUCCESS) return
 
-      ! Write diagnostics for each process
-      do i = 1, num_processes
-         call write_process_diagnostics(cc_wrap, trim(process_list(i)), filename, rc)
-         if (rc /= CC_SUCCESS) then
-            ! Log error and return
-            write(*,'(A,A)') 'Error: Failed to write diagnostics for process: ', trim(process_list(i))
-            return
+      ! Write process diagnostics (optional - may have no registered processes)
+      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
+      if (associated(diag_mgr)) then
+         call diag_mgr%list_processes(process_list, num_processes, rc)
+         if (rc == CC_SUCCESS .and. num_processes > 0) then
+            do i = 1, num_processes
+               call write_process_diagnostics(cc_wrap, trim(process_list(i)), filename, rc)
+               if (rc /= CC_SUCCESS) then
+                  write(*,'(A,A)') 'Error: Failed to write diagnostics for process: ', trim(process_list(i))
+                  return
+               end if
+            end do
          end if
-      end do
+      end if
 
       !write extemission fields if needed
       call catchem_emis_write_diagnostics(cc_wrap%ext_emis, cc_wrap%current_time_slice, cc_wrap%iocomp, cc_wrap%grid, filename, rc)
@@ -1580,6 +1738,287 @@ contains
 
    end subroutine write_chem_diagnostics
 
+   !> \brief PM mass weight for a single aerosol species/bin
+   !!
+   !! \details
+   !! Returns the fractional contribution of an aerosol species (or size bin)
+   !! to a given particulate-matter size class (PM2.5 or PM10). This mirrors
+   !! the weighted-sum approach of the GOCART UFS Aerosol_Diag_Mod ComputePM /
+   !! PMGetTracerWeight routine, but is keyed on CATChem per-bin species
+   !! short_names (dust1..dust5, seas1..seas5, so4, bc1/bc2, oc1/oc2, and the
+   !! NO3an* nitrate aerosols) instead of contiguous tracer indices.
+   !!
+   !! A weight of 0 means the species does not contribute to that size class.
+   !!
+   !! \param name    Aerosol species short_name (e.g. 'dust2', 'seas3', 'so4')
+   !! \param pm_size Size class string: 'PM25' or 'PM10'
+   !! \return w      Mass weight (dimensionless multiplier)
+   function pm_tracer_weight(name, pm_size) result(w)
+      character(len=*), intent(in) :: name
+      character(len=*), intent(in) :: pm_size
+      real(fp) :: w
+
+      ! Partial-bin mass fractions (log-ratio of size cutoff to bin upper edge),
+      ! taken directly from the GOCART Aerosol_Diag_Mod PMGetTracerWeight routine.
+      real(fp), parameter :: one        = 1.0_fp
+      real(fp), parameter :: w25_du2    = log(1.250_fp) / log(1.8_fp)
+      real(fp), parameter :: w_du4      = log(1.667_fp) / log(2.0_fp)
+      real(fp), parameter :: w25_ss3    = log(2.50_fp)  / log(3.0_fp)
+      real(fp), parameter :: w_so4      = 132.14_fp / 96.06_fp
+      real(fp), parameter :: w_no3      = 80.043_fp / 62.0_fp
+      real(fp), parameter :: w10_no3an2 = 0.808_fp * w_no3
+      real(fp), parameter :: w25_no3an2 = 0.138_fp * w_no3
+      real(fp), parameter :: w10_no3an3 = 0.164_fp * w_no3
+
+      logical :: is25
+
+      w = 0.0_fp
+      is25 = (trim(pm_size) == 'PM25')
+
+      select case (trim(name))
+         ! --- Mineral dust (5 bins) ---
+       case ('dust1', 'DUST1')
+         w = one                                   ! fully in PM2.5 and PM10
+       case ('dust2', 'DUST2')
+         if (is25) then
+            w = w25_du2                            ! partial in PM2.5
+         else
+            w = one
+         end if
+       case ('dust3', 'DUST3')
+         if (.not. is25) w = one                   ! PM10 only
+       case ('dust4', 'DUST4')
+         if (.not. is25) w = w_du4                 ! partial in PM10
+       case ('dust5', 'DUST5')
+         w = 0.0_fp                                ! coarser than PM10
+
+         ! --- Sea salt (5 bins) ---
+       case ('seas1', 'SEAS1', 'seas2', 'SEAS2')
+         w = one
+       case ('seas3', 'SEAS3')
+         if (is25) then
+            w = w25_ss3                            ! partial in PM2.5
+         else
+            w = one
+         end if
+       case ('seas4', 'SEAS4')
+         if (.not. is25) w = one                   ! PM10 only
+       case ('seas5', 'SEAS5')
+         w = 0.0_fp                                ! coarser than PM10
+
+         ! --- Sulfate ---
+       case ('so4', 'SO4')
+         w = w_so4                                 ! (NH4)2SO4 mass scaling
+
+         ! --- Nitrate aerosols (present in extended mechanisms) ---
+       case ('NO3an1', 'no3an1','NO3AN1')
+         w = w_no3
+       case ('NO3an2', 'no3an2', 'NO3AN2')
+         if (is25) then
+            w = w25_no3an2
+         else
+            w = w10_no3an2
+         end if
+       case ('NO3an3', 'no3an3', 'NO3AN3')
+         w = w10_no3an3                            ! same weight for PM2.5/PM10
+
+         ! --- Carbonaceous aerosols (BC/OC, all fine mode) ---
+       case ('bc1', 'bc2', 'oc1', 'oc2', 'BC1', 'BC2', 'OC1', 'OC2')
+         w = one
+
+       case default
+         w = 0.0_fp
+      end select
+
+   end function pm_tracer_weight
+
+   !> \brief Compute 3D PM2.5 and PM10 aerosol mass concentrations
+   !!
+   !! \details
+   !! Computes particulate-matter mass concentrations (ug m-3) as a weighted
+   !! sum over aerosol species:  PM = sum_s w_s * conc_s * air_density, where
+   !! conc_s is the aerosol mixing ratio (ug kg-1) and air_density is the dry
+   !! air density (kg m-3). Weights are obtained from pm_tracer_weight and the
+   !! sum runs over every aerosol species in the chemistry state. No vertical
+   !! flip is applied (CATChem concentrations and AIRDEN share orientation).
+   !!
+   !! \param cc_wrap CATChem wrapper containing the model state
+   !! \param pm25    (out) allocatable 3D PM2.5 mass concentration (ug m-3)
+   !! \param pm10    (out) allocatable 3D PM10 mass concentration (ug m-3)
+   !! \param rc      Return code
+   subroutine compute_pm_diagnostics(cc_wrap, pm25, pm10, rc)
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      real(fp), allocatable, intent(out) :: pm25(:,:,:)
+      real(fp), allocatable, intent(out) :: pm10(:,:,:)
+      integer, intent(out) :: rc
+
+      type(StateManagerType), pointer :: state_mgr => null()
+      type(ChemStateType), pointer :: chem_state => null()
+      type(MetStateType), pointer :: met_state => null()
+      real(fp), pointer :: air_density(:,:,:) => null()
+      real(fp), pointer :: conc_data(:,:,:) => null()
+      integer :: i, ni, nj, nk
+      real(fp) :: w25, w10
+
+      rc = CC_SUCCESS
+
+      ! Get state manager and the chemistry / meteorology states
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      if (.not. associated(state_mgr)) then
+         write(*,'(A)') 'Error: StateManager not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      chem_state => state_mgr%get_chem_state_ptr()
+      if (.not. associated(chem_state)) then
+         write(*,'(A)') 'Error: ChemState not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      met_state => state_mgr%get_met_state_ptr()
+      if (.not. associated(met_state)) then
+         write(*,'(A)') 'Error: MetState not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      air_density => met_state%AIRDEN
+      if (.not. associated(air_density)) then
+         write(*,'(A)') 'Error: AIRDEN not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      ni = size(air_density, 1)
+      nj = size(air_density, 2)
+      nk = size(air_density, 3)
+
+      allocate(pm25(ni, nj, nk))
+      allocate(pm10(ni, nj, nk))
+      pm25 = 0.0_fp
+      pm10 = 0.0_fp
+
+      ! Weighted sum over all aerosol species
+      do i = 1, size(chem_state%ChemSpecies)
+         if (.not. chem_state%ChemSpecies(i)%is_aerosol) cycle
+
+         w25 = pm_tracer_weight(trim(chem_state%ChemSpecies(i)%short_name), 'PM25')
+         w10 = pm_tracer_weight(trim(chem_state%ChemSpecies(i)%short_name), 'PM10')
+         if (w25 == 0.0_fp .and. w10 == 0.0_fp) cycle
+
+         conc_data => chem_state%ChemSpecies(i)%conc
+         if (.not. associated(conc_data)) cycle
+
+         ! conc_data (ug kg-1) * air_density (kg m-3) -> ug m-3
+         if (w25 /= 0.0_fp) pm25 = pm25 + w25 * conc_data * air_density
+         if (w10 /= 0.0_fp) pm10 = pm10 + w10 * conc_data * air_density
+
+         nullify(conc_data)
+      end do
+
+   end subroutine compute_pm_diagnostics
+
+   !> \brief Register (lazily) and update PM2.5/PM10 diagnostics each timestep
+   !!
+   !! \details
+   !! On first invocation this registers an 'aerosol' diagnostic process in the
+   !! DiagnosticManager and creates two 3D fields, 'pm25' and 'pm10'. On every
+   !! invocation it recomputes the PM mass concentrations and stores them in the
+   !! DiagnosticManager. Storing the fields here makes them available both for
+   !! NetCDF file output (via the standard process-diagnostics writer) and for
+   !! NUOPC export (via transform_catchem_to_field). Must be called after the
+   !! chemistry timestep has run and before the export transform.
+   !!
+   !! \param cc_wrap CATChem wrapper containing the model state
+   !! \param rc      Return code
+   subroutine update_pm_diagnostics(cc_wrap, rc)
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      integer, intent(out) :: rc
+
+      logical, save :: pm_diag_registered = .false.
+
+      type(DiagnosticManagerType), pointer :: diag_mgr => null()
+      type(DiagnosticRegistryType), pointer :: registry => null()
+      type(DiagnosticFieldType), pointer :: field_ptr => null()
+      type(DiagnosticFieldType) :: pm_field
+      real(fp), allocatable :: pm25(:,:,:), pm10(:,:,:)
+      integer :: ni, nj, nk
+
+      rc = CC_SUCCESS
+
+      ! Compute current PM mass concentrations
+      call compute_pm_diagnostics(cc_wrap, pm25, pm10, rc)
+      if (rc /= CC_SUCCESS) return
+
+      ni = size(pm25, 1)
+      nj = size(pm25, 2)
+      nk = size(pm25, 3)
+
+      ! Get the diagnostic manager
+      diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
+      if (.not. associated(diag_mgr)) then
+         write(*,'(A)') 'Error: DiagnosticManager not available for PM diagnostics'
+         rc = CC_FAILURE
+         return
+      end if
+
+      ! Lazily register the 'aerosol' process and its PM fields
+      if (.not. pm_diag_registered) then
+         ! register_process is a no-op-with-error if already present; ignore dup
+         call diag_mgr%register_process('aerosol', rc)
+         rc = CC_SUCCESS
+
+         call diag_mgr%get_process_registry('aerosol', registry, rc)
+         if (rc /= CC_SUCCESS .or. .not. associated(registry)) then
+            write(*,'(A)') 'Error: could not get aerosol diagnostic registry'
+            rc = CC_FAILURE
+            return
+         end if
+
+         ! PM2.5 field
+         call pm_field%create('pm25', 'PM2.5 aerosol mass concentration', &
+            'ug m-3', DIAG_REAL_3D, process_name='aerosol', rc=rc)
+         if (rc /= CC_SUCCESS) return
+         call pm_field%initialize_data((/ni, nj, nk/), rc)
+         if (rc /= CC_SUCCESS) return
+         call registry%register_field(pm_field, rc)
+         if (rc /= CC_SUCCESS) return
+
+         ! PM10 field
+         call pm_field%create('pm10', 'PM10 aerosol mass concentration', &
+            'ug m-3', DIAG_REAL_3D, process_name='aerosol', rc=rc)
+         if (rc /= CC_SUCCESS) return
+         call pm_field%initialize_data((/ni, nj, nk/), rc)
+         if (rc /= CC_SUCCESS) return
+         call registry%register_field(pm_field, rc)
+         if (rc /= CC_SUCCESS) return
+
+         pm_diag_registered = .true.
+      end if
+
+      ! Update the stored PM fields with the current values
+      call diag_mgr%get_process_registry('aerosol', registry, rc)
+      if (rc /= CC_SUCCESS .or. .not. associated(registry)) then
+         write(*,'(A)') 'Error: could not get aerosol diagnostic registry for update'
+         rc = CC_FAILURE
+         return
+      end if
+
+      field_ptr => registry%get_field_ptr('pm25')
+      if (associated(field_ptr)) call field_ptr%update_data(array_3d=pm25)
+      nullify(field_ptr)
+
+      field_ptr => registry%get_field_ptr('pm10')
+      if (associated(field_ptr)) call field_ptr%update_data(array_3d=pm10)
+      nullify(field_ptr)
+
+      if (allocated(pm25)) deallocate(pm25)
+      if (allocated(pm10)) deallocate(pm10)
+
+   end subroutine update_pm_diagnostics
+
    !> \brief Update time variable in NetCDF file
    !!
    !! This function handles proper time series management by either:
@@ -1606,7 +2045,12 @@ contains
       type(ESMF_TimeInterval) :: time_diff
       integer(ESMF_KIND_I8) :: time_seconds
       type(ESMF_VM) :: vm
+      type(ESMF_Grid) :: grid
       integer :: ibuf(1)  ! Buffer for MPI broadcast
+      integer :: tileCount, tile, localDe, localDeCount, localrc
+      character(len=256) :: tileFilename
+      character(len=16) :: tileSuffix
+      integer :: dotpos
 
       rc = CC_SUCCESS
 
@@ -1621,12 +2065,38 @@ contains
 
       new_time_data(1) = int(time_seconds, ESMF_KIND_I4)
 
-      ! Use the new direct write function with append=true
-      ! This automatically handles reading existing data and appending the new time
-      call AQMIO_Write1D(filename, "time", append=.true., del_old_file=.true., rc=rc, &
-         data_i4=new_time_data, current_size=time_slice, &
-         iocomp=cc_wrap%iocomp)
+      ! Store time value for lat/lon coordinate output
+      if (latlon_diag_is_init()) call latlon_diag_set_time(new_time_data(1))
+
+      ! Determine tile count to match AQMIO's per-tile file naming
+      call ESMF_GridCompGet(cc_wrap%iocomp, grid=grid, rc=rc)
       if (rc /= ESMF_SUCCESS) return
+      call ESMF_GridGet(grid, tileCount=tileCount, rc=rc)
+      if (rc /= ESMF_SUCCESS) return
+
+      if (tileCount > 1 .and. index(filename, '<tile>') == 0) then
+         ! Multi-tile without <tile> placeholder: write time to each per-tile file
+         ! Must match AQMIO_FileNameGet auto-tile naming: "file.nc" -> "file.tileN.nc"
+         do tile = 1, tileCount
+            write(tileSuffix, '(".tile",I0)') tile
+            dotpos = index(filename, '.', back=.true.)
+            if (dotpos > 1) then
+               tileFilename = filename(1:dotpos-1) // trim(tileSuffix) // trim(filename(dotpos:))
+            else
+               tileFilename = trim(filename) // trim(tileSuffix)
+            end if
+            call AQMIO_Write1D(tileFilename, "time", append=.true., del_old_file=.true., rc=rc, &
+               data_i4=new_time_data, current_size=time_slice, &
+               iocomp=cc_wrap%iocomp)
+            if (rc /= ESMF_SUCCESS) return
+         end do
+      else
+         ! Single tile or filename has <tile> placeholder
+         call AQMIO_Write1D(filename, "time", append=.true., del_old_file=.true., rc=rc, &
+            data_i4=new_time_data, current_size=time_slice, &
+            iocomp=cc_wrap%iocomp)
+         if (rc /= ESMF_SUCCESS) return
+      end if
 
       ! Broadcast time_slice from I/O PET to all other PETs so they have the correct value
       ! Get VM from the IOComp for broadcasting
@@ -1763,6 +2233,10 @@ contains
             call system('mkdir -p ' // trim(cc_wrap%output_directory))
          end if
       end if
+
+      ! Barrier to ensure directory is created before any PET tries to write
+      call ESMF_VMBarrier(vm, rc=rc)
+      if (rc /= ESMF_SUCCESS) return
 
       ! Get time components
       call ESMF_TimeGet(time_on_file, yy=year, mm=month, dd=day, &

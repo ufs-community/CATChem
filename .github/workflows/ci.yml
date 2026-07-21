@@ -56,7 +56,7 @@ jobs:
 
       - name: Configure
         if: ${{ !matrix.nuopc }}
-        run: cmake -B $BUILD_DIR -DBUILD_NUOPC=OFF
+        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF
         env:
           FC: gfortran-${{ matrix.gcc-version }}
           CC: gcc-${{ matrix.gcc-version }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Configure (NUOPC)
         if: matrix.nuopc
-        run: cmake -B $BUILD_DIR -DBUILD_NUOPC=ON
+        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=ON
         env:
           FC: mpifort
           OMPI_FC: gfortran-${{ matrix.gcc-version }}
@@ -86,9 +86,9 @@ jobs:
       matrix:
         include:
           - build-label: NUOPC
-            cmake-flags: -DBUILD_NUOPC=ON
+            cmake-flags: -DCATCHEM_BUILD_NUOPC=ON
           - build-label: NUOPC + MUSICA
-            cmake-flags: -DBUILD_NUOPC=ON -DCATCHEM_BUILD_MUSICA=ON
+            cmake-flags: -DCATCHEM_BUILD_NUOPC=ON -DCATCHEM_BUILD_MUSICA=ON
     defaults:
       run:
         shell: bash -l {0}

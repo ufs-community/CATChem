@@ -5,6 +5,8 @@
 set(
   _srcs
   aqmio.F90
+  catchem_regrid_mod.F90
+  catchem_latlon_output_mod.F90
   catchem_nuopc_cap.F90
   catchem_nuopc_interface.F90
   catchem_emis_mod.F90
@@ -20,7 +22,10 @@ set(_lib NUOPC_CATChem_cap)
 # find_package(NetCDF REQUIRED)      # Removed to avoid conflicts
 
 add_library(${_lib} ${_srcs})
-target_link_libraries(${_lib} PUBLIC CATChem esmf NetCDF::NetCDF_Fortran)
+target_link_libraries(
+  ${_lib}
+  PUBLIC CATChem ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran
+)
 
 # target_include_directories(${_lib} PUBLIC
 #   $<TARGET_PROPERTY:esmf,INTERFACE_INCLUDE_DIRECTORIES>

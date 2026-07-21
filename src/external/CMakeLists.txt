@@ -22,6 +22,16 @@ set(_lib GOCART2G)
 add_library(${_lib} ${_srcs})
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
   target_compile_options(${_lib} PRIVATE -ffree-line-length-none)
+  # Detect if parent build promotes default real to 8-byte and propagate to GOCART2G
+  if(CMAKE_Fortran_FLAGS MATCHES "-fdefault-real-8")
+    target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  endif()
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+  # Detect if parent build promotes default real to 8-byte and propagate to GOCART2G
+  # Intel supports: -r8, -real-size 64, and ifx also accepts -fdefault-real-8
+  if(CMAKE_Fortran_FLAGS MATCHES "-r8|-real-size 64|-fdefault-real-8")
+    target_compile_options(${_lib} PRIVATE -r8)
+  endif()
 endif()
 
 #find_package(NetCDF REQUIRED COMPONENTS Fortran)
@@ -37,20 +47,42 @@ set_target_properties(
 )
 
 #
-# yaml-cpp — declare via FetchContent so MUSICA and its dependencies reuse it
+# yaml-cpp — find or declare via FetchContent so MUSICA and its dependencies reuse it
 #
 
-include(FetchContent)
+find_package(yaml-cpp CONFIG QUIET)
+if(NOT yaml-cpp_FOUND)
+  find_package(yaml-cpp QUIET)
+endif()
 
-# Configure yaml-cpp build options
-set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Build yaml-cpp tests")
-set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Build yaml-cpp tools")
-set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "Build yaml-cpp contrib")
+if(yaml-cpp_FOUND OR TARGET yaml-cpp OR TARGET yaml-cpp::yaml-cpp)
+  message(STATUS "CATChem: using system/external yaml-cpp")
+  if(TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
+    add_library(yaml-cpp ALIAS yaml-cpp::yaml-cpp)
+  elseif(TARGET yaml-cpp AND NOT TARGET yaml-cpp::yaml-cpp)
+    add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+  endif()
+else()
+  message(
+    STATUS
+    "CATChem: yaml-cpp not found, building from source via FetchContent"
+  )
+  include(FetchContent)
 
-# Declare yaml-cpp as already available via FetchContent
-# This prevents MUSICA from fetching their own copy
-FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
-FetchContent_MakeAvailable(yaml-cpp)
+  # Configure yaml-cpp build options
+  set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Build yaml-cpp tests")
+  set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Build yaml-cpp tools")
+  set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "Build yaml-cpp contrib")
+
+  # Declare yaml-cpp as already available via FetchContent
+  # This prevents MUSICA from fetching their own copy
+  FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
+  FetchContent_MakeAvailable(yaml-cpp)
+  target_compile_definitions(
+    yaml-cpp
+    PUBLIC "$<$<COMPILE_LANGUAGE:CXX>:YAML=CATChem_YAML>"
+  )
+endif()
 
 #
 # MUSICA Fortran API (optional, controlled by CATCHEM_BUILD_MUSICA)
@@ -66,6 +98,8 @@ if(CATCHEM_BUILD_MUSICA)
   set(MUSICA_ENABLE_MICM ON)
   set(MUSICA_ENABLE_TUVX OFF)
   set(MUSICA_ENABLE_CARMA OFF)
+  set(MUSICA_ENABLE_MPI ON)
+  set(MUSICA_ENABLE_OPENMP ON)
 
   # Add MUSICA as a subdirectory
   add_subdirectory(musica)

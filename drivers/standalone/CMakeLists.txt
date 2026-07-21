@@ -37,9 +37,9 @@ endif()
 
 # Include directories
 include_directories(
-  ${CMAKE_SOURCE_DIR}/src/core
-  ${CMAKE_SOURCE_DIR}/src/api
-  ${CMAKE_SOURCE_DIR}/src/process
+  ${CATCHEM_SRC_DIR}/core
+  ${CATCHEM_SRC_DIR}/api
+  ${CATCHEM_SRC_DIR}/process
 )
 
 # Define source files for the standalone driver
@@ -48,20 +48,20 @@ set(DRIVER_SOURCES standalone_column_driver.F90)
 # Define CATChem library sources (would link to actual CATChem library in real build)
 set(
   CATCHEM_CORE_SOURCES
-  ${CMAKE_SOURCE_DIR}/src/core/precision_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/error_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/constants.F90
-  ${CMAKE_SOURCE_DIR}/src/core/config_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/ConfigManager_Mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/state_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/metstate_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/chemstate_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/emisstate_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/core/diagstate_mod.F90
-  ${CMAKE_SOURCE_DIR}/src/api/CATChemAPI_Mod.F90
-  ${CMAKE_SOURCE_DIR}/src/process/ProcessManager_Mod.F90
-  ${CMAKE_SOURCE_DIR}/src/process/ProcessInterface_Mod.F90
-  ${CMAKE_SOURCE_DIR}/src/process/ProcessFactory_Mod.F90
+  ${CATCHEM_SRC_DIR}/core/precision_mod.F90
+  ${CATCHEM_SRC_DIR}/core/error_mod.F90
+  ${CATCHEM_SRC_DIR}/core/constants.F90
+  ${CATCHEM_SRC_DIR}/core/config_mod.F90
+  ${CATCHEM_SRC_DIR}/core/ConfigManager_Mod.F90
+  ${CATCHEM_SRC_DIR}/core/state_mod.F90
+  ${CATCHEM_SRC_DIR}/core/metstate_mod.F90
+  ${CATCHEM_SRC_DIR}/core/chemstate_mod.F90
+  ${CATCHEM_SRC_DIR}/core/emisstate_mod.F90
+  ${CATCHEM_SRC_DIR}/core/diagstate_mod.F90
+  ${CATCHEM_SRC_DIR}/api/CATChemAPI_Mod.F90
+  ${CATCHEM_SRC_DIR}/process/ProcessManager_Mod.F90
+  ${CATCHEM_SRC_DIR}/process/ProcessInterface_Mod.F90
+  ${CATCHEM_SRC_DIR}/process/ProcessFactory_Mod.F90
 )
 
 # Create CATChem library

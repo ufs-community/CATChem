@@ -328,7 +328,9 @@ contains
          call this%run_wesely_scheme_column(column, rc)
          if (rc /= CC_SUCCESS) return
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown drydep gas scheme "' // &
+            trim(this%process_config%drydep_config%gas_scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessDryDepInterface_Mod.F90)')
          return
       end select
 
@@ -339,7 +341,9 @@ contains
        case ('zhang')
          call this%run_zhang_scheme_column(column, rc)
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown drydep aerosol scheme "' // &
+            trim(this%process_config%drydep_config%aero_scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessDryDepInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column
@@ -609,6 +613,7 @@ contains
       ! Species properties
       real(fp), allocatable :: species_density(:)
       real(fp), allocatable :: species_radius(:)
+      logical, allocatable :: species_is_dust(:)
       logical, allocatable :: species_is_seasalt(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
@@ -650,6 +655,7 @@ contains
       allocate(z0h(1))  ! Surface field - always scalar
       allocate(species_density(n_species))
       allocate(species_radius(n_species))
+      allocate(species_is_dust(n_species))
       allocate(species_is_seasalt(n_species))
       species_tendencies = 0.0_fp
 
@@ -685,6 +691,8 @@ contains
       ! Use species properties from process configuration
       species_radius(1:n_species) = this%process_config%drydep_config%species_radius(1:n_species)
       ! Use species properties from process configuration
+      species_is_dust(1:n_species) = this%process_config%drydep_config%species_is_dust(1:n_species)
+      ! Use species properties from process configuration
       species_is_seasalt(1:n_species) = this%process_config%drydep_config%species_is_seasalt(1:n_species)
 
       ! Call the science scheme with optional diagnostic parameters
@@ -712,6 +720,7 @@ contains
             z0h(1)            , &
             species_density, &
             species_radius, &
+            species_is_dust, &
             species_is_seasalt, &
             species_conc, &
             species_tendencies, &
@@ -740,6 +749,7 @@ contains
             z0h(1)            , &
             species_density, &
             species_radius, &
+            species_is_dust, &
             species_is_seasalt, &
             species_conc, &
             species_tendencies, &

@@ -322,7 +322,9 @@ contains
        case ('gocart')
          call this%run_gocart_scheme_column(column, rc)
        case default
-         rc = CC_FAILURE
+         call CC_Error('Unknown settling scheme "' // &
+            trim(this%process_config%settling_config%scheme), rc, &
+            ThisLoc='run_active_scheme_column (in module ProcessSettlingInterface_Mod.F90)')
       end select
 
    end subroutine run_active_scheme_column

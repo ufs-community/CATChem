@@ -120,6 +120,7 @@ schemes:
       - density
       - radius
       - is_seasalt
+      - is_dust
 
     parameters:
       scale_factor:
@@ -128,7 +129,9 @@ schemes:
       resuspension:
         default: false
         description: "Apply resuspension for dry deposition"
-
+      dust_resuspension_only:
+        default: true
+        description: "If true, resuspension only applies to dust species"
     diagnostics: []
 
   zhang:

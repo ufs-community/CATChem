@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! seasalt process and its schemes.
 !!
-!! Generated on: 2025-11-14T23:01:21.563867
+!! Generated on: 2026-05-28T17:43:34.271954
 !! Author: Barry Baker & Wei Li
 !! Version: 1.0.0
 
@@ -85,8 +85,8 @@ module SeaSaltCommon_Mod
       logical :: weibull_flag = .false.  ! Apply Weibull distribution for particle size
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 5
-      character(len=32) :: required_met_fields(5)
+      integer :: n_required_met_fields = 7
+      character(len=32) :: required_met_fields(7)
 
    contains
       procedure, public :: validate => validate_gong97_config
@@ -112,8 +112,8 @@ module SeaSaltCommon_Mod
       logical :: weibull_flag = .false.  ! Apply Weibull distribution for particle size
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 5
-      character(len=32) :: required_met_fields(5)
+      integer :: n_required_met_fields = 7
+      character(len=32) :: required_met_fields(7)
 
    contains
       procedure, public :: validate => validate_gong03_config
@@ -136,10 +136,11 @@ module SeaSaltCommon_Mod
 
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! Emission scale factor
+      logical :: weibull_flag = .false.  ! Apply Weibull distribution for particle size
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 4
-      character(len=32) :: required_met_fields(4)
+      integer :: n_required_met_fields = 8
+      character(len=32) :: required_met_fields(8)
 
    contains
       procedure, public :: validate => validate_geos12_config
@@ -165,6 +166,7 @@ module SeaSaltCommon_Mod
       type(SeaSaltSchemeGONG97Config) :: gong97_config
       type(SeaSaltSchemeGONG03Config) :: gong03_config
       type(SeaSaltSchemeGEOS12Config) :: geos12_config
+
 
    contains
       procedure, public :: load_from_config => seasalt_process_load_config
@@ -551,6 +553,9 @@ contains
       call config_manager%get_real("processes/seasalt/geos12/scale_factor", &
          this%geos12_config%scale_factor, rc, 1.0_fp)
       if (rc /= CC_SUCCESS) this%geos12_config%scale_factor = 1.0_fp
+      call config_manager%get_logical("processes/seasalt/geos12/weibull_flag", &
+         this%geos12_config%weibull_flag, rc, .false.)
+      if (rc /= CC_SUCCESS) this%geos12_config%weibull_flag = .false.
 
 
    end subroutine load_geos12_config
@@ -581,12 +586,14 @@ contains
    subroutine seasalt_process_finalize(this)
       class(SeaSaltProcessConfig), intent(inout) :: this
 
+
       call this%seasalt_config%finalize()
       call this%gong97_config%finalize()
       call this%gong03_config%finalize()
       call this%geos12_config%finalize()
 
    end subroutine seasalt_process_finalize
+
 
    !> Get active scheme configuration (polymorphic return)
    function get_active_scheme_config(this) result(scheme_config)
