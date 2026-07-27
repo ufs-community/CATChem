@@ -285,7 +285,7 @@ contains
                      'areas; AREA_M2 left unset (point emissions will be skipped)', &
                      ESMF_LOGMSG_WARNING, rc=arc)
                end if
-               call ESMF_FieldDestroy(areaField, rc=arc)
+               call ESMF_FieldDestroy(areaField, noGarbage=.true., rc=arc)
             end if
          end block
       end if
@@ -477,10 +477,47 @@ contains
       type(StateManagerType), pointer :: state_mgr => null()
       integer, save :: timestep = 0
 
+      ! Stage-level memory-leak instrumentation (gated by env CATCHEM_MEM_STAGE).
+      integer, save :: mem_stride = -2      ! -2 = uninitialised, -1 = disabled
+      integer(8), save :: stage_cum(5) = 0_8
+      integer, save :: prev_entry = -1
+      character(len=32) :: mem_env
+      integer :: mem_len, mem_stat, mem_ios, rss0, rss1
+      logical :: mem_on
+      ! Peak (VmHWM) attribution: which stage advances the monotonic peak.
+      ! hwm_cum(1)=emis (2)=procs (3)=pmdiag (4)=diagwrite (5)=transforms/cap.
+      integer(8), save :: hwm_cum(5) = 0_8
+      integer, save :: prev_diagend_hwm = -1
+      integer :: hwm0, hwm1
+
       !cc_wrap => get_cc_wrap()
 
       rc = CC_SUCCESS
       errmsg = ''
+
+      ! One-time read of the stage-memory control variable.
+      if (mem_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_STAGE', mem_env, mem_len, mem_stat)
+         if (mem_stat == 0 .and. mem_len > 0) then
+            read(mem_env, *, iostat=mem_ios) mem_stride
+            if (mem_ios /= 0) mem_stride = -1
+         else
+            mem_stride = -1
+         end if
+      end if
+      mem_on = (mem_stride > 0)
+
+      ! Full-step growth (includes cap ModelAdvance transforms/regrid between runs).
+      if (mem_on) then
+         rss1 = cc_read_vmrss_kb()
+         if (prev_entry >= 0 .and. rss1 >= 0) stage_cum(5) = stage_cum(5) + (rss1 - prev_entry)
+         if (rss1 >= 0) prev_entry = rss1
+         ! Peak advanced in the transform/cap region (after last step's diagwrite
+         ! through import transform up to this entry) is attributed to bucket 5.
+         hwm1 = cc_read_vmhwm_kb()
+         if (prev_diagend_hwm >= 0 .and. hwm1 >= 0) &
+            hwm_cum(5) = hwm_cum(5) + (hwm1 - prev_diagend_hwm)
+      end if
 
       ! Update extemission data first
       state_mgr => cc_wrap%catchem_model%get_state_manager()
@@ -489,8 +526,18 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
+      if (mem_on) then
+         rss0 = cc_read_vmrss_kb()
+         hwm0 = cc_read_vmhwm_kb()
+      end if
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
+      if (mem_on) then
+         rss1 = cc_read_vmrss_kb()
+         if (rss0 >= 0 .and. rss1 >= 0) stage_cum(1) = stage_cum(1) + (rss1 - rss0)
+         hwm1 = cc_read_vmhwm_kb()
+         if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(1) = hwm_cum(1) + (hwm1 - hwm0)
+      end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -504,10 +551,20 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
+      if (mem_on) then
+         rss0 = cc_read_vmrss_kb()
+         hwm0 = cc_read_vmhwm_kb()
+      end if
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
          write(errmsg, '(A,I0)') 'Error in run_timestep at timestep = ', timestep
          return
+      end if
+      if (mem_on) then
+         rss1 = cc_read_vmrss_kb()
+         if (rss0 >= 0 .and. rss1 >= 0) stage_cum(2) = stage_cum(2) + (rss1 - rss0)
+         hwm1 = cc_read_vmhwm_kb()
+         if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(2) = hwm_cum(2) + (hwm1 - hwm0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
@@ -524,10 +581,20 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
+      if (mem_on) then
+         rss0 = cc_read_vmrss_kb()
+         hwm0 = cc_read_vmhwm_kb()
+      end if
       call update_pm_diagnostics(cc_wrap, rc)
       if (rc /= CC_SUCCESS) then
          errmsg = 'Error updating PM2.5/PM10 aerosol diagnostics'
          return
+      end if
+      if (mem_on) then
+         rss1 = cc_read_vmrss_kb()
+         if (rss0 >= 0 .and. rss1 >= 0) stage_cum(3) = stage_cum(3) + (rss1 - rss0)
+         hwm1 = cc_read_vmhwm_kb()
+         if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(3) = hwm_cum(3) + (hwm1 - hwm0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("update_pm_diagnostics", rc=rc)
@@ -541,10 +608,33 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
+      if (mem_on) then
+         rss0 = cc_read_vmrss_kb()
+         hwm0 = cc_read_vmhwm_kb()
+      end if
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
          errmsg = 'Error writing NetCDF output diagnostics'
          return
+      end if
+      if (mem_on) then
+         rss1 = cc_read_vmrss_kb()
+         if (rss0 >= 0 .and. rss1 >= 0) stage_cum(4) = stage_cum(4) + (rss1 - rss0)
+         hwm1 = cc_read_vmhwm_kb()
+         if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(4) = hwm_cum(4) + (hwm1 - hwm0)
+         if (hwm1 >= 0) prev_diagend_hwm = hwm1
+         if (mod(timestep, mem_stride) == 0) then
+            write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem STAGEMEM] step=', timestep, &
+               '  emis=', stage_cum(1), '  procs=', stage_cum(2), &
+               '  pmdiag=', stage_cum(3), '  diagwrite=', stage_cum(4), &
+               '  fullstep=', stage_cum(5), &
+               '  other=', stage_cum(5) - (stage_cum(1)+stage_cum(2)+stage_cum(3)+stage_cum(4))
+            write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem PEAKMEM] step=', timestep, &
+               '  emis=', hwm_cum(1), '  procs=', hwm_cum(2), &
+               '  pmdiag=', hwm_cum(3), '  diagwrite=', hwm_cum(4), &
+               '  transform=', hwm_cum(5)
+            flush(6)
+         end if
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("catchem_diagnostics_write", rc=rc)
@@ -639,7 +729,28 @@ contains
       integer :: i, n, n_met
       !type(cc_wrap_type), pointer :: cc_wrap
 
+      ! Import-transform memory-leak instrumentation (env CATCHEM_MEM_STAGE).
+      integer, save :: xm_stride = -2
+      integer, save :: xm_ncall = 0
+      integer(8), save :: xm_cum = 0_8
+      character(len=32) :: xm_env
+      integer :: xm_len, xm_stat, xm_ios, xr0, xr1
+      logical :: xm_on
+
       rc = ESMF_SUCCESS
+
+      if (xm_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_STAGE', xm_env, xm_len, xm_stat)
+         if (xm_stat == 0 .and. xm_len > 0) then
+            read(xm_env, *, iostat=xm_ios) xm_stride
+            if (xm_ios /= 0) xm_stride = -1
+         else
+            xm_stride = -1
+         end if
+      end if
+      xm_on = (xm_stride > 0)
+      if (xm_on) xr0 = cc_read_vmrss_kb()
+
 
       ! assign time to catchem model's time state
       state_mgr => cc_wrap%catchem_model%get_state_manager()
@@ -719,6 +830,16 @@ contains
          deallocate(set_required_met)
       end if
 
+      if (xm_on) then
+         xr1 = cc_read_vmrss_kb()
+         if (xr0 >= 0 .and. xr1 >= 0) xm_cum = xm_cum + (xr1 - xr0)
+         xm_ncall = xm_ncall + 1
+         if (mod(xm_ncall, xm_stride) == 0) then
+            write(*,'(A,I0,A,I0)') '[CATChem XFERMEM] which=import call=', xm_ncall, '  cumRSS=', xm_cum
+            flush(6)
+         end if
+      end if
+
    end subroutine transform_nuopc_to_catchem
 
    ! Transform CATChem states to NUOPC export fields
@@ -739,7 +860,27 @@ contains
       integer :: n
       !type(cc_wrap_type), pointer :: cc_wrap
 
+      ! Export-transform memory-leak instrumentation (env CATCHEM_MEM_STAGE).
+      integer, save :: xe_stride = -2
+      integer, save :: xe_ncall = 0
+      integer(8), save :: xe_cum = 0_8
+      character(len=32) :: xe_env
+      integer :: xe_len, xe_stat, xe_ios, xer0, xer1
+      logical :: xe_on
+
       rc = ESMF_SUCCESS
+
+      if (xe_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_STAGE', xe_env, xe_len, xe_stat)
+         if (xe_stat == 0 .and. xe_len > 0) then
+            read(xe_env, *, iostat=xe_ios) xe_stride
+            if (xe_ios /= 0) xe_stride = -1
+         else
+            xe_stride = -1
+         end if
+      end if
+      xe_on = (xe_stride > 0)
+      if (xe_on) xer0 = cc_read_vmrss_kb()
 
       ! Get process-local state
       !cc_wrap => get_cc_wrap()
@@ -767,6 +908,16 @@ contains
             line=__LINE__, file=__FILE__)) return
 
       end do
+
+      if (xe_on) then
+         xer1 = cc_read_vmrss_kb()
+         if (xer0 >= 0 .and. xer1 >= 0) xe_cum = xe_cum + (xer1 - xer0)
+         xe_ncall = xe_ncall + 1
+         if (mod(xe_ncall, xe_stride) == 0) then
+            write(*,'(A,I0,A,I0)') '[CATChem XFERMEM] which=export call=', xe_ncall, '  cumRSS=', xe_cum
+            flush(6)
+         end if
+      end if
 
    end subroutine transform_catchem_to_nuopc
 
@@ -796,13 +947,40 @@ contains
       type(ChemStateType), pointer :: chem_state
       !type(cc_wrap_type), pointer :: cc_wrap
       real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
-      real(ESMF_KIND_R8), pointer :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
-      real(fp), allocatable :: cc_conc(:,:,:,:)
+      ! fptr4d_rev/fptr3d_rev/cc_conc are PERSISTENT (save) reusable buffers: allocated
+      ! once and resized only on shape change, instead of allocated+freed every step.
+      ! Per-step alloc/free of these ~all-species 4D arrays fragmented the glibc arena and
+      ! caused unbounded RSS growth (the ~4-5 MB/step coupled import "leak").
+      real(ESMF_KIND_R8), allocatable, save :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
+      real(fp), allocatable, save :: cc_conc(:,:,:,:)
       real(fp), pointer :: column_ptr(:) !catchem met column pointer to get vertical dimension for nz+1 variables
       real(ESMF_KIND_R8) :: unit_conv
-      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index
+      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index, nsp, s
+
+      ! Per-dimension-case retained-RSS instrumentation (env CATCHEM_MEM_STAGE).
+      ! Splits the import leak by field rank (2D/3D/4D tracer) to pinpoint the
+      ! leaking transform path. Cumulative kB of VmRSS delta across the routine.
+      integer, save :: tf_stride = -2
+      integer, save :: tf_ncall = 0
+      integer(8), save :: tf_cum2 = 0_8, tf_cum3 = 0_8, tf_cum4 = 0_8
+      character(len=32) :: tf_env
+      integer :: tf_len, tf_stat, tf_ios, tf_r0, tf_r1
+      logical :: tf_on
 
       rc = ESMF_SUCCESS
+
+      if (tf_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_STAGE', tf_env, tf_len, tf_stat)
+         if (tf_stat == 0 .and. tf_len > 0) then
+            read(tf_env, *, iostat=tf_ios) tf_stride
+            if (tf_ios /= 0) tf_stride = -1
+         else
+            tf_stride = -1
+         end if
+      end if
+      tf_on = (tf_stride > 0)
+      tf_r0 = -1
+      if (tf_on) tf_r0 = cc_read_vmrss_kb()
 
       ! Get process-local state
       !process_mgr => cc_wrap%catchem_model%get_process_manager()
@@ -861,7 +1039,7 @@ contains
 
          ! 3D meteorological fields
        case (3)
-         nullify(fptr3d, fptr3d_rev)
+         nullify(fptr3d)  ! fptr3d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr3d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -887,8 +1065,13 @@ contains
             nk1 = nk
          end if
 
-         ! Allocate fptr3d_rev with the same dimensions as fptr3d
-         allocate(fptr3d_rev(ni, nj, nk1))
+         ! Reuse the persistent fptr3d_rev buffer; (re)allocate only if shape changed
+         ! (e.g. switching between nz and nz+1 edge fields). Avoids per-field alloc/free.
+         if (allocated(fptr3d_rev)) then
+            if (size(fptr3d_rev,1) /= ni .or. size(fptr3d_rev,2) /= nj .or. &
+                size(fptr3d_rev,3) /= nk1) deallocate(fptr3d_rev)
+         end if
+         if (.not. allocated(fptr3d_rev)) allocate(fptr3d_rev(ni, nj, nk1))
 
          ! -- map provider field levels to receiver field levels in the same (not reverse) order
          ! -- NOTE: if provider field from NUOPC has fewer vertical levels than the receiver field in CATChem,
@@ -929,16 +1112,15 @@ contains
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="Met field is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr3d_rev)  ! Clean up before returning
-            return  ! bail out
+            return  ! bail out (persistent fptr3d_rev buffer retained for reuse)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr3d_rev)
+         ! fptr3d_rev is a persistent buffer: intentionally NOT deallocated here (reused
+         ! next step). Freed implicitly at program end.
 
          ! 4D tracer concentrations
        case (4)
-         nullify(fptr4d, fptr4d_rev)
+         nullify(fptr4d)  ! fptr4d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr4d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -955,22 +1137,33 @@ contains
          nj = size(fptr4d, 2)
          nk = size(fptr4d, 3)
          nv = size(fptr4d, 4)
+         nsp = size(chem_state%ChemSpecies)
 
-         ! Allocate fptr4d_rev with the same dimensions as fptr4d
-         allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
-         fptr4d_rev = 0.0_fp  ! Initialize to zero
-         !get original concentrations from CATChem.
-         !This is because some species in CATChem may not go through advection and should keep their values.
-         call chem_state%get_all_concentrations(cc_conc, rc)
-         if (rc /= CC_SUCCESS) then
-            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-               msg="CATChem tracer array is not retrieved successfully for: " // trim(field_map%catchem_var), &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-            if (allocated(cc_conc)) deallocate(cc_conc)  ! Clean up before returning
-            return  ! bail out
+         ! Reuse persistent fptr4d_rev + cc_conc buffers; (re)allocate only on shape change.
+         ! This replaces the per-step allocate/free of two ~all-species 4D arrays (fptr4d_rev
+         ! and the get_all_concentrations output), which was the dominant per-step large-array
+         ! churn fragmenting the glibc arena.
+         if (allocated(fptr4d_rev)) then
+            if (size(fptr4d_rev,1) /= ni .or. size(fptr4d_rev,2) /= nj .or. &
+                size(fptr4d_rev,3) /= nk .or. size(fptr4d_rev,4) /= nsp) deallocate(fptr4d_rev)
          end if
-         !assign to fptr4d_rev
-         fptr4d_rev = real(cc_conc, ESMF_KIND_R8)
+         if (.not. allocated(fptr4d_rev)) allocate(fptr4d_rev(ni, nj, nk, nsp))
+         if (allocated(cc_conc)) then
+            if (size(cc_conc,1) /= ni .or. size(cc_conc,2) /= nj .or. &
+                size(cc_conc,3) /= nk .or. size(cc_conc,4) /= nsp) deallocate(cc_conc)
+         end if
+         if (.not. allocated(cc_conc)) allocate(cc_conc(ni, nj, nk, nsp))
+
+         ! Seed fptr4d_rev with CATChem's current concentrations so non-advected species keep
+         ! their values. Inlined from get_all_concentrations to avoid its intent(out)
+         ! allocatable argument re-allocating a 4D array every step.
+         do s = 1, nsp
+            if (associated(chem_state%ChemSpecies(s)%conc)) then
+               fptr4d_rev(:,:,:,s) = real(chem_state%ChemSpecies(s)%conc(:,:,:), ESMF_KIND_R8)
+            else
+               fptr4d_rev(:,:,:,s) = 0.0_ESMF_KIND_R8
+            end if
+         end do
 
          ! Reverse vertical layers
          do v = 1, nv
@@ -993,9 +1186,7 @@ contains
                   call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                      msg="Met field is not set successfully for: QV", &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  deallocate(fptr4d_rev)  ! Clean up before returning
-                  if (allocated(cc_conc)) deallocate(cc_conc)
-                  return  ! bail out
+                  return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
                end if
             end if
 
@@ -1023,25 +1214,46 @@ contains
          end do
 
          !set to concentrations in CATChem
-         call chem_state%set_all_concentrations(real(fptr4d_rev, fp), rc)
+         ! cc_conc is the persistent real(fp) send buffer (same shape as fptr4d_rev). Copy the
+         ! import result into it and pass the VARIABLE (not a whole-array real() expression,
+         ! which would force a per-call array temporary) to set_all_concentrations.
+         cc_conc = real(fptr4d_rev, fp)
+         call chem_state%set_all_concentrations(cc_conc, rc)
          if (rc /= CC_SUCCESS) then
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="CATChem tracer array is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr4d_rev)  ! Clean up before returning
-            if (allocated(cc_conc)) deallocate(cc_conc)
-            return  ! bail out
+            return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr4d_rev)
-         if (allocated(cc_conc)) deallocate(cc_conc)
+         ! fptr4d_rev and cc_conc are persistent buffers: intentionally NOT deallocated here
+         ! (reused next step). Freed implicitly at program end.
 
        case default
          call ESMF_LogWrite("Unknown field mapping dimension for: " // trim(field_map%catchem_var), &
             ESMF_LOGMSG_WARNING, rc=rc)
 
       end select
+
+      if (tf_on .and. tf_r0 >= 0) then
+         tf_r1 = cc_read_vmrss_kb()
+         if (tf_r1 >= 0) then
+            select case (field_map%dimensions)
+            case (2)
+               tf_cum2 = tf_cum2 + (tf_r1 - tf_r0)
+            case (3)
+               tf_cum3 = tf_cum3 + (tf_r1 - tf_r0)
+            case (4)
+               tf_cum4 = tf_cum4 + (tf_r1 - tf_r0)
+            end select
+         end if
+         tf_ncall = tf_ncall + 1
+         if (mod(tf_ncall, tf_stride) == 0) then
+            write(*,'(A,I0,3(A,I0))') '[CATChem CASEMEM] call=', tf_ncall, &
+               '  cum2=', tf_cum2, '  cum3=', tf_cum3, '  cum4=', tf_cum4
+            flush(6)
+         end if
+      end if
 
    end subroutine transform_field_to_catchem
 
@@ -1526,9 +1738,11 @@ contains
       ! This would require extending AQMIO or using NetCDF directly
       ! For now, we rely on the working AQMIO functionality
 
-      ! Clean up
+      ! Clean up. noGarbage=.true. forces ESMF to release the field's memory
+      ! immediately; without it ESMF defers deallocation until ESMF_Finalize,
+      ! leaking one subdomain-sized array per field on every diagnostic write.
       if (ESMF_FieldIsCreated(esmf_field)) then
-         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
       end if
 
    end subroutine write_diagnostic_field
@@ -2633,5 +2847,49 @@ contains
          success = .true.
       end if
    end function get_export_field_info
+
+   !> \brief Read current resident-set size (VmRSS) in kB from /proc/self/status.
+   !! Returns -1 if unavailable (e.g. non-Linux). Used only for leak diagnosis.
+   integer function cc_read_vmrss_kb() result(kb)
+      integer :: ios, unit
+      character(len=256) :: line
+      kb = -1
+      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(unit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:6) == 'VmRSS:') then
+            read(line(7:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(unit)
+   end function cc_read_vmrss_kb
+
+   !> \brief Read peak resident-set size (VmHWM) in kB from /proc/self/status.
+   !! Returns -1 if unavailable (e.g. non-Linux). VmHWM is monotonic, so the
+   !! increase between two samples equals the peak reached in that interval —
+   !! this is what lets us attribute the growing per-step transient to a stage
+   !! even when the transient is freed before the RSS boundary sample. Used
+   !! only for leak diagnosis.
+   integer function cc_read_vmhwm_kb() result(kb)
+      integer :: ios, unit
+      character(len=256) :: line
+      kb = -1
+      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(unit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:6) == 'VmHWM:') then
+            read(line(7:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(unit)
+   end function cc_read_vmhwm_kb
 
 end module catchem_nuopc_interface

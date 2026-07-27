@@ -201,6 +201,9 @@ contains
          end if
 
          !initialize fluxout
+         !NOTE: fluxout is a pointer allocated inside this per-species loop; free any
+         !prior iteration's allocation first to avoid orphaning it (memory leak).
+         if (associated(fluxout)) deallocate(fluxout)
          allocate(fluxout(1, 1, bin))
          fluxout = 0.0_fp
 

@@ -381,8 +381,29 @@ contains
       type(ProcessConfigType) :: process_config
       logical :: phase_found
 
+      ! Per-process memory-leak instrumentation (gated by env CATCHEM_MEM_PROC).
+      integer, save :: mem_stride = -2      ! -2 = uninitialised, -1 = disabled
+      integer, save :: mem_ncall  = 0
+      integer(8), save :: proc_cum(64) = 0_8
+      character(len=32) :: mem_env
+      integer :: mem_len, mem_stat, mem_ios, rss_before, rss_after
+      logical :: mem_on
+
       rc = CC_SUCCESS
       phase_found = .false.
+
+      ! One-time read of the per-process memory control variable.
+      if (mem_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_PROC', mem_env, mem_len, mem_stat)
+         if (mem_stat == 0 .and. mem_len > 0) then
+            read(mem_env, *, iostat=mem_ios) mem_stride
+            if (mem_ios /= 0) mem_stride = -1
+         else
+            mem_stride = -1
+         end if
+      end if
+      mem_on = (mem_stride > 0)
+      if (mem_on) mem_ncall = mem_ncall + 1
 
       ! Check if run phases are configured
       if (.not. allocated(config_data%run_phases)) then
@@ -431,6 +452,7 @@ contains
 
          ! Run the process based on its type
          if (this%processes(process_idx)%item%is_ready()) then
+            if (mem_on) rss_before = pm_read_vmrss_kb()
             select type(proc => this%processes(process_idx)%item)
              class is (ColumnProcessInterface)
                !!write(*,*) 'Test phase process', process_idx, trim(proc%name) !debug only
@@ -438,6 +460,18 @@ contains
              class default
                call this%processes(process_idx)%item%run(container, local_rc)
             end select
+
+            if (mem_on) then
+               rss_after = pm_read_vmrss_kb()
+               if (rss_before >= 0 .and. rss_after >= 0 .and. process_idx <= 64) &
+                  proc_cum(process_idx) = proc_cum(process_idx) + (rss_after - rss_before)
+               if (mod(mem_ncall, mem_stride) == 0 .and. process_idx <= 64) then
+                  write(*,'(A,I0,A,A,A,I0,A,I0)') '[CATChem PROCMEM] call=', mem_ncall, &
+                     ' proc=', trim(process_config%name), &
+                     ' dRSS=', rss_after - rss_before, ' cumRSS=', proc_cum(process_idx)
+                  flush(6)
+               end if
+            end if
 
             if (local_rc /= CC_SUCCESS) then
                write(*,*) 'ERROR: Process ', trim(process_config%name), ' failed with code: ', local_rc
@@ -499,6 +533,26 @@ contains
       write(*,*) 'INFO: All ', size(config_data%run_phases), ' phases completed successfully'
 
    end subroutine manager_run_all_phases
+
+   !> \brief Read current resident-set size (VmRSS) in kB from /proc/self/status.
+   !! Returns -1 if unavailable (e.g. non-Linux). Used only for leak diagnosis.
+   integer function pm_read_vmrss_kb() result(kb)
+      integer :: ios, unit
+      character(len=256) :: line
+      kb = -1
+      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(unit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:6) == 'VmRSS:') then
+            read(line(7:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(unit)
+   end function pm_read_vmrss_kb
 
    !> Run all processes (compatibility method)
    subroutine manager_run_all_processes(this, container, rc)
