@@ -529,6 +529,15 @@ contains
       character(len=256) :: sp_topname
       logical :: sp_on
 
+      ! Full /proc/self/smaps dump to name the GROWING (not just largest) mapping.
+      ! CATCHEM_SMAPS_DUMP=N -> on localPet==0, every N ModelAdvance calls write the whole
+      ! /proc/self/smaps to catchem_smaps_step<N>.txt; diff two dumps to find the growing region.
+      integer, save :: sd_stride = -2
+      integer, save :: sd_ncall = 0
+      character(len=32) :: sd_env
+      integer :: sd_len, sd_stat, sd_ios
+      logical :: sd_on
+
       rc = ESMF_SUCCESS
 
       if (cap_stride == -2) then
@@ -590,6 +599,17 @@ contains
          end if
       end if
       sp_on = (sp_stride > 0)
+
+      if (sd_stride == -2) then
+         call get_environment_variable('CATCHEM_SMAPS_DUMP', sd_env, sd_len, sd_stat)
+         if (sd_stat == 0 .and. sd_len > 0) then
+            read(sd_env, *, iostat=sd_ios) sd_stride
+            if (sd_ios /= 0) sd_stride = -1
+         else
+            sd_stride = -1
+         end if
+      end if
+      sd_on = (sd_stride > 0)
 
       ! Get component information
       call ESMF_GridCompGet(model, localPet=localPet, rc=rc)
@@ -695,6 +715,12 @@ contains
                '  entry=', cap_a0, '  imp=', cap_a1, '  run=', cap_a2, '  exp=', cap_a3
             flush(6)
          end if
+      end if
+
+      ! Full smaps dump (rank 0) to name the growing mapping; diff two dumps offline.
+      if (sd_on .and. localPet == 0) then
+         sd_ncall = sd_ncall + 1
+         if (mod(sd_ncall, sd_stride) == 0) call cc_cap_dump_smaps(sd_ncall)
       end if
 
       ! --- malloc_trim mitigation + mallinfo live-heap diagnosis (end of step) ---
@@ -901,6 +927,31 @@ contains
       end do
       close(u)
    end function cc_cap_read_rssanon_kb
+
+   !> \brief Dump the full /proc/self/smaps to catchem_smaps_step<step>.txt (rank 0 only).
+   !! Used to name the progressively-growing mapping: diff two dumps and find the region
+   !! whose Rss increased. No-op if /proc/self/smaps is unavailable.
+   subroutine cc_cap_dump_smaps(step)
+      integer, intent(in) :: step
+      integer :: uin, uout, ios
+      character(len=512) :: line
+      character(len=64) :: fname
+      write(fname, '(A,I0,A)') 'catchem_smaps_step', step, '.txt'
+      open(newunit=uin, file='/proc/self/smaps', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      open(newunit=uout, file=trim(fname), status='replace', action='write', iostat=ios)
+      if (ios /= 0) then
+         close(uin)
+         return
+      end if
+      do
+         read(uin, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         write(uout, '(A)') trim(line)
+      end do
+      close(uin)
+      close(uout)
+   end subroutine cc_cap_dump_smaps
 
 #ifndef CATCHEM_DISABLE_MALLINFO
    !> \brief Widen a (possibly negative) 32-bit mallinfo field to an unsigned 0..4GB value.
