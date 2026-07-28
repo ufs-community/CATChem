@@ -167,6 +167,14 @@ contains
 
       integer :: i, local_rc
       type(GridManagerType), pointer :: grid_mgr
+      ! Per-process RssAnon leak instrumentation (gated by env CATCHEM_MEM_PROC=N;
+      ! prints cumulative heap-resident growth attributed to each scheme every N steps).
+      integer, save :: pm_stride = -2
+      integer, save :: pm_ncall = 0
+      integer(8), save :: proc_anon(50) = 0_8
+      character(len=64) :: pm_env
+      integer :: pm_len, pm_stat, pm_ios, pa0, pa1
+      logical :: pm_on
 
       ! If there are no processes, succeed immediately
       if (this%num_processes == 0) then
@@ -183,8 +191,21 @@ contains
          return
       endif
 
+      if (pm_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_PROC', pm_env, pm_len, pm_stat)
+         if (pm_stat == 0 .and. pm_len > 0) then
+            read(pm_env, *, iostat=pm_ios) pm_stride
+            if (pm_ios /= 0) pm_stride = -1
+         else
+            pm_stride = -1
+         end if
+      end if
+      pm_on = (pm_stride > 0)
+      if (pm_on) pm_ncall = pm_ncall + 1
+
       do i = 1, this%num_processes
          if (this%processes(i)%item%is_ready()) then
+            if (pm_on) pa0 = cc_pm_read_rssanon_kb()
             ! Check if this is a column process
             select type(proc => this%processes(i)%item)
              class is (ColumnProcessInterface)
@@ -195,13 +216,48 @@ contains
                call this%processes(i)%item%run(container, local_rc)
             end select
 
+            if (pm_on) then
+               pa1 = cc_pm_read_rssanon_kb()
+               if (pa0 >= 0 .and. pa1 >= 0) proc_anon(i) = proc_anon(i) + (pa1 - pa0)
+            end if
+
             if (local_rc /= CC_SUCCESS) then
                rc = local_rc
                return
             endif
          endif
       enddo
+
+      if (pm_on .and. mod(pm_ncall, pm_stride) == 0) then
+         do i = 1, this%num_processes
+            write(*,'(A,I0,A,I0,2A,A,I0)') '[CATChem PROCANON] step=', pm_ncall, &
+               '  idx=', i, '  name=', trim(this%processes(i)%item%get_name()), &
+               '  cum_anon_kB=', proc_anon(i)
+         end do
+         flush(6)
+      end if
    end subroutine manager_run_all
+
+   !> \brief Read resident anonymous memory (RssAnon, kB) from /proc/self/status.
+   !! Returns -1 if unavailable. Heap-resident only (no file-cache jitter); used by the
+   !! per-process leak instrumentation ([CATChem PROCANON], gated by CATCHEM_MEM_PROC).
+   integer function cc_pm_read_rssanon_kb() result(kb)
+      integer :: ios, unit
+      character(len=256) :: line
+      kb = -1
+      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(unit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:8) == 'RssAnon:') then
+            read(line(9:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(unit)
+   end function cc_pm_read_rssanon_kb
 
    !> \brief Run column processes using column virtualization
    subroutine manager_run_column_processes(this, container, rc)

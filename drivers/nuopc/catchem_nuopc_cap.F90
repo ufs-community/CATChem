@@ -491,6 +491,7 @@ contains
       character(len=32) :: cap_env
       integer :: cap_len, cap_stat, cap_ios
       integer :: cap_r0, cap_r1, cap_r2, cap_r3
+      integer :: cap_a0, cap_a1, cap_a2, cap_a3   ! RssAnon (precise heap-resident) at same boundaries
       logical :: cap_on
 
       ! malloc_trim / mallinfo instrumentation (independent of CAPMEM).
@@ -541,7 +542,11 @@ contains
       end if
       cap_on = (cap_stride > 0)
       cap_r0 = -1; cap_r1 = -1; cap_r2 = -1; cap_r3 = -1
-      if (cap_on) cap_r0 = cc_cap_read_vmrss_kb()   ! cap entry (after host/mediator ran)
+      cap_a0 = -1; cap_a1 = -1; cap_a2 = -1; cap_a3 = -1
+      if (cap_on) then
+         cap_r0 = cc_cap_read_vmrss_kb()     ! cap entry (after host/mediator ran)
+         cap_a0 = cc_cap_read_rssanon_kb()   ! precise heap-resident at entry
+      end if
 
       if (mt_stride == -2) then
          call get_environment_variable('CATCHEM_MALLOC_TRIM', mm_env, mm_len, mm_stat)
@@ -632,7 +637,10 @@ contains
          line=__LINE__, file=__FILE__)) return
 #endif
 
-      if (cap_on) cap_r1 = cc_cap_read_vmrss_kb()   ! after import transform
+      if (cap_on) then
+         cap_r1 = cc_cap_read_vmrss_kb()     ! after import transform
+         cap_a1 = cc_cap_read_rssanon_kb()
+      end if
 
       ! Run CATChem processes with current time
 #ifdef CATCHEM_TRACE_NUOPC
@@ -653,7 +661,10 @@ contains
          line=__LINE__, file=__FILE__)) return
 #endif
 
-      if (cap_on) cap_r2 = cc_cap_read_vmrss_kb()   ! after catchem_nuopc_run
+      if (cap_on) then
+         cap_r2 = cc_cap_read_vmrss_kb()     ! after catchem_nuopc_run
+         cap_a2 = cc_cap_read_rssanon_kb()
+      end if
 
       ! Export results to other components
 #ifdef CATCHEM_TRACE_NUOPC
@@ -671,11 +682,17 @@ contains
 #endif
 
       if (cap_on) then
-         cap_r3 = cc_cap_read_vmrss_kb()   ! after export transform (cap exit)
+         cap_r3 = cc_cap_read_vmrss_kb()     ! after export transform (cap exit)
+         cap_a3 = cc_cap_read_rssanon_kb()
          cap_ncall = cap_ncall + 1
          if (mod(cap_ncall, cap_stride) == 0) then
             write(*,'(A,I0,4(A,I0))') '[CATChem CAPMEM] step=', cap_ncall, &
                '  entry=', cap_r0, '  imp=', cap_r1, '  run=', cap_r2, '  exp=', cap_r3
+            ! Precise heap-resident (RssAnon) at the SAME 4 boundaries: file-backed page
+            ! jitter excluded, so per-phase anon growth (entry->imp import, imp->run run,
+            ! run->exp export) is resolvable even at ~10 pages/step.
+            write(*,'(A,I0,4(A,I0))') '[CATChem CAPANON] step=', cap_ncall, &
+               '  entry=', cap_a0, '  imp=', cap_a1, '  run=', cap_a2, '  exp=', cap_a3
             flush(6)
          end if
       end if
@@ -862,6 +879,28 @@ contains
       end do
       close(u)
    end function cc_cap_read_vmrss_kb
+
+   !> \brief Read resident anonymous memory (RssAnon, kB) from /proc/self/status.
+   !! Returns -1 if unavailable. RssAnon is the heap/stack/anon-mmap resident set only
+   !! (excludes file-backed pages), so it is free of the page-cache jitter that makes
+   !! VmRSS unusable for resolving a small per-phase heap leak. Used by CAPANON.
+   integer function cc_cap_read_rssanon_kb() result(kb)
+      integer :: u, ios
+      character(len=256) :: line
+      kb = -1
+      open(newunit=u, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(u, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:8) == 'RssAnon:') then
+            read(line(9:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(u)
+   end function cc_cap_read_rssanon_kb
 
 #ifndef CATCHEM_DISABLE_MALLINFO
    !> \brief Widen a (possibly negative) 32-bit mallinfo field to an unsigned 0..4GB value.

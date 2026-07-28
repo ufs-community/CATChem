@@ -480,9 +480,10 @@ contains
       ! Stage-level memory-leak instrumentation (gated by env CATCHEM_MEM_STAGE).
       integer, save :: mem_stride = -2      ! -2 = uninitialised, -1 = disabled
       integer(8), save :: stage_cum(5) = 0_8
+      integer(8), save :: stage_anon(4) = 0_8   ! precise RssAnon accumulation per sub-call
       integer, save :: prev_entry = -1
       character(len=32) :: mem_env
-      integer :: mem_len, mem_stat, mem_ios, rss0, rss1
+      integer :: mem_len, mem_stat, mem_ios, rss0, rss1, an0, an1
       logical :: mem_on
       ! Peak (VmHWM) attribution: which stage advances the monotonic peak.
       ! hwm_cum(1)=emis (2)=procs (3)=pmdiag (4)=diagwrite (5)=transforms/cap.
@@ -529,6 +530,7 @@ contains
       if (mem_on) then
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
+         an0  = cc_read_rssanon_kb()
       end if
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
@@ -537,6 +539,8 @@ contains
          if (rss0 >= 0 .and. rss1 >= 0) stage_cum(1) = stage_cum(1) + (rss1 - rss0)
          hwm1 = cc_read_vmhwm_kb()
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(1) = hwm_cum(1) + (hwm1 - hwm0)
+         an1  = cc_read_rssanon_kb()
+         if (an0 >= 0 .and. an1 >= 0) stage_anon(1) = stage_anon(1) + (an1 - an0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
@@ -554,6 +558,7 @@ contains
       if (mem_on) then
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
+         an0  = cc_read_rssanon_kb()
       end if
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
@@ -565,6 +570,8 @@ contains
          if (rss0 >= 0 .and. rss1 >= 0) stage_cum(2) = stage_cum(2) + (rss1 - rss0)
          hwm1 = cc_read_vmhwm_kb()
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(2) = hwm_cum(2) + (hwm1 - hwm0)
+         an1  = cc_read_rssanon_kb()
+         if (an0 >= 0 .and. an1 >= 0) stage_anon(2) = stage_anon(2) + (an1 - an0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
@@ -584,6 +591,7 @@ contains
       if (mem_on) then
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
+         an0  = cc_read_rssanon_kb()
       end if
       call update_pm_diagnostics(cc_wrap, rc)
       if (rc /= CC_SUCCESS) then
@@ -595,6 +603,8 @@ contains
          if (rss0 >= 0 .and. rss1 >= 0) stage_cum(3) = stage_cum(3) + (rss1 - rss0)
          hwm1 = cc_read_vmhwm_kb()
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(3) = hwm_cum(3) + (hwm1 - hwm0)
+         an1  = cc_read_rssanon_kb()
+         if (an0 >= 0 .and. an1 >= 0) stage_anon(3) = stage_anon(3) + (an1 - an0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("update_pm_diagnostics", rc=rc)
@@ -611,6 +621,7 @@ contains
       if (mem_on) then
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
+         an0  = cc_read_rssanon_kb()
       end if
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
@@ -622,6 +633,8 @@ contains
          if (rss0 >= 0 .and. rss1 >= 0) stage_cum(4) = stage_cum(4) + (rss1 - rss0)
          hwm1 = cc_read_vmhwm_kb()
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(4) = hwm_cum(4) + (hwm1 - hwm0)
+         an1  = cc_read_rssanon_kb()
+         if (an0 >= 0 .and. an1 >= 0) stage_anon(4) = stage_anon(4) + (an1 - an0)
          if (hwm1 >= 0) prev_diagend_hwm = hwm1
          if (mod(timestep, mem_stride) == 0) then
             write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem STAGEMEM] step=', timestep, &
@@ -629,6 +642,11 @@ contains
                '  pmdiag=', stage_cum(3), '  diagwrite=', stage_cum(4), &
                '  fullstep=', stage_cum(5), &
                '  other=', stage_cum(5) - (stage_cum(1)+stage_cum(2)+stage_cum(3)+stage_cum(4))
+            ! Precise RssAnon (heap-resident) accumulation per sub-call: file-backed jitter
+            ! excluded, so the leaking call is the bucket whose value climbs ~linearly.
+            write(*,'(A,I0,4(A,I0))') '[CATChem STAGEANON] step=', timestep, &
+               '  emis=', stage_anon(1), '  procs=', stage_anon(2), &
+               '  pmdiag=', stage_anon(3), '  diagwrite=', stage_anon(4)
             write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem PEAKMEM] step=', timestep, &
                '  emis=', hwm_cum(1), '  procs=', hwm_cum(2), &
                '  pmdiag=', hwm_cum(3), '  diagwrite=', hwm_cum(4), &
@@ -2867,6 +2885,27 @@ contains
       end do
       close(unit)
    end function cc_read_vmrss_kb
+
+   !> \brief Read resident anonymous memory (RssAnon) in kB from /proc/self/status.
+   !! Returns -1 if unavailable. RssAnon excludes file-backed pages, so it resolves a
+   !! small per-call heap leak that VmRSS page-cache jitter would otherwise hide.
+   integer function cc_read_rssanon_kb() result(kb)
+      integer :: ios, unit
+      character(len=256) :: line
+      kb = -1
+      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      do
+         read(unit, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         if (line(1:8) == 'RssAnon:') then
+            read(line(9:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(unit)
+   end function cc_read_rssanon_kb
 
    !> \brief Read peak resident-set size (VmHWM) in kB from /proc/self/status.
    !! Returns -1 if unavailable (e.g. non-Linux). VmHWM is monotonic, so the
