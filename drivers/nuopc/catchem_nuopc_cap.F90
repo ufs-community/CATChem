@@ -95,6 +95,11 @@ module cc_nuopc
          integer(c_size_t), value :: pad
          integer(c_int) :: res
       end function cc_c_malloc_trim
+      ! glibc per-arena report to stderr (system/in-use bytes for EVERY arena incl.
+      ! secondary/per-thread arenas + total mmap) — reveals growth that mallinfo()'s
+      ! main-arena-only view cannot see.
+      subroutine cc_c_malloc_stats() bind(C, name="malloc_stats")
+      end subroutine cc_c_malloc_stats
 #ifndef CATCHEM_DISABLE_MALLINFO
       function cc_c_mallinfo() bind(C, name="mallinfo") result(mi)
          import :: cc_mallinfo_t
@@ -102,6 +107,14 @@ module cc_nuopc
       end function cc_c_mallinfo
 #endif
    end interface
+
+   ! ---- CATCHEM_MEM_GROW per-region /proc/self/smaps growth analyzer: baseline state ----
+   ! First report snapshots every mapping (start addr, virtual size, Rss); later reports diff
+   ! against it to NAME the growing region(s) and decide bounded vs unbounded. One set per rank.
+   integer, parameter :: CC_GROW_MAX = 12000
+   integer(8), allocatable, save :: gb_addr0(:), gb_vsize(:), gb_rss(:)
+   integer, save :: gb_n = -1, gb_step = 0
+   integer(8), save :: gb_totrss = 0, gb_totanon = 0
 
 contains
 
@@ -537,6 +550,25 @@ contains
       character(len=32) :: sd_env
       integer :: sd_len, sd_stat, sd_ios
       logical :: sd_on
+      integer, save :: sd_rank = -3          ! CATCHEM_SMAPS_DUMP_RANK (default 0; -1=all)
+      character(len=32) :: sr_env
+      integer :: sr_len, sr_stat, sr_ios
+
+      ! Per-region smaps growth analyzer (CATCHEM_MEM_GROW=N: report every N calls;
+      ! CATCHEM_MEM_GROW_RANK=R selects reporting rank, default 0, -1=all ranks).
+      integer, save :: gr_stride = -2
+      integer, save :: gr_rank   = -3
+      integer, save :: gr_ncall  = 0
+      character(len=32) :: gr_env
+      integer :: gr_len, gr_stat, gr_ios
+      logical :: gr_on
+
+      ! Per-arena glibc report via malloc_stats() to stderr (CATCHEM_MALLOC_STATSC=N).
+      integer, save :: gc_stride = -2
+      integer, save :: gc_ncall  = 0
+      character(len=32) :: gc_env
+      integer :: gc_len, gc_stat, gc_ios
+      logical :: gc_on
 
       rc = ESMF_SUCCESS
 
@@ -610,6 +642,45 @@ contains
          end if
       end if
       sd_on = (sd_stride > 0)
+
+      if (sd_rank == -3) then
+         sd_rank = 0
+         call get_environment_variable('CATCHEM_SMAPS_DUMP_RANK', sr_env, sr_len, sr_stat)
+         if (sr_stat == 0 .and. sr_len > 0) then
+            read(sr_env, *, iostat=sr_ios) sd_rank
+            if (sr_ios /= 0) sd_rank = 0
+         end if
+      end if
+
+      if (gr_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_GROW', gr_env, gr_len, gr_stat)
+         if (gr_stat == 0 .and. gr_len > 0) then
+            read(gr_env, *, iostat=gr_ios) gr_stride
+            if (gr_ios /= 0) gr_stride = -1
+         else
+            gr_stride = -1
+         end if
+      end if
+      if (gr_rank == -3) then
+         gr_rank = 0
+         call get_environment_variable('CATCHEM_MEM_GROW_RANK', gr_env, gr_len, gr_stat)
+         if (gr_stat == 0 .and. gr_len > 0) then
+            read(gr_env, *, iostat=gr_ios) gr_rank
+            if (gr_ios /= 0) gr_rank = 0
+         end if
+      end if
+      gr_on = (gr_stride > 0)
+
+      if (gc_stride == -2) then
+         call get_environment_variable('CATCHEM_MALLOC_STATSC', gc_env, gc_len, gc_stat)
+         if (gc_stat == 0 .and. gc_len > 0) then
+            read(gc_env, *, iostat=gc_ios) gc_stride
+            if (gc_ios /= 0) gc_stride = -1
+         else
+            gc_stride = -1
+         end if
+      end if
+      gc_on = (gc_stride > 0)
 
       ! Get component information
       call ESMF_GridCompGet(model, localPet=localPet, rc=rc)
@@ -717,10 +788,30 @@ contains
          end if
       end if
 
-      ! Full smaps dump (rank 0) to name the growing mapping; diff two dumps offline.
-      if (sd_on .and. localPet == 0) then
+      ! Full smaps dump to name the growing mapping (diff two dumps offline).
+      if (sd_on .and. (sd_rank == -1 .or. localPet == sd_rank)) then
          sd_ncall = sd_ncall + 1
-         if (mod(sd_ncall, sd_stride) == 0) call cc_cap_dump_smaps(sd_ncall)
+         if (mod(sd_ncall, sd_stride) == 0) call cc_cap_dump_smaps(localPet, sd_ncall)
+      end if
+
+      ! Per-region smaps growth analyzer: in-process baseline diff that NAMES the growing
+      ! region(s) and decides bounded (fixed reservation faulting in) vs unbounded (nnew>0 /
+      ! sizeGrow>0 / ever-rising named total) — from any rank, no dump files needed.
+      if (gr_on) then
+         gr_ncall = gr_ncall + 1
+         if (mod(gr_ncall, gr_stride) == 0 .and. &
+             (gr_rank == -1 .or. localPet == gr_rank)) then
+            call cc_cap_smaps_growth(gr_ncall)
+         end if
+      end if
+
+      ! Per-arena glibc breakdown (secondary-arena / mmap-pool growth that mallinfo hides).
+      if (gc_on .and. localPet == 0) then
+         gc_ncall = gc_ncall + 1
+         if (mod(gc_ncall, gc_stride) == 0) then
+            write(0,'(A,I0)') '[CATChem MALLOC_STATS] step=', gc_ncall
+            call cc_c_malloc_stats()
+         end if
       end if
 
       ! --- malloc_trim mitigation + mallinfo live-heap diagnosis (end of step) ---
@@ -931,12 +1022,12 @@ contains
    !> \brief Dump the full /proc/self/smaps to catchem_smaps_step<step>.txt (rank 0 only).
    !! Used to name the progressively-growing mapping: diff two dumps and find the region
    !! whose Rss increased. No-op if /proc/self/smaps is unavailable.
-   subroutine cc_cap_dump_smaps(step)
-      integer, intent(in) :: step
+   subroutine cc_cap_dump_smaps(pe, step)
+      integer, intent(in) :: pe, step
       integer :: uin, uout, ios
       character(len=512) :: line
       character(len=64) :: fname
-      write(fname, '(A,I0,A)') 'catchem_smaps_step', step, '.txt'
+      write(fname, '(A,I0,A,I0,A)') 'catchem_smaps_pe', pe, '_step', step, '.txt'
       open(newunit=uin, file='/proc/self/smaps', status='old', action='read', iostat=ios)
       if (ios /= 0) return
       open(newunit=uout, file=trim(fname), status='replace', action='write', iostat=ios)
@@ -1101,5 +1192,181 @@ contains
       end do
       close(u)
    end subroutine cc_cap_top_rss_region
+
+   !> \brief Binary-search a sorted (ascending) integer(8) array for key; -1 if absent.
+   integer function cc_bsearch(a, n, key) result(idx)
+      integer(8), intent(in) :: a(:)
+      integer, intent(in) :: n
+      integer(8), intent(in) :: key
+      integer :: lo, hi, mid
+      idx = -1; lo = 1; hi = n
+      do while (lo <= hi)
+         mid = (lo + hi) / 2
+         if (a(mid) == key) then
+            idx = mid; return
+         else if (a(mid) < key) then
+            lo = mid + 1
+         else
+            hi = mid - 1
+         end if
+      end do
+   end function cc_bsearch
+
+   !> \brief Per-region /proc/self/smaps growth analyzer (CATCHEM_MEM_GROW).
+   !! First call snapshots every mapping (start addr, virtual size, Rss) as a baseline.
+   !! Each later call re-reads smaps and reports, vs baseline: total & anon Rss and growth,
+   !! the count/Rss of NEW mappings (addr not in baseline => unbounded proliferation), the
+   !! count of mappings whose virtual size GREW (a reservation being extended), the top-N
+   !! individual regions by Rss growth, and the top names by aggregated Rss growth. Together
+   !! these NAME the culprit and decide bounded (rss->vsize then flat) vs unbounded — from any
+   !! rank, without shipping dump files. Signals:
+   !!   nnew rising / sizeGrow>0 / dTot never flattening => UNBOUNDED leak (localize by name).
+   !!   one region rss climbing toward a FIXED vsize, nnew=0, sizeGrow=0 => BOUNDED (safe).
+   subroutine cc_cap_smaps_growth(step)
+      integer, intent(in) :: step
+      integer :: u, ios, i, j, k, m, sl, br, lastsl, cn, nd, dstep
+      character(len=512) :: line
+      character(len=64)  :: cname
+      character :: c
+      integer(8) :: a0, a1, rss, d, totrss, totanon, dtot, tmp8
+      integer :: tmpi, nnew, nsizegrow
+      integer(8) :: newrss
+      logical :: isfile, have
+      integer(8), allocatable :: c_a0(:), c_vs(:), c_rss(:)
+      character(len=64), allocatable :: c_nm(:)
+      logical, allocatable :: c_if(:)
+      integer, parameter :: NTOP = 8, NTOPN = 6, NDMAX = 256
+      integer(8) :: td(NTOP)
+      integer    :: ti(NTOP)
+      character(len=64) :: nd_name(NDMAX)
+      integer(8) :: nd_delta(NDMAX)
+
+      allocate(c_a0(CC_GROW_MAX), c_vs(CC_GROW_MAX), c_rss(CC_GROW_MAX), &
+               c_nm(CC_GROW_MAX), c_if(CC_GROW_MAX))
+      cn = 0; have = .false.
+      a0 = 0; a1 = 0; rss = 0; cname = '[anon]'; isfile = .false.
+      open(newunit=u, file='/proc/self/smaps', status='old', action='read', iostat=ios)
+      if (ios /= 0) then
+         deallocate(c_a0, c_vs, c_rss, c_nm, c_if); return
+      end if
+      do
+         read(u, '(A)', iostat=ios) line
+         if (ios /= 0) then
+            if (have .and. cn < CC_GROW_MAX) then
+               cn = cn + 1; c_a0(cn) = a0; c_vs(cn) = (a1 - a0) / 1024_8
+               c_rss(cn) = rss; c_nm(cn) = cname; c_if(cn) = isfile
+            end if
+            exit
+         end if
+         c = line(1:1)
+         if ((c >= '0' .and. c <= '9') .or. (c >= 'a' .and. c <= 'f')) then
+            if (have .and. cn < CC_GROW_MAX) then
+               cn = cn + 1; c_a0(cn) = a0; c_vs(cn) = (a1 - a0) / 1024_8
+               c_rss(cn) = rss; c_nm(cn) = cname; c_if(cn) = isfile
+            end if
+            j = index(line, '-')
+            a0 = cc_hex2i(line(1:j-1))
+            m = index(line(j+1:), ' ')
+            a1 = cc_hex2i(line(j+1:j+m-1))
+            sl = index(line, '/'); br = index(line, '[')
+            if (sl > 0) then
+               lastsl = sl
+               do i = sl + 1, len_trim(line)
+                  if (line(i:i) == '/') lastsl = i
+               end do
+               cname = adjustl(line(lastsl+1:)); isfile = .true.
+            else if (br > 0) then
+               cname = adjustl(line(br:)); isfile = .false.
+            else
+               cname = '[anon]'; isfile = .false.
+            end if
+            rss = 0; have = .true.
+         else if (line(1:4) == 'Rss:') then
+            read(line(5:), *, iostat=ios) rss
+            if (ios /= 0) rss = 0
+         end if
+      end do
+      close(u)
+
+      totrss = 0; totanon = 0
+      do i = 1, cn
+         totrss = totrss + c_rss(i)
+         if (.not. c_if(i)) totanon = totanon + c_rss(i)
+      end do
+
+      if (gb_n == -1) then
+         allocate(gb_addr0(cn), gb_vsize(cn), gb_rss(cn))
+         do i = 1, cn
+            gb_addr0(i) = c_a0(i); gb_vsize(i) = c_vs(i); gb_rss(i) = c_rss(i)
+         end do
+         gb_n = cn; gb_step = step; gb_totrss = totrss; gb_totanon = totanon
+         write(*,'(A,I0,3(A,I0))') '[CATChem GROW] baseline step=', step, &
+            ' nreg=', cn, ' totRss_kB=', totrss, ' totAnon_kB=', totanon
+         flush(6)
+         deallocate(c_a0, c_vs, c_rss, c_nm, c_if); return
+      end if
+
+      do m = 1, NTOP
+         td(m) = -huge(1_8); ti(m) = 0
+      end do
+      nd = 0; nnew = 0; newrss = 0; nsizegrow = 0
+      do i = 1, cn
+         j = cc_bsearch(gb_addr0, gb_n, c_a0(i))
+         if (j > 0) then
+            d = c_rss(i) - gb_rss(j)
+            if (c_vs(i) > gb_vsize(j)) nsizegrow = nsizegrow + 1
+         else
+            d = c_rss(i); nnew = nnew + 1; newrss = newrss + c_rss(i)
+         end if
+         if (d > td(NTOP)) then
+            td(NTOP) = d; ti(NTOP) = i
+            do m = NTOP, 2, -1
+               if (td(m) > td(m-1)) then
+                  tmp8 = td(m); td(m) = td(m-1); td(m-1) = tmp8
+                  tmpi = ti(m); ti(m) = ti(m-1); ti(m-1) = tmpi
+               end if
+            end do
+         end if
+         do m = 1, nd
+            if (nd_name(m) == c_nm(i)) then
+               nd_delta(m) = nd_delta(m) + d
+               go to 100
+            end if
+         end do
+         if (nd < NDMAX) then
+            nd = nd + 1; nd_name(nd) = c_nm(i); nd_delta(nd) = d
+         end if
+100      continue
+      end do
+
+      dtot = totrss - gb_totrss
+      dstep = step - gb_step
+      if (dstep < 1) dstep = 1
+      write(*,'(A,I0,7(A,I0),A,I0)') '[CATChem GROW] step=', step, &
+         ' dstep=', dstep, ' nreg=', cn, ' nnew=', nnew, ' newRss_kB=', int(newrss), &
+         ' sizeGrow=', nsizegrow, ' totRss_kB=', int(totrss), ' totAnon_kB=', int(totanon), &
+         ' dTot_kB=', int(dtot)
+      do m = 1, NTOP
+         if (ti(m) > 0 .and. td(m) > 0) then
+            i = ti(m)
+            write(*,'(A,I0,A,I0,A,I0,A,I0,A,Z0,2A)') '[CATChem GROW]   +', int(td(m)), &
+               ' kB rate=', int(td(m)/dstep), ' cur_kB=', int(c_rss(i)), &
+               ' vsize_kB=', int(c_vs(i)), ' addr=0x', c_a0(i), &
+               ' name=', trim(c_nm(i))
+         end if
+      end do
+      do k = 1, NTOPN
+         j = 0
+         do m = 1, nd
+            if (nd_delta(m) > 0 .and. (j == 0 .or. nd_delta(m) > nd_delta(j))) j = m
+         end do
+         if (j == 0) exit
+         write(*,'(A,I0,A,I0,2A)') '[CATChem GROW]   byname +', int(nd_delta(j)), &
+            ' kB rate=', int(nd_delta(j)/dstep), ' name=', trim(nd_name(j))
+         nd_delta(j) = -1
+      end do
+      flush(6)
+      deallocate(c_a0, c_vs, c_rss, c_nm, c_if)
+   end subroutine cc_cap_smaps_growth
 
 end module cc_nuopc
