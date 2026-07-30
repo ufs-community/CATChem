@@ -481,9 +481,11 @@ contains
       integer, save :: mem_stride = -2      ! -2 = uninitialised, -1 = disabled
       integer(8), save :: stage_cum(5) = 0_8
       integer(8), save :: stage_anon(4) = 0_8   ! precise RssAnon accumulation per sub-call
+      integer(8), save :: stage_heap(4) = 0_8   ! [heap]-Rss (main-arena) accumulation per sub-call
       integer, save :: prev_entry = -1
       character(len=32) :: mem_env
       integer :: mem_len, mem_stat, mem_ios, rss0, rss1, an0, an1
+      integer(8) :: hp0, hp1
       logical :: mem_on
       ! Peak (VmHWM) attribution: which stage advances the monotonic peak.
       ! hwm_cum(1)=emis (2)=procs (3)=pmdiag (4)=diagwrite (5)=transforms/cap.
@@ -531,6 +533,7 @@ contains
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
          an0  = cc_read_rssanon_kb()
+         hp0  = cc_read_heaprss_kb()
       end if
       call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
          cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
@@ -541,6 +544,8 @@ contains
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(1) = hwm_cum(1) + (hwm1 - hwm0)
          an1  = cc_read_rssanon_kb()
          if (an0 >= 0 .and. an1 >= 0) stage_anon(1) = stage_anon(1) + (an1 - an0)
+         hp1  = cc_read_heaprss_kb()
+         if (hp0 >= 0 .and. hp1 >= 0) stage_heap(1) = stage_heap(1) + (hp1 - hp0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
@@ -559,6 +564,7 @@ contains
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
          an0  = cc_read_rssanon_kb()
+         hp0  = cc_read_heaprss_kb()
       end if
       call cc_wrap%catchem_model%run_timestep(timestep, real(dt, fp), rc)
       if (rc /= CC_SUCCESS) then
@@ -572,6 +578,8 @@ contains
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(2) = hwm_cum(2) + (hwm1 - hwm0)
          an1  = cc_read_rssanon_kb()
          if (an0 >= 0 .and. an1 >= 0) stage_anon(2) = stage_anon(2) + (an1 - an0)
+         hp1  = cc_read_heaprss_kb()
+         if (hp0 >= 0 .and. hp1 >= 0) stage_heap(2) = stage_heap(2) + (hp1 - hp0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("cc_wrap%catchem_model%run_timestep", rc=rc)
@@ -592,6 +600,7 @@ contains
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
          an0  = cc_read_rssanon_kb()
+         hp0  = cc_read_heaprss_kb()
       end if
       call update_pm_diagnostics(cc_wrap, rc)
       if (rc /= CC_SUCCESS) then
@@ -605,6 +614,8 @@ contains
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(3) = hwm_cum(3) + (hwm1 - hwm0)
          an1  = cc_read_rssanon_kb()
          if (an0 >= 0 .and. an1 >= 0) stage_anon(3) = stage_anon(3) + (an1 - an0)
+         hp1  = cc_read_heaprss_kb()
+         if (hp0 >= 0 .and. hp1 >= 0) stage_heap(3) = stage_heap(3) + (hp1 - hp0)
       end if
 #ifdef CATCHEM_TRACE_NUOPC
       call ESMF_TraceRegionExit("update_pm_diagnostics", rc=rc)
@@ -622,6 +633,7 @@ contains
          rss0 = cc_read_vmrss_kb()
          hwm0 = cc_read_vmhwm_kb()
          an0  = cc_read_rssanon_kb()
+         hp0  = cc_read_heaprss_kb()
       end if
       call catchem_diagnostics_write(cc_wrap, current_time, rc)
       if (rc /= ESMF_SUCCESS) then
@@ -635,6 +647,8 @@ contains
          if (hwm0 >= 0 .and. hwm1 >= 0) hwm_cum(4) = hwm_cum(4) + (hwm1 - hwm0)
          an1  = cc_read_rssanon_kb()
          if (an0 >= 0 .and. an1 >= 0) stage_anon(4) = stage_anon(4) + (an1 - an0)
+         hp1  = cc_read_heaprss_kb()
+         if (hp0 >= 0 .and. hp1 >= 0) stage_heap(4) = stage_heap(4) + (hp1 - hp0)
          if (hwm1 >= 0) prev_diagend_hwm = hwm1
          if (mod(timestep, mem_stride) == 0) then
             write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem STAGEMEM] step=', timestep, &
@@ -647,6 +661,12 @@ contains
             write(*,'(A,I0,4(A,I0))') '[CATChem STAGEANON] step=', timestep, &
                '  emis=', stage_anon(1), '  procs=', stage_anon(2), &
                '  pmdiag=', stage_anon(3), '  diagwrite=', stage_anon(4)
+            ! [heap]-Rss (main glibc arena) accumulation per sub-call — the clean main-arena
+            ! signal (excludes secondary arenas/stacks): the bucket climbing ~+1MB/step holds
+            ! the never-freed allocation. Portable (/proc); prints -1 where /proc is absent.
+            write(*,'(A,I0,4(A,I0))') '[CATChem STAGEHEAP] step=', timestep, &
+               '  emis=', stage_heap(1), '  procs=', stage_heap(2), &
+               '  pmdiag=', stage_heap(3), '  diagwrite=', stage_heap(4)
             write(*,'(A,I0,A,I0,A,I0,A,I0,A,I0,A,I0)') '[CATChem PEAKMEM] step=', timestep, &
                '  emis=', hwm_cum(1), '  procs=', hwm_cum(2), &
                '  pmdiag=', hwm_cum(3), '  diagwrite=', hwm_cum(4), &
@@ -1485,8 +1505,29 @@ contains
       integer :: num_processes, i
       logical :: time_to_write
       character(len=256) :: filename
+      ! [heap]-Rss inner split of the diagnostics-write sub-call (gated by CATCHEM_MEM_STAGE):
+      ! splits diagwrite into process-diags / ext-emis / chem-diags so ONE run pinpoints which
+      ! diagnostic path never-frees (if diagwrite is the leaking sub-call). Portable /proc.
+      integer, save :: dw_stride = -2
+      integer, save :: dw_ncall = 0
+      integer(8), save :: dw_heap(3) = 0_8
+      character(len=32) :: dw_env
+      integer :: dw_len, dw_stat, dw_ios
+      integer(8) :: dwh0, dwh1
+      logical :: dw_on
 
       rc = CC_SUCCESS
+
+      if (dw_stride == -2) then
+         call get_environment_variable('CATCHEM_MEM_STAGE', dw_env, dw_len, dw_stat)
+         if (dw_stat == 0 .and. dw_len > 0) then
+            read(dw_env, *, iostat=dw_ios) dw_stride
+            if (dw_ios /= 0) dw_stride = -1
+         else
+            dw_stride = -1
+         end if
+      end if
+      dw_on = (dw_stride > 0)
 
       ! Check top-level diagnostics/output/enabled switch before doing anything
       state_mgr_diag => cc_wrap%catchem_model%get_state_manager()
@@ -1523,6 +1564,7 @@ contains
       if (rc /= CC_SUCCESS) return
 
       ! Write process diagnostics (optional - may have no registered processes)
+      if (dw_on) dwh0 = cc_read_heaprss_kb()
       diag_mgr => cc_wrap%catchem_model%get_diagnostic_manager()
       if (associated(diag_mgr)) then
          call diag_mgr%list_processes(process_list, num_processes, rc)
@@ -1538,17 +1580,37 @@ contains
       end if
 
       !write extemission fields if needed
+      if (dw_on) then
+         dwh1 = cc_read_heaprss_kb()
+         if (dwh0 >= 0 .and. dwh1 >= 0) dw_heap(1) = dw_heap(1) + (dwh1 - dwh0)
+      end if
+      if (dw_on) dwh0 = cc_read_heaprss_kb()
       call catchem_emis_write_diagnostics(cc_wrap%ext_emis, cc_wrap%current_time_slice, cc_wrap%iocomp, cc_wrap%grid, filename, rc)
       if (rc /= CC_SUCCESS) then
          write(*,'(A)') 'Error: Failed to write external emission diagnostics.'
          return
       end if
+      if (dw_on) then
+         dwh1 = cc_read_heaprss_kb()
+         if (dwh0 >= 0 .and. dwh1 >= 0) dw_heap(2) = dw_heap(2) + (dwh1 - dwh0)
+      end if
 
       ! Write chemical species concentration diagnostics
+      if (dw_on) dwh0 = cc_read_heaprss_kb()
       call write_chem_diagnostics(cc_wrap, filename, rc)
       if (rc /= CC_SUCCESS) then
          write(*,'(A)') 'Error: Failed to write chemical species diagnostics.'
          return
+      end if
+      if (dw_on) then
+         dwh1 = cc_read_heaprss_kb()
+         if (dwh0 >= 0 .and. dwh1 >= 0) dw_heap(3) = dw_heap(3) + (dwh1 - dwh0)
+         dw_ncall = dw_ncall + 1
+         if (mod(dw_ncall, dw_stride) == 0) then
+            write(*,'(A,I0,3(A,I0))') '[CATChem DIAGHEAP] write=', dw_ncall, &
+               '  procdiag=', dw_heap(1), '  extemis=', dw_heap(2), '  chemdiag=', dw_heap(3)
+            flush(6)
+         end if
       end if
 
       ! Update last output time
@@ -2930,5 +2992,33 @@ contains
       end do
       close(unit)
    end function cc_read_vmhwm_kb
+
+   !> \brief Resident kB of the main [heap] (brk) segment from /proc/self/smaps. Portable
+   !! (pure file I/O) => returns -1 where /proc is absent (e.g. macOS), so it links with no
+   !! libc allocator symbol. [heap] Rss is the main-arena high-water where the malloc leak
+   !! accumulates; the per-sub-call delta attributes the growth to the leaking call.
+   integer(8) function cc_read_heaprss_kb() result(kb)
+      integer :: u, ios
+      character(len=512) :: line
+      character :: c
+      logical :: inheap
+      kb = -1
+      open(newunit=u, file='/proc/self/smaps', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      inheap = .false.
+      do
+         read(u, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         c = line(1:1)
+         if ((c >= '0' .and. c <= '9') .or. (c >= 'a' .and. c <= 'f')) then
+            inheap = (index(line, '[heap]') > 0)
+         else if (inheap .and. line(1:4) == 'Rss:') then
+            read(line(5:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(u)
+   end function cc_read_heaprss_kb
 
 end module catchem_nuopc_interface

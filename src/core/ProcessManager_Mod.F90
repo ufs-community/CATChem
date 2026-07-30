@@ -172,8 +172,10 @@ contains
       integer, save :: pm_stride = -2
       integer, save :: pm_ncall = 0
       integer(8), save :: proc_anon(50) = 0_8
+      integer(8), save :: proc_heap(50) = 0_8
       character(len=64) :: pm_env
       integer :: pm_len, pm_stat, pm_ios, pa0, pa1
+      integer(8) :: ph0, ph1
       logical :: pm_on
 
       ! If there are no processes, succeed immediately
@@ -205,7 +207,10 @@ contains
 
       do i = 1, this%num_processes
          if (this%processes(i)%item%is_ready()) then
-            if (pm_on) pa0 = cc_pm_read_rssanon_kb()
+            if (pm_on) then
+               pa0 = cc_pm_read_rssanon_kb()
+               ph0 = cc_pm_read_heaprss_kb()
+            end if
             ! Check if this is a column process
             select type(proc => this%processes(i)%item)
              class is (ColumnProcessInterface)
@@ -219,6 +224,8 @@ contains
             if (pm_on) then
                pa1 = cc_pm_read_rssanon_kb()
                if (pa0 >= 0 .and. pa1 >= 0) proc_anon(i) = proc_anon(i) + (pa1 - pa0)
+               ph1 = cc_pm_read_heaprss_kb()
+               if (ph0 >= 0 .and. ph1 >= 0) proc_heap(i) = proc_heap(i) + (ph1 - ph0)
             end if
 
             if (local_rc /= CC_SUCCESS) then
@@ -233,6 +240,9 @@ contains
             write(*,'(A,I0,A,I0,2A,A,I0)') '[CATChem PROCANON] step=', pm_ncall, &
                '  idx=', i, '  name=', trim(this%processes(i)%item%get_name()), &
                '  cum_anon_kB=', proc_anon(i)
+            write(*,'(A,I0,A,I0,2A,A,I0)') '[CATChem PROCHEAP] step=', pm_ncall, &
+               '  idx=', i, '  name=', trim(this%processes(i)%item%get_name()), &
+               '  cum_heap_kB=', proc_heap(i)
          end do
          flush(6)
       end if
@@ -258,6 +268,34 @@ contains
       end do
       close(unit)
    end function cc_pm_read_rssanon_kb
+
+   !> \brief Resident kB of the main [heap] (brk) segment from /proc/self/smaps. Portable
+   !! (pure file I/O) => -1 where /proc is absent (macOS), so core links with no libc
+   !! allocator symbol. Main-arena high-water where the malloc leak accumulates; the
+   !! per-scheme delta attributes the growth to the leaking scheme. ([CATChem PROCHEAP])
+   integer(8) function cc_pm_read_heaprss_kb() result(kb)
+      integer :: u, ios
+      character(len=512) :: line
+      character :: c
+      logical :: inheap
+      kb = -1
+      open(newunit=u, file='/proc/self/smaps', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      inheap = .false.
+      do
+         read(u, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         c = line(1:1)
+         if ((c >= '0' .and. c <= '9') .or. (c >= 'a' .and. c <= 'f')) then
+            inheap = (index(line, '[heap]') > 0)
+         else if (inheap .and. line(1:4) == 'Rss:') then
+            read(line(5:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(u)
+   end function cc_pm_read_heaprss_kb
 
    !> \brief Run column processes using column virtualization
    subroutine manager_run_column_processes(this, container, rc)
