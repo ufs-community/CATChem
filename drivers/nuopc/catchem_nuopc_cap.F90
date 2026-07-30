@@ -505,6 +505,7 @@ contains
       integer :: cap_len, cap_stat, cap_ios
       integer :: cap_r0, cap_r1, cap_r2, cap_r3
       integer :: cap_a0, cap_a1, cap_a2, cap_a3   ! RssAnon (precise heap-resident) at same boundaries
+      integer(8) :: cap_h0, cap_h1, cap_h2, cap_h3   ! [heap]-Rss (main-arena) at same boundaries
       logical :: cap_on
 
       ! malloc_trim / mallinfo instrumentation (independent of CAPMEM).
@@ -584,9 +585,11 @@ contains
       cap_on = (cap_stride > 0)
       cap_r0 = -1; cap_r1 = -1; cap_r2 = -1; cap_r3 = -1
       cap_a0 = -1; cap_a1 = -1; cap_a2 = -1; cap_a3 = -1
+      cap_h0 = -1; cap_h1 = -1; cap_h2 = -1; cap_h3 = -1
       if (cap_on) then
          cap_r0 = cc_cap_read_vmrss_kb()     ! cap entry (after host/mediator ran)
          cap_a0 = cc_cap_read_rssanon_kb()   ! precise heap-resident at entry
+         cap_h0 = cc_cap_read_heaprss_kb()   ! [heap] main-arena resident at entry
       end if
 
       if (mt_stride == -2) then
@@ -731,6 +734,7 @@ contains
       if (cap_on) then
          cap_r1 = cc_cap_read_vmrss_kb()     ! after import transform
          cap_a1 = cc_cap_read_rssanon_kb()
+         cap_h1 = cc_cap_read_heaprss_kb()
       end if
 
       ! Run CATChem processes with current time
@@ -755,6 +759,7 @@ contains
       if (cap_on) then
          cap_r2 = cc_cap_read_vmrss_kb()     ! after catchem_nuopc_run
          cap_a2 = cc_cap_read_rssanon_kb()
+         cap_h2 = cc_cap_read_heaprss_kb()
       end if
 
       ! Export results to other components
@@ -775,6 +780,7 @@ contains
       if (cap_on) then
          cap_r3 = cc_cap_read_vmrss_kb()     ! after export transform (cap exit)
          cap_a3 = cc_cap_read_rssanon_kb()
+         cap_h3 = cc_cap_read_heaprss_kb()
          cap_ncall = cap_ncall + 1
          if (mod(cap_ncall, cap_stride) == 0) then
             write(*,'(A,I0,4(A,I0))') '[CATChem CAPMEM] step=', cap_ncall, &
@@ -784,6 +790,12 @@ contains
             ! run->exp export) is resolvable even at ~10 pages/step.
             write(*,'(A,I0,4(A,I0))') '[CATChem CAPANON] step=', cap_ncall, &
                '  entry=', cap_a0, '  imp=', cap_a1, '  run=', cap_a2, '  exp=', cap_a3
+            ! [heap] main-arena resident at the SAME 4 boundaries. Separates the [heap]
+            ! (+865/step) grower from [anon]: if entry rises step-over-step while imp/run/exp
+            ! deltas within a step stay ~0, the heap is extended BETWEEN CATChem steps
+            ! (host/mediator/ESMF), NOT by CATChem. Portable (/proc); -1 where absent.
+            write(*,'(A,I0,4(A,I0))') '[CATChem CAPHEAP] step=', cap_ncall, &
+               '  entry=', cap_h0, '  imp=', cap_h1, '  run=', cap_h2, '  exp=', cap_h3
             flush(6)
          end if
       end if
@@ -1018,6 +1030,34 @@ contains
       end do
       close(u)
    end function cc_cap_read_rssanon_kb
+
+   !> \brief Resident kB of the main [heap] (brk) segment from /proc/self/smaps. Portable
+   !! (pure file I/O) => -1 where /proc is absent. Separates main-arena [heap] growth from
+   !! [anon] at the cap phase boundaries (import entry->imp, catchem run imp->run, export
+   !! run->exp, host between exp and next entry). Used by CAPHEAP.
+   integer(8) function cc_cap_read_heaprss_kb() result(kb)
+      integer :: u, ios
+      character(len=512) :: line
+      character :: c
+      logical :: inheap
+      kb = -1
+      open(newunit=u, file='/proc/self/smaps', status='old', action='read', iostat=ios)
+      if (ios /= 0) return
+      inheap = .false.
+      do
+         read(u, '(A)', iostat=ios) line
+         if (ios /= 0) exit
+         c = line(1:1)
+         if ((c >= '0' .and. c <= '9') .or. (c >= 'a' .and. c <= 'f')) then
+            inheap = (index(line, '[heap]') > 0)
+         else if (inheap .and. line(1:4) == 'Rss:') then
+            read(line(5:), *, iostat=ios) kb
+            if (ios /= 0) kb = -1
+            exit
+         end if
+      end do
+      close(u)
+   end function cc_cap_read_heaprss_kb
 
    !> \brief Dump the full /proc/self/smaps to catchem_smaps_step<step>.txt (rank 0 only).
    !! Used to name the progressively-growing mapping: diff two dumps and find the region
