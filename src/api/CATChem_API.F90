@@ -509,68 +509,7 @@ contains
             return
          endif
       endif
-
-      ! Optional per-timestep resident-memory logging for leak diagnosis.
-      ! No-op unless the environment variable CATCHEM_MEM_LOG is set.
-      call catchem_log_memory(timestep)
    end subroutine model_run_timestep
-
-   !> \brief Log resident memory usage (VmRSS/VmHWM) for memory-leak diagnosis.
-   !!
-   !! Controlled by the environment variable CATCHEM_MEM_LOG:
-   !!   unset or <= 0 : disabled (zero overhead in production)
-   !!   N > 0         : print resident memory every N timesteps
-   !!
-   !! Reads /proc/self/status (Linux). Under Slurm, run with `srun --label` so
-   !! each line is automatically prefixed with the MPI rank. Grep the output for
-   !! 'CATChem MEM' and plot VmRSS vs. step: a straight upward line == leak.
-   subroutine catchem_log_memory(step)
-      integer, intent(in) :: step
-
-      integer, save :: stride = -1
-      integer, save :: ncall = 0
-      logical, save :: initialized = .false.
-      character(len=32) :: env_val
-      integer :: env_len, env_stat, ios, unit
-      character(len=256) :: line
-      character(len=64) :: vmrss, vmhwm
-
-      ! One-time read of the control environment variable
-      if (.not. initialized) then
-         call get_environment_variable('CATCHEM_MEM_LOG', env_val, env_len, env_stat)
-         if (env_stat == 0 .and. env_len > 0) then
-            read(env_val, *, iostat=ios) stride
-            if (ios /= 0) stride = -1
-         else
-            stride = -1
-         end if
-         initialized = .true.
-      end if
-
-      if (stride <= 0) return
-
-      ! Use an internal monotonic counter for the stride gate so logging works
-      ! even if the caller's timestep value is not a clean incrementing integer.
-      ncall = ncall + 1
-      if (mod(ncall, stride) /= 0) return
-
-      vmrss = 'NA'
-      vmhwm = 'NA'
-      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
-      if (ios == 0) then
-         do
-            read(unit, '(A)', iostat=ios) line
-            if (ios /= 0) exit
-            if (line(1:6) == 'VmRSS:') vmrss = adjustl(line(7:))
-            if (line(1:6) == 'VmHWM:') vmhwm = adjustl(line(7:))
-         end do
-         close(unit)
-      end if
-
-      write(*,'(A,I0,A,I0,A,A,A,A)') '[CATChem MEM] call=', ncall, &
-         ' step=', step, '  VmRSS= ', trim(vmrss), '  VmHWM= ', trim(vmhwm)
-      flush(6)
-   end subroutine catchem_log_memory
 
    !> Run a specific phase
    !! This method executes a named phase of the simulation

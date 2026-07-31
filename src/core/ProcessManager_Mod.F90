@@ -167,16 +167,6 @@ contains
 
       integer :: i, local_rc
       type(GridManagerType), pointer :: grid_mgr
-      ! Per-process RssAnon leak instrumentation (gated by env CATCHEM_MEM_PROC=N;
-      ! prints cumulative heap-resident growth attributed to each scheme every N steps).
-      integer, save :: pm_stride = -2
-      integer, save :: pm_ncall = 0
-      integer(8), save :: proc_anon(50) = 0_8
-      integer(8), save :: proc_heap(50) = 0_8
-      character(len=64) :: pm_env
-      integer :: pm_len, pm_stat, pm_ios, pa0, pa1
-      integer(8) :: ph0, ph1
-      logical :: pm_on
 
       ! If there are no processes, succeed immediately
       if (this%num_processes == 0) then
@@ -193,24 +183,8 @@ contains
          return
       endif
 
-      if (pm_stride == -2) then
-         call get_environment_variable('CATCHEM_MEM_PROC', pm_env, pm_len, pm_stat)
-         if (pm_stat == 0 .and. pm_len > 0) then
-            read(pm_env, *, iostat=pm_ios) pm_stride
-            if (pm_ios /= 0) pm_stride = -1
-         else
-            pm_stride = -1
-         end if
-      end if
-      pm_on = (pm_stride > 0)
-      if (pm_on) pm_ncall = pm_ncall + 1
-
       do i = 1, this%num_processes
          if (this%processes(i)%item%is_ready()) then
-            if (pm_on) then
-               pa0 = cc_pm_read_rssanon_kb()
-               ph0 = cc_pm_read_heaprss_kb()
-            end if
             ! Check if this is a column process
             select type(proc => this%processes(i)%item)
              class is (ColumnProcessInterface)
@@ -221,81 +195,13 @@ contains
                call this%processes(i)%item%run(container, local_rc)
             end select
 
-            if (pm_on) then
-               pa1 = cc_pm_read_rssanon_kb()
-               if (pa0 >= 0 .and. pa1 >= 0) proc_anon(i) = proc_anon(i) + (pa1 - pa0)
-               ph1 = cc_pm_read_heaprss_kb()
-               if (ph0 >= 0 .and. ph1 >= 0) proc_heap(i) = proc_heap(i) + (ph1 - ph0)
-            end if
-
             if (local_rc /= CC_SUCCESS) then
                rc = local_rc
                return
             endif
          endif
       enddo
-
-      if (pm_on .and. mod(pm_ncall, pm_stride) == 0) then
-         do i = 1, this%num_processes
-            write(*,'(A,I0,A,I0,2A,A,I0)') '[CATChem PROCANON] step=', pm_ncall, &
-               '  idx=', i, '  name=', trim(this%processes(i)%item%get_name()), &
-               '  cum_anon_kB=', proc_anon(i)
-            write(*,'(A,I0,A,I0,2A,A,I0)') '[CATChem PROCHEAP] step=', pm_ncall, &
-               '  idx=', i, '  name=', trim(this%processes(i)%item%get_name()), &
-               '  cum_heap_kB=', proc_heap(i)
-         end do
-         flush(6)
-      end if
    end subroutine manager_run_all
-
-   !> \brief Read resident anonymous memory (RssAnon, kB) from /proc/self/status.
-   !! Returns -1 if unavailable. Heap-resident only (no file-cache jitter); used by the
-   !! per-process leak instrumentation ([CATChem PROCANON], gated by CATCHEM_MEM_PROC).
-   integer function cc_pm_read_rssanon_kb() result(kb)
-      integer :: ios, unit
-      character(len=256) :: line
-      kb = -1
-      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
-      if (ios /= 0) return
-      do
-         read(unit, '(A)', iostat=ios) line
-         if (ios /= 0) exit
-         if (line(1:8) == 'RssAnon:') then
-            read(line(9:), *, iostat=ios) kb
-            if (ios /= 0) kb = -1
-            exit
-         end if
-      end do
-      close(unit)
-   end function cc_pm_read_rssanon_kb
-
-   !> \brief Resident kB of the main [heap] (brk) segment from /proc/self/smaps. Portable
-   !! (pure file I/O) => -1 where /proc is absent (macOS), so core links with no libc
-   !! allocator symbol. Main-arena high-water where the malloc leak accumulates; the
-   !! per-scheme delta attributes the growth to the leaking scheme. ([CATChem PROCHEAP])
-   integer(8) function cc_pm_read_heaprss_kb() result(kb)
-      integer :: u, ios
-      character(len=512) :: line
-      character :: c
-      logical :: inheap
-      kb = -1
-      open(newunit=u, file='/proc/self/smaps', status='old', action='read', iostat=ios)
-      if (ios /= 0) return
-      inheap = .false.
-      do
-         read(u, '(A)', iostat=ios) line
-         if (ios /= 0) exit
-         c = line(1:1)
-         if ((c >= '0' .and. c <= '9') .or. (c >= 'a' .and. c <= 'f')) then
-            inheap = (index(line, '[heap]') > 0)
-         else if (inheap .and. line(1:4) == 'Rss:') then
-            read(line(5:), *, iostat=ios) kb
-            if (ios /= 0) kb = -1
-            exit
-         end if
-      end do
-      close(u)
-   end function cc_pm_read_heaprss_kb
 
    !> \brief Run column processes using column virtualization
    subroutine manager_run_column_processes(this, container, rc)
@@ -475,29 +381,8 @@ contains
       type(ProcessConfigType) :: process_config
       logical :: phase_found
 
-      ! Per-process memory-leak instrumentation (gated by env CATCHEM_MEM_PROC).
-      integer, save :: mem_stride = -2      ! -2 = uninitialised, -1 = disabled
-      integer, save :: mem_ncall  = 0
-      integer(8), save :: proc_cum(64) = 0_8
-      character(len=32) :: mem_env
-      integer :: mem_len, mem_stat, mem_ios, rss_before, rss_after
-      logical :: mem_on
-
       rc = CC_SUCCESS
       phase_found = .false.
-
-      ! One-time read of the per-process memory control variable.
-      if (mem_stride == -2) then
-         call get_environment_variable('CATCHEM_MEM_PROC', mem_env, mem_len, mem_stat)
-         if (mem_stat == 0 .and. mem_len > 0) then
-            read(mem_env, *, iostat=mem_ios) mem_stride
-            if (mem_ios /= 0) mem_stride = -1
-         else
-            mem_stride = -1
-         end if
-      end if
-      mem_on = (mem_stride > 0)
-      if (mem_on) mem_ncall = mem_ncall + 1
 
       ! Check if run phases are configured
       if (.not. allocated(config_data%run_phases)) then
@@ -546,7 +431,6 @@ contains
 
          ! Run the process based on its type
          if (this%processes(process_idx)%item%is_ready()) then
-            if (mem_on) rss_before = pm_read_vmrss_kb()
             select type(proc => this%processes(process_idx)%item)
              class is (ColumnProcessInterface)
                !!write(*,*) 'Test phase process', process_idx, trim(proc%name) !debug only
@@ -554,18 +438,6 @@ contains
              class default
                call this%processes(process_idx)%item%run(container, local_rc)
             end select
-
-            if (mem_on) then
-               rss_after = pm_read_vmrss_kb()
-               if (rss_before >= 0 .and. rss_after >= 0 .and. process_idx <= 64) &
-                  proc_cum(process_idx) = proc_cum(process_idx) + (rss_after - rss_before)
-               if (mod(mem_ncall, mem_stride) == 0 .and. process_idx <= 64) then
-                  write(*,'(A,I0,A,A,A,I0,A,I0)') '[CATChem PROCMEM] call=', mem_ncall, &
-                     ' proc=', trim(process_config%name), &
-                     ' dRSS=', rss_after - rss_before, ' cumRSS=', proc_cum(process_idx)
-                  flush(6)
-               end if
-            end if
 
             if (local_rc /= CC_SUCCESS) then
                write(*,*) 'ERROR: Process ', trim(process_config%name), ' failed with code: ', local_rc
@@ -627,26 +499,6 @@ contains
       write(*,*) 'INFO: All ', size(config_data%run_phases), ' phases completed successfully'
 
    end subroutine manager_run_all_phases
-
-   !> \brief Read current resident-set size (VmRSS) in kB from /proc/self/status.
-   !! Returns -1 if unavailable (e.g. non-Linux). Used only for leak diagnosis.
-   integer function pm_read_vmrss_kb() result(kb)
-      integer :: ios, unit
-      character(len=256) :: line
-      kb = -1
-      open(newunit=unit, file='/proc/self/status', status='old', action='read', iostat=ios)
-      if (ios /= 0) return
-      do
-         read(unit, '(A)', iostat=ios) line
-         if (ios /= 0) exit
-         if (line(1:6) == 'VmRSS:') then
-            read(line(7:), *, iostat=ios) kb
-            if (ios /= 0) kb = -1
-            exit
-         end if
-      end do
-      close(unit)
-   end function pm_read_vmrss_kb
 
    !> Run all processes (compatibility method)
    subroutine manager_run_all_processes(this, container, rc)
