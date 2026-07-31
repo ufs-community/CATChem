@@ -59,10 +59,13 @@ program test_VirtualColumn
 
    ! Test 4: Set and get meteorological field
    write(*,*) 'Test 4: Set and get meteorological field'
-   ! Use a valid meteorological field from VirtualMetType, e.g. T(:) for temperature
+   ! Use a valid meteorological field from VirtualMetType, e.g. T(:) for temperature.
+   ! virtual_column_init no longer pre-allocates met pointers (that placeholder
+   ! allocation leaked in production when populate re-pointed it), so this
+   ! standalone test allocates the field itself.
    if (.not. associated(virtual_col%met%T)) then
-      write(*,*) "[ERROR] Temperature field pointer not associated"
-      stop
+      allocate(virtual_col%met%T(virtual_col%nlev))
+      virtual_col%met%T = 288.15_fp
    endif
    virtual_col%met%T(1) = 288.15_fp
    test_value = virtual_col%met%T(1)  ! Read back the value we just set
@@ -95,6 +98,9 @@ program test_VirtualColumn
 
    ! Test 7: Cleanup
    write(*,*) 'Test 7: Cleanup'
+   ! This test owns met%T (allocated above); cleanup only nullifies pointers,
+   ! so free it here to keep the test leak-clean.
+   if (associated(virtual_col%met%T)) deallocate(virtual_col%met%T)
    call virtual_col%cleanup()
 
    ! After cleanup, accessing fields should return 0 or fail gracefully

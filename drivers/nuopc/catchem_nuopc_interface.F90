@@ -285,7 +285,7 @@ contains
                      'areas; AREA_M2 left unset (point emissions will be skipped)', &
                      ESMF_LOGMSG_WARNING, rc=arc)
                end if
-               call ESMF_FieldDestroy(areaField, rc=arc)
+               call ESMF_FieldDestroy(areaField, noGarbage=.true., rc=arc)
             end if
          end block
       end if
@@ -936,11 +936,15 @@ contains
       type(ChemStateType), pointer :: chem_state
       !type(cc_wrap_type), pointer :: cc_wrap
       real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
-      real(ESMF_KIND_R8), pointer :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
-      real(fp), allocatable :: cc_conc(:,:,:,:)
+      ! fptr4d_rev/fptr3d_rev/cc_conc are PERSISTENT (save) reusable buffers: allocated
+      ! once and resized only on shape change, instead of allocated+freed every step.
+      ! Per-step alloc/free of these ~all-species 4D arrays fragmented the glibc arena and
+      ! caused unbounded RSS growth (the ~4-5 MB/step coupled import "leak").
+      real(ESMF_KIND_R8), allocatable, save :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
+      real(fp), allocatable, save :: cc_conc(:,:,:,:)
       real(fp), pointer :: column_ptr(:) !catchem met column pointer to get vertical dimension for nz+1 variables
       real(ESMF_KIND_R8) :: unit_conv
-      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index
+      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index, nsp, s
 
       rc = ESMF_SUCCESS
 
@@ -1001,7 +1005,7 @@ contains
 
          ! 3D meteorological fields
        case (3)
-         nullify(fptr3d, fptr3d_rev)
+         nullify(fptr3d)  ! fptr3d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr3d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -1027,8 +1031,13 @@ contains
             nk1 = nk
          end if
 
-         ! Allocate fptr3d_rev with the same dimensions as fptr3d
-         allocate(fptr3d_rev(ni, nj, nk1))
+         ! Reuse the persistent fptr3d_rev buffer; (re)allocate only if shape changed
+         ! (e.g. switching between nz and nz+1 edge fields). Avoids per-field alloc/free.
+         if (allocated(fptr3d_rev)) then
+            if (size(fptr3d_rev,1) /= ni .or. size(fptr3d_rev,2) /= nj .or. &
+                size(fptr3d_rev,3) /= nk1) deallocate(fptr3d_rev)
+         end if
+         if (.not. allocated(fptr3d_rev)) allocate(fptr3d_rev(ni, nj, nk1))
 
          ! -- map provider field levels to receiver field levels in the same (not reverse) order
          ! -- NOTE: if provider field from NUOPC has fewer vertical levels than the receiver field in CATChem,
@@ -1069,16 +1078,15 @@ contains
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="Met field is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr3d_rev)  ! Clean up before returning
-            return  ! bail out
+            return  ! bail out (persistent fptr3d_rev buffer retained for reuse)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr3d_rev)
+         ! fptr3d_rev is a persistent buffer: intentionally NOT deallocated here (reused
+         ! next step). Freed implicitly at program end.
 
          ! 4D tracer concentrations
        case (4)
-         nullify(fptr4d, fptr4d_rev)
+         nullify(fptr4d)  ! fptr4d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr4d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -1095,22 +1103,33 @@ contains
          nj = size(fptr4d, 2)
          nk = size(fptr4d, 3)
          nv = size(fptr4d, 4)
+         nsp = size(chem_state%ChemSpecies)
 
-         ! Allocate fptr4d_rev with the same dimensions as fptr4d
-         allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
-         fptr4d_rev = 0.0_fp  ! Initialize to zero
-         !get original concentrations from CATChem.
-         !This is because some species in CATChem may not go through advection and should keep their values.
-         call chem_state%get_all_concentrations(cc_conc, rc)
-         if (rc /= CC_SUCCESS) then
-            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-               msg="CATChem tracer array is not retrieved successfully for: " // trim(field_map%catchem_var), &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-            if (allocated(cc_conc)) deallocate(cc_conc)  ! Clean up before returning
-            return  ! bail out
+         ! Reuse persistent fptr4d_rev + cc_conc buffers; (re)allocate only on shape change.
+         ! This replaces the per-step allocate/free of two ~all-species 4D arrays (fptr4d_rev
+         ! and the get_all_concentrations output), which was the dominant per-step large-array
+         ! churn fragmenting the glibc arena.
+         if (allocated(fptr4d_rev)) then
+            if (size(fptr4d_rev,1) /= ni .or. size(fptr4d_rev,2) /= nj .or. &
+                size(fptr4d_rev,3) /= nk .or. size(fptr4d_rev,4) /= nsp) deallocate(fptr4d_rev)
          end if
-         !assign to fptr4d_rev
-         fptr4d_rev = real(cc_conc, ESMF_KIND_R8)
+         if (.not. allocated(fptr4d_rev)) allocate(fptr4d_rev(ni, nj, nk, nsp))
+         if (allocated(cc_conc)) then
+            if (size(cc_conc,1) /= ni .or. size(cc_conc,2) /= nj .or. &
+                size(cc_conc,3) /= nk .or. size(cc_conc,4) /= nsp) deallocate(cc_conc)
+         end if
+         if (.not. allocated(cc_conc)) allocate(cc_conc(ni, nj, nk, nsp))
+
+         ! Seed fptr4d_rev with CATChem's current concentrations so non-advected species keep
+         ! their values. Inlined from get_all_concentrations to avoid its intent(out)
+         ! allocatable argument re-allocating a 4D array every step.
+         do s = 1, nsp
+            if (associated(chem_state%ChemSpecies(s)%conc)) then
+               fptr4d_rev(:,:,:,s) = real(chem_state%ChemSpecies(s)%conc(:,:,:), ESMF_KIND_R8)
+            else
+               fptr4d_rev(:,:,:,s) = 0.0_ESMF_KIND_R8
+            end if
+         end do
 
          ! Reverse vertical layers
          do v = 1, nv
@@ -1133,9 +1152,7 @@ contains
                   call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                      msg="Met field is not set successfully for: QV", &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  deallocate(fptr4d_rev)  ! Clean up before returning
-                  if (allocated(cc_conc)) deallocate(cc_conc)
-                  return  ! bail out
+                  return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
                end if
             end if
 
@@ -1163,19 +1180,20 @@ contains
          end do
 
          !set to concentrations in CATChem
-         call chem_state%set_all_concentrations(real(fptr4d_rev, fp), rc)
+         ! cc_conc is the persistent real(fp) send buffer (same shape as fptr4d_rev). Copy the
+         ! import result into it and pass the VARIABLE (not a whole-array real() expression,
+         ! which would force a per-call array temporary) to set_all_concentrations.
+         cc_conc = real(fptr4d_rev, fp)
+         call chem_state%set_all_concentrations(cc_conc, rc)
          if (rc /= CC_SUCCESS) then
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="CATChem tracer array is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr4d_rev)  ! Clean up before returning
-            if (allocated(cc_conc)) deallocate(cc_conc)
-            return  ! bail out
+            return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr4d_rev)
-         if (allocated(cc_conc)) deallocate(cc_conc)
+         ! fptr4d_rev and cc_conc are persistent buffers: intentionally NOT deallocated here
+         ! (reused next step). Freed implicitly at program end.
 
        case default
          call ESMF_LogWrite("Unknown field mapping dimension for: " // trim(field_map%catchem_var), &
@@ -1667,9 +1685,11 @@ contains
       ! This would require extending AQMIO or using NetCDF directly
       ! For now, we rely on the working AQMIO functionality
 
-      ! Clean up
+      ! Clean up. noGarbage=.true. forces ESMF to release the field's memory
+      ! immediately; without it ESMF defers deallocation until ESMF_Finalize,
+      ! leaking one subdomain-sized array per field on every diagnostic write.
       if (ESMF_FieldIsCreated(esmf_field)) then
-         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
       end if
 
    end subroutine write_diagnostic_field
