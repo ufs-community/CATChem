@@ -140,6 +140,12 @@ contains
       allocate(fluxout_temp(1,1))
       SD = 0.0_fp
       fluxout_temp = 0.0_fp
+      ! fluxout is (re)allocated each species iteration below; give it a defined
+      ! disassociated status here so the first associated()/deallocate() guard is
+      ! valid. A pointer without => null()/nullify has UNDEFINED association status
+      ! on entry, so associated() is illegal and compiler-dependent (ifort happened
+      ! to return .false., gfortran .true. -> deallocate of a bogus pointer -> crash).
+      nullify(fluxout)
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.

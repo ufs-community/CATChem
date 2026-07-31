@@ -1035,7 +1035,7 @@ contains
          ! (e.g. switching between nz and nz+1 edge fields). Avoids per-field alloc/free.
          if (allocated(fptr3d_rev)) then
             if (size(fptr3d_rev,1) /= ni .or. size(fptr3d_rev,2) /= nj .or. &
-                size(fptr3d_rev,3) /= nk1) deallocate(fptr3d_rev)
+               size(fptr3d_rev,3) /= nk1) deallocate(fptr3d_rev)
          end if
          if (.not. allocated(fptr3d_rev)) allocate(fptr3d_rev(ni, nj, nk1))
 
@@ -1111,12 +1111,12 @@ contains
          ! churn fragmenting the glibc arena.
          if (allocated(fptr4d_rev)) then
             if (size(fptr4d_rev,1) /= ni .or. size(fptr4d_rev,2) /= nj .or. &
-                size(fptr4d_rev,3) /= nk .or. size(fptr4d_rev,4) /= nsp) deallocate(fptr4d_rev)
+               size(fptr4d_rev,3) /= nk .or. size(fptr4d_rev,4) /= nsp) deallocate(fptr4d_rev)
          end if
          if (.not. allocated(fptr4d_rev)) allocate(fptr4d_rev(ni, nj, nk, nsp))
          if (allocated(cc_conc)) then
             if (size(cc_conc,1) /= ni .or. size(cc_conc,2) /= nj .or. &
-                size(cc_conc,3) /= nk .or. size(cc_conc,4) /= nsp) deallocate(cc_conc)
+               size(cc_conc,3) /= nk .or. size(cc_conc,4) /= nsp) deallocate(cc_conc)
          end if
          if (.not. allocated(cc_conc)) allocate(cc_conc(ni, nj, nk, nsp))
 
