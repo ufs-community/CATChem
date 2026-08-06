@@ -450,7 +450,8 @@ processes:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
-      correction_maring: true  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+      correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+      maring_dust_only: true  #apply Maring correction to dust only (true) or all species (false)
   so4chem:
     activate: true
     diagnostics: true
