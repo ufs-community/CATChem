@@ -108,6 +108,7 @@ MODULE ExtEmisData_Mod
       INTEGER                                   :: irec = 0            !< time slice index
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)           !< Emission fields array
       LOGICAL                                   :: is_active = .true.  !< Category enabled/disabled
+      LOGICAL                                   :: is_met = .false.   !< Cached: all mappings target met_state (MET_ prefix)
       LOGICAL                                   :: gridded = .true.    !< Is this a gridded emission category
       LOGICAL                                   :: is_2d = .true.         !< Is this a 2D or 3D emission category
       LOGICAL                                   :: diagnostic = .true.  !< Enable diagnostic output for this category?

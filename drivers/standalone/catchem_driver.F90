@@ -50,6 +50,8 @@ module catchem_driver
 
    use catchem_standalone_grid_mod, only: CATChemGridConfig, create_standalone_grid
 
+   use Constants, only: MAX_LEN_PATH
+
    implicit none
    private
 
@@ -59,7 +61,7 @@ module catchem_driver
    character(len=*), parameter :: u_FILE_u = __FILE__
 
    !> Path to the driver ESMF configure file (set by the main application)
-   character(len=512), save :: g_driver_cfg_file = "catchem_standalone.configure"
+   character(len=MAX_LEN_PATH), save :: g_driver_cfg_file = "catchem_standalone.configure"
 
 contains
 
@@ -109,7 +111,7 @@ contains
       type(CATChemGridConfig) :: gridCfg
 
       character(len=64)  :: start_str, stop_str
-      character(len=512) :: catchem_config_file, field_mapping_file
+      character(len=MAX_LEN_PATH) :: catchem_config_file, field_mapping_file
       integer :: timestep_sec
 
       rc = ESMF_SUCCESS

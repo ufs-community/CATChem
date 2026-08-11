@@ -31,6 +31,8 @@ program catchem_app
    use NUOPC
    use catchem_driver, only: driver_SS => SetServices, set_driver_config_file
 
+   use Constants, only: MAX_LEN_PATH
+
    implicit none
 
    character(len=*), parameter :: u_FILE_u = __FILE__
@@ -39,7 +41,7 @@ program catchem_app
    type(ESMF_VM)       :: vm
    type(ESMF_GridComp) :: driver
    integer             :: localPet
-   character(len=512)  :: driver_cfg_file
+   character(len=MAX_LEN_PATH)  :: driver_cfg_file
 
    ! ------------------------------------------------------------------
    ! Initialize ESMF

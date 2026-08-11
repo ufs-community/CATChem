@@ -81,7 +81,8 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)
          return
       end select
-      if (rc /= ESMF_SUCCESS) return
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
 
       ! Record the vertical level count as grid metadata. The vertical is an
       ! ungridded dimension applied to fields, so it is stored here rather than

@@ -33,7 +33,7 @@ module catchem_nuopc_interface
    ! use catchem_nuopc_netcdf_out
    ! use machine, only: kind_phys
    use precision_mod, only: fp
-   use Constants, only: g0, Rd, Re, MAX_LEN_NAME
+   use Constants, only: g0, Rd, Re, MAX_LEN_NAME, MAX_LEN_PATH
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -73,8 +73,8 @@ module catchem_nuopc_interface
    !! including metadata for proper data transformation and validation.
    !! \{
    type :: field_mapping_type
-      character(len=128) :: standard_name !< NUOPC/CF standard field name
-      character(len=128) :: catchem_var   !< Corresponding CATChem variable path
+      character(len=MAX_LEN_NAME) :: standard_name !< NUOPC/CF standard field name
+      character(len=MAX_LEN_NAME) :: catchem_var   !< Corresponding CATChem variable path
       integer :: dimensions               !< Number of spatial dimensions (2D/3D)
       character(len=64) :: units          !< Physical units for conversion
       logical :: optional = .false.       !< Whether field is required or optional
@@ -122,8 +122,8 @@ module catchem_nuopc_interface
       type(ESMF_TimeInterval) :: output_interval
       type(ESMF_TimeInterval) :: timeStep
       logical :: output_timing_initialized = .false.
-      character(len=256) :: output_directory = './output'
-      character(len=64) :: output_prefix = 'catchem_diag'
+      character(len=MAX_LEN_PATH) :: output_directory = './output'
+      character(len=MAX_LEN_NAME) :: output_prefix = 'catchem_diag'
       integer :: output_frequency = 3600  ! Default: 1 hour in seconds
       integer :: compress_lev = 0         !< Compression level for output NC files (0-9)
       type(ESMF_GridComp) :: iocomp
@@ -827,7 +827,7 @@ contains
 
       type(StateManagerType), pointer :: state_mgr
       type(ConfigManagerType), pointer :: config_mgr
-      character(len=64) :: tgt
+      character(len=MAX_LEN_NAME) :: tgt
       integer :: icat, ifield, ispec, idx
 
       mask = .false.
@@ -1416,7 +1416,7 @@ contains
       character(len=MAX_LEN_NAME), allocatable :: process_list(:)
       integer :: num_processes, i
       logical :: time_to_write
-      character(len=256) :: filename
+      character(len=MAX_LEN_PATH) :: filename
 
       rc = CC_SUCCESS
 
@@ -1512,7 +1512,7 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       character(len=128) :: description
       character(len=32) :: units
-      character(len=64) :: field_name
+      character(len=MAX_LEN_NAME) :: field_name
 
       rc = CC_SUCCESS
 
@@ -1715,9 +1715,10 @@ contains
       type(ConfigManagerType), pointer :: config_manager => null()
       type(ChemStateType), pointer :: chem_state => null()
       type(MetStateType), pointer :: met_state => null()
-      character(len=64), allocatable :: diag_species(:)
+      character(len=MAX_LEN_NAME), allocatable :: diag_species(:)
       integer :: num_diag_species, i, j, species_idx
-      character(len=64) :: species_name, field_name, units_str
+      character(len=MAX_LEN_NAME) :: species_name, field_name
+      character(len=64) :: units_str
       character(len=128) :: description
       logical :: found_species, save_all_species
       real(fp), pointer :: conc_data(:,:,:) => null()
@@ -2209,7 +2210,7 @@ contains
       type(ESMF_Grid) :: grid
       integer :: ibuf(1)  ! Buffer for MPI broadcast
       integer :: tileCount, tile, localDe, localDeCount, localrc
-      character(len=256) :: tileFilename
+      character(len=MAX_LEN_PATH) :: tileFilename
       character(len=16) :: tileSuffix
       integer :: dotpos
 

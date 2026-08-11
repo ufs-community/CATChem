@@ -441,7 +441,85 @@ program test_nuopc_compliance
 end program test_nuopc_compliance
 ```
 
+## Standalone Driver
+
+The same NUOPC cap (`cc_nuopc`) that couples into a host model can also be run
+**standalone** — as a self-contained ESMF/NUOPC application with no parent
+component. This is the recommended way to exercise CATChem end-to-end for
+development and testing. For build flags, the driver configure file, and run
+instructions, see the user-facing [Standalone Driver](../../user-guide/standalone-driver.md)
+page; this section covers the component architecture.
+
+### Component hierarchy
+
+```text
+catchem_app (main program)          drivers/standalone/catchem_app.F90
+     │
+catchem_driver (NUOPC_Driver)       drivers/standalone/catchem_driver.F90
+     │
+cc_nuopc (CATChem NUOPC cap)        drivers/nuopc/  (same cap used when coupled)
+```
+
+`catchem_app` is a thin main program: it initializes ESMF, resolves the driver
+configure file (command-line argument or the `catchem_standalone.configure`
+default), creates the driver component, and runs Initialize → Run → Finalize.
+
+### Driver specialization (`catchem_driver`)
+
+`catchem_driver` derives from `NUOPC_Driver` and specializes two labels:
+
+- **`SetModelServices`** — reads the ESMF configure file, hands the cap its
+  configuration file paths (`cc_nuopc_set_config_file`,
+  `cc_nuopc_set_field_mapping_file`), builds the standalone grid, adds
+  `cc_nuopc` as a child component (`NUOPC_DriverAddComp`), attaches the grid to
+  the child (`ESMF_GridCompSet(child, grid=...)`), and creates the top-level
+  clock from `start_time`/`stop_time`/`timestep_seconds`.
+- **`SetRunSequence`** — ingests a free-format `runSeq::` block from the
+  configure file if one is present; otherwise NUOPC builds a trivial
+  single-component run sequence automatically.
+
+### Standalone grid (`catchem_standalone_grid_mod`)
+
+Because there is no parent to supply a grid, the driver builds one itself via
+`create_standalone_grid`, which dispatches on `grid_mode`:
+
+- **`column`** — a single 1×1 grid for fast process testing.
+- **`gridded`** — a regular lat-lon grid (`grid_nx` × `grid_ny`), periodic in
+  longitude.
+
+The vertical is an *ungridded* field dimension, not part of the horizontal grid
+geometry, so the level count (`grid_nz`) is stamped onto the grid as ESMF_Info
+metadata under the key `/catchem/num_levels` (`set_grid_num_levels`) and read
+back by the cap (`get_grid_num_levels`).
+
+!!! note "Column corners"
+    Column corner coordinates — and therefore conservative regridding and
+    `AREA_M2` — are only produced when both `column_dlon` and `column_dlat` are
+    `> 0`. See the user-guide warning for the implications on emission
+    regridding.
+
+### Cap standalone initialization path
+
+The cap detects the standalone case (no rank-4 tracer array and no import
+fields), retrieves the driver-attached grid via
+`ESMF_GridCompGet(model, grid=grid, ...)`, reads the level count and
+coordinates from it, and initializes CATChem without a coupling tracer list.
+Meteorology that a host would normally import is instead read from offline files
+through the emission reader (mapping targets prefixed `MET_`/`met_`), with the
+remaining pressure-derived fields derived automatically. The coupled code path
+is left byte-for-byte unchanged.
+
+### Extending with more components
+
+The structure is deliberately extensible. To add another component (e.g. a
+data/forcing component or a mediator):
+
+1. `use` the new component's `SetServices`.
+2. Add a `NUOPC_DriverAddComp` call in `SetModelServices`.
+3. Extend the `runSeq::` block in the driver configure file.
+
 ## Best Practices
+
 
 ### 1. ESMF Resource Management
 ```fortran

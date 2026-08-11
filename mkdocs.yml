@@ -226,6 +226,7 @@ nav:
     - Overview: user-guide/overview.md
     - Build System: user-guide/build-system.md
     - HPC Installation: user-guide/hpc-installation.md
+    - Standalone Driver: user-guide/standalone-driver.md
     - Configuration System: user-guide/configuration.md
     - Input Files: user-guide/input-files.md
   - Processes:

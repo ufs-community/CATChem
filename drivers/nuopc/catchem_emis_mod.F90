@@ -146,6 +146,9 @@ contains
 
             call catchem_emis_setup_timing(ext_emis_data%categories(icat), clock, localrc)
 
+            ! Cache the (static) meteorology-provider classification once here.
+            ext_emis_data%categories(icat)%is_met = emis_category_is_met(config_manager, icat)
+
          end if
       end do
 
@@ -272,7 +275,7 @@ contains
          ! met_state primary they supply (PS, T, QV, ...) is populated before we
          ! ensure the pressure-derived fields below.  Non-met (emission)
          ! categories are deferred to pass 2.
-         if (emis_category_is_met(config_manager, i)) then
+         if (ext_emis_data%categories(i)%is_met) then
             call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
@@ -301,7 +304,9 @@ contains
          if (localrc /= CC_SUCCESS) then
             call ESMF_LogWrite(trim(pName)//': could not derive DELP (surface pressure '// &
                'PS may be unavailable); kg/m2/s emission unit conversion may be invalid', &
-               ESMF_LOGMSG_WARNING, rc=localrc)
+               ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
          end if
       end if
       if (.not. met_state%is_field_set('AIRDEN')) then
@@ -309,7 +314,9 @@ contains
          if (localrc /= CC_SUCCESS) then
             call ESMF_LogWrite(trim(pName)//': could not derive AIRDEN (PMID/T may be '// &
                'unavailable); #/cm3 emission unit conversion may be invalid', &
-               ESMF_LOGMSG_WARNING, rc=localrc)
+               ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
          end if
       end if
 
@@ -317,7 +324,7 @@ contains
       ! state.  DELP/AIRDEN are now valid for the mass-flux unit conversions.
       do i = 1, ext_emis_data%n_categories
          if (.not. ext_emis_data%categories(i)%is_active) cycle
-         if (emis_category_is_met(config_manager, i)) cycle
+         if (ext_emis_data%categories(i)%is_met) cycle
 
          call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
          if (localrc /= CC_SUCCESS) then
@@ -427,10 +434,9 @@ contains
             dimName = ''
             ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName)
             if (ncStatus == NF90_NOERR) then
-               if (index(dimName, 'time')   > 0 .or. index(dimName, 'Time')   > 0 .or. &
-                  index(dimName, 'TIME')   > 0 .or. index(dimName, 'month')  > 0 .or. &
-                  index(dimName, 'Month')  > 0 .or. index(dimName, 'record') > 0 .or. &
-                  index(dimName, 'Record') > 0) is_time = .true.
+               call to_lower_str(dimName)
+               if (index(dimName, 'time') > 0 .or. index(dimName, 'month') > 0 .or. &
+                  index(dimName, 'record') > 0) is_time = .true.
             end if
          end if
          if (is_time) spatial_ndims = ndims - 1

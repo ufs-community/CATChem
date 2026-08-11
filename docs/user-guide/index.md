@@ -6,6 +6,7 @@ Welcome to the CATChem User Guide. This comprehensive guide covers everything yo
 
 - **[HPC Installation](hpc-installation.md)** - Learn how to install CATChem on HPC systems
 - **[Build System](build-system.md)** - Learn how to build CATChem
+- **[Standalone Driver](standalone-driver.md)** - Run CATChem as a self-contained ESMF/NUOPC application
 - **[Overview](overview.md)** - Understanding CATChem's architecture and capabilities
 - **[Configuration System](configuration.md)** - How to configure CATChem for your needs
 - **[Input Files](input-files.md)** - Required input data and formats
