@@ -62,7 +62,7 @@ jobs:
           find modulefiles/ -type f -exec sed -i 's/UFS Model/CATChem/g' {} +
           find modulefiles/ -type f -exec sed -i 's/ufs_modules/catchem_modules/g' {} +
 
-      - name: Rename ufs_* to cece_* and update internal references
+      - name: Rename ufs_* to catchem_* and update internal references
         run: |
           # 1. Rename files using a Bash loop
           for file in modulefiles/ufs_*; do
