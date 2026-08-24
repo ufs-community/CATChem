@@ -49,7 +49,7 @@
 </span><span id=__span-4-8><a id=__codelineno-4-8 name=__codelineno-4-8 href=#__codelineno-4-8></a><span class=c1># Configure for GPU</span>
 </span><span id=__span-4-9><a id=__codelineno-4-9 name=__codelineno-4-9 href=#__codelineno-4-9></a><span class=nb>export</span><span class=w> </span><span class=nv>FC</span><span class=o>=</span>mpif90
 </span><span id=__span-4-10><a id=__codelineno-4-10 name=__codelineno-4-10 href=#__codelineno-4-10></a><span class=nb>export</span><span class=w> </span><span class=nv>CC</span><span class=o>=</span>mpicc
-</span><span id=__span-4-11><a id=__codelineno-4-11 name=__codelineno-4-11 href=#__codelineno-4-11></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-acc -gpu=cc70 -Minfo=accel&quot;</span>
+</span><span id=__span-4-11><a id=__codelineno-4-11 name=__codelineno-4-11 href=#__codelineno-4-11></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-acc -gpu=cc70 -Minfo=accel"</span>
 </span></code></pre></div></p> <p><strong>Cori (NERSC):</strong> <div class="language-bash highlight"><pre><span></span><code><span id=__span-5-1><a id=__codelineno-5-1 name=__codelineno-5-1 href=#__codelineno-5-1></a><span class=c1># Load environment</span>
 </span><span id=__span-5-2><a id=__codelineno-5-2 name=__codelineno-5-2 href=#__codelineno-5-2></a>module<span class=w> </span>purge
 </span><span id=__span-5-3><a id=__codelineno-5-3 name=__codelineno-5-3 href=#__codelineno-5-3></a>module<span class=w> </span>load<span class=w> </span>PrgEnv-intel/6.0.9
@@ -79,13 +79,13 @@
 </span><span id=__span-6-18><a id=__codelineno-6-18 name=__codelineno-6-18 href=#__codelineno-6-18></a><span class=nb>export</span><span class=w> </span><span class=nv>HDF5_ROOT</span><span class=o>=</span><span class=nv>$HDF5_ROOT</span>
 </span><span id=__span-6-19><a id=__codelineno-6-19 name=__codelineno-6-19 href=#__codelineno-6-19></a>
 </span><span id=__span-6-20><a id=__codelineno-6-20 name=__codelineno-6-20 href=#__codelineno-6-20></a><span class=c1># Optimization flags</span>
-</span><span id=__span-6-21><a id=__codelineno-6-21 name=__codelineno-6-21 href=#__codelineno-6-21></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -xHOST -ipo&quot;</span>
-</span><span id=__span-6-22><a id=__codelineno-6-22 name=__codelineno-6-22 href=#__codelineno-6-22></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -xHOST -ipo&quot;</span>
+</span><span id=__span-6-21><a id=__codelineno-6-21 name=__codelineno-6-21 href=#__codelineno-6-21></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-O3 -xHOST -ipo"</span>
+</span><span id=__span-6-22><a id=__codelineno-6-22 name=__codelineno-6-22 href=#__codelineno-6-22></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>"-O3 -xHOST -ipo"</span>
 </span><span id=__span-6-23><a id=__codelineno-6-23 name=__codelineno-6-23 href=#__codelineno-6-23></a>
 </span><span id=__span-6-24><a id=__codelineno-6-24 name=__codelineno-6-24 href=#__codelineno-6-24></a><span class=c1># Parallel make</span>
-</span><span id=__span-6-25><a id=__codelineno-6-25 name=__codelineno-6-25 href=#__codelineno-6-25></a><span class=nb>export</span><span class=w> </span><span class=nv>MAKEFLAGS</span><span class=o>=</span><span class=s2>&quot;-j 8&quot;</span>
+</span><span id=__span-6-25><a id=__codelineno-6-25 name=__codelineno-6-25 href=#__codelineno-6-25></a><span class=nb>export</span><span class=w> </span><span class=nv>MAKEFLAGS</span><span class=o>=</span><span class=s2>"-j 8"</span>
 </span><span id=__span-6-26><a id=__codelineno-6-26 name=__codelineno-6-26 href=#__codelineno-6-26></a>
-</span><span id=__span-6-27><a id=__codelineno-6-27 name=__codelineno-6-27 href=#__codelineno-6-27></a><span class=nb>echo</span><span class=w> </span><span class=s2>&quot;Environment configured for CATChem build&quot;</span>
+</span><span id=__span-6-27><a id=__codelineno-6-27 name=__codelineno-6-27 href=#__codelineno-6-27></a><span class=nb>echo</span><span class=w> </span><span class=s2>"Environment configured for CATChem build"</span>
 </span></code></pre></div> <h3 id=2-dependency-installation>2. Dependency Installation<a class=headerlink href=#2-dependency-installation title="Permanent link">&para;</a></h3> <p><strong>Option A: Use System Modules (Recommended)</strong> <div class="language-bash highlight"><pre><span></span><code><span id=__span-7-1><a id=__codelineno-7-1 name=__codelineno-7-1 href=#__codelineno-7-1></a><span class=c1># Load system-provided libraries</span>
 </span><span id=__span-7-2><a id=__codelineno-7-2 name=__codelineno-7-2 href=#__codelineno-7-2></a><span class=nb>source</span><span class=w> </span>setup_catchem_env.sh
 </span></code></pre></div></p> <p><strong>Option B: Build Dependencies from Source</strong> <div class="language-bash highlight"><pre><span></span><code><span id=__span-8-1><a id=__codelineno-8-1 name=__codelineno-8-1 href=#__codelineno-8-1></a><span class=c1># Build NetCDF-Fortran</span>
@@ -96,8 +96,8 @@
 </span><span id=__span-8-6><a id=__codelineno-8-6 name=__codelineno-8-6 href=#__codelineno-8-6></a>
 </span><span id=__span-8-7><a id=__codelineno-8-7 name=__codelineno-8-7 href=#__codelineno-8-7></a>./configure<span class=w> </span>--prefix<span class=o>=</span><span class=nv>$HOME</span>/software/netcdf-fortran<span class=w> </span><span class=se>\</span>
 </span><span id=__span-8-8><a id=__codelineno-8-8 name=__codelineno-8-8 href=#__codelineno-8-8></a><span class=w>           </span>--enable-shared<span class=w> </span>--enable-static<span class=w> </span><span class=se>\</span>
-</span><span id=__span-8-9><a id=__codelineno-8-9 name=__codelineno-8-9 href=#__codelineno-8-9></a><span class=w>           </span><span class=nv>CPPFLAGS</span><span class=o>=</span><span class=s2>&quot;-I</span><span class=nv>$HDF5_ROOT</span><span class=s2>/include -I</span><span class=nv>$NETCDF_C_ROOT</span><span class=s2>/include&quot;</span><span class=w> </span><span class=se>\</span>
-</span><span id=__span-8-10><a id=__codelineno-8-10 name=__codelineno-8-10 href=#__codelineno-8-10></a><span class=w>           </span><span class=nv>LDFLAGS</span><span class=o>=</span><span class=s2>&quot;-L</span><span class=nv>$HDF5_ROOT</span><span class=s2>/lib -L</span><span class=nv>$NETCDF_C_ROOT</span><span class=s2>/lib&quot;</span>
+</span><span id=__span-8-9><a id=__codelineno-8-9 name=__codelineno-8-9 href=#__codelineno-8-9></a><span class=w>           </span><span class=nv>CPPFLAGS</span><span class=o>=</span><span class=s2>"-I</span><span class=nv>$HDF5_ROOT</span><span class=s2>/include -I</span><span class=nv>$NETCDF_C_ROOT</span><span class=s2>/include"</span><span class=w> </span><span class=se>\</span>
+</span><span id=__span-8-10><a id=__codelineno-8-10 name=__codelineno-8-10 href=#__codelineno-8-10></a><span class=w>           </span><span class=nv>LDFLAGS</span><span class=o>=</span><span class=s2>"-L</span><span class=nv>$HDF5_ROOT</span><span class=s2>/lib -L</span><span class=nv>$NETCDF_C_ROOT</span><span class=s2>/lib"</span>
 </span><span id=__span-8-11><a id=__codelineno-8-11 name=__codelineno-8-11 href=#__codelineno-8-11></a>
 </span><span id=__span-8-12><a id=__codelineno-8-12 name=__codelineno-8-12 href=#__codelineno-8-12></a>make<span class=w> </span>-j<span class=w> </span><span class=m>8</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span>make<span class=w> </span>install
 </span></code></pre></div></p> <h3 id=3-build-catchem>3. Build CATChem<a class=headerlink href=#3-build-catchem title="Permanent link">&para;</a></h3> <div class="language-bash highlight"><pre><span></span><code><span id=__span-9-1><a id=__codelineno-9-1 name=__codelineno-9-1 href=#__codelineno-9-1></a><span class=c1># Clone repository</span>
@@ -140,7 +140,7 @@
 </span><span id=__span-11-6><a id=__codelineno-11-6 name=__codelineno-11-6 href=#__codelineno-11-6></a><span class=c1># Configure build</span>
 </span><span id=__span-11-7><a id=__codelineno-11-7 name=__codelineno-11-7 href=#__codelineno-11-7></a><span class=nb>export</span><span class=w> </span><span class=nv>FC</span><span class=o>=</span>nvfortran
 </span><span id=__span-11-8><a id=__codelineno-11-8 name=__codelineno-11-8 href=#__codelineno-11-8></a><span class=nb>export</span><span class=w> </span><span class=nv>CC</span><span class=o>=</span>nvc
-</span><span id=__span-11-9><a id=__codelineno-11-9 name=__codelineno-11-9 href=#__codelineno-11-9></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-acc -gpu=cc70,cc80 -Minfo=accel&quot;</span>
+</span><span id=__span-11-9><a id=__codelineno-11-9 name=__codelineno-11-9 href=#__codelineno-11-9></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-acc -gpu=cc70,cc80 -Minfo=accel"</span>
 </span><span id=__span-11-10><a id=__codelineno-11-10 name=__codelineno-11-10 href=#__codelineno-11-10></a>
 </span><span id=__span-11-11><a id=__codelineno-11-11 name=__codelineno-11-11 href=#__codelineno-11-11></a><span class=c1># Build with GPU support</span>
 </span><span id=__span-11-12><a id=__codelineno-11-12 name=__codelineno-11-12 href=#__codelineno-11-12></a>cmake<span class=w> </span>..<span class=w> </span><span class=se>\</span>
@@ -163,8 +163,8 @@
 </span><span id=__span-13-5><a id=__codelineno-13-5 name=__codelineno-13-5 href=#__codelineno-13-5></a>
 </span><span id=__span-13-6><a id=__codelineno-13-6 name=__codelineno-13-6 href=#__codelineno-13-6></a><span class=nb>export</span><span class=w> </span><span class=nv>FC</span><span class=o>=</span>mpiifort
 </span><span id=__span-13-7><a id=__codelineno-13-7 name=__codelineno-13-7 href=#__codelineno-13-7></a><span class=nb>export</span><span class=w> </span><span class=nv>CC</span><span class=o>=</span>mpiicc
-</span><span id=__span-13-8><a id=__codelineno-13-8 name=__codelineno-13-8 href=#__codelineno-13-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -xCORE-AVX512 -ipo -no-prec-div -fp-model fast=2&quot;</span>
-</span><span id=__span-13-9><a id=__codelineno-13-9 name=__codelineno-13-9 href=#__codelineno-13-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -xCORE-AVX512 -ipo&quot;</span>
+</span><span id=__span-13-8><a id=__codelineno-13-8 name=__codelineno-13-8 href=#__codelineno-13-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-O3 -xCORE-AVX512 -ipo -no-prec-div -fp-model fast=2"</span>
+</span><span id=__span-13-9><a id=__codelineno-13-9 name=__codelineno-13-9 href=#__codelineno-13-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>"-O3 -xCORE-AVX512 -ipo"</span>
 </span><span id=__span-13-10><a id=__codelineno-13-10 name=__codelineno-13-10 href=#__codelineno-13-10></a>
 </span><span id=__span-13-11><a id=__codelineno-13-11 name=__codelineno-13-11 href=#__codelineno-13-11></a>cmake<span class=w> </span>..<span class=w> </span><span class=se>\</span>
 </span><span id=__span-13-12><a id=__codelineno-13-12 name=__codelineno-13-12 href=#__codelineno-13-12></a><span class=w>  </span>-DCMAKE_BUILD_TYPE<span class=o>=</span>Release<span class=w> </span><span class=se>\</span>
@@ -178,8 +178,8 @@
 </span><span id=__span-14-5><a id=__codelineno-14-5 name=__codelineno-14-5 href=#__codelineno-14-5></a>
 </span><span id=__span-14-6><a id=__codelineno-14-6 name=__codelineno-14-6 href=#__codelineno-14-6></a><span class=nb>export</span><span class=w> </span><span class=nv>FC</span><span class=o>=</span>mpif90
 </span><span id=__span-14-7><a id=__codelineno-14-7 name=__codelineno-14-7 href=#__codelineno-14-7></a><span class=nb>export</span><span class=w> </span><span class=nv>CC</span><span class=o>=</span>mpicc
-</span><span id=__span-14-8><a id=__codelineno-14-8 name=__codelineno-14-8 href=#__codelineno-14-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -march=znver3 -mtune=znver3 -ffast-math&quot;</span>
-</span><span id=__span-14-9><a id=__codelineno-14-9 name=__codelineno-14-9 href=#__codelineno-14-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -march=znver3 -mtune=znver3&quot;</span>
+</span><span id=__span-14-8><a id=__codelineno-14-8 name=__codelineno-14-8 href=#__codelineno-14-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-O3 -march=znver3 -mtune=znver3 -ffast-math"</span>
+</span><span id=__span-14-9><a id=__codelineno-14-9 name=__codelineno-14-9 href=#__codelineno-14-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>"-O3 -march=znver3 -mtune=znver3"</span>
 </span><span id=__span-14-10><a id=__codelineno-14-10 name=__codelineno-14-10 href=#__codelineno-14-10></a>
 </span><span id=__span-14-11><a id=__codelineno-14-11 name=__codelineno-14-11 href=#__codelineno-14-11></a>cmake<span class=w> </span>..<span class=w> </span><span class=se>\</span>
 </span><span id=__span-14-12><a id=__codelineno-14-12 name=__codelineno-14-12 href=#__codelineno-14-12></a><span class=w>  </span>-DCMAKE_BUILD_TYPE<span class=o>=</span>Release<span class=w> </span><span class=se>\</span>
@@ -192,8 +192,8 @@
 </span><span id=__span-15-5><a id=__codelineno-15-5 name=__codelineno-15-5 href=#__codelineno-15-5></a>
 </span><span id=__span-15-6><a id=__codelineno-15-6 name=__codelineno-15-6 href=#__codelineno-15-6></a><span class=nb>export</span><span class=w> </span><span class=nv>FC</span><span class=o>=</span>mpif90
 </span><span id=__span-15-7><a id=__codelineno-15-7 name=__codelineno-15-7 href=#__codelineno-15-7></a><span class=nb>export</span><span class=w> </span><span class=nv>CC</span><span class=o>=</span>mpicc
-</span><span id=__span-15-8><a id=__codelineno-15-8 name=__codelineno-15-8 href=#__codelineno-15-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -mcpu=neoverse-n1 -ffast-math&quot;</span>
-</span><span id=__span-15-9><a id=__codelineno-15-9 name=__codelineno-15-9 href=#__codelineno-15-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>&quot;-O3 -mcpu=neoverse-n1&quot;</span>
+</span><span id=__span-15-8><a id=__codelineno-15-8 name=__codelineno-15-8 href=#__codelineno-15-8></a><span class=nb>export</span><span class=w> </span><span class=nv>FCFLAGS</span><span class=o>=</span><span class=s2>"-O3 -mcpu=neoverse-n1 -ffast-math"</span>
+</span><span id=__span-15-9><a id=__codelineno-15-9 name=__codelineno-15-9 href=#__codelineno-15-9></a><span class=nb>export</span><span class=w> </span><span class=nv>CFLAGS</span><span class=o>=</span><span class=s2>"-O3 -mcpu=neoverse-n1"</span>
 </span><span id=__span-15-10><a id=__codelineno-15-10 name=__codelineno-15-10 href=#__codelineno-15-10></a>
 </span><span id=__span-15-11><a id=__codelineno-15-11 name=__codelineno-15-11 href=#__codelineno-15-11></a>cmake<span class=w> </span>..<span class=w> </span><span class=se>\</span>
 </span><span id=__span-15-12><a id=__codelineno-15-12 name=__codelineno-15-12 href=#__codelineno-15-12></a><span class=w>  </span>-DCMAKE_BUILD_TYPE<span class=o>=</span>Release<span class=w> </span><span class=se>\</span>
@@ -228,7 +228,7 @@
 </span><span id=__span-16-27><a id=__codelineno-16-27 name=__codelineno-16-27 href=#__codelineno-16-27></a><span class=w>    </span>make<span class=w> </span>-j<span class=w> </span><span class=m>4</span><span class=w> </span>install
 </span><span id=__span-16-28><a id=__codelineno-16-28 name=__codelineno-16-28 href=#__codelineno-16-28></a>
 </span><span id=__span-16-29><a id=__codelineno-16-29 name=__codelineno-16-29 href=#__codelineno-16-29></a><span class=gh>%runscript</span>
-</span><span id=__span-16-30><a id=__codelineno-16-30 name=__codelineno-16-30 href=#__codelineno-16-30></a><span class=w>    </span><span class=nb>exec</span><span class=w> </span>/opt/catchem/bin/catchem_driver<span class=w> </span><span class=s2>&quot;</span><span class=nv>$@</span><span class=s2>&quot;</span>
+</span><span id=__span-16-30><a id=__codelineno-16-30 name=__codelineno-16-30 href=#__codelineno-16-30></a><span class=w>    </span><span class=nb>exec</span><span class=w> </span>/opt/catchem/bin/catchem_driver<span class=w> </span><span class=s2>"</span><span class=nv>$@</span><span class=s2>"</span>
 </span></code></pre></div></p> <p><strong>Build and Run:</strong> <div class="language-bash highlight"><pre><span></span><code><span id=__span-17-1><a id=__codelineno-17-1 name=__codelineno-17-1 href=#__codelineno-17-1></a><span class=c1># Build container</span>
 </span><span id=__span-17-2><a id=__codelineno-17-2 name=__codelineno-17-2 href=#__codelineno-17-2></a>singularity<span class=w> </span>build<span class=w> </span>catchem.sif<span class=w> </span>catchem.def
 </span><span id=__span-17-3><a id=__codelineno-17-3 name=__codelineno-17-3 href=#__codelineno-17-3></a>
@@ -289,7 +289,7 @@
 </span></code></pre></div></p> <h3 id=lsf>LSF<a class=headerlink href=#lsf title="Permanent link">&para;</a></h3> <p><strong>Job Script:</strong> <div class="language-bash highlight"><pre><span></span><code><span id=__span-21-1><a id=__codelineno-21-1 name=__codelineno-21-1 href=#__codelineno-21-1></a><span class=ch>#!/bin/bash</span>
 </span><span id=__span-21-2><a id=__codelineno-21-2 name=__codelineno-21-2 href=#__codelineno-21-2></a><span class=c1>#BSUB -J catchem</span>
 </span><span id=__span-21-3><a id=__codelineno-21-3 name=__codelineno-21-3 href=#__codelineno-21-3></a><span class=c1>#BSUB -n 64</span>
-</span><span id=__span-21-4><a id=__codelineno-21-4 name=__codelineno-21-4 href=#__codelineno-21-4></a><span class=c1>#BSUB -R &quot;span[ptile=16]&quot;</span>
+</span><span id=__span-21-4><a id=__codelineno-21-4 name=__codelineno-21-4 href=#__codelineno-21-4></a><span class=c1>#BSUB -R "span[ptile=16]"</span>
 </span><span id=__span-21-5><a id=__codelineno-21-5 name=__codelineno-21-5 href=#__codelineno-21-5></a><span class=c1>#BSUB -W 02:00</span>
 </span><span id=__span-21-6><a id=__codelineno-21-6 name=__codelineno-21-6 href=#__codelineno-21-6></a><span class=c1>#BSUB -q general</span>
 </span><span id=__span-21-7><a id=__codelineno-21-7 name=__codelineno-21-7 href=#__codelineno-21-7></a><span class=c1>#BSUB -P myproject</span>

@@ -97,7 +97,7 @@ module diagnosticinterface_mod
       real(fp) :: custom_frequency = 0.0_fp        
       logical :: is_enabled = .true.               
       logical :: is_initialized = .false.          
-      type(DiagnosticDataType) :: data = diagnosticdatatype() 
+      type(DiagnosticDataType) :: data
 
       ! Diagnostic species filtering support
       character(len=32), allocatable :: diagnostic_species(:)
