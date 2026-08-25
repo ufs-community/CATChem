@@ -19,6 +19,7 @@ License: Apache 2.0
 """
 
 import argparse
+import dataclasses
 import logging
 import os
 import sys
@@ -37,6 +38,40 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger('ProcessGenerator')
+
+
+def _extract_field_names(field_list) -> List[str]:
+    """Extract string field names from a list of strings or dicts and normalize to standard MetState names."""
+    alias_map = {
+        'LEAF_AREA_INDEX': 'LAI',
+        'SOLAR_ZENITH_ANGLE': 'SUNCOS',
+        'TEMPERATURE': 'T',
+        'PRESSURE': 'PMID',
+        'SURFACE_PRESSURE': 'PS',
+        'HUMIDITY': 'QV',
+        'AIR_DENSITY': 'AIRDEN',
+        'WIND_SPEED': 'U10M',
+        'FRICTION_VELOCITY': 'USTAR',
+    }
+    names = []
+    seen = set()
+    if not field_list:
+        return names
+    for item in field_list:
+        name = None
+        if isinstance(item, dict):
+            name = item.get('name') or item.get('field') or item.get('variable_name')
+        elif isinstance(item, str):
+            name = item
+        else:
+            name = str(item)
+        if name:
+            norm_name = str(name).strip().upper()
+            norm_name = alias_map.get(norm_name, norm_name)
+            if norm_name not in seen:
+                seen.add(norm_name)
+                names.append(norm_name)
+    return names
 
 
 @dataclass
@@ -391,6 +426,7 @@ class ProcessConfig:
     memory_requirements: str = "low"
     generate_tests: bool = True
     generate_docs: bool = True
+    generate_examples: bool = False
     output_dir: str = ""
     src_base_dir: str = "src/process"
 
@@ -474,16 +510,12 @@ class ProcessGenerator:
         # Add a filter to get all required met fields for a scheme
         def get_all_met_fields_filter(scheme):
             """Jinja2 filter to get all required meteorological fields for a scheme."""
-            # Access the config from template globals if available
             context = self.env.globals.get('config', {})
-
             all_fields = set()
 
-            # Add common process-level fields from config
             if hasattr(context, 'required_met_fields') and context.required_met_fields:
-                all_fields.update(context.required_met_fields)
+                all_fields.update(_extract_field_names(context.required_met_fields))
 
-            # Add scheme-specific fields - handle both dict and object
             scheme_fields = None
             if isinstance(scheme, dict):
                 scheme_fields = scheme.get('required_met_fields')
@@ -491,9 +523,8 @@ class ProcessGenerator:
                 scheme_fields = scheme.required_met_fields
 
             if scheme_fields:
-                all_fields.update(scheme_fields)
+                all_fields.update(_extract_field_names(scheme_fields))
 
-            # Return sorted list for consistent ordering
             return sorted(list(all_fields))
 
         # Add filter for scheme-only met fields (excludes process-level fields)
@@ -501,45 +532,16 @@ class ProcessGenerator:
             """Filter for scheme-only meteorological fields (excludes process-level fields)."""
             scheme_fields = set()
 
-            # Add only scheme-specific fields - handle both dict and object
             if isinstance(scheme, dict):
                 if 'required_met_fields' in scheme and scheme['required_met_fields']:
-                    scheme_fields.update(scheme['required_met_fields'])
+                    scheme_fields.update(_extract_field_names(scheme['required_met_fields']))
             elif hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
-                scheme_fields.update(scheme.required_met_fields)
+                scheme_fields.update(_extract_field_names(scheme.required_met_fields))
 
-            # Return sorted list for consistent ordering
             return sorted(list(scheme_fields))
 
         self.env.filters['all_required_met_fields'] = get_all_met_fields_filter
         self.env.filters['scheme_only_met_fields'] = get_scheme_only_met_fields_filter
-
-        # Add a filter to get all required met fields for a scheme
-        def get_all_met_fields_filter(scheme):
-            """Jinja2 filter to get all required meteorological fields for a scheme."""
-            # Access the config from template globals if available
-            context = self.env.globals.get('config', {})
-
-            all_fields = set()
-
-            # Add common process-level fields from config
-            if hasattr(context, 'required_met_fields') and context.required_met_fields:
-                all_fields.update(context.required_met_fields)
-
-            # Add scheme-specific fields - handle both dict and object
-            scheme_fields = None
-            if isinstance(scheme, dict):
-                scheme_fields = scheme.get('required_met_fields')
-            elif hasattr(scheme, 'required_met_fields'):
-                scheme_fields = scheme.required_met_fields
-
-            if scheme_fields:
-                all_fields.update(scheme_fields)
-
-            # Return sorted list for consistent ordering
-            return sorted(list(all_fields))
-
-        self.env.filters['all_required_met_fields'] = get_all_met_fields_filter
 
     @staticmethod
     def _upper_snake_case(s: str) -> str:
@@ -912,11 +914,11 @@ class ProcessGenerator:
 
         # Add common process-level fields
         if 'required_met_fields' in config_dict and config_dict['required_met_fields']:
-            all_fields.update(config_dict['required_met_fields'])
+            all_fields.update(_extract_field_names(config_dict['required_met_fields']))
 
         # Add scheme-specific fields
         if 'required_met_fields' in scheme_dict and scheme_dict['required_met_fields']:
-            all_fields.update(scheme_dict['required_met_fields'])
+            all_fields.update(_extract_field_names(scheme_dict['required_met_fields']))
 
         # Return sorted list for consistent ordering
         return sorted(list(all_fields))
@@ -1046,19 +1048,25 @@ class ProcessGenerator:
         if config.default_scheme and config.default_scheme not in scheme_names:
             errors.append(f"Default scheme '{config.default_scheme}' not found in schemes")
 
+        # Met field & species validation
+        field_classifier = MetFieldClassification(self.metstate_file)
+        known_met_fields = set(field_classifier.get_all_2d_fields() +
+                               field_classifier.get_all_3d_atmospheric_fields() +
+                               field_classifier.get_all_categorical_fields())
+
+        all_met_fields = self.get_all_required_met_fields_combined(config)
+        for field in all_met_fields:
+            if known_met_fields and field not in known_met_fields:
+                logger.warning(f"Unrecognized meteorological field '{field}' - ensure it is provided by MetState")
+
+        if config.process_behavior and isinstance(config.process_behavior, dict):
+            species_filter = config.process_behavior.get('species_filter', {})
+            if species_filter.get('type') == 'by_metadata' and not species_filter.get('metadata_flags'):
+                errors.append("species_filter type 'by_metadata' requires 'metadata_flags'")
+
         # Species validation
         if config.species and len(set(config.species)) != len(config.species):
             errors.append("Species names must be unique")
-
-        # Size bin validation
-        if config.has_size_bins and not config.size_bins:
-            errors.append("Size bin configuration required when has_size_bins=True")
-
-        if config.size_bins:
-            required_keys = ['n_bins', 'type', 'bounds']
-            missing_keys = [key for key in required_keys if key not in config.size_bins]
-            if missing_keys:
-                errors.append(f"Size bin config missing keys: {missing_keys}")
 
         # Output directory validation
         if config.output_dir:
@@ -1113,9 +1121,15 @@ class ProcessGenerator:
         with open(config_path, 'r') as f:
             data = yaml.safe_load(f)
 
+        def _make_dataclass(cls, kwargs_dict):
+            if not isinstance(kwargs_dict, dict):
+                return kwargs_dict
+            valid_keys = {field.name for field in dataclasses.fields(cls)}
+            return cls(**{k: v for k, v in kwargs_dict.items() if k in valid_keys})
+
         # Convert process_behavior to ProcessBehavior object if present
         if 'process_behavior' in data and data['process_behavior']:
-            data['process_behavior'] = ProcessBehavior(**data['process_behavior'])
+            data['process_behavior'] = _make_dataclass(ProcessBehavior, data['process_behavior'])
 
         # Convert schemes to SchemeConfig objects
         schemes = []
@@ -1129,7 +1143,7 @@ class ProcessGenerator:
 
                 # Convert scheme_behavior to SchemeBehavior object if present
                 if 'scheme_behavior' in scheme_data and scheme_data['scheme_behavior']:
-                    scheme_data['scheme_behavior'] = SchemeBehavior(**scheme_data['scheme_behavior'])
+                    scheme_data['scheme_behavior'] = _make_dataclass(SchemeBehavior, scheme_data['scheme_behavior'])
 
                 # Handle diagnostics field name change
                 if 'diagnostics' in scheme_data:
@@ -1139,14 +1153,14 @@ class ProcessGenerator:
                 if 'gas_or_aero' not in scheme_data:
                     scheme_data['gas_or_aero'] = 'both'
 
-                scheme = SchemeConfig(**scheme_data)
+                scheme = _make_dataclass(SchemeConfig, scheme_data)
                 schemes.append(scheme)
         elif isinstance(schemes_data, list):
             # Schemes defined as list
             for scheme_data in schemes_data:
                 # Convert scheme_behavior to SchemeBehavior object if present
                 if 'scheme_behavior' in scheme_data and scheme_data['scheme_behavior']:
-                    scheme_data['scheme_behavior'] = SchemeBehavior(**scheme_data['scheme_behavior'])
+                    scheme_data['scheme_behavior'] = _make_dataclass(SchemeBehavior, scheme_data['scheme_behavior'])
 
                 # Handle diagnostics field name change
                 if 'diagnostics' in scheme_data:
@@ -1156,12 +1170,12 @@ class ProcessGenerator:
                 if 'gas_or_aero' not in scheme_data:
                     scheme_data['gas_or_aero'] = 'both'
 
-                scheme = SchemeConfig(**scheme_data)
+                scheme = _make_dataclass(SchemeConfig, scheme_data)
                 schemes.append(scheme)
 
         # Remove schemes from data and create ProcessConfig
         data['schemes'] = schemes
-        config = ProcessConfig(**data)
+        config = _make_dataclass(ProcessConfig, data)
 
         # Load species database if process behavior specifies species filtering
         if config.process_behavior and config.process_behavior.species_filter:
@@ -1203,11 +1217,11 @@ class ProcessGenerator:
 
         # Add common process-level fields
         if hasattr(config, 'required_met_fields') and config.required_met_fields:
-            all_fields.update(config.required_met_fields)
+            all_fields.update(_extract_field_names(config.required_met_fields))
 
         # Add scheme-specific fields
         if scheme_config and hasattr(scheme_config, 'required_met_fields') and scheme_config.required_met_fields:
-            all_fields.update(scheme_config.required_met_fields)
+            all_fields.update(_extract_field_names(scheme_config.required_met_fields))
 
         # Return sorted list for consistent ordering
         return sorted(list(all_fields))
@@ -1347,6 +1361,18 @@ class ProcessGenerator:
 
         return []
 
+    def get_all_required_met_fields_combined(self, config: ProcessConfig) -> List[str]:
+        """Collect all unique required met fields across process and all schemes."""
+        all_fields = set()
+        if hasattr(config, 'required_met_fields') and config.required_met_fields:
+            all_fields.update(_extract_field_names(config.required_met_fields))
+        for scheme in config.schemes:
+            if hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
+                all_fields.update(_extract_field_names(scheme.required_met_fields))
+            elif isinstance(scheme, dict) and 'required_met_fields' in scheme:
+                all_fields.update(_extract_field_names(scheme['required_met_fields']))
+        return sorted(list(all_fields))
+
     def generate_process(self, config: ProcessConfig) -> None:
         """Generate complete process implementation.
 
@@ -1355,27 +1381,25 @@ class ProcessGenerator:
         """
         logger.info(f"Generating process: {config.name}")
 
-        # Determine output directory
-        if config.output_dir:
-            base_output_dir = Path(config.output_dir)
-        else:
-            # Use the repository root (parent of the script's directory) as base
-            script_dir = Path(__file__).resolve().parent
-            repo_root = script_dir.parent.parent  # go up from tools/process_generator/
-            base_output_dir = repo_root
+        script_dir = Path(__file__).resolve().parent
+        repo_root = script_dir.parent.parent
 
-        # Define directory structure according to CATChem layout
-        process_dir = base_output_dir / config.src_base_dir / config.name
-        test_dir = base_output_dir / "tests" / "process" / config.name
-        docs_dir = base_output_dir / "docs" / "processes" / config.name
+        if config.output_dir:
+            process_dir = Path(config.output_dir)
+            test_dir = process_dir / "tests"
+            docs_dir = process_dir
+        else:
+            process_dir = repo_root / config.src_base_dir / config.name
+            test_dir = repo_root / "tests" / "process" / config.name
+            docs_dir = repo_root / "docs" / "processes" / config.name
 
         # Create directory structure
         self._create_directory_structure(process_dir, test_dir, docs_dir, config)
 
         # Generate files
-        self._generate_main_interface(process_dir, config)
+        self._generate_cpp_wrapper(process_dir, config)
+        self._generate_science_bridge(process_dir, config)
         self._generate_common_module(process_dir, config)
-        self._generate_creator_module(process_dir, config)
         self._generate_schemes(process_dir, config)
         self._generate_cmake_files(process_dir, config)
 
@@ -1391,64 +1415,64 @@ class ProcessGenerator:
         """Create the directory structure for the process."""
         logger.info(f"Creating directory structure: {process_dir}")
 
-        # Main process directories
         directories = [
             process_dir,
             process_dir / "schemes",
         ]
 
-        # Test directories
         if config.generate_tests:
-            directories.extend([
-                test_dir,
-                test_dir / "unit",
-                test_dir / "integration"
-            ])
+            directories.append(test_dir)
 
-        # Documentation directories
-        if config.generate_docs:
+        if config.generate_docs and docs_dir != process_dir:
             directories.append(docs_dir)
 
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
 
-    def _generate_main_interface(self, process_dir: Path, config: ProcessConfig) -> None:
-        """Generate the main process interface module."""
-        logger.info("Generating main process interface")
+    def _generate_cpp_wrapper(self, process_dir: Path, config: ProcessConfig) -> None:
+        """Generate C++ Process Wrapper header and source files."""
+        logger.info("Generating C++ process wrapper header and source")
 
-        template = self.env.get_template('process_interface.F90.j2')
+        all_met_fields = self.get_all_required_met_fields_combined(config)
 
-        # Collect all unique required species properties from all schemes
-        all_required_species_properties = self.get_all_required_species_properties(config)
+        # 1. Header
+        template_hpp = self.env.get_template('catchem_process.hpp.j2')
+        content_hpp = template_hpp.render(
+            config=config,
+            all_met_fields=all_met_fields,
+            timestamp=datetime.now().isoformat()
+        )
+        file_hpp = process_dir / f"catchem_process_{config.name}.hpp"
+        with open(file_hpp, 'w') as f:
+            f.write(content_hpp)
+        logger.info(f"Generated: {file_hpp}")
 
-        # Collect all unique required constants from all schemes
-        all_required_constants = self.get_all_required_constants(config)
+        # 2. Source
+        template_cpp = self.env.get_template('catchem_process.cpp.j2')
+        content_cpp = template_cpp.render(
+            config=config,
+            all_met_fields=all_met_fields,
+            timestamp=datetime.now().isoformat()
+        )
+        file_cpp = process_dir / f"catchem_process_{config.name}.cpp"
+        with open(file_cpp, 'w') as f:
+            f.write(content_cpp)
+        logger.info(f"Generated: {file_cpp}")
 
-        # Check if any scheme requires time parameters
-        needs_time_state = self.has_required_time_parameters(config)
-        all_required_time_parameters = self.get_all_required_time_parameters(config)
+    def _generate_science_bridge(self, process_dir: Path, config: ProcessConfig) -> None:
+        """Generate Fortran BIND(C) Science Bridge module."""
+        logger.info("Generating Fortran science bridge")
 
-        # Initialize field classification helper with MetState file
-        field_classifier = MetFieldClassification(self.metstate_file)
+        all_met_fields = self.get_all_required_met_fields_combined(config)
 
-        # Set config as global for filter access
-        self.env.globals['config'] = config
-
+        template = self.env.get_template('science_bridge.F90.j2')
         content = template.render(
             config=config,
-            all_required_species_properties=all_required_species_properties,
-            all_required_constants=all_required_constants,
-            needs_time_state=needs_time_state,
-            all_required_time_parameters=all_required_time_parameters,
-            field_classifier=field_classifier,
-            has_persistent_state_variables=self.has_persistent_state_variables(config),
-            all_persistent_state_variables=self.get_all_persistent_state_variables(config),
-            generation_date=datetime.now().isoformat(),
-            version=config.version,
+            all_met_fields=all_met_fields,
             timestamp=datetime.now().isoformat()
         )
 
-        filename = f"Process{config.class_name}Interface_Mod.F90"
+        filename = f"{config.class_name}ScienceBridge.F90"
         output_file = process_dir / filename
 
         with open(output_file, 'w') as f:
@@ -1462,10 +1486,7 @@ class ProcessGenerator:
 
         template = self.env.get_template('process_common.F90.j2')
 
-        # Collect all unique required species properties from all schemes
         all_required_species_properties = self.get_all_required_species_properties(config)
-
-        # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
 
         content = template.render(
@@ -1489,21 +1510,6 @@ class ProcessGenerator:
 
         logger.info(f"Generated: {output_file}")
 
-    def _generate_creator_module(self, process_dir: Path, config: ProcessConfig) -> None:
-        """Generate the process creator module."""
-        logger.info("Generating creator module")
-
-        template = self.env.get_template('process_creator.F90.j2')
-        content = template.render(config=config, timestamp=datetime.now().isoformat())
-
-        filename = f"{config.class_name}ProcessCreator_Mod.F90"
-        output_file = process_dir / filename
-
-        with open(output_file, 'w') as f:
-            f.write(content)
-
-        logger.info(f"Generated: {output_file}")
-
     def _generate_schemes(self, process_dir: Path, config: ProcessConfig) -> None:
         """Generate scheme implementation modules."""
         logger.info("Generating scheme modules")
@@ -1517,22 +1523,14 @@ class ProcessGenerator:
             else:
                 return obj.__dict__
 
-        # Initialize field classification helper with MetState file
         field_classifier = MetFieldClassification(self.metstate_file)
-
-        # Restore to use the full scheme module template
         template = self.env.get_template('scheme_module.F90.j2')
         schemes_dir = process_dir / "schemes"
 
         for scheme in config.schemes:
-            # Defensive: support both object and dict
             scheme_dict = to_dict(scheme)
             config_dict = to_dict(config)
-            logger.info(f"Rendering scheme: {scheme_dict.get('name', '<unknown>')} with class {scheme_dict.get('class_name', '<unknown>')}")
-            logger.info(f"SCHEME DICT: {scheme_dict}")
-            logger.info(f"CONFIG DICT: {config_dict}")
 
-            # Set config as global for filter access during scheme generation
             self.env.globals['config'] = config
 
             try:
@@ -1547,7 +1545,6 @@ class ProcessGenerator:
                     all_persistent_state_variables=self.get_all_persistent_state_variables(config),
                     timestamp=datetime.now().isoformat()
                 )
-                logger.info(f"Template rendered successfully, content length: {len(content)}")
             except Exception as e:
                 logger.error(f"Template rendering failed for scheme {scheme_dict.get('name', '<unknown>')}: {e}")
                 content = f"! Template rendering failed: {e}\n"
@@ -1564,7 +1561,6 @@ class ProcessGenerator:
         """Generate CMake configuration files."""
         logger.info("Generating CMake files")
 
-        # Main CMakeLists.txt
         template = self.env.get_template('CMakeLists.txt.j2')
         content = template.render(config=config, timestamp=datetime.now().isoformat())
 
@@ -1574,7 +1570,6 @@ class ProcessGenerator:
 
         logger.info(f"Generated: {cmake_file}")
 
-        # Schemes CMakeLists.txt
         schemes_cmake_template = self.env.get_template('schemes_CMakeLists.txt.j2')
         schemes_content = schemes_cmake_template.render(
             config=config,
@@ -1588,58 +1583,33 @@ class ProcessGenerator:
         logger.info(f"Generated: {schemes_cmake_file}")
 
     def _generate_tests(self, test_dir: Path, config: ProcessConfig) -> None:
-        """Generate test files in tests/process/<process_name> directory."""
+        """Generate standalone Fortran CTest science test."""
         logger.info(f"Generating test files in: {test_dir}")
 
-        # Collect all required meteorological fields from process and schemes
-        required_met_fields = []
+        all_met_fields = self.get_all_required_met_fields_combined(config)
 
-        # Add process-level required fields first
-        if hasattr(config, 'required_met_fields') and config.required_met_fields:
-            for field in config.required_met_fields:
-                if field not in required_met_fields:
-                    required_met_fields.append(field)
+        test_dir.mkdir(parents=True, exist_ok=True)
 
-        # Add scheme-level required fields
-        for scheme in config.schemes:
-            if hasattr(scheme, 'required_met_fields') and scheme.required_met_fields:
-                for field in scheme.required_met_fields:
-                    if field not in required_met_fields:
-                        required_met_fields.append(field)
-
-        # Unit tests
-        unit_template = self.env.get_template('unit_test.F90.j2')
-        unit_content = unit_template.render(
+        science_test_template = self.env.get_template('test_science.f90.j2')
+        content = science_test_template.render(
             config=config,
-            timestamp=datetime.now().isoformat(),
-            required_met_fields=required_met_fields
+            all_met_fields=all_met_fields,
+            timestamp=datetime.now().isoformat()
         )
 
-        unit_file = test_dir / "unit" / f"test_{config.name}_unit.F90"
-        with open(unit_file, 'w') as f:
-            f.write(unit_content)
+        test_file = test_dir / f"test_{config.name}_science.f90"
+        with open(test_file, 'w') as f:
+            f.write(content)
 
-        # Integration tests
-        integration_template = self.env.get_template('integration_test.F90.j2')
-        integration_content = integration_template.render(
-            config=config,
-            timestamp=datetime.now().isoformat(),
-            required_met_fields=required_met_fields
-        )
+        logger.info(f"Generated science test: {test_file}")
 
-        integration_file = test_dir / "integration" / f"test_{config.name}_integration.F90"
-        with open(integration_file, 'w') as f:
-            f.write(integration_content)
-
-        logger.info(f"Generated tests in: {test_dir}")
-
-        # Test CMakeLists.txt
         test_cmake_template = self.env.get_template('test_CMakeLists.txt.j2')
         test_cmake_content = test_cmake_template.render(
             config=config,
             timestamp=datetime.now().isoformat()
         )
 
+        test_dir.mkdir(parents=True, exist_ok=True)
         test_cmake_file = test_dir / "CMakeLists.txt"
         with open(test_cmake_file, 'w') as f:
             f.write(test_cmake_content)
@@ -1757,6 +1727,93 @@ class ProcessGenerator:
                 "parallelization": "column",
                 "generate_tests": True,
                 "generate_docs": True
+            },
+
+            "deposition": {
+                "name": "my_deposition",
+                "class_name": "MyDeposition",
+                "description": "Dry and wet deposition process",
+                "author": "Your Name",
+                "version": "1.0.0",
+                "process_type": "deposition",
+                "process_behavior": {
+                    "type": "sink",
+                    "tendency_mode": "additive",
+                    "parallelization": "column",
+                    "spatial_scope": "column"
+                },
+                "species": ["O3", "NO2", "SO2"],
+                "schemes": [
+                    {
+                        "name": "wesely",
+                        "class_name": "Wesely",
+                        "description": "Wesely dry deposition scheme",
+                        "author": "Your Name",
+                        "required_met_fields": ["USTAR", "Z0", "TSKIN"]
+                    }
+                ],
+                "default_scheme": "wesely",
+                "required_met_fields": ["USTAR", "Z0", "TSKIN"],
+                "generate_tests": True,
+                "generate_docs": True
+            },
+
+            "settling": {
+                "name": "my_settling",
+                "class_name": "MySettling",
+                "description": "Gravitational settling process for aerosols",
+                "author": "Your Name",
+                "version": "1.0.0",
+                "process_type": "settling",
+                "process_behavior": {
+                    "type": "sink",
+                    "tendency_mode": "additive",
+                    "parallelization": "column",
+                    "spatial_scope": "column"
+                },
+                "species": ["DUST1", "DUST2", "SEASALT1"],
+                "schemes": [
+                    {
+                        "name": "stokes",
+                        "class_name": "Stokes",
+                        "description": "Stokes gravitational settling scheme",
+                        "author": "Your Name",
+                        "required_met_fields": ["AIRDEN", "T", "P"]
+                    }
+                ],
+                "default_scheme": "stokes",
+                "required_met_fields": ["AIRDEN", "T", "P"],
+                "generate_tests": True,
+                "generate_docs": True
+            },
+
+            "plume_rise": {
+                "name": "my_plume_rise",
+                "class_name": "MyPlumeRise",
+                "description": "Wildfire and point source plume rise process",
+                "author": "Your Name",
+                "version": "1.0.0",
+                "process_type": "plume_rise",
+                "process_behavior": {
+                    "type": "transport",
+                    "tendency_mode": "additive",
+                    "parallelization": "column",
+                    "spatial_scope": "column"
+                },
+                "species": ["CO", "NO2", "PM25"],
+                "schemes": [
+                    {
+                        "name": "freitas",
+                        "class_name": "Freitas",
+                        "description": "Freitas 1D plume rise scheme",
+                        "author": "Your Name",
+                        "required_met_fields": ["T", "PBLH", "U10M", "V10M"]
+                    }
+                ],
+                "default_scheme": "freitas",
+                "required_met_fields": ["T", "PBLH", "U10M", "V10M"],
+                "generate_tests": True,
+                "generate_docs": True
             }
         }
 
@@ -1812,34 +1869,35 @@ Features:
     generate_parser = subparsers.add_parser('generate',
                                            help='Generate process implementation',
                                            description='Generate complete process implementation from YAML configuration. '
-                                                     'Automatically discovers meteorological fields from MetState definition '
-                                                     'and generates proper VirtualMet pattern code.')
+                                                     'Renders modern C++ process classes and Fortran science bridges.')
     generate_parser.add_argument('--config', '-c', required=True,
                                help='Path to YAML configuration file')
-    generate_parser.add_argument('--output', '-o',
-                               help='Output directory for generated files (overrides config file setting)')
+    generate_parser.add_argument('--output-dir', '--output', '-o', dest='output',
+                               help='Output directory for generated files (default: src/process/<process_name>)')
     generate_parser.add_argument('--templates', '-t',
                                help='Path to template directory')
-    generate_parser.add_argument('--metstate', '-m',
+    generate_parser.add_argument('--metstate-file', '--metstate', '-m', dest='metstate',
                                help='Path to MetState file for automatic field discovery')
+    generate_parser.add_argument('--force', '-f', action='store_true',
+                               help='Force overwriting existing target files without prompting')
     generate_parser.add_argument('--verbose', '-v', action='store_true',
                                help='Enable verbose output')
 
     # Validate command
     validate_parser = subparsers.add_parser('validate',
                                            help='Validate configuration file',
-                                           description='Validate YAML configuration file syntax and check field compatibility '
-                                                     'with discovered MetState fields. Ensures configuration is ready for generation.')
+                                           description='Validate YAML configuration file syntax and check field compatibility. '
+                                                     'Ensures configuration is ready for generation.')
     validate_parser.add_argument('--config', '-c', required=True,
                                help='Path to YAML configuration file')
-    validate_parser.add_argument('--metstate', '-m',
+    validate_parser.add_argument('--metstate-file', '--metstate', '-m', dest='metstate',
                                help='Path to MetState file for automatic field discovery')
     validate_parser.add_argument('--verbose', '-v', action='store_true',
                                help='Enable verbose output')
 
     # Template command
     template_parser = subparsers.add_parser('template', help='Generate template configuration')
-    template_parser.add_argument('--type', '-t', choices=['emission', 'chemistry', 'transport'],
+    template_parser.add_argument('--type', '-t', choices=['emission', 'chemistry', 'deposition', 'settling', 'plume_rise'],
                                default='emission', help='Type of process template')
     template_parser.add_argument('--output', '-o', required=True,
                                help='Output file for template')
@@ -1881,7 +1939,9 @@ Features:
         elif args.command == 'validate':
             generator = ProcessGenerator(metstate_file=getattr(args, 'metstate', None))
             config = generator.load_config(args.config)
+            print(f"Configuration '{Path(args.config).name}' is valid.")
             logger.info(f"Configuration is valid: {args.config}")
+            return 0
 
         elif args.command == 'template':
             generator = ProcessGenerator()
@@ -1929,7 +1989,10 @@ Features:
         return 1
     except FileNotFoundError as e:
         logger.error(f"File not found: {e}")
-        return 1
+        return 2
+    except (IOError, OSError) as e:
+        logger.error(f"I/O error: {e}")
+        return 2
     except Exception as e:
         logger.error(f"Error: {e}")
         if hasattr(args, 'verbose') and args.verbose:

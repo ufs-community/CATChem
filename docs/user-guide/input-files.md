@@ -16,7 +16,7 @@ CATChem input files can be organized into several categories:
 
 ### Main Configuration File
 
-The main configuration file (typically `catchem_config.yml`) controls all aspects of the model run:
+The main configuration file (typically `CATChem_config.yml`) controls all aspects of the model run:
 
 ```yaml
 # CATChem Configuration File
@@ -575,7 +575,7 @@ def validate_emission_data(filename):
 ```
 /data/catchem_run/
 ├── config/
-│   ├── catchem_config.yml
+│   ├── CATChem_config.yml
 │   ├── chemistry_config.yml
 │   └── emissions_config.yml
 ├── meteorology/

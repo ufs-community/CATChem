@@ -85,29 +85,29 @@ Let's walk through creating a `seasalt` emission process.
 
     ```
     src/process/seasalt/
-    ├── ProcessSeaSaltInterface_Mod.F90
+    ├── catchem_process_seasalt.hpp
+    ├── catchem_process_seasalt.cpp
+    ├── SeaSaltScienceBridge.F90
     ├── SeaSaltCommon_Mod.F90
-    ├── SeaSaltCreator_Mod.F90
     ├── schemes/
-    │   ├── SeaSalt_gong97_Scheme_Mod.F90
-    │   └── SeaSalt_gong03_Scheme_Mod.F90
+    │   ├── SeaSaltScheme_GONG97_Mod.F90
+    │   └── SeaSaltScheme_GONG03_Mod.F90
     └── CMakeLists.txt
     ```
 
 4.  **Implement the science:**
 
-    Open the scheme files (e.g., `SeaSalt_gong97_Scheme_Mod.F90`) and add your scientific algorithm to the `compute_scheme` subroutine. The generator has already set up the necessary inputs and outputs.
+    Open the scheme files (e.g., `SeaSaltScheme_GONG97_Mod.F90`) and add your scientific algorithm to the `compute_gong97` subroutine. The generator has already set up the necessary inputs and outputs.
 
     ```fortran
-    subroutine compute_gong97_scheme(u10m, v10m, sst, tendency, rc)
-      real(fp), intent(in) :: u10m, v10m, sst
-      real(fp), intent(out) :: tendency
-      integer, intent(out) :: rc
+    subroutine compute_gong97(n_levels, n_species, dt, u10m, v10m, sst, conc, tendency)
+      integer, intent(in) :: n_levels, n_species
+      real(fp), intent(in) :: dt, u10m, v10m, sst
+      real(fp), intent(in) :: conc(n_levels, n_species)
+      real(fp), intent(out) :: tendency(n_levels, n_species)
 
-      ! Your science goes here
-      tendency = calculate_seasalt_flux(u10m, v10m, sst)
-      rc = 0
-    end subroutine
+      ! Your pure science algorithm goes here
+    end subroutine compute_gong97
     ```
 
 5.  **Build and test:**

@@ -4,12 +4,7 @@
 # Description: Process for computing wet deposition of gas and aerosol species
 
 # Define wetdep process sources
-set(
-  WETDEP_PROCESS_SOURCES
-  WetDepCommon_Mod.F90
-  ProcessWetDepInterface_Mod.F90
-  WetDepProcessCreator_Mod.F90
-)
+set(WETDEP_PROCESS_SOURCES WetDepCommon_Mod.F90 WetDepScienceBridge.F90)
 
 # Define wetdep scheme sources
 set(WETDEP_SCHEME_SOURCES schemes/WetDepScheme_JACOB_Mod.F90)
@@ -17,12 +12,22 @@ set(WETDEP_SCHEME_SOURCES schemes/WetDepScheme_JACOB_Mod.F90)
 # Combine all sources
 set(WETDEP_ALL_SOURCES ${WETDEP_PROCESS_SOURCES} ${WETDEP_SCHEME_SOURCES})
 
+if(CATCHEM_ENABLE_KOKKOS)
+  list(APPEND WETDEP_ALL_SOURCES catchem_process_wetdep.cpp)
+endif()
+
 # Create the wetdep process library
 set(_lib CATChem_process_wetdep)
 add_library(${_lib} ${WETDEP_ALL_SOURCES})
 
 # Link with required libraries
 target_link_libraries(${_lib} PUBLIC CATChem_core)
+
+# Conditional Kokkos linking
+if(CATCHEM_ENABLE_KOKKOS)
+  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos CATChem_core_cpp)
+  target_compile_definitions(${_lib} PRIVATE CATCHEM_ENABLE_KOKKOS)
+endif()
 
 # Additional dependencies
 
@@ -37,9 +42,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions

@@ -12,24 +12,35 @@ Column virtualization is a key performance optimization in CATChem. Instead of p
 
 ## Core Concepts
 
-### The Virtual Column
+### Zero-Copy Subview Column Slicing
 
-The central concept in column virtualization is the `VirtualColumn`. A `VirtualColumn` is a data structure that represents a single vertical column of the atmosphere. It contains all the data that is needed to process that column, such as the temperature, pressure, and chemical concentrations at each level of the atmosphere.
+Under CATChem's C++ and Kokkos architecture, column virtualization is achieved via zero-copy **Kokkos subviews** (`Kokkos::subview`). Slicing a 3D memory view down to a 1D column vector creates an unmanaged view that points directly to contiguous backing memory without any heap allocation or array copying:
 
-### The Column Interface
+```cpp
+// Slice 1D column from 3D temperature view with zero copies
+auto col_temp = Kokkos::subview(state->met.T->view(), icol, Kokkos::ALL(), 0);
+```
 
-The `ColumnInterface` is a module that provides a high-level interface for working with `VirtualColumn`s. It provides methods for getting and setting data in a column, as well as for performing common operations, such as interpolating between levels and calculating column-integrated quantities.
+### Fortran ScienceBridge Column Slicing
+
+For physical processes written in Fortran, the `ScienceBridge` module receives raw C pointers (`c_ptr`) from C++, converts them to Fortran array pointers (`c_f_pointer`), and iterates over columns using standard Fortran array section slicing:
+
+```fortran
+do icol = 1, n_cols
+   call compute_scheme(n_levels, n_species, dt, f_conc(icol, :, :), f_tendency(icol, :, :))
+end do
+```
 
 ## Data Access Patterns
 
-The column virtualization system supports several data access patterns:
+The column virtualization system supports high-performance parallel execution:
 
-- **Sequential Processing**: In this pattern, the columns are processed one at a time, in a sequential loop. This is the simplest data access pattern, but it is also the least efficient.
-- **Parallel Processing**: In this pattern, the columns are processed in parallel, using a parallel programming model such as OpenMP. This is a more efficient data access pattern, but it is also more complex to implement.
+- **Kokkos Parallel For**: Executes column kernels concurrently using `Kokkos::parallel_for` across OpenMP, CUDA, or HIP execution spaces.
+- **Fortran OpenMP Parallelization**: Process ScienceBridges can process independent columns concurrently across multi-core CPUs.
 
 ## Process Integration
 
-Atmospheric processes can be integrated with the column virtualization system by implementing the `ColumnProcessInterface`. This interface defines a standard set of methods that are called by the column virtualization system to process a column.
+Atmospheric processes integrate with the column system by implementing C++ `catchem::ProcessInterface`. Processes retrieve meteorological and chemical view pointers from `StateManager`, perform column calculations (natively in C++ or via a Fortran `ScienceBridge`), and update device views in-place.
 
 ## Performance Considerations
 

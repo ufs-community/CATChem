@@ -1,4 +1,6 @@
-add_compile_options(${_catchem_compiler_options})
+foreach(opt IN LISTS _catchem_compiler_options)
+  add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:${opt}>")
+endforeach()
 
 add_subdirectory(seasalt)
 add_subdirectory(dust)
@@ -8,4 +10,8 @@ add_subdirectory(wetdep)
 add_subdirectory(settling)
 add_subdirectory(so4chem)
 add_subdirectory(carbchem)
-#add_subdirectory(chem)
+
+if(CATCHEM_BUILD_MUSICA)
+  add_subdirectory(photolysis)
+  add_subdirectory(gaschem)
+endif()

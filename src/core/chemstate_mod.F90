@@ -19,17 +19,8 @@ module ChemState_Mod
 
    IMPLICIT NONE
    PRIVATE
-   !
-   ! !PUBLIC MEMBER FUNCTIONS:
-   !PUBLIC :: ChemStateType          ! Main data type
-   PUBLIC :: Find_Number_of_Species
-   ! Legacy routines - commented out in modernization
-   ! PUBLIC :: Find_Index_of_Species
-   ! PUBLIC :: FindSpecByName
-   ! PUBLIC :: GetSpecConc
-   ! PUBLIC :: GetSpecConcByName
-   ! PUBLIC :: GetSpecConcByIndex
-   ! All legacy allocation functions removed - use modern type-bound procedures:
+
+   ! Modern type-bound procedures in ChemStateType handle:
    ! - ChemState%init() instead of legacy allocation
    ! - ChemState%cleanup() for cleanup
    ! - ChemState%validate() for validation
@@ -101,6 +92,7 @@ module ChemState_Mod
       !---------------------------------------------------------------------
       type(SpeciesType), allocatable :: ChemSpecies(:)
       type(GridGeometryType), pointer :: Grid => null()  ! Pointer to grid geometry
+      real(fp), allocatable :: unified_conc(:,:,:,:) !< Contiguous concentrations array [nx, ny, nz, n_species]
 
    contains
       ! Type-bound procedures for modern initialization and cleanup
@@ -132,412 +124,6 @@ module ChemState_Mod
 CONTAINS
 
 
-   ! Legacy Chem_Allocate procedure (deprecated)
-   ! This has been replaced by the modern chemstate_init procedure
-   ! which takes explicit parameters instead of GridState
-   !
-   ! subroutine Chem_Allocate(GridState, ChemState, RC)
-   !    USE GridState_Mod,  ONLY : GridStateType
-   !    ...
-   ! end subroutine Chem_Allocate
-
-   !> \brief Find the number of species
-   !!
-   !! This subroutine finds the number of species
-   !!
-   !! \param ChemState The ChemState object
-   !! \param RC The return code
-   !!
-   !! \ingroup core_modules
-   !!!>
-   subroutine Find_Number_of_Species(ChemState, RC)
-      ! USES
-      USE Species_Mod,  ONLY :SpeciesType
-
-      IMPLICIT NONE
-
-      ! INOUT Params
-      type(ChemStateType), INTENT(inout) :: ChemState     ! chem State object
-      ! OUTPUT Params
-      INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
-
-      ! Error handling
-      CHARACTER(LEN=255) :: ErrMsg
-      CHARACTER(LEN=255) :: thisLoc
-
-      ! Local variables
-      INTEGER :: i
-
-      ! Initialize
-      RC = CC_SUCCESS
-      ErrMsg = ''
-      thisLoc = ' -> at Find_Number_of_Species (in core/chemstate_mod.F90)'
-
-      ! Initialize to zero before counting species
-      ChemState%nSpeciesAero = 0
-      ChemState%nSpeciesAeroDryDep = 0
-      ChemState%nSpeciesPhotolysis = 0
-      ChemState%nSpeciesAdvect = 0
-      ChemState%nSpeciesDryDep = 0
-      ChemState%nSpeciesWetDep = 0
-      ChemState%nSpeciesDust = 0
-      ChemState%nSpeciesGas = 0
-      ChemState%nSpeciesSeaSalt = 0
-      ChemState%nSpeciesTracer = 0
-
-      ! Count number of species
-      do i = 1, ChemState%nSpecies
-         if (ChemState%ChemSpecies(i)%is_gas .eqv. .true.) then
-            ChemState%nSpeciesGas = ChemState%nSpeciesGas + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
-            ChemState%nSpeciesAero = ChemState%nSpeciesAero + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_dust .eqv. .true.) then
-            ChemState%nSpeciesDust = ChemState%nSpeciesDust + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_seasalt .eqv. .true.) then
-            ChemState%nSpeciesSeaSalt = ChemState%nSpeciesSeaSalt + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_tracer .eqv. .true.) then
-            ChemState%nSpeciesTracer = ChemState%nSpeciesTracer + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true.) then
-            ChemState%nSpeciesDryDep = ChemState%nSpeciesDryDep + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true. .and. &
-            ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
-            ChemState%nSpeciesAeroDryDep = ChemState%nSpeciesAeroDryDep + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_photolysis .eqv. .true.) then
-            ChemState%nSpeciesPhotolysis = ChemState%nSpeciesPhotolysis + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_advected .eqv. .true.) then
-            ChemState%nSpeciesAdvect = ChemState%nSpeciesAdvect + 1
-         endif
-         if (ChemState%ChemSpecies(i)%is_wetdep .eqv. .true.) then
-            ChemState%nSpeciesWetDep = ChemState%nSpeciesWetDep + 1
-         endif
-      enddo
-
-   end subroutine Find_Number_of_Species
-
-   !> \brief Find the indices of species (LEGACY - COMMENTED OUT)
-   !!
-   !! \param ChemState The ChemState object
-   !! \param RC The return code
-   !!
-   !! \ingroup core_modules
-   !!!>
-   ! subroutine Find_Index_of_Species(ChemState, RC)
-   !    ! USES
-   !    USE Species_Mod,  ONLY : SpeciesType
-   !
-   !    IMPLICIT NONE
-   !
-   !    ! INOUT Params
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    ! OUTPUT Params
-   !    INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !
-   !    ! Local variables
-   !    integer :: n ! looping variable
-   !    integer :: aero_index      ! Current Aerosol Index
-   !    integer :: gas_index       ! Current Gas Index
-   !    integer :: dust_index      ! Current Dust Index
-   !    integer :: seasalt_index   ! Current Seas Salt Index
-   !    integer :: tracer_index    ! Current Tracer Index
-   !    integer :: drydep_index    ! Current DryDep Index
-   !
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at Find_indices_of_Species (in core/chemstate_mod.F90)'
-   !
-   !
-   !    ! Initialize to zero before counting species
-   !    aero_index = 1
-   !    gas_index = 1
-   !    dust_index = 1
-   !    seasalt_index = 1
-   !    tracer_index = 1
-   !    drydep_index = 1
-   !
-   !    ! Allocate index arrays
-   !    ALLOCATE(Chemstate%AeroIndex(ChemState%nSpeciesAero), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%AeroIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    ENDIF
-   !
-   !    ALLOCATE(Chemstate%TracerIndex(ChemState%nSpeciesTracer), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%TracerIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    ENDIF
-   !
-   !    ALLOCATE(Chemstate%GasIndex(ChemState%nSpeciesGas), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%GasIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    ENDIF
-   !
-   !    ALLOCATE(Chemstate%DustIndex(ChemState%nSpeciesDust), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%DustIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    ENDIF
-   !
-   !    ALLOCATE(Chemstate%SeaSaltIndex(ChemState%nSpeciesSeaSalt), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%SeaSaltIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    ENDIF
-   !
-   !    ALLOCATE(Chemstate%DryDepIndex(ChemState%nSpeciesAeroDryDep), STAT=RC)
-   !    IF ( RC /= CC_SUCCESS ) THEN
-   !       errMsg = 'Error allocating Chemstate%DryDepIndex'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !
-   !    ENDIF
-   !
-   !    ! Find indices for species groups
-   !    do n = 1, ChemState%nSpecies
-   !       if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
-   !          Chemstate%AeroIndex(aero_index) = n
-   !          aero_index = aero_index + 1
-   !       endif
-   !       if (ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
-   !          Chemstate%GasIndex(gas_index) = n
-   !          gas_index = gas_index + 1
-   !       endif
-   !       if (ChemState%ChemSpecies(n)%is_dust .eqv. .true.) then
-   !          Chemstate%DustIndex(dust_index) = n
-   !          dust_index = dust_index + 1
-   !       endif
-   !       if (ChemState%ChemSpecies(n)%is_seasalt .eqv. .true.) then
-   !          Chemstate%SeaSaltIndex(seasalt_index) = n
-   !          seasalt_index = seasalt_index + 1
-   !       endif
-   !       if (ChemState%ChemSpecies(n)%is_tracer .eqv. .true.) then
-   !          Chemstate%TracerIndex(tracer_index) = n
-   !          tracer_index = tracer_index + 1
-   !       endif
-   !       if (ChemState%ChemSpecies(n)%is_drydep .eqv. .true.) then
-   !          Chemstate%DryDepIndex(drydep_index) = n
-   !          drydep_index = drydep_index + 1
-   !       endif
-   !    enddo
-   !
-   ! end subroutine Find_index_of_Species
-
-   !> \brief Find the species by name (LEGACY - COMMENTED OUT)
-   !!
-   !! \param ChemState The ChemState object
-   !! \param name The name of the species
-   !! \param index The index of the species
-   !! \param RC The return code
-   !!
-   !! \ingroup core_modules
-   !!!>
-   ! subroutine FindSpecByName(ChemState, name, index, RC)
-   !
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    character(len=50),    INTENT(in)    :: name
-   !    integer,              INTENT(out)   :: index
-   !    integer,              INTENT(out)   :: RC
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !
-   !    ! local variables
-   !    integer :: n
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at FindSpecByName (in core/chemstate_mod.F90)'
-   !
-   !    index = 0
-   !    do n = 1, ChemState%nSpecies
-   !       if (TRIM(name) == TRIM(ChemState%SpeciesNames(n))) then
-   !          index = n
-   !          exit
-   !       endif
-   !    enddo
-   !    if (index == 0) then
-   !       RC = CC_FAILURE
-   !       ErrMsg = 'Species not found: ' // TRIM(name)
-   !       call CC_Warning(ErrMsg, RC, thisLoc)
-   !    endif
-   !
-   ! end subroutine FindSpecByName
-   !
-   ! subroutine FindSpecByName(ChemState, name, index, RC)
-   !
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    character(len=50),    INTENT(in)    :: name
-   !    integer,              INTENT(out)   :: index
-   !    integer,              INTENT(out)   :: RC
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !    integer :: n
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at FindSpecByName (in core/chemstate_mod.F90)'
-   !
-   !    index = 0
-   !    do n = 1, ChemState%nSpecies
-   !       if (TRIM(name) == TRIM(ChemState%SpeciesNames(n))) then
-   !          index = n
-   !          exit
-   !       endif
-   !    enddo
-   !    if (index == 0) then
-   !       RC = CC_FAILURE
-   !       ErrMsg = 'Species not found: ' // TRIM(name)
-   !       call CC_Warning(ErrMsg, RC, thisLoc)
-   !    endif
-   !
-   ! end subroutine FindSpecByName
-
-
-   !> \brief Get the concentration of a species (LEGACY - COMMENTED OUT)
-   !!
-   !! get the concentration of a species given either the index or the name of the species
-   !!
-   !! \param ChemState The ChemState object
-   !! \param concentration The concentration of the species
-   !! \param RC The return code
-   !! \param index The index of the species - Optional
-   !! \param name The name of the species - Optional
-   !!
-   !! \ingroup core_modules
-   !!!>
-   ! subroutine GetSpecConc(ChemState, concentration, RC, index, name)
-   !
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    real(kind=fp), dimension(:), INTENT(out)   :: concentration
-   !    integer,              INTENT(out)   :: RC
-   !    integer, optional,    INTENT(inout)    :: index
-   !    character(len=50), optional, INTENT(inout)    :: name
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at GetSpecConc (in core/chemstate_mod.F90)'
-   !
-   !    if (present(index)) then
-   !       call GetSpecConcByIndex(ChemState, concentration, index, RC)
-   !    elseif (present(name)) then
-   !       call GetSpecConcByName(ChemState, concentration, name, RC)
-   !    else
-   !       RC = CC_FAILURE
-   !    endif
-   !
-   !    if (RC /= CC_SUCCESS) then
-   !       errMsg = 'Error in GetSpecConc'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    endif
-   !
-   ! end subroutine GetSpecConc
-
-   !> \brief Get the concentration of a species by index (LEGACY - COMMENTED OUT)
-   !!
-   !! \param ChemState The ChemState object
-   !! \param concentration The concentration of the species
-   !! \param RC The return code
-   !! \param index The index of the species
-   !!
-   !! \ingroup core_modules
-   !!!>
-   ! subroutine GetSpecConcByIndex(ChemState, concentration, index, RC)
-   !
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    real(kind=fp), dimension(:), INTENT(out)   :: concentration
-   !    integer,              INTENT(in)    :: index
-   !    integer,              INTENT(out)   :: RC
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at GetSpecConcByIndex (in core/chemstate_mod.F90)'
-   !
-   !    if (index < 1 .or. index > ChemState%nSpecies) then
-   !       RC = CC_FAILURE
-   !       errMsg = 'index out of bounds'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    endif
-   !
-   !    concentration = ChemState%ChemSpecies(index)%conc
-   !
-   ! end subroutine GetSpecConcByIndex
-
-   !> \brief Get the concentration of a species by name (LEGACY - COMMENTED OUT)
-   !!
-   !! \param ChemState The ChemState object
-   !! \param concentration The concentration of the species
-   !! \param RC The return code
-   !! \param name The name of the species
-   !!
-   !! \ingroup core_modules
-   !!!>
-   ! subroutine GetSpecConcByName(ChemState, concentration, name, RC)
-   !
-   !    type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-   !    real(kind=fp), dimension(:), INTENT(out)   :: concentration
-   !    character(len=50),    INTENT(in)    :: name
-   !    integer,              INTENT(out)   :: RC
-   !
-   !    ! Locals
-   !    integer :: index
-   !
-   !    ! Error handling
-   !    CHARACTER(LEN=255) :: ErrMsg
-   !    CHARACTER(LEN=255) :: thisLoc
-   !
-   !    ! Initialize
-   !    RC = CC_SUCCESS
-   !    ErrMsg = ''
-   !    thisLoc = ' -> at GetSpecConcByName (in core/chemstate_mod.F90)'
-   !
-   !    call FindSpecByName(ChemState, name, index, RC)
-   !
-   !    if (RC /= CC_SUCCESS) then
-   !       errMsg = 'Error in GetSpecConcByName'
-   !       call CC_Error(errMsg, RC, thisLoc)
-   !       RETURN
-   !    endif
-   !
-   !    concentration = ChemState%ChemSpecies(index)%conc
-   !
-   ! end subroutine GetSpecConcByName
-
    !========================================================================
    ! Modern ChemState Type-Bound Procedures
    !========================================================================
@@ -555,7 +141,7 @@ CONTAINS
       use error_mod, only: ErrorManagerType, CC_SUCCESS, ERROR_MEMORY_ALLOCATION
       use GridGeometry_Mod, only: GridGeometryType
       implicit none
-      class(ChemStateType), intent(inout) :: this
+      class(ChemStateType), intent(inout), target :: this
       integer, intent(in) :: max_species
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
@@ -591,105 +177,6 @@ CONTAINS
 
       ! Allocate species arrays
       if (max_species > 0) then
-         allocate(this%SpeciesIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate SpeciesIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%TracerIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate TracerIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%AeroIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate AeroIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%GasIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate GasIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%DustIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate DustIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%SeaSaltIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate SeaSaltIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%DryDepIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate DryDepIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%WetDepIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate WetDepIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%AeroDryDepIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate AeroDryDepIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%PhotolysisIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate PhotolysisIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
-         allocate(this%AdvectIndex(max_species), stat=allocStat)
-         if (allocStat /= 0) then
-            call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-               'Failed to allocate AdvectIndex', rc, &
-               thisLoc, 'Check available memory')
-            call error_mgr%pop_context()
-            return
-         endif
-
          allocate(this%SpeciesNames(max_species), stat=allocStat)
          if (allocStat /= 0) then
             call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
@@ -720,21 +207,20 @@ CONTAINS
             ny = this%Grid%ny
             nz = this%Grid%nz
 
-            do s = 1, max_species
-               ! Always nullify and reallocate to ensure proper dimensions
-               ! Skip trying to deallocate potentially corrupted pointers
-               if (associated(this%ChemSpecies(s)%conc)) then
-                  nullify(this%ChemSpecies(s)%conc)
-               endif
+            ! Allocate the unified TARGET concentrations array
+            allocate(this%unified_conc(nx, ny, nz, max_species), stat=allocStat)
+            if (allocStat /= 0) then
+               call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
+                  'Failed to allocate unified_conc', rc, thisLoc, 'Check available memory')
+               call error_mgr%pop_context()
+               return
+            endif
+            this%unified_conc = 0.0_fp
 
-               allocate(this%ChemSpecies(s)%conc(nx,ny,nz), stat=allocStat)
-               if (allocStat /= 0) then
-                  call error_mgr%report_error(ERROR_MEMORY_ALLOCATION, &
-                     'Failed to allocate ChemSpecies(s)%conc', rc, thisLoc, 'Check available memory')
-                  call error_mgr%pop_context()
-                  return
-               endif
-               this%ChemSpecies(s)%conc = 0.0_fp
+            do s = 1, max_species
+               ! Point each species concentration array to the appropriate contiguous slice!
+               this%ChemSpecies(s)%conc => this%unified_conc(:, :, :, s)
+               this%ChemSpecies(s)%is_valid = .true.
             end do
          else
             write(*,'(A)') 'DEBUG: Grid not associated, cannot allocate conc arrays'
@@ -750,6 +236,9 @@ CONTAINS
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
+
+      ! Deallocate unified TARGET array
+      if (allocated(this%unified_conc)) deallocate(this%unified_conc)
 
       ! Deallocate all allocatable arrays
       if (allocated(this%SpeciesIndex)) deallocate(this%SpeciesIndex)

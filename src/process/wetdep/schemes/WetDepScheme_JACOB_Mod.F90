@@ -28,6 +28,7 @@
 !!
 module WetDepScheme_JACOB_Mod
 
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
    use precision_mod, only: fp, zero, one, rae, TINY_
    use error_mod, only: CC_Warning, CC_SUCCESS !CC_Error
    use WetDepCommon_Mod, only: WetDepSchemeJACOBConfig
@@ -408,6 +409,7 @@ contains
 
          ! -- surface level
          k = kbot
+         km1 = k + 1
          if (pdwn(km1) > pdwn_thr) then
             f = ftop
             if ( f > zero ) then
@@ -435,11 +437,11 @@ contains
          ! calculate vertical met first
          do k = kbot, ktop
 
-            ! -- convert back to ug/kg or ppmv
+            ! -- convert back to ug/kg or ppmv and compute the TENDENCY (rate of change per second)
             if (species_is_aerosol(species_idx)) then
-               species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp
+               species_tendencies(k, species_idx) = ( (max(0.0_fp, conc(k)) / dpog(k) * 1.0e9_fp) - species_conc(k, species_idx) ) / dt
             else
-               species_tendencies(k, species_idx) = max(0.0_fp, conc(k)) / dpog(k) * AIRMW / species_mw_g(species_idx) * 1.0e6_fp
+               species_tendencies(k, species_idx) = ( (max(0.0_fp, conc(k)) / dpog(k) * AIRMW / species_mw_g(species_idx) * 1.0e6_fp) - species_conc(k, species_idx) ) / dt
             end if
 
             ! Update diagnostic fields here based on your scheme's requirements
@@ -483,9 +485,9 @@ contains
             ! sulfate produced from SO2 = current local SO4 minus its initial column value
             so4_prod = SO4(k) - species_conc(k, so4_id) * 1.e-09_fp * dpog(k)
             if (so4_prod > zero) then
-               ! convert the [kg/m2] production back to [ug/kg] and add to SO4
+               ! convert the [kg/m2] production back to [ug/kg] tendency (divided by dt) and add to SO4 tendency
                species_tendencies(k, so4_id) = species_tendencies(k, so4_id) &
-                  + so4_prod / dpog(k) * 1.0e9_fp
+                  + (so4_prod / dpog(k) * 1.0e9_fp) / dt
             end if
          end do
       end if
@@ -505,9 +507,9 @@ contains
             ! H2O2 consumed = initial - final local working value, in [kg/kg]
             h2o2_used = species_conc(k, h2o2_id) * species_mw_g(h2o2_id) * 1.0e-6_fp / AIRMW - H2O2(k)
             if (h2o2_used > zero) then
-               ! convert the consumed [kg/kg] back to [ppmv] and remove from H2O2
-               species_tendencies(k, h2o2_id) = max( 0.0_fp, species_tendencies(k, h2o2_id) &
-                  - h2o2_used * AIRMW / species_mw_g(h2o2_id) * 1.0e6_fp )
+               ! convert the consumed [kg/kg] back to [ppmv] tendency (divided by dt) and remove from H2O2 tendency
+               species_tendencies(k, h2o2_id) = species_tendencies(k, h2o2_id) &
+                  - (h2o2_used * AIRMW / species_mw_g(h2o2_id) * 1.0e6_fp) / dt
             end if
          end do
       end if
@@ -588,7 +590,7 @@ contains
       real(fp),   intent(in)  :: c_h2o                !< Mix ratio of H2O [cm3 H2O/cm3 air]
       real(fp),   intent(in)  :: cldice               !< Precipitable cloud ice mixing ratio [cm3 ice/cm3 air]
       real(fp),   intent(in)  :: cldliq               !< Precipitable cloud liquid mixing ratio [cm3 H2O/cm3 air]
-      character(len = 20),  intent(in)  :: spc        !< Species name
+      character(len = *),   intent(in)  :: spc        !< Species name
       real(fp),   intent(out) :: lossfrac             !< Fraction of species lost to rainout [unitless]
       real(fp),   intent(in) :: SO2                   !< SO2 concentration [kg/kg]; depleted in rainout_loss, not here
       real(fp),   intent(inout) :: H2O2               !< H2O2 concentration [kg/kg]; depleted by SO2 oxidation (written back)
@@ -677,10 +679,20 @@ contains
          !TODO: seems an error in GOCART version here
          l2g = liq_to_gas_ratio( k0, cr, pKa, tk, cldliq)
 
-         ! -- fraction of species in liquid and ice phases
+         ! -- fraction of species in liquid and ice phases (guarded against overflow/NaN)
          c_tot = one + l2g + i2g
-         f_l   = l2g / c_tot
-         f_i   = i2g / c_tot
+         if ( ieee_is_nan(c_tot) .or. c_tot >= 1.0e10_fp ) then
+            if ( l2g >= i2g ) then
+               f_l = one
+               f_i = zero
+            else
+               f_l = zero
+               f_i = one
+            endif
+         else
+            f_l   = l2g / c_tot
+            f_i   = i2g / c_tot
+         endif
 
          ! -- compute Ki for loss due to scavenging from convective updraft
          if ( tk >= 268.0_fp ) then
@@ -732,7 +744,7 @@ contains
       real(fp),  intent(in)  :: qdwn           !< Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
       real(fp),  intent(in)  :: dz             !< Height of grid box [cm]
       real(fp),  intent(in)  :: dt             !< Timestep (s)
-      character(len = 20),  intent(in) :: spc  !< Species name
+      character(len = *),  intent(in) :: spc  !< Species name
       logical,   intent(in)  :: is_aero        !< aerosol washout flag
       real(fp),  intent(in) :: k0              !< Henry's solubility constant [M/atm]
       real(fp),  intent(in) :: cr              !< Henry's volatility constant [K]
@@ -922,7 +934,7 @@ contains
       real(fp), intent(in) :: radius_fine    !< fine particle radius threshold (um); using 1.0 um for now
 
       ! -- local variables
-      real(fp)          :: dth, pph
+      real(fp)          :: dth, pph, ratio
       ! -- local parameters
       real(fp), parameter :: k_wash = 1.06e-03_fp
       real(fp), parameter :: h2s = 3600.0_fp ! s-1
@@ -935,19 +947,22 @@ contains
          pph = 10.0_fp * pdwn * h2s
          dth = dt / h2s
 
+         ! Guard ratio against negative values before raising to fractional power (defense-in-depth)
+         ratio = max( zero, pph / f )
+
          if ( radius < radius_fine ) then  !for fine aerosol (simplified from WASHFRAC_FINE_AEROSOL)
             if ( tk >= 268e+0_fp  ) then
-               washfrac_aerosol = F * ( one  - EXP(-k_wash * tuning * (pph / f ) ** 0.61e+0_fp * dth))
+               washfrac_aerosol = F * ( one  - EXP(-k_wash * tuning * ratio ** 0.61e+0_fp * dth))
             else
-               washfrac_aerosol = F * ( one  - EXP(-2.6e+1_fp * k_wash * tuning  * (pph / f ) ** 0.96e+0_fp * dth))
+               washfrac_aerosol = F * ( one  - EXP(-2.6e+1_fp * k_wash * tuning  * ratio ** 0.96e+0_fp * dth))
             endif
          else  !for coarse aerosol (simplified from WASHFRAC_COARSE_AEROSOL)
             if ( tk >= 268e+0_fp  ) then
-               washfrac_aerosol = F * ( one  - EXP(-0.92e+0_fp * tuning * (pph / f ) ** 0.79e+0_fp * dth))
+               washfrac_aerosol = F * ( one  - EXP(-0.92e+0_fp * tuning * ratio ** 0.79e+0_fp * dth))
             else
                !TODO: GOCART applied a factor of 0.5 to the tuning factor for coarse aerosol????
-               !washfrac_aerosol = F * ( one  - EXP(-1.57e+0_fp / 0.5e+0_fp * tuning * (pph / f ) ** 0.96e+0_fp * dth))
-               washfrac_aerosol = F * ( one  - EXP(-1.57e+0_fp * tuning * (pph / f ) ** 0.96e+0_fp * dth))
+               !washfrac_aerosol = F * ( one  - EXP(-1.57e+0_fp / 0.5e+0_fp * tuning * ratio ** 0.96e+0_fp * dth))
+               washfrac_aerosol = F * ( one  - EXP(-1.57e+0_fp * tuning * ratio ** 0.96e+0_fp * dth))
             endif
          endif
       endif
@@ -1037,8 +1052,12 @@ contains
          ! Compute liquid to gas ratio
          l2g = liq_to_gas_ratio( k0, cr, pKa, tk, qliq )
 
-         ! -- washout fraction from Henry's Law
-         washfrac = l2g / ( one + l2g )
+         ! -- washout fraction from Henry's Law (guarded against overflow/NaN)
+         if ( ieee_is_nan(l2g) .or. l2g >= 1.0e10_fp ) then
+            washfrac = one
+         else
+            washfrac = l2g / ( one + l2g )
+         endif
 
          ! -- washout fraction from kinetic processes (HNO3)
          ! set f = one and call washfrac_hno3 function above
@@ -1134,7 +1153,7 @@ contains
       real(fp),  dimension(:), intent(inout) :: conc    !< concentration [kg/m2]
       real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
       real(fp),  dimension(:), intent(inout) :: SO4     !< SO4 concentration [kg/m2]
-      character(len = 20),  intent(in) :: spc           !< Species name
+      character(len = *),  intent(in) :: spc            !< Species name
       real(fp),  intent(in)    :: reevap_resusp_frac    !< fraction of re-evaporated mass resuspended (0.5 GEOS-Chem/Luo default; 1.0 GOCART)
       logical,   intent(in)    :: so4_gocart_resusp     !< if .true., sulfate (SO4/SO2) uses GOCART SU_Wet_Removal resuspension alpha
 
@@ -1251,7 +1270,7 @@ contains
       integer,   intent(in)    :: k                     !< layer index
       real(fp),  dimension(:), intent(inout) :: conc    !< concentration [kg/m2]
       real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
-      character(len = 20),  intent(in) :: spc           !< Species name
+      character(len = *),  intent(in) :: spc           !< Species name
       real(fp),  dimension(:), intent(inout)    :: SO4  !< SO4 concentration [kg/m2]
 
       ! -- local variables

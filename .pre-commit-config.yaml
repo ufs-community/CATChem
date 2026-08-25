@@ -66,3 +66,14 @@ repos:
                 src/external/yaml-cpp/.*|
                 CHANGELOG.md
             )$
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v22.1.8
+    hooks:
+      - id: clang-format
+        types_or: [c++, c]
+        exclude: |
+            (?x)^(
+                src/external/yaml-cpp/.*|
+                src/external/musica/.*
+            )$

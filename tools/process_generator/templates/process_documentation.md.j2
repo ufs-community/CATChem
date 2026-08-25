@@ -87,17 +87,18 @@ The {{ config.name }} process operates on the following chemical species:
 
 ## Usage
 
-### Basic Integration
+### Basic C++ Core Integration
 
-```fortran
-use {{ config.class_name }}ProcessCreator_Mod
-use {{ config.class_name }}Common_Mod
+```cpp
+#include "catchem_process_{{ config.name }}.hpp"
+#include "catchem_process_registry.hpp"
 
-! Create process instance
-type({{ config.class_name }}Process_t) :: process
-call create_{{ config.name }}_process(process, config_data)
-
-! Use process in model time step
+// Create process instance via C++ Process Registry
+auto process = catchem::ProcessRegistry::get_instance().create_process("{{ config.name }}");
+process->init(state_mgr);
+process->run(state_mgr);
+process->finalize();
+```
 call process%run(state, dt)
 ```
 

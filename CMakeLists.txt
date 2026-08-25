@@ -22,6 +22,105 @@ project(CATChem VERSION ${CATCHEM_VERSION} LANGUAGES Fortran C CXX)
 set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 
+# Option to enable Kokkos GPU/parallel support (defaults to ON)
+option(CATCHEM_ENABLE_KOKKOS "Enable Kokkos GPU/parallel support" ON)
+
+# Set C++ standard (default 11 for yaml-cpp; overridden to 20 when Kokkos is enabled)
+if(NOT CATCHEM_ENABLE_KOKKOS)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+if(CATCHEM_ENABLE_KOKKOS)
+  if(CMAKE_VERSION VERSION_LESS "3.16")
+    message(
+      FATAL_ERROR
+      "CATCHEM_ENABLE_KOKKOS requires CMake 3.16 or later (Kokkos minimum)"
+    )
+  endif()
+  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+  # CATChem's C++ core depends on mdspan support (Kokkos::mdspan and the
+  # <mdspan/mdspan.hpp> headers), which is only available in modern Kokkos
+  # (5.x). Older distro packages (e.g. Ubuntu's Kokkos 3.7) are not usable.
+  # Prefer a sufficiently new system install and otherwise fetch and build a
+  # pinned release.
+  set(
+    CATCHEM_KOKKOS_MIN_VERSION
+    "5.0"
+    CACHE STRING
+    "Minimum acceptable Kokkos version"
+  )
+  set(
+    CATCHEM_KOKKOS_VERSION
+    "5.1.1"
+    CACHE STRING
+    "Kokkos release to fetch when a suitable system install is not found"
+  )
+
+  find_package(Kokkos ${CATCHEM_KOKKOS_MIN_VERSION} QUIET)
+
+  if(Kokkos_FOUND)
+    message(STATUS "Using system Kokkos ${Kokkos_VERSION}")
+
+    # Work around a packaging bug in some Kokkos installs where the exported
+    # Kokkos targets advertise a non-existent "/include" path in
+    # INTERFACE_INCLUDE_DIRECTORIES (its _IMPORT_PREFIX resolves to "/"). CMake
+    # treats this as a hard error at generate time, so strip any include
+    # directories that do not actually exist on disk. This must be applied to
+    # every imported Kokkos target because Kokkos::kokkos inherits include
+    # directories transitively from its component targets.
+    foreach(
+      _kokkos_target
+      Kokkos::kokkos
+      Kokkos::kokkoscore
+      Kokkos::kokkoscontainers
+      Kokkos::kokkosalgorithms
+      Kokkos::kokkossimd
+    )
+      if(TARGET ${_kokkos_target})
+        get_target_property(
+          _kokkos_include_dirs
+          ${_kokkos_target}
+          INTERFACE_INCLUDE_DIRECTORIES
+        )
+        if(_kokkos_include_dirs)
+          set(_kokkos_include_dirs_clean "")
+          foreach(_kokkos_inc IN LISTS _kokkos_include_dirs)
+            if(_kokkos_inc MATCHES "\\$<" OR EXISTS "${_kokkos_inc}")
+              list(APPEND _kokkos_include_dirs_clean "${_kokkos_inc}")
+            else()
+              message(
+                STATUS
+                "Dropping non-existent include directory '${_kokkos_inc}' from ${_kokkos_target}"
+              )
+            endif()
+          endforeach()
+          set_target_properties(
+            ${_kokkos_target}
+            PROPERTIES
+              INTERFACE_INCLUDE_DIRECTORIES "${_kokkos_include_dirs_clean}"
+          )
+        endif()
+      endif()
+    endforeach()
+  else()
+    message(
+      STATUS
+      "Suitable Kokkos (>= ${CATCHEM_KOKKOS_MIN_VERSION}) not found; fetching and building Kokkos ${CATCHEM_KOKKOS_VERSION}"
+    )
+    include(FetchContent)
+    # Enable the OpenMP host backend by default for the fetched build.
+    set(Kokkos_ENABLE_OPENMP ON CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+      kokkos
+      URL
+        "https://github.com/kokkos/kokkos/releases/download/${CATCHEM_KOKKOS_VERSION}/kokkos-${CATCHEM_KOKKOS_VERSION}.tar.gz"
+    )
+    FetchContent_MakeAvailable(kokkos)
+  endif()
+endif()
 # Option to build NUOPC cap (defaults to OFF)
 option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
@@ -59,7 +158,7 @@ cmake_print_variables(
 set(_catchem_compiler_options "")
 
 # Handle Intel compiler deprecation warnings
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
   # Always disable the deprecation warning for ifort
   list(APPEND _catchem_compiler_options -diag-disable=6379,10448)
   # Also disable problematic flags that might come from external dependencies
@@ -92,22 +191,19 @@ if(
     -fmax-errors=0
   )
 elseif(
-  CMAKE_Fortran_COMPILER_ID MATCHES "^Intel"
+  CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM"
   AND CMAKE_BUILD_TYPE MATCHES "Debug"
 )
   list(
     APPEND
     _catchem_compiler_options
     -O0
-    -warn
-    all
-    -check
-    all,nouninit
+    -warnall
+    -check=all,nouninit
     -implicitnone
     -fpe0
     -traceback
-    -error-limit
-    0
+    -error-limit=0
   )
 endif()
 
@@ -188,6 +284,7 @@ if(CATCHEM_BUILD_TESTING)
 endif()
 
 if(CATCHEM_BUILD_NUOPC)
+  find_package(MPI COMPONENTS Fortran REQUIRED)
   add_subdirectory(drivers/nuopc)
 
   # Copy module files from include/ to mod/ for UFS integration during build
@@ -216,7 +313,7 @@ if(CATCHEM_BUILD_NUOPC)
   # Link only to external dependencies (not internal CATChem targets)
   target_link_libraries(
     cc_nuopc
-    PUBLIC ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran
+    PUBLIC ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran MPI::MPI_Fortran
   )
 
   # Manually handle the CATChem dependencies by linking to built libraries

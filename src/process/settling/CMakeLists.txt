@@ -4,18 +4,21 @@
 # Description: Process for computing gravitational settling of aerosol species
 
 # Define settling process sources
-set(
-  SETTLING_PROCESS_SOURCES
-  SettlingCommon_Mod.F90
-  ProcessSettlingInterface_Mod.F90
-  SettlingProcessCreator_Mod.F90
-)
+set(SETTLING_PROCESS_SOURCES SettlingCommon_Mod.F90)
 
 # Define settling scheme sources
-set(SETTLING_SCHEME_SOURCES schemes/SettlingScheme_GOCART_Mod.F90)
+set(
+  SETTLING_SCHEME_SOURCES
+  schemes/SettlingScheme_GOCART_Mod.F90
+  schemes/SettlingPhysics_Mod.F90
+)
 
 # Combine all sources
 set(SETTLING_ALL_SOURCES ${SETTLING_PROCESS_SOURCES} ${SETTLING_SCHEME_SOURCES})
+
+if(CATCHEM_ENABLE_KOKKOS)
+  list(APPEND SETTLING_ALL_SOURCES catchem_process_settling.cpp)
+endif()
 
 # Create the settling process library
 set(_lib CATChem_process_settling)
@@ -24,7 +27,11 @@ add_library(${_lib} ${SETTLING_ALL_SOURCES})
 # Link with required libraries
 target_link_libraries(${_lib} PUBLIC CATChem_core)
 
-# Additional dependencies
+# Conditional Kokkos linking
+if(CATCHEM_ENABLE_KOKKOS)
+  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos CATChem_core_cpp)
+  target_compile_definitions(${_lib} PRIVATE CATCHEM_ENABLE_KOKKOS)
+endif()
 
 # Set module directory
 set_target_properties(
@@ -37,9 +44,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions

@@ -7,13 +7,14 @@
 !! \ingroup core_modules
 !!!>
 module precision_mod
+   use iso_c_binding, only: c_float, c_double
    implicit none
 
    ! KIND parameter for 4-byte precision
-   INTEGER, PARAMETER, PUBLIC :: f4 = KIND( 0.0_4 ) !< KIND parameter for 4-byte precision
+   INTEGER, PARAMETER, PUBLIC :: f4 = c_float !< KIND parameter for 4-byte precision
 
    ! KIND parameter for 8-byte precision
-   INTEGER, PARAMETER, PUBLIC :: f8 = KIND( 0.0_8 ) !< KIND parameter for 8-byte precision
+   INTEGER, PARAMETER, PUBLIC :: f8 = c_double !< KIND parameter for 8-byte precision
 
 #ifdef USE_REAL8
    ! Use 8-byte floating point precision when asked.

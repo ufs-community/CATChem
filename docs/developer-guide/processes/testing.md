@@ -40,64 +40,33 @@ call testing_end_test()
 call testing_finalize()
 ```
 
-### Writing Unit Tests
+### Writing Unit & Science Tests
 
-Create unit tests for each process component:
+Create standalone science unit tests for each process component:
 
 ```fortran
-program test_settling_process
-   use settlingProcess_Mod
-   use StokesschemeScheme_Mod
-   use testing_mod
-   use state_mod
+program test_settling_science
+   use testing_mod, only: assert
+   use precision_mod, only: fp
+   use SettlingPhysics_Mod, only: settling_calc_vsettle, settling_compute
 
    implicit none
 
-   call testing_init("Settling Process Tests")
+   write(*,*) 'Testing Settling Science Schemes...'
 
-   ! Test process initialization
-   call test_process_initialization()
-
-   ! Test Stokes scheme calculations
-   call test_stokes_calculations()
-
-   ! Test error handling
-   call test_error_conditions()
-
-   ! Test configuration validation
-   call test_configuration_validation()
-
-   call testing_finalize()
+   ! Test terminal velocity
+   call test_settling_velocity()
 
 contains
 
-   subroutine test_process_initialization()
-      type(settlingProcessType) :: process
-      type(StateContainerType) :: container
-      integer :: rc
+   subroutine test_settling_velocity()
+      real(fp) :: vsettle
+      call settling_calc_vsettle(2.0e-6_fp, 2200.0_fp, 1.225_fp, 288.15_fp, 9.80665_fp, vsettle)
+      call assert(vsettle > 0.0_fp, "Settling velocity must be positive")
+   end subroutine test_settling_velocity
 
-      call testing_start_test("Process Initialization")
-
-      ! Create minimal test container
-      call create_test_state_container(container)
-
-      ! Test successful initialization
-      call process%init(container, rc)
-      call assert_equal(rc, CC_SUCCESS, "Init should succeed")
-      call assert_true(process%is_ready(), "Process should be ready")
-      call assert_equal(process%get_name(), 'settling', "Name should match")
-
-      call testing_end_test()
-   end subroutine test_process_initialization
-
-   subroutine test_stokes_calculations()
-      type(StateContainerType) :: container
-      real(fp) :: particle_radius, air_density, temperature
-      real(fp) :: settling_velocity, expected_velocity
-      real(fp), parameter :: tolerance = 1.0e-6_fp
-      integer :: rc
-
-      call testing_start_test("Stokes Settling Calculations")
+end program test_settling_science
+```
 
       ! Set up test conditions
       particle_radius = 1.0e-6_fp  ! 1 μm
@@ -127,19 +96,19 @@ contains
 
    subroutine test_error_conditions()
       type(settlingProcessType) :: process
-      type(StateContainerType) :: container
+      type(StateManagerType) :: state_mgr
       integer :: rc
 
       call testing_start_test("Error Condition Handling")
 
       ! Test initialization with invalid configuration
-      call create_invalid_test_container(container)
-      call process%init(container, rc)
+      call create_invalid_test_container(state_mgr)
+      call process%init(state_mgr, rc)
       call assert_not_equal(rc, CC_SUCCESS, "Init should fail with invalid config")
 
       ! Test run without initialization
       process%is_initialized = .false.
-      call process%run(container, rc)
+      call process%run(state_mgr, rc)
       call assert_not_equal(rc, CC_SUCCESS, "Run should fail without init")
 
       call testing_end_test()
@@ -242,7 +211,7 @@ Compare process outputs with established reference solutions:
 
 ```fortran
 subroutine test_reference_validation()
-   type(StateContainerType) :: container
+   type(StateManagerType) :: state_mgr
    real(fp), allocatable :: reference_data(:,:,:)
    real(fp), allocatable :: computed_data(:,:,:)
    real(fp), parameter :: validation_tolerance = 0.05_fp  ! 5% tolerance
@@ -254,10 +223,10 @@ subroutine test_reference_validation()
    call load_reference_data("reference/settling_test_case.nc", reference_data)
 
    ! Set up test case to match reference conditions
-   call setup_reference_conditions(container)
+   call setup_reference_conditions(state_mgr)
 
    ! Run process
-   call run_process_for_validation(container, rc)
+   call run_process_for_validation(state_mgr, rc)
    call assert_equal(rc, CC_SUCCESS, "Process should run successfully")
 
    ! Extract computed results
@@ -312,13 +281,13 @@ Measure and validate computational performance:
 ```fortran
 program benchmark_settling
    use settlingProcess_Mod
-   use state_mod
+   use StateManager_Mod, only : StateManagerType
    use iso_fortran_env, only : real64
 
    implicit none
 
    type(settlingProcessType) :: process
-   type(StateContainerType) :: container
+   type(StateManagerType) :: state_mgr
    integer, parameter :: n_runs = 1000
    integer :: i, rc
    real(real64) :: start_time, end_time, total_time
@@ -359,7 +328,7 @@ Monitor memory usage and detect leaks:
 ```fortran
 subroutine test_memory_usage()
    type(settlingProcessType) :: process
-   type(StateContainerType) :: container
+   type(StateManagerType) :: state_mgr
    integer :: initial_memory, final_memory, rc, i
 
    call testing_start_test("Memory Usage Testing")
@@ -368,9 +337,9 @@ subroutine test_memory_usage()
    initial_memory = get_memory_usage()
 
    ! Initialize and run process multiple times
-   call process%init(container, rc)
+   call process%init(state_mgr, rc)
    do i = 1, 1000
-      call process%run(container, rc)
+      call process%run(state_mgr, rc)
    end do
    call process%finalize(rc)
 
@@ -430,15 +399,15 @@ module test_utilities
    implicit none
    private
 
-   public :: create_test_state_container
+   public :: create_test_state_manager
    public :: setup_uniform_conditions
    public :: calculate_total_mass
    public :: validate_against_reference
 
 contains
 
-   subroutine create_test_state_container(container, nx, ny, nz)
-      type(StateContainerType), intent(out) :: container
+   subroutine create_test_state_manager(state_mgr, nx, ny, nz)
+      type(StateManagerType), intent(out) :: state_mgr
       integer, intent(in), optional :: nx, ny, nz
 
       integer :: local_nx, local_ny, local_nz
@@ -450,18 +419,18 @@ contains
       if (present(ny)) local_ny = ny
       if (present(nz)) local_nz = nz
 
-      ! Create minimal container for testing
-      call container%init_for_testing(local_nx, local_ny, local_nz)
+      ! Initialize StateManager for testing
+      call state_mgr%init('TestStateManager', rc=local_nx)
 
-   end subroutine create_test_state_container
+   end subroutine create_test_state_manager
 
-   subroutine setup_uniform_conditions(container, temp, press, density)
-      type(StateContainerType), intent(inout) :: container
+   subroutine setup_uniform_conditions(state_mgr, temp, press, density)
+      type(StateManagerType), intent(inout) :: state_mgr
       real(fp), intent(in) :: temp, press, density
 
       type(MetStateType), pointer :: met_state
 
-      met_state => container%get_met_state_ptr()
+      met_state => state_mgr%get_met_state_ptr()
       call met_state%set_uniform('temperature', temp)
       call met_state%set_uniform('pressure', press)
       call met_state%set_uniform('air_density', density)

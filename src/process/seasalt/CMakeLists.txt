@@ -4,12 +4,7 @@
 # Description: Process for computing sea salt aerosol emissions over ocean surfaces
 
 # Define seasalt process sources
-set(
-  SEASALT_PROCESS_SOURCES
-  SeaSaltCommon_Mod.F90
-  ProcessSeaSaltInterface_Mod.F90
-  SeaSaltProcessCreator_Mod.F90
-)
+set(SEASALT_PROCESS_SOURCES SeaSaltCommon_Mod.F90 SeaSaltScienceBridge.F90)
 
 # Define seasalt scheme sources
 set(
@@ -22,12 +17,22 @@ set(
 # Combine all sources
 set(SEASALT_ALL_SOURCES ${SEASALT_PROCESS_SOURCES} ${SEASALT_SCHEME_SOURCES})
 
+if(CATCHEM_ENABLE_KOKKOS)
+  list(APPEND SEASALT_ALL_SOURCES catchem_process_seasalt.cpp)
+endif()
+
 # Create the seasalt process library
 set(_lib CATChem_process_seasalt)
 add_library(${_lib} ${SEASALT_ALL_SOURCES})
 
 # Link with required libraries
 target_link_libraries(${_lib} PUBLIC CATChem_core)
+
+# Conditional Kokkos linking
+if(CATCHEM_ENABLE_KOKKOS)
+  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos CATChem_core_cpp)
+  target_compile_definitions(${_lib} PRIVATE CATCHEM_ENABLE_KOKKOS)
+endif()
 
 # Additional dependencies
 
@@ -42,9 +47,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions

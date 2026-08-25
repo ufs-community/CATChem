@@ -13,20 +13,19 @@ processes:
     diagnostics: [process_rate, tendency]
 ```
 
-## Fortran Usage
+## C++ Usage
 
-```fortran
-use DustProcess_Mod
-type(DustProcessType) :: process
-type(StateContainerType) :: container
-integer :: rc
+```cpp
+#include <catchem_core.hpp>
 
-! Initialize
-call process%init(container, rc)
+extern "C" void catchem_register_dust_cpp();
 
-! Run for timestep
-call process%run(container, rc)
+catchem_register_dust_cpp();
+auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+auto process = catchem::ProcessRegistry::get_instance().create("dust");
+process->init(core->get_state_manager());
+core->add_process(process);
 
-! Clean up
-call process%finalize(rc)
+// Execute timestep
+core->run_timestep(1800.0);
 ```

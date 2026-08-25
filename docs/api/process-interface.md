@@ -1,400 +1,264 @@
 # Process Interface API
 
-This section covers the process interface APIs that define how atmospheric processes integrate with the CATChem framework.
+This section covers the modernized C++ process interface APIs that define how atmospheric physics and chemistry processes integrate with the centralized CATChem framework.
 
 ## Overview
 
-The Process Interface system provides:
+Under the modernized C++20 architecture, the Process Interface system provides:
 
-- **ProcessInterface**: Base interface for all atmospheric processes
-- **ColumnProcessInterface**: Column-optimized process interface
-- **ProcessManager**: Process orchestration and lifecycle management
-- **ProcessRegistry**: Dynamic process discovery and loading
+- **catchem::ProcessInterface**: Virtual base class defining execution lifecycles for all processes.
+- **catchem::ProcessRegistry**: Singleton registry utilizing creator lambdas for dynamic process instantiation.
+- **catchem::FortranProcess**: Bridging adapter allowing legacy Fortran schemes to run under the C++ orchestrator.
+- **Linker-Safe Registration**: BIND(C) callbacks preventing dead-code stripping of static process libraries.
+
+---
 
 ## Core Interfaces
 
-### ProcessInterface
+### catchem::ProcessInterface
 
-The base interface that all processes must implement:
+The abstract C++ virtual base class and unified process name identifiers that all native processes implement:
 
-```fortran
-use ProcessInterface_Mod
+```cpp
+#pragma once
+#include "catchem_state_manager.hpp"
+#include <memory>
+#include <string>
+#include <string_view>
 
-type, extends(ProcessInterface_t) :: MyProcessType
-contains
-    procedure :: initialize => my_process_init
-    procedure :: run => my_process_run
-    procedure :: finalize => my_process_finalize
-end type
+namespace catchem {
+
+    // Centralized process identifier constants
+    struct ProcessNames {
+        static constexpr std::string_view GasChem = "gaschem";
+        static constexpr std::string_view Photolysis = "photolysis";
+        static constexpr std::string_view Settling = "settling";
+        static constexpr std::string_view Dust = "dust";
+        static constexpr std::string_view SeaSalt = "seasalt";
+        static constexpr std::string_view CarbChem = "carbchem";
+        static constexpr std::string_view SO4Chem = "so4chem";
+    };
+
+    class ProcessInterface {
+    public:
+        virtual ~ProcessInterface() = default;
+
+        // Returns the lowercase string identifier of the process (using catchem::ProcessNames)
+        virtual std::string get_name() const = 0;
+
+        // Allocates local resources and binds config parameters
+        virtual void init(std::shared_ptr<StateManager> state) = 0;
+
+        // Executes physical/chemical calculations
+        virtual void run(std::shared_ptr<StateManager> state) = 0;
+
+        // Cleans up heap memory and releases resources
+        virtual void finalize() = 0;
+    };
+
+} // namespace catchem
 ```
 
-**Required Methods:**
+### Column Processing & Kokkos Parallelization
 
-- `initialize(container, rc)` - Setup process with configuration
-- `run(container, rc)` - Execute process calculations
-- `finalize(rc)` - Clean up process resources
+Unlike the legacy architecture which required a separate `ColumnProcessInterface` class, column virtualization and 1D column loops are now handled natively inside `run()` using zero-copy **Kokkos subviews** and parallel execution kernels:
 
-**Auto-Generated Documentation:** [Process Interface Reference](../CATChem/namespaceprocessinterface__mod.md)
+```cpp
+void MyProcess::run(std::shared_ptr<StateManager> state) {
+    auto n_cols = state->n_cols;
+    auto n_levels = state->n_levels;
 
-### ColumnProcessInterface
+    // Parallel-for over 1D columns using Kokkos
+    Kokkos::parallel_for("MyProcessLoop", Kokkos::RangePolicy<Kokkos::HostSpace>(0, n_cols),
+        [=](const int icol) {
+            // Slice 3D fields to 1D columns with zero copy
+            auto col_temp = Kokkos::subview(state->met.temp, icol, Kokkos::ALL(), 0);
 
-Optimized interface for column-based processing:
-
-```fortran
-use ColumnProcessInterface_Mod
-
-type, extends(ColumnProcessInterface_t) :: MyColumnProcessType
-contains
-    procedure :: run_column => my_column_process
-    procedure :: can_use_column_processing => my_column_check
-end type
-
-subroutine my_column_process(this, column, rc)
-    class(MyColumnProcessType), intent(inout) :: this
-    type(ColumnType), intent(inout) :: column
-    integer, intent(out) :: rc
-
-    ! Process atmospheric column
-    do k = 1, column%nz
-        ! Atmospheric level calculations
-        call process_level(column, k, rc)
-    end do
-end subroutine
+            for (int k = 0; k < n_levels; ++k) {
+                // Perform levels calculations
+                process_level(col_temp(k));
+            }
+        });
+}
 ```
 
-**Performance Benefits:**
+---
 
-- Automatic parallelization
-- Cache-optimized memory access
-- Linear scaling with grid size
+## Process Registry & Factory Pattern
 
-**Auto-Generated Documentation:** [Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)
+### ProcessRegistry
 
-## Process Implementation
+The dynamic creator factory maps lowercase process name strings to dynamic creator lambda functions:
 
-### Basic Process Structure
+```cpp
+#pragma once
+#include "catchem_process_interface.hpp"
+#include <functional>
+#include <memory>
+#include <string>
+#include <unordered_map>
 
-```fortran
-module MyProcess_Mod
-    use ProcessInterface_Mod
-    use State_Mod
-    use Error_Mod
-    implicit none
+namespace catchem {
 
-    type, extends(ProcessInterface_t) :: MyProcessType
-        private
-        ! Process-specific data
-        real(fp) :: process_parameter
-        logical :: is_initialized = .false.
-    contains
-        procedure :: initialize => my_process_init
-        procedure :: run => my_process_run
-        procedure :: finalize => my_process_finalize
-    end type
+    using ProcessCreator = std::function<std::shared_ptr<ProcessInterface>()>;
 
-contains
+    class ProcessRegistry {
+    private:
+        std::unordered_map<std::string, ProcessCreator> creators;
+        ProcessRegistry() = default;
+    public:
+        static ProcessRegistry& get_instance() {
+            static ProcessRegistry instance;
+            return instance;
+        }
 
-    subroutine my_process_init(this, container, rc)
-        class(MyProcessType), intent(inout) :: this
-        type(StateContainerType), intent(in) :: container
-        integer, intent(out) :: rc
+        void register_process(const std::string& name, ProcessCreator creator) {
+            creators[name] = creator;
+        }
 
-        rc = CC_SUCCESS
+        std::shared_ptr<ProcessInterface> create(const std::string& name) {
+            auto it = creators.find(name);
+            if (it == creators.end()) {
+                throw std::runtime_error("Process not found in registry: " + name);
+            }
+            return it->second();
+        }
+    };
 
-        ! Initialize process
-        call this%load_configuration(container, rc)
-        if (rc /= CC_SUCCESS) return
-
-        ! Setup process state
-        this%is_initialized = .true.
-    end subroutine
-
-    subroutine my_process_run(this, container, rc)
-        class(MyProcessType), intent(inout) :: this
-        type(StateContainerType), intent(inout) :: container
-        integer, intent(out) :: rc
-
-        rc = CC_SUCCESS
-
-        if (.not. this%is_initialized) then
-            rc = ERROR_NOT_INITIALIZED
-            return
-        endif
-
-        ! Process implementation
-        call this%execute_calculations(container, rc)
-    end subroutine
-
-end module
+} // namespace catchem
 ```
 
-### Column-Based Process
+---
 
-```fortran
-module MyColumnProcess_Mod
-    use ColumnProcessInterface_Mod
-    use ColumnInterface_Mod
-    implicit none
+## Linker-Safe Callback Registration
 
-    type, extends(ColumnProcessInterface_t) :: MyColumnProcessType
-        private
-        real(fp) :: column_parameter
-    contains
-        procedure :: run_column => my_column_run
-        procedure :: can_use_column_processing => my_column_capable
-    end type
+When physical processes are compiled into distinct static libraries (e.g. `catchem_process_gaschem`), linker optimizations often strip "unused" C++ symbols if they aren't explicitly referenced during main application linking.
 
-contains
+To guarantee that creator lambdas are preserved and registered at startup, CATChem implements an explicit, linker-safe dynamic callback mechanism across the mixed-language boundary:
 
-    subroutine my_column_run(this, column, rc)
-        class(MyColumnProcessType), intent(inout) :: this
-        type(ColumnType), intent(inout) :: column
-        integer, intent(out) :: rc
+### 1. C++ Registration Hook
 
-        integer :: k
+The process defines and exports a flat `extern "C"` registration hook:
 
-        rc = CC_SUCCESS
+```cpp
+#include "catchem_process_gaschem.hpp"
+#include "catchem_process_registry.hpp"
 
-        ! Process each atmospheric level
-        do k = 1, column%nz
-            call this%process_level(column, k, rc)
-            if (rc /= CC_SUCCESS) return
-        end do
-
-        ! Apply boundary conditions
-        call this%apply_boundary_conditions(column, rc)
-    end subroutine
-
-    logical function my_column_capable(this)
-        class(MyColumnProcessType), intent(in) :: this
-        my_column_capable = .true.  ! This process supports column processing
-    end function
-
-end module
+extern "C" void catchem_register_gaschem_cpp() {
+    catchem::ProcessRegistry::get_instance().register_process("gaschem", []() {
+        return std::make_shared<catchem::GasChemProcess>();
+    });
+}
 ```
 
-## Process Manager
+### 2. C-API Call
 
-The ProcessManager orchestrates process execution:
+The process wrapper or host application triggers this dynamic hook at initialization time to ensure process creator lambdas are present in the `ProcessRegistry`:
 
-```fortran
-use ProcessManager_Mod
+```cpp
+// Register C++ process wrapper in ProcessRegistry
+catchem_register_dust_cpp();
 
-type(ProcessManagerType) :: process_mgr
-type(StateContainerType) :: container
-
-! Initialize process manager
-call process_mgr%init(config, rc)
-
-! Register processes
-call process_mgr%register_process('my_process', my_process_factory, rc)
-
-! Execute all processes
-call process_mgr%run_all_processes(container, rc)
-
-! Clean up
-call process_mgr%finalize(rc)
+// Instantiate from ProcessRegistry by lowercase name
+auto dust_proc = catchem::ProcessRegistry::get_instance().create("dust");
+dust_proc->init(state_mgr);
+core->add_process(dust_proc);
 ```
 
-**Key Features:**
+---
 
-- Automatic process discovery
-- Dependency resolution
-- Parallel process execution
-- Error recovery and reporting
+## C++ Bridge for Legacy Schemes
 
-**Auto-Generated Documentation:** [Process Manager Reference](../CATChem/namespaceprocessmanager__mod.md)
+For physical schemes that have not yet been migrated to native C++ Kokkos, the generic `FortranProcess` bridging adapter wraps Fortran subroutines so they execute seamlessly within the centralized C++ schedule:
 
-## Process Registry
+```cpp
+namespace catchem {
 
-Dynamic process loading and management:
+    class FortranProcess : public ProcessInterface {
+    private:
+        std::string name;
+        void (*fortran_run_callback)(void*); // Pointer to raw Fortran subroutine
+    public:
+        FortranProcess(const std::string& n, void (*cb)(void*))
+            : name(n), fortran_run_callback(cb) {}
 
-```fortran
-use ProcessRegistry_Mod
+        std::string get_name() const override { return name; }
 
-! Register process factory
-call process_registry%register('emission_process', &
-                              create_emission_process, rc)
+        void init(std::shared_ptr<StateManager> state) override {}
 
-! Create process instance
-call process_registry%create_process('emission_process', &
-                                   process_instance, rc)
+        void run(std::shared_ptr<StateManager> state) override {
+            // 1. Sync GPU views to host CPU space
+            state->sync_to_host();
 
-! List available processes
-call process_registry%list_processes(process_names, rc)
+            // 2. Pass StateManager handle and invoke legacy Fortran calculation
+            fortran_run_callback(state.get());
+
+            // 3. Flush CPU changes back to GPU device space
+            state->sync_to_device();
+        }
+
+        void finalize() override {}
+    };
+
+} // namespace catchem
 ```
 
-**Auto-Generated Documentation:** [Process Registry Reference](../CATChem/namespaceprocessregistry__mod.md)
+---
 
-## Error Handling
+## Configuration & Diagnostics Integration
 
-Comprehensive error handling for process operations:
+### YAML Configuration Loading
 
-```fortran
-use Error_Mod
+Processes load configuration settings in their `init` method by querying the thread-safe `StateManager` and associated YAML files:
 
-subroutine my_process_run(this, container, rc)
-    ! ...
+```cpp
+void GasChemProcess::init(std::shared_ptr<StateManager> state) {
+    // Obtain configuration path
+    std::string config_dir = state->config_dir;
 
-    ! Use error context for debugging
-    call error_mgr%push_context('my_process_run', &
-                               'Executing atmospheric process')
-
-    ! Process operations with error checking
-    call this%calculate_tendencies(container, rc)
-    if (rc /= CC_SUCCESS) then
-        call error_mgr%report_error(ERROR_CALCULATION, &
-                                   'Failed to calculate tendencies', rc, &
-                                   additional_info='Check input data validity')
-        call error_mgr%pop_context()
-        return
-    endif
-
-    call error_mgr%pop_context()
-end subroutine
+    // Parse using yaml-cpp
+    YAML::Node config = YAML::LoadFile(config_dir + "/micm_config.yaml");
+    double absolute_tolerance = config["absolute_tolerance"].as<double>(1e-12);
+}
 ```
 
-**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
+### Diagnostics Binding
 
-## Configuration Integration
+Processes write diagnostics directly into pre-allocated memory buffers in the `DiagnosticManager`:
 
-Processes integrate with the configuration system:
+```cpp
+void PhotolysisProcess::run(std::shared_ptr<StateManager> state) {
+    auto diag_mgr = state->get_diagnostic_manager();
 
-```fortran
-! Process configuration
-subroutine load_process_config(this, container, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(StateContainerType), intent(in) :: container
-    integer, intent(out) :: rc
+    // Retrieve direct pointer address of registered diagnostic field
+    double* jrate_ptr = diag_mgr->get_field_pointer("photolysis_rate_jfoo");
 
-    type(ConfigDataType) :: config
-
-    ! Get process configuration
-    call container%get_config_data(config, rc)
-    if (rc /= CC_SUCCESS) return
-
-    ! Load process-specific parameters
-    call config%get_parameter('my_process.parameter1', &
-                             this%parameter1, rc)
-    call config%get_parameter('my_process.parameter2', &
-                             this%parameter2, rc)
-end subroutine
+    // Write directly into diagnostic buffer
+    jrate_ptr[cell_idx] = calculated_jrate;
+}
 ```
 
-## Diagnostic Integration
-
-Processes can output diagnostics:
-
-```fortran
-! Diagnostic output
-subroutine process_with_diagnostics(this, container, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(StateContainerType), intent(inout) :: container
-    integer, intent(out) :: rc
-
-    real(fp) :: diagnostic_value
-
-    ! Calculate process diagnostics
-    diagnostic_value = this%calculate_diagnostic()
-
-    ! Output to diagnostic system
-    call container%set_diagnostic('my_process_rate', &
-                                 diagnostic_value, rc)
-end subroutine
-```
-
-**Auto-Generated Documentation:** [Diagnostic Manager Reference](../CATChem/namespacediagnosticmanager__mod.md)
-
-**Auto-Generated Documentation:** [Diagnostic Interface Reference](../CATChem/namespacediagnosticinterface__mod.md)
-
-## Testing Framework
-
-Process testing utilities:
-
-```fortran
-! Unit test example
-program test_my_process
-    use MyProcess_Mod
-    use TestFramework_Mod
-    implicit none
-
-    type(MyProcessType) :: process
-    type(StateContainerType) :: container
-    integer :: rc
-
-    ! Setup test
-    call test_framework%setup('my_process_test', rc)
-    call container%init_for_testing(rc)
-
-    ! Initialize process
-    call process%initialize(container, rc)
-    call test_framework%assert_success(rc, 'Process initialization')
-
-    ! Run process
-    call process%run(container, rc)
-    call test_framework%assert_success(rc, 'Process execution')
-
-    ! Validate results
-    call test_framework%validate_output(container, 'expected_output.nc', rc)
-
-    ! Cleanup
-    call process%finalize(rc)
-    call test_framework%cleanup(rc)
-end program
-```
+---
 
 ## Best Practices
 
 ### Performance
 
-1. **Use column processing** when possible
-2. **Minimize memory allocations** in run methods
-3. **Cache frequently accessed data**
-4. **Use efficient algorithms** for atmospheric calculations
+1. **Zero-Copy Slicing**: Use `Kokkos::subview` to slice 3D arrays to 1D column vectors.
+2. **Synchronize Efficiently**: Minimize the frequency of calling `sync_to_host()` and `sync_to_device()`. Keep computations inside Kokkos parallel device loops wherever possible.
+3. **Register Fields on Startup**: Avoid dynamic metadata lookup or map queries in the `run()` loop; cache offsets and raw pointer locations inside `init()`.
 
 ### Code Quality
 
-1. **Follow interface contracts** exactly
-2. **Handle all error conditions** appropriately
-3. **Document process physics** clearly
-4. **Write comprehensive tests**
-
-### Integration
-
-1. **Use StateContainer** for all data access
-2. **Register diagnostics** for monitoring
-3. **Support configuration** parameters
-4. **Handle initialization** dependencies
-
-## Process Templates
-
-Use the process generator for rapid development:
-
-```bash
-# Generate new process template
-python util/catchem_generate_process.py \
-    --name MyProcess \
-    --type transport \
-    --column-capable \
-    --output-dir src/process/myprocess/
-```
-
-This creates a complete process template with:
-
-- Process interface implementation
-- Column processing support
-- Configuration integration
-- Error handling
-- Unit tests
-- Documentation
-
-## See Also
-
-- [State Management API](state-management.md) - Data access and manipulation
-- [Column Interface API](column-interface.md) - Column-based processing
-- [Configuration API](configuration.md) - Process configuration
-- [Process Development Guide](../developer-guide/processes/creating.md) - Step-by-step process creation
+1. **Linker Safety**: Always declare and invoke the `extern "C"` registration hook for all C++ process classes.
+2. **Exceptional Protection**: Ensure no native C++ exception escapes the dynamic registration hooks or BIND(C) boundaries; wrap code in complete `try-catch` blocks returning integer failure codes.
 
 ---
 
-**Auto-Generated Documentation:** [Complete Process Interface Reference](../CATChem/namespaceprocessinterface__mod.md)
+## See Also
+
+- [State Management API](state-management.md) - Host/Device Kokkos View synchronization
+- [Column Interface API](column-interface.md) - C++ GridManager and column views
+- [Configuration API](configuration.md) - C++ YAML Configuration Manager
+- [GasChem Process Documentation](../processes/gaschem/index.md) - Details on C++ MICM solver integration
+- [Photolysis Process Documentation](../processes/photolysis/index.md) - Details on C++ TUV-x engine integration

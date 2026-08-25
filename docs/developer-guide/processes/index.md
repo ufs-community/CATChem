@@ -16,55 +16,26 @@ CATChem processes are modular components that implement specific atmospheric tra
 
 ## Process Architecture
 
-All processes inherit from the base `ProcessInterface` and must implement `init`, `run`, and `finalize`. Column-based processes should extend `ColumnProcessInterface`.
+All processes inherit from C++ `catchem::ProcessInterface` and must implement `init`, `run`, and `finalize`. Process C++ wrappers interface with pure Fortran science schemes using C-interoperable Fortran ScienceBridges (`BIND(C)`).
 
-```fortran
-module MyProcess_Mod
-  use ProcessInterface_Mod, only: ColumnProcessInterface
-  use StateManager_Mod, only: StateManagerType
-  use VirtualColumn_Mod, only: VirtualColumnType
-  implicit none
+```cpp
+#include "catchem_process_interface.hpp"
 
-  type, extends(ColumnProcessInterface) :: MyProcessType
-    ! Private data members
-  contains
-    procedure :: init => MyProcess_init
-    procedure :: run => MyProcess_run
-    procedure :: finalize => MyProcess_finalize
-    procedure :: run_column => MyProcess_run_column
-  end type
+namespace catchem {
 
-contains
+    class MyProcessProcess : public ProcessInterface {
+    public:
+        std::string active_scheme;
 
-  subroutine MyProcess_init(this, container, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(StateManagerType), intent(inout) :: container
-    integer, intent(out) :: rc
-    ! Initialize process
-  end subroutine
+        MyProcessProcess();
 
-  subroutine MyProcess_run(this, container, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(StateManagerType), intent(inout) :: container
-    integer, intent(out) :: rc
-    ! 3D operations (before/after column processing)
-  end subroutine
+        std::string get_name() const override { return "myprocess"; }
+        void init(std::shared_ptr<StateManager> state) override;
+        void run(std::shared_ptr<StateManager> state) override;
+        void finalize() override;
+    };
 
-  subroutine MyProcess_finalize(this, rc)
-    class(MyProcessType), intent(inout) :: this
-    integer, intent(out) :: rc
-    ! Clean up resources
-  end subroutine
-
-  subroutine MyProcess_run_column(this, column, container, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(VirtualColumnType), intent(inout) :: column
-    type(StateManagerType), intent(inout) :: container
-    integer, intent(out) :: rc
-    ! Process a single column
-  end subroutine
-
-end module
+} // namespace catchem
 ```
 
 ## Creating New Processes

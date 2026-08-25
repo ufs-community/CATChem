@@ -30,7 +30,7 @@ program modern_initialization_example
    ! NOTE: nspecies is NOT set here - it will be read from species config file
 
    ! 2. Specify configuration files (read in this order)
-   config%config_file = 'tests/CATChem_config.yml'           ! Main config (first)
+   config%config_file = 'tests/Configs/Default/CATChem_config.yml'           ! Main config (first)
    config%species_file = 'tests/Configs/Default/CATChem_species.yml'  ! Species (second)
    config%emission_file = 'external_emission_config.yaml'    ! Emissions (third)
 

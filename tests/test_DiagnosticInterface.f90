@@ -67,7 +67,7 @@ program test_DiagnosticInterface
    ! Test 4: Initialize diagnostic registry
    write(*,*) 'Test 4: Initialize diagnostic registry'
    error_mgr => error_mgr_target
-   call diag_registry%init('TestProcess', error_mgr=error_mgr)
+   call diag_registry%init('TestProcess', error_mgr=error_mgr, rc=rc)
    write(*,*) 'diag_registry%init called'
    call assert(rc == CC_SUCCESS, "Diagnostic registry initialization should succeed")
 

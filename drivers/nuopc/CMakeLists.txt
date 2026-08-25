@@ -24,7 +24,7 @@ set(_lib NUOPC_CATChem_cap)
 add_library(${_lib} ${_srcs})
 target_link_libraries(
   ${_lib}
-  PUBLIC CATChem ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran
+  PUBLIC CATChem ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran MPI::MPI_Fortran
 )
 
 # target_include_directories(${_lib} PUBLIC

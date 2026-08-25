@@ -1,9 +1,9 @@
 #include "yaml_interface.h"
-#include <yaml-cpp/yaml.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <cstring>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <yaml-cpp/yaml.h>
 
 // Internal node management
 struct YamlNodeWrapper {
@@ -13,7 +13,8 @@ struct YamlNodeWrapper {
 
 // Helper function to navigate nested paths (for paths like "species/is_aerosol")
 static YAML::Node navigate_path(const YAML::Node& root, const std::string& path) {
-    if (path.empty()) return root;
+    if (path.empty())
+        return root;
 
     // Create a fresh copy of the root node to ensure we start from a clean state
     YAML::Node current = YAML::Clone(root);
@@ -70,20 +71,21 @@ void yaml_destroy_node(void* node_ptr) {
 }
 
 void* yaml_sequence_to_map(void* node_ptr) {
-    if (!node_ptr) return nullptr;
+    if (!node_ptr)
+        return nullptr;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
         if (wrapper->node.IsSequence()) {
-           YAML::Node resultMap(YAML::NodeType::Map);
-           for (size_t i=0; i < wrapper->node.size(); ++i) {
-               resultMap[std::to_string(i)] = wrapper->node[i];
-           }
-	       // Remove sequence version of node from memory
-	       delete wrapper;
-	       // Return the new map wrapped in a new pointer
-           return new YamlNodeWrapper(resultMap);
-	} else {
+            YAML::Node resultMap(YAML::NodeType::Map);
+            for (size_t i = 0; i < wrapper->node.size(); ++i) {
+                resultMap[std::to_string(i)] = wrapper->node[i];
+            }
+            // Remove sequence version of node from memory
+            delete wrapper;
+            // Return the new map wrapped in a new pointer
+            return new YamlNodeWrapper(resultMap);
+        } else {
             std::cerr << "Warning: yaml_sequence_to_map called on non-sequence node" << std::endl;
             return node_ptr;
         }
@@ -95,7 +97,8 @@ void* yaml_sequence_to_map(void* node_ptr) {
 
 // Getter functions
 bool yaml_get_string(void* node_ptr, const char* key, char* value, int max_len) {
-    if (!node_ptr || !key || !value) return false;
+    if (!node_ptr || !key || !value)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -116,7 +119,8 @@ bool yaml_get_string(void* node_ptr, const char* key, char* value, int max_len) 
 }
 
 bool yaml_get_integer(void* node_ptr, const char* key, int* value) {
-    if (!node_ptr || !key || !value) return false;
+    if (!node_ptr || !key || !value)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -135,7 +139,8 @@ bool yaml_get_integer(void* node_ptr, const char* key, int* value) {
 }
 
 bool yaml_get_real(void* node_ptr, const char* key, double* value) {
-    if (!node_ptr || !key || !value) return false;
+    if (!node_ptr || !key || !value)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -154,7 +159,8 @@ bool yaml_get_real(void* node_ptr, const char* key, double* value) {
 }
 
 bool yaml_get_logical(void* node_ptr, const char* key, bool* value) {
-    if (!node_ptr || !key || !value) return false;
+    if (!node_ptr || !key || !value)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -174,7 +180,8 @@ bool yaml_get_logical(void* node_ptr, const char* key, bool* value) {
 
 // Array getter functions
 bool yaml_get_real_array(void* node_ptr, const char* key, double* values, int max_size, int* actual_size) {
-    if (!node_ptr || !key || !values || !actual_size) return false;
+    if (!node_ptr || !key || !values || !actual_size)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -197,7 +204,8 @@ bool yaml_get_real_array(void* node_ptr, const char* key, double* values, int ma
 }
 
 bool yaml_get_integer_array(void* node_ptr, const char* key, int* values, int max_size, int* actual_size) {
-    if (!node_ptr || !key || !values || !actual_size) return false;
+    if (!node_ptr || !key || !values || !actual_size)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -219,8 +227,10 @@ bool yaml_get_integer_array(void* node_ptr, const char* key, int* values, int ma
     return false;
 }
 
-bool yaml_get_string_array(void* node_ptr, const char* key, char* values, int max_strings, int max_len, int* actual_size) {
-    if (!node_ptr || !key || !values || !actual_size) return false;
+bool yaml_get_string_array(void* node_ptr, const char* key, char* values, int max_strings, int max_len,
+                           int* actual_size) {
+    if (!node_ptr || !key || !values || !actual_size)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -247,7 +257,8 @@ bool yaml_get_string_array(void* node_ptr, const char* key, char* values, int ma
 
 // Utility functions
 bool yaml_has_key(void* node_ptr, const char* key) {
-    if (!node_ptr || !key) return false;
+    if (!node_ptr || !key)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -263,7 +274,8 @@ bool yaml_has_key(void* node_ptr, const char* key) {
 }
 
 int yaml_get_size(void* node_ptr) {
-    if (!node_ptr) return 0;
+    if (!node_ptr)
+        return 0;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -275,7 +287,8 @@ int yaml_get_size(void* node_ptr) {
 }
 
 bool yaml_is_sequence(void* node_ptr) {
-    if (!node_ptr) return false;
+    if (!node_ptr)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -287,7 +300,8 @@ bool yaml_is_sequence(void* node_ptr) {
 }
 
 bool yaml_is_map(void* node_ptr) {
-    if (!node_ptr) return false;
+    if (!node_ptr)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -300,7 +314,8 @@ bool yaml_is_map(void* node_ptr) {
 
 // Setter functions
 bool yaml_set_string(void* node_ptr, const char* key, const char* value) {
-    if (!node_ptr || !key || !value) return false;
+    if (!node_ptr || !key || !value)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -313,7 +328,8 @@ bool yaml_set_string(void* node_ptr, const char* key, const char* value) {
 }
 
 bool yaml_set_integer(void* node_ptr, const char* key, int value) {
-    if (!node_ptr || !key) return false;
+    if (!node_ptr || !key)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -326,7 +342,8 @@ bool yaml_set_integer(void* node_ptr, const char* key, int value) {
 }
 
 bool yaml_set_real(void* node_ptr, const char* key, double value) {
-    if (!node_ptr || !key) return false;
+    if (!node_ptr || !key)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -339,7 +356,8 @@ bool yaml_set_real(void* node_ptr, const char* key, double value) {
 }
 
 bool yaml_set_logical(void* node_ptr, const char* key, bool value) {
-    if (!node_ptr || !key) return false;
+    if (!node_ptr || !key)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -353,7 +371,8 @@ bool yaml_set_logical(void* node_ptr, const char* key, bool value) {
 
 // File operations
 bool yaml_save_file(void* node_ptr, const char* filename) {
-    if (!node_ptr || !filename) return false;
+    if (!node_ptr || !filename)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -368,7 +387,8 @@ bool yaml_save_file(void* node_ptr, const char* filename) {
 
 // Get all keys from a YAML map
 bool yaml_get_all_keys(void* node_ptr, char* keys, int max_keys, int max_key_len, int* actual_count) {
-    if (!node_ptr || !keys || !actual_count) return false;
+    if (!node_ptr || !keys || !actual_count)
+        return false;
 
     try {
         YamlNodeWrapper* wrapper = static_cast<YamlNodeWrapper*>(node_ptr);
@@ -381,14 +401,15 @@ bool yaml_get_all_keys(void* node_ptr, char* keys, int max_keys, int max_key_len
         // Create a const copy to avoid any potential iterator state issues
         const YAML::Node node_copy = wrapper->node;
         for (const auto& pair : node_copy) {
-            if (*actual_count >= max_keys) break;
+            if (*actual_count >= max_keys)
+                break;
 
             std::string key_str = pair.first.as<std::string>();
             if (key_str.length() < max_key_len) {
                 // Copy key to the output array
                 char* dest = keys + (*actual_count) * max_key_len;
                 strncpy(dest, key_str.c_str(), max_key_len - 1);
-                dest[max_key_len - 1] = '\0';  // Ensure null termination
+                dest[max_key_len - 1] = '\0'; // Ensure null termination
                 (*actual_count)++;
             }
         }

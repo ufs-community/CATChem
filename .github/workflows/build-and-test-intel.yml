@@ -3,6 +3,9 @@ name: CI (Intel)
 on:
   workflow_call:
 
+env:
+  KOKKOS_VERSION: 5.1.1
+
 jobs:
   build-and-test-intel:
     name: Build and test (Intel)
@@ -26,6 +29,30 @@ jobs:
           mpi-wrapper-setup: oneapi
           env-update: true
 
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install -y libyaml-cpp-dev
+
+      - name: Cache Kokkos
+        id: cache-kokkos
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/kokkos-install
+          key: kokkos-${{ env.KOKKOS_VERSION }}-ubuntu-24.04-oneapi-2025.3
+
+      - name: Build and install Kokkos
+        if: steps.cache-kokkos.outputs.cache-hit != 'true'
+        run: |
+          . /entrypoint.sh
+          curl -fsSL "https://github.com/kokkos/kokkos/releases/download/${KOKKOS_VERSION}/kokkos-${KOKKOS_VERSION}.tar.gz" -o kokkos.tar.gz
+          tar xzf kokkos.tar.gz
+          cmake -B kokkos-build -S "kokkos-${KOKKOS_VERSION}" \
+            -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/kokkos-install" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DKokkos_ENABLE_OPENMP=ON
+          cmake --build kokkos-build -j2 --target install
+
       - name: Configure
         run: |
           . /entrypoint.sh
@@ -34,6 +61,8 @@ jobs:
             -DCATCHEM_BUILD_TESTING=ON \
             -DCATCHEM_BUILD_NUOPC=ON \
             -DCATCHEM_BUILD_MUSICA=ON \
+            -DCATCHEM_ENABLE_KOKKOS=ON \
+            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/kokkos-install" \
             -DCMAKE_INSTALL_PREFIX=../install \
             -DCMAKE_BUILD_TYPE=Debug
 

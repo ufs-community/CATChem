@@ -1,0 +1,9 @@
+#pragma once
+#include <string_view>
+
+namespace catchem {
+    namespace test {
+        constexpr std::string_view SOURCE_DIR = "@PROJECT_SOURCE_DIR@";
+        constexpr std::string_view TEST_DIR = "@CMAKE_CURRENT_SOURCE_DIR@";
+    }
+}

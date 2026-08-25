@@ -24,28 +24,23 @@ This process follows the modern CATChem architecture where:
 
 ## Usage
 
-### Initialization
+### C++ Initialization & Execution
 
-```fortran
-use ProcessInterface_Mod, only : ProcessInterface
-use ProcessDustCreator_Mod, only : create_dust_process
+```cpp
+#include <catchem_core.hpp>
 
-class(ProcessInterface), allocatable :: process
-type(StateContainerType) :: container
-integer :: rc
+extern "C" void catchem_register_dust_cpp();
 
-! Create the process
-call create_dust_process(process, rc)
+// 1. Register Dust C++ Process Handler
+catchem_register_dust_cpp();
 
-! Initialize the process with container
-call process%init(container, rc)
+// 2. Initialize Core with configuration
+auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+core->add_process(catchem::ProcessRegistry::get_instance().create("dust"));
+
+// 3. Execute Timestep
+core->run_timestep(300.0);
 ```
-
-### Running the Process
-
-```fortran
-! Run the process
-call process%run(container, rc)
 ```
 
 ### Finalization
@@ -222,36 +217,32 @@ src/process/dust/
 
 Unit tests are available in:
 ```
-tests/test_dust_process.F90
+tests/test_dust_science.f90
 ```
 
 Run tests with:
 ```bash
 cd build
-ctest -R dust -V
+ctest -R test_dust_science -V
 ```
 
 ### Adding Custom Tests
 
 Extend the generated tests with specific test cases:
 
-```fortran
-subroutine test_dust_physics()
-  ! Test the actual physics implementation
-  class(ProcessInterface), allocatable :: process
-  type(StateContainerType) :: container
+```cpp
+#include <catchem_core.hpp>
+#include "catchem_process_dust.hpp"
 
-  ! Create and initialize process
-  call create_dust_process(process, rc)
-  call process%init(container, rc)
+void test_dust_physics() {
+    auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+    auto dust = std::make_shared<catchem::DustProcess>();
+    dust->init(core->get_state_manager());
+    core->add_process(dust);
 
-  ! Set up test conditions
-  ! Run process
-  call process%run(container, rc)
-
-  ! Verify results
-  call assert_approximately_equals(expected_value, actual_value, tolerance)
-end subroutine
+    core->run_timestep(300.0);
+}
+```
 ```
 
 ## Architecture Features

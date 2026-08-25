@@ -1,671 +1,547 @@
 [ccpp-table-properties]
   name = ccpp_catchem_interface
   type = scheme
-  dependencies = ../../src/core/charpak_mod.F90,../../src/core/chemstate_mod.F90,../../src/core/cmn_size_mod.F90,../../src/core/config_mod.F90,../../src/core/config_opt_mod.F90,../../src/core/constants.F90,../../src/core/diagstate_mod.F90,../../src/core/emisstate_mod.F90,../../src/core/error_mod.F90,../../src/core/gridstate_mod.F90,../../src/core/init_mod.F90,../../src/core/metstate_mod.F90,../../src/core/precision_mod.F90,../../src/core/qfyaml_mod.F90,../../src/core/species_mod.F90,../../src/core/state_mod.F90,../../src/external/GOCART/Process_Library/GOCART2G_Process.F90,../../src/external/GOCART/Process_Library/GOCART2G_MieMod.F90,../../src/process/dust/ccpr_dust_common_mod.F90,../../src/process/dust/ccpr_scheme_fengsha_mod.F90,../../src/process/dust/ccpr_scheme_ginoux_mod.F90,../../src/process/dust/CCPr_Dust_Mod.F90,../../src/process/seasalt/ccpr_seasalt_common_mod.F90,../../src/process/seasalt/ccpr_scheme_gong03_mod.F90,../../src/process/seasalt/ccpr_scheme_gong97_mod.F90,../../src/process/seasalt/ccpr_scheme_geos12_mod.F90,../../src/process/seasalt/CCPr_SeaSalt_Mod.F90,../../src/process/drydep/ccpr_scheme_GOCART_DryDep_mod.F90,../../src/process/drydep/CCPr_DryDep_Mod.F90,../../src/process/plumerise/CCPr_Scheme_Briggs_mod.F90,../../src/process/plumerise/CCPr_Scheme_Sofiev_mod.F90,../../src/process/plumerise/CCPr_Plumerise_Mod.F90,../../src/api/run_mod.F90,../../src/api/catchem.F90,./catchem_types.F90,./catchem_wrapper_utils.F90
+  dependencies = ../../src/api/CATChem_API.F90
+
+########################################################################
+[ccpp-arg-table]
+  name = ccpp_catchem_interface_register
+  type = scheme
+[constituent_props]
+  standard_name = dynamic_constituents_for_catchem
+  units = none
+  dimensions = (:)
+  allocatable = True
+  type = ccpp_constituent_properties_t
+  intent = out
+[errmsg]
+  standard_name = ccpp_error_message
+  units = none
+  type = character | kind = len=*
+  dimensions = ()
+  intent = out
+[errflg]
+  standard_name = ccpp_error_code
+  units = 1
+  type = integer
+  dimensions = ()
+  intent = out
 
 ########################################################################
 [ccpp-arg-table]
   name = ccpp_catchem_interface_init
   type = scheme
 [im]
-  standard_name = horizontal_dimension
-  long_name = horizontal loop extent
-  units = count
-  dimensions = ()
-  type = integer
-  intent = in
-[do_catchem]
-  standard_name = do_catchem_coupling
-  long_name = flag controlling catchem collection (default off)
-  units = flag
-  dimensions = ()
-  type = logical
-  intent = in
-[catchem_configfile_in]
-  standard_name = catchem_configfile
-  long_name = catchem configuration file name
-  units = none
-  dimensions = ()
-  type = character
-  kind = len=*
-  intent = in
-[errmsg]
-  standard_name = ccpp_error_message
-  long_name = error message for error handling in CCPP
-  units = none
-  dimensions = ()
-  type = character
-  kind = len=*
-  intent = out
-[errflg]
-  standard_name = ccpp_error_code
-  long_name = error code for error handling in CCPP
-  units = 1
-  dimensions = ()
-  type = integer
-  intent = out
-########################################################################
-[ccpp-arg-table]
-  name = ccpp_catchem_interface_finalize
-  type = scheme
-[do_catchem]
-  standard_name = do_catchem_coupling
-  long_name = flag controlling catchem collection (default off)
-  units = flag
-  dimensions = ()
-  type = logical
-  intent = in
-[errmsg]
-  standard_name = ccpp_error_message
-  long_name = error message for error handling in CCPP
-  units = none
-  dimensions = ()
-  type = character
-  kind = len=*
-  intent = out
-[errflg]
-  standard_name = ccpp_error_code
-  long_name = error code for error handling in CCPP
-  units = 1
-  dimensions = ()
-  type = integer
-  intent = out
-########################################################################
-[ccpp-arg-table]
-  name = ccpp_catchem_interface_run
-  type = scheme
-#Grid State
-[im]
   standard_name = horizontal_loop_extent
-  long_name = horizontal loop extent
   units = count
   dimensions = ()
   type = integer
   intent = in
 [kte]
   standard_name = vertical_layer_dimension
-  long_name = vertical layer dimension
   units = count
   dimensions = ()
   type = integer
-  intent = in
-[kme]
-  standard_name = vertical_interface_dimension
-  long_name = number of vertical levels plus one
-  units = count
-  dimensions = ()
-  type = integer
-  intent = in
-[garea]
-  standard_name = cell_area
-  long_name = grid cell area
-  units = m2
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
   intent = in
 [nsoil]
   standard_name = vertical_dimension_of_soil
-  long_name = number of soil layers
   units = count
   dimensions = ()
   type = integer
   intent = in
 [nlndcat]
   standard_name = number_of_vegetation_categories
-  long_name = number of vegetation categories
   units = count
   dimensions = ()
   type = integer
   intent = in
 [nsoilcat]
   standard_name = number_of_soil_categories
-  long_name = number of soil categories
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[do_catchem]
+  standard_name = do_catchem_coupling
+  units = flag
+  dimensions = ()
+  type = logical
+  intent = in
+[catchem_configfile_in]
+  standard_name = catchem_configfile
+  units = none
+  dimensions = ()
+  type = character | kind = len=*
+  intent = in
+[constituent_props_ptr]
+  standard_name = ccpp_constituent_properties
+  units = none
+  type = ccpp_constituent_prop_ptr_t
+  dimensions = (number_of_ccpp_constituents)
+  intent = in
+[errmsg]
+  standard_name = ccpp_error_message
+  units = none
+  type = character | kind = len=*
+  dimensions = ()
+  intent = out
+[errflg]
+  standard_name = ccpp_error_code
+  units = 1
+  type = integer
+  dimensions = ()
+  intent = out
+
+########################################################################
+[ccpp-arg-table]
+  name = ccpp_catchem_interface_finalize
+  type = scheme
+[do_catchem]
+  standard_name = do_catchem_coupling
+  units = flag
+  dimensions = ()
+  type = logical
+  intent = in
+[errmsg]
+  standard_name = ccpp_error_message
+  units = none
+  type = character | kind = len=*
+  dimensions = ()
+  intent = out
+[errflg]
+  standard_name = ccpp_error_code
+  units = 1
+  type = integer
+  dimensions = ()
+  intent = out
+
+########################################################################
+[ccpp-arg-table]
+  name = ccpp_catchem_interface_run
+  type = scheme
+[im]
+  standard_name = horizontal_loop_extent
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[kte]
+  standard_name = vertical_layer_dimension
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[kme]
+  standard_name = vertical_interface_dimension
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[garea]
+  standard_name = cell_area
+  units = m2
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
+  intent = in
+[nsoil]
+  standard_name = vertical_dimension_of_soil
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[nlndcat]
+  standard_name = number_of_vegetation_categories
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[nsoilcat]
+  standard_name = number_of_soil_categories
   units = count
   dimensions = ()
   type = integer
   intent = in
 [lat]
   standard_name = latitude_in_degree
-  long_name = latitude
   units = degree_north
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [lon]
   standard_name = longitude_in_degree
-  long_name = longitude
   units = degree_east
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [do_catchem]
   standard_name = do_catchem_coupling
-  long_name = flag controlling catchem collection (default off)
   units = flag
   dimensions = ()
   type = logical
   intent = in
-# TIME VARIABLES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [dt]
   standard_name = timestep_for_physics
-  long_name = physics time step
   units = s
   dimensions = ()
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [jdate]
-  standard_name = date_and_time_of_forecast_in_united_states_order
-  long_name = current forecast date and time
-  units = none
+  standard_name = current_date_and_time
+  units = yyyymmdd_and_utc
   dimensions = (8)
   type = integer
   intent = in
 [xcosz]
-  standard_name = instantaneous_cosine_of_zenith_angle
-  long_name = cosine of zenith angle at current time
+  standard_name = cosine_of_solar_zenith_angle
   units = none
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
-# Land Parameters #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [lwi]
-  standard_name = sea_land_ice_mask
-  long_name = landmask: sea/land/ice=0/1/2
-  units = flag
+  standard_name = land_sea_mask
+  units = index
   dimensions = (horizontal_loop_extent)
   type = integer
   intent = in
 [frlanduse]
-  standard_name = fraction_of_vegetation_category
-  long_name = fraction of horizontal grid area occupied by given vegetation category
-  units = frac
-  dimensions = (horizontal_loop_extent, number_of_vegetation_categories)
-  type = real
-  kind = kind_phys
+  standard_name = fraction_of_vegetation_type
+  units = fraction
+  dimensions = (horizontal_loop_extent,number_of_vegetation_categories)
+  type = real | kind = kind_phys
   intent = in
 [gvf]
-  standard_name = bounded_vegetation_area_fraction
-  long_name = areal fractional cover of green vegetation bounded on the bottom
-  units = frac
+  standard_name = green_vegetation_fraction
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [seaicefrac]
-  standard_name = sea_ice_area_fraction_of_sea_area_fraction
-  long_name = ice fraction over open water
-  units = frac
+  standard_name = sea_ice_concentration
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [oceanfrac]
-  standard_name = sea_area_fraction
-  long_name = fraction of horizontal grid area occupied by ocean
-  units = frac
+  standard_name = fraction_of_ocean
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [lakefrac]
-  standard_name = lake_area_fraction
-  long_name = fraction of horizontal grid area occupied by ocean
-  units = frac
+  standard_name = fraction_of_lake
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [landfrac]
-  standard_name = land_area_fraction
-  long_name = fraction of horizontal grid area occupied by land
-  units = frac
+  standard_name = fraction_of_land
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [stype]
-  standard_name = soil_type_classification
-  long_name = soil type at each grid cell
+  standard_name = soil_type_index
   units = index
   dimensions = (horizontal_loop_extent)
   type = integer
   intent = in
 [vtype]
-  standard_name = vegetation_type_classification
-  long_name = vegetation type at each grid cell
+  standard_name = vegetation_type_index
   units = index
   dimensions = (horizontal_loop_extent)
   type = integer
   intent = in
 [snowdepth]
-  standard_name = lwe_thickness_of_snow_amount_on_dynamics_timestep
-  long_name = snow fall at this time step
+  standard_name = physical_snow_depth
   units = m
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [frsnow]
-  standard_name = surface_snow_area_fraction_over_land
-  long_name = Surface snow area fraction over land
-  units = frac
+  standard_name = snow_cover_fraction
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [lai]
   standard_name = leaf_area_index
-  long_name = leaf area index
-  units = none
+  units = m2 m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [frsoil]
-  standard_name = fraction_of_soil_category
-  long_name = fraction of horizontal grid area occupied by given soil category
-  units = frac
+  standard_name = fraction_of_soil_type
+  units = fraction
   dimensions = (horizontal_loop_extent,number_of_soil_categories)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [pores]
-  standard_name = maximum_soil_moisture_content_for_land_surface_model
-  long_name = maximum soil moisture for a given soil type for land surface model
-  units = m
+  standard_name = dry_soil_porosity
+  units = none
   dimensions = (30)
-  type = real
-  intent = out
-  kind = kind_phys
+  type = real | kind = kind_phys
+  intent = in
 [resid]
-  standard_name = minimum_soil_moisture_content_for_land_surface_model
-  long_name = minimum soil moisture for a given soil type for land surface model
-  units = m
+  standard_name = residual_soil_moisture
+  units = none
   dimensions = (30)
-  type = real
-  intent = out
-  kind = kind_phys
-# Surface Met <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  type = real | kind = kind_phys
+  intent = in
 [ustar]
-  standard_name = surface_friction_velocity
-  long_name = boundary layer parameter
+  standard_name = friction_velocity
   units = m s-1
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [u10m]
-  standard_name = x_wind_at_10m
-  long_name = 10 meter u wind speed
+  standard_name = zonal_wind_at_10m
   units = m s-1
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [v10m]
-  standard_name = y_wind_at_10m
-  long_name = 10 meter v wind speed
+  standard_name = meridional_wind_at_10m
   units = m s-1
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [tskin]
-  standard_name = surface_skin_temperature
-  long_name = surface skin temperature
+  standard_name = ground_skin_temperature
   units = K
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [ts]
-  standard_name = air_temperature_at_surface_adjacent_layer
-  long_name = Air temperature at surface adjacent layer
+  standard_name = surface_temperature_for_air_sea_fluxes
   units = K
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [hf2d]
-  standard_name = surface_upward_sensible_heat_flux_for_coupling
-  long_name = surface upward sensible heat flux valid for coupling
+  standard_name = sensible_heat_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [lf2d]
-  standard_name = surface_upward_latent_heat_flux_for_coupling
-  long_name = surface upward latent heat flux valid for coupling
+  standard_name = latent_heat_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [znt]
-  standard_name = surface_roughness_length
-  long_name = surface roughness length in cm
-  units = cm
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = in
-# State Variables <<<<<<<<<<<<<<<<<<<<<<<<<<<
-[prsfc]
-  standard_name = surface_air_pressure
-  long_name = surface air_pressure
-  units = Pa
-  dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = in
-[pblh]
-  standard_name = atmosphere_boundary_layer_thickness
-  long_name = PBL thickness
+  standard_name = roughness_length_for_momentum
   units = m
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
-# Radiation <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[prsfc]
+  standard_name = surface_air_pressure
+  units = Pa
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
+  intent = in
+[pblh]
+  standard_name = planetary_boundary_layer_height
+  units = m
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
+  intent = in
 [dswsfc]
-  standard_name = surface_downwelling_shortwave_flux
-  long_name = surface downwelling shortwave flux at current time
+  standard_name = downward_shortwave_flux_at_surface
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [nirbmdi]
-  standard_name = surface_downwelling_direct_nir_shortwave_flux_on_radiation_timestep
-  long_name = sfc nir beam sw downward flux
+  standard_name = downward_near_infrared_direct_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [nirdfdi]
-  standard_name = surface_downwelling_diffuse_nir_shortwave_flux_on_radiation_timestep
-  long_name = sfc nir diff sw downward flux
+  standard_name = downward_near_infrared_diffuse_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [visbmdi]
-  standard_name = surface_downwelling_direct_uv_and_vis_shortwave_flux_on_radiation_timestep
-  long_name = sfc uv+vis beam sw downward flux
+  standard_name = downward_visible_direct_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [visdfdi]
-  standard_name = surface_downwelling_diffuse_uv_and_vis_shortwave_flux_on_radiation_timestep
-  long_name = sfc uv+vis diff sw downward flux
+  standard_name = downward_visible_diffuse_flux
   units = W m-2
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [sfc_alb_nir_dir]
-  standard_name = surface_albedo_due_to_near_IR_direct
-  long_name = surface albedo due to near IR direct beam
-  units = frac
+  standard_name = surface_albedo_due_to_NIR_direct
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [sfc_alb_nir_dif]
-  standard_name = surface_albedo_due_to_near_IR_diffused
-  long_name = surface albedo due to near IR diffused beam
-  units = frac
+  standard_name = surface_albedo_due_to_NIR_diffuse
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [sfc_alb_uvvis_dir]
   standard_name = surface_albedo_due_to_UV_and_VIS_direct
-  long_name = surface albedo due to UV+VIS direct beam
-  units = frac
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [sfc_alb_uvvis_dif]
-  standard_name = surface_albedo_due_to_UV_and_VIS_diffused
-  long_name = surface albedo due to UV+VIS diffused beam
-  units = frac
+  standard_name = surface_albedo_due_to_UV_and_VIS_diffuse
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [soilmoist]
-  standard_name = volume_fraction_of_condensed_water_in_soil
-  long_name = total soil moisture
-  units = frac
+  standard_name = soil_moisture_fraction
+  units = m3 m-3
   dimensions = (horizontal_loop_extent,vertical_dimension_of_soil)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [pr3d]
   standard_name = air_pressure_at_interface
-  long_name = air pressure at model layer interfaces
   units = Pa
   dimensions = (horizontal_loop_extent,vertical_interface_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [phl3d]
-  standard_name = geopotential
-  long_name = geopotential at model layer centers
-  units = m2 s-2
+  standard_name = geopotential_height_at_interface
+  units = m
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [prl3d]
   standard_name = air_pressure
-  long_name = mean layer pressure
   units = Pa
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [tk3d]
-  standard_name = air_temperature_of_new_state
-  long_name = updated temperature
+  standard_name = air_temperature
   units = K
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [q3d]
-  standard_name = specific_humidity_of_new_state
-  long_name = water vapor specific humidity updated by physics
+  standard_name = water_vapor_mixing_ratio_wrt_dry_air
   units = kg kg-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [us3d]
-  standard_name = x_wind_of_new_state
-  long_name = zonal wind updated by physics
+  standard_name = eastward_wind
   units = m s-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [vs3d]
-  standard_name = y_wind_of_new_state
-  long_name = meridional wind updated by physics
+  standard_name = northward_wind
   units = m s-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [rh]
   standard_name = relative_humidity
-  long_name = layer relative humidity
-  units = frac
+  units = percent
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
-#TODO: delete dry air pressure for now; not found in current GFS meta file
 [delp]
-  standard_name = air_pressure_difference_between_midlayers
-  long_name = air pressure difference between midlayers
+  standard_name = air_pressure_thickness
   units = Pa
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [airden]
   standard_name = dry_air_density
-  long_name = Density of dry air
   units = kg m-3
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [pfl_lsan]
-  standard_name = liquid_flux_due_to_large_scale_precipitation
-  long_name = instantaneous 3D flux of liquid water from nonconvective precipitation
-  units = kg m-2 s-1
+  standard_name = cloud_liquid_water_mixing_ratio
+  units = kg kg-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [pfl_isan]
-  standard_name = ice_flux_due_to_large_scale_precipitation
-  long_name = instantaneous 3D flux of ice from nonconvective precipitation
-  units = kg m-2 s-1
+  standard_name = cloud_ice_water_mixing_ratio
+  units = kg kg-1
   dimensions = (horizontal_loop_extent,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-  intent = inout
+  type = real | kind = kind_phys
+  intent = in
 [rain_cpl]
-  standard_name = cumulative_lwe_thickness_of_precipitation_amount_for_coupling
-  long_name = total rain precipitation
-  units = m
+  standard_name = precipitation_rate
+  units = kg m-2 s-1
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
 [cldf]
   standard_name = cloud_area_fraction
-  long_name = fraction of grid box area in which updrafts occur
-  units = frac
+  units = fraction
   dimensions = (horizontal_loop_extent)
-  type = real
-  kind = kind_phys
+  type = real | kind = kind_phys
   intent = in
-[dust_in]
-  standard_name = fengsha_dust12m_input
-  long_name = fengsha dust input
-  units = various
-  dimensions = (horizontal_loop_extent,12,5)
-  type = real
-  kind = kind_phys
+[clayfrac]
+  standard_name = clay_fraction
+  units = fraction
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
   intent = in
-# Tracer info <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[ntrac]
-  standard_name = number_of_tracers
-  long_name = number of tracers
-  units = count
-  dimensions = ()
-  type = integer
+[rdrag]
+  standard_name = drag_partitioning_parameter
+  units = none
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
   intent = in
-[ntchs]
-  standard_name = index_of_first_chemical_tracer_in_tracer_concentration_array
-  long_name = tracer index for first chemical tracer
-  units = index
-  dimensions = ()
-  type = integer
+[sandfrac]
+  standard_name = sand_fraction
+  units = fraction
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
   intent = in
-[ntchm]
-  standard_name = number_of_chemical_tracers
-  long_name = number of chemical tracers
-  units = count
-  dimensions = ()
-  type = integer
+[ssm]
+  standard_name = sediment_supply_map_for_dust
+  units = none
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
   intent = in
-[chemarr_phys]
-  standard_name = tracer_concentration_of_new_state
-  long_name = tracer concentration updated by physics
-  units = kg kg-1
-  dimensions = (horizontal_loop_extent,vertical_layer_dimension,number_of_tracers)
-  type = real
-  kind = kind_phys
-  intent = inout
-[chemarr]
-  standard_name = tracer_concentration
-  long_name = model layer mean tracer concentration
-  units = kg kg-1
-  dimensions = (horizontal_loop_extent,vertical_layer_dimension,number_of_tracers)
-  type = real
-  kind = kind_phys
+[ustar_threshold]
+  standard_name = threshold_friction_velocity_for_dust
+  units = m s-1
+  dimensions = (horizontal_loop_extent)
+  type = real | kind = kind_phys
+  intent = in
+[constituent_props]
+  standard_name = ccpp_constituent_properties
+  units = none
+  type = ccpp_constituent_prop_ptr_t
+  dimensions = (number_of_ccpp_constituents)
+  intent = in
+[constituents]
+  standard_name = ccpp_constituents
+  units = none
+  type = real | kind = kind_phys
+  dimensions = (horizontal_loop_extent,vertical_layer_dimension,number_of_ccpp_constituents)
   intent = inout
 [errmsg]
   standard_name = ccpp_error_message
-  long_name = error message for error handling in CCPP
   units = none
+  type = character | kind = len=*
   dimensions = ()
-  type = character
-  kind = len=*
   intent = out
 [errflg]
   standard_name = ccpp_error_code
-  long_name = error code for error handling in CCPP
   units = 1
-  dimensions = ()
   type = integer
+  dimensions = ()
   intent = out
-#some variable may be used in the future <<<<<<<<<
-#TODO: no land_ice_fraction found
-#[landicefrac]
-#  standard_name = land_ice_area_fraction_of_cell_area
-#  long_name = fraction of horizontal grid area occupied by land ice
-#  units = frac
-#  dimensions = (horizontal_loop_extent)
-#  type = real
-#  kind = kind_phys
-#  intent = in
-#[snowfrac]
-#  standard_name = surface_snow_area_fraction
-#  long_name = surface snow area fraction
-#  units = frac
-#  dimensions = (horizontal_loop_extent)
-#  type = real
-#  kind = kind_phys
-#  intent = out
-#[t2m]
-#  standard_name = air_temperature_at_2m
-#  long_name = Air temperature at 2m
-#  units = K
-#  dimensions = (horizontal_loop_extent)
-#  type = real
-#  kind = kind_phys
-#  intent = in
-#[dlwsfc]
-#  standard_name = surface_downwelling_longwave_flux
-#  long_name = surface downwelling longwave flux at current time
-#  units = W m-2
-#  dimensions = (horizontal_loop_extent)
-#  type = real
-#  kind = kind_phys
-#  intent = in
-#[rainc_cpl]
-#  standard_name = cumulative_lwe_thickness_of_convective_precipitation_amount_for_coupling
-#  long_name = total convective precipitation
-#  units = m
-#  dimensions = (horizontal_loop_extent)
-#  type = real
-#  kind = kind_phys
-#  intent = in

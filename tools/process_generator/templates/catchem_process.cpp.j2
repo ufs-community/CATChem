@@ -1,0 +1,135 @@
+#include "catchem_process_{{ config.name }}.hpp"
+#include "catchem_diagnostic_manager.hpp"
+#include "catchem_process_registry.hpp"
+#include <algorithm>
+#include <iostream>
+
+extern "C" {
+void run_{{ config.name }}_science_bridge(
+    int n_cols, int n_levels, int n_species, int n_soil, double dt,
+    const char* active_scheme, int diagnostics,
+{% for field in all_met_fields %}
+    double* {{ field }},
+{% endfor %}
+    double* species_density, double* species_radius,
+    double* species_lower_radius, double* species_upper_radius,
+    double* conc, double* tendency,
+{% for diag in config.diagnostics %}
+    double* diag_{{ diag.name }},
+{% endfor %}
+    const int* diagnostic_species_id, int n_diag_species
+);
+}
+
+namespace catchem {
+
+    {{ config.class_name }}Process::{{ config.class_name }}Process()
+        : active_scheme("{{ config.default_scheme if config.default_scheme else config.schemes[0].name }}"),
+          diagnostics_enabled(true) {}
+
+    void {{ config.class_name }}Process::init(std::shared_ptr<StateManager> state) {
+        // 1. Setup diagnostic species IDs dynamically based on species flags
+        for (size_t i = 0; i < state->chem.species_list.size(); ++i) {
+            {% if config.process_behavior.species_filter and config.process_behavior.species_filter.type == 'by_metadata' %}
+            {% for flag in config.process_behavior.species_filter.metadata_flags %}
+            if (state->chem.species_list[i].{{ flag }}) {
+                diagnostic_species_id.push_back(i + 1); // 1-based for Fortran
+            }
+            {% endfor %}
+            {% else %}
+            diagnostic_species_id.push_back(i + 1);
+            {% endif %}
+        }
+
+        // 2. Register C++ Diagnostic fields
+        std::vector<int> dims_1d_as_2d = {state->n_cols, 1};
+        std::vector<int> dims_2d = {state->n_cols, state->n_species};
+        std::vector<int> dims_3d = {state->n_cols, state->n_levels, state->n_species};
+
+        {% for diag in config.diagnostics %}
+        {% if diag.type == 'FIELD_1D_AS_2D' or diag.type == 'FIELD_2D' %}
+        state->diag_mgr->register_field("{{ diag.name }}", "{{ diag.description }}", "{{ diag.units }}",
+                                        DiagType::FIELD_2D, dims_1d_as_2d);
+        {% elif diag.type == 'FIELD_3D' %}
+        state->diag_mgr->register_field("{{ diag.name }}", "{{ diag.description }}", "{{ diag.units }}",
+                                        DiagType::FIELD_3D, dims_3d);
+        {% else %}
+        state->diag_mgr->register_field("{{ diag.name }}", "{{ diag.description }}", "{{ diag.units }}",
+                                        DiagType::FIELD_2D, dims_1d_as_2d);
+        {% endif %}
+        {% endfor %}
+    }
+
+    void {{ config.class_name }}Process::run(std::shared_ptr<StateManager> state) {
+        state->sync_to_host();
+
+        // Retrieve Meteorological state pointers
+        {% for field in all_met_fields %}
+        auto {{ field }}_it = state->met.fields_2d.find("{{ field }}");
+        double* {{ field }}_ptr = ({{ field }}_it != state->met.fields_2d.end()) ? {{ field }}_it->second->host_view.data() : nullptr;
+        if (!{{ field }}_ptr) {
+            auto {{ field }}_3d_it = state->met.fields_3d.find("{{ field }}");
+            if ({{ field }}_3d_it != state->met.fields_3d.end()) {
+                {{ field }}_ptr = {{ field }}_3d_it->second->host_view.data();
+            }
+        }
+        {% endfor %}
+
+        // Fallback dummy arrays for null pointers
+        std::vector<double> dummy_1d(state->n_cols, 0.0);
+        std::vector<double> dummy_soil(state->n_cols * 4, 0.0);
+
+        {% for field in all_met_fields %}
+        if (!{{ field }}_ptr) {{ field }}_ptr = dummy_1d.data();
+        {% endfor %}
+
+        // Retrieve Diagnostic Host Pointers
+        {% for diag in config.diagnostics %}
+        double* diag_{{ diag.name }}_ptr = nullptr;
+        if (state->diag_mgr && diagnostics_enabled) {
+            diag_{{ diag.name }}_ptr = (double*)state->diag_mgr->get_host_pointer("{{ diag.name }}");
+        }
+        {% endfor %}
+
+        double* conc_ptr = state->chem.conc ? state->chem.conc->host_view.data() : nullptr;
+        std::vector<double> local_tendency(state->n_cols * state->n_levels * state->n_species, 0.0);
+
+        // Species properties
+        std::vector<double> density(state->n_species, 2500.0);
+        std::vector<double> radius(state->n_species, 1e-6);
+        std::vector<double> lower_radius(state->n_species, 1e-7);
+        std::vector<double> upper_radius(state->n_species, 1e-5);
+        for (size_t i = 0; i < state->chem.species_list.size(); ++i) {
+            density[i] = state->chem.species_list[i].density;
+            radius[i] = state->chem.species_list[i].radius;
+            lower_radius[i] = state->chem.species_list[i].lower_radius;
+            upper_radius[i] = state->chem.species_list[i].upper_radius;
+        }
+
+        // Invoke Fortran Science Bridge
+        run_{{ config.name }}_science_bridge(
+            state->n_cols, state->n_levels, state->n_species, 4, state->time.timestep,
+            active_scheme.c_str(), diagnostics_enabled ? 1 : 0,
+{% for field in all_met_fields %}
+            {{ field }}_ptr,
+{% endfor %}
+            density.data(), radius.data(), lower_radius.data(), upper_radius.data(),
+            conc_ptr, local_tendency.data(),
+{% for diag in config.diagnostics %}
+            diag_{{ diag.name }}_ptr,
+{% endfor %}
+            diagnostic_species_id.data(), static_cast<int>(diagnostic_species_id.size())
+        );
+    }
+
+    void {{ config.class_name }}Process::finalize() {}
+
+} // namespace catchem
+
+extern "C" {
+void catchem_register_{{ config.name }}_cpp() {
+    catchem::ProcessRegistry::get_instance().register_process(
+        "{{ config.name }}", []() { return std::make_shared<catchem::{{ config.class_name }}Process>(); }
+    );
+}
+}

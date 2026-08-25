@@ -4,6 +4,7 @@
 !!!>
 program test_GridGeometry
    use testing_mod, only: assert, assert_close
+   use GridGeometry_Mod
    use GridGeometry_Mod, only: GridGeometryType
 
    implicit none

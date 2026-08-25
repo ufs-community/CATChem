@@ -32,9 +32,9 @@ process_behavior:
 
 # Required meteorological fields (process-level)
 required_met_fields:
-  - "ustar"
-  - "solar_zenith_angle"
-  - "leaf_area_index"
+  - "USTAR"
+  - "SUNCOS"
+  - "LAI"
 
 # Process-level diagnostics
 diagnostics:

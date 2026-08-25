@@ -1,9 +1,4 @@
-set(
-  _srcs
-  catchem_types.F90
-  catchem_wrapper_utils.F90
-  ccpp_catchem_interface.F90
-)
+set(_srcs ccpp_catchem_interface.F90)
 
 set(_lib CCPP_CATChem_interface)
 

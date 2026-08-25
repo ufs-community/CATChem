@@ -8,9 +8,10 @@ Welcome to the CATChem API documentation. This section provides comprehensive re
 ## � API Organization
 
 ### Core Modules
+
 High-level APIs for the main CATChem systems:
 
-- **[State Management](state-management.md)** - StateContainer, ChemState, MetState, & DiagState data handling
+- **[State Management](state-management.md)** - StateManager, ChemState, MetState, & DiagState data handling
 - **[Process Interface](process-interface.md)** - Process development and integration APIs
 - **[Column Interface](column-interface.md)** - Column virtualization and 1D processing
 - **[Configuration Manager](configuration.md)** - YAML configuration system
@@ -40,43 +41,56 @@ The complete API documentation includes:
 - **[Constants](../CATChem/constants_8_f90.md)** - Physical and mathematical constants
 - **[Utilities](../CATChem/utilities__mod_8_f90.md)** - Common utility functions and tools
 
-
 ## Quick Reference
 
 ### Key Types
 
-| Type | Module | Description |
-|------|--------|-------------|
-| `CATChemType` | `CATChemAPI_Mod` | Main API interface |
-| `StateContainerType` | `state_mod` | Central data container |
-| `ProcessInterface` | `ProcessInterface_Mod` | Base class for processes |
-| `ErrorManagerType` | `error_mod` | Error handling |
-| `ConfigDataType` | `config_mod` | Configuration management |
+| Type | Module / Namespace | Description |
+| --- | --- | --- |
+| `catchem::Core` | C++ Namespace `catchem` | Central orchestration engine |
+| `catchem::StateManager` | C++ Namespace `catchem` | Central memory state (using Kokkos Views) |
+| `catchem::ProcessInterface` | C++ Namespace `catchem` | Base virtual interface class for physics/chemistry processes |
+| `catchem::ProcessRegistry` | C++ Namespace `catchem` | Creator-lambda process registry |
+| `CATChemType` | Fortran `CATChemAPI_Mod` | BIND(C) wrapper API delegate |
+| `StateManagerType` | Fortran `StateManager_Mod` | Fortran delegate container wrapping C++ StateManager |
 
 ### Common Patterns
 
-=== "Process Initialization"
+=== "Process Initialization (C++)"
 
-    ```fortran
-    use ProcessName_Mod
-    type(ProcessNameType) :: process
-    call process%init(container, rc)
+    ```cpp
+    #include <catchem_process_registry.hpp>
+
+    // Retrieve creator and instantiate process
+    auto process = catchem::ProcessRegistry::get_instance().create("gaschem");
+    process->init(state_mgr);
     ```
 
-=== "Error Handling"
+=== "Process Initialization (Fortran)"
 
     ```fortran
-    use error_mod
-    type(ErrorManagerType), pointer :: error_mgr
-    error_mgr => container%get_error_manager()
-    call error_mgr%push_context('routine_name', 'description')
-    ! ... operations ...
-    call error_mgr%pop_context()
+    ! Fortran ScienceBridge binds directly to C++ StateManager
+    use StateManager_Mod, only: StateManagerType
+    type(StateManagerType) :: state_mgr
+    real(fp), pointer :: temp(:,:,:)
+    temp => state_mgr%get_met_state_ptr()%T
     ```
 
-=== "Diagnostic Access"
+=== "Diagnostic Access (C++)"
+
+    ```cpp
+    #include <catchem_diagnostic_manager.hpp>
+
+    // Query and write diagnostic midpoint photolysis rate
+    auto diag_mgr = core->get_diagnostic_manager();
+    double* jrate_ptr = diag_mgr->get_field_pointer("photolysis_rate_jfoo");
+    jrate_ptr[cell_idx] = calculated_jrate;
+    ```
+
+=== "Diagnostic Access (Fortran)"
 
     ```fortran
+    ! Direct bind pointers to C++ DiagnosticManager buffers
     use DiagnosticInterface_Mod
     type(DiagnosticFieldType), pointer :: field
     field => diag_mgr%get_field('field_name', rc)
@@ -85,29 +99,34 @@ The complete API documentation includes:
 
 ## Search Tips
 
-- Use the search box above to find specific procedures or types
-- Browse by module for related functionality
-- Check the inheritance hierarchy for process types
-- Look at usage examples in the source code
+- Use the search box above to find specific C++ namespaces, classes, procedures, or Fortran wrapper types
+- Browse by module or namespace for related functionality
+- Check the inheritance hierarchy for C++ `ProcessInterface` subclasses
+- Look at usage examples in the `tests/` directory (e.g. `tests/test_catchem_gaschem.cpp`)
 
 ## Conventions
 
 ### Naming Conventions
-- **Modules**: `ModuleName_Mod`
-- **Types**: `TypeNameType`
-- **Procedures**: `snake_case`
+
+- **C++ Namespaces**: `catchem`
+- **C++ Classes**: `camelCase` (with leading upper letter, e.g. `StateManager`)
+- **C++ Methods**: `snake_case` (e.g. `run_timestep`, `sync_to_device`)
+- **Fortran Modules**: `ModuleName_Mod`
+- **Fortran Types**: `TypeNameType`
+- **Fortran Procedures**: `snake_case`
 - **Constants**: `UPPER_CASE`
 
 ### Return Codes
-All procedures use integer return codes following the convention:
+
 - `CC_SUCCESS = 0` - Successful operation
 - `CC_FAILURE = -1` - Generic failure
-- Specific error codes defined in `error_mod`
+- C++ methods utilize standard exceptions (e.g., `std::runtime_error`) shielded inside BIND(C) boundaries.
 
 ### Memory Management
-- Pointer associations managed by StateContainer
-- No explicit allocation in process modules
-- Use `intent(in)` for immutable data, `intent(inout)` for modifications
+
+- Central memory managed entirely in C++ `StateManager` using Kokkos Views
+- Dual-space capabilities: synchronized dynamically between Host (CPU) and Device (GPU) memory layout
+- Fortran pointer variables are dynamically bound at runtime to raw C++ host pointers without any duplicate allocations.
 
 ## Contributing
 

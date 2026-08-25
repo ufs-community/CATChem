@@ -230,12 +230,15 @@ nav:
     - Input Files: user-guide/input-files.md
   - Processes:
     - Process Overview: processes/index.md
-    - Dust Process: processes/dust_process.md
-    - External Emission Process: processes/externalemission_process.md
-    - Settling Process: processes/settling_process.md
-    - Settling Velocity Process: processes/settlingvelocity_process.md
-    - Test Process: processes/testprocess_process.md
-    - Vertical Diffusion Process: processes/vertical_diffusion_process.md
+    - Gas Chemistry: processes/gaschem/index.md
+    - Photolysis: processes/photolysis/index.md
+    - Dust: processes/dust/index.md
+    - SeaSalt: processes/seasalt/index.md
+    - Carbon Chemistry: processes/carbchem/carbchem.md
+    - Sulfate Chemistry: processes/so4chem/so4chem.md
+    - Dry Deposition: processes/drydep/drydep.md
+    - Wet Deposition: processes/wetdep/wetdep.md
+    - Settling: processes/settling/settling.md
   - Developer Guide:
     - developer-guide/index.md
     - Contributing Guide: developer-guide/contributing.md

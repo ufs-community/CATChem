@@ -13,8 +13,8 @@ if(BUILD_PROCESSES)
   add_subdirectory(process)
 endif()
 
-# API depends on process modules
+# API depends on process modules and C++ core
 option(BUILD_API "Build API (requires process modules)" ON)
-if(BUILD_API AND BUILD_PROCESSES)
+if(BUILD_API)
   add_subdirectory(api)
 endif()

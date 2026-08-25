@@ -22,7 +22,8 @@ bool yaml_get_logical(void* node_ptr, const char* key, bool* value);
 // Array getter functions
 bool yaml_get_real_array(void* node_ptr, const char* key, double* values, int max_size, int* actual_size);
 bool yaml_get_integer_array(void* node_ptr, const char* key, int* values, int max_size, int* actual_size);
-bool yaml_get_string_array(void* node_ptr, const char* key, char* values, int max_strings, int max_len, int* actual_size);
+bool yaml_get_string_array(void* node_ptr, const char* key, char* values, int max_strings, int max_len,
+                           int* actual_size);
 
 // Utility functions
 bool yaml_has_key(void* node_ptr, const char* key);

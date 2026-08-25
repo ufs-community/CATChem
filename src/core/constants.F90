@@ -34,7 +34,7 @@ module Constants
    REAL(fp), PARAMETER, PUBLIC :: g0     = 9.80665e+0_fp           !< Standard gravity acceleration [m/s^2]
    REAL(fp), PARAMETER, PUBLIC :: g0_100 = 100.0_fp / g0           !< 100 divided by standard gravity
    REAL(fp), PARAMETER, PUBLIC :: Re = 6.3710072e+6_fp             !< Earth's radius [m]
-   REAL(fp), PARAMETER, PUBLIC :: RSTARG = 8.3144598_fp            !< Universal gas constant [J/K/mol]
+   REAL(fp), PARAMETER, PUBLIC :: RSTARG = 8.314462618_fp          !< Universal gas constant [J/K/mol]
    REAL(fp), PARAMETER, PUBLIC :: BOLTZ = 1.38064852e-23_fp        !< Boltzmann's constant [J/K]
    REAL(fp), PARAMETER, PUBLIC :: PLANCK = 6.62606957e-34_fp       !< Planck's constant [J⋅s]
    REAL(fp), PARAMETER, PUBLIC :: CCONST = 2.99792458e+8_fp        !< Speed of light in vacuum [m/s]
@@ -48,7 +48,7 @@ module Constants
    REAL(fp), PARAMETER, PUBLIC :: Cpm = 1.00464e+3_fp              !< Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART
    REAL(fp), PARAMETER, PUBLIC :: Cv = 7.1760e+2_fp                !< Specific heat of dry air at constant volume [J/kg/K]
    REAL(fp), PARAMETER, PUBLIC :: AIRMW = 28.9644_fp               !< Average molecular weight of dry air [g/mol]
-   REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.016_fp                !< Molecular weight of water [g/mol]
+   REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.01528_fp              !< Molecular weight of water [g/mol]
    REAL(fp), PARAMETER, PUBLIC :: Rd   = 287.0_fp                  !< Gas constant for dry air [J/K/kg]
    REAL(fp), PARAMETER, PUBLIC :: Rdg0 = Rd / g0                   !< Gas constant for dry air divided by gravity
    REAL(fp), PARAMETER, PUBLIC :: Rv = 461.00_fp                   !< Gas constant for water vapor [J/K/kg]

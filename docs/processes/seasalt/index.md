@@ -26,28 +26,23 @@ This process follows the modern CATChem architecture where:
 
 ## Usage
 
-### Initialization
+### C++ Initialization & Execution
 
-```fortran
-use ProcessInterface_Mod, only : ProcessInterface
-use ProcessSeaSaltCreator_Mod, only : create_seasalt_process
+```cpp
+#include <catchem_core.hpp>
 
-class(ProcessInterface), allocatable :: process
-type(StateContainerType) :: container
-integer :: rc
+extern "C" void catchem_register_seasalt_cpp();
 
-! Create the process
-call create_seasalt_process(process, rc)
+// 1. Register SeaSalt C++ Process Handler
+catchem_register_seasalt_cpp();
 
-! Initialize the process with container
-call process%init(container, rc)
+// 2. Initialize Core with configuration
+auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+core->add_process(catchem::ProcessRegistry::get_instance().create("seasalt"));
+
+// 3. Execute Timestep
+core->run_timestep(300.0);
 ```
-
-### Running the Process
-
-```fortran
-! Run the process
-call process%run(container, rc)
 ```
 
 ### Finalization
@@ -217,22 +212,18 @@ ctest -R seasalt -V
 
 Extend the generated tests with specific test cases:
 
-```fortran
-subroutine test_seasalt_physics()
-  ! Test the actual physics implementation
-  class(ProcessInterface), allocatable :: process
-  type(StateContainerType) :: container
+```cpp
+#include <catchem_core.hpp>
+#include "catchem_process_seasalt.hpp"
 
-  ! Create and initialize process
-  call create_seasalt_process(process, rc)
-  call process%init(container, rc)
+void test_seasalt_physics() {
+    auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+    auto seasalt = std::make_shared<catchem::SeaSaltProcess>();
+    seasalt->init(core->get_state_manager());
+    core->add_process(seasalt);
 
-  ! Set up test conditions
-  ! Run process
-  call process%run(container, rc)
-
-  ! Verify results
-  call assert_approximately_equals(expected_value, actual_value, tolerance)
+    core->run_timestep(300.0);
+}
 end subroutine
 ```
 

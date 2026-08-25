@@ -61,7 +61,7 @@ program standalone_column_driver
    config%nsteps = nsteps
 
    ! Configuration files (nspecies will be read from these)
-   config%config_file = 'tests/CATChem_config.yml'
+   config%config_file = 'tests/Configs/Default/CATChem_config.yml'
    config%species_file = 'tests/Configs/Default/CATChem_species.yml'
    config%emission_file = 'external_emission_config.yaml'
 

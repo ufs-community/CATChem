@@ -4,7 +4,7 @@ This section describes the configuration system in CATChem, which is designed to
 
 ## Overview
 
-The configuration system in CATChem is based on YAML, a human-readable data serialization format. It is designed to be hierarchical, type-safe, and self-documenting. The system is built around the `ConfigManagerType`, which is a centralized configuration management object that provides a consistent interface for loading, accessing, and validating configuration settings.
+The configuration system in CATChem is based on YAML, a human-readable data serialization format. It is designed to be hierarchical, type-safe, and self-documenting. The system is built around `ConfigManager` (`catchem::ConfigManager` / `ConfigManagerType`), which is a centralized configuration management object that provides a consistent interface for loading, accessing, and validating configuration settings using `yaml-cpp`.
 
 ## Core Concepts
 

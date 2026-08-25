@@ -6,8 +6,7 @@
 # Define {{ config.name }} process sources
 set({{ config.name | upper_snake }}_PROCESS_SOURCES
     {{ config.class_name }}Common_Mod.F90
-    Process{{ config.class_name }}Interface_Mod.F90
-    {{ config.class_name }}ProcessCreator_Mod.F90
+    {{ config.class_name }}ScienceBridge.F90
 )
 
 # Define {{ config.name }} scheme sources
@@ -23,12 +22,22 @@ set({{ config.name | upper_snake }}_ALL_SOURCES
     ${{ "{" }}{{ config.name | upper_snake }}_SCHEME_SOURCES}
 )
 
+if(CATCHEM_ENABLE_KOKKOS)
+    list(APPEND {{ config.name | upper_snake }}_ALL_SOURCES catchem_process_{{ config.name }}.cpp)
+endif()
+
 # Create the {{ config.name }} process library
 set(_lib CATChem_process_{{ config.name }})
 add_library(${_lib} ${{ "{" }}{{ config.name | upper_snake }}_ALL_SOURCES})
 
 # Link with required libraries
 target_link_libraries(${_lib} PUBLIC CATChem_core)
+
+# Conditional Kokkos linking
+if(CATCHEM_ENABLE_KOKKOS)
+  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos CATChem_core_cpp yaml-cpp)
+  target_compile_definitions(${_lib} PRIVATE CATCHEM_ENABLE_KOKKOS)
+endif()
 
 # Additional dependencies
 {% if config.process_type == "chemistry" %}

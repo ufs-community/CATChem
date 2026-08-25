@@ -1,214 +1,151 @@
 # State Management API
 
-This section covers the core state management APIs in CATChem, providing unified data handling across all atmospheric processes.
+This section covers the modernized C++ state management APIs in CATChem, providing unified, high-performance multidimensional data handling on both CPUs and GPUs.
 
 ## Overview
 
-The state management system provides:
+The modernized state management system is centered around C++20 and **Kokkos**. It provides:
 
-- **StateContainer**: Central data repository for all model states
-- **ChemState**: Chemical species concentrations and properties
-- **MetState**: Meteorological fields and atmospheric conditions
-- **DiagState**: Diagnostic variables and output management
+- **catchem::StateManager**: Central data repository holding Kokkos Views for chemical species and meteorological attributes.
+- **catchem::InteropField**: Dynamic field wrapper supporting raw pointer bindings with zero-copy mapping.
+- **Dual-Space Coherence**: Memory tracking and explicit `sync_to_host()` and `sync_to_device()` synchronization boundaries.
+- **Zero-Copy Fortran Interoperability**: Direct dynamic binding of C++ allocated buffers to legacy Fortran pointer slices, eliminating double-buffering.
+
+---
 
 ## Core Components
 
-### StateContainer
+### catchem::StateManager
 
-The `StateContainer` is the central hub for all model data:
+The C++ StateManager coordinates physical grid dimensions and acts as the single source of truth for all simulation states:
 
-```fortran
-use State_Mod
-type(StateContainerType) :: container
+```cpp
+#pragma once
+#include "catchem_chem_state.hpp"
+#include "catchem_met_state.hpp"
+#include "catchem_time_state.hpp"
+#include <memory>
+#include <string>
 
-! Initialize with configuration
-call container%init(config, rc)
+namespace catchem {
 
-! Access chemical state
-call container%get_chem_state(chem_state, rc)
+    class StateManager {
+    public:
+        int n_cols;                             ///< Number of horizontal columns.
+        int n_levels;                           ///< Number of vertical levels.
+        int n_species;                          ///< Number of chemical species.
 
-! Access meteorological state
-call container%get_met_state(met_state, rc)
+        // Structured sub-states holding InteropField host/device views
+        MetState met;                           ///< Meteorological state fields (T, PMID, PEDGE, USTAR, etc.)
+        ChemState chem;                         ///< Chemical state fields (conc, species metadata)
+        TimeState time;                         ///< Simulation timeline and solar parameters
+
+        StateManager(int nc, int nl, int ns);
+
+        // Bind host memory pointers
+        void bind_met_field_2d(const std::string& name, double* ptr);
+        void bind_met_field_3d(const std::string& name, double* ptr);
+        void bind_unified_chemistry(double* ptr);
+
+        // Explicitly copies modified host data to GPU device space
+        void sync_to_device();
+
+        // Explicitly copies modified device calculations back to CPU memory buffers
+        void sync_to_host();
+    };
+
+} // namespace catchem
 ```
 
-**Key Features:**
-
-- Unified data access across all processes
-- Automatic memory management
-- Thread-safe operations
-- Efficient column-based access
-
-**Auto-Generated Documentation:** [State Module](../CATChem/namespacestate__mod.md)
-
-## State Types
-
-### Chemical State (ChemState)
-
-Manages chemical species concentrations:
-
-```fortran
-type(ChemStateType) :: chem_state
-
-! Get species concentration
-call chem_state%get_species_conc(species_name, concentration, rc)
-
-! Set species concentration
-call chem_state%set_species_conc(species_name, new_concentration, rc)
-
-! Get all species data
-call chem_state%get_all_species(species_data, rc)
-```
-
-**Auto-Generated Documentation:** [ChemState Reference](../CATChem/namespacechemstate__mod.md)
-
-### Meteorological State (MetState)
-
-Handles atmospheric conditions:
-
-```fortran
-type(MetStateType) :: met_state
-
-! Get temperature profile
-call met_state%get_temperature(temperature, rc)
-
-! Get pressure levels
-call met_state%get_pressure(pressure, rc)
-
-! Get wind components
-call met_state%get_wind(u_wind, v_wind, w_wind, rc)
-```
-
-**Auto-Generated Documentation:** [MetState Reference](../CATChem/namespacemetstate__mod.md)
+---
 
 ## Data Access Patterns
 
-### Direct Access
+### 1. C++ Native Access (Kokkos parallel kernels)
 
-For simple operations:
+C++ kernels execute directly on GPU device space or CPU host space using standard Kokkos accessors:
 
-```fortran
-! Get pointer to concentration array
-real(fp), pointer :: conc(:,:,:) => null()
-call container%get_concentration_ptr(species_idx, conc, rc)
-
-! Modify data directly
-conc(i, j, k) = new_value
+```cpp
+// Kernel executing on GPU Device space
+auto conc_device = state->chem_conc_device;
+Kokkos::parallel_for("ScaleChemistry", Kokkos::MDRangePolicy<Kokkos::Rank<3>>({0,0,0}, {n_species, n_cols, n_levels}),
+    KOKKOS_LAMBDA(const int s, const int icol, const int k) {
+        conc_device(s, icol, k) *= 1.05; // Apply scaling factor in-place
+    });
 ```
 
-### Column Processing
+### 2. Zero-Copy Fortran Access (C-API boundaries)
 
-For optimal performance:
-
-```fortran
-! Process all columns
-do j = 1, ny
-    do i = 1, nx
-        call container%get_column(i, j, column, rc)
-        call process_column(column)
-        call container%update_column(i, j, column, rc)
-    end do
-end do
-```
-
-### Batch Operations
-
-For bulk data handling:
+Legacy Fortran codes query the StateManager dynamically using BIND(C) flat APIs and construct standard pointer slices without any allocations or copies:
 
 ```fortran
-! Get multiple species at once
-call container%get_species_batch(species_list, concentration_batch, rc)
+use iso_c_binding
+use StateManager_Mod, only: StateManagerType
+use Interop_Mod, only: get_cpp_field
+implicit none
 
-! Update multiple species
-call container%set_species_batch(species_list, new_concentrations, rc)
+type(StateManagerType) :: state_mgr
+real(fp), pointer :: temp_ptr(:,:,:) => null()
+integer :: nx, ny, nz, rc
+
+! 1. Bind Fortran pointer directly to C++ StateManager backing buffer
+call get_cpp_field(state_mgr%cpp_ptr, "T", temp_ptr, [nx, ny, nz], rc)
+
+! 2. Modify memory in-place directly on C++ allocated buffers
+temp_ptr(i, j, k) = 298.15_fp
 ```
 
-## Error Handling
+---
 
-All state operations include comprehensive error handling:
+## Dual-Space Synchronization
 
-```fortran
-use Error_Mod
+To prevent race conditions across heterogeneous systems (CPU host and GPU devices), developers must explicitly schedule memory synchronizations at computational boundaries:
 
-! Check return codes
-call container%get_species_conc(species_name, conc, rc)
-if (rc /= CC_SUCCESS) then
-    call error_mgr%report_error(ERROR_DATA_ACCESS, &
-                               'Failed to get species concentration', rc)
-    return
-endif
+```cpp
+// 1. Host-model updates variables on the CPU host (via Fortran or C-API)
+catchem_state_bind_3d(state_ptr, "temp", host_temp_buffer);
 
-! Use error context for debugging
-call error_mgr%push_context('state_operation', 'Getting chemical data')
-call container%operation(data, rc)
-call error_mgr%pop_context()
+// 2. Synchronize modified host memory to GPU device before C++ Kokkos execution
+state->sync_to_device();
+
+// 3. Execute Kokkos GPU kernel
+core->run_timestep(300.0);
+
+// 4. Synchronize GPU results back to CPU host buffers for I/O and diagnostics
+state->sync_to_host();
 ```
 
-**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
+---
 
 ## Thread Safety
 
-State operations are designed for parallel processing:
+- **Kokkos Space**: Kokkos Views utilize standard memory traits and layouts ensuring safe concurrent execution inside multi-threaded OpenMP, CUDA, or HIP dispatch zones.
+- **Fortran OMP Boundaries**: Fortran drivers can safely process columns concurrently using standard OpenMP directives because all C++ pointer-bindings are thread-safe and contiguous.
 
-```fortran
-! Thread-safe column access
-!$OMP PARALLEL DO PRIVATE(column, rc)
-do j = 1, ny
-    do i = 1, nx
-        call container%get_column_safe(i, j, column, rc)
-        call process_column(column)
-        call container%update_column_safe(i, j, column, rc)
-    end do
-end do
-!$OMP END PARALLEL DO
-```
-
-## Memory Management
-
-Automatic memory management with manual control when needed:
-
-```fortran
-! Automatic cleanup
-call container%finalize(rc)  ! Cleans up all allocated memory
-
-! Manual memory control
-call container%allocate_workspace(size, rc)
-call container%deallocate_workspace(rc)
-
-! Memory optimization
-call container%optimize_memory_layout(rc)
-```
+---
 
 ## Best Practices
 
 ### Performance
 
-1. **Use column processing** for atmospheric calculations
-2. **Batch operations** for multiple species
-3. **Avoid unnecessary copies** - use pointers when possible
-4. **Cache column data** for repeated access
+1. **Enforce Zero-Copy**: Never allocate intermediate local arrays inside wrappers or process modules. Retrieve the raw pointer via the dynamic interop utility and write directly to C++ memory buffers.
+2. **Combine Synchronizations**: Group multiple field updates together and call `sync_to_device()` exactly once before running a timestep.
+3. **Use Contiguous Layouts**: Leverage `Kokkos::LayoutLeft` or standard C-row-major contiguous buffers to maximize hardware pre-fetcher cache alignment.
 
 ### Safety
 
-1. **Always check return codes**
-2. **Use error context** for debugging
-3. **Initialize before use**
-4. **Clean up resources** in finalize routines
+1. **Check Bind Status**: Ensure that physical fields (like `temp`, `pres`, `AIRDEN_DRY`) are successfully bound before invoking calculations; non-bound fields will return a null pointer, raising a segmentation fault.
+2. **Explicit Memory Sync**: Always call `sync_to_host()` before invoking NetCDF output writers or legacy diagnostics.
 
-### Debugging
-
-1. **Enable debug mode** for detailed logging
-2. **Use error context** to track operation flow
-3. **Validate data bounds** in development builds
-4. **Monitor memory usage** for large simulations
+---
 
 ## See Also
 
-- [Process Interface API](process-interface.md) - How processes interact with state
-- [Column Interface API](column-interface.md) - Efficient column-based processing
-- [Configuration API](configuration.md) - State initialization and setup
+- [Process Interface API](process-interface.md) - Physics processes lifecycles
+- [Column Interface API](column-interface.md) - GridManager column slicing
+- [Configuration API](configuration.md) - YAML configuration loadings
+- [GasChem Process Documentation](../processes/gaschem/index.md) - C++ MICM state handling
 
 ---
 
 **Auto-Generated Documentation:** [Complete State Management Reference](../CATChem/namespacestatemanager__mod.md)
-
-**Auto-Generated Documentation:** [Complete State Interface Reference](../CATChem/namespacestate__interface__mod.md)

@@ -548,7 +548,7 @@ contains
       real(fp), intent(in)  :: XLAI        !< Leaf area index
       integer,  intent(in)  :: II          !< Index of the drydep land type
       !integer,  intent(in)  :: N_SPC      !< Species ID (TODO: may be changed to species name)
-      character(len=20), intent(in) :: SPC !< Species name
+      character(len=*), intent(in) :: SPC !< Species name
       !some inputs are for O3 over water and Hg over Amazon forest (not sure if we should include them for now)
       real(fp), intent(in)  :: SALINITY    !< Salinity of the ocean
       real(fp), intent(in)  :: TSKIN       !< Skin temperature

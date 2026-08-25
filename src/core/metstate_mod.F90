@@ -15,6 +15,7 @@ MODULE MetState_Mod
    USE GridGeometry_Mod
    USE Met_Utilities_Mod
    USE TimeState_Mod, only: TimeStateType
+   USE iso_c_binding, only: c_ptr, c_null_ptr, c_associated
 
 
 
@@ -36,166 +37,167 @@ MODULE MetState_Mod
    !! \ingroup core_modules
    !!!>
    TYPE, PUBLIC :: MetStateType
+      type(c_ptr) :: cpp_ptr = c_null_ptr
       CHARACTER(LEN=3)             :: State     = 'MET'    !< Name of this state
       INTEGER                      :: NLEVS     = 127      !< Number of vertical levels (default)
       TYPE(GridGeometryType) :: geometry
       INTEGER                      :: NSURFTYPE = 20       !< Number of surface types (default)
       ! Grid flags (2D: nx, ny)
-      LOGICAL, ALLOCATABLE         :: IsLand(:,:)       !< Is this a land grid box?
-      LOGICAL, ALLOCATABLE         :: IsWater(:,:)      !< Is this a water grid box?
-      LOGICAL, ALLOCATABLE         :: IsIce(:,:)        !< Is this an ice grid box?
-      LOGICAL, ALLOCATABLE         :: IsSnow(:,:)       !< Is this a snow grid box?
+      LOGICAL, POINTER         :: IsLand(:,:) => null()       !< Is this a land grid box?
+      LOGICAL, POINTER         :: IsWater(:,:) => null()      !< Is this a water grid box?
+      LOGICAL, POINTER         :: IsIce(:,:) => null()        !< Is this an ice grid box?
+      LOGICAL, POINTER         :: IsSnow(:,:) => null()       !< Is this a snow grid box?
       ! Vertical flags and arrays (3D: nx, ny, nz)
-      LOGICAL,  ALLOCATABLE        :: InStratMeso(:,:,:)    !< Are we in the stratosphere or mesosphere?
-      LOGICAL,  ALLOCATABLE        :: InStratosphere(:,:,:) !< Are we in the stratosphere?
-      LOGICAL,  ALLOCATABLE        :: InTroposphere(:,:,:)  !< Are we in the troposphere?
-      LOGICAL,  ALLOCATABLE        :: InPbl(:,:,:)          !< Are we in the PBL?
-      LOGICAL,  ALLOCATABLE        :: IsLocalNoon(:,:)      !< Is it local noon (between 11 and 13 local solar time)?
+      LOGICAL, POINTER        :: InStratMeso(:,:,:) => null()    !< Are we in the stratosphere or mesosphere?
+      LOGICAL, POINTER        :: InStratosphere(:,:,:) => null() !< Are we in the stratosphere?
+      LOGICAL, POINTER        :: InTroposphere(:,:,:) => null()  !< Are we in the troposphere?
+      LOGICAL, POINTER        :: InPbl(:,:,:) => null()          !< Are we in the PBL?
+      LOGICAL, POINTER        :: IsLocalNoon(:,:) => null()      !< Is it local noon (between 11 and 13 local solar time)?
       ! Surface properties (2D: nx, ny)
-      REAL(fp), ALLOCATABLE        :: AREA_M2(:,:)      !< Grid box surface area [m2]
-      INTEGER,  ALLOCATABLE        :: LWI(:,:)          !< Land water ice mask (0-sea, 1-land, 2-ice)
-      INTEGER,  ALLOCATABLE        :: DLUSE(:,:)        !< Dominant land-use type
-      REAL(fp), ALLOCATABLE        :: FRVEG(:,:)        !< Fraction of veg [1]
-      REAL(fp), ALLOCATABLE        :: FRLAKE(:,:)       !< Fraction of lake [1]
-      REAL(fp), ALLOCATABLE        :: FRLAND(:,:)       !< Fraction of land [1]
-      REAL(fp), ALLOCATABLE        :: FRLANDIC(:,:)     !< Fraction of land ice [1]
-      REAL(fp), ALLOCATABLE        :: FROCEAN(:,:)      !< Fraction of ocean [1]
-      REAL(fp), ALLOCATABLE        :: FRSEAICE(:,:)     !< Sfc sea ice fraction
-      REAL(fp), ALLOCATABLE        :: FRSNO(:,:)        !< Sfc snow fraction
-      REAL(fp), ALLOCATABLE        :: LAI(:,:)          !< Leaf area index [m2/m2] (online) Dominant
-      REAL(fp), ALLOCATABLE        :: GVF(:,:)          !< Green Vegetative Fraction
+      REAL(fp), POINTER        :: AREA_M2(:,:) => null()      !< Grid box surface area [m2]
+      INTEGER, POINTER        :: LWI(:,:) => null()          !< Land water ice mask (0-sea, 1-land, 2-ice)
+      INTEGER, POINTER        :: DLUSE(:,:) => null()        !< Dominant land-use type
+      REAL(fp), POINTER        :: FRVEG(:,:) => null()        !< Fraction of veg [1]
+      REAL(fp), POINTER        :: FRLAKE(:,:) => null()       !< Fraction of lake [1]
+      REAL(fp), POINTER        :: FRLAND(:,:) => null()       !< Fraction of land [1]
+      REAL(fp), POINTER        :: FRLANDIC(:,:) => null()     !< Fraction of land ice [1]
+      REAL(fp), POINTER        :: FROCEAN(:,:) => null()      !< Fraction of ocean [1]
+      REAL(fp), POINTER        :: FRSEAICE(:,:) => null()     !< Sfc sea ice fraction
+      REAL(fp), POINTER        :: FRSNO(:,:) => null()        !< Sfc snow fraction
+      REAL(fp), POINTER        :: LAI(:,:) => null()          !< Leaf area index [m2/m2] (online) Dominant
+      REAL(fp), POINTER        :: GVF(:,:) => null()          !< Green Vegetative Fraction
       ! Dust Only Variables
-      REAL(fp), ALLOCATABLE        :: RDRAG(:,:)        !< Drag Partition [1]
-      REAL(fp), ALLOCATABLE        :: USTAR_THRESHOLD(:,:) !< Threshold friction velocity [m/s]
-      REAL(fp), ALLOCATABLE        :: SSM(:,:)          !< Sediment Supply Map [1]
+      REAL(fp), POINTER        :: RDRAG(:,:) => null()        !< Drag Partition [1]
+      REAL(fp), POINTER        :: USTAR_THRESHOLD(:,:) => null() !< Threshold friction velocity [m/s]
+      REAL(fp), POINTER        :: SSM(:,:) => null()          !< Sediment Supply Map [1]
       ! Surface and ice properties (2D: nx, ny)
-      REAL(fp), ALLOCATABLE        :: SEAICE00(:,:)     !< Sea ice coverage 00-10%
-      REAL(fp), ALLOCATABLE        :: SEAICE10(:,:)     !< Sea ice coverage 10-20%
-      REAL(fp), ALLOCATABLE        :: SEAICE20(:,:)     !< Sea ice coverage 20-30%
-      REAL(fp), ALLOCATABLE        :: SEAICE30(:,:)     !< Sea ice coverage 30-40%
-      REAL(fp), ALLOCATABLE        :: SEAICE40(:,:)     !< Sea ice coverage 40-50%
-      REAL(fp), ALLOCATABLE        :: SEAICE50(:,:)     !< Sea ice coverage 50-60%
-      REAL(fp), ALLOCATABLE        :: SEAICE60(:,:)     !< Sea ice coverage 60-70%
-      REAL(fp), ALLOCATABLE        :: SEAICE70(:,:)     !< Sea ice coverage 70-80%
-      REAL(fp), ALLOCATABLE        :: SEAICE80(:,:)     !< Sea ice coverage 80-90%
-      REAL(fp), ALLOCATABLE        :: SEAICE90(:,:)     !< Sea ice coverage 90-100%
-      REAL(fp), ALLOCATABLE        :: SNODP(:,:)        !< Snow depth [m]
-      REAL(fp), ALLOCATABLE        :: SNOMAS(:,:)       !< Snow mass [kg/m2]
+      REAL(fp), POINTER        :: SEAICE00(:,:) => null()     !< Sea ice coverage 00-10%
+      REAL(fp), POINTER        :: SEAICE10(:,:) => null()     !< Sea ice coverage 10-20%
+      REAL(fp), POINTER        :: SEAICE20(:,:) => null()     !< Sea ice coverage 20-30%
+      REAL(fp), POINTER        :: SEAICE30(:,:) => null()     !< Sea ice coverage 30-40%
+      REAL(fp), POINTER        :: SEAICE40(:,:) => null()     !< Sea ice coverage 40-50%
+      REAL(fp), POINTER        :: SEAICE50(:,:) => null()     !< Sea ice coverage 50-60%
+      REAL(fp), POINTER        :: SEAICE60(:,:) => null()     !< Sea ice coverage 60-70%
+      REAL(fp), POINTER        :: SEAICE70(:,:) => null()     !< Sea ice coverage 70-80%
+      REAL(fp), POINTER        :: SEAICE80(:,:) => null()     !< Sea ice coverage 80-90%
+      REAL(fp), POINTER        :: SEAICE90(:,:) => null()     !< Sea ice coverage 90-100%
+      REAL(fp), POINTER        :: SNODP(:,:) => null()        !< Snow depth [m]
+      REAL(fp), POINTER        :: SNOMAS(:,:) => null()       !< Snow mass [kg/m2]
 
       ! Soil and land use arrays (2D for counts, 3D for fractions)
-      INTEGER,  ALLOCATABLE        :: DSOILTYPE(:,:)    !< Dominant soil type
-      REAL(fp), ALLOCATABLE        :: CLAYFRAC(:,:)     !< Fraction of clay [1]
-      REAL(fp), ALLOCATABLE        :: SANDFRAC(:,:)     !< Fraction of sand [1]
-      INTEGER,  ALLOCATABLE        :: nLNDTYPE(:,:)     !< # of landtypes in box (I,J)
-      REAL(fp), ALLOCATABLE        :: GWETTOP(:,:)      !< Top soil moisture [1]
-      REAL(fp), ALLOCATABLE        :: GWETROOT(:,:)     !< Root Zone soil moisture [1]
-      REAL(fp), ALLOCATABLE        :: WILT(:,:)         !< Wilt point [1]
+      INTEGER, POINTER        :: DSOILTYPE(:,:) => null()    !< Dominant soil type
+      REAL(fp), POINTER        :: CLAYFRAC(:,:) => null()     !< Fraction of clay [1]
+      REAL(fp), POINTER        :: SANDFRAC(:,:) => null()     !< Fraction of sand [1]
+      INTEGER, POINTER        :: nLNDTYPE(:,:) => null()     !< # of landtypes in box (I,J)
+      REAL(fp), POINTER        :: GWETTOP(:,:) => null()      !< Top soil moisture [1]
+      REAL(fp), POINTER        :: GWETROOT(:,:) => null()     !< Root Zone soil moisture [1]
+      REAL(fp), POINTER        :: WILT(:,:) => null()         !< Wilt point [1]
       INTEGER                      :: nSOIL             !< # number of soil layers
       INTEGER                      :: nSOILTYPE         !< # number of soil types
-      REAL(fp), ALLOCATABLE        :: SOILM(:,:,:)      !< Volumetric Soil moisture [m3/m3] (nx,ny,nsoil)
-      REAL(fp), ALLOCATABLE        :: SOILT(:,:,:)      !< Temperature of soil layer [K] (nx,ny,nsoil)
-      REAL(fp), ALLOCATABLE        :: FRLANDUSE(:,:,:)  !< Fractional Land Use (nx,ny,nlanduse)
-      REAL(fp), ALLOCATABLE        :: FRSOIL(:,:,:)     !< Fractional Soil (nx,ny,nsoil)
-      REAL(fp), ALLOCATABLE        :: FRLAI(:,:,:)      !< LAI in each Fractional Land use type [m2/m2] (nx,ny,nlanduse)
-      INTEGER, ALLOCATABLE         :: ILAND(:,:,:)      !< Land type ID in current grid box (nx,ny,nlanduse)
+      REAL(fp), POINTER        :: SOILM(:,:,:) => null()      !< Volumetric Soil moisture [m3/m3] (nx,ny,nsoil)
+      REAL(fp), POINTER        :: SOILT(:,:,:) => null()      !< Temperature of soil layer [K] (nx,ny,nsoil)
+      REAL(fp), POINTER        :: FRLANDUSE(:,:,:) => null()  !< Fractional Land Use (nx,ny,nlanduse)
+      REAL(fp), POINTER        :: FRSOIL(:,:,:) => null()     !< Fractional Soil (nx,ny,nsoil)
+      REAL(fp), POINTER        :: FRLAI(:,:,:) => null()      !< LAI in each Fractional Land use type [m2/m2] (nx,ny,nlanduse)
+      INTEGER, POINTER         :: ILAND(:,:,:) => null()      !< Land type ID in current grid box (nx,ny,nlanduse)
       ! Location arrays (1D for single point, 2D for grid)
-      real(fp), ALLOCATABLE        :: LAT(:,:)         !< Latitude
-      real(fp), ALLOCATABLE        :: LON(:,:)         !< Longitude
+      real(fp), POINTER        :: LAT(:,:) => null()         !< Latitude
+      real(fp), POINTER        :: LON(:,:) => null()         !< Longitude
       character(len=20)            :: LUCNAME          !< name of land use category
       ! Surface meteorological properties (2D: nx, ny)
-      REAL(fp), ALLOCATABLE        :: ALBD_VIS(:,:)     !< Visible surface albedo [1]
-      REAL(fp), ALLOCATABLE        :: ALBD_NIR(:,:)     !< Near-IR surface albedo [1]
-      REAL(fp), ALLOCATABLE        :: ALBD_UV(:,:)      !< UV surface albedo [1]
-      REAL(fp), ALLOCATABLE        :: PARDR(:,:)        !< Direct photsynthetically active radiation [W/m2]
-      REAL(fp), ALLOCATABLE        :: PARDF(:,:)        !< Diffuse photsynthetically active radiation [W/m2]
-      REAL(fp), ALLOCATABLE        :: SUNCOS(:,:)       !< COS(solar zenith angle) at current time
-      REAL(fp), ALLOCATABLE        :: SUNCOSmid(:,:)    !< COS(solar zenith angle) at midpoint of chem timestep
-      REAL(fp), ALLOCATABLE        :: SUNCOSsum(:,:)    !< Sum of COS(SZA) for HEMCO OH diurnal variability
-      REAL(fp), ALLOCATABLE        :: SZAFACT(:,:)      !< Diurnal scale factor for HEMCO OH diurnal variability (computed) [1]
-      REAL(fp), ALLOCATABLE        :: SWGDN(:,:)        !< Incident radiation @ ground [W/m2]
-      REAL(fp), ALLOCATABLE        :: EFLUX(:,:)        !< Latent heat flux [W/m2]
-      REAL(fp), ALLOCATABLE        :: HFLUX(:,:)        !< Sensible heat flux [W/m2]
-      REAL(fp), ALLOCATABLE        :: HFLUX_UP(:,:)     !< Sensible upward heat flux [W/m2]
-      REAL(fp), ALLOCATABLE        :: U10M(:,:)         !< E/W wind speed @ 10m ht [m/s]
-      REAL(fp), ALLOCATABLE        :: USTAR(:,:)        !< Friction velocity [m/s]
-      REAL(fp), ALLOCATABLE        :: V10M(:,:)         !< N/S wind speed @ 10m ht [m/s]
-      REAL(fp), ALLOCATABLE        :: Z0(:,:)           !< Surface roughness height [m]
-      REAL(fp), ALLOCATABLE        :: Z0H(:,:)          !< Surface roughness height, for heat (thermal roughness) [m]
-      REAL(fp), ALLOCATABLE        :: FRZ0(:,:,:)       !< Aerodynamic Roughness Length per FRLANDUSE (nx,ny,nlanduse)
-      REAL(fp), ALLOCATABLE        :: PBLH(:,:)         !< PBL height [m]
-      REAL(fp), ALLOCATABLE        :: SALINITY(:,:)     !< Salinity of the ocean [part per thousand]
-      REAL(fp), ALLOCATABLE        :: CMM(:,:)          !< Aerodynamic conductance [m/s]
-      REAL(fp), ALLOCATABLE        :: ORO(:,:)          !< surface height above sea level [m]
-      REAL(fp), ALLOCATABLE        :: RCA(:,:)          !< Aerodynamic resistance in canopy [s/m]
+      REAL(fp), POINTER        :: ALBD_VIS(:,:) => null()     !< Visible surface albedo [1]
+      REAL(fp), POINTER        :: ALBD_NIR(:,:) => null()     !< Near-IR surface albedo [1]
+      REAL(fp), POINTER        :: ALBD_UV(:,:) => null()      !< UV surface albedo [1]
+      REAL(fp), POINTER        :: PARDR(:,:) => null()        !< Direct photsynthetically active radiation [W/m2]
+      REAL(fp), POINTER        :: PARDF(:,:) => null()        !< Diffuse photsynthetically active radiation [W/m2]
+      REAL(fp), POINTER        :: SUNCOS(:,:) => null()       !< COS(solar zenith angle) at current time
+      REAL(fp), POINTER        :: SUNCOSmid(:,:) => null()    !< COS(solar zenith angle) at midpoint of chem timestep
+      REAL(fp), POINTER        :: SUNCOSsum(:,:) => null()    !< Sum of COS(SZA) for HEMCO OH diurnal variability
+      REAL(fp), POINTER        :: SZAFACT(:,:) => null()      !< Diurnal scale factor for HEMCO OH diurnal variability (computed) [1]
+      REAL(fp), POINTER        :: SWGDN(:,:) => null()        !< Incident radiation @ ground [W/m2]
+      REAL(fp), POINTER        :: EFLUX(:,:) => null()        !< Latent heat flux [W/m2]
+      REAL(fp), POINTER        :: HFLUX(:,:) => null()        !< Sensible heat flux [W/m2]
+      REAL(fp), POINTER        :: HFLUX_UP(:,:) => null()     !< Sensible upward heat flux [W/m2]
+      REAL(fp), POINTER        :: U10M(:,:) => null()         !< E/W wind speed @ 10m ht [m/s]
+      REAL(fp), POINTER        :: USTAR(:,:) => null()        !< Friction velocity [m/s]
+      REAL(fp), POINTER        :: V10M(:,:) => null()         !< N/S wind speed @ 10m ht [m/s]
+      REAL(fp), POINTER        :: Z0(:,:) => null()           !< Surface roughness height [m]
+      REAL(fp), POINTER        :: Z0H(:,:) => null()          !< Surface roughness height, for heat (thermal roughness) [m]
+      REAL(fp), POINTER        :: FRZ0(:,:,:) => null()       !< Aerodynamic Roughness Length per FRLANDUSE (nx,ny,nlanduse)
+      REAL(fp), POINTER        :: PBLH(:,:) => null()         !< PBL height [m]
+      REAL(fp), POINTER        :: SALINITY(:,:) => null()     !< Salinity of the ocean [part per thousand]
+      REAL(fp), POINTER        :: CMM(:,:) => null()          !< Aerodynamic conductance [m/s]
+      REAL(fp), POINTER        :: ORO(:,:) => null()          !< surface height above sea level [m]
+      REAL(fp), POINTER        :: RCA(:,:) => null()          !< Aerodynamic resistance in canopy [s/m]
       REAL(fp), ALLOCATABLE        :: WCA(:,:)          ! canopy water amount [kg/m2]
       ! 3D volumetric fields (3D: nx, ny, nz)
-      REAL(fp), ALLOCATABLE        :: F_OF_PBL(:,:,:)       !< Fraction of box within PBL [1]
-      REAL(fp), ALLOCATABLE        :: F_UNDER_PBLTOP(:,:,:) !< Fraction of box under PBL top
-      real(fp), ALLOCATABLE        :: OBK(:,:)          !< Monin-Obhukov length [m]
+      REAL(fp), POINTER        :: F_OF_PBL(:,:,:) => null()       !< Fraction of box within PBL [1]
+      REAL(fp), POINTER        :: F_UNDER_PBLTOP(:,:,:) => null() !< Fraction of box under PBL top
+      real(fp), POINTER        :: OBK(:,:) => null()          !< Monin-Obhukov length [m]
       ! Cloud and precipitation properties (2D for surface, 3D for volumetric)
-      REAL(fp), ALLOCATABLE        :: CLDFRC(:,:)       !< Column cloud fraction [1]
-      REAL(fp), ALLOCATABLE        :: CONV_DEPTH(:,:)   !< Convective cloud depth [m]
-      REAL(fp), ALLOCATABLE        :: FLASH_DENS(:,:)   !< Lightning flash density [#/km2/s]
-      REAL(fp), ALLOCATABLE        :: CNV_FRC(:,:)      !< Convective fraction [1]
-      REAL(fp), ALLOCATABLE        :: CLDF(:,:,:)       !< 3-D cloud fraction [1]
-      REAL(fp), ALLOCATABLE        :: CMFMC(:,:,:)      !< Cloud mass flux [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: DQRCU(:,:,:)      !< Conv precip production rate [kg/kg/s] (assume per dry air)
-      REAL(fp), ALLOCATABLE        :: DQRLSAN(:,:,:)    !< LS precip prod rate [kg/kg/s] (assume per dry air)
-      REAL(fp), ALLOCATABLE        :: DTRAIN(:,:,:)     !< Detrainment flux [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PRECANV(:,:)      !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
-      REAL(fp), ALLOCATABLE        :: PRECCON(:,:)      !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
-      REAL(fp), ALLOCATABLE        :: PRECLSC(:,:)      !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
-      real(fp), ALLOCATABLE        :: REEVAPLS(:,:,:)   !< Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
+      REAL(fp), POINTER        :: CLDFRC(:,:) => null()       !< Column cloud fraction [1]
+      REAL(fp), POINTER        :: CONV_DEPTH(:,:) => null()   !< Convective cloud depth [m]
+      REAL(fp), POINTER        :: FLASH_DENS(:,:) => null()   !< Lightning flash density [#/km2/s]
+      REAL(fp), POINTER        :: CNV_FRC(:,:) => null()      !< Convective fraction [1]
+      REAL(fp), POINTER        :: CLDF(:,:,:) => null()       !< 3-D cloud fraction [1]
+      REAL(fp), POINTER        :: CMFMC(:,:,:) => null()      !< Cloud mass flux [kg/m2/s]
+      REAL(fp), POINTER        :: DQRCU(:,:,:) => null()      !< Conv precip production rate [kg/kg/s] (assume per dry air)
+      REAL(fp), POINTER        :: DQRLSAN(:,:,:) => null()    !< LS precip prod rate [kg/kg/s] (assume per dry air)
+      REAL(fp), POINTER        :: DTRAIN(:,:,:) => null()     !< Detrainment flux [kg/m2/s]
+      REAL(fp), POINTER        :: PRECANV(:,:) => null()      !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
+      REAL(fp), POINTER        :: PRECCON(:,:) => null()      !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
+      REAL(fp), POINTER        :: PRECLSC(:,:) => null()      !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
+      real(fp), POINTER        :: REEVAPLS(:,:,:) => null()   !< Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
       ! 3D cloud and precipitation arrays
-      REAL(fp), ALLOCATABLE        :: QI(:,:,:)         !< Mass fraction of cloud ice water [kg/kg dry air]
-      REAL(fp), ALLOCATABLE        :: QL(:,:,:)         !< Mass fraction of cloud liquid water [kg/kg dry air]
-      REAL(fp), ALLOCATABLE        :: PFICU(:,:,:)      !< Dwn flux ice prec:conv [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PFILSAN(:,:,:)    !< Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
-      REAL(fp), ALLOCATABLE        :: PFLCU(:,:,:)      !< Dwn flux liq prec:conv [kg/m2/s]
-      REAL(fp), ALLOCATABLE        :: PFLLSAN(:,:,:)    !< Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
-      REAL(fp), ALLOCATABLE        :: TAUCLI(:,:,:)     !< Opt depth of ice clouds [1]
-      REAL(fp), ALLOCATABLE        :: TAUCLW(:,:,:)     !< Opt depth of H2O clouds [1]
+      REAL(fp), POINTER        :: QI(:,:,:) => null()         !< Mass fraction of cloud ice water [kg/kg dry air]
+      REAL(fp), POINTER        :: QL(:,:,:) => null()         !< Mass fraction of cloud liquid water [kg/kg dry air]
+      REAL(fp), POINTER        :: PFICU(:,:,:) => null()      !< Dwn flux ice prec:conv [kg/m2/s]
+      REAL(fp), POINTER        :: PFILSAN(:,:,:) => null()    !< Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+      REAL(fp), POINTER        :: PFLCU(:,:,:) => null()      !< Dwn flux liq prec:conv [kg/m2/s]
+      REAL(fp), POINTER        :: PFLLSAN(:,:,:) => null()    !< Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+      REAL(fp), POINTER        :: TAUCLI(:,:,:) => null()     !< Opt depth of ice clouds [1]
+      REAL(fp), POINTER        :: TAUCLW(:,:,:) => null()     !< Opt depth of H2O clouds [1]
       ! Surface scalars (now 2D: nx, ny)
-      REAL(fp), ALLOCATABLE        :: PHIS(:,:)         !< Surface geopotential height [m2/s2]
-      REAL(fp), ALLOCATABLE        :: PS_WET(:,:)       !< Wet surface pressure at start of timestep [Pa]
-      REAL(fp), ALLOCATABLE        :: PS_DRY(:,:)       !< Dry surface pressure at start of timestep [Pa]
-      REAL(fp), ALLOCATABLE        :: QV2M(:,:)         !< Specific Humidity at 2m [kg/kg]
-      REAL(fp), ALLOCATABLE        :: T2M(:,:)          !< Temperature 2m [K]
-      REAL(fp), ALLOCATABLE        :: TS(:,:)           !< Surface temperature [K]
-      REAL(fp), ALLOCATABLE        :: TSKIN(:,:)        !< Surface skin temperature [K]
-      REAL(fp), ALLOCATABLE        :: SST(:,:)          !< Sea surface temperature [K]
-      REAL(fp), ALLOCATABLE        :: SLP(:,:)          !< Sea level pressure [Pa]
-      REAL(fp), ALLOCATABLE        :: PS(:,:)           !< Surface Pressure [Pa]
-      REAL(fp), ALLOCATABLE        :: TO3(:,:)          !< Total overhead O3 column [DU]
-      REAL(fp), ALLOCATABLE        :: TROPP(:,:)        !< Tropopause pressure [Pa]
-      INTEGER,  ALLOCATABLE        :: TropLev(:,:)      !< Tropopause level [1]
-      REAL(fp), ALLOCATABLE        :: TropHt(:,:)       !< Tropopause height [km]
+      REAL(fp), POINTER        :: PHIS(:,:) => null()         !< Surface geopotential height [m2/s2]
+      REAL(fp), POINTER        :: PS_WET(:,:) => null()       !< Wet surface pressure at start of timestep [Pa]
+      REAL(fp), POINTER        :: PS_DRY(:,:) => null()       !< Dry surface pressure at start of timestep [Pa]
+      REAL(fp), POINTER        :: QV2M(:,:) => null()         !< Specific Humidity at 2m [kg/kg]
+      REAL(fp), POINTER        :: T2M(:,:) => null()          !< Temperature 2m [K]
+      REAL(fp), POINTER        :: TS(:,:) => null()           !< Surface temperature [K]
+      REAL(fp), POINTER        :: TSKIN(:,:) => null()        !< Surface skin temperature [K]
+      REAL(fp), POINTER        :: SST(:,:) => null()          !< Sea surface temperature [K]
+      REAL(fp), POINTER        :: SLP(:,:) => null()          !< Sea level pressure [Pa]
+      REAL(fp), POINTER        :: PS(:,:) => null()           !< Surface Pressure [Pa]
+      REAL(fp), POINTER        :: TO3(:,:) => null()          !< Total overhead O3 column [DU]
+      REAL(fp), POINTER        :: TROPP(:,:) => null()        !< Tropopause pressure [Pa]
+      INTEGER, POINTER        :: TropLev(:,:) => null()      !< Tropopause level [1]
+      REAL(fp), POINTER        :: TropHt(:,:) => null()       !< Tropopause height [km]
       ! 3D atmospheric variables (3D: nx, ny, nz)
-      REAL(fp), ALLOCATABLE        :: Z(:,:,:)          !< Geopotential Height @ level edges [m] (nx,ny,nz+1)
-      REAL(fp), ALLOCATABLE        :: ZMID(:,:,:)       !< Mid Layer Geopotential Height [m]
-      REAL(fp), ALLOCATABLE        :: BXHEIGHT(:,:,:)   !< Grid box height [m] (dry air)
-      REAL(fp), ALLOCATABLE        :: QV(:,:,:)         !< Specific Humidity [kg/kg]
-      REAL(fp), ALLOCATABLE        :: T(:,:,:)          !< Temperature [K]
-      REAL(fp), ALLOCATABLE        :: THETA(:,:,:)      !< Potential temperature [K]
-      REAL(fp), ALLOCATABLE        :: TV(:,:,:)         !< Virtual temperature [K]
-      REAL(fp), ALLOCATABLE        :: V(:,:,:)          !< N/S component of wind [m s-1]
-      REAL(fp), ALLOCATABLE        :: U(:,:,:)          !< E/W component of wind [m s-1]
-      REAL(fp), ALLOCATABLE        :: OMEGA(:,:,:)      !< Updraft velocity [Pa/s]
-      REAL(fp), ALLOCATABLE        :: RH(:,:,:)         !< Relative humidity [fraction, not %]
-      REAL(fp), ALLOCATABLE        :: SPHU(:,:,:)       !< Specific humidity [g H2O/kg tot air]
-      REAL(fp), ALLOCATABLE        :: AIRDEN(:,:,:)     !< Wet air density [kg/m3]
-      REAL(fp), ALLOCATABLE        :: AIRDEN_DRY(:,:,:) !< Dry air density [kg/m3]
-      REAL(fp), ALLOCATABLE        :: AIRNUMDEN(:,:,:)  !< Dry air density [molec/cm3]
-      REAL(fp), ALLOCATABLE        :: MAIRDEN(:,:,:)    !< Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
-      REAL(fp), ALLOCATABLE        :: AVGW(:,:,:)       !< Water vapor volume mixing ratio [vol H2O/vol dry air]
-      REAL(fp), ALLOCATABLE        :: DELP(:,:,:)       !< Delta-P (wet) across box [Pa]
-      REAL(fp), ALLOCATABLE        :: DELP_DRY(:,:,:)   !< Delta-P (dry) across box [Pa]
-      REAL(fp), ALLOCATABLE        :: DAIRMASS(:,:,:)   !< Dry air mass [kg] in grid box
-      REAL(fp), ALLOCATABLE        :: AIRVOL(:,:,:)     !< Grid box volume [m3] (dry air)
-      REAL(fp), ALLOCATABLE        :: PEDGE_DRY(:,:,:)  !< Dry air partial pressure @ level edges [Pa] (nx,ny,nz+1)
-      REAL(fp), ALLOCATABLE        :: PEDGE(:,:,:)      !< Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
-      REAL(fp), ALLOCATABLE        :: PMID(:,:,:)       !< Average wet air pressure [Pa] defined as arithmetic average of edge pressures
-      REAL(fp), ALLOCATABLE        :: PMID_DRY(:,:,:)   !< Dry air partial pressure [Pa] defined as arithmetic avg of edge pressures
+      REAL(fp), POINTER        :: Z(:,:,:) => null()          !< Geopotential Height @ level edges [m] (nx,ny,nz+1)
+      REAL(fp), POINTER        :: ZMID(:,:,:) => null()       !< Mid Layer Geopotential Height [m]
+      REAL(fp), POINTER        :: BXHEIGHT(:,:,:) => null()   !< Grid box height [m] (dry air)
+      REAL(fp), POINTER        :: QV(:,:,:) => null()         !< Specific Humidity [kg/kg]
+      REAL(fp), POINTER        :: T(:,:,:) => null()          !< Temperature [K]
+      REAL(fp), POINTER        :: THETA(:,:,:) => null()      !< Potential temperature [K]
+      REAL(fp), POINTER        :: TV(:,:,:) => null()         !< Virtual temperature [K]
+      REAL(fp), POINTER        :: V(:,:,:) => null()          !< N/S component of wind [m s-1]
+      REAL(fp), POINTER        :: U(:,:,:) => null()          !< E/W component of wind [m s-1]
+      REAL(fp), POINTER        :: OMEGA(:,:,:) => null()      !< Updraft velocity [Pa/s]
+      REAL(fp), POINTER        :: RH(:,:,:) => null()         !< Relative humidity [fraction, not %]
+      REAL(fp), POINTER        :: SPHU(:,:,:) => null()       !< Specific humidity [g H2O/kg tot air]
+      REAL(fp), POINTER        :: AIRDEN(:,:,:) => null()     !< Wet air density [kg/m3]
+      REAL(fp), POINTER        :: AIRDEN_DRY(:,:,:) => null() !< Dry air density [kg/m3]
+      REAL(fp), POINTER        :: AIRNUMDEN(:,:,:) => null()  !< Dry air density [molec/cm3]
+      REAL(fp), POINTER        :: MAIRDEN(:,:,:) => null()    !< Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
+      REAL(fp), POINTER        :: AVGW(:,:,:) => null()       !< Water vapor volume mixing ratio [vol H2O/vol dry air]
+      REAL(fp), POINTER        :: DELP(:,:,:) => null()       !< Delta-P (wet) across box [Pa]
+      REAL(fp), POINTER        :: DELP_DRY(:,:,:) => null()   !< Delta-P (dry) across box [Pa]
+      REAL(fp), POINTER        :: DAIRMASS(:,:,:) => null()   !< Dry air mass [kg] in grid box
+      REAL(fp), POINTER        :: AIRVOL(:,:,:) => null()     !< Grid box volume [m3] (dry air)
+      REAL(fp), POINTER        :: PEDGE_DRY(:,:,:) => null()  !< Dry air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+      REAL(fp), POINTER        :: PEDGE(:,:,:) => null()      !< Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+      REAL(fp), POINTER        :: PMID(:,:,:) => null()       !< Average wet air pressure [Pa] defined as arithmetic average of edge pressures
+      REAL(fp), POINTER        :: PMID_DRY(:,:,:) => null()   !< Dry air partial pressure [Pa] defined as arithmetic avg of edge pressures
    contains
       procedure :: init => metstate_init
       procedure :: cleanup => metstate_cleanup
@@ -332,28 +334,110 @@ CONTAINS
 
       call this%geometry%get_dimensions(nx, ny, nz)
 
-      ! Use the properly initialized values (no more defaults needed)
       nsoil = this%nSOIL
       nsoiltype = this%nSOILTYPE
       nSURFTYPE = this%NSURFTYPE
 
-      ! Auto-allocate all REAL(fp), ALLOCATABLE fields (generated, now field-by-field)
-      select case (trim(field_name))
-#include "metstate_allocate_fields.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('ALL', 'all')
+         ! Allocate core meteorological pointer arrays only if not already associated (prevents leaks/orphaning)
+         if (.not. associated(this%T)) allocate(this%T(nx, ny, nz))
+         if (.not. associated(this%QV)) allocate(this%QV(nx, ny, nz))
+         if (.not. associated(this%RH)) allocate(this%RH(nx, ny, nz))
+         if (.not. associated(this%PMID)) allocate(this%PMID(nx, ny, nz))
+         if (.not. associated(this%PEDGE)) allocate(this%PEDGE(nx, ny, nz+1))
+         if (.not. associated(this%AIRDEN)) allocate(this%AIRDEN(nx, ny, nz))
+         if (.not. associated(this%AIRDEN_DRY)) allocate(this%AIRDEN_DRY(nx, ny, nz))
+         if (.not. associated(this%BXHEIGHT)) allocate(this%BXHEIGHT(nx, ny, nz))
+         if (.not. associated(this%DELP)) allocate(this%DELP(nx, ny, nz))
+         if (.not. associated(this%DELP_DRY)) allocate(this%DELP_DRY(nx, ny, nz))
+         if (.not. associated(this%PS)) allocate(this%PS(nx, ny))
+         if (.not. associated(this%TS)) allocate(this%TS(nx, ny))
+         if (.not. associated(this%PBLH)) allocate(this%PBLH(nx, ny))
+         if (.not. associated(this%USTAR)) allocate(this%USTAR(nx, ny))
+         if (.not. associated(this%HFLUX)) allocate(this%HFLUX(nx, ny))
+         if (.not. associated(this%OBK)) allocate(this%OBK(nx, ny))
+         if (.not. associated(this%LAT)) allocate(this%LAT(nx, ny))
+         if (.not. associated(this%LON)) allocate(this%LON(nx, ny))
+         if (.not. associated(this%IsLand)) allocate(this%IsLand(nx, ny))
+         if (.not. associated(this%IsWater)) allocate(this%IsWater(nx, ny))
+         if (.not. associated(this%IsIce)) allocate(this%IsIce(nx, ny))
+         if (.not. associated(this%IsSnow)) allocate(this%IsSnow(nx, ny))
+         if (.not. associated(this%LWI)) allocate(this%LWI(nx, ny))
+         if (.not. associated(this%DLUSE)) allocate(this%DLUSE(nx, ny))
+         if (.not. associated(this%FRVEG)) allocate(this%FRVEG(nx, ny))
+         if (.not. associated(this%AREA_M2)) allocate(this%AREA_M2(nx, ny))
+         if (.not. associated(this%U)) allocate(this%U(nx, ny, nz))
+         if (.not. associated(this%V)) allocate(this%V(nx, ny, nz))
+
+       case ('T', 't')
+         allocate(this%T(nx, ny, nz))
+       case ('QV', 'qv')
+         allocate(this%QV(nx, ny, nz))
+       case ('RH', 'rh')
+         allocate(this%RH(nx, ny, nz))
+       case ('PMID', 'pmid')
+         allocate(this%PMID(nx, ny, nz))
+       case ('PEDGE', 'pedge')
+         allocate(this%PEDGE(nx, ny, nz+1))
+       case ('AIRDEN', 'airden')
+         allocate(this%AIRDEN(nx, ny, nz))
+       case ('AIRDEN_DRY', 'airden_dry')
+         allocate(this%AIRDEN_DRY(nx, ny, nz))
+       case ('BXHEIGHT', 'bxheight')
+         allocate(this%BXHEIGHT(nx, ny, nz))
+       case ('DELP', 'delp')
+         allocate(this%DELP(nx, ny, nz))
+       case ('DELP_DRY', 'delp_dry')
+         allocate(this%DELP_DRY(nx, ny, nz))
+       case ('PS', 'ps')
+         allocate(this%PS(nx, ny))
+       case ('TS', 'ts')
+         allocate(this%TS(nx, ny))
+       case ('PBLH', 'pblh')
+         allocate(this%PBLH(nx, ny))
+       case ('USTAR', 'ustar')
+         allocate(this%USTAR(nx, ny))
+       case ('HFLUX', 'hflux')
+         allocate(this%HFLUX(nx, ny))
+       case ('OBK', 'obk')
+         allocate(this%OBK(nx, ny))
+       case ('LAT', 'lat')
+         allocate(this%LAT(nx, ny))
+       case ('LON', 'lon')
+         allocate(this%LON(nx, ny))
+       case ('U', 'u')
+         allocate(this%U(nx, ny, nz))
+       case ('V', 'v')
+         allocate(this%V(nx, ny, nz))
+       case ('IsLand', 'island')
+         allocate(this%IsLand(nx, ny))
+       case ('IsWater', 'iswater')
+         allocate(this%IsWater(nx, ny))
+       case ('LWI', 'lwi')
+         allocate(this%LWI(nx, ny))
+       case ('FRVEG', 'frveg')
+         allocate(this%FRVEG(nx, ny))
+       case ('AREA_M2', 'area_m2')
+         allocate(this%AREA_M2(nx, ny))
+       case ('InPbl', 'inpbl')
+         allocate(this%InPbl(nx, ny, nz))
+       case ('TropLev', 'troplev')
+         allocate(this%TropLev(nx, ny))
       end select
 
-      ! Initialize to safe defaults
-      this%T = 288.15_fp
-      this%U = 0.0_fp
-      this%V = 0.0_fp
-      this%QV = 0.001_fp
-      this%RH = 0.50_fp
-      this%AIRDEN = 1.2_fp
-      this%BXHEIGHT = 100.0_fp
-      this%PS = 101300.25_fp
-      this%SLP = 101300.25_fp
-      this%T2M = 288.15_fp
-      this%TS = 288.15_fp
+      ! Initialize to safe defaults if associated
+      if (associated(this%T)) this%T = 288.15_fp
+      if (associated(this%U)) this%U = 0.0_fp
+      if (associated(this%V)) this%V = 0.0_fp
+      if (associated(this%QV)) this%QV = 0.001_fp
+      if (associated(this%RH)) this%RH = 0.50_fp
+      if (associated(this%AIRDEN)) this%AIRDEN = 1.2_fp
+      if (associated(this%BXHEIGHT)) this%BXHEIGHT = 100.0_fp
+      if (associated(this%PS)) this%PS = 101300.25_fp
+      if (associated(this%SLP)) this%SLP = 101300.25_fp
+      if (associated(this%T2M)) this%T2M = 288.15_fp
+      if (associated(this%TS)) this%TS = 288.15_fp
 
    end subroutine allocate_metstate_arrays
 
@@ -372,9 +456,123 @@ CONTAINS
 
       rc = CC_SUCCESS
 
-      ! Deallocate only the requested field (or all if 'ALL')
-      select case (trim(field_name))
-#include "metstate_deallocate_fields.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('ALL', 'all')
+         if (associated(this%T)) deallocate(this%T)
+         if (associated(this%QV)) deallocate(this%QV)
+         if (associated(this%RH)) deallocate(this%RH)
+         if (associated(this%PMID)) deallocate(this%PMID)
+         if (associated(this%PEDGE)) deallocate(this%PEDGE)
+         if (associated(this%AIRDEN)) deallocate(this%AIRDEN)
+         if (associated(this%AIRDEN_DRY)) deallocate(this%AIRDEN_DRY)
+         if (associated(this%BXHEIGHT)) deallocate(this%BXHEIGHT)
+         if (associated(this%DELP)) deallocate(this%DELP)
+         if (associated(this%DELP_DRY)) deallocate(this%DELP_DRY)
+         if (associated(this%PS)) deallocate(this%PS)
+         if (associated(this%TS)) deallocate(this%TS)
+         if (associated(this%PBLH)) deallocate(this%PBLH)
+         if (associated(this%USTAR)) deallocate(this%USTAR)
+         if (associated(this%HFLUX)) deallocate(this%HFLUX)
+         if (associated(this%OBK)) deallocate(this%OBK)
+         if (associated(this%LAT)) deallocate(this%LAT)
+         if (associated(this%LON)) deallocate(this%LON)
+         if (associated(this%U)) deallocate(this%U)
+         if (associated(this%V)) deallocate(this%V)
+         if (associated(this%IsLand)) deallocate(this%IsLand)
+         if (associated(this%IsWater)) deallocate(this%IsWater)
+         if (associated(this%LWI)) deallocate(this%LWI)
+         if (associated(this%FRVEG)) deallocate(this%FRVEG)
+         if (associated(this%AREA_M2)) deallocate(this%AREA_M2)
+         if (associated(this%InPbl)) deallocate(this%InPbl)
+         if (associated(this%TropLev)) deallocate(this%TropLev)
+
+         ! Nullify pointers
+         nullify(this%T, this%QV, this%RH, this%PMID, this%PEDGE, this%AIRDEN, this%AIRDEN_DRY)
+         nullify(this%BXHEIGHT, this%DELP, this%DELP_DRY, this%PS, this%TS, this%PBLH)
+         nullify(this%USTAR, this%HFLUX, this%OBK, this%LAT, this%LON, this%U, this%V)
+         nullify(this%IsLand, this%IsWater, this%LWI, this%FRVEG, this%AREA_M2, this%InPbl, this%TropLev)
+
+       case ('T', 't')
+         if (associated(this%T)) deallocate(this%T)
+         nullify(this%T)
+       case ('QV', 'qv')
+         if (associated(this%QV)) deallocate(this%QV)
+         nullify(this%QV)
+       case ('RH', 'rh')
+         if (associated(this%RH)) deallocate(this%RH)
+         nullify(this%RH)
+       case ('PMID', 'pmid')
+         if (associated(this%PMID)) deallocate(this%PMID)
+         nullify(this%PMID)
+       case ('PEDGE', 'pedge')
+         if (associated(this%PEDGE)) deallocate(this%PEDGE)
+         nullify(this%PEDGE)
+       case ('AIRDEN', 'airden')
+         if (associated(this%AIRDEN)) deallocate(this%AIRDEN)
+         nullify(this%AIRDEN)
+       case ('AIRDEN_DRY', 'airden_dry')
+         if (associated(this%AIRDEN_DRY)) deallocate(this%AIRDEN_DRY)
+         nullify(this%AIRDEN_DRY)
+       case ('BXHEIGHT', 'bxheight')
+         if (associated(this%BXHEIGHT)) deallocate(this%BXHEIGHT)
+         nullify(this%BXHEIGHT)
+       case ('DELP', 'delp')
+         if (associated(this%DELP)) deallocate(this%DELP)
+         nullify(this%DELP)
+       case ('DELP_DRY', 'delp_dry')
+         if (associated(this%DELP_DRY)) deallocate(this%DELP_DRY)
+         nullify(this%DELP_DRY)
+       case ('PS', 'ps')
+         if (associated(this%PS)) deallocate(this%PS)
+         nullify(this%PS)
+       case ('TS', 'ts')
+         if (associated(this%TS)) deallocate(this%TS)
+         nullify(this%TS)
+       case ('PBLH', 'pblh')
+         if (associated(this%PBLH)) deallocate(this%PBLH)
+         nullify(this%PBLH)
+       case ('USTAR', 'ustar')
+         if (associated(this%USTAR)) deallocate(this%USTAR)
+         nullify(this%USTAR)
+       case ('HFLUX', 'hflux')
+         if (associated(this%HFLUX)) deallocate(this%HFLUX)
+         nullify(this%HFLUX)
+       case ('OBK', 'obk')
+         if (associated(this%OBK)) deallocate(this%OBK)
+         nullify(this%OBK)
+       case ('LAT', 'lat')
+         if (associated(this%LAT)) deallocate(this%LAT)
+         nullify(this%LAT)
+       case ('LON', 'lon')
+         if (associated(this%LON)) deallocate(this%LON)
+         nullify(this%LON)
+       case ('U', 'u')
+         if (associated(this%U)) deallocate(this%U)
+         nullify(this%U)
+       case ('V', 'v')
+         if (associated(this%V)) deallocate(this%V)
+         nullify(this%V)
+       case ('IsLand', 'island')
+         if (associated(this%IsLand)) deallocate(this%IsLand)
+         nullify(this%IsLand)
+       case ('IsWater', 'iswater')
+         if (associated(this%IsWater)) deallocate(this%IsWater)
+         nullify(this%IsWater)
+       case ('LWI', 'lwi')
+         if (associated(this%LWI)) deallocate(this%LWI)
+         nullify(this%LWI)
+       case ('FRVEG', 'frveg')
+         if (associated(this%FRVEG)) deallocate(this%FRVEG)
+         nullify(this%FRVEG)
+       case ('AREA_M2', 'area_m2')
+         if (associated(this%AREA_M2)) deallocate(this%AREA_M2)
+         nullify(this%AREA_M2)
+       case ('InPbl', 'inpbl')
+         if (associated(this%InPbl)) deallocate(this%InPbl)
+         nullify(this%InPbl)
+       case ('TropLev', 'troplev')
+         if (associated(this%TropLev)) deallocate(this%TropLev)
+         nullify(this%TropLev)
       end select
 
       this%State = ''
@@ -393,7 +591,6 @@ CONTAINS
    !! \param[out]   rc        Return code (CC_SUCCESS or error code)
    subroutine metstate_validate(this, error_mgr, rc)
       use error_mod, only: ErrorManagerType, CC_SUCCESS, ERROR_INVALID_INPUT
-      use utilities_mod, only: is_valid_temperature, is_valid_pressure
 
       implicit none
       class(MetStateType), intent(in) :: this
@@ -417,7 +614,7 @@ CONTAINS
       endif
 
       ! Validate temperatures (use maxval/minval for array validation)
-      if (allocated(this%T2M)) then
+      if (associated(this%T2M)) then
          if (maxval(this%T2M) > 400.0_fp .or. minval(this%T2M) < 100.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                '2m temperature out of physical range', rc, &
@@ -427,7 +624,7 @@ CONTAINS
          endif
       endif
 
-      if (allocated(this%TS)) then
+      if (associated(this%TS)) then
          if (maxval(this%TS) > 400.0_fp .or. minval(this%TS) < 100.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'Surface temperature out of physical range', rc, &
@@ -438,7 +635,7 @@ CONTAINS
       endif
 
       ! Validate pressures (use maxval/minval for array validation)
-      if (allocated(this%PS)) then
+      if (associated(this%PS)) then
          if (maxval(this%PS) > 120000.0_fp .or. minval(this%PS) < 1000.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'Surface pressure out of physical range', rc, &
@@ -448,7 +645,7 @@ CONTAINS
          endif
       endif
 
-      if (allocated(this%SLP)) then
+      if (associated(this%SLP)) then
          if (maxval(this%SLP) > 120000.0_fp .or. minval(this%SLP) < 50000.0_fp) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'Sea level pressure out of physical range', rc, &
@@ -484,19 +681,19 @@ CONTAINS
       rc = CC_SUCCESS
 
       ! Reset to standard atmosphere values
-      if (allocated(this%T2M)) this%T2M = 288.15_fp
-      if (allocated(this%TS)) this%TS = 288.15_fp
-      if (allocated(this%TSKIN)) this%TSKIN = 288.15_fp
-      if (allocated(this%PS)) this%PS = 101300.25_fp
-      if (allocated(this%SLP)) this%SLP = 101300.25_fp
-      if (allocated(this%SST)) this%SST = 288.15_fp
+      if (associated(this%T2M)) this%T2M = 288.15_fp
+      if (associated(this%TS)) this%TS = 288.15_fp
+      if (associated(this%TSKIN)) this%TSKIN = 288.15_fp
+      if (associated(this%PS)) this%PS = 101300.25_fp
+      if (associated(this%SLP)) this%SLP = 101300.25_fp
+      if (associated(this%SST)) this%SST = 288.15_fp
 
       ! Reset arrays if allocated
-      if (allocated(this%T)) this%T = 288.15_fp
-      if (allocated(this%U)) this%U = 0.0_fp
-      if (allocated(this%V)) this%V = 0.0_fp
-      if (allocated(this%QV)) this%QV = 0.01_fp
-      if (allocated(this%RH)) this%RH = 0.5_fp
+      if (associated(this%T)) this%T = 288.15_fp
+      if (associated(this%U)) this%U = 0.0_fp
+      if (associated(this%V)) this%V = 0.0_fp
+      if (associated(this%QV)) this%QV = 0.01_fp
+      if (associated(this%RH)) this%RH = 0.5_fp
 
    end subroutine metstate_reset
 
@@ -511,8 +708,8 @@ CONTAINS
       class(MetStateType), intent(in) :: this
       logical :: is_alloc
 
-      is_alloc = allocated(this%T) .and. allocated(this%U) .and. allocated(this%V) .and. &
-         allocated(this%QV) .and. allocated(this%PMID) .and. allocated(this%DELP)
+      is_alloc = associated(this%T) .and. associated(this%U) .and. associated(this%V) .and. &
+         associated(this%QV) .and. associated(this%PMID) .and. associated(this%DELP)
    end function metstate_is_allocated
 
    !> \brief Get approximate memory usage of MetStateType in bytes
@@ -553,13 +750,13 @@ CONTAINS
       write(*,'(A)') '=== MetState Summary ==='
       write(*,'(A,A)') 'State: ', trim(this%State)
       write(*,'(A,I0)') 'Number of levels: ', this%NLEVS
-      if (allocated(this%TS)) then
+      if (associated(this%TS)) then
          write(*,'(A,F8.2,A)') 'Surface temperature: ', this%TS(1,1), ' K'
       endif
-      if (allocated(this%PS)) then
+      if (associated(this%PS)) then
          write(*,'(A,F8.2,A)') 'Surface pressure: ', this%PS(1,1), ' Pa'
       endif
-      if (allocated(this%SLP)) then
+      if (associated(this%SLP)) then
          write(*,'(A,F8.2,A)') 'Sea level pressure: ', this%SLP(1,1), ' Pa'
       endif
       write(*,'(A,L1)') 'Arrays allocated: ', this%is_allocated()
@@ -579,30 +776,6 @@ CONTAINS
 
    end subroutine metstate_get_dimensions
 
-!    !========================================================================
-!    !! Get pointer to a meteorological field array by name
-!    !!
-!    !! Returns a pointer to the requested 1D field array (e.g., temperature, pressure) for the column model.
-!    !! Returns null() if the field is not found or not allocated.
-!    !!
-!    !! \param[in]  this       MetStateType object
-!    !! \param[in]  field_name Name of the field (e.g., 'T', 'temperature')
-!    !! \return     Pointer to the requested field array, or null()
-!    function metstate_get_field_ptr(this, field_name) result(field_ptr)
-!       implicit none
-!       class(MetStateType), intent(in), target :: this
-!       character(len=*), intent(in) :: field_name
-!       real(fp), pointer :: field_ptr(:)
-
-!       ! Return pointer to 1D column data
-!       field_ptr => null()
-
-!       select case (trim(field_name))
-! #include "metstate_accessor.inc"
-!       end select
-
-!    end function metstate_get_field_ptr
-
    !> \brief Allocate a specific field in MetStateType by name
    !!
    !! Calls the generated select-case macro to allocate only the requested field.
@@ -617,13 +790,76 @@ CONTAINS
       integer :: nx, ny, nz, nsoil, nsoiltype, nSURFTYPE
       rc = CC_SUCCESS
       call this%geometry%get_dimensions(nx, ny, nz)
-      ! Use the properly initialized values (no more defaults needed)
       nsoil = this%nSOIL
       nsoiltype = this%nSOILTYPE
       nSURFTYPE = this%NSURFTYPE
-      ! Only allocate the requested field
-      select case (trim(field_name))
-#include "metstate_allocate_fields.inc"
+      select case (to_upper(trim(field_name)))
+       case ('T')
+         if (.not. associated(this%T)) allocate(this%T(nx, ny, nz))
+       case ('U')
+         if (.not. associated(this%U)) allocate(this%U(nx, ny, nz))
+       case ('V')
+         if (.not. associated(this%V)) allocate(this%V(nx, ny, nz))
+       case ('QV')
+         if (.not. associated(this%QV)) allocate(this%QV(nx, ny, nz))
+       case ('RH')
+         if (.not. associated(this%RH)) allocate(this%RH(nx, ny, nz))
+       case ('PMID')
+         if (.not. associated(this%PMID)) allocate(this%PMID(nx, ny, nz))
+       case ('PEDGE')
+         if (.not. associated(this%PEDGE)) allocate(this%PEDGE(nx, ny, nz+1))
+       case ('AIRDEN')
+         if (.not. associated(this%AIRDEN)) allocate(this%AIRDEN(nx, ny, nz))
+       case ('AIRDEN_DRY')
+         if (.not. associated(this%AIRDEN_DRY)) allocate(this%AIRDEN_DRY(nx, ny, nz))
+       case ('BXHEIGHT')
+         if (.not. associated(this%BXHEIGHT)) allocate(this%BXHEIGHT(nx, ny, nz))
+       case ('DELP')
+         if (.not. associated(this%DELP)) allocate(this%DELP(nx, ny, nz))
+       case ('DELP_DRY')
+         if (.not. associated(this%DELP_DRY)) allocate(this%DELP_DRY(nx, ny, nz))
+       case ('PS')
+         if (.not. associated(this%PS)) allocate(this%PS(nx, ny))
+       case ('TS')
+         if (.not. associated(this%TS)) allocate(this%TS(nx, ny))
+       case ('PBLH')
+         if (.not. associated(this%PBLH)) allocate(this%PBLH(nx, ny))
+       case ('USTAR')
+         if (.not. associated(this%USTAR)) allocate(this%USTAR(nx, ny))
+       case ('HFLUX')
+         if (.not. associated(this%HFLUX)) allocate(this%HFLUX(nx, ny))
+       case ('OBK')
+         if (.not. associated(this%OBK)) allocate(this%OBK(nx, ny))
+       case ('LAT')
+         if (.not. associated(this%LAT)) allocate(this%LAT(nx, ny))
+       case ('LON')
+         if (.not. associated(this%LON)) allocate(this%LON(nx, ny))
+       case ('FRVEG')
+         if (.not. associated(this%FRVEG)) allocate(this%FRVEG(nx, ny))
+       case ('AREA_M2')
+         if (.not. associated(this%AREA_M2)) allocate(this%AREA_M2(nx, ny))
+       case ('LWI')
+         if (.not. associated(this%LWI)) allocate(this%LWI(nx, ny))
+       case ('DLUSE')
+         if (.not. associated(this%DLUSE)) allocate(this%DLUSE(nx, ny))
+       case ('DSOILTYPE')
+         if (.not. associated(this%DSOILTYPE)) allocate(this%DSOILTYPE(nx, ny))
+       case ('NLNDTYPE')
+         if (.not. associated(this%nLNDTYPE)) allocate(this%nLNDTYPE(nx, ny))
+       case ('TROPLEV')
+         if (.not. associated(this%TropLev)) allocate(this%TropLev(nx, ny))
+       case ('ISLAND')
+         if (.not. associated(this%IsLand)) allocate(this%IsLand(nx, ny))
+       case ('ISWATER')
+         if (.not. associated(this%IsWater)) allocate(this%IsWater(nx, ny))
+       case ('ISICE')
+         if (.not. associated(this%IsIce)) allocate(this%IsIce(nx, ny))
+       case ('ISSNOW')
+         if (.not. associated(this%IsSnow)) allocate(this%IsSnow(nx, ny))
+       case ('ISLOCALNOON')
+         if (.not. associated(this%IsLocalNoon)) allocate(this%IsLocalNoon(nx, ny))
+       case ('INPBL')
+         if (.not. associated(this%InPbl)) allocate(this%InPbl(nx, ny, nz))
       end select
    end subroutine metstate_allocate_field
 
@@ -639,9 +875,73 @@ CONTAINS
       character(len=*), intent(in) :: field_name
       integer, intent(out) :: rc
       rc = CC_SUCCESS
-      ! Only deallocate the requested field
-      select case (trim(field_name))
-#include "metstate_deallocate_fields.inc"
+      select case (to_upper(trim(field_name)))
+       case ('T')
+         if (associated(this%T)) deallocate(this%T)
+       case ('U')
+         if (associated(this%U)) deallocate(this%U)
+       case ('V')
+         if (associated(this%V)) deallocate(this%V)
+       case ('QV')
+         if (associated(this%QV)) deallocate(this%QV)
+       case ('RH')
+         if (associated(this%RH)) deallocate(this%RH)
+       case ('PMID')
+         if (associated(this%PMID)) deallocate(this%PMID)
+       case ('PEDGE')
+         if (associated(this%PEDGE)) deallocate(this%PEDGE)
+       case ('AIRDEN')
+         if (associated(this%AIRDEN)) deallocate(this%AIRDEN)
+       case ('AIRDEN_DRY')
+         if (associated(this%AIRDEN_DRY)) deallocate(this%AIRDEN_DRY)
+       case ('BXHEIGHT')
+         if (associated(this%BXHEIGHT)) deallocate(this%BXHEIGHT)
+       case ('DELP')
+         if (associated(this%DELP)) deallocate(this%DELP)
+       case ('DELP_DRY')
+         if (associated(this%DELP_DRY)) deallocate(this%DELP_DRY)
+       case ('PS')
+         if (associated(this%PS)) deallocate(this%PS)
+       case ('TS')
+         if (associated(this%TS)) deallocate(this%TS)
+       case ('PBLH')
+         if (associated(this%PBLH)) deallocate(this%PBLH)
+       case ('USTAR')
+         if (associated(this%USTAR)) deallocate(this%USTAR)
+       case ('HFLUX')
+         if (associated(this%HFLUX)) deallocate(this%HFLUX)
+       case ('OBK')
+         if (associated(this%OBK)) deallocate(this%OBK)
+       case ('LAT')
+         if (associated(this%LAT)) deallocate(this%LAT)
+       case ('LON')
+         if (associated(this%LON)) deallocate(this%LON)
+       case ('FRVEG')
+         if (associated(this%FRVEG)) deallocate(this%FRVEG)
+       case ('AREA_M2')
+         if (associated(this%AREA_M2)) deallocate(this%AREA_M2)
+       case ('LWI')
+         if (associated(this%LWI)) deallocate(this%LWI)
+       case ('DLUSE')
+         if (associated(this%DLUSE)) deallocate(this%DLUSE)
+       case ('DSOILTYPE')
+         if (associated(this%DSOILTYPE)) deallocate(this%DSOILTYPE)
+       case ('NLNDTYPE')
+         if (associated(this%nLNDTYPE)) deallocate(this%nLNDTYPE)
+       case ('TROPLEV')
+         if (associated(this%TropLev)) deallocate(this%TropLev)
+       case ('ISLAND')
+         if (associated(this%IsLand)) deallocate(this%IsLand)
+       case ('ISWATER')
+         if (associated(this%IsWater)) deallocate(this%IsWater)
+       case ('ISICE')
+         if (associated(this%IsIce)) deallocate(this%IsIce)
+       case ('ISSNOW')
+         if (associated(this%IsSnow)) deallocate(this%IsSnow)
+       case ('ISLOCALNOON')
+         if (associated(this%IsLocalNoon)) deallocate(this%IsLocalNoon)
+       case ('INPBL')
+         if (associated(this%InPbl)) deallocate(this%InPbl)
       end select
    end subroutine metstate_deallocate_field
 
@@ -680,33 +980,114 @@ CONTAINS
    !! \param[in]  j          Grid row index (optional, default 1)
    !! \return     Pointer to vertical profile (1D)
    function metstate_get_column_ptr_func(this, field_name, i, j) result(column_ptr)
+      use Interop_Mod, only: get_cpp_field
       implicit none
       class(MetStateType), intent(in), target :: this
       character(len=*), intent(in) :: field_name
       integer, intent(in), optional :: i, j
       real(fp), pointer :: column_ptr(:)
-      integer :: nx, ny, nlev, col_i, col_j
+      integer :: nx, ny, nlev, col_i, col_j, rc
+      real(fp), pointer :: full_3d(:,:,:)
       column_ptr => null()
+      full_3d => null()
       call this%get_dimensions(nx, ny, nlev)
       col_i = 1; col_j = 1
       if (present(i)) col_i = max(1, min(i, nx))
       if (present(j)) col_j = max(1, min(j, ny))
-      select case (trim(field_name))
-#include "metstate_column_accessor.inc"
+
+      if (c_associated(this%cpp_ptr)) then
+         call get_cpp_field(this%cpp_ptr, field_name, full_3d, [nx, ny, nlev], rc)
+         if (rc == 0 .and. associated(full_3d)) then
+            column_ptr => full_3d(col_i, col_j, :)
+            return
+         end if
+      end if
+
+      select case (to_upper(trim(field_name)))
+       case ('T')
+         if (associated(this%T)) full_3d => this%T
+       case ('QV')
+         if (associated(this%QV)) full_3d => this%QV
+       case ('RH')
+         if (associated(this%RH)) full_3d => this%RH
+       case ('PMID')
+         if (associated(this%PMID)) full_3d => this%PMID
+       case ('PEDGE')
+         if (associated(this%PEDGE)) full_3d => this%PEDGE
+       case ('AIRDEN')
+         if (associated(this%AIRDEN)) full_3d => this%AIRDEN
+       case ('AIRDEN_DRY')
+         if (associated(this%AIRDEN_DRY)) full_3d => this%AIRDEN_DRY
+       case ('BXHEIGHT')
+         if (associated(this%BXHEIGHT)) full_3d => this%BXHEIGHT
+       case ('DELP')
+         if (associated(this%DELP)) full_3d => this%DELP
+       case ('DELP_DRY')
+         if (associated(this%DELP_DRY)) full_3d => this%DELP_DRY
+       case ('U')
+         if (associated(this%U)) full_3d => this%U
+       case ('V')
+         if (associated(this%V)) full_3d => this%V
+       case ('PFILSAN')
+         if (associated(this%PFILSAN)) full_3d => this%PFILSAN
+       case ('PFLLSAN')
+         if (associated(this%PFLLSAN)) full_3d => this%PFLLSAN
       end select
+
+      if (associated(full_3d)) then
+         column_ptr => full_3d(col_i, col_j, :)
+      endif
    end function metstate_get_column_ptr_func
 
    !> Get a scalar value from a 2D field at (i,j)
    function metstate_get_2Dto0D_value(this, field_name, i, j) result(scalar_val)
+      use Interop_Mod, only: get_cpp_field
       class(MetStateType), intent(in) :: this
       character(len=*), intent(in) :: field_name
       integer, intent(in) :: i, j
       real(fp) :: scalar_val
-      integer :: col_i, col_j
+      integer :: col_i, col_j, rc, nx, ny, nz
+      real(fp), pointer :: full_2d(:,:)
       col_i = i
       col_j = j
-      select case (trim(field_name))
-#include "metstate_2d_scalar_accessor.inc"
+      scalar_val = 0.0_fp
+
+      if (c_associated(this%cpp_ptr)) then
+         call this%geometry%get_dimensions(nx, ny, nz)
+         call get_cpp_field(this%cpp_ptr, field_name, full_2d, [nx, ny], rc)
+         if (rc == 0 .and. associated(full_2d)) then
+            scalar_val = full_2d(col_i, col_j)
+            return
+         end if
+      end if
+
+      select case (to_upper(trim(field_name)))
+       case ('PS')
+         if (associated(this%PS)) scalar_val = this%PS(col_i, col_j)
+       case ('TS')
+         if (associated(this%TS)) scalar_val = this%TS(col_i, col_j)
+       case ('PBLH')
+         if (associated(this%PBLH)) scalar_val = this%PBLH(col_i, col_j)
+       case ('USTAR')
+         if (associated(this%USTAR)) scalar_val = this%USTAR(col_i, col_j)
+       case ('HFLUX')
+         if (associated(this%HFLUX)) scalar_val = this%HFLUX(col_i, col_j)
+       case ('OBK')
+         if (associated(this%OBK)) scalar_val = this%OBK(col_i, col_j)
+       case ('LAT')
+         if (associated(this%LAT)) scalar_val = this%LAT(col_i, col_j)
+       case ('LON')
+         if (associated(this%LON)) scalar_val = this%LON(col_i, col_j)
+       case ('FRVEG')
+         if (associated(this%FRVEG)) scalar_val = this%FRVEG(col_i, col_j)
+       case ('AREA_M2')
+         if (associated(this%AREA_M2)) scalar_val = this%AREA_M2(col_i, col_j)
+       case ('FROCEAN')
+         if (associated(this%FROCEAN)) scalar_val = this%FROCEAN(col_i, col_j)
+       case ('FRSEAICE')
+         if (associated(this%FRSEAICE)) scalar_val = this%FRSEAICE(col_i, col_j)
+       case ('SST')
+         if (associated(this%SST)) scalar_val = this%SST(col_i, col_j)
       end select
    end function metstate_get_2Dto0D_value
 
@@ -715,9 +1096,7 @@ CONTAINS
       class(MetStateType), intent(in) :: this
       character(len=*), intent(in) :: field_name
       real(fp) :: scalar_val
-      select case (trim(field_name))
-#include "metstate_scalar_accessor.inc"
-      end select
+      scalar_val = 0.0_fp
    end function metstate_get_scalar_value
 
    !> INTEGER versions of accessor functions
@@ -728,14 +1107,22 @@ CONTAINS
       integer, intent(in), optional :: i, j
       integer, pointer :: column_ptr(:)
       integer :: nx, ny, nlev, col_i, col_j
+      integer, pointer :: full_3d(:,:,:)
       column_ptr => null()
+      full_3d => null()
       call this%get_dimensions(nx, ny, nlev)
       col_i = 1; col_j = 1
       if (present(i)) col_i = max(1, min(i, nx))
       if (present(j)) col_j = max(1, min(j, ny))
-      select case (trim(field_name))
-#include "metstate_column_accessor_int.inc"
+
+      select case (to_upper(trim(field_name)))
+       case ('ILAND')
+         if (associated(this%ILAND)) full_3d => this%ILAND
       end select
+
+      if (associated(full_3d)) then
+         column_ptr => full_3d(col_i, col_j, :)
+      endif
    end function metstate_get_column_ptr_func_int
 
    function metstate_get_2Dto0D_value_int(this, field_name, i, j) result(scalar_val)
@@ -746,8 +1133,18 @@ CONTAINS
       integer :: col_i, col_j
       col_i = i
       col_j = j
-      select case (trim(field_name))
-#include "metstate_2d_scalar_accessor_int.inc"
+      scalar_val = 0
+      select case (to_upper(trim(field_name)))
+       case ('LWI')
+         if (associated(this%LWI)) scalar_val = this%LWI(col_i, col_j)
+       case ('DLUSE')
+         if (associated(this%DLUSE)) scalar_val = this%DLUSE(col_i, col_j)
+       case ('DSOILTYPE')
+         if (associated(this%DSOILTYPE)) scalar_val = this%DSOILTYPE(col_i, col_j)
+       case ('NLNDTYPE')
+         if (associated(this%nLNDTYPE)) scalar_val = this%nLNDTYPE(col_i, col_j)
+       case ('TROPLEV')
+         if (associated(this%TropLev)) scalar_val = this%TropLev(col_i, col_j)
       end select
    end function metstate_get_2Dto0D_value_int
 
@@ -755,8 +1152,14 @@ CONTAINS
       class(MetStateType), intent(in) :: this
       character(len=*), intent(in) :: field_name
       integer :: scalar_val
-      select case (trim(field_name))
-#include "metstate_scalar_accessor_int.inc"
+      scalar_val = 0
+      select case (to_upper(trim(field_name)))
+       case ('NLEVS')
+         scalar_val = this%NLEVS
+       case ('NSOIL')
+         scalar_val = this%nSOIL
+       case ('NSOILTYPE')
+         scalar_val = this%nSOILTYPE
       end select
    end function metstate_get_scalar_value_int
 
@@ -768,14 +1171,28 @@ CONTAINS
       integer, intent(in), optional :: i, j
       logical, pointer :: column_ptr(:)
       integer :: nx, ny, nlev, col_i, col_j
+      logical, pointer :: full_3d(:,:,:)
       column_ptr => null()
+      full_3d => null()
       call this%get_dimensions(nx, ny, nlev)
       col_i = 1; col_j = 1
       if (present(i)) col_i = max(1, min(i, nx))
       if (present(j)) col_j = max(1, min(j, ny))
-      select case (trim(field_name))
-#include "metstate_column_accessor_logical.inc"
+
+      select case (to_upper(trim(field_name)))
+       case ('INSTRATMESO')
+         if (associated(this%InStratMeso)) full_3d => this%InStratMeso
+       case ('INSTRATOSPHERE')
+         if (associated(this%InStratosphere)) full_3d => this%InStratosphere
+       case ('INTROPOSPHERE')
+         if (associated(this%InTroposphere)) full_3d => this%InTroposphere
+       case ('INPBL')
+         if (associated(this%InPbl)) full_3d => this%InPbl
       end select
+
+      if (associated(full_3d)) then
+         column_ptr => full_3d(col_i, col_j, :)
+      endif
    end function metstate_get_column_ptr_func_logical
 
    function metstate_get_2Dto0D_value_logical(this, field_name, i, j) result(scalar_val)
@@ -786,8 +1203,18 @@ CONTAINS
       integer :: col_i, col_j
       col_i = i
       col_j = j
-      select case (trim(field_name))
-#include "metstate_2d_scalar_accessor_logical.inc"
+      scalar_val = .false.
+      select case (to_upper(trim(field_name)))
+       case ('ISLAND')
+         if (associated(this%IsLand)) scalar_val = this%IsLand(col_i, col_j)
+       case ('ISWATER')
+         if (associated(this%IsWater)) scalar_val = this%IsWater(col_i, col_j)
+       case ('ISICE')
+         if (associated(this%IsIce)) scalar_val = this%IsIce(col_i, col_j)
+       case ('ISSNOW')
+         if (associated(this%IsSnow)) scalar_val = this%IsSnow(col_i, col_j)
+       case ('ISLOCALNOON')
+         if (associated(this%IsLocalNoon)) scalar_val = this%IsLocalNoon(col_i, col_j)
       end select
    end function metstate_get_2Dto0D_value_logical
 
@@ -795,9 +1222,7 @@ CONTAINS
       class(MetStateType), intent(in) :: this
       character(len=*), intent(in) :: field_name
       logical :: scalar_val
-      select case (trim(field_name))
-#include "metstate_scalar_accessor_logical.inc"
-      end select
+      scalar_val = .false.
    end function metstate_get_scalar_value_logical
 
    !> High-level interface: get any field (column, 2D, or scalar)
@@ -915,52 +1340,17 @@ CONTAINS
       real(fp), pointer :: col_ptr(:)
       integer, intent(out) :: rc
 
-      ! Local variables for handling different field types
       real(fp), pointer :: temp_col_ptr(:)
-      real(fp) :: scalar_val
-      integer :: nx, ny, nlev
 
       rc = CC_FAILURE
       nullify(col_ptr)
 
-      call this%get_dimensions(nx, ny, nlev)
-
-      ! First try to get as a 3D field (vertical column)
+      ! Call the targeted getter function to fetch the slice
       temp_col_ptr => this%get_column_ptr_func(field_name, i, j)
       if (associated(temp_col_ptr)) then
          col_ptr => temp_col_ptr
          rc = CC_SUCCESS
-         return
-      endif
-
-      ! If not found as 3D field, try as 2D field and create a single-element array
-      ! For 2D fields, we return a pointer to a single-element array containing the scalar value
-      select case (trim(field_name))
-       case ('PS', 'SLP', 'TS', 'T2M', 'TSKIN', 'SST', 'PHIS', 'PS_WET', 'PS_DRY', &
-          'QV2M', 'AREA_M2', 'ALBD_VIS', 'ALBD_NIR', 'ALBD_UV', 'PARDR', 'PARDF', &
-          'SUNCOS', 'SUNCOSmid', 'SWGDN', 'EFLUX', 'HFLUX', 'U10M', 'V10M', &
-          'USTAR', 'Z0', 'Z0H', 'PBLH', 'OBK', 'CLDFRC', 'CONV_DEPTH', &
-          'FLASH_DENS', 'CNV_FRC', 'PRECANV', 'PRECCON', 'PRECLSC', &
-          'LAI', 'GVF', 'RDRAG', 'CLAYFRAC', 'SANDFRAC', 'FRVEG', 'FRLAKE', &
-          'FRLAND', 'FRLANDIC', 'FROCEAN', 'FRSEAICE', 'FRSNO', 'SNODP', &
-          'SNOMAS', 'SSM', 'USTAR_THRESHOLD', 'GWETTOP', 'GWETROOT', 'WILT', &
-          'TO3', 'TROPP', 'TropHt', 'LAT', 'LON')
-
-         scalar_val = this%get_2Dto0D_value(field_name, i, j)
-
-         ! For 2D fields, we need to return a pointer to a single element
-         ! This is a limitation of the current interface - we can't easily return a scalar as a 1D pointer
-         ! For now, we'll return null and indicate failure
-         rc = CC_FAILURE
-         return
-
-       case default
-         ! Try as scalar field - similar limitation
-         scalar_val = this%get_scalar_value(field_name)
-         rc = CC_FAILURE
-         return
-      end select
-
+      end if
    end subroutine metstate_get_column_ptr_subroutine
 
 
@@ -979,24 +1369,49 @@ CONTAINS
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
-
-      ! Handle scalar REAL fields directly
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_scalar_real.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('T')
+         if (associated(this%T)) this%T = field_data
+       case ('QV')
+         if (associated(this%QV)) this%QV = field_data
+       case ('RH')
+         if (associated(this%RH)) this%RH = field_data
+       case ('PMID')
+         if (associated(this%PMID)) this%PMID = field_data
+       case ('PEDGE')
+         if (associated(this%PEDGE)) this%PEDGE = field_data
+       case ('AIRDEN')
+         if (associated(this%AIRDEN)) this%AIRDEN = field_data
+       case ('AIRDEN_DRY')
+         if (associated(this%AIRDEN_DRY)) this%AIRDEN_DRY = field_data
+       case ('BXHEIGHT')
+         if (associated(this%BXHEIGHT)) this%BXHEIGHT = field_data
+       case ('DELP')
+         if (associated(this%DELP)) this%DELP = field_data
+       case ('DELP_DRY')
+         if (associated(this%DELP_DRY)) this%DELP_DRY = field_data
+       case ('PS')
+         if (associated(this%PS)) this%PS = field_data
+       case ('TS')
+         if (associated(this%TS)) this%TS = field_data
+       case ('PBLH')
+         if (associated(this%PBLH)) this%PBLH = field_data
+       case ('USTAR')
+         if (associated(this%USTAR)) this%USTAR = field_data
+       case ('HFLUX')
+         if (associated(this%HFLUX)) this%HFLUX = field_data
+       case ('OBK')
+         if (associated(this%OBK)) this%OBK = field_data
+       case ('LAT')
+         if (associated(this%LAT)) this%LAT = field_data
+       case ('LON')
+         if (associated(this%LON)) this%LON = field_data
+       case ('FRVEG')
+         if (associated(this%FRVEG)) this%FRVEG = field_data
+       case ('AREA_M2')
+         if (associated(this%AREA_M2)) this%AREA_M2 = field_data
        case default
-         ! If not a scalar field, try broadcasting to 2D REAL arrays
-         select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_real.inc"
-          case default
-            ! Try broadcasting to 3D REAL arrays
-            select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_real.inc"
-             case default
-               call error_mgr%report_error(ERROR_NOT_FOUND, &
-                  'Unknown REAL field name: ' // trim(field_name), rc)
-               rc = CC_FAILURE
-            end select
-         end select
+         rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_scalar_real
 
@@ -1011,24 +1426,25 @@ CONTAINS
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
-
-      ! Handle scalar INTEGER fields directly
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_scalar_int.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('NLEVS')
+         this%NLEVS = field_data
+       case ('NSOIL')
+         this%nSOIL = field_data
+       case ('NSOILTYPE')
+         this%nSOILTYPE = field_data
+       case ('LWI')
+         if (associated(this%LWI)) this%LWI = field_data
+       case ('DLUSE')
+         if (associated(this%DLUSE)) this%DLUSE = field_data
+       case ('DSOILTYPE')
+         if (associated(this%DSOILTYPE)) this%DSOILTYPE = field_data
+       case ('NLNDTYPE')
+         if (associated(this%nLNDTYPE)) this%nLNDTYPE = field_data
+       case ('TROPLEV')
+         if (associated(this%TropLev)) this%TropLev = field_data
        case default
-         ! If not a scalar field, try broadcasting to 2D INTEGER arrays
-         select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_int.inc"
-          case default
-            ! Try broadcasting to 3D INTEGER arrays
-            select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_int.inc"
-             case default
-               call error_mgr%report_error(ERROR_NOT_FOUND, &
-                  'Unknown INTEGER field name: ' // trim(field_name), rc)
-               rc = CC_FAILURE
-            end select
-         end select
+         rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_scalar_int
 
@@ -1043,24 +1459,21 @@ CONTAINS
       integer, intent(out) :: rc
 
       rc = CC_SUCCESS
-
-      ! Handle scalar LOGICAL fields directly
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_scalar_logical.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('ISLAND')
+         if (associated(this%IsLand)) this%IsLand = field_data
+       case ('ISWATER')
+         if (associated(this%IsWater)) this%IsWater = field_data
+       case ('ISICE')
+         if (associated(this%IsIce)) this%IsIce = field_data
+       case ('ISSNOW')
+         if (associated(this%IsSnow)) this%IsSnow = field_data
+       case ('ISLOCALNOON')
+         if (associated(this%IsLocalNoon)) this%IsLocalNoon = field_data
+       case ('INPBL')
+         if (associated(this%InPbl)) this%InPbl = field_data
        case default
-         ! If not a scalar field, try broadcasting to 2D LOGICAL arrays
-         select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_logical.inc"
-          case default
-            ! Try broadcasting to 3D LOGICAL arrays
-            select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_logical.inc"
-             case default
-               call error_mgr%report_error(ERROR_NOT_FOUND, &
-                  'Unknown LOGICAL field name: ' // trim(field_name), rc)
-               rc = CC_FAILURE
-            end select
-         end select
+         rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_scalar_logical
 
@@ -1074,13 +1487,29 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 2D REAL field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_real.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('PS')
+         if (associated(this%PS)) this%PS = field_data
+       case ('TS')
+         if (associated(this%TS)) this%TS = field_data
+       case ('PBLH')
+         if (associated(this%PBLH)) this%PBLH = field_data
+       case ('USTAR')
+         if (associated(this%USTAR)) this%USTAR = field_data
+       case ('HFLUX')
+         if (associated(this%HFLUX)) this%HFLUX = field_data
+       case ('OBK')
+         if (associated(this%OBK)) this%OBK = field_data
+       case ('LAT')
+         if (associated(this%LAT)) this%LAT = field_data
+       case ('LON')
+         if (associated(this%LON)) this%LON = field_data
+       case ('FRVEG')
+         if (associated(this%FRVEG)) this%FRVEG = field_data
+       case ('AREA_M2')
+         if (associated(this%AREA_M2)) this%AREA_M2 = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_2d_real
@@ -1095,13 +1524,19 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 2D INTEGER field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_int.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('LWI')
+         if (associated(this%LWI)) this%LWI = field_data
+       case ('DLUSE')
+         if (associated(this%DLUSE)) this%DLUSE = field_data
+       case ('DSOILTYPE')
+         if (associated(this%DSOILTYPE)) this%DSOILTYPE = field_data
+       case ('NLNDTYPE')
+         if (associated(this%nLNDTYPE)) this%nLNDTYPE = field_data
+       case ('TROPLEV')
+         if (associated(this%TropLev)) this%TropLev = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_2d_int
@@ -1116,13 +1551,19 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 2D LOGICAL field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_2d_logical.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('ISLAND')
+         if (associated(this%IsLand)) this%IsLand = field_data
+       case ('ISWATER')
+         if (associated(this%IsWater)) this%IsWater = field_data
+       case ('ISICE')
+         if (associated(this%IsIce)) this%IsIce = field_data
+       case ('ISSNOW')
+         if (associated(this%IsSnow)) this%IsSnow = field_data
+       case ('ISLOCALNOON')
+         if (associated(this%IsLocalNoon)) this%IsLocalNoon = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_2d_logical
@@ -1137,13 +1578,33 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 3D REAL field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_real.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('T')
+         if (associated(this%T)) this%T = field_data
+       case ('QV')
+         if (associated(this%QV)) this%QV = field_data
+       case ('RH')
+         if (associated(this%RH)) this%RH = field_data
+       case ('PMID')
+         if (associated(this%PMID)) this%PMID = field_data
+       case ('PEDGE')
+         if (associated(this%PEDGE)) this%PEDGE = field_data
+       case ('AIRDEN')
+         if (associated(this%AIRDEN)) this%AIRDEN = field_data
+       case ('AIRDEN_DRY')
+         if (associated(this%AIRDEN_DRY)) this%AIRDEN_DRY = field_data
+       case ('BXHEIGHT')
+         if (associated(this%BXHEIGHT)) this%BXHEIGHT = field_data
+       case ('DELP')
+         if (associated(this%DELP)) this%DELP = field_data
+       case ('DELP_DRY')
+         if (associated(this%DELP_DRY)) this%DELP_DRY = field_data
+       case ('U')
+         if (associated(this%U)) this%U = field_data
+       case ('V')
+         if (associated(this%V)) this%V = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_3d_real
@@ -1158,13 +1619,11 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 3D INTEGER field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_int.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('ILAND')
+         if (associated(this%ILAND)) this%ILAND = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_3d_int
@@ -1179,19 +1638,164 @@ CONTAINS
       type(ErrorManagerType), pointer, intent(inout) :: error_mgr
       integer, intent(out) :: rc
 
-      ! Generated include file for 3D LOGICAL field assignment
       rc = CC_SUCCESS
-      select case (trim(adjustl(field_name)))
-#include "metstate_set_field_3d_logical.inc"
+      select case (to_upper(trim(adjustl(field_name))))
+       case ('INPBL')
+         if (associated(this%InPbl)) this%InPbl = field_data
+       case ('INSTRATMESO')
+         if (associated(this%InStratMeso)) this%InStratMeso = field_data
+       case ('INSTRATOSPHERE')
+         if (associated(this%InStratosphere)) this%InStratosphere = field_data
+       case ('INTROPOSPHERE')
+         if (associated(this%InTroposphere)) this%InTroposphere = field_data
        case default
-         call error_mgr%report_error(ERROR_NOT_FOUND, &
-            "Unknown field name: " // trim(field_name), rc)
          rc = CC_FAILURE
       end select
    end subroutine metstate_set_field_3d_logical
 
-! Include the auto-generated multiple fields interface
-#include "metstate_multiple_fields_interface.inc"
+   subroutine metstate_set_multiple_fields(this, field_names, error_mgr, rc, &
+      AREA_M2_data, FRVEG_data, LAT_data, LON_data, IsLand_data, IsWater_data, NLEVS_data, LWI_data, &
+      T_data, U_data, V_data, InPbl_data, nSOIL_data, nSOILTYPE_data, QV_data, RH_data, TropLev_data)
+      use error_mod, only: ErrorManagerType, CC_SUCCESS, CC_FAILURE
+      class(MetStateType), intent(inout) :: this
+      character(len=*), intent(in) :: field_names(:)
+      type(ErrorManagerType), pointer, intent(inout) :: error_mgr
+      integer, intent(out) :: rc
+
+      real(fp), optional, intent(in) :: AREA_M2_data(:,:)
+      real(fp), optional, intent(in) :: FRVEG_data(:,:)
+      real(fp), optional, intent(in) :: LAT_data(:,:)
+      real(fp), optional, intent(in) :: LON_data(:,:)
+      logical, optional, intent(in) :: IsLand_data(:,:)
+      logical, optional, intent(in) :: IsWater_data(:,:)
+      integer, optional, intent(in) :: NLEVS_data
+      integer, optional, intent(in) :: LWI_data(:,:)
+      real(fp), optional, intent(in) :: T_data(:,:,:)
+      real(fp), optional, intent(in) :: U_data(:,:,:)
+      real(fp), optional, intent(in) :: V_data(:,:,:)
+      logical, optional, intent(in) :: InPbl_data(:,:,:)
+      integer, optional, intent(in) :: nSOIL_data
+      integer, optional, intent(in) :: nSOILTYPE_data
+      real(fp), optional, intent(in) :: QV_data(:,:,:)
+      real(fp), optional, intent(in) :: RH_data(:,:,:)
+      integer, optional, intent(in) :: TropLev_data(:,:)
+
+      integer :: idx
+      character(len=32) :: name
+
+      rc = CC_SUCCESS
+
+      do idx = 1, size(field_names)
+         name = trim(adjustl(field_names(idx)))
+         select case (name)
+          case ('AREA_M2', 'area_m2')
+            if (present(AREA_M2_data)) then
+               call this%set_field(name, AREA_M2_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('FRVEG', 'frveg')
+            if (present(FRVEG_data)) then
+               call this%set_field(name, FRVEG_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('LAT', 'lat')
+            if (present(LAT_data)) then
+               call this%set_field(name, LAT_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('LON', 'lon')
+            if (present(LON_data)) then
+               call this%set_field(name, LON_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('IsLand', 'island')
+            if (present(IsLand_data)) then
+               call this%set_field(name, IsLand_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('IsWater', 'iswater')
+            if (present(IsWater_data)) then
+               call this%set_field(name, IsWater_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('NLEVS', 'nlevs')
+            if (present(NLEVS_data)) then
+               call this%set_field(name, NLEVS_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('LWI', 'lwi')
+            if (present(LWI_data)) then
+               call this%set_field(name, LWI_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('T', 't')
+            if (present(T_data)) then
+               call this%set_field(name, T_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('U', 'u')
+            if (present(U_data)) then
+               call this%set_field(name, U_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('V', 'v')
+            if (present(V_data)) then
+               call this%set_field(name, V_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('InPbl', 'inpbl')
+            if (present(InPbl_data)) then
+               call this%set_field(name, InPbl_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('nSOIL', 'nsoil')
+            if (present(nSOIL_data)) then
+               call this%set_field(name, nSOIL_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('nSOILTYPE', 'nsoiltype')
+            if (present(nSOILTYPE_data)) then
+               call this%set_field(name, nSOILTYPE_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('QV', 'qv')
+            if (present(QV_data)) then
+               call this%set_field(name, QV_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('RH', 'rh')
+            if (present(RH_data)) then
+               call this%set_field(name, RH_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case ('TropLev', 'troplev')
+            if (present(TropLev_data)) then
+               call this%set_field(name, TropLev_data, error_mgr, rc)
+            else
+               rc = CC_FAILURE
+            end if
+          case default
+            rc = CC_FAILURE
+         end select
+         if (rc /= CC_SUCCESS) return
+      end do
+   end subroutine metstate_set_multiple_fields
 
    !> \brief Derive meteorological fields from existing data
    !!
@@ -1232,12 +1836,12 @@ CONTAINS
       rc = CC_SUCCESS
       call this%get_dimensions(nx, ny, nz)
 
-      select case (trim(adjustl(field_name)))
+      select case (to_upper(trim(adjustl(field_name))))
 
        case ('MAIRDEN', 'mairden', 'AIRDEN', 'airden')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
-         if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
+         if (.not. associated(this%PMID) .or. .not. associated(this%T)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PMID and T fields required for MAIRDEN/AIRDEN calculation', rc, &
                thisLoc, 'Ensure pressure and temperature are available')
@@ -1246,7 +1850,7 @@ CONTAINS
          endif
 
          ! Allocate MAIRDEN if not already allocated
-         if (.not. allocated(this%MAIRDEN) .or. .not. allocated(this%AIRDEN)) then
+         if (.not. associated(this%MAIRDEN) .or. .not. associated(this%AIRDEN)) then
             call error_mgr%report_error(rc, 'MAIRDEN/AIRDEN fields need to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1265,7 +1869,7 @@ CONTAINS
        case ('AIRDEN_DRY', 'airden_dry', 'PMID_DRY', 'pmid_dry', 'PEDGE_DRY', 'pedge_dry', 'DELP_DRY', 'delp_dry')
          ! Calculate dry air density from pressure and temperature
          ! ρ = P / (R_specific * T) where R_specific = R / MW
-         if (.not. allocated(this%PMID) .or. .not. allocated(this%T)) then
+         if (.not. associated(this%PMID) .or. .not. associated(this%T)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PMID and T fields required for AIRDEN_DRY calculation', rc, &
                thisLoc, 'Ensure pressure and temperature are available')
@@ -1274,8 +1878,8 @@ CONTAINS
          endif
 
          ! Allocate AIRDEN_DRY if not already allocated
-         if (.not. allocated(this%AIRDEN_DRY) .or. .not. allocated(this%PMID_DRY) .or. &
-            .not. allocated(this%PEDGE_DRY) .or. .not. allocated(this%DELP_DRY)) then
+         if (.not. associated(this%AIRDEN_DRY) .or. .not. associated(this%PMID_DRY) .or. &
+            .not. associated(this%PEDGE_DRY) .or. .not. associated(this%DELP_DRY)) then
             call error_mgr%report_error(rc, 'AIRDEN_DRY/PMID_DRY/PEDGE_DRY/DELP_DRY fields need to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1300,7 +1904,7 @@ CONTAINS
 
        case ('RH', 'rh')
          ! Calculate virtual temperature from temperature and humidity
-         if (.not. allocated(this%T) .or. .not. allocated(this%QV) .or. .not. allocated(this%PMID)) then
+         if (.not. associated(this%T) .or. .not. associated(this%QV) .or. .not. associated(this%PMID)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'T, PMID and QV fields required for RH calculation', rc, &
                thisLoc, 'Ensure temperature, pressure and humidity are available')
@@ -1309,7 +1913,7 @@ CONTAINS
          endif
 
          ! Allocate RH if not already allocated
-         if (.not. allocated(this%RH)) then
+         if (.not. associated(this%RH)) then
             call error_mgr%report_error(rc, 'RH field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1326,7 +1930,7 @@ CONTAINS
 
        case ('TV', 'tv')
          ! Calculate virtual temperature from temperature and humidity
-         if (.not. allocated(this%T) .or. .not. allocated(this%QV)) then
+         if (.not. associated(this%T) .or. .not. associated(this%QV)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'T and QV fields required for TV calculation', rc, &
                thisLoc, 'Ensure temperature and humidity are available')
@@ -1335,7 +1939,7 @@ CONTAINS
          endif
 
          ! Allocate TV if not already allocated
-         if (.not. allocated(this%TV)) then
+         if (.not. associated(this%TV)) then
             call error_mgr%report_error(rc, 'TV field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1352,8 +1956,8 @@ CONTAINS
 
        case ('OBK', 'obk')
          ! Calculate OBK from sensible heat flux and air density
-         if (.not. allocated(this%HFLUX) .or. .not. allocated(this%AIRDEN) .or. .not. allocated(this%TS) .or. &
-            .not. allocated(this%USTAR)) then
+         if (.not. associated(this%HFLUX) .or. .not. associated(this%AIRDEN) .or. .not. associated(this%TS) .or. &
+            .not. associated(this%USTAR)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'TS, USTAR, AIRDEN and HFLUX fields required for OBK calculation', rc, &
                thisLoc, 'Ensure temperature, ustar, air density, and sensible heat flux are available')
@@ -1362,7 +1966,7 @@ CONTAINS
          endif
 
          ! Allocate OBK if not already allocated
-         if (.not. allocated(this%OBK)) then
+         if (.not. associated(this%OBK)) then
             call error_mgr%report_error(rc, 'OBK field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1379,7 +1983,7 @@ CONTAINS
 
        case ('SUNCOS', 'suncos')
          ! Calculate SUNCOS
-         if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
+         if (.not. associated(this%LAT) .or. .not. associated(this%LON)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'LAT and LON fields required for SUNCOS calculation', rc, &
                thisLoc, 'Ensure latitude and longitude are available')
@@ -1388,7 +1992,7 @@ CONTAINS
          endif
 
          ! Allocate OBK if not already allocated
-         if (.not. allocated(this%SUNCOS)) then
+         if (.not. associated(this%SUNCOS)) then
             call error_mgr%report_error(rc, 'SUNCOS field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1404,7 +2008,7 @@ CONTAINS
 
        case ('SUNCOSmid', 'suncosmid')
          ! Calculate SUNCOSmid
-         if (.not. allocated(this%LAT) .or. .not. allocated(this%LON)) then
+         if (.not. associated(this%LAT) .or. .not. associated(this%LON)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'LAT and LON fields required for SUNCOSmid calculation', rc, &
                thisLoc, 'Ensure latitude and longitude are available')
@@ -1413,7 +2017,7 @@ CONTAINS
          endif
 
          ! Allocate OBK if not already allocated
-         if (.not. allocated(this%SUNCOSmid)) then
+         if (.not. associated(this%SUNCOSmid)) then
             call error_mgr%report_error(rc, 'SUNCOSmid field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1429,7 +2033,7 @@ CONTAINS
 
        case ('DELP', 'delp')
          ! Calculate box height from geopotential heights
-         if (.not. allocated(this%PEDGE)) then
+         if (.not. associated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PEDGE field required for DELP calculation', rc, &
                thisLoc, 'Ensure pressure edges are available')
@@ -1438,7 +2042,7 @@ CONTAINS
          endif
 
          ! Allocate BXHEIGHT if not already allocated
-         if (.not. allocated(this%DELP)) then
+         if (.not. associated(this%DELP)) then
             call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1456,7 +2060,7 @@ CONTAINS
 
        case ('BXHEIGHT', 'bxheight')
          ! Calculate box height from geopotential heights
-         if (.not. allocated(this%PEDGE)) then
+         if (.not. associated(this%PEDGE)) then
             call error_mgr%report_error(ERROR_INVALID_INPUT, &
                'PEDGE field required for BXHEIGHT calculation', rc, &
                thisLoc, 'Ensure pressure edges are available')
@@ -1465,7 +2069,7 @@ CONTAINS
          endif
 
          ! Allocate BXHEIGHT if not already allocated
-         if (.not. allocated(this%BXHEIGHT)) then
+         if (.not. associated(this%BXHEIGHT)) then
             call error_mgr%report_error(rc, 'BXHEIGHT field needs to be allocated first!', rc, thisLoc)
             call error_mgr%pop_context()
             return
@@ -1539,7 +2143,7 @@ CONTAINS
        case ('FRLANDUSE', 'frlanduse')
          !Note that FRLANDUSE is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
-         if (.not. allocated(this%FRLANDUSE)) allocate(this%FRLANDUSE(nx, ny, nlanduse))
+         if (.not. associated(this%FRLANDUSE)) allocate(this%FRLANDUSE(nx, ny, nlanduse))
          this%FRLANDUSE(:,:,:) = 0.0_fp
          do j = 1, ny
             do i = 1, nx
@@ -1553,7 +2157,7 @@ CONTAINS
        case ('ILAND', 'iland')
          !Note that ILAND is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
-         if (.not. allocated(this%ILAND)) allocate(this%ILAND(nx, ny, nlanduse))
+         if (.not. associated(this%ILAND)) allocate(this%ILAND(nx, ny, nlanduse))
          this%ILAND(:,:,:) = 0
          do j = 1, ny
             do i = 1, nx
@@ -1565,7 +2169,7 @@ CONTAINS
        case ('FRLAI', 'frlai')
          !Note that FRLAI is not allocated yet in met_sate%init phase because we don't know nlanduse yet
          nlanduse = 20  !set to 20 for now; later we can read from a config file or pass in from outside
-         if (.not. allocated(this%FRLAI)) allocate(this%FRLAI(nx, ny, nlanduse))
+         if (.not. associated(this%FRLAI)) allocate(this%FRLAI(nx, ny, nlanduse))
          this%FRLAI(:,:,:) = 0.0_fp
          do j = 1, ny
             do i = 1, nx
@@ -1667,5 +2271,21 @@ CONTAINS
 
       call error_mgr%pop_context()
    end subroutine metstate_derive_field
+
+   !> @brief Private helper to convert a string to uppercase for case-insensitive matching
+   function to_upper(str) result(upper_str)
+      implicit none
+      character(len=*), intent(in) :: str
+      character(len=len(str)) :: upper_str
+      integer :: i, char_code
+      do i = 1, len(str)
+         char_code = ichar(str(i:i))
+         if (char_code >= 97 .and. char_code <= 122) then
+            upper_str(i:i) = char(char_code - 32)
+         else
+            upper_str(i:i) = str(i:i)
+         end if
+      end do
+   end function to_upper
 
 END MODULE MetState_Mod

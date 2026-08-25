@@ -1,141 +1,51 @@
 # CATChem Process Generator
 
-A powerful Python tool for generating standardized atmospheric chemistry process implementations for the CATChem framework.
+A powerful Python tool for generating standardized atmospheric chemistry and physics process implementations matching the CATChem C++ core architecture (`catchem::Core`, `catchem::StateManager`, `catchem::ProcessRegistry`).
 
 ## Features
 
-- 🎯 **Template-driven generation** - Uses Jinja2 templates for consistent code structure
-- ⚙️ **YAML configuration** - Simple configuration files define process parameters
-- 🔍 **Validation** - Built-in validation for process configurations
-- 🚀 **Modern Fortran** - Generates clean, modern Fortran 2008+ code
-- 🔧 **CATChem integration** - Seamlessly integrates with CATChem infrastructure
-- 🌡️ **MetState Field Detection** - Automatically discovers and classifies meteorological fields
+- 🎯 **C++ Core Architecture Integration** - Generates C++ process wrapper headers/sources (`catchem_process_<name>.hpp/cpp`), flat C-interoperable Fortran science bridges (`<ClassName>ScienceBridge.F90`), and pure Fortran science schemes
+- ⚙️ **YAML Configuration** - Simple YAML configuration files define process parameters, schemes, species filters, and diagnostics
+- 🔍 **Validation** - Built-in configuration validation (`validate` subcommand) checking schema syntax and meteorological field compatibility
+- 📦 **Kokkos & CMake Ready** - Generates CMake build files supporting `CATCHEM_ENABLE_KOKKOS` and standalone CTest science unit tests (`test_<name>_science.f90`)
+- 🧪 **Template Command** - Generates starter YAML configs for `emission`, `chemistry`, `deposition`, `settling`, and `plume_rise` process types
 
-## MetState Field Detection
+## Usage
 
-The process generator includes automatic meteorological field discovery and classification from the CATChem MetState definition. This ensures generated processes are synchronized with the actual MetState implementation.
-
-### Field Classification
-
-The generator automatically categorizes fields into three types:
-
-- **2D Surface Fields**: Surface-level scalar fields (e.g., `FROCEAN`, `SST`, `USTAR`, `PBLH`)
-- **3D Atmospheric Fields**: Vertical profile arrays (e.g., `T`, `QV`, `P`, `U`, `V`)
-- **Categorical Fields**: Special-purpose arrays with non-vertical dimensions (e.g., `SOILM`, `FRLANDUSE`)
-
-### Field Discovery Commands
+### 1. Generate a Process Package
 
 ```bash
-# Show all discovered fields (summary)
-python process_generator.py fields --type all
-
-# Show detailed list of 2D surface fields
-python process_generator.py fields --type 2d --verbose
-
-# Show 3D atmospheric fields
-python process_generator.py fields --type 3d --verbose
-
-# Show categorical fields
-python process_generator.py fields --type categorical --verbose
-
-# Use specific MetState file
-python process_generator.py fields --metstate /path/to/metstate_mod.F90 --type all
+# Generate C++/Fortran process package from YAML config
+python process_generator.py generate --config configs/dust_emission.yaml --output-dir src/process/dust_test --force
 ```
 
-### Generated VirtualMet Pattern
-
-The generator produces code that uses the modern VirtualMet pattern:
-
-```fortran
-! Generated process implementation
-type(VirtualMetType), pointer :: met => null()
-
-! Get meteorological data pointer
-met => column%get_met()
-
-! Access fields based on automatic classification
-frocean(1) = met%FROCEAN    ! 2D surface field - scalar access
-sst(1) = met%SST            ! 2D surface field - scalar access
-
-! For 3D fields (when affects_full_column = true):
-! temperature(:) = met%T     ! 3D atmospheric field - array access
-```
-
-### MetState File Discovery
-
-The generator automatically finds the MetState file using these search paths:
-
-1. Automatic discovery: `../../src/core/metstate_mod.F90` (relative to generator)
-2. Explicit path: `--metstate /path/to/metstate_mod.F90`
-3. Fallback: Uses hardcoded field lists if MetState file not found
-
-### Benefits
-
-- **Always Up-to-Date**: New MetState fields are immediately available
-- **Type Safety**: Based on actual Fortran type definitions
-- **Reduced Maintenance**: No manual field list updates required
-- **Accurate Classification**: Respects actual field dimensions and usage patterns
-
-## Quick Start
-
-### 1. Set up development environment
+### 2. Validate Process Configuration
 
 ```bash
-# Quick setup - Full development environment (recommended for contributors)
-./setup_dev_env.sh my-env
-
-# Minimal setup - Just run the tool (for users)
-./setup_dev_env.sh my-env 3.10 minimal
-
-# Manual setup options:
-
-# Option A: Full development setup with pyproject.toml
-conda create -n catchem-process-gen python=3.10
-conda activate catchem-process-gen
-pip install -e ".[dev,test]"
-
-# Option B: Minimal setup with requirements.txt
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Option C: Manual venv with pyproject.toml
-python3 -m venv venv
-source venv/bin/activate
-pip install -e .
+# Validate YAML configuration syntax and field completeness
+python process_generator.py validate --config configs/dust_emission.yaml
 ```
 
-### 2. Generate a process
+### 3. Generate Starter YAML Configuration
 
 ```bash
-# Basic usage with automatic MetState field discovery
-python process_generator.py generate --config configs/example_process.yaml
-
-# With explicit MetState file path
-python process_generator.py generate --config configs/example_process.yaml --metstate ../../src/core/metstate_mod.F90
-
-# With custom output directory
-python process_generator.py generate --config configs/example_process.yaml --output /path/to/output
-
-# Validate configuration only
-python process_generator.py validate --config configs/example_process.yaml
-
-# Inspect discovered meteorological fields
-python process_generator.py fields --type all --verbose
+# Generate starter YAML template for chemistry process
+python process_generator.py template --type chemistry --output my_chem_template.yaml
 ```
 
-### 3. Integration with CATChem
+## Generated Process Layout
 
-The generated processes automatically integrate with the CATChem framework:
-
-```fortran
-! The generated process includes:
-! - Proper ProcessInterface implementation
-! - VirtualMet pattern with automatic field classification
-! - Error handling integration
-! - State variable management
-! - Diagnostic capability
-! - Registry-compatible factory pattern
+```text
+src/process/<process_name>/
+├── catchem_process_<name>.hpp       # C++ Process Interface Class Header
+├── catchem_process_<name>.cpp       # C++ Process Implementation & C-Registration
+├── <ClassName>ScienceBridge.F90      # Fortran BIND(C) Science Bridge
+├── <ClassName>Common_Mod.F90         # Fortran Common Types & Config
+├── schemes/                          # Pure Fortran Science Schemes
+│   ├── <ClassName>Scheme_<SCHEME>_Mod.F90
+│   └── CMakeLists.txt
+├── CMakeLists.txt                    # Process CMake Build Script
+└── README.md                         # Process Documentation
 ```
 
 ## Configuration Format
@@ -288,7 +198,7 @@ python process_generator.py COMMAND [OPTIONS]
 
 # Main commands
 python process_generator.py generate --config CONFIG_FILE
-python process_generator.py validate --config CONFIG_FILE  
+python process_generator.py validate --config CONFIG_FILE
 python process_generator.py template --type TYPE --output FILE
 python process_generator.py fields --type TYPE [--verbose]
 
@@ -299,7 +209,7 @@ python process_generator.py fields --type TYPE [--verbose]
   --metstate FILE        Path to MetState file for field discovery
   --verbose              Enable verbose output
 
-# Validate options  
+# Validate options
   --config CONFIG_FILE    YAML configuration file (required)
   --metstate FILE        Path to MetState file for field discovery
   --verbose              Enable verbose output

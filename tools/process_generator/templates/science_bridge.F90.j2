@@ -1,0 +1,119 @@
+module {{ config.class_name }}ScienceBridge_Mod
+   use iso_c_binding
+   use precision_mod, only: fp
+   use Constants, only: g0
+   use {{ config.class_name }}Common_Mod
+   {% for scheme in config.schemes %}
+   use {{ config.class_name }}Scheme_{{ scheme.class_name }}_Mod, only: compute_{{ scheme.name }}
+   {% endfor %}
+
+   implicit none
+   private
+
+   public :: run_{{ config.name }}_science_bridge
+
+contains
+
+   subroutine run_{{ config.name }}_science_bridge( &
+      n_cols, n_levels, n_species, n_soil, dt, &
+      active_scheme, diagnostics, &
+{% for field in all_met_fields %}
+      {{ field }}, &
+{% endfor %}
+      species_density, species_radius, species_lower_radius, species_upper_radius, &
+      conc, tendency, &
+{% for diag in config.diagnostics %}
+      diag_{{ diag.name }}, &
+{% endfor %}
+      diagnostic_species_id, n_diag_species &
+      ) bind(C, name="run_{{ config.name }}_science_bridge")
+
+      ! C-interoperable metadata
+      integer(c_int), value :: n_cols, n_levels, n_species, n_soil
+      real(c_double), value :: dt
+      character(kind=c_char), intent(in) :: active_scheme(*)
+      integer(c_int), value :: diagnostics
+
+      ! Met field C pointers
+      {% for field in all_met_fields %}
+      type(c_ptr), value :: {{ field }}
+      {% endfor %}
+
+      ! Species properties
+      type(c_ptr), value :: species_density
+      type(c_ptr), value :: species_radius
+      type(c_ptr), value :: species_lower_radius
+      type(c_ptr), value :: species_upper_radius
+
+      ! Multi-dimensional Views
+      type(c_ptr), value :: conc
+      type(c_ptr), value :: tendency
+
+      ! Diagnostics
+      {% for diag in config.diagnostics %}
+      type(c_ptr), value :: diag_{{ diag.name }}
+      {% endfor %}
+      integer(c_int), value :: n_diag_species
+      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+
+      ! Fortran Pointers
+      {% for field in all_met_fields %}
+      real(c_double), pointer :: f_{{ field }}(:)
+      {% endfor %}
+      real(c_double), pointer :: f_species_density(:), f_species_radius(:)
+      real(c_double), pointer :: f_species_lower_radius(:), f_species_upper_radius(:)
+      real(c_double), pointer :: f_conc(:,:,:), f_tendency(:,:,:)
+      {% for diag in config.diagnostics %}
+      real(c_double), pointer :: f_diag_{{ diag.name }}(:)
+      {% endfor %}
+
+      ! Local variables
+      character(len=32) :: local_scheme
+      integer :: i, icol, ilev, ispec
+
+      ! Convert C string to Fortran character
+      local_scheme = ' '
+      i = 1
+      do while (active_scheme(i) /= c_null_char .and. i <= 32)
+         local_scheme(i:i) = active_scheme(i)
+         i = i + 1
+      end do
+
+      ! Associate Fortran pointers
+      {% for field in all_met_fields %}
+      if (c_associated({{ field }})) call c_f_pointer({{ field }}, f_{{ field }}, [n_cols])
+      {% endfor %}
+      if (c_associated(species_density)) call c_f_pointer(species_density, f_species_density, [n_species])
+      if (c_associated(species_radius)) call c_f_pointer(species_radius, f_species_radius, [n_species])
+      if (c_associated(species_lower_radius)) call c_f_pointer(species_lower_radius, f_species_lower_radius, [n_species])
+      if (c_associated(species_upper_radius)) call c_f_pointer(species_upper_radius, f_species_upper_radius, [n_species])
+
+      if (c_associated(conc)) call c_f_pointer(conc, f_conc, [n_cols, n_levels, n_species])
+      if (c_associated(tendency)) call c_f_pointer(tendency, f_tendency, [n_cols, n_levels, n_species])
+
+      {% for diag in config.diagnostics %}
+      if (c_associated(diag_{{ diag.name }})) call c_f_pointer(diag_{{ diag.name }}, f_diag_{{ diag.name }}, [n_cols])
+      {% endfor %}
+
+      ! Column iteration
+      do icol = 1, n_cols
+         select case (trim(adjustl(local_scheme)))
+         {% for scheme in config.schemes %}
+         case ("{{ scheme.name }}")
+            call compute_{{ scheme.name }}( &
+               n_levels, n_species, real(dt, fp), &
+{% for field in all_met_fields %}
+               f_{{ field }}(icol), &
+{% endfor %}
+               f_species_density, f_species_radius, &
+               f_conc(icol, :, :), f_tendency(icol, :, :) &
+            )
+         {% endfor %}
+         case default
+            ! Unknown scheme fallback
+         end select
+      end do
+
+   end subroutine run_{{ config.name }}_science_bridge
+
+end module {{ config.class_name }}ScienceBridge_Mod

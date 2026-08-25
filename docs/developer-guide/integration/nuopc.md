@@ -108,7 +108,7 @@ subroutine InitializeP2(model, importState, exportState, clock, rc)
 
   ! Read configuration
   call ESMF_ConfigGetAttribute(config, config_file, &
-    label='catchem_config_file:', default='catchem_config.yml', rc=rc)
+    label='catchem_config_file:', default='CATChem_config.yml', rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU)) return
 
   ! Create grid (or get from parent)

@@ -1,7 +1,7 @@
 # CATChem Library and Modeling Component
 
 ![CATChem_logo](diagrams/CATChem_logo.png){: width="35%", align="right"}
-CATChem (Configurable ATmospheric Chemistry) is a library and modeling component that includes all chemical and aerosol processes needed to perform atmospheric chemistry and composition simulations within a model through a flexible, easy to modify, and well-documented infrastructure. CATChem will include the following processes: chemical kinetics, aerosols, photolysis, wet deposition, dry deposition, connections to emissions, and connection to physics schemes. CATChem is integrated into NOAA’s Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. UFS-Chem is a modern, high-performance atmospheric chemistry model designed for operational and research applications including weather, air quality, and smoke forecasting. Built with modern Fortran and designed for scalability, CATChem provides sophisticated atmospheric chemistry capabilities as an open-source community project.
+CATChem (Configurable ATmospheric Chemistry) is a library and modeling component that includes all chemical and aerosol processes needed to perform atmospheric chemistry and composition simulations within a model through a flexible, easy to modify, and well-documented infrastructure. CATChem will include the following processes: chemical kinetics, aerosols, photolysis, wet deposition, dry deposition, connections to emissions, and connection to physics schemes. CATChem is integrated into NOAA’s Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. UFS-Chem is a modern, high-performance atmospheric chemistry model designed for operational and research applications including weather, air quality, and smoke forecasting. Built with modern C++20 and powered by Kokkos for GPU/CPU acceleration, CATChem provides a high-performance, scalable, and cross-platform framework for atmospheric composition simulations, while maintaining a clean Fortran integration API.
 
 ## ✨ Key Features
 
@@ -11,7 +11,7 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
 
   ---
 
-  Optimized for modern HPC systems with column virtualization, efficient memory management, and scalable parallelization.
+  Optimized for modern GPU/CPU HPC systems via Kokkos and zero-copy column virtualization, efficient memory management, and scalable parallelization.
 
 - :material-puzzle: **Modular Architecture**
 
@@ -29,7 +29,7 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
 
   ---
 
-  Full atmospheric chemistry including gas-phase, aerosol processes, emissions, deposition, and transport.
+  Full atmospheric chemistry including gas-phase (MICM), photolysis (TUV-x), aerosol processes, emissions, deposition, and transport.
 
 </div>
 
@@ -42,9 +42,9 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
     git clone https://github.com/UFS-Community/CATChem.git
     cd CATChem
 
-    # Build with CMake
+    # Build with CMake (supports -DCATCHEM_ENABLE_KOKKOS=ON for GPU acceleration)
     mkdir build && cd build
-    cmake ..
+    cmake -DCATCHEM_ENABLE_KOKKOS=ON ..
     make -j$(nproc)
     ```
 
@@ -53,14 +53,14 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
     ```bash
     # Run a test case
     cd build
-    ctest -R test_CATChemCore
+    ctest -R test_catchem_gaschem
 
     ```
 
-=== "Integration"
+=== "Fortran Integration"
 
     ```fortran
-    ! Integrate with your model
+    ! Integrate with your model via BIND(C) compatibility wrappers
     use CATChemAPI_Mod
 
     type(CATChemType) :: catchem
@@ -70,17 +70,29 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
     call catchem%finalize(rc)
     ```
 
+=== "C++ Integration"
+
+    ```cpp
+    // Integrate with your model directly in native C++
+    #include <catchem_core.hpp>
+
+    auto core = std::make_shared<catchem::Core>("tests/Configs/Default/CATChem_config.yml");
+    core->get_state_manager()->sync_to_device();
+    core->run_timestep(300.0);
+    core->get_state_manager()->sync_to_host();
+    ```
+
 ## 🧪 Available Processes
 
 | Process Type | Description | Status |
 |--------------|-------------|--------|
-| <span class="process-badge process-badge--chemistry">Chemistry</span> | Gas-phase and aerosol chemistry | 🚧 In development|
+| <span class="process-badge process-badge--chemistry">Chemistry</span> | Gas-phase (MICM) and Photolysis (TUV-x) | ✅ Completed |
 | <span class="process-badge process-badge--emission">Emissions</span> | Anthropogenic and biogenic emissions | 🚧 In development|
-| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | 🚧 In Development |
-| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | 🚧 In Development |
-| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | 🚧 In Development |
-| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | 🚧 In development |
-| <span class="process-badge process-badge--emission">Sea Salt</span> | Marine aerosol processes | ✅ Production |
+| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | ✅ Completed |
+| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | ✅ Completed |
+| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | ✅ Completed |
+| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | ✅ Completed |
+| <span class="process-badge process-badge--emission">Sea Salt</span> | Marine aerosol processes | ✅ Completed |
 
 
 ## 🏗️ Architecture Overview

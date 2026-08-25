@@ -1,46 +1,34 @@
-# CMakeLists.txt for {{ config.name }} process tests
+# CMakeLists.txt for {{ config.name }} process science tests
 # Generated on: {{ timestamp }}
 
-# Test executables
-set(TEST_SOURCES
-    unit/test_{{ config.name }}_unit.F90
-    integration/test_{{ config.name }}_integration.F90
+add_executable(test_{{ config.name }}_science test_{{ config.name }}_science.f90)
+
+target_link_libraries(test_{{ config.name }}_science
+    PRIVATE
+    CATChem_process_{{ config.name }}
+    CATChem_core
+    testing
 )
 
-# Create test executables
-foreach(test_source ${TEST_SOURCES})
-    get_filename_component(test_name ${test_source} NAME_WE)
+if(CATCHEM_ENABLE_KOKKOS)
+    target_link_libraries(test_{{ config.name }}_science PRIVATE Kokkos::kokkos CATChem_core_cpp yaml-cpp)
+endif()
 
-    add_executable(${test_name} ${test_source})
+set_target_properties(test_{{ config.name }}_science PROPERTIES
+    Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules"
+    LINKER_LANGUAGE Fortran
+)
 
-    # Link against process modules
-    target_link_libraries(${test_name}
-        CATChem_process_{{ config.name }}
-        CATChem_core
-        testing
-    )
+target_include_directories(test_{{ config.name }}_science PRIVATE
+    "${CMAKE_BINARY_DIR}/include"
+)
 
-    # Set Fortran module directory and force Fortran linker
-    set_target_properties(${test_name} PROPERTIES
-        Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules"
-        LINKER_LANGUAGE Fortran
-    )
+add_test(NAME test_{{ config.name }}_science COMMAND test_{{ config.name }}_science)
 
-    # Add include directories for module files
-    target_include_directories(${test_name} PRIVATE
-        "${CMAKE_BINARY_DIR}/include"
-        "${CMAKE_CURRENT_BINARY_DIR}/modules"
-    )
-
-    # Add to test suite
-    add_test(NAME ${test_name} COMMAND ${test_name})
-
-    # Set test properties
-    set_tests_properties(${test_name} PROPERTIES
-        TIMEOUT 60
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-    )
-endforeach()
+set_tests_properties(test_{{ config.name }}_science PROPERTIES
+    TIMEOUT 60
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
 
 # Test data files
 configure_file(

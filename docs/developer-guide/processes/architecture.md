@@ -23,57 +23,41 @@ graph TB
 
 ## ProcessInterface Base Class
 
-All processes extend the abstract `ProcessInterface` type defined in `ProcessInterface_Mod.F90`:
+All processes extend the abstract C++ `catchem::ProcessInterface` class defined in `src/core/catchem_process_interface.hpp`:
 
-```fortran
-type, abstract :: ProcessInterface
-   private
-   character(len=64) :: name = ''
-   character(len=64) :: version = ''
-   character(len=256) :: description = ''
-   logical :: is_initialized = .false.
-   logical :: is_active = .false.
-   real(fp) :: dt = 0.0_fp
+```cpp
+namespace catchem {
 
-   ! Species and size bin management
-   integer :: n_species = 0
-   character(len=32), allocatable :: species_names(:)
-   integer :: n_size_bins = 0
-   real(fp), allocatable :: size_bin_bounds(:)
+    class ProcessInterface {
+    public:
+        virtual ~ProcessInterface() = default;
 
-contains
-   ! Required interface methods
-   procedure(init_interface), deferred :: init
-   procedure(run_interface), deferred :: run
-   procedure(finalize_interface), deferred :: finalize
+        virtual std::string get_name() const = 0;
+        virtual void init(std::shared_ptr<StateManager> state) = 0;
+        virtual void run(std::shared_ptr<StateManager> state) = 0;
+        virtual void finalize() = 0;
+    };
 
-   ! Common utility methods
-   procedure :: is_ready
-   procedure :: get_name
-   procedure :: get_version
-end type ProcessInterface
+} // namespace catchem
 ```
 
 ### Required Methods
 
-Every process must implement three core methods:
+Every process must implement three core C++ methods:
 
-#### `init(container, rc)`
-- Initialize the process with configuration and state
-- Validate inputs and allocate resources
-- Set up diagnostic outputs
-- Register with the state container
+#### `init(state)`
+- Initialize the process with C++ `StateManager`
+- Set up diagnostic fields in `DiagnosticManager`
+- Prepare dynamic species mapping and index lists
 
-#### `run(container, rc)`
-- Execute the main process logic
-- Access state data through the container
-- Update species concentrations or emissions
-- Generate diagnostic output
+#### `run(state)`
+- Sync C++ Kokkos state host views
+- Retrieve meteorological and chemical pointers from `StateManager`
+- Invoke the Fortran `ScienceBridge` via `extern "C"`
+- Accumulate tendencies and update device views
 
-#### `finalize(rc)`
-- Clean up allocated resources
-- Close files and finalize diagnostics
-- Graceful shutdown procedures
+#### `finalize()`
+- Clean up allocated resources and state handles
 
 ## Process Development Workflow
 
@@ -85,100 +69,59 @@ mkdir src/process/myprocess
 mkdir src/process/myprocess/schemes
 
 # Create required files
-touch src/process/myprocess/myprocessProcess_Mod.F90
-touch src/process/myprocess/myprocessCommon_Mod.F90
+touch src/process/myprocess/catchem_process_myprocess.hpp
+touch src/process/myprocess/catchem_process_myprocess.cpp
+touch src/process/myprocess/MyProcessScienceBridge.F90
+touch src/process/myprocess/MyProcessCommon_Mod.F90
 touch src/process/myprocess/CMakeLists.txt
 touch src/process/myprocess/schemes/CMakeLists.txt
 ```
 
-### 2. Implement Process Module
+### 2. Implement Process Science Bridge
 
 ```fortran
-module myprocessProcess_Mod
-   use precision_mod
-   use state_mod, only : StateContainerType
-   use error_mod
-   use ProcessInterface_Mod
-   use myprocessCommon_Mod
+module MyProcessScienceBridge_Mod
+   use iso_c_binding
+   use precision_mod, only: fp
+   use StateManager_Mod, only: StateManagerType
+   use Error_Mod, only: CC_SUCCESS
 
    implicit none
    private
 
-   public :: myprocessProcessType
-
-   type, extends(ProcessInterface) :: myprocessProcessType
-      private
-
-      ! Process-specific configuration
-      character(len=32) :: selected_scheme = 'default'
-      real(fp) :: process_parameter = 1.0_fp
-
-   contains
-      procedure :: init => myprocess_init
-      procedure :: run => myprocess_run
-      procedure :: finalize => myprocess_finalize
-   end type myprocessProcessType
+   public :: run_myprocess_science_bridge
 
 contains
 
-   subroutine myprocess_init(this, container, rc)
-      class(myprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
+   subroutine run_myprocess_science_bridge( &
+      n_cols, n_levels, n_species, dt, &
+      conc, tendency, rc) bind(C, name="run_myprocess_science_bridge")
 
-      ! Set process metadata
-      this%name = 'myprocess'
-      this%version = '1.0'
-      this%description = 'My atmospheric process description'
+      integer(c_int), value :: n_cols, n_levels, n_species
+      real(c_double), value :: dt
+      type(c_ptr), value :: conc, tendency
+      integer(c_int), intent(out) :: rc
 
-      ! Process-specific initialization
-      ! ... implementation details ...
+      real(c_double), pointer :: f_conc(:,:,:), f_tendency(:,:,:)
 
-      this%is_initialized = .true.
-      this%is_active = .true.
-      rc = CC_SUCCESS
-   end subroutine myprocess_init
-
-   subroutine myprocess_run(this, container, rc)
-      class(myprocessProcessType), intent(inout) :: this
-      type(StateContainerType), intent(inout) :: container
-      integer, intent(out) :: rc
-
-      ! Get state pointers
-      type(MetStateType), pointer :: met_state
-      type(ChemStateType), pointer :: chem_state
-
-      met_state => container%get_met_state_ptr()
-      chem_state => container%get_chem_state_ptr()
+      if (c_associated(conc)) call c_f_pointer(conc, f_conc, [n_cols, n_levels, n_species])
+      if (c_associated(tendency)) call c_f_pointer(tendency, f_tendency, [n_cols, n_levels, n_species])
 
       ! Execute process logic
-      ! ... implementation details ...
-
       rc = CC_SUCCESS
-   end subroutine myprocess_run
+   end subroutine run_myprocess_science_bridge
 
-   subroutine myprocess_finalize(this, rc)
-      class(myprocessProcessType), intent(inout) :: this
-      integer, intent(out) :: rc
-
-      ! Cleanup resources
-      ! ... implementation details ...
-
-      rc = CC_SUCCESS
-   end subroutine myprocess_finalize
-
-end module myprocessProcess_Mod
+end module MyProcessScienceBridge_Mod
 ```
 
-### 3. Implement Schemes
+### 3. Implement Pure Science Schemes
 
 Schemes provide interchangeable algorithms within a process:
 
 ```fortran
 module MyScheme_Mod
-   use precision_mod
-   use state_mod, only : StateContainerType
-   use error_mod
+   use precision_mod, only: fp
+   use Error_Mod, only: CC_SUCCESS
 
    implicit none
    private
@@ -187,30 +130,30 @@ module MyScheme_Mod
 
 contains
 
-   subroutine myscheme_calculate(container, parameters, rc)
-      type(StateContainerType), intent(inout) :: container
-      real(fp), intent(in) :: parameters(:)
+   subroutine myscheme_calculate(n_levels, n_species, dt, conc, tendency, rc)
+      integer, intent(in) :: n_levels, n_species
+      real(fp), intent(in) :: dt
+      real(fp), intent(in) :: conc(n_levels, n_species)
+      real(fp), intent(out) :: tendency(n_levels, n_species)
       integer, intent(out) :: rc
 
       ! Scheme-specific calculations
-      ! ... implementation details ...
-
       rc = CC_SUCCESS
    end subroutine myscheme_calculate
 
 end module MyScheme_Mod
 ```
 
-## State Container Integration
+## State Manager Integration
 
-Processes interact with model state through the `StateContainerType`:
+Processes interact with model state through `catchem::StateManager` (C++) or `StateManagerType` (Fortran):
 
 ### Accessing State Data
 
 ```fortran
 ! Get meteorological state
 type(MetStateType), pointer :: met_state
-met_state => container%get_met_state_ptr()
+met_state => state_mgr%get_met_state_ptr()
 
 ! Access temperature, pressure, etc.
 real(fp), pointer :: temperature(:,:,:)
@@ -245,7 +188,7 @@ call error_mgr%report_info("Process completed successfully")
 
 ```fortran
 type(DiagnosticManagerType), pointer :: diag_mgr
-diag_mgr => container%get_diagnostic_manager()
+diag_mgr => state_mgr%get_diagnostic_manager()
 
 ! Register diagnostic variables
 call diag_mgr%register_field('settling_velocity', &
@@ -258,30 +201,21 @@ call diag_mgr%update_field('settling_velocity', settling_vel)
 
 ## Column Virtualization
 
-CATChem processes operate on 1D columns for optimal performance:
+CATChem processes operate on 1D columns for optimal performance via zero-copy Kokkos subviews (C++) or 1D array section slicing (Fortran):
+
+```cpp
+// Kokkos subview slicing 1D column from 3D state
+auto col_temp = Kokkos::subview(state->met.T->view(), icol, Kokkos::ALL(), 0);
+for (int k = 0; k < state->n_levels; ++k) {
+    col_temp(k) = calculate_level_temperature(col_temp(k));
+}
+```
 
 ```fortran
-subroutine process_column(this, column, rc)
-   class(myprocessProcessType), intent(inout) :: this
-   type(VirtualColumnType), intent(inout) :: column
-   integer, intent(out) :: rc
-
-   ! Process operates on single column
-   real(fp) :: temp_profile(column%nz)
-   real(fp) :: conc_profile(column%nz, this%n_species)
-
-   ! Get column data
-   temp_profile = column%get_met_field('temperature')
-   conc_profile = column%get_chem_concentrations()
-
-   ! Process calculations on 1D profiles
-   ! ... calculations ...
-
-   ! Update column data
-   call column%set_chem_concentrations(conc_profile)
-
-   rc = CC_SUCCESS
-end subroutine process_column
+! Fortran column processing inside ScienceBridge
+do icol = 1, n_cols
+   call compute_scheme(n_levels, n_species, dt, f_conc(icol, :, :), f_tendency(icol, :, :))
+end do
 ```
 
 ## Configuration Integration
@@ -311,20 +245,13 @@ processes:
 Create unit tests for individual process components:
 
 ```fortran
-program test_myprocess
-   use myprocessProcess_Mod
+program test_myprocess_science
+   use MyProcessScienceBridge_Mod
    use testing_mod
 
-   type(myprocessProcessType) :: process
-   type(StateContainerType) :: container
-   integer :: rc
-
-   ! Test initialization
-   call process%init(container, rc)
-   call assert_equal(rc, CC_SUCCESS, "Process initialization failed")
-
    ! Test calculation
-   call process%run(container, rc)
+   call run_myprocess_science_bridge(...)
+   call assert(.true., "Process science bridge execution passed")
    call assert_equal(rc, CC_SUCCESS, "Process run failed")
 
    ! Verify results

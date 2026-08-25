@@ -64,7 +64,7 @@ program standalone_column_driver
    config%nsteps = nsteps
 
    ! Configuration files (nspecies will be read from these)
-   config%config_file = 'tests/CATChem_config.yml'
+   config%config_file = 'tests/Configs/Default/CATChem_config.yml'
    config%species_file = 'tests/Configs/Default/CATChem_species.yml'
    config%emission_file = 'external_emission_config.yaml'
 
@@ -316,7 +316,6 @@ program standalone_column_driver
    print *, "  • Configuration-driven initialization (nspecies from files)"
    print *, "  • Multi-phase execution with timing analysis"
    print *, "  • FV3 hybrid σ-p vertical coordinate system"
-   print *, "  • YSU vertical dispersion for tracer transport"
    print *, "  • High-level NetCDF I/O API demonstration"
    print *, "  • Optimized column processing"
    print *, "  • Process-level diagnostics"
@@ -452,15 +451,6 @@ contains
          print *, "    ✓ External emissions"
       else
          print *, "    ⚠ External emissions (process not available)"
-         rc = CATCHEM_SUCCESS
-      endif
-
-      ! Add YSU vertical dispersion process
-      call catchem%add_process('ysuverticaldispersion', rc=rc)
-      if (rc == CATCHEM_SUCCESS) then
-         print *, "    ✓ YSU vertical dispersion"
-      else
-         print *, "    ⚠ YSU vertical dispersion (process not available)"
          rc = CATCHEM_SUCCESS
       endif
 
@@ -623,8 +613,6 @@ contains
       ! Get specific diagnostics for key processes
       call get_process_diagnostic_safely(catchem, 'dust', 'emission_flux', step, time_str)
       call get_process_diagnostic_safely(catchem, 'drydep', 'deposition_velocity', step, time_str)
-      call get_process_diagnostic_safely(catchem, 'ysuverticaldispersion', 'pbl_height', step, time_str)
-      call get_process_diagnostic_safely(catchem, 'ysuverticaldispersion', 'mixing_coefficients', step, time_str)
 
    end subroutine process_column_diagnostics
 

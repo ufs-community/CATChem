@@ -3,6 +3,9 @@ FROM ${BASE_IMAGE}
 
 SHELL ["/bin/bash", "-c"]
 
+USER root
+RUN apt-get update --yes && apt-get install --yes libkokkos-dev libyaml-cpp-dev
+
 COPY . /opt/catchem/src
 
 RUN source /opt/ufschem/spack-stack/setup.sh && \
@@ -14,6 +17,7 @@ RUN source /opt/ufschem/spack-stack/setup.sh && \
       -DCATCHEM_BUILD_TESTING=ON \
       -DCATCHEM_BUILD_NUOPC=ON \
       -DCATCHEM_BUILD_MUSICA=ON \
+      -DCATCHEM_ENABLE_KOKKOS=ON \
       -DCMAKE_INSTALL_PREFIX=/opt/catchem/install \
       -DCMAKE_BUILD_TYPE=Debug && \
     make -j$(nproc) && \

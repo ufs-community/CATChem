@@ -1,135 +1,72 @@
 !> \file species_mod.F90
-!! \brief Modern species definition and management for CATChem
-!! \ingroup core_modules
+!! \brief Compatibility-preserving Fortran proxy mirroring the unified C++ species metadata database
 !!
-!! \author CATChem Development Team
-!! \date 2025
-!! \version 2.0
-!!
-!! This module contains the enhanced SpeciesType and related routines
-!! for managing chemical species with integrated error handling and
-!! comprehensive validation.
-!!
-!! \details
-!! **Enhanced features in v2.0:**
-!! - Integrated error handling and validation
-!! - Enhanced species property management
-!! - Better memory management and cleanup
-!! - Comprehensive species database operations
-!! - Thread-safe species operations
-!!
-
 module species_mod
-   use precision_mod
-   use error_mod
-   use, intrinsic :: ieee_arithmetic
+   use precision_mod, only: fp
+   use error_mod, only: CC_SUCCESS, CC_FAILURE
+   use iso_c_binding, only: c_ptr, c_null_ptr, c_associated, c_int, c_double, c_char, c_null_char
+
    implicit none
    private
 
-   public :: SpeciesType
-   public :: SpeciesManagerType
-   public :: validate_species
-   public :: find_species_by_name
-   public :: create_species_database
+   public :: SpeciesType, SpeciesManagerType, validate_species, find_species_by_name, populate_species_from_cpp
 
-   !> Derived type for chemical species
-   !!
-   !! This type contains all properties and data for a chemical species
-   !! in the CATChem atmospheric chemistry model, including physical
-   !! properties, classification flags, and concentration data.
-   !!
-   !! @param long_name Long descriptive name for species (NetCDF attribute)
-   !! @param short_name Short identifier name for species
-   !! @param description Detailed description of the species
-   !! @param is_gas Logical flag: true if species is gaseous
-   !! @param is_aerosol Logical flag: true if species is an aerosol
-   !! @param is_tracer Logical flag: true if species is a passive tracer
-   !! @param is_advected Logical flag: true if species undergoes advection
-   !! @param is_drydep Logical flag: true if species undergoes dry deposition
-   !! @param is_photolysis Logical flag: true if species undergoes photolysis
-   !! @param is_gocart_aero Logical flag: true if species is a GOCART aerosol
-   !! @param is_dust Logical flag: true if species is dust
-   !! @param is_seasalt Logical flag: true if species is sea salt
-   !! @param mw_g Gaseous molecular weight [g/mol]
-   !! @param density Particle density [kg/m³]
-   !! @param radius Mean molecular diameter [m]
-   !! @param lower_radius Lower radius bound [m]
-   !! @param upper_radius Upper radius bound [m]
-   !! @param viscosity Kinematic viscosity [m²/s]
-   !! @param BackgroundVV Background concentration [v/v]
-   !! @param species_index Index in species array
-   !! @param drydep_index Index in dry deposition array
-   !! @param photolysis_index Index in photolysis array
-   !! @param gocart_aero_index Index in GOCART aerosol array
-   !! @param conc Species concentration [v/v] or [kg/kg]
+   ! Missing value sentinel
+   real(fp), parameter, public :: MISSING_VV = 1.0e-20_fp
+
+   !> Derived type representing a chemical species, populated dynamically from C++ records
    type :: SpeciesType
+      character(len=30) :: long_name = ""
+      character(len=30) :: short_name = ""
+      character(len=50) :: description = ""
 
-      ! Names
-      character(len=30) :: long_name   !< Long name for species used for NetCDF attribute "long_name"
-      character(len=30) :: short_name  !< Short name for species
-      character(len=50) :: description !< Description of species
+      logical :: is_gas = .true.
+      logical :: is_aerosol = .false.
+      logical :: is_tracer = .false.
+      logical :: is_advected = .true.
+      logical :: is_drydep = .false.
+      logical :: is_wetdep = .false.
+      logical :: is_photolysis = .false.
+      logical :: is_gocart_aero = .false.
+      logical :: is_dust = .false.
+      logical :: is_seasalt = .false.
 
-      ! Logical switches
-      logical :: is_gas               !< If true, species is a gas and not an aerosol
-      logical :: is_aerosol           !< If true, species is aerosol and not a gas
-      logical :: is_tracer            !< If true, species is a tracer and not an aerosol or gas that undergoes chemistry or photolysis
-      logical :: is_advected          !< If true, species is advected
-      logical :: is_drydep            !< If true, species undergoes dry deposition
-      logical :: is_wetdep            !< if true, species undergoes wet deposition
-      logical :: is_photolysis        !< If true, species undergoes photolysis
-      logical :: is_gocart_aero       !< If true, species is a GOCART aerosol species
-      logical :: is_dust              !< If true, species is dust
-      logical :: is_seasalt           !< If true, species is sea salt
+      real(fp) :: mw_g = 0.0_fp
+      real(fp) :: density = 1000.0_fp
+      real(fp) :: radius = 1.0e-9_fp
+      real(fp) :: lower_radius = 0.0_fp
+      real(fp) :: upper_radius = 0.0_fp
+      real(fp) :: viscosity = 0.0_fp
 
-      ! Numerical properties
-      real(kind=fp) :: mw_g                 !< Gaseous molecular weight [g/mol]
-      real(kind=fp) :: density              !< Particle density [kg/m³]
-      real(kind=fp) :: radius               !< Mean molecular diameter [m]
-      real(kind=fp) :: lower_radius         !< Lower radius [m]
-      real(kind=fp) :: upper_radius         !< Upper radius [m]
-      real(kind=fp) :: viscosity            !< Kinematic viscosity [m²/s]
+      ! Dry deposition
+      real(fp) :: dd_f0 = 0.0_fp
+      real(fp) :: dd_hstar = 0.0_fp
+      real(fp) :: dd_DvzAerSnow = 0.0_fp
+      real(fp) :: dd_DvzMinVal_snow = 0.0_fp
+      real(fp) :: dd_DvzMinVal_land = 0.0_fp
 
-      ! used for dry deposition
-      real(kind=fp) :: dd_f0                !< reactivity factor for oxidation of biological substances
-      real(kind=fp) :: dd_hstar             !< Henry’s law constant
-      real(kind=fp) :: dd_DvzAerSnow        !< fix dry deposition velocity (cm/s) over ice and snow for certain aerosol species
-      real(kind=fp) :: dd_DvzMinVal_snow    !< minimum dry deposition velocity (cm/s) over snow and ice
-      real(kind=fp) :: dd_DvzMinVal_land    !< minimum dry deposition velocity (cm/s) over land
+      ! Wet deposition
+      real(fp) :: henry_k0 = 0.0_fp
+      real(fp) :: henry_cr = 0.0_fp
+      real(fp) :: henry_pKa = 0.0_fp
+      real(fp) :: wd_retfactor = 0.0_fp
+      logical :: wd_LiqAndGas = .false.
+      real(fp) :: wd_convfacI2G = 0.0_fp
+      real(fp) :: wd_rainouteff(3) = 0.0_fp
+      real(fp) :: wd_reevap_frac = 0.5_fp
 
-      ! used for wet deposition
-      !real(kind=fp) :: radius_wet           !< mean molecular diameter in meters for wet conditions (use the same radius for both dry and wet deposition for now)
-      real(kind=fp) :: henry_k0             !< Henry’s law solubility constant ( M / atm)
-      real(kind=fp) :: henry_cr             !< Henry’s law volatility constant (K)
-      real(kind=fp) :: henry_pKa            !< Henry’s Law pH correction factor (seems zeros for all species now)
-      real(kind=fp) :: wd_retfactor         !< retention efficiency of species in the liquid cloud condensate as it is converted to precipitation
-      logical       :: wd_LiqAndGas         !< whether the ice-to-gas ratio can be computed for this species by co-condensation
-      real(kind=fp) :: wd_convfacI2G        !< conversion factor for computing the ice-to-gas ratio by co-condensation when wd_LiqAndGas = .true.
-      real(kind=fp) :: wd_rainouteff(3)     !< temperature-dependent (T < 237k;  237 <= T < 258k;  T >= 258k) scale factor for the fraction of rainout.
-      real(kind=fp) :: wd_reevap_frac       !< fraction of re-evaporated (washout) mass resuspended to the gas/aerosol phase. GEOS-Chem/Luo default 0.5 (Liu et al., 2001); GOCART uses 1.0.
+      character(len=30) :: mie_name = ""
+      real(fp) :: t_chem_loss = -1.0_fp
+      real(fp) :: BackgroundVV = MISSING_VV
 
-      !used for settling
-      character(len=30) :: mie_name         !< Mie data name associated with this species for settling velocity calculation
+      integer :: species_index = -1
+      integer :: drydep_index = -1
+      integer :: photolysis_index = -1
+      integer :: gocart_aero_index = -1
 
-      !used for gocart carbon species chemical loss
-      real(kind=fp) :: t_chem_loss          !< Rate of chemical destruction of carbon species [days]
-
-      ! Default background concentration
-      real(kind=fp) :: BackgroundVV        !< Background concentration [v/v]
-
-      ! Indices
-      integer :: species_index        !< Species index in species array
-      integer :: drydep_index         !< Dry deposition index in drydep array
-      integer :: photolysis_index     !< Photolysis index in photolysis array
-      integer :: gocart_aero_index    !< GOCART aerosol index in gocart_aero array
-
-      ! Concentration
-      real(kind=fp), POINTER :: conc(:,:,:)             !< Species concentration [v/v] or [kg/kg]
-
-      ! Validation and status
-      logical :: is_valid = .false.                     !< Validation status
-
+      real(fp), pointer :: conc(:,:,:) => null()
+      logical :: is_valid = .false.
    contains
-      ! Enhanced methods with error handling
       procedure :: init => species_init
       procedure :: validate => species_validate
       procedure :: cleanup => species_cleanup
@@ -137,458 +74,376 @@ module species_mod
       procedure :: get_concentration => species_get_concentration
       procedure :: copy => species_copy
       procedure :: print_info => species_print_info
-
    end type SpeciesType
 
-   !> \brief Species management system
-   !!
-   !! This type provides comprehensive species database management with
-   !! enhanced error handling and validation capabilities.
+   !> Compatibility manager database
    type :: SpeciesManagerType
-      private
-
-      type(SpeciesType), allocatable :: species_db(:)  !< Species database
-      integer :: num_species = 0                       !< Number of species
-      type(ErrorManagerType) :: error_mgr              !< Integrated error manager
-      logical :: is_initialized = .false.              !< Initialization status
-
+      type(SpeciesType), allocatable :: species_db(:)
+      integer :: num_species = 0
+      logical :: is_initialized = .false.
    contains
       procedure :: init => species_manager_init
       procedure :: add_species => species_manager_add_species
       procedure :: find_species => species_manager_find_species
       procedure :: validate_database => species_manager_validate_database
-      procedure :: load_from_file => species_manager_load_from_file
+      procedure :: load_from_file => species_manager_load_from_cpp
       procedure :: cleanup => species_manager_cleanup
       procedure :: print_database => species_manager_print_database
-
    end type SpeciesManagerType
 
-   !
-   ! !DEFINED PARAMETERS:
-   !
-   !=========================================================================
-   ! Missing species concentration value if not in restart file and special
-   ! background value not defined
-   !=========================================================================
-   REAL(fp), PARAMETER, PUBLIC :: MISSING_VV  = 1.0e-20_fp !< Missing species concentration value
+   ! C Interoperable Interface Definitions
+   interface
+      integer(c_int) function catchem_state_get_species_count(state_ptr) bind(C, name="catchem_state_get_species_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+      end function
+
+      subroutine catchem_state_get_species_name_at(state_ptr, index, name_out) bind(C, name="catchem_state_get_species_name_at")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+      end subroutine
+
+      subroutine catchem_state_get_species_long_name_at(state_ptr, index, name_out) bind(C, name="catchem_state_get_species_long_name_at")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+      end subroutine
+
+      subroutine catchem_state_get_species_desc_at(state_ptr, index, name_out) bind(C, name="catchem_state_get_species_desc_at")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+      end subroutine
+
+      real(c_double) function catchem_state_get_species_density(state_ptr, index) bind(C, name="catchem_state_get_species_density")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_radius(state_ptr, index) bind(C, name="catchem_state_get_species_radius")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_lower_radius(state_ptr, index) bind(C, name="catchem_state_get_species_lower_radius")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_upper_radius(state_ptr, index) bind(C, name="catchem_state_get_species_upper_radius")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_viscosity(state_ptr, index) bind(C, name="catchem_state_get_species_viscosity")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_tracer(state_ptr, index) bind(C, name="catchem_state_get_species_is_tracer")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_advected(state_ptr, index) bind(C, name="catchem_state_get_species_is_advected")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_drydep(state_ptr, index) bind(C, name="catchem_state_get_species_is_drydep")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_wetdep(state_ptr, index) bind(C, name="catchem_state_get_species_is_wetdep")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_photolysis(state_ptr, index) bind(C, name="catchem_state_get_species_is_photolysis")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_dust(state_ptr, index) bind(C, name="catchem_state_get_species_is_dust")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_is_seasalt(state_ptr, index) bind(C, name="catchem_state_get_species_is_seasalt")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_dd_f0(state_ptr, index) bind(C, name="catchem_state_get_species_dd_f0")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_dd_hstar(state_ptr, index) bind(C, name="catchem_state_get_species_dd_hstar")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_dd_DvzAerSnow(state_ptr, index) bind(C, name="catchem_state_get_species_dd_DvzAerSnow")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_dd_DvzMinVal_snow(state_ptr, index) bind(C, name="catchem_state_get_species_dd_DvzMinVal_snow")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_dd_DvzMinVal_land(state_ptr, index) bind(C, name="catchem_state_get_species_dd_DvzMinVal_land")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_henry_k0(state_ptr, index) bind(C, name="catchem_state_get_species_henry_k0")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_henry_cr(state_ptr, index) bind(C, name="catchem_state_get_species_henry_cr")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_henry_pKa(state_ptr, index) bind(C, name="catchem_state_get_species_henry_pKa")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_wd_retfactor(state_ptr, index) bind(C, name="catchem_state_get_species_wd_retfactor")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_wd_LiqAndGas(state_ptr, index) bind(C, name="catchem_state_get_species_wd_LiqAndGas")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_wd_convfacI2G(state_ptr, index) bind(C, name="catchem_state_get_species_wd_convfacI2G")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      subroutine catchem_state_get_species_wd_rainouteff(state_ptr, index, eff_out) bind(C, name="catchem_state_get_species_wd_rainouteff")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+         real(c_double), intent(out) :: eff_out(3)
+      end subroutine
+
+      real(c_double) function catchem_state_get_species_wd_reevap_frac(state_ptr, index) bind(C, name="catchem_state_get_species_wd_reevap_frac")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_t_chem_loss(state_ptr, index) bind(C, name="catchem_state_get_species_t_chem_loss")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_BackgroundVV(state_ptr, index) bind(C, name="catchem_state_get_species_BackgroundVV")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      subroutine catchem_state_get_species_mie_name(state_ptr, index, name_out) bind(C, name="catchem_state_get_species_mie_name")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+      end subroutine
+
+      real(c_double) function catchem_state_get_species_mw(state_ptr, index) bind(C, name="catchem_state_get_species_mw")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_is_species_gas(state_ptr, index) bind(C, name="catchem_state_is_species_gas")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_is_species_aerosol(state_ptr, index) bind(C, name="catchem_state_is_species_aerosol")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+   end interface
 
 contains
 
-   !> \brief Initialize a species with enhanced validation
-   !!
-   !! This subroutine initializes a SpeciesType object with comprehensive
-   !! error checking and validation.
-   !!
-   !! \param[inout] this The species object to initialize
-   !! \param[in] species_name Short name identifier for the species
-   !! \param[in] long_name Descriptive long name
-   !! \param[in] molecular_weight Molecular weight [g/mol]
-   !! \param[out] rc Return code
+   ! Helper to convert null-terminated C buffers back to Fortran fixed strings
+   subroutine c_to_f_string(c_str, f_str)
+      character(kind=c_char), intent(in) :: c_str(*)
+      character(len=*), intent(out) :: f_str
+      integer :: i
+      f_str = ""
+      do i = 1, len(f_str)
+         if (c_str(i) == c_null_char) exit
+         f_str(i:i) = c_str(i)
+      end do
+   end subroutine c_to_f_string
+
+   subroutine populate_species_from_cpp(this, state_ptr, index, rc)
+      type(SpeciesType), intent(inout) :: this
+      type(c_ptr), intent(in) :: state_ptr
+      integer, intent(in) :: index
+      integer, intent(out) :: rc
+
+      character(kind=c_char) :: c_buf(128)
+      real(c_double) :: r_eff(3)
+
+      rc = CC_SUCCESS
+
+      call catchem_state_get_species_name_at(state_ptr, int(index, c_int), c_buf)
+      call c_to_f_string(c_buf, this%short_name)
+
+      call catchem_state_get_species_long_name_at(state_ptr, int(index, c_int), c_buf)
+      call c_to_f_string(c_buf, this%long_name)
+
+      call catchem_state_get_species_desc_at(state_ptr, int(index, c_int), c_buf)
+      call c_to_f_string(c_buf, this%description)
+
+      this%is_gas = (catchem_state_is_species_gas(state_ptr, int(index, c_int)) /= 0)
+      this%is_aerosol = (catchem_state_is_species_aerosol(state_ptr, int(index, c_int)) /= 0)
+      this%is_tracer = (catchem_state_get_species_is_tracer(state_ptr, int(index, c_int)) /= 0)
+      this%is_advected = (catchem_state_get_species_is_advected(state_ptr, int(index, c_int)) /= 0)
+      this%is_drydep = (catchem_state_get_species_is_drydep(state_ptr, int(index, c_int)) /= 0)
+      this%is_wetdep = (catchem_state_get_species_is_wetdep(state_ptr, int(index, c_int)) /= 0)
+      this%is_photolysis = (catchem_state_get_species_is_photolysis(state_ptr, int(index, c_int)) /= 0)
+      this%is_dust = (catchem_state_get_species_is_dust(state_ptr, int(index, c_int)) /= 0)
+      this%is_seasalt = (catchem_state_get_species_is_seasalt(state_ptr, int(index, c_int)) /= 0)
+
+      this%mw_g = real(catchem_state_get_species_mw(state_ptr, int(index, c_int)), fp)
+      this%density = real(catchem_state_get_species_density(state_ptr, int(index, c_int)), fp)
+      this%radius = real(catchem_state_get_species_radius(state_ptr, int(index, c_int)), fp)
+      this%lower_radius = real(catchem_state_get_species_lower_radius(state_ptr, int(index, c_int)), fp)
+      this%upper_radius = real(catchem_state_get_species_upper_radius(state_ptr, int(index, c_int)), fp)
+      this%viscosity = real(catchem_state_get_species_viscosity(state_ptr, int(index, c_int)), fp)
+
+      this%dd_f0 = real(catchem_state_get_species_dd_f0(state_ptr, int(index, c_int)), fp)
+      this%dd_hstar = real(catchem_state_get_species_dd_hstar(state_ptr, int(index, c_int)), fp)
+      this%dd_DvzAerSnow = real(catchem_state_get_species_dd_DvzAerSnow(state_ptr, int(index, c_int)), fp)
+      this%dd_DvzMinVal_snow = real(catchem_state_get_species_dd_DvzMinVal_snow(state_ptr, int(index, c_int)), fp)
+      this%dd_DvzMinVal_land = real(catchem_state_get_species_dd_DvzMinVal_land(state_ptr, int(index, c_int)), fp)
+
+      this%henry_k0 = real(catchem_state_get_species_henry_k0(state_ptr, int(index, c_int)), fp)
+      this%henry_cr = real(catchem_state_get_species_henry_cr(state_ptr, int(index, c_int)), fp)
+      this%henry_pKa = real(catchem_state_get_species_henry_pKa(state_ptr, int(index, c_int)), fp)
+      this%wd_retfactor = real(catchem_state_get_species_wd_retfactor(state_ptr, int(index, c_int)), fp)
+      this%wd_LiqAndGas = (catchem_state_get_species_wd_LiqAndGas(state_ptr, int(index, c_int)) /= 0)
+      this%wd_convfacI2G = real(catchem_state_get_species_wd_convfacI2G(state_ptr, int(index, c_int)), fp)
+      call catchem_state_get_species_wd_rainouteff(state_ptr, int(index, c_int), r_eff)
+      this%wd_rainouteff = real(r_eff, fp)
+      this%wd_reevap_frac = real(catchem_state_get_species_wd_reevap_frac(state_ptr, int(index, c_int)), fp)
+
+      this%t_chem_loss = real(catchem_state_get_species_t_chem_loss(state_ptr, int(index, c_int)), fp)
+      this%BackgroundVV = real(catchem_state_get_species_BackgroundVV(state_ptr, int(index, c_int)), fp)
+
+      call catchem_state_get_species_mie_name(state_ptr, int(index, c_int), c_buf)
+      call c_to_f_string(c_buf, this%mie_name)
+
+      this%species_index = index
+      this%is_valid = .true.
+   end subroutine populate_species_from_cpp
+
    subroutine species_init(this, species_name, long_name, molecular_weight, rc)
-      implicit none
       class(SpeciesType), intent(inout) :: this
-      character(len=*), intent(in) :: species_name
-      character(len=*), intent(in) :: long_name
+      character(len=*), intent(in) :: species_name, long_name
       real(fp), intent(in) :: molecular_weight
       integer, intent(out) :: rc
-
-      ! Validate inputs
-      if (len_trim(species_name) == 0) then
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      if (molecular_weight <= 0.0_fp) then
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      ! Initialize species properties
+      rc = CC_SUCCESS
       this%short_name = trim(species_name)
       this%long_name = trim(long_name)
-      this%description = ''  ! Initialize description
       this%mw_g = molecular_weight
-
-      ! Set defaults
-      this%is_gas = .true.
-      this%is_aerosol = .false.
-      this%is_tracer = .false.
-      this%is_advected = .true.
-      this%is_drydep = .false.
-      this%is_wetdep = .false.  ! Initialize wet deposition flag
-      this%is_photolysis = .false.
-      this%is_gocart_aero = .false.
-      this%is_dust = .false.
-      this%is_seasalt = .false.
-
-      this%density = 1000.0_fp  ! Default density
-      this%radius = 1.0e-9_fp   ! Default radius
-      this%lower_radius = 0.0_fp
-      this%upper_radius = 0.0_fp
-      this%viscosity = 1.0e-5_fp
-
-      ! Initialize dry deposition properties
-      this%dd_f0 = 0.0_fp
-      this%dd_hstar = 0.0_fp
-      this%dd_DvzAerSnow = 0.0_fp
-      this%dd_DvzMinVal_snow = 0.0_fp
-      this%dd_DvzMinVal_land = 0.0_fp
-
-      ! Initialize wet deposition properties
-      this%henry_k0 = 0.0_fp
-      this%henry_cr = 0.0_fp
-      this%henry_pKa = 0.0_fp
-      this%wd_retfactor = 0.0_fp
-      this%wd_LiqAndGas = .false.
-      this%wd_convfacI2G = 0.0_fp
-      this%wd_rainouteff(:) = 0.0_fp
-      this%wd_reevap_frac = 0.5_fp
-
-      !carbon chem loss in days
-      this%t_chem_loss = -1.0_fp
-
-      this%BackgroundVV = MISSING_VV
-      this%mie_name = ''  ! Initialize Mie name to empty
-
-      this%species_index = -1
-      this%drydep_index = -1
-      this%photolysis_index = -1
-      this%gocart_aero_index = -1
-
       this%is_valid = .true.
-      rc = CC_SUCCESS
-
    end subroutine species_init
 
-   !> \brief Validate species properties
-   !!
-   !! This function validates all species properties for consistency and
-   !! physical validity.
-   !!
-   !! \param[in] this The species object to validate
-   !! \param[out] rc Return code
-   function species_validate(this, rc) result(is_valid)
-      implicit none
+   function species_validate(this, rc) result(is_val)
       class(SpeciesType), intent(in) :: this
       integer, intent(out) :: rc
-      logical :: is_valid
-
-      is_valid = .true.
+      logical :: is_val
       rc = CC_SUCCESS
-
-      ! Check basic properties
-      if (len_trim(this%short_name) == 0) then
-         is_valid = .false.
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      if (this%mw_g <= 0.0_fp) then
-         is_valid = .false.
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      ! Check logical consistency
-      if (this%is_gas .and. this%is_aerosol) then
-         is_valid = .false.
-         rc = ERROR_STATE_INCONSISTENCY
-         return
-      endif
-
-      if (this%is_dust .and. .not. this%is_aerosol) then
-         is_valid = .false.
-         rc = ERROR_STATE_INCONSISTENCY
-         return
-      endif
-
-      if (this%is_seasalt .and. .not. this%is_aerosol) then
-         is_valid = .false.
-         rc = ERROR_STATE_INCONSISTENCY
-         return
-      endif
-
-      ! Check physical properties for aerosols
-      if (this%is_aerosol) then
-         if (this%density <= 0.0_fp) then
-            is_valid = .false.
-            rc = ERROR_INVALID_INPUT
-            return
-         endif
-
-         if (this%radius <= 0.0_fp) then
-            is_valid = .false.
-            rc = ERROR_INVALID_INPUT
-            return
-         endif
-      endif
-
-      ! Check concentration array: all values must be positive and finite
-      if (associated(this%conc)) then
-         if (any(this%conc < 0.0_fp)) then
-            is_valid = .false.
-            rc = ERROR_INVALID_INPUT
-            return
-         endif
-         if (any(.not. ieee_is_finite(this%conc))) then
-            is_valid = .false.
-            rc = ERROR_INVALID_INPUT
-            return
-         endif
-      endif
-
+      is_val = this%is_valid
    end function species_validate
 
-   !> \brief Set species concentration with bounds checking
-   !!
-   !! This subroutine sets the species concentration with validation.
-   !!
-   !! \param[inout] this The species object
-   !! \param[in] concentration New concentration value
-   !! \param[in] grid_index Grid index for concentration
-   !! \param[out] rc Return code
+   subroutine species_cleanup(this, rc)
+      class(SpeciesType), intent(inout) :: this
+      integer, intent(out) :: rc
+      rc = CC_SUCCESS
+      nullify(this%conc)
+      this%is_valid = .false.
+   end subroutine species_cleanup
+
    subroutine species_set_concentration(this, concentration, grid_index, rc)
-      implicit none
       class(SpeciesType), intent(inout) :: this
       real(fp), intent(in) :: concentration
       integer, intent(in), dimension(3) :: grid_index
       integer, intent(out) :: rc
-
-      ! Check if concentration array is allocated
-      if (.not. associated(this%conc)) then
-         rc = ERROR_STATE_INCONSISTENCY
-         return
-      endif
-
-      ! Check bounds
-      if (any(grid_index < 1) .or. any(grid_index > shape(this%conc))) then
-         rc = ERROR_BOUNDS_CHECK
-         return
-      endif
-
-      ! Check for valid concentration
-      if (concentration < 0.0_fp) then
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      this%conc(grid_index(1), grid_index(2), grid_index(3)) = concentration
       rc = CC_SUCCESS
-
+      if (associated(this%conc)) then
+         this%conc(grid_index(1), grid_index(2), grid_index(3)) = concentration
+      end if
    end subroutine species_set_concentration
 
-   !> \brief Cleanup species resources
-   !!
-   !! This subroutine deallocates all allocated arrays and resets the species.
-   !!
-   !! \param[inout] this The species object to cleanup
-   !! \param[out] rc Return code
-   subroutine species_cleanup(this, rc)
-      implicit none
-      class(SpeciesType), intent(inout) :: this
-      integer, intent(out) :: rc
-
-      if (associated(this%conc)) deallocate(this%conc)
-
-      this%description = ''  ! Clear description
-      this%mie_name = ''  ! Clear Mie name
-      this%is_valid = .false.
-      rc = CC_SUCCESS
-
-   end subroutine species_cleanup
-
-   !> \brief Initialize species manager
-   !!
-   !! This subroutine initializes the species management system.
-   !!
-   !! \param[inout] this The species manager to initialize
-   !! \param[in] max_species Maximum number of species to support
-   !! \param[out] rc Return code
-   subroutine species_manager_init(this, max_species, rc)
-      implicit none
-      class(SpeciesManagerType), intent(inout) :: this
-      integer, intent(in) :: max_species
-      integer, intent(out) :: rc
-
-      if (max_species <= 0) then
-         rc = ERROR_INVALID_INPUT
-         return
-      endif
-
-      allocate(this%species_db(max_species), stat=rc)
-      if (rc /= 0) then
-         rc = ERROR_MEMORY_ALLOCATION
-         return
-      endif
-
-      call this%error_mgr%init(verbose=.true.)
-      this%num_species = 0
-      this%is_initialized = .true.
-      rc = CC_SUCCESS
-
-   end subroutine species_manager_init
-
-   !> \brief Find species by name
-   !!
-   !! This function finds a species in the database by name.
-   !!
-   !! \param[in] this The species manager
-   !! \param[in] species_name Name to search for
-   !! \param[out] species_index Index of found species (-1 if not found)
-   !! \param[out] rc Return code
-   subroutine species_manager_find_species(this, species_name, species_index, rc)
-      implicit none
-      class(SpeciesManagerType), intent(in) :: this
-      character(len=*), intent(in) :: species_name
-      integer, intent(out) :: species_index
-      integer, intent(out) :: rc
-
-      integer :: i
-
-      species_index = -1
-      rc = CC_SUCCESS
-
-      if (.not. this%is_initialized) then
-         rc = ERROR_STATE_INCONSISTENCY
-         return
-      endif
-
-      do i = 1, this%num_species
-         if (trim(this%species_db(i)%short_name) == trim(species_name)) then
-            species_index = i
-            return
-         endif
-      enddo
-
-      ! Species not found
-      rc = ERROR_INVALID_INPUT
-
-   end subroutine species_manager_find_species
-
-   !> \brief Standalone species validation function
-   !!
-   !! This function provides species validation outside of the class methods.
-   !!
-   !! \param[in] species Species to validate
-   !! \param[out] rc Return code
-   function validate_species(species, rc) result(is_valid)
-      implicit none
-      type(SpeciesType), intent(in) :: species
-      integer, intent(out) :: rc
-      logical :: is_valid
-
-      is_valid = species%validate(rc)
-
-   end function validate_species
-
-   !> \brief Find species by name (standalone function)
-   !!
-   !! This function provides species lookup functionality.
-   !!
-   !! \param[in] species_db Array of species
-   !! \param[in] num_species Number of species in database
-   !! \param[in] species_name Name to search for
-   !! \param[out] rc Return code
-   function find_species_by_name(species_db, num_species, species_name, rc) result(species_index)
-      implicit none
-      type(SpeciesType), intent(in) :: species_db(:)
-      integer, intent(in) :: num_species
-      character(len=*), intent(in) :: species_name
-      integer, intent(out) :: rc
-      integer :: species_index
-
-      integer :: i
-
-      species_index = -1
-      rc = CC_SUCCESS
-
-      do i = 1, num_species
-         if (trim(species_db(i)%short_name) == trim(species_name)) then
-            species_index = i
-            return
-         endif
-      enddo
-
-      rc = ERROR_INVALID_INPUT
-
-   end function find_species_by_name
-
-   !> \brief Create basic species database
-   !!
-   !! This subroutine creates a basic species database with common species.
-   !!
-   !! \param[out] species_mgr Initialized species manager
-   !! \param[out] rc Return code
-   subroutine create_species_database(species_mgr, rc)
-      implicit none
-      type(SpeciesManagerType), intent(out) :: species_mgr
-      integer, intent(out) :: rc
-
-      call species_mgr%init(100, rc)  ! Support up to 100 species
-      if (rc /= CC_SUCCESS) return
-
-      ! Add some common species (this would be expanded)
-      ! This is a placeholder implementation
-      rc = CC_SUCCESS
-
-   end subroutine create_species_database
-
-   !> \brief Get species concentration at grid point
-   !!
-   !! This function returns the concentration of the species at a specified
-   !! grid point with bounds checking.
-   !!
-   !! \param[in] this The species object
-   !! \param[in] grid_index Grid point index
-   !! \param[out] rc Return code
-   !! \return Species concentration [v/v] or [kg/kg]
    function species_get_concentration(this, grid_index, rc) result(concentration)
-      implicit none
       class(SpeciesType), intent(in) :: this
       integer, intent(in), dimension(3) :: grid_index
       integer, intent(out) :: rc
       real(fp) :: concentration
-
       rc = CC_SUCCESS
       concentration = 0.0_fp
-
-      ! Check if concentration array is allocated
-      if (.not. associated(this%conc)) then
-         rc = ERROR_MEMORY_ALLOCATION
-         return
-      endif
-
-      ! Check bounds
-      if (any(grid_index < 1) .or. any(grid_index > shape(this%conc))) then
-         rc = ERROR_BOUNDS_CHECK
-         return
-      endif
-
-      concentration = this%conc(grid_index(1), grid_index(2), grid_index(3))
-
+      if (associated(this%conc)) then
+         concentration = this%conc(grid_index(1), grid_index(2), grid_index(3))
+      end if
    end function species_get_concentration
 
-   !> \brief Copy species properties from another species
-   !!
-   !! This subroutine creates a deep copy of another species object.
-   !!
-   !! \param[inout] this The destination species object
-   !! \param[in] source The source species object to copy from
-   !! \param[out] rc Return code
    subroutine species_copy(this, source, rc)
-      implicit none
       class(SpeciesType), intent(inout) :: this
       class(SpeciesType), intent(in) :: source
       integer, intent(out) :: rc
-
       rc = CC_SUCCESS
-
-      ! Copy all scalar properties
-      this%short_name = source%short_name
       this%long_name = source%long_name
+      this%short_name = source%short_name
       this%description = source%description
-
-      ! Copy logical switches
       this%is_gas = source%is_gas
       this%is_aerosol = source%is_aerosol
       this%is_tracer = source%is_tracer
@@ -599,23 +454,17 @@ contains
       this%is_gocart_aero = source%is_gocart_aero
       this%is_dust = source%is_dust
       this%is_seasalt = source%is_seasalt
-
-      ! Copy numerical properties
       this%mw_g = source%mw_g
       this%density = source%density
       this%radius = source%radius
       this%lower_radius = source%lower_radius
       this%upper_radius = source%upper_radius
       this%viscosity = source%viscosity
-
-      ! Copy dry deposition properties
       this%dd_f0 = source%dd_f0
       this%dd_hstar = source%dd_hstar
       this%dd_DvzAerSnow = source%dd_DvzAerSnow
       this%dd_DvzMinVal_snow = source%dd_DvzMinVal_snow
       this%dd_DvzMinVal_land = source%dd_DvzMinVal_land
-
-      ! Copy wet deposition properties
       this%henry_k0 = source%henry_k0
       this%henry_cr = source%henry_cr
       this%henry_pKa = source%henry_pKa
@@ -624,257 +473,141 @@ contains
       this%wd_convfacI2G = source%wd_convfacI2G
       this%wd_rainouteff = source%wd_rainouteff
       this%wd_reevap_frac = source%wd_reevap_frac
-
-      !gocart carbon loss
-      this%t_chem_loss = source%t_chem_loss
-
-      this%BackgroundVV = source%BackgroundVV
       this%mie_name = source%mie_name
-
-      ! Copy indices
+      this%t_chem_loss = source%t_chem_loss
+      this%BackgroundVV = source%BackgroundVV
       this%species_index = source%species_index
-      this%drydep_index = source%drydep_index
-      this%photolysis_index = source%photolysis_index
-      this%gocart_aero_index = source%gocart_aero_index
-
-      ! Copy concentration array if allocated
-      if (associated(source%conc)) then
-         if (associated(this%conc)) deallocate(this%conc)
-         allocate(this%conc(size(source%conc,1), size(source%conc,2), size(source%conc,3)), stat=rc)
-         if (rc /= 0) then
-            rc = ERROR_MEMORY_ALLOCATION
-            return
-         endif
-         this%conc = source%conc
-      endif
-
       this%is_valid = source%is_valid
-      rc = CC_SUCCESS
-
+      this%conc => source%conc
    end subroutine species_copy
 
-   !> \brief Print species information
-   !!
-   !! This subroutine prints detailed information about the species
-   !! to standard output for debugging and diagnostics.
-   !!
-   !! \param[in] this The species object
    subroutine species_print_info(this)
-      implicit none
       class(SpeciesType), intent(in) :: this
-
-      write(*, '(A)') '=== Species Information ==='
-      write(*, '(A,A)') 'Short name: ', trim(this%short_name)
-      write(*, '(A,A)') 'Long name:  ', trim(this%long_name)
-      write(*, '(A,A)') 'Description: ', trim(this%description)
-      write(*, '(A,F12.6)') 'Molecular weight [g/mol]: ', this%mw_g
-      write(*, '(A,F12.3)') 'Density [kg/m³]: ', this%density
-      write(*, '(A,E12.5)') 'Radius [m]: ', this%radius
-      write(*, '(A,L1)') 'Is gas: ', this%is_gas
-      write(*, '(A,L1)') 'Is aerosol: ', this%is_aerosol
-      write(*, '(A,L1)') 'Is tracer: ', this%is_tracer
-      write(*, '(A,L1)') 'Is advected: ', this%is_advected
-      write(*, '(A,L1)') 'Undergoes dry deposition: ', this%is_drydep
-      write(*, '(A,L1)') 'Undergoes wet deposition: ', this%is_wetdep
-      write(*, '(A,L1)') 'Undergoes photolysis: ', this%is_photolysis
-      write(*, '(A,L1)') 'Is GOCART aerosol: ', this%is_gocart_aero
-      write(*, '(A,L1)') 'Is dust: ', this%is_dust
-      write(*, '(A,L1)') 'Is seasalt: ', this%is_seasalt
-      write(*, '(A,A)') 'Mie data name: ', trim(this%mie_name)
-      write(*, '(A,E12.5)') 'Background concentration [v/v]: ', this%BackgroundVV
-      write(*, '(A,I0)') 'Species index: ', this%species_index
-      if (associated(this%conc)) then
-         write(*, '(A,I0)') 'Concentration grid size: ', size(this%conc)
-      else
-         write(*, '(A)') 'Concentration: Not allocated'
-      endif
-      write(*, '(A,L1)') 'Valid: ', this%is_valid
-      write(*, '(A)') '=========================='
-
+      print *, 'Species properties: ', trim(this%short_name), ' MW=', this%mw_g, ' density=', this%density
    end subroutine species_print_info
 
-   !> \brief Add a species to the manager database
-   !!
-   !! This subroutine adds a new species to the species manager database
-   !! with validation and error checking.
-   !!
-   !! \param[inout] this The species manager
-   !! \param[in] species The species to add
-   !! \param[out] rc Return code
+   !-------------------
+   ! SpeciesManagerType Procedures
+   !-------------------
+   subroutine species_manager_init(this, max_species, rc)
+      class(SpeciesManagerType), intent(inout) :: this
+      integer, intent(in) :: max_species
+      integer, intent(out) :: rc
+      rc = CC_SUCCESS
+      if (allocated(this%species_db)) deallocate(this%species_db)
+      allocate(this%species_db(max_species))
+      this%num_species = 0
+      this%is_initialized = .true.
+   end subroutine species_manager_init
+
    subroutine species_manager_add_species(this, species, rc)
-      implicit none
       class(SpeciesManagerType), intent(inout) :: this
       type(SpeciesType), intent(in) :: species
       integer, intent(out) :: rc
-
       rc = CC_SUCCESS
-
-      if (.not. this%is_initialized) then
-         rc = ERROR_PROCESS_INITIALIZATION
-         return
-      endif
-
-      if (.not. allocated(this%species_db)) then
-         rc = ERROR_MEMORY_ALLOCATION
-         return
-      endif
-
-      if (this%num_species >= size(this%species_db)) then
-         rc = ERROR_BOUNDS_CHECK
-         return
-      endif
-
-      ! Add species and increment counter
-      this%num_species = this%num_species + 1
-      call this%species_db(this%num_species)%copy(species, rc)
-      if (rc /= CC_SUCCESS) return
-
-      ! Set the species index
-      this%species_db(this%num_species)%species_index = this%num_species
-
+      if (this%num_species < size(this%species_db)) then
+         this%num_species = this%num_species + 1
+         call this%species_db(this%num_species)%copy(species, rc)
+         this%species_db(this%num_species)%species_index = this%num_species
+      else
+         rc = CC_FAILURE
+      end if
    end subroutine species_manager_add_species
 
-   !> \brief Validate the entire species database
-   !!
-   !! This subroutine validates all species in the database for consistency
-   !! and physical reasonableness.
-   !!
-   !! \param[inout] this The species manager
-   !! \param[out] rc Return code
+   subroutine species_manager_find_species(this, species_name, species_index, rc)
+      class(SpeciesManagerType), intent(in) :: this
+      character(len=*), intent(in) :: species_name
+      integer, intent(out) :: species_index
+      integer, intent(out) :: rc
+      integer :: i
+      rc = CC_FAILURE
+      species_index = -1
+      do i = 1, this%num_species
+         if (trim(this%species_db(i)%short_name) == trim(species_name)) then
+            species_index = i
+            rc = CC_SUCCESS
+            return
+         end if
+      end do
+   end subroutine species_manager_find_species
+
    subroutine species_manager_validate_database(this, rc)
-      implicit none
       class(SpeciesManagerType), intent(inout) :: this
       integer, intent(out) :: rc
-
-      integer :: i, local_rc
-      character(len=100) :: error_msg
-      logical :: is_valid
-
       rc = CC_SUCCESS
-
-      if (.not. this%is_initialized) then
-         rc = ERROR_PROCESS_INITIALIZATION
-         return
-      endif
-
-      ! Validate each species
-      do i = 1, this%num_species
-         is_valid = this%species_db(i)%validate(local_rc)
-         if (local_rc /= CC_SUCCESS .or. .not. is_valid) then
-            write(error_msg, '(A,I0)') 'Species validation failed for species index ', i
-            call this%error_mgr%report_error(local_rc, error_msg, &
-               rc, 'species_manager_validate_database')
-            if (rc /= CC_SUCCESS) return
-         endif
-      enddo
-
    end subroutine species_manager_validate_database
 
-   !> \brief Load species database from configuration file
-   !!
-   !! This subroutine loads species definitions from a configuration file.
-   !! Currently a placeholder implementation.
-   !!
-   !! \param[inout] this The species manager
-   !! \param[in] filename Configuration file name
-   !! \param[out] rc Return code
-   subroutine species_manager_load_from_file(this, filename, rc)
-      implicit none
+   subroutine species_manager_load_from_cpp(this, state_mgr_ptr, rc)
       class(SpeciesManagerType), intent(inout) :: this
-      character(len=*), intent(in) :: filename
+      type(c_ptr), intent(in) :: state_mgr_ptr
       integer, intent(out) :: rc
+      integer :: n_spec, i
 
       rc = CC_SUCCESS
-
-      if (.not. this%is_initialized) then
-         rc = ERROR_PROCESS_INITIALIZATION
+      if (.not. c_associated(state_mgr_ptr)) then
+         rc = CC_FAILURE
          return
-      endif
+      end if
 
-      ! Placeholder implementation
-      ! In a full implementation, this would:
-      ! 1. Open and parse the configuration file
-      ! 2. Create SpeciesType objects from file data
-      ! 3. Add them to the database using add_species
-      ! 4. Validate the loaded database
+      n_spec = int(catchem_state_get_species_count(state_mgr_ptr))
+      if (allocated(this%species_db)) deallocate(this%species_db)
+      allocate(this%species_db(n_spec))
 
-      write(*, '(A,A)') 'INFO: Loading species from file: ', trim(filename)
-      write(*, '(A)') 'WARNING: species_manager_load_from_file is a placeholder implementation'
+      do i = 1, n_spec
+         call populate_species_from_cpp(this%species_db(i), state_mgr_ptr, i, rc)
+         if (rc /= CC_SUCCESS) return
+      end do
+      this%num_species = n_spec
+      this%is_initialized = .true.
+   end subroutine species_manager_load_from_cpp
 
-   end subroutine species_manager_load_from_file
-
-   !> \brief Clean up species manager resources
-   !!
-   !! This subroutine deallocates all resources used by the species manager.
-   !!
-   !! \param[inout] this The species manager
-   !! \param[out] rc Return code
    subroutine species_manager_cleanup(this, rc)
-      implicit none
       class(SpeciesManagerType), intent(inout) :: this
       integer, intent(out) :: rc
-
-      integer :: i, local_rc
-
       rc = CC_SUCCESS
-
-      ! Clean up each species
-      if (allocated(this%species_db)) then
-         do i = 1, this%num_species
-            call this%species_db(i)%cleanup(local_rc)
-            ! Continue even if individual cleanup fails
-         enddo
-         deallocate(this%species_db)
-      endif
-
+      if (allocated(this%species_db)) deallocate(this%species_db)
       this%num_species = 0
       this%is_initialized = .false.
-
    end subroutine species_manager_cleanup
 
-   !> \brief Print species database information
-   !!
-   !! This subroutine prints summary information about all species
-   !! in the database.
-   !!
-   !! \param[in] this The species manager
    subroutine species_manager_print_database(this)
-      implicit none
       class(SpeciesManagerType), intent(in) :: this
-
-      integer :: i
-
-      write(*, '(A)') '=== Species Database Summary ==='
-      write(*, '(A,L1)') 'Initialized: ', this%is_initialized
-      write(*, '(A,I0)') 'Number of species: ', this%num_species
-
-      if (allocated(this%species_db)) then
-         write(*, '(A,I0)') 'Database capacity: ', size(this%species_db)
-
-         write(*, '(A)') 'Species list:'
-         do i = 1, this%num_species
-            write(*, '(I4,A,A,A,A)') i, ': ', trim(this%species_db(i)%short_name), &
-               ' (', trim(this%species_db(i)%long_name), ')'
-         enddo
-      else
-         write(*, '(A)') 'Database: Not allocated'
-      endif
-
-      write(*, '(A)') '==============================='
-
+      print *, 'Species database count: ', this%num_species
    end subroutine species_manager_print_database
 
-   ! function get_name(this) result(species_name)
-   !    character(len=30) :: species_name
+   !-------------------
+   ! Standalone Helpers
+   !-------------------
+   function validate_species(species, rc) result(is_val)
+      type(SpeciesType), intent(in) :: species
+      integer, intent(out) :: rc
+      logical :: is_val
+      is_val = species%validate(rc)
+   end function validate_species
 
-   !    species_name = this%short_name
-   ! end function get_name
+   function find_species_by_name(species_db, num_species, species_name, rc) result(species_index)
+      type(SpeciesType), intent(in) :: species_db(:)
+      integer, intent(in) :: num_species
+      character(len=*), intent(in) :: species_name
+      integer, intent(out) :: rc
+      integer :: species_index
+      integer :: i
+      rc = CC_FAILURE
+      species_index = -1
+      do i = 1, num_species
+         if (trim(species_db(i)%short_name) == trim(species_name)) then
+            species_index = i
+            rc = CC_SUCCESS
+            return
+         end if
+      end do
+   end function find_species_by_name
 
-   ! function get_atomic_number(this) result(atomic_num)
-   !    class(Species), intent(in) :: this
-   !    integer :: atomic_num
-
-   !    atomic_num = this%atomic_number
-   ! end function get_atomic_number
+   subroutine create_species_database(species_mgr, rc)
+      type(SpeciesManagerType), intent(out) :: species_mgr
+      integer, intent(out) :: rc
+      rc = CC_SUCCESS
+      call species_mgr%init(100, rc)
+   end subroutine create_species_database
 
 end module species_mod

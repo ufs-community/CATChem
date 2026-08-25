@@ -22,6 +22,7 @@
 !! Reference: Zhang et al. 2022
 module DustScheme_FENGSHA_Mod
 
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
    use precision_mod, only: fp
    use DustCommon_Mod, only: DustSchemeFENGSHAConfig
 
@@ -183,7 +184,7 @@ contains
       end select
 
       if (.not. skip) then
-         skip = (clayfrac /= clayfrac) .or. (sandfrac /= sandfrac) ! check for NaNs
+         skip = ieee_is_nan(clayfrac) .or. ieee_is_nan(sandfrac) ! check for NaNs
          if (skip) return !return here to avoid floating point checking below.
       endif
 

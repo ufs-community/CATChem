@@ -4,34 +4,35 @@ This section covers the core state management concepts in CATChem, providing uni
 
 ## Overview
 
-The state management system in CATChem is designed to provide a centralized and efficient way to manage all model data. It is built around a central data repository called the `StateContainer`, which holds all the different states of the model, such as the chemical state, meteorological state, and diagnostic state.
+The state management system in CATChem is designed to provide a centralized and efficient way to manage all model data. It is built around a central data repository called the `StateManager` (`catchem::StateManager`), which holds all the different states of the model, such as the chemical state, meteorological state, time state, and diagnostic state.
 
 The key design goals of the state management system are:
 
 - **Unified Data Access**: Provide a single, consistent interface for all processes to access and modify model data.
-- **Performance**: Enable efficient data access patterns, such as column-based processing, to optimize performance.
+- **Performance**: Enable efficient data access patterns, such as column-based processing via Kokkos subviews, to optimize performance.
 - **Safety**: Ensure data integrity and provide robust error handling.
 - **Flexibility**: Support a wide range of use cases, from simple standalone models to complex, fully coupled Earth system models.
 
 ## Core Components
 
-### StateContainer
+### StateManager
 
-The `StateContainer` is the heart of the state management system. It is a container that holds all the different states of the model, including:
+The `StateManager` is the heart of the state management system. It is a C++ container holding Kokkos memory views and structured sub-states:
 
-- **`ChemState`**: Manages the chemical species, including their concentrations, properties, and reactions.
-- **`MetState`**: Manages the meteorological fields, such as temperature, pressure, and wind.
-- **`DiagState`**: Manages the diagnostic variables that are used for model evaluation and analysis.
+- **`ChemState`**: Manages chemical species concentrations (`conc`), metadata properties, and species indices.
+- **`MetState`**: Manages meteorological fields, such as temperature, pressure, density, and surface properties.
+- **`TimeState`**: Manages simulation timelines, Julian dates, solar zenith angles, and calendar utilities.
+- **`DiagnosticManager`**: Manages diagnostic variables and registries for process outputs.
 
-The `StateContainer` is responsible for initializing and finalizing the states, as well as providing access to them.
+The `StateManager` is responsible for initializing sub-states, managing zero-copy pointer bindings, and synchronizing host (CPU) and device (GPU) memory.
 
 ### State Types
 
-Each state type is a specialized data container that is designed to manage a specific type of data.
+Each state type is a specialized data container designed to manage a specific type of data.
 
-- **`ChemState`**: The `ChemState` is responsible for managing the chemical state of the model. It provides methods for adding and removing species, getting and setting their concentrations, and accessing their properties.
-- **`MetState`**: The `MetState` is responsible for managing the meteorological state of the model. It provides methods for accessing meteorological fields, such as temperature, pressure, and wind, at different levels of the atmosphere.
-- **`DiagState`**: The `DiagState` is responsible for managing the diagnostic variables of the model. It provides methods for registering and updating diagnostic variables, as well as writing them to output files.
+- **`ChemState`**: Manages chemical concentrations and species metadata attributes.
+- **`MetState`**: Manages 2D and 3D meteorological arrays (`T`, `PMID`, `PEDGE`, `AIRDEN`, `USTAR`, etc.).
+- **`DiagnosticManager`**: Manages diagnostic fields, registries, and output buffers across processes.
 
 ## Data Access Patterns
 

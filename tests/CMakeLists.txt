@@ -1,5 +1,25 @@
-add_compile_options(${_catchem_compiler_options})
+foreach(opt IN LISTS _catchem_compiler_options)
+  add_compile_options("$<$<COMPILE_LANGUAGE:Fortran>:${opt}>")
+endforeach()
 
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/catchem_test_config.hpp.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/catchem_test_config.hpp"
+)
+
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
+# Automatically link the musica configs folder so that CTest can find relative NetCDF files on GHA CI
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/configs")
+  file(
+    CREATE_LINK
+      "${PROJECT_SOURCE_DIR}/src/external/musica/configs"
+      "${CMAKE_CURRENT_BINARY_DIR}/configs"
+    SYMBOLIC
+  )
+endif()
+
+# Restore compilation of foundational Fortran testing helper library
 add_library(testing testing_mod.f90)
 target_link_libraries(testing PRIVATE CATChem_core)
 set_target_properties(
@@ -10,450 +30,190 @@ set_target_properties(
 )
 target_include_directories(testing PRIVATE ${CMAKE_BINARY_DIR}/include)
 
-# Core framework tests
-add_executable(test_CATChemCore test_CATChemCore.f90)
-target_link_libraries(test_CATChemCore PRIVATE CATChem_core)
-target_link_libraries(test_CATChemCore PRIVATE testing)
-set_target_properties(
-  test_CATChemCore
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-target_include_directories(test_CATChemCore PRIVATE ${CMAKE_BINARY_DIR}/include)
-add_dependencies(test_CATChemCore CATChem_core)
-add_test(
-  NAME test_CATChemCore
-  COMMAND test_CATChemCore
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# Restored Low-Level Foundational Unit Tests
+macro(add_fortran_test name_test)
+  add_executable(${name_test} ${name_test}.f90)
+  target_link_libraries(${name_test} PRIVATE CATChem_core testing)
+  set_target_properties(
+    ${name_test}
+    PROPERTIES
+      Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+      LINKER_LANGUAGE Fortran
+  )
+  target_include_directories(${name_test} PRIVATE ${CMAKE_BINARY_DIR}/include)
+  add_dependencies(${name_test} CATChem_core)
+  add_test(
+    NAME ${name_test}
+    COMMAND ${name_test}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+endmacro()
 
-add_executable(test_StateManager test_StateManager.f90)
-target_link_libraries(test_StateManager PRIVATE CATChem_core)
-target_link_libraries(test_StateManager PRIVATE testing)
-set_target_properties(
-  test_StateManager
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-target_include_directories(
-  test_StateManager
-  PRIVATE ${CMAKE_BINARY_DIR}/include
-)
-add_dependencies(test_StateManager CATChem_core)
-add_test(
-  NAME test_StateManager
-  COMMAND test_StateManager
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+add_fortran_test(test_Precision)
+add_fortran_test(test_Error)
+add_fortran_test(test_Constants)
+add_fortran_test(test_GridGeometry)
+add_fortran_test(test_TimeState)
+add_fortran_test(test_MetState)
+add_fortran_test(test_ChemSpeciesUtils)
+add_fortran_test(test_DiagnosticInterface)
 
-add_executable(test_MetState test_MetState.f90)
-target_link_libraries(test_MetState PRIVATE CATChem_core)
-target_link_libraries(test_MetState PRIVATE testing)
-set_target_properties(
-  test_MetState
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-target_include_directories(test_MetState PRIVATE ${CMAKE_BINARY_DIR}/include)
-add_dependencies(test_MetState CATChem_core)
-add_test(
-  NAME test_MetState
-  COMMAND test_MetState
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# Process Science Unit Tests
+macro(add_process_science_test name_test process_lib)
+  add_executable(${name_test} ${name_test}.f90)
+  target_link_libraries(
+    ${name_test}
+    PRIVATE ${process_lib} CATChem_core testing
+  )
+  set_target_properties(
+    ${name_test}
+    PROPERTIES
+      Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+      LINKER_LANGUAGE Fortran
+  )
+  target_include_directories(${name_test} PRIVATE ${CMAKE_BINARY_DIR}/include)
+  add_dependencies(${name_test} ${process_lib} CATChem_core)
+  add_test(
+    NAME ${name_test}
+    COMMAND ${name_test}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+endmacro()
 
-add_executable(test_GridManager test_GridManager.f90)
-target_link_libraries(test_GridManager PRIVATE CATChem_core)
-target_link_libraries(test_GridManager PRIVATE testing)
-set_target_properties(
-  test_GridManager
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-target_include_directories(test_GridManager PRIVATE ${CMAKE_BINARY_DIR}/include)
-add_dependencies(test_GridManager CATChem_core)
-add_test(
-  NAME test_GridManager
-  COMMAND test_GridManager
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+add_process_science_test(test_settling_science CATChem_process_settling)
+add_process_science_test(test_seasalt_science CATChem_process_seasalt)
+add_process_science_test(test_dust_science CATChem_process_dust)
+add_process_science_test(test_drydep_science CATChem_process_drydep)
+add_process_science_test(test_wetdep_science CATChem_process_wetdep)
+add_process_science_test(test_so4chem_science CATChem_process_so4chem)
+add_process_science_test(test_carbchem_science CATChem_process_carbchem)
 
-add_executable(test_ConfigManager test_ConfigManager.f90)
-target_link_libraries(test_ConfigManager PRIVATE CATChem_core)
-target_link_libraries(test_ConfigManager PRIVATE testing)
+# UnitConversion needs specific include search dirs
+add_executable(test_UnitConversion test_UnitConversion.f90)
+target_link_libraries(test_UnitConversion PRIVATE CATChem_core testing)
 set_target_properties(
-  test_ConfigManager
+  test_UnitConversion
   PROPERTIES
     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
     LINKER_LANGUAGE Fortran
 )
 target_include_directories(
-  test_ConfigManager
+  test_UnitConversion
   PRIVATE ${CMAKE_BINARY_DIR}/include
 )
-add_dependencies(test_ConfigManager CATChem_core)
+add_dependencies(test_UnitConversion CATChem_core)
 add_test(
-  NAME test_ConfigManager
-  COMMAND test_ConfigManager
+  NAME test_UnitConversion
+  COMMAND test_UnitConversion
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_executable(test_ProcessManager test_ProcessManager.f90)
-target_link_libraries(test_ProcessManager PRIVATE CATChem_core)
-target_link_libraries(test_ProcessManager PRIVATE testing)
-set_target_properties(
-  test_ProcessManager
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ProcessManager
-  COMMAND test_ProcessManager
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+# New C++ Interop and Integration Suite
+if(CATCHEM_ENABLE_KOKKOS)
+  add_executable(test_catchem_logger test_catchem_logger.cpp)
+  target_link_libraries(
+    test_catchem_logger
+    PRIVATE CATChem_core_cpp Kokkos::kokkos
+  )
+  add_test(NAME test_catchem_logger COMMAND test_catchem_logger)
 
-add_executable(test_DiagnosticManager test_DiagnosticManager.f90)
-target_link_libraries(test_DiagnosticManager PRIVATE CATChem_core)
-target_link_libraries(test_DiagnosticManager PRIVATE testing)
-set_target_properties(
-  test_DiagnosticManager
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_DiagnosticManager
-  COMMAND test_DiagnosticManager
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  add_executable(
+    test_catchem_process_registry
+    test_catchem_process_registry.cpp
+  )
+  target_link_libraries(
+    test_catchem_process_registry
+    PRIVATE
+      CATChem_core_cpp
+      CATChem_core
+      Kokkos::kokkos
+      CATChem_process_settling
+      CATChem_process_seasalt
+      CATChem_process_drydep
+      CATChem_process_wetdep
+      CATChem_process_so4chem
+      CATChem_process_dust
+      CATChem_process_carbchem
+  )
+  set_target_properties(
+    test_catchem_process_registry
+    PROPERTIES LINKER_LANGUAGE CXX
+  )
+  add_test(
+    NAME test_catchem_process_registry
+    COMMAND test_catchem_process_registry
+  )
 
-add_executable(test_Error test_Error.f90)
-target_link_libraries(test_Error PRIVATE CATChem_core)
-target_link_libraries(test_Error PRIVATE testing)
-set_target_properties(
-  test_Error
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_Error
-  COMMAND test_Error
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  add_executable(test_catchem_interop test_catchem_interop.cpp)
+  target_link_libraries(
+    test_catchem_interop
+    PRIVATE
+      CATChem_core_cpp
+      CATChem_core
+      Kokkos::kokkos
+      CATChem_process_settling
+      CATChem_process_seasalt
+      CATChem_process_drydep
+      CATChem_process_wetdep
+      CATChem_process_so4chem
+      CATChem_process_dust
+      CATChem_process_carbchem
+  )
+  set_target_properties(test_catchem_interop PROPERTIES LINKER_LANGUAGE CXX)
+  add_test(NAME test_catchem_interop COMMAND test_catchem_interop)
 
-add_executable(test_Precision test_Precision.f90)
-target_link_libraries(test_Precision PRIVATE CATChem_core)
-target_link_libraries(test_Precision PRIVATE testing)
-set_target_properties(
-  test_Precision
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_Precision
-  COMMAND test_Precision
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  # Modern Randomized Property-Based Testing
+  add_executable(test_catchem_properties test_catchem_properties.cpp)
+  target_link_libraries(
+    test_catchem_properties
+    PRIVATE
+      CATChem_core_cpp
+      CATChem_core
+      Kokkos::kokkos
+      CATChem_process_settling
+      CATChem_process_seasalt
+      CATChem_process_drydep
+      CATChem_process_wetdep
+      CATChem_process_so4chem
+      CATChem_process_dust
+      CATChem_process_carbchem
+  )
+  set_target_properties(test_catchem_properties PROPERTIES LINKER_LANGUAGE CXX)
+  add_test(NAME test_catchem_properties COMMAND test_catchem_properties)
 
-add_executable(test_ChemSpeciesUtils test_ChemSpeciesUtils.f90)
-target_link_libraries(test_ChemSpeciesUtils PRIVATE CATChem_core)
-target_link_libraries(test_ChemSpeciesUtils PRIVATE testing)
-set_target_properties(
-  test_ChemSpeciesUtils
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ChemSpeciesUtils
-  COMMAND test_ChemSpeciesUtils
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  if(CATCHEM_BUILD_MUSICA)
+    # Photolysis Process Unit/Integration Test
+    add_executable(test_catchem_photolysis test_catchem_photolysis.cpp)
+    target_link_libraries(
+      test_catchem_photolysis
+      PRIVATE
+        CATChem_core_cpp
+        CATChem_core
+        Kokkos::kokkos
+        catchem_process_photolysis
+        yaml-cpp::yaml-cpp
+    )
+    set_target_properties(
+      test_catchem_photolysis
+      PROPERTIES LINKER_LANGUAGE CXX
+    )
+    add_test(NAME test_catchem_photolysis COMMAND test_catchem_photolysis)
 
-add_executable(test_ProcessInterface test_ProcessInterface.f90)
-target_link_libraries(test_ProcessInterface PRIVATE CATChem_core)
-target_link_libraries(test_ProcessInterface PRIVATE testing)
-set_target_properties(
-  test_ProcessInterface
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ProcessInterface
-  COMMAND test_ProcessInterface
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_GridGeometry test_GridGeometry.f90)
-target_link_libraries(test_GridGeometry PRIVATE CATChem_core)
-target_link_libraries(test_GridGeometry PRIVATE testing)
-set_target_properties(
-  test_GridGeometry
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_GridGeometry
-  COMMAND test_GridGeometry
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_TimeState test_TimeState.f90)
-target_link_libraries(test_TimeState PRIVATE CATChem_core)
-target_link_libraries(test_TimeState PRIVATE testing)
-set_target_properties(
-  test_TimeState
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_TimeState
-  COMMAND test_TimeState
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_Constants test_Constants.f90)
-target_link_libraries(test_Constants PRIVATE CATChem_core)
-target_link_libraries(test_Constants PRIVATE testing)
-set_target_properties(
-  test_Constants
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_Constants
-  COMMAND test_Constants
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_VirtualColumn test_VirtualColumn.f90)
-target_link_libraries(test_VirtualColumn PRIVATE CATChem_core)
-target_link_libraries(test_VirtualColumn PRIVATE testing)
-set_target_properties(
-  test_VirtualColumn
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_VirtualColumn
-  COMMAND test_VirtualColumn
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_ColumnInterface test_ColumnInterface.f90)
-target_link_libraries(test_ColumnInterface PRIVATE CATChem_core)
-target_link_libraries(test_ColumnInterface PRIVATE testing)
-set_target_properties(
-  test_ColumnInterface
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ColumnInterface
-  COMMAND test_ColumnInterface
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-# add_executable(test_StateInterface test_StateInterface.f90)
-# target_link_libraries(test_StateInterface PRIVATE CATChem_core)
-# target_link_libraries(test_StateInterface PRIVATE testing)
-# set_target_properties(
-#   test_StateInterface
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_StateInterface
-#   COMMAND test_StateInterface
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-
-add_executable(test_DiagnosticInterface test_DiagnosticInterface.f90)
-target_link_libraries(test_DiagnosticInterface PRIVATE CATChem_core)
-target_link_libraries(test_DiagnosticInterface PRIVATE testing)
-set_target_properties(
-  test_DiagnosticInterface
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_DiagnosticInterface
-  COMMAND test_DiagnosticInterface
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_ProcessRegistry test_ProcessRegistry.f90)
-target_link_libraries(test_ProcessRegistry PRIVATE CATChem_core)
-target_link_libraries(test_ProcessRegistry PRIVATE testing)
-set_target_properties(
-  test_ProcessRegistry
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ProcessRegistry
-  COMMAND test_ProcessRegistry
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_executable(test_ProcessFactory test_ProcessFactory.f90)
-target_link_libraries(test_ProcessFactory PRIVATE CATChem_core)
-target_link_libraries(test_ProcessFactory PRIVATE testing)
-set_target_properties(
-  test_ProcessFactory
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-add_test(
-  NAME test_ProcessFactory
-  COMMAND test_ProcessFactory
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-# New CATChem API test
-add_executable(test_catchem_api test_catchem_api.F90)
-target_link_libraries(test_catchem_api PRIVATE CATChem)
-target_link_libraries(test_catchem_api PRIVATE testing)
-set_target_properties(
-  test_catchem_api
-  PROPERTIES
-    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-    LINKER_LANGUAGE Fortran
-)
-target_include_directories(test_catchem_api PRIVATE ${CMAKE_BINARY_DIR}/include)
-add_dependencies(test_catchem_api CATChem)
-add_test(
-  NAME test_catchem_api
-  COMMAND test_catchem_api
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-# # Legacy tests (to be updated)
-# add_executable(test_main test_main.F90)
-# target_link_libraries(test_main PRIVATE CATChem_core)
-# target_link_libraries(test_main PRIVATE CATChem)
-# target_link_libraries(test_main PRIVATE testing)
-# set_target_properties(
-#   test_main
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_main
-#   COMMAND test_main
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-# add_test(
-#   NAME test_main_missing_config
-#   COMMAND test_main
-#   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-# )
-# set_property(TEST test_main_missing_config PROPERTY WILL_FAIL TRUE)
-
-# add_executable(test_dust test_dust.f90)
-# target_link_libraries(test_dust PRIVATE CATChem_core)
-# target_link_libraries(test_dust PRIVATE CATChem)
-# target_link_libraries(test_dust PRIVATE CATChem_process_dust)
-# target_link_libraries(test_dust PRIVATE testing)
-# set_target_properties(
-#   test_dust
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_ccpr_dust
-#   COMMAND test_dust
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-
-# add_executable(test_seasalt test_seasalt.F90)
-# target_link_libraries(test_seasalt PRIVATE CATChem_core)
-# target_link_libraries(test_seasalt PRIVATE CATChem)
-# target_link_libraries(test_seasalt PRIVATE CATChem_process_seasalt)
-# target_link_libraries(test_seasalt PRIVATE testing)
-# set_target_properties(
-#   test_seasalt
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_ccpr_seasalt
-#   COMMAND test_seasalt
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-
-# add_executable(test_prise test_plumerise.F90)
-# target_link_libraries(test_prise PRIVATE CATChem_core)
-# target_link_libraries(test_prise PRIVATE CATChem)
-# target_link_libraries(test_prise PRIVATE testing)
-# set_target_properties(
-#   test_prise
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_plumerise
-#   COMMAND test_prise
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-
-# add_executable(test_drydep test_drydep.f90)
-# target_link_libraries(test_drydep PRIVATE CATChem_core)
-# target_link_libraries(test_drydep PRIVATE CATChem)
-# target_link_libraries(test_drydep PRIVATE testing)
-# set_target_properties(
-#   test_drydep
-#   PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-# )
-# add_test(
-#   NAME test_drydep
-#   COMMAND test_drydep
-#   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-# )
-
-#add_executable(test_chem test_chem.f90)
-#target_link_libraries(test_chem PRIVATE CATChem)
-#target_link_libraries(test_chem PRIVATE testing)
-#set_target_properties(
-#  test_chem
-#  PROPERTIES
-#     Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
-#     LINKER_LANGUAGE Fortran
-#)
-#add_test(NAME test_chem COMMAND test_chem)
-
-# Process-specific tests - binaries land in build/tests/process/<name>/
-set(CATCHEM_TESTS_DIR "${CMAKE_CURRENT_LIST_DIR}")
-set(CATCHEM_TESTS_CONFIG_DIR "${CATCHEM_TESTS_DIR}/Configs/Default")
-
-file(GLOB _process_test_dirs LIST_DIRECTORIES true process/*)
-foreach(_dir ${_process_test_dirs})
-  if(IS_DIRECTORY "${_dir}" AND EXISTS "${_dir}/CMakeLists.txt")
-    get_filename_component(_process_name ${_dir} NAME)
-    message(STATUS "Found process tests: ${_process_name}")
-    add_subdirectory(${_dir})
+    # Coupled Process Integration Test
+    add_executable(test_catchem_gaschem test_catchem_gaschem.cpp)
+    target_link_libraries(
+      test_catchem_gaschem
+      PUBLIC
+        CATChem_core_cpp
+        CATChem_core
+        catchem_process_photolysis
+        catchem_process_gaschem
+        Kokkos::kokkos
+    )
+    set_target_properties(test_catchem_gaschem PROPERTIES LINKER_LANGUAGE CXX)
+    add_test(NAME test_catchem_gaschem COMMAND test_catchem_gaschem)
   endif()
-endforeach()
+endif()
+
+add_executable(test_catchem_gaschem_units test_catchem_gaschem_units.cpp)
+add_test(NAME test_catchem_gaschem_units COMMAND test_catchem_gaschem_units)

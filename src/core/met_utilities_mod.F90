@@ -1,39 +1,11 @@
 !> \file met_utilities_mod.F90
-!! \brief Meteorological utility functions for CATChem
-!! \ingroup core_modules
-!!
-!! \author CATChem Development Team
-!! \date 2025
-!! \version 1.0
-!!
-!! This module provides meteorological and atmospheric utility functions
-!! commonly used in atmospheric chemistry and physics, including calculations
-!! for potential temperature, virtual temperature, dew point, relative humidity,
-!! saturation vapor pressure, and more.
-!!
-!! \details
-!! The met_utilities module includes:
-!! - Potential temperature calculation
-!! - Virtual temperature calculation
-!! - Dew point calculation
-!! - Relative humidity calculation
-!! - Saturation vapor pressure (Clausius-Clapeyron)
-!! - Mixing ratio and specific humidity conversions
-!! - Lapse rate calculations
-!!
-!! \section met_utilities_usage Usage Example
-!! \code{.f90}
-!! use met_utilities_mod
-!! real(fp) :: T, p, theta, Tv, rh, Td, es
-!! theta = potential_temperature(T, p, p0)
-!! Tv = virtual_temperature(T, qv)
-!! Td = dew_point(T, rh)
-!! es = saturation_vapor_pressure(T)
-!! \endcode
+!! \brief Compatibility-preserving Fortran proxy delegating meteorological equations directly to modern C++
 !!
 module Met_Utilities_Mod
-   use Precision_Mod
-   use Constants
+   use Precision_Mod, only: fp
+   use Constants, only: Rd, Cp, g0
+   use iso_c_binding, only: c_double, c_int, c_char, c_null_char
+
    implicit none
    private
 
@@ -66,369 +38,347 @@ module Met_Utilities_Mod
    public :: nuclear_decay
    public :: stokes_number
    public :: mean_free_path_air
+   public :: solar_zenith_angle
+
+   ! C Interoperable Interface Definitions
+   interface
+      real(c_double) function catchem_met_potential_temperature(temp, press, sfc_press) bind(C, name="catchem_met_potential_temperature")
+         import :: c_double
+         real(c_double), value :: temp, press, sfc_press
+      end function
+
+      real(c_double) function catchem_met_virtual_temperature(temp, qv) bind(C, name="catchem_met_virtual_temperature")
+         import :: c_double
+         real(c_double), value :: temp, qv
+      end function
+
+      real(c_double) function catchem_met_dew_point(temp, rh) bind(C, name="catchem_met_dew_point")
+         import :: c_double
+         real(c_double), value :: temp, rh
+      end function
+
+      real(c_double) function catchem_met_relative_humidity(temp, qv, press) bind(C, name="catchem_met_relative_humidity")
+         import :: c_double
+         real(c_double), value :: temp, qv, press
+      end function
+
+      real(c_double) function catchem_met_saturation_vapor_pressure(temp) bind(C, name="catchem_met_saturation_vapor_pressure")
+         import :: c_double
+         real(c_double), value :: temp
+      end function
+
+      real(c_double) function catchem_met_mixing_ratio(q) bind(C, name="catchem_met_mixing_ratio")
+         import :: c_double
+         real(c_double), value :: q
+      end function
+
+      real(c_double) function catchem_met_specific_humidity(r) bind(C, name="catchem_met_specific_humidity")
+         import :: c_double
+         real(c_double), value :: r
+      end function
+
+      real(c_double) function catchem_met_dry_adiabatic_lapse_rate() bind(C, name="catchem_met_dry_adiabatic_lapse_rate")
+         import :: c_double
+      end function
+
+      real(c_double) function catchem_met_bulk_richardson_number(t0, tz, u, z) bind(C, name="catchem_met_bulk_richardson_number")
+         import :: c_double
+         real(c_double), value :: t0, tz, u, z
+      end function
+
+      real(c_double) function catchem_met_monin_obukhov_length(ustar, t0, hflux, rho) bind(C, name="catchem_met_monin_obukhov_length")
+         import :: c_double
+         real(c_double), value :: ustar, t0, hflux, rho
+      end function
+
+      real(c_double) function catchem_met_friction_velocity(tau, rho) bind(C, name="catchem_met_friction_velocity")
+         import :: c_double
+         real(c_double), value :: tau, rho
+      end function
+
+      integer(c_int) function catchem_met_stability_classification(l) bind(C, name="catchem_met_stability_classification")
+         import :: c_double, c_int
+         real(c_double), value :: l
+      end function
+
+      real(c_double) function catchem_met_saturation_mixing_ratio(p, t) bind(C, name="catchem_met_saturation_mixing_ratio")
+         import :: c_double
+         real(c_double), value :: p, t
+      end function
+
+      real(c_double) function catchem_met_latent_heat_vaporization(t) bind(C, name="catchem_met_latent_heat_vaporization")
+         import :: c_double
+         real(c_double), value :: t
+      end function
+
+      real(c_double) function catchem_met_psychrometric_constant(p, lv) bind(C, name="catchem_met_psychrometric_constant")
+         import :: c_double
+         real(c_double), value :: p, lv
+      end function
+
+      real(c_double) function catchem_met_wind_profile_loglaw(ustar, z, z0) bind(C, name="catchem_met_wind_profile_loglaw")
+         import :: c_double
+         real(c_double), value :: ustar, z, z0
+      end function
+
+      real(c_double) function catchem_met_brunt_vaisala_frequency(t0, dtdz) bind(C, name="catchem_met_brunt_vaisala_frequency")
+         import :: c_double
+         real(c_double), value :: t0, dtdz
+      end function
+
+      real(c_double) function catchem_met_psi_m_businger(zeta) bind(C, name="catchem_met_psi_m_businger")
+         import :: c_double
+         real(c_double), value :: zeta
+      end function
+
+      real(c_double) function catchem_met_psi_h_businger(zeta) bind(C, name="catchem_met_psi_h_businger")
+         import :: c_double
+         real(c_double), value :: zeta
+      end function
+
+      real(c_double) function catchem_met_arrhenius_rate(a, ea, t) bind(C, name="catchem_met_arrhenius_rate")
+         import :: c_double
+         real(c_double), value :: a, ea, t
+      end function
+
+      real(c_double) function catchem_met_henrys_law_constant(h0, dh, t, t0) bind(C, name="catchem_met_henrys_law_constant")
+         import :: c_double
+         real(c_double), value :: h0, dh, t, t0
+      end function
+
+      real(c_double) function catchem_met_photolysis_rate_scaling(j0, sza) bind(C, name="catchem_met_photolysis_rate_scaling")
+         import :: c_double
+         real(c_double), value :: j0, sza
+      end function
+
+      real(c_double) function catchem_met_ppm_to_ugm3(ppm, m, t, p) bind(C, name="catchem_met_ppm_to_ugm3")
+         import :: c_double
+         real(c_double), value :: ppm, m, t, p
+      end function
+
+      real(c_double) function catchem_met_ugm3_to_ppm(ugm3, m, t, p) bind(C, name="catchem_met_ugm3_to_ppm")
+         import :: c_double
+         real(c_double), value :: ugm3, m, t, p
+      end function
+
+      real(c_double) function catchem_met_stokes_settling_velocity(dp, rho_p, rho_a, mu, cc) bind(C, name="catchem_met_stokes_settling_velocity")
+         import :: c_double
+         real(c_double), value :: dp, rho_p, rho_a, mu, cc
+      end function
+
+      real(c_double) function catchem_met_cunningham_correction_factor(dp, lambda) bind(C, name="catchem_met_cunningham_correction_factor")
+         import :: c_double
+         real(c_double), value :: dp, lambda
+      end function
+
+      real(c_double) function catchem_met_stokes_number(rho_p, d_p, u, mu, l) bind(C, name="catchem_met_stokes_number")
+         import :: c_double
+         real(c_double), value :: rho_p, d_p, u, mu, l
+      end function
+
+      real(c_double) function catchem_met_mean_free_path_air(temp, press) bind(C, name="catchem_met_mean_free_path_air")
+         import :: c_double
+         real(c_double), value :: temp, press
+      end function
+
+      real(c_double) function catchem_met_nuclear_decay(n0, lambda, t) bind(C, name="catchem_met_nuclear_decay")
+         import :: c_double
+         real(c_double), value :: n0, lambda, t
+      end function
+
+      subroutine catchem_met_solar_zenith_angle(jday, xhour, lat_rad, lon_rad, sza_deg, cossza) bind(C, name="catchem_met_solar_zenith_angle")
+         import :: c_double, c_int
+         integer(c_int), value :: jday
+         real(c_double), value :: xhour, lat_rad, lon_rad
+         real(c_double), intent(out) :: sza_deg, cossza
+      end subroutine
+   end interface
 
 contains
 
-   !> \brief Calculate potential temperature (theta)
-   !! \param[in] T Temperature [K]
-   !! \param[in] p Pressure [Pa]
-   !! \param[in] p0 Surface pressure [Pa]
-   !! \return Potential temperature [K]
-   !! \cite WallaceHobbs2006
    function potential_temperature(T, p, p0) result(theta)
       real(fp), intent(in) :: T, p, p0
       real(fp) :: theta
-      theta = T * (p0 / p) ** (Rd / Cp)
+      theta = real(catchem_met_potential_temperature(real(T, c_double), real(p, c_double), real(p0, c_double)), fp)
    end function potential_temperature
 
-   !> \brief Calculate virtual temperature
-   !! \param[in] T Temperature [K]
-   !! \param[in] qv Water vapor mixing ratio [kg/kg]
-   !! \return Virtual temperature [K]
-   !! \cite WallaceHobbs2006
    function virtual_temperature(T, qv) result(Tv)
       real(fp), intent(in) :: T, qv
       real(fp) :: Tv
-      Tv = T * (1.0_fp + 0.61_fp * qv)
+      Tv = real(catchem_met_virtual_temperature(real(T, c_double), real(qv, c_double)), fp)
    end function virtual_temperature
 
-   !> \brief Calculate dew point temperature
-   !! \param[in] T Temperature [K]
-   !! \param[in] rh Relative humidity [0-1]
-   !! \return Dew point temperature [K]
-   !! \cite Bolton1980
    function dew_point(T, rh) result(Td)
       real(fp), intent(in) :: T, rh
       real(fp) :: Td
-      real(fp) :: es, ed
-      es = saturation_vapor_pressure(T)
-      ed = rh * es
-      Td = 243.5_fp / (17.67_fp / log(ed / 611.2_fp) - 1.0_fp) + 273.15_fp
+      Td = real(catchem_met_dew_point(real(T, c_double), real(rh, c_double)), fp)
    end function dew_point
 
-   !> \brief Calculate relative humidity
-   !! \param[in] T Temperature [K]
-   !! \param[in] qv Water vapor mixing ratio [kg/kg]
-   !! \param[in] p Pressure [Pa]
-   !! \return Relative humidity [0-1]
-   !! \cite WallaceHobbs2006
    function relative_humidity(T, qv, p) result(rh)
       real(fp), intent(in) :: T, qv, p
       real(fp) :: rh
-      real(fp) :: e, es
-      e = qv * p / (0.622_fp + 0.378_fp * qv)
-      es = saturation_vapor_pressure(T)
-      rh = e / es
-      ! Clip to physical limits
-      rh = max(0.0_fp, min(1.0_fp, rh))
+      rh = real(catchem_met_relative_humidity(real(T, c_double), real(qv, c_double), real(p, c_double)), fp)
    end function relative_humidity
 
-   !> \brief Calculate saturation vapor pressure (Clausius-Clapeyron)
-   !! \param[in] T Temperature [K]
-   !! \return Saturation vapor pressure [Pa]
-   !! \cite Bolton1980
    function saturation_vapor_pressure(T) result(es)
       real(fp), intent(in) :: T
       real(fp) :: es
-      es = 611.2_fp * exp(17.67_fp * (T - 273.15_fp) / (T - 29.65_fp))
+      es = real(catchem_met_saturation_vapor_pressure(real(T, c_double)), fp)
    end function saturation_vapor_pressure
 
-   !> \brief Calculate mixing ratio from specific humidity
-   !! \param[in] q Specific humidity [kg/kg]
-   !! \return Mixing ratio [kg/kg]
    function mixing_ratio(q) result(r)
       real(fp), intent(in) :: q
       real(fp) :: r
-      r = q / (1.0_fp - q)
+      r = real(catchem_met_mixing_ratio(real(q, c_double)), fp)
    end function mixing_ratio
 
-   !> \brief Calculate specific humidity from mixing ratio
-   !! \param[in] r Mixing ratio [kg/kg]
-   !! \return Specific humidity [kg/kg]
    function specific_humidity(r) result(q)
       real(fp), intent(in) :: r
       real(fp) :: q
-      q = r / (1.0_fp + r)
+      q = real(catchem_met_specific_humidity(real(r, c_double)), fp)
    end function specific_humidity
 
-   !> \brief Calculate dry adiabatic lapse rate
-   !! \return Dry adiabatic lapse rate [K/m]
    function dry_adiabatic_lapse_rate() result(gamma_d)
       real(fp) :: gamma_d
-      gamma_d = g0 / Cp
+      gamma_d = real(catchem_met_dry_adiabatic_lapse_rate(), fp)
    end function dry_adiabatic_lapse_rate
 
-   !> \brief Calculate the bulk Richardson number
-   !! \param[in] T0 Surface temperature [K]
-   !! \param[in] Tz Temperature at height z [K]
-   !! \param[in] u Wind speed at height z [m/s]
-   !! \param[in] z Height above ground [m]
-   !! \return Bulk Richardson number (dimensionless)
    function bulk_richardson_number(T0, Tz, u, z) result(Ri)
       real(fp), intent(in) :: T0, Tz, u, z
       real(fp) :: Ri
-      if (u > 0.0_fp .and. z > 0.0_fp) then
-         Ri = (g0 / T0) * (Tz - T0) * z / (u**2)
-      else
-         Ri = 0.0_fp
-      endif
+      Ri = real(catchem_met_bulk_richardson_number(real(T0, c_double), real(Tz, c_double), real(u, c_double), real(z, c_double)), fp)
    end function bulk_richardson_number
 
-   !> \brief Calculate the Monin-Obukhov length
-   !! \param[in] ustar Friction velocity [m/s]
-   !! \param[in] T0 Surface temperature [K]
-   !! \param[in] H Sensible heat flux [W/m^2]
-   !! \param[in] rho Air density [kg/m^3]
-   !! \return Monin-Obukhov length [m]
    function monin_obukhov_length(ustar, T0, H, rho) result(L)
       real(fp), intent(in) :: ustar, T0, H, rho
       real(fp) :: L
-      if (ustar > 0.0_fp .and. abs(H) > 0.0_fp) then
-         L = - (ustar**3 * rho * Cp * T0) / (VON_KARMAN * g0 * H)
-      else
-         L = 1.0e5_fp  ! Neutral/very stable default
-      endif
+      L = real(catchem_met_monin_obukhov_length(real(ustar, c_double), real(T0, c_double), real(H, c_double), real(rho, c_double)), fp)
    end function monin_obukhov_length
 
-   !> \brief Calculate friction velocity (u*)
-   !! \param[in] tau Surface shear stress [N/m^2]
-   !! \param[in] rho Air density [kg/m^3]
-   !! \return Friction velocity [m/s]
    function friction_velocity(tau, rho) result(ustar)
       real(fp), intent(in) :: tau, rho
       real(fp) :: ustar
-      if (rho > 0.0_fp) then
-         ustar = sqrt(abs(tau) / rho)
-      else
-         ustar = 0.0_fp
-      endif
+      ustar = real(catchem_met_friction_velocity(real(tau, c_double), real(rho, c_double)), fp)
    end function friction_velocity
 
-   !> \brief Classify atmospheric stability based on Monin-Obukhov length
-   !! \param[in] L Monin-Obukhov length [m]
-   !! \return Stability class: -1 (unstable), 0 (neutral), 1 (stable)
    function stability_classification(L) result(class)
       real(fp), intent(in) :: L
       integer :: class
-      if (L < -200.0_fp) then
-         class = -1  ! Unstable
-      else if (L > 200.0_fp) then
-         class = 1   ! Stable
-      else
-         class = 0   ! Neutral
-      endif
+      class = int(catchem_met_stability_classification(real(L, c_double)))
    end function stability_classification
 
-   !> \brief Calculate saturation mixing ratio
-   !! \param[in] p Pressure [Pa]
-   !! \param[in] T Temperature [K]
-   !! \return Saturation mixing ratio [kg/kg]
    function saturation_mixing_ratio(p, T) result(ws)
       real(fp), intent(in) :: p, T
       real(fp) :: ws
-      real(fp) :: es
-      es = saturation_vapor_pressure(T)
-      ws = 0.622_fp * es / (p - es)
+      ws = real(catchem_met_saturation_mixing_ratio(real(p, c_double), real(T, c_double)), fp)
    end function saturation_mixing_ratio
 
-   !> \brief Calculate latent heat of vaporization (temperature dependent)
-   !! \param[in] T Temperature [K]
-   !! \return Latent heat of vaporization [J/kg]
    function latent_heat_vaporization(T) result(Lv)
       real(fp), intent(in) :: T
       real(fp) :: Lv
-      Lv = 2.501e6_fp - 2.361e3_fp * (T - 273.15_fp)
+      Lv = real(catchem_met_latent_heat_vaporization(real(T, c_double)), fp)
    end function latent_heat_vaporization
 
-   !> \brief Calculate the psychrometric constant
-   !! \param[in] p Pressure [Pa]
-   !! \param[in] Lv Latent heat of vaporization [J/kg]
-   !! \return Psychrometric constant [Pa/K]
    function psychrometric_constant(p, Lv) result(gamma)
       real(fp), intent(in) :: p, Lv
       real(fp) :: gamma
-      gamma = Cp * p / (0.622_fp * Lv)
+      gamma = real(catchem_met_psychrometric_constant(real(p, c_double), real(Lv, c_double)), fp)
    end function psychrometric_constant
 
-   !> \brief Calculate wind speed at height z using the log-law
-   !! \param[in] ustar Friction velocity [m/s]
-   !! \param[in] z Height above ground [m]
-   !! \param[in] z0 Surface roughness length [m]
-   !! \return Wind speed at height z [m/s]
    function wind_profile_loglaw(ustar, z, z0) result(u)
       real(fp), intent(in) :: ustar, z, z0
       real(fp) :: u
-      if (z > z0 .and. z0 > 0.0_fp) then
-         u = ustar / VON_KARMAN * log(z / z0)
-      else
-         u = 0.0_fp
-      endif
+      u = real(catchem_met_wind_profile_loglaw(real(ustar, c_double), real(z, c_double), real(z0, c_double)), fp)
    end function wind_profile_loglaw
 
-   !> \brief Calculate Brunt–Väisälä frequency squared (N^2)
-   !! \param[in] T0 Reference temperature [K]
-   !! \param[in] dTdz Vertical temperature gradient [K/m]
-   !! \return Brunt–Väisälä frequency squared [1/s^2]
-   !! \cite WallaceHobbs2006
    function brunt_vaisala_frequency(T0, dTdz) result(N2)
       real(fp), intent(in) :: T0, dTdz
       real(fp) :: N2
-      N2 = (g0 / T0) * (dTdz + g0 / Cp)
+      N2 = real(catchem_met_brunt_vaisala_frequency(real(T0, c_double), real(dTdz, c_double)), fp)
    end function brunt_vaisala_frequency
 
-   !> \brief Businger-Dyer stability correction for momentum
-   !! \param[in] zeta z/L (dimensionless stability parameter)
-   !! \return Psi_m (stability correction for momentum)
    function psi_m_businger(zeta) result(psi_m)
       real(fp), intent(in) :: zeta
       real(fp) :: psi_m
-      if (zeta < 0.0_fp) then
-         psi_m = 2.0_fp * log((1.0_fp + sqrt(1.0_fp - 16.0_fp*zeta)) / 2.0_fp)
-      else
-         psi_m = -5.0_fp * zeta
-      endif
+      psi_m = real(catchem_met_psi_m_businger(real(zeta, c_double)), fp)
    end function psi_m_businger
 
-   !> \brief Businger-Dyer stability correction for heat
-   !! \param[in] zeta z/L (dimensionless stability parameter)
-   !! \return Psi_h (stability correction for heat)
    function psi_h_businger(zeta) result(psi_h)
       real(fp), intent(in) :: zeta
       real(fp) :: psi_h
-      if (zeta < 0.0_fp) then
-         psi_h = 2.0_fp * log((1.0_fp + sqrt(1.0_fp - 16.0_fp*zeta)) / 2.0_fp)
-      else
-         psi_h = -5.0_fp * zeta
-      endif
+      psi_h = real(catchem_met_psi_h_businger(real(zeta, c_double)), fp)
    end function psi_h_businger
 
-   !> \brief Calculate Arrhenius rate constant
-   !! \param[in] A Pre-exponential factor [units vary]
-   !! \param[in] Ea Activation energy [J/mol]
-   !! \param[in] T Temperature [K]
-   !! \return Rate constant [units of A]
-   !! \cite SeinfeldPandis2016
    function arrhenius_rate(A, Ea, T) result(k)
       real(fp), intent(in) :: A, Ea, T
       real(fp) :: k
-      real(fp), parameter :: R = 8.314462618_fp  ! Gas constant [J/mol/K]
-      k = A * exp(-Ea / (R * T))
+      k = real(catchem_met_arrhenius_rate(real(A, c_double), real(Ea, c_double), real(T, c_double)), fp)
    end function arrhenius_rate
 
-   !> \brief Calculate Henry's Law constant (temperature dependent)
-   !! \param[in] H0 Reference Henry's constant [mol/(m^3*Pa)]
-   !! \param[in] dH Enthalpy of solution [J/mol]
-   !! \param[in] T Temperature [K]
-   !! \param[in] T0 Reference temperature [K]
-   !! \return Henry's Law constant at T [mol/(m^3*Pa)]
-   !! \cite Sander2015
    function henrys_law_constant(H0, dH, T, T0) result(H)
       real(fp), intent(in) :: H0, dH, T, T0
       real(fp) :: H
-      real(fp), parameter :: R = 8.314462618_fp
-      H = H0 * exp(-dH/R * (1.0_fp/T - 1.0_fp/T0))
+      H = real(catchem_met_henrys_law_constant(real(H0, c_double), real(dH, c_double), real(T, c_double), real(T0, c_double)), fp)
    end function henrys_law_constant
 
-   !> \brief Scale photolysis rate for solar zenith angle
-   !! \param[in] J0 Base photolysis rate [1/s]
-   !! \param[in] sza Solar zenith angle [degrees]
-   !! \return Scaled photolysis rate [1/s]
    function photolysis_rate_scaling(J0, sza) result(J)
       real(fp), intent(in) :: J0, sza
       real(fp) :: J
-      J = J0 * max(0.0_fp, cos(sza * 3.141592653589793_fp / 180.0_fp))
+      J = real(catchem_met_photolysis_rate_scaling(real(J0, c_double), real(sza, c_double)), fp)
    end function photolysis_rate_scaling
 
-   !> \brief Convert ppm to ug/m3
-   !! \param[in] ppm Concentration [ppm]
-   !! \param[in] M Molar mass [g/mol]
-   !! \param[in] T Temperature [K]
-   !! \param[in] p Pressure [Pa]
-   !! \return Concentration [ug/m3]
    function ppm_to_ugm3(ppm, M, T, p) result(ugm3)
       real(fp), intent(in) :: ppm, M, T, p
       real(fp) :: ugm3
-      ugm3 = ppm * 1.0e-6_fp * p * M / (RSTARG * T) * 1.0e3_fp
+      ugm3 = real(catchem_met_ppm_to_ugm3(real(ppm, c_double), real(M, c_double), real(T, c_double), real(p, c_double)), fp)
    end function ppm_to_ugm3
 
-   !> \brief Convert ug/m3 to ppm
-   !! \param[in] ugm3 Concentration [ug/m3]
-   !! \param[in] M Molar mass [g/mol]
-   !! \param[in] T Temperature [K]
-   !! \param[in] p Pressure [Pa]
-   !! \return Concentration [ppm]
    function ugm3_to_ppm(ugm3, M, T, p) result(ppm)
       real(fp), intent(in) :: ugm3, M, T, p
       real(fp) :: ppm
-      ppm = ugm3 * (RSTARG * T) / (p * M * 1.0e3_fp) * 1.0e6_fp
+      ppm = real(catchem_met_ugm3_to_ppm(real(ugm3, c_double), real(M, c_double), real(T, c_double), real(p, c_double)), fp)
    end function ugm3_to_ppm
 
-   !> \brief Calculate Stokes settling velocity for a particle
-   !! \param[in] dp Particle diameter [m]
-   !! \param[in] rho_p Particle density [kg/m3]
-   !! \param[in] rho_a Air density [kg/m3]
-   !! \param[in] mu Air dynamic viscosity [kg/m/s]
-   !! \param[in] Cc Cunningham correction factor
-   !! \return Settling velocity [m/s]
    function stokes_settling_velocity(dp, rho_p, rho_a, mu, Cc) result(vs)
       real(fp), intent(in) :: dp, rho_p, rho_a, mu, Cc
       real(fp) :: vs
-      vs = (dp**2) * (rho_p - rho_a) * g0 * Cc / (18.0_fp * mu)
+      vs = real(catchem_met_stokes_settling_velocity(real(dp, c_double), real(rho_p, c_double), real(rho_a, c_double), real(mu, c_double), real(Cc, c_double)), fp)
    end function stokes_settling_velocity
 
-   !> \brief Calculate Cunningham correction factor
-   !! \param[in] dp Particle diameter [m]
-   !! \param[in] lambda Mean free path of air [m]
-   !! \return Cunningham correction factor (dimensionless)
    function cunningham_correction_factor(dp, lambda) result(Cc)
       real(fp), intent(in) :: dp, lambda
       real(fp) :: Cc
-      if (dp > 0.0_fp .and. lambda > 0.0_fp) then
-         Cc = 1.0_fp + 2.0_fp * lambda / dp * (1.257_fp + 0.4_fp * exp(-1.1_fp * dp / lambda))
-      else
-         Cc = 1.0_fp
-      endif
+      Cc = real(catchem_met_cunningham_correction_factor(real(dp, c_double), real(lambda, c_double)), fp)
    end function cunningham_correction_factor
 
-   !> \brief Calculate nuclear decay (first-order)
-   !! \param[in] N0 Initial quantity
-   !! \param[in] lambda Decay constant [1/s]
-   !! \param[in] t Time [s]
-   !! \return Remaining quantity after time t
-   function nuclear_decay(N0, lambda, t) result(N)
-      real(fp), intent(in) :: N0, lambda, t
-      real(fp) :: N
-      N = N0 * exp(-lambda * t)
-   end function nuclear_decay
-
-
-   !> \brief Calculate Stokes number from base state variables
-   !! \param[in] rho_p Particle density [kg/m^3]
-   !! \param[in] d_p Particle diameter [m]
-   !! \param[in] U Characteristic velocity [m/s]
-   !! \param[in] mu Dynamic viscosity [kg/m/s]
-   !! \param[in] L Characteristic length scale [m]
-   !! \return Stokes number (dimensionless)
    function stokes_number(rho_p, d_p, U, mu, L) result(Stk)
       real(fp), intent(in) :: rho_p, d_p, U, mu, L
       real(fp) :: Stk
-      if (mu > 0.0_fp .and. L > 0.0_fp) then
-         Stk = (rho_p * d_p**2 * U) / (18.0_fp * mu * L)
-      else
-         Stk = 0.0_fp
-      endif
+      Stk = real(catchem_met_stokes_number(real(rho_p, c_double), real(d_p, c_double), real(U, c_double), real(mu, c_double), real(L, c_double)), fp)
    end function stokes_number
 
-   !> \brief Calculate the mean free path of air molecules
-   !! \param[in] T Temperature [K]
-   !! \param[in] p Pressure [Pa]
-   !! \return Mean free path [m]
-   !! \cite SeinfeldPandis2016
    function mean_free_path_air(T, p) result(lambda)
       real(fp), intent(in) :: T, p
       real(fp) :: lambda
-      real(fp), parameter :: d_air = 3.7e-10_fp  ! Effective air molecule diameter [m]
-      lambda = BOLTZ * T / (sqrt(2.0_fp) * 3.141592653589793_fp * d_air**2 * p)
+      lambda = real(catchem_met_mean_free_path_air(real(T, c_double), real(p, c_double)), fp)
    end function mean_free_path_air
 
-end module met_utilities_mod
+   function nuclear_decay(N0, lambda, t) result(N)
+      real(fp), intent(in) :: N0, lambda, t
+      real(fp) :: N
+      N = real(catchem_met_nuclear_decay(real(N0, c_double), real(lambda, c_double), real(t, c_double)), fp)
+   end function nuclear_decay
+
+   subroutine solar_zenith_angle(jday, xhour, lat_rad, lon_rad, sza_deg, cossza)
+      integer, intent(in) :: jday
+      real(fp), intent(in) :: xhour, lat_rad, lon_rad
+      real(fp), intent(out) :: sza_deg, cossza
+
+      real(c_double) :: s_deg, c_sza
+
+      call catchem_met_solar_zenith_angle(int(jday, c_int), real(xhour, c_double), real(lat_rad, c_double), real(lon_rad, c_double), s_deg, c_sza)
+      sza_deg = real(s_deg, fp)
+      cossza = real(c_sza, fp)
+   end subroutine solar_zenith_angle
+
+end module Met_Utilities_Mod

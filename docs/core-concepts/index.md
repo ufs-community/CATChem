@@ -6,7 +6,7 @@ CATChem is built upon several interconnected core concepts that ensure its flexi
 
 ## Overview of Core Concepts
 
--   **[State Management](state-management.md)**: Learn how CATChem efficiently manages all model data, including chemical species, meteorological fields, and diagnostic variables, through a unified and thread-safe `StateContainer`.
+-   **[State Management](state-management.md)**: Learn how CATChem efficiently manages all model data, including chemical species, meteorological fields, and diagnostic variables, through a unified and thread-safe `catchem::StateManager`.
 
 -   **[Column Virtualization](column-virtualization.md)**: Discover how CATChem optimizes atmospheric processing by treating the 3D grid as a collection of independent 1D vertical columns, enhancing performance and scalability.
 
