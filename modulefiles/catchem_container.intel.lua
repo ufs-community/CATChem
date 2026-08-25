@@ -1,5 +1,5 @@
 help([[
-Load environment to compile ufs-weather-model in a container using Intel
+Load environment to compile CATChem in a container using Intel
 ]])
 
 prepend_path("MODULEPATH", "/opt/spack-stack/spack-stack-1.9.2/envs/unified-env/install/modulefiles/Core")
