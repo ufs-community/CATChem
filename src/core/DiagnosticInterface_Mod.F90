@@ -123,7 +123,7 @@ module DiagnosticInterface_Mod
       real(fp) :: custom_frequency = 0.0_fp        !< Custom output frequency (seconds)
       logical :: is_enabled = .true.               !< Whether diagnostic is enabled
       logical :: is_initialized = .false.          !< Initialization status
-      type(DiagnosticDataType) :: data             !< Actual data storage
+      type(DiagnosticDataType) :: data = DiagnosticDataType() !< Actual data storage
 
       ! Diagnostic species filtering support
       character(len=32), allocatable :: diagnostic_species(:)  !< User-defined species for diagnostics
