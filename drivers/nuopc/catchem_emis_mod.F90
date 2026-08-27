@@ -384,8 +384,6 @@ contains
       !! lets a single file/category mix 2D and 3D variables while still being
       !! read in a single data-open.  If the file or a variable cannot be
       !! inspected, the field keeps the category-level \c is_2d as a fallback.
-      implicit none
-
       type(ExtEmisCategoryType), intent(inout) :: category
       character(len=*),          intent(in)    :: filename
       integer,                   intent(out)   :: rc
@@ -405,7 +403,11 @@ contains
       end do
 
       ncStatus = nf90_open(trim(filename), NF90_NOWRITE, ncid)
-      if (ncStatus /= NF90_NOERR) return  ! keep category defaults
+      ! Non-fatal: this pass only refines is_2d. If the file can't be opened
+      ! for inspection, fields keep the category-level is_2d and the real
+      ! data-open (AQMIO_Open in catchem_emis_read) reports any genuine I/O
+      ! error via ESMF_LogFoundError, so we return rc=success here.
+      if (ncStatus /= NF90_NOERR) return
 
       ! Identify the unlimited (record) dimension, if any
       uid = -1
@@ -764,9 +766,18 @@ contains
             timeSlice=category % irec, iofmt=AQMIO_FMT_NETCDF, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-            ! Clean up field and close file before returning
+            ! Clean up field and close file before returning; log any cleanup
+            ! failure at the point of failure (still close the file afterward).
             call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__)) then
+               ! cleanup error already logged; still close the file below
+            end if
             call AQMIO_Close(IO, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__)) then
+               ! close error already logged; fall through to bail out
+            end if
             return  ! bail out
          end if
 
@@ -775,9 +786,18 @@ contains
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field and close file before returning
+               ! Clean up field and close file before returning; log any cleanup
+               ! failure at the point of failure (still close the file afterward).
                call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! cleanup error already logged; still close the file below
+               end if
                call AQMIO_Close(IO, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! close error already logged; fall through to bail out
+               end if
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
@@ -787,9 +807,18 @@ contains
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field and close file before returning
+               ! Clean up field and close file before returning; log any cleanup
+               ! failure at the point of failure (still close the file afterward).
                call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! cleanup error already logged; still close the file below
+               end if
                call AQMIO_Close(IO, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! close error already logged; fall through to bail out
+               end if
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
@@ -967,6 +996,10 @@ contains
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__)) then
+                  ! cleanup error already logged; fall through to bail out
+               end if
                return
             end if
 
@@ -974,6 +1007,10 @@ contains
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__)) then
+                  ! cleanup error already logged; fall through to bail out
+               end if
                return
             end if
 
@@ -1015,6 +1052,10 @@ contains
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                   call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
@@ -1054,6 +1095,10 @@ contains
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                   call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
@@ -1061,6 +1106,10 @@ contains
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                   call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
@@ -1102,6 +1151,10 @@ contains
                   if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)) then
                      call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                        line=__LINE__, file=__FILE__)) then
+                        ! cleanup error already logged; fall through to bail out
+                     end if
                      return
                   end if
 

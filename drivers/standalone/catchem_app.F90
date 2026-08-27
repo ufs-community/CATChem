@@ -70,8 +70,8 @@ program catchem_app
    call set_driver_config_file(trim(driver_cfg_file))
 
    if (localPet == 0) then
-      write(*,'(A,A)') "INFO: [catchem_app] Driver configure file: ", &
-         trim(driver_cfg_file)
+      call ESMF_LogWrite("[catchem_app] Driver configure file: "// &
+         trim(driver_cfg_file), ESMF_LOGMSG_INFO, rc=rc)
    end if
 
    ! ------------------------------------------------------------------

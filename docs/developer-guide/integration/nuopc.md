@@ -520,7 +520,6 @@ data/forcing component or a mediator):
 
 ## Best Practices
 
-
 ### 1. ESMF Resource Management
 ```fortran
 ! Always check return codes
