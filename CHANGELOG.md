@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v2.1.0-rc.1 (2026-08-24)
+
+### Features
+
+- Enhance the modulefile sync workflow following CECE
+  ([#188](https://github.com/ufs-community/CATChem/pull/188),
+  [`8c924bc`](https://github.com/ufs-community/CATChem/commit/8c924bc7f0abf54f91b0ba5abc650b969018e9ab))
+
+
 ## v2.0.0 (2026-07-20)
 
 
