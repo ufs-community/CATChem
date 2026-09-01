@@ -62,6 +62,11 @@ def parse_metstate_type(filename):
         elif in_type and 'end type' in line.lower():
             break
         elif in_type:
+            # Skip internal bookkeeping components that are not met fields. These
+            # are tagged with a trailing "!macro-skip" marker so they are not
+            # treated as allocatable/scalar met fields by the generator.
+            if 'macro-skip' in line.lower():
+                continue
             # Match different field types: real(fp), integer, logical, character
             # REAL(fp), ALLOCATABLE :: name(dimensions) or name
             m_real_alloc = re.match(r'\s*REAL\(fp\),\s*ALLOCATABLE\s*::\s*(\w+)(?:\s*\(([^)]*)\))?\s*', line, re.IGNORECASE)
@@ -1046,6 +1051,35 @@ def write_set_field_2d_real(fields, output_file):
                 f.write(f"   this%{name} = field_data\n")
                 f.write(f"   rc = CC_SUCCESS\n\n")
 
+        # Integer fields: callers (e.g. the offline emission reader) always supply
+        # real data, so accept it here and convert with nint(). This makes the
+        # real set_field a universal entry point for integer 2D met fields such as
+        # LWI (land/water/ice mask) and DLUSE (dominant land-use type), which would
+        # otherwise hit "Unknown field name" because they are absent from this
+        # real-typed case list.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 2 and type_name == 'integer':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call this%allocate_arrays('{name}', error_mgr, rc)\n")
+                f.write(f"      if (rc /= CC_SUCCESS) return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = nint(field_data)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Logical fields: convert real data to logical via a > 0.5 threshold.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 2 and type_name == 'logical':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call this%allocate_arrays('{name}', error_mgr, rc)\n")
+                f.write(f"      if (rc /= CC_SUCCESS) return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = (field_data > 0.5_fp)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
 def write_set_field_2d_int(fields, output_file):
     """
     Write a macro for setting 2D INTEGER field values.
@@ -1168,6 +1202,48 @@ def write_set_field_3d_real(fields, output_file):
                     f.write(f"   ! Field type: {conditional_info['type']}\n")
                     f.write(f"   this%{name} = field_data\n")
                     f.write(f"   rc = CC_SUCCESS\n\n")
+                elif is_edge:
+                    # Edge field (nz+1). A plain `this%{name} = field_data` uses
+                    # Fortran realloc-on-assignment, which would SHRINK the
+                    # persistent nz+1 array to the caller's level count. Offline
+                    # emission met data is supplied on nz model levels, so that
+                    # would corrupt the array shape for every downstream edge
+                    # consumer (e.g. wetdep indexes 1:nz+1). Assign into the
+                    # existing allocation instead so the shape is preserved.
+                    #
+                    # NOTE: this same .inc is also #included by the scalar-REAL
+                    # setter's fallback dispatcher, where `field_data` is a
+                    # SCALAR being broadcast. The array-shape logic below is only
+                    # valid when field_data is rank-3, so it is guarded by
+                    # METSTATE_FIELD_DATA_RANK3 (defined only around the rank-3
+                    # include). In the scalar context we fall back to a plain
+                    # broadcast assignment, which does not reallocate.
+                    f.write(f"   if (.not. allocated(this%{name})) then\n")
+                    f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                    f.write(f"         'Field {name} not allocated', rc)\n")
+                    f.write(f"      return\n")
+                    f.write(f"   end if\n")
+                    f.write(f"#ifdef METSTATE_FIELD_DATA_RANK3\n")
+                    f.write(f"   if (size(field_data,3) == size(this%{name},3)) then\n")
+                    f.write(f"      ! Caller supplies all nz+1 edges (e.g. coupled import): full copy.\n")
+                    f.write(f"      this%{name}(:,:,:) = field_data(:,:,:)\n")
+                    f.write(f"   else if (size(field_data,3) == size(this%{name},3) - 1) then\n")
+                    f.write(f"      ! Caller supplies nz model levels (offline emission read):\n")
+                    f.write(f"      ! fill the lower nz edges and zero the top-of-atmosphere edge\n")
+                    f.write(f"      ! (surface-first storage => highest index is the TOA boundary,\n")
+                    f.write(f"      !  where the downward precipitation flux is zero).\n")
+                    f.write(f"      this%{name}(:,:,1:size(field_data,3)) = field_data(:,:,:)\n")
+                    f.write(f"      this%{name}(:,:,size(this%{name},3)) = 0.0_fp\n")
+                    f.write(f"   else\n")
+                    f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                    f.write(f"         'Field {name} vertical size mismatch (expected nz or nz+1)', rc)\n")
+                    f.write(f"      return\n")
+                    f.write(f"   end if\n")
+                    f.write(f"#else\n")
+                    f.write(f"   ! Scalar broadcast context (scalar-REAL setter fallback): no realloc.\n")
+                    f.write(f"   this%{name} = field_data\n")
+                    f.write(f"#endif\n")
+                    f.write(f"   rc = CC_SUCCESS\n\n")
                 else:
                     # Standard allocation check for other fields
                     f.write(f"   if (.not. allocated(this%{name})) then\n")
@@ -1177,6 +1253,33 @@ def write_set_field_3d_real(fields, output_file):
                     f.write(f"   end if\n")
                     f.write(f"   this%{name} = field_data\n")
                     f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Integer fields: callers always supply real data, so convert with nint().
+        # Makes the real set_field a universal entry point for integer 3D met fields.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 3 and type_name == 'integer':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                f.write(f"         'Field {name} not allocated', rc)\n")
+                f.write(f"      return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = nint(field_data)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
+
+        # Logical fields: convert real data to logical via a > 0.5 threshold.
+        for name, type_name, rank, dims, is_edge in fields:
+            if rank == 3 and type_name == 'logical':
+                labels = sorted({name, name.lower()})
+                f.write("case (" + ", ".join(f"'{label}'" for label in labels) + ")\n")
+                f.write(f"   if (.not. allocated(this%{name})) then\n")
+                f.write(f"      call error_mgr%report_error(ERROR_INVALID_INPUT, &\n")
+                f.write(f"         'Field {name} not allocated', rc)\n")
+                f.write(f"      return\n")
+                f.write(f"   end if\n")
+                f.write(f"   this%{name} = (field_data > 0.5_fp)\n")
+                f.write(f"   rc = CC_SUCCESS\n\n")
 
 def write_set_field_3d_int(fields, output_file):
     """

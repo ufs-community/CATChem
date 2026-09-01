@@ -33,7 +33,7 @@ module catchem_nuopc_interface
    ! use catchem_nuopc_netcdf_out
    ! use machine, only: kind_phys
    use precision_mod, only: fp
-   use Constants, only: g0, Rd, Re
+   use Constants, only: g0, Rd, Re, MAX_LEN_NAME, MAX_LEN_PATH
    use Error_Mod, only : CC_SUCCESS, CC_FAILURE
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType
@@ -73,8 +73,8 @@ module catchem_nuopc_interface
    !! including metadata for proper data transformation and validation.
    !! \{
    type :: field_mapping_type
-      character(len=128) :: standard_name !< NUOPC/CF standard field name
-      character(len=128) :: catchem_var   !< Corresponding CATChem variable path
+      character(len=MAX_LEN_NAME) :: standard_name !< NUOPC/CF standard field name
+      character(len=MAX_LEN_NAME) :: catchem_var   !< Corresponding CATChem variable path
       integer :: dimensions               !< Number of spatial dimensions (2D/3D)
       character(len=64) :: units          !< Physical units for conversion
       logical :: optional = .false.       !< Whether field is required or optional
@@ -122,8 +122,8 @@ module catchem_nuopc_interface
       type(ESMF_TimeInterval) :: output_interval
       type(ESMF_TimeInterval) :: timeStep
       logical :: output_timing_initialized = .false.
-      character(len=256) :: output_directory = './output'
-      character(len=64) :: output_prefix = 'catchem_diag'
+      character(len=MAX_LEN_PATH) :: output_directory = './output'
+      character(len=MAX_LEN_NAME) :: output_prefix = 'catchem_diag'
       integer :: output_frequency = 3600  ! Default: 1 hour in seconds
       integer :: compress_lev = 0         !< Compression level for output NC files (0-9)
       type(ESMF_GridComp) :: iocomp
@@ -181,7 +181,7 @@ contains
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lat
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lon
       integer, intent(in) :: nlev
-      type(ESMF_Info), intent(in) :: tracerinfo
+      type(ESMF_Info), intent(in), optional :: tracerinfo
       type(ESMF_Grid), intent(in) :: input_grid
       type(ESMF_Time), intent(in), optional :: startTime,stopTime
       type(ESMF_TimeInterval), intent(in), optional :: timeStep
@@ -285,7 +285,7 @@ contains
                      'areas; AREA_M2 left unset (point emissions will be skipped)', &
                      ESMF_LOGMSG_WARNING, rc=arc)
                end if
-               call ESMF_FieldDestroy(areaField, rc=arc)
+               call ESMF_FieldDestroy(areaField, noGarbage=.true., rc=arc)
             end if
          end block
       end if
@@ -301,29 +301,44 @@ contains
       cc_wrap%output_prefix = config_manager%config_data%file_paths%Output_Prefix
 
       !populate tracer mapping using process-local tracer_map
-      call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_names)) then
-         call ESMF_LogWrite("Unable to retrieve imported tracer list", &
-            ESMF_LOGMSG_WARNING, line=__LINE__, file=__FILE__, rc=rc)
+      if (present(tracerinfo)) then
+         call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         return
-      end if
-
-      ! - import tracer units if available
-      call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_units)) then
-         allocate(tracer_units(size(tracer_names)), stat=stat)
-         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
-            msg="Unable to allocate internal workspace", &
             line=__LINE__,  file=__FILE__)) return  ! bail out
-         tracer_units = 'n/a'
+
+         if (.not.allocated(tracer_names)) then
+            call ESMF_LogWrite("Unable to retrieve imported tracer list", &
+               ESMF_LOGMSG_WARNING, line=__LINE__, file=__FILE__, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            return
+         end if
+
+         ! - import tracer units if available
+         call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+
+         if (.not.allocated(tracer_units)) then
+            allocate(tracer_units(size(tracer_names)), stat=stat)
+            if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+               msg="Unable to allocate internal workspace", &
+               line=__LINE__,  file=__FILE__)) return  ! bail out
+            tracer_units = 'n/a'
+         end if
+      else
+         ! Standalone (no coupling partner): there is no imported tracer list to
+         ! map onto. Build empty name/unit lists so the (unused) NUOPC<->CATChem
+         ! tracer map is well-defined. A single CATChem model owns its species
+         ! through its YAML configuration rather than through coupling.
+         allocate(tracer_names(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer name list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+         allocate(tracer_units(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer unit list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
       end if
 
       !copy to cc_wrap
@@ -474,7 +489,6 @@ contains
       integer, intent(out) :: rc
 
       ! Get process-local state
-      type(StateManagerType), pointer :: state_mgr => null()
       integer, save :: timestep = 0
 
       !cc_wrap => get_cc_wrap()
@@ -482,20 +496,12 @@ contains
       rc = CC_SUCCESS
       errmsg = ''
 
-      ! Update extemission data first
-      state_mgr => cc_wrap%catchem_model%get_state_manager()
-#ifdef CATCHEM_TRACE_NUOPC
-      call ESMF_TraceRegionEnter("catchem_emis_update", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
-#endif
-      call catchem_emis_update(cc_wrap%ext_emis, current_time, state_mgr, &
-         cc_wrap%iocomp, cc_wrap%grid, real(dt, fp), rc)
-#ifdef CATCHEM_TRACE_NUOPC
-      call ESMF_TraceRegionExit("catchem_emis_update", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return
-#endif
+      ! NOTE: Emission reading, emission-provided meteorology, pressure-field
+      ! derivation (DELP/AIRDEN) and required-met finalization are all performed
+      ! in transform_nuopc_to_catchem (called from ModelAdvance immediately before
+      ! this routine). This gives coupled and standalone/offline runs an identical
+      ! sequence: transform fully populates MetState and applies emissions, and
+      ! this routine only advances the CATChem processes.
 
       !Run CATChem processes
       timestep = timestep + 1
@@ -647,6 +653,10 @@ contains
       time_state => state_mgr%get_time_state_ptr()
       met_state => state_mgr%get_met_state_ptr()
 
+      ! Clear the per-timestep record of which met fields have been populated so
+      ! that "is field set" reflects only fields provided/derived this timestep.
+      call met_state%reset_field_set()
+
       call ESMF_TimeGet(currTime, yy=year, mm=month, dd=day, &
          h=hour, m=minute, s=second, rc=rc)
       call ESMF_TimeIntervalGet(cc_wrap%timeStep, s_i8=timestep_seconds, rc=rc)
@@ -687,39 +697,169 @@ contains
 
       end do
 
-      !derive some met fields if required after reading from NUOPC
-      if (allocated(cc_wrap%catchem_model%required_fields)) then
-         do i = 1, n_met
-            if (.not. set_required_met(i)) then
-               call met_state%derive_field(trim(cc_wrap%catchem_model%required_fields(i)), error_mgr, time_state, rc)
-               if (rc /= CC_SUCCESS) then
-                  call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-                     msg="Error deriving required met field: "// trim(cc_wrap%catchem_model%required_fields(i)), &
-                     line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  return  ! bail out
-               else
-                  set_required_met(i) = .true.
-               end if
-            end if
-         end do
-      end if
+      ! Populate any meteorology supplied by the offline emission reader and apply
+      ! chemical emissions. Running this here (immediately after importing met from
+      ! the NUOPC import state) makes the coupled and standalone/offline forms share
+      ! one sequence: transform fully populates MetState -- import + emission-provided
+      ! met + derived pressure fields (DELP/AIRDEN) -- and applies emissions, after
+      ! which catchem_nuopc_run only advances the processes. In coupled runs with no
+      ! "MET_" mappings this reads/applies nothing extra and leaves imported met
+      ! untouched (catchem_emis_update derives DELP/AIRDEN only when they were not
+      ! already provided this timestep, so host-imported values are preserved).
+      call catchem_emis_update(cc_wrap%ext_emis, currTime, state_mgr, &
+         cc_wrap%iocomp, cc_wrap%grid, real(timestep_seconds, fp), rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
 
-      !check if all require met fields are set
+      ! Derive any still-missing required met fields and verify completeness. This
+      ! single, unconditional call serves both run forms: import-provided and
+      ! emission-provided fields are detected through MetState's per-timestep
+      ! registry inside finalize_required_met, and derive_field self-resolves its
+      ! own prerequisites, so already-set fields are skipped and never recomputed.
       if (allocated(cc_wrap%catchem_model%required_fields)) then
-         do i = 1, n_met
-            if (.not. set_required_met(i)) then
-               !write(*,*) 'Wait. A required field is not set: ' // trim(cc_wrap%catchem_model%required_fields(i))
-               call ESMF_LogWrite("Required met field not set yet: "// &
-                  trim(cc_wrap%catchem_model%required_fields(i)), ESMF_LOGMSG_ERROR, rc=rc)
-               rc = ESMF_FAILURE
-               return
-            end if
-         end do
-         !deallocate array
+         call finalize_required_met(cc_wrap, set_required_met, rc)
+         if (rc /= ESMF_SUCCESS) return
          deallocate(set_required_met)
       end if
 
    end subroutine transform_nuopc_to_catchem
+
+   !> \brief Derive any still-missing required met fields, then verify completeness
+   !!
+   !! Shared "tail" used by both the coupled path (after importing met from the
+   !! NUOPC import state) and the standalone/offline path (after the emission
+   !! reader has populated met fields via "MET_" mappings). On entry,
+   !! set_required_met(i) must be .true. for every required field that has
+   !! already been provided (read from import and/or supplied by the emission
+   !! reader). Each remaining required field is derived from already-available
+   !! fields; the routine then verifies that all required fields are set.
+   !!
+   !! Ordering is handled inside MetState: derive_field self-resolves its own
+   !! prerequisites via the per-timestep populated registry (PS -> PEDGE -> PMID
+   !! -> {AIRDEN, DELP, RH, BXHEIGHT, REEVAPLS, ...}), so this generic loop is
+   !! order-independent. A field already populated this timestep (provided by the
+   !! import state or emission reader, or derived earlier as another field's
+   !! prerequisite) is skipped and never recomputed, which keeps the coupled path
+   !! unaffected.
+   !!
+   !! \param[inout] cc_wrap            CATChem NUOPC wrapper
+   !! \param[inout] set_required_met   Mask of already-provided required fields
+   !! \param[out]   rc                 ESMF return code
+   subroutine finalize_required_met(cc_wrap, set_required_met, rc)
+
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      logical, intent(inout) :: set_required_met(:)
+      integer, intent(out) :: rc
+
+      type(StateManagerType), pointer :: state_mgr
+      type(ErrorManagerType), pointer :: error_mgr
+      type(TimeStateType), pointer :: time_state
+      type(MetStateType), pointer :: met_state
+      integer :: i, n_met
+
+      rc = ESMF_SUCCESS
+
+      if (.not. allocated(cc_wrap%catchem_model%required_fields)) return
+
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      error_mgr => state_mgr%get_error_manager()
+      time_state => state_mgr%get_time_state_ptr()
+      met_state => state_mgr%get_met_state_ptr()
+
+      n_met = size(cc_wrap%catchem_model%required_fields)
+
+      ! Derive any remaining required met field that has not been provided yet.
+      ! derive_field self-resolves its own prerequisites via MetState's populated
+      ! registry, so this loop is order-independent. A field already populated
+      ! this timestep (from the import state, the emission reader, or derived
+      ! earlier as another field's prerequisite) is skipped and never recomputed.
+      do i = 1, n_met
+         if (set_required_met(i)) cycle
+         if (met_state%is_field_set(trim(cc_wrap%catchem_model%required_fields(i)))) then
+            set_required_met(i) = .true.
+            cycle
+         end if
+         call met_state%derive_field(trim(cc_wrap%catchem_model%required_fields(i)), error_mgr, time_state, rc)
+         if (rc /= CC_SUCCESS) then
+            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+               msg="Error deriving required met field: "// trim(cc_wrap%catchem_model%required_fields(i)), &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            return  ! bail out
+         else
+            set_required_met(i) = .true.
+         end if
+      end do
+
+      ! Verify that all required met fields are now set.
+      do i = 1, n_met
+         if (.not. set_required_met(i)) then
+            call ESMF_LogWrite("Required met field not set yet: "// &
+               trim(cc_wrap%catchem_model%required_fields(i)), ESMF_LOGMSG_ERROR, rc=rc)
+            rc = ESMF_FAILURE
+            return
+         end if
+      end do
+
+   end subroutine finalize_required_met
+
+   !> \brief Mark required met fields that are supplied by the emission reader
+   !!
+   !! Scans the loaded emission-to-species mapping for targets whose name begins
+   !! with "MET_"/"met_". The text after the prefix names a meteorological field
+   !! that catchem_emis_update writes into the MetState (see catchem_emis_apply).
+   !! For each such target that is also a required met field, the corresponding
+   !! entry of mask is set .true. This lets the derive/verify step skip fields
+   !! that come from offline files instead of from coupling or derivation.
+   !!
+   !! The result depends only on static configuration (not on whether a given
+   !! timestep actually read the file), so for the standard coupled case with no
+   !! "MET_" mappings it returns all-.false. and any_provided=.false., leaving
+   !! the coupled behavior unchanged.
+   !!
+   !! \param[inout] cc_wrap        CATChem NUOPC wrapper
+   !! \param[out]   mask           Per-required-field mask (must be sized n_met)
+   !! \param[out]   any_provided   .true. if at least one required field is met-mapped
+   subroutine emission_provided_met_mask(cc_wrap, mask, any_provided)
+
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      logical, intent(out) :: mask(:)
+      logical, intent(out) :: any_provided
+
+      type(StateManagerType), pointer :: state_mgr
+      type(ConfigManagerType), pointer :: config_mgr
+      character(len=MAX_LEN_NAME) :: tgt
+      integer :: icat, ifield, ispec, idx
+
+      mask = .false.
+      any_provided = .false.
+
+      if (.not. allocated(cc_wrap%catchem_model%required_fields)) return
+
+      state_mgr => cc_wrap%catchem_model%get_state_manager()
+      config_mgr => state_mgr%get_config_ptr()
+      if (.not. associated(config_mgr)) return
+      if (.not. config_mgr%config_data%emission_mapping%is_loaded) return
+
+      associate (em => config_mgr%config_data%emission_mapping)
+         do icat = 1, em%n_categories
+            do ifield = 1, em%categories(icat)%n_emission_species
+               do ispec = 1, em%categories(icat)%species_mappings(ifield)%n_mappings
+                  tgt = em%categories(icat)%species_mappings(ifield)%map(ispec)
+                  if (len_trim(tgt) > 4) then
+                     if (tgt(1:4) == 'MET_' .or. tgt(1:4) == 'met_') then
+                        idx = cc_wrap%catchem_model%get_required_met_index(trim(tgt(5:)))
+                        if (idx > 0) then
+                           mask(idx) = .true.
+                           any_provided = .true.
+                        end if
+                     end if
+                  end if
+               end do
+            end do
+         end do
+      end associate
+
+   end subroutine emission_provided_met_mask
 
    ! Transform CATChem states to NUOPC export fields
    !!
@@ -796,11 +936,15 @@ contains
       type(ChemStateType), pointer :: chem_state
       !type(cc_wrap_type), pointer :: cc_wrap
       real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
-      real(ESMF_KIND_R8), pointer :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
-      real(fp), allocatable :: cc_conc(:,:,:,:)
+      ! fptr4d_rev/fptr3d_rev/cc_conc are PERSISTENT (save) reusable buffers: allocated
+      ! once and resized only on shape change, instead of allocated+freed every step.
+      ! Per-step alloc/free of these ~all-species 4D arrays fragmented the glibc arena and
+      ! caused unbounded RSS growth (the ~4-5 MB/step coupled import "leak").
+      real(ESMF_KIND_R8), allocatable, save :: fptr4d_rev(:,:,:,:), fptr3d_rev(:,:,:)
+      real(fp), allocatable, save :: cc_conc(:,:,:,:)
       real(fp), pointer :: column_ptr(:) !catchem met column pointer to get vertical dimension for nz+1 variables
       real(ESMF_KIND_R8) :: unit_conv
-      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index
+      integer :: i, j, k, v, ni, nj, nk, nk1, nv, kk, v_cc, met_index, nsp, s
 
       rc = ESMF_SUCCESS
 
@@ -861,7 +1005,7 @@ contains
 
          ! 3D meteorological fields
        case (3)
-         nullify(fptr3d, fptr3d_rev)
+         nullify(fptr3d)  ! fptr3d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr3d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -887,8 +1031,13 @@ contains
             nk1 = nk
          end if
 
-         ! Allocate fptr3d_rev with the same dimensions as fptr3d
-         allocate(fptr3d_rev(ni, nj, nk1))
+         ! Reuse the persistent fptr3d_rev buffer; (re)allocate only if shape changed
+         ! (e.g. switching between nz and nz+1 edge fields). Avoids per-field alloc/free.
+         if (allocated(fptr3d_rev)) then
+            if (size(fptr3d_rev,1) /= ni .or. size(fptr3d_rev,2) /= nj .or. &
+               size(fptr3d_rev,3) /= nk1) deallocate(fptr3d_rev)
+         end if
+         if (.not. allocated(fptr3d_rev)) allocate(fptr3d_rev(ni, nj, nk1))
 
          ! -- map provider field levels to receiver field levels in the same (not reverse) order
          ! -- NOTE: if provider field from NUOPC has fewer vertical levels than the receiver field in CATChem,
@@ -929,16 +1078,15 @@ contains
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="Met field is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr3d_rev)  ! Clean up before returning
-            return  ! bail out
+            return  ! bail out (persistent fptr3d_rev buffer retained for reuse)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr3d_rev)
+         ! fptr3d_rev is a persistent buffer: intentionally NOT deallocated here (reused
+         ! next step). Freed implicitly at program end.
 
          ! 4D tracer concentrations
        case (4)
-         nullify(fptr4d, fptr4d_rev)
+         nullify(fptr4d)  ! fptr4d_rev is a persistent allocatable buffer (not a pointer)
          call ESMF_FieldGet(field, farrayPtr=fptr4d, rc=rc)
          if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) return
@@ -955,22 +1103,33 @@ contains
          nj = size(fptr4d, 2)
          nk = size(fptr4d, 3)
          nv = size(fptr4d, 4)
+         nsp = size(chem_state%ChemSpecies)
 
-         ! Allocate fptr4d_rev with the same dimensions as fptr4d
-         allocate(fptr4d_rev(ni, nj, nk, size(chem_state%ChemSpecies)))
-         fptr4d_rev = 0.0_fp  ! Initialize to zero
-         !get original concentrations from CATChem.
-         !This is because some species in CATChem may not go through advection and should keep their values.
-         call chem_state%get_all_concentrations(cc_conc, rc)
-         if (rc /= CC_SUCCESS) then
-            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
-               msg="CATChem tracer array is not retrieved successfully for: " // trim(field_map%catchem_var), &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-            if (allocated(cc_conc)) deallocate(cc_conc)  ! Clean up before returning
-            return  ! bail out
+         ! Reuse persistent fptr4d_rev + cc_conc buffers; (re)allocate only on shape change.
+         ! This replaces the per-step allocate/free of two ~all-species 4D arrays (fptr4d_rev
+         ! and the get_all_concentrations output), which was the dominant per-step large-array
+         ! churn fragmenting the glibc arena.
+         if (allocated(fptr4d_rev)) then
+            if (size(fptr4d_rev,1) /= ni .or. size(fptr4d_rev,2) /= nj .or. &
+               size(fptr4d_rev,3) /= nk .or. size(fptr4d_rev,4) /= nsp) deallocate(fptr4d_rev)
          end if
-         !assign to fptr4d_rev
-         fptr4d_rev = real(cc_conc, ESMF_KIND_R8)
+         if (.not. allocated(fptr4d_rev)) allocate(fptr4d_rev(ni, nj, nk, nsp))
+         if (allocated(cc_conc)) then
+            if (size(cc_conc,1) /= ni .or. size(cc_conc,2) /= nj .or. &
+               size(cc_conc,3) /= nk .or. size(cc_conc,4) /= nsp) deallocate(cc_conc)
+         end if
+         if (.not. allocated(cc_conc)) allocate(cc_conc(ni, nj, nk, nsp))
+
+         ! Seed fptr4d_rev with CATChem's current concentrations so non-advected species keep
+         ! their values. Inlined from get_all_concentrations to avoid its intent(out)
+         ! allocatable argument re-allocating a 4D array every step.
+         do s = 1, nsp
+            if (associated(chem_state%ChemSpecies(s)%conc)) then
+               fptr4d_rev(:,:,:,s) = real(chem_state%ChemSpecies(s)%conc(:,:,:), ESMF_KIND_R8)
+            else
+               fptr4d_rev(:,:,:,s) = 0.0_ESMF_KIND_R8
+            end if
+         end do
 
          ! Reverse vertical layers
          do v = 1, nv
@@ -993,9 +1152,7 @@ contains
                   call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                      msg="Met field is not set successfully for: QV", &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)
-                  deallocate(fptr4d_rev)  ! Clean up before returning
-                  if (allocated(cc_conc)) deallocate(cc_conc)
-                  return  ! bail out
+                  return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
                end if
             end if
 
@@ -1023,19 +1180,20 @@ contains
          end do
 
          !set to concentrations in CATChem
-         call chem_state%set_all_concentrations(real(fptr4d_rev, fp), rc)
+         ! cc_conc is the persistent real(fp) send buffer (same shape as fptr4d_rev). Copy the
+         ! import result into it and pass the VARIABLE (not a whole-array real() expression,
+         ! which would force a per-call array temporary) to set_all_concentrations.
+         cc_conc = real(fptr4d_rev, fp)
+         call chem_state%set_all_concentrations(cc_conc, rc)
          if (rc /= CC_SUCCESS) then
             call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                msg="CATChem tracer array is not set successfully for: " // trim(field_map%catchem_var), &
                line=__LINE__, file=__FILE__, rcToReturn=rc)
-            deallocate(fptr4d_rev)  ! Clean up before returning
-            if (allocated(cc_conc)) deallocate(cc_conc)
-            return  ! bail out
+            return  ! bail out (persistent fptr4d_rev/cc_conc buffers retained)
          end if
 
-         ! Clean up allocated memory
-         deallocate(fptr4d_rev)
-         if (allocated(cc_conc)) deallocate(cc_conc)
+         ! fptr4d_rev and cc_conc are persistent buffers: intentionally NOT deallocated here
+         ! (reused next step). Freed implicitly at program end.
 
        case default
          call ESMF_LogWrite("Unknown field mapping dimension for: " // trim(field_map%catchem_var), &
@@ -1251,10 +1409,14 @@ contains
       type(StateManagerType), pointer :: state_mgr_diag => null()
       type(ConfigManagerType), pointer :: config_mgr_diag => null()
       type(ESMF_Time) :: time_on_file
-      character(len=64), allocatable :: process_list(:)
+      ! NOTE: element length MUST match DiagnosticManager%list_processes, whose
+      ! intent(out) allocatable dummy is character(len=MAX_LEN_NAME). A shorter
+      ! length here corrupts the returned array (blank names, heap/descriptor
+      ! damage) and deadlocks the parallel diagnostic write.
+      character(len=MAX_LEN_NAME), allocatable :: process_list(:)
       integer :: num_processes, i
       logical :: time_to_write
-      character(len=256) :: filename
+      character(len=MAX_LEN_PATH) :: filename
 
       rc = CC_SUCCESS
 
@@ -1350,7 +1512,7 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       character(len=128) :: description
       character(len=32) :: units
-      character(len=64) :: field_name
+      character(len=MAX_LEN_NAME) :: field_name
 
       rc = CC_SUCCESS
 
@@ -1436,7 +1598,7 @@ contains
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k, time_slice
+      integer :: time_slice
 
       rc = CC_SUCCESS
 
@@ -1471,11 +1633,11 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do j = 1, size(array_2d_ptr, 2)
-            do i = 1, size(array_2d_ptr, 1)
-               field_data_2d(i, j) = real(array_2d_ptr(i, j), ESMF_KIND_R4)
-            end do
-         end do
+         ! Whole-array (shape-based) copy: on a decomposed grid the ESMF field
+         ! pointer carries DE-local/global index bounds (lower bound /= 1), while
+         ! the CATChem diagnostic array is 1-based. Intrinsic assignment copies
+         ! element-by-element by position and ignores the differing lower bounds.
+         field_data_2d(:,:) = real(array_2d_ptr(:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
@@ -1507,13 +1669,10 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do k = 1, size(array_3d_ptr, 3)
-            do j = 1, size(array_3d_ptr, 2)
-               do i = 1, size(array_3d_ptr, 1)
-                  field_data_3d(i, j, k) = real(array_3d_ptr(i, j, k), ESMF_KIND_R4)
-               end do
-            end do
-         end do
+         ! Whole-array (shape-based) copy: see the 2D case above. The decomposed
+         ! ESMF field pointer has non-1 horizontal lower bounds, so index-by-1
+         ! loops would run off the DE-local tile; intrinsic assignment is safe.
+         field_data_3d(:,:,:) = real(array_3d_ptr(:,:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
@@ -1526,9 +1685,11 @@ contains
       ! This would require extending AQMIO or using NetCDF directly
       ! For now, we rely on the working AQMIO functionality
 
-      ! Clean up
+      ! Clean up. noGarbage=.true. forces ESMF to release the field's memory
+      ! immediately; without it ESMF defers deallocation until ESMF_Finalize,
+      ! leaking one subdomain-sized array per field on every diagnostic write.
       if (ESMF_FieldIsCreated(esmf_field)) then
-         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
       end if
 
    end subroutine write_diagnostic_field
@@ -1554,9 +1715,10 @@ contains
       type(ConfigManagerType), pointer :: config_manager => null()
       type(ChemStateType), pointer :: chem_state => null()
       type(MetStateType), pointer :: met_state => null()
-      character(len=64), allocatable :: diag_species(:)
+      character(len=MAX_LEN_NAME), allocatable :: diag_species(:)
       integer :: num_diag_species, i, j, species_idx
-      character(len=64) :: species_name, field_name, units_str
+      character(len=MAX_LEN_NAME) :: species_name, field_name
+      character(len=64) :: units_str
       character(len=128) :: description
       logical :: found_species, save_all_species
       real(fp), pointer :: conc_data(:,:,:) => null()
@@ -2048,7 +2210,7 @@ contains
       type(ESMF_Grid) :: grid
       integer :: ibuf(1)  ! Buffer for MPI broadcast
       integer :: tileCount, tile, localDe, localDeCount, localrc
-      character(len=256) :: tileFilename
+      character(len=MAX_LEN_PATH) :: tileFilename
       character(len=16) :: tileSuffix
       integer :: dotpos
 

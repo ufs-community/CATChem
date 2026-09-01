@@ -3257,11 +3257,46 @@ contains
             end if
          end if
       end do
-      ! Ungridded dimension (vertical levels)
+      ! Ungridded dimension (vertical levels).
+      ! Different 3D fields may have different vertical extents in the same file
+      ! (e.g. layer-mid fields at nz vs. layer-edge fields at nz+1). A single
+      ! shared 'lev' dimension cannot represent both, so the canonical name
+      ! 'lev' is claimed by the first vertical size written and any field with a
+      ! different vertical extent gets its own size-suffixed dimension
+      ! (e.g. 'lev73'). This lets nz and nz+1 fields coexist instead of the
+      ! write failing with a dimension-length mismatch in nf90_put_var.
       if (rank > dimCount) then
          dimName = 'lev'
          ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
-         if (ncStatus /= NF90_NOERR) then
+         if (ncStatus == NF90_NOERR) then
+            ! 'lev' exists: reuse it only if its length matches this field.
+            ncStatus = nf90_inquire_dimension(IOLayout % ncid, dimIds(dimCount+1), len=length)
+            if (ncStatus /= NF90_NOERR) then
+               call ESMF_LogSetError(ESMF_RC_FILE_READ, &
+                  msg="Error inquiring dimension "//trim(dimName), &
+                  line=__LINE__, &
+                  file=__FILE__, &
+                  rcToReturn=rc)
+               return  ! bail out
+            end if
+            if (length /= dimLen(dimCount+1)) then
+               ! Mismatch: use a size-specific dimension (create or reuse).
+               write(dimName, '("lev",i0)') dimLen(dimCount+1)
+               ncStatus = nf90_inq_dimid(IOLayout % ncid, trim(dimName), dimIds(dimCount+1))
+               if (ncStatus /= NF90_NOERR) then
+                  ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
+                  if (ncStatus /= NF90_NOERR) then
+                     call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+                        msg="Error defining dimension "//trim(dimName), &
+                        line=__LINE__, &
+                        file=__FILE__, &
+                        rcToReturn=rc)
+                     return  ! bail out
+                  end if
+               end if
+            end if
+         else
+            ! 'lev' not present yet: define it at this field's vertical size.
             ncStatus = nf90_def_dim(IOLayout % ncid, trim(dimName), dimLen(dimCount+1), dimIds(dimCount+1))
             if (ncStatus /= NF90_NOERR) then
                call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
@@ -4083,6 +4118,7 @@ contains
       integer :: localrc, ncStatus, localDe, localDeCount
       integer :: ncid, xtDimId, ytDimId, varId
       integer :: i, j, nx, ny, de, tile, deCount, dimCount, tileCount, lbuf
+      integer :: i0, j0
       integer :: elb(2), eub(2)
       integer, allocatable :: deToTileMap(:), localDeToDeMap(:)
       integer, allocatable :: minIndexPDe(:,:), maxIndexPDe(:,:)
@@ -4091,10 +4127,14 @@ contains
       real(ESMF_KIND_R8), allocatable :: lonBuf(:,:), latBuf(:,:), xt(:), yt(:)
       real(ESMF_KIND_R8), allocatable :: sendbuf(:), recvbuf(:)
       real(ESMF_KIND_R8), parameter :: rad2deg = 180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
+      real(ESMF_KIND_R8), parameter :: coordTol = 1.e-4_ESMF_KIND_R8
+      real(ESMF_KIND_R8) :: coordScale
+      logical :: rectilinear
       type(ioWrapper) :: is
       type(ESMF_Grid) :: grid
       type(ESMF_DistGrid) :: distgrid
       type(ESMF_VM) :: vm
+      type(ESMF_CoordSys_Flag) :: coordSys
 
       rc = ESMF_SUCCESS
       if (.not. ESMF_GridCompIsPetLocal(IOComp)) return
@@ -4109,6 +4149,18 @@ contains
       ! Get grid and its decomposition info
       call ESMF_GridCompGet(IOComp, grid=grid, rc=localrc)
       if (localrc /= ESMF_SUCCESS) return
+
+      ! The model grid may store coordinates in radians (host cubed-sphere grids)
+      ! or degrees (standalone regular lat/lon uses ESMF_COORDSYS_SPH_DEG). Only
+      ! radians need the rad2deg conversion for output; multiplying coordinates
+      ! that are already in degrees by rad2deg yields nonsensical lon/lat values.
+      call ESMF_GridGet(grid, coordSys=coordSys, rc=localrc)
+      if (localrc /= ESMF_SUCCESS) return
+      if (coordSys == ESMF_COORDSYS_SPH_RAD) then
+         coordScale = rad2deg
+      else
+         coordScale = 1._ESMF_KIND_R8
+      end if
 
       call ESMF_GridGet(grid, ESMF_STAGGERLOC_CENTER, distgrid=distgrid, rc=localrc)
       if (localrc /= ESMF_SUCCESS) return
@@ -4143,9 +4195,18 @@ contains
          call ESMF_GridCompGet(is % IO % IOLayout(localDe) % taskComp, vm=vm, rc=localrc)
          if (localrc /= ESMF_SUCCESS) cycle
 
+         ! Tile-origin offsets. DistGrid tile indices are GLOBAL: a cubed-sphere
+         ! tile > 1 does not start at (1,1) (e.g. tile 2 spans j=193..288). Build
+         ! the stitch buffers 1-based (1..nx, 1..ny) and shift each DE's global
+         ! index block by the tile origin, so the reshape and the
+         ! rectilinear-detection / coordinate-fill loops below can safely assume
+         ! 1-based bounds. For the standalone single regular lat/lon tile the
+         ! origin is (1,1), so this is a no-op there.
+         i0 = minIndexPTile(1, tile)
+         j0 = minIndexPTile(2, tile)
+
          ! --- Gather longitude (coordDim=1) from all PETs ---
-         allocate(lonBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         allocate(lonBuf(nx, ny))
          lonBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=1, localDE=localDe, &
@@ -4153,8 +4214,8 @@ contains
             exclusiveLBound=elb, exclusiveUBound=eub, &
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
-            lonBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+            lonBuf(minIndexPDe(1,de)-i0+1:maxIndexPDe(1,de)-i0+1, &
+               minIndexPDe(2,de)-j0+1:maxIndexPDe(2,de)-j0+1) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 
@@ -4163,12 +4224,11 @@ contains
          recvbuf = 0._ESMF_KIND_R8
          call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
             ESMF_REDUCE_SUM, 0, rc=localrc)
-         lonBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         lonBuf = reshape(recvbuf, (/nx, ny/)) * coordScale
          deallocate(sendbuf, recvbuf)
 
          ! --- Gather latitude (coordDim=2) from all PETs ---
-         allocate(latBuf(minIndexPTile(1,tile):maxIndexPTile(1,tile), &
-            minIndexPTile(2,tile):maxIndexPTile(2,tile)))
+         allocate(latBuf(nx, ny))
          latBuf = 0._ESMF_KIND_R8
 
          call ESMF_GridGetCoord(grid, coordDim=2, localDE=localDe, &
@@ -4176,8 +4236,8 @@ contains
             exclusiveLBound=elb, exclusiveUBound=eub, &
             farrayPtr=ptrCoord, rc=localrc)
          if (localrc == ESMF_SUCCESS) then
-            latBuf(minIndexPDe(1,de):maxIndexPDe(1,de), &
-               minIndexPDe(2,de):maxIndexPDe(2,de)) = &
+            latBuf(minIndexPDe(1,de)-i0+1:maxIndexPDe(1,de)-i0+1, &
+               minIndexPDe(2,de)-j0+1:maxIndexPDe(2,de)-j0+1) = &
                ptrCoord(elb(1):eub(1), elb(2):eub(2))
          end if
 
@@ -4186,7 +4246,7 @@ contains
          recvbuf = 0._ESMF_KIND_R8
          call ESMF_VMReduce(vm, sendbuf, recvbuf, lbuf, &
             ESMF_REDUCE_SUM, 0, rc=localrc)
-         latBuf = reshape(recvbuf, (/nx, ny/)) * rad2deg
+         latBuf = reshape(recvbuf, (/nx, ny/)) * coordScale
          deallocate(sendbuf, recvbuf)
 
          ! --- Only I/O PET writes coordinate variables to file ---
@@ -4243,14 +4303,38 @@ contains
                         ncStatus = nf90_enddef(ncid)
                      end if
 
-                     ! Write 1-D index arrays
+                     ! Write 1-D coordinate arrays. For a rectilinear grid
+                     ! (regular lat/lon: lon depends only on i, lat only on j)
+                     ! store the real 1-D longitude/latitude so the file is a
+                     ! standard CF lat/lon dataset. For a curvilinear grid
+                     ! (e.g. cubed-sphere) 1-D geographic coordinates are not
+                     ! meaningful, so fall back to 1-based index counters and
+                     ! rely on the 2-D grid_lont/grid_latt for geography.
                      allocate(xt(nx), yt(ny))
-                     do i = 1, nx
-                        xt(i) = real(i, ESMF_KIND_R8)
-                     end do
+                     rectilinear = .true.
                      do j = 1, ny
-                        yt(j) = real(j, ESMF_KIND_R8)
+                        do i = 1, nx
+                           if (abs(lonBuf(i,j) - lonBuf(i,1)) > coordTol .or. &
+                              abs(latBuf(i,j) - latBuf(1,j)) > coordTol) then
+                              rectilinear = .false.
+                           end if
+                        end do
                      end do
+                     if (rectilinear) then
+                        do i = 1, nx
+                           xt(i) = lonBuf(i, 1)
+                        end do
+                        do j = 1, ny
+                           yt(j) = latBuf(1, j)
+                        end do
+                     else
+                        do i = 1, nx
+                           xt(i) = real(i, ESMF_KIND_R8)
+                        end do
+                        do j = 1, ny
+                           yt(j) = real(j, ESMF_KIND_R8)
+                        end do
+                     end if
                      ncStatus = nf90_inq_varid(ncid, 'grid_xt', varId)
                      if (ncStatus == NF90_NOERR) ncStatus = nf90_put_var(ncid, varId, xt)
                      ncStatus = nf90_inq_varid(ncid, 'grid_yt', varId)

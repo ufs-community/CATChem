@@ -26,6 +26,12 @@ set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 option(CATCHEM_BUILD_NUOPC "Build NUOPC cap and drivers" OFF)
 option(CATCHEM_BUILD_TESTING "Build CATChem testing framework" ON)
 option(CATCHEM_TRACE_NUOPC "Enable ESMF trace regions in NUOPC cap" OFF)
+# Option to build the standalone ESMF/NUOPC driver + application (requires NUOPC)
+option(
+  CATCHEM_BUILD_STANDALONE
+  "Build standalone ESMF/NUOPC driver and app"
+  OFF
+)
 
 if(CATCHEM_TRACE_NUOPC)
   add_compile_definitions(CATCHEM_TRACE_NUOPC)
@@ -143,6 +149,11 @@ if(NOT TARGET NetCDF::NetCDF_Fortran)
   find_package(NetCDF REQUIRED COMPONENTS Fortran)
 endif()
 
+#find MPI for standalone builds
+if(CATCHEM_BUILD_STANDALONE)
+  find_package(MPI REQUIRED)
+endif()
+
 if(CATCHEM_BUILD_NUOPC)
   # Resolve ESMF target: prefer uppercase ESMF (FindESMF), fall back to
   # lowercase esmf (MPAS internal), or find_package as last resort.
@@ -150,9 +161,28 @@ if(CATCHEM_BUILD_NUOPC)
     set(CATCHEM_ESMF_TARGET ESMF)
   elseif(TARGET esmf)
     set(CATCHEM_ESMF_TARGET esmf)
+  elseif(TARGET ESMF::ESMF)
+    set(CATCHEM_ESMF_TARGET ESMF::ESMF)
   else()
     find_package(ESMF REQUIRED)
-    set(CATCHEM_ESMF_TARGET esmf)
+    # find_package may create the target under different names depending on the
+    # provider: the repo's FindESMF.cmake creates `esmf`, while an installed
+    # ESMF CMake config package (e.g. Homebrew/upstream) creates `ESMF::ESMF`
+    # (or `ESMF`). Re-resolve the actual target instead of assuming `esmf`,
+    # otherwise CMake passes a bogus `-lesmf` flag and the link fails.
+    if(TARGET esmf)
+      set(CATCHEM_ESMF_TARGET esmf)
+    elseif(TARGET ESMF::ESMF)
+      set(CATCHEM_ESMF_TARGET ESMF::ESMF)
+    elseif(TARGET ESMF)
+      set(CATCHEM_ESMF_TARGET ESMF)
+    else()
+      message(
+        FATAL_ERROR
+        "find_package(ESMF) succeeded but created no usable target "
+        "(expected esmf, ESMF::ESMF, or ESMF)."
+      )
+    endif()
   endif()
   message(STATUS "CATChem: using ESMF target '${CATCHEM_ESMF_TARGET}'")
 endif()
@@ -274,6 +304,11 @@ if(CATCHEM_BUILD_NUOPC)
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
   )
+
+  # Standalone ESMF/NUOPC driver + application (built on top of cc_nuopc)
+  if(CATCHEM_BUILD_STANDALONE)
+    add_subdirectory(drivers/standalone)
+  endif()
 endif()
 
 # Install module files to both locations for compatibility

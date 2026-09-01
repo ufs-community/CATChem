@@ -13,14 +13,14 @@ simulation:
   #species_filename: ./Configs/Default/CATChem_species.yml
   #emission_filename: ./Configs/Default/CATChem_emission.yml
   species_filename: ./CATChem_species.yml
-  emission_filename: ./CATChem_emission.yml
+  emission_filename: ./CATChem_emission_standalone.yml
   verbose:
     activate: true
 #============================================================================
 # Grid settings
 #============================================================================
 grid:
-  number_of_levels: 64
+  number_of_levels: 72
   number_of_soil_layers: 4
 #============================================================================
 # Timesteps settings
@@ -103,46 +103,46 @@ processes:
     anthro1:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
+      source_file: "ChemInput/NEXUS_DIAG.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "P100" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
-      frequency: "daily"
+      frequency: "hourly"
       diagnostics: true
       diag_list: [SO2, OC, BC]
     anthro2:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
+      source_file: "ChemInput/NEXUS_DIAG.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "P500" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
-      frequency: "daily"
+      frequency: "hourly"
       diagnostics: true
       diag_list: [SO2_elev, OC_elev, BC_elev]
     ship:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/CEDS/v2019/%y4/CEDS.2019.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
+      source_file: "ChemInput/NEXUS_DIAG.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "P100" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
-      frequency: "daily"
+      frequency: "hourly"
       diagnostics: true
       diag_list: [SO2_ship, OC_ship, BC_ship]
     bio:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/MEGAN_OFFLINE_BVOC/v2019-10/%y4/MEGAN.OFFLINE.BIOVOC.%y4.emis.%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
+      source_file: "ExtData/nexus/MEGAN_OFFLINE_BVOC/v2021-12/MEGAN_OFFLINE_CLIMO_2000_2022_%m2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       regrid_method: conserve
@@ -150,7 +150,7 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "none" #biogenic is only at the surface.
-      frequency: "daily"
+      frequency: "monthly"  #note it is monthly climatology from offline megan for now
       diagnostics: true
       diag_list: [isoprene, mtpa]
     so2_aviation_lto:
@@ -278,7 +278,6 @@ processes:
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
       frequency: "monthly"
       diagnostics: true
-      diag_list: [bc_aviation]
     point: #not used for now
       activate: true
       scale_factor: 1.0
@@ -299,16 +298,19 @@ processes:
     gmi:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/PIESA/L127/A2_ACCMIP_gmic_MERRA_oh_h2o2_no3.x144_y91_z127_t14.2021.nc"
+      source_file: "ExtData/PIESA/L127/A2_ACCMIP_gmic_MERRA_oh_h2o2_no3.x144_y91_z127_t14.%y4.nc"
       format: "netcdf"
       gridded: true
       is_2d: false
       apply_method: "replace"
       reverse_vertical: true
       regrid_method: conserve
+      time_interpolation: linear
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "none"
+      vertical_interp: true          # remap the 127-level file onto the model nz (pressure-based)
+      vertical_pressure_mode: construct  # P = ak + bk*PS using the built-in 127-level hybrid coefficients (met_utilities_mod)
       frequency: "monthly" # 14 months (Dec+Jan padding); time-coord matching selects the right slice
       diagnostics: true
       diag_list: [oh, h2o2]
@@ -319,7 +321,7 @@ processes:
       format: "netcdf"
       gridded: true
       is_2d: true
-      apply_method: "replace" # "add" to accumulate concentration (default); "replace" to overwrite existing concentration
+      apply_method: "replace"
       regrid_method: conserve
       time_interpolation: linear
       lat_name: "latitude"
@@ -331,35 +333,35 @@ processes:
     volcano:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/volcanic/so2_volcanic_emissions_Carns.%y4%m2%d2.rc"
+      source_file: "ExtData/nexus/VOLCANO/v2021-09/so2_volcanic_emissions_CARN_v202005.degassing_only.rc"
       format: "volcano"      # triggers the point-source reader + 3D injector
       gridded: false
-      frequency: "daily"     # "static" if for climatology
+      frequency: "static"     # "daily" if separated by day
       diagnostics: false     #current will all be zeros
       diag_list: [SO2]
     fire:
       activate: true
       scale_factor: 0.7778
       topfraction: -1.0
-      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4"  # %y4=year, %m2=month, %d2=day
+      source_file: "ChemInput/FIRE_EMIS_%y4%m2%d2.nc"  # %y4=year, %m2=month, %d2=day
       format: "netcdf"
       gridded: true
       is_2d: true
       regrid_method: conserve
       time_interpolation: linear
-      diurnal_bb: true
       use_oc_fbb: true
+      diurnal_bb: true
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "Ppbl"
       frequency: "daily"
       plume_rise: "sofiev"
       diagnostics: true
-      diag_list: [biomass]
+      diag_list: [SO2,OC,BC]
     dust:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/dust/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
+      source_file: "ExtData/FENGSHA/FENGSHA_2022_NESDIS_inputs_10km_v3.2.nc"
       format: "netcdf"
       gridded: true
       regrid_method: neareststod
@@ -367,14 +369,14 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
-      apply_method: "replace" #mapped to met_state; so it is non-op here
+      apply_method: "replace"
       frequency: "static"
       diagnostics: true
       diag_list: [clayfrac,sandfrac,uthres,sep]
     fengsha:
       activate: true
       scale_factor: 1.0
-      source_file: "ExtData/dust/FENGSHA_New_Method_NESDISv1.1_9km.nc"
+      source_file: "ExtData/FENGSHA/FENGSHA_2022_NESDIS_inputs_10km_v4.nc"
       format: "netcdf"
       gridded: true
       regrid_method: neareststod
@@ -382,10 +384,130 @@ processes:
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
-      apply_method: "replace" #mapped to met_state; so it is non-op here
+      apply_method: "replace"
       frequency: "monthly"
       diagnostics: true
-      diag_list: [PC]
+      diag_list: [albedo_drag]
+    met1:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.I3.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: false
+      apply_method: "replace"
+      frequency: "3hourly"
+      diagnostics: true
+      diag_list: [T]
+    met2:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.A3dyn.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: false
+      apply_method: "replace"
+      frequency: "3hourly"
+      diagnostics: true
+      diag_list: [U,V]
+    met3:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.A1.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: true
+      apply_method: "replace"
+      frequency: "hourly"
+      diagnostics: true
+      diag_list: [PBLH]
+    met4:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.A3mstE.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: false
+      apply_method: "replace"
+      frequency: "3hourly"
+      diagnostics: true
+      diag_list: [PFILSAN, PFLLSAN]
+    met5:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.A3mstC.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: false
+      apply_method: "replace"
+      frequency: "3hourly"
+      diagnostics: true
+      diag_list: [REEVAPLS]
+    met6:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.%y4%m2%d2.A3cld.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: bilinear
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: false
+      apply_method: "replace"
+      frequency: "3hourly"
+      diagnostics: true
+      diag_list: [CLOUD]
+    met7:
+      activate: true
+      scale_factor: 1.0
+      source_file: "MERRA2/MERRA2.20150101.CN.05x0625.nc4"  # %y4=year, %m2=month, %d2=day
+      format: "netcdf"
+      gridded: true
+      regrid_method: conserve
+      time_interpolation: linear
+      lat_name: "lat"
+      lon_name: "lon"
+      is_2d: true
+      apply_method: "replace"
+      frequency: "static"
+      diagnostics: true
+      diag_list: [PHIS]
+    met8:
+      activate: true
+      scale_factor: 1.0
+      source_file: "GFSv16/gfs.t12z.sfcf.%y4%m2%d2%h2.nc"  # %y4=year, %m2=month, %d2=day, %h2=hour
+      format: "netcdf"
+      gridded: true
+      regrid_method: neareststod
+      time_interpolation: linear
+      lat_name: "grid_yt"
+      lon_name: "grid_xt"
+      is_2d: true
+      apply_method: "replace"
+      frequency: "hourly"
+      diagnostics: true
+      diag_list: [vtype]
   seasalt:
     activate: true
     diagnostics: true
@@ -420,7 +542,7 @@ processes:
   drydep:
     activate: true
     diagnostics: true
-    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
+    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2,dust1, dust3, dust5]
     gas_scheme: 'wesely'
     aero_scheme: 'gocart'
     wesely:
@@ -434,24 +556,23 @@ processes:
   wetdep:
     activate: true
     diagnostics: true
-    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
+    diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2,dust1, dust3, dust5]
     scheme: 'jacob'
     jacob:
-      scale_factor: 1.0
+      scale_factor: 1.0     #washout scale for all species
       radius_threshold: 0.05
-      so4_gocart_resusp: true #sulfate-only GOCART-style resuspension toggle (default on)
-      so4_washout_eff: 0.3 #wash out factor for SO4 only
+      so4_gocart_resusp: true #sulfate-only GOCART-style resuspension
+      so4_washout_eff: 0.3 #sulfate-only below-cloud washout efficiency (1.0=unchanged); reduce to cut excess SO4 washout
   settling:
     activate: true
     diagnostics: true
-    diag_species: [so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
+    diag_species: [so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2,dust1, dust3, dust5]
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
-      correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
-      maring_dust_only: true  #apply Maring correction to dust only (true) or all species (false)
+      correction_maring: true  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
     activate: true
     diagnostics: true

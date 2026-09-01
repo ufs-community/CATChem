@@ -170,11 +170,22 @@ program test_MetState
 
    print *, "=== Testing Type Safety ==="
 
-   ! Test type mismatch (try to assign REAL to INTEGER field)
+   ! Offline datasets frequently supply integer masks (e.g. LWI) as REAL data, so
+   ! the REAL set_field intentionally accepts an INTEGER field and coerces it with
+   ! nint(). Verify the value is stored correctly rather than rejected.
+   test_scalar_real = 1.6_fp
    call metstate%set_field("LWI", test_scalar_real, error_manager, rc)
-   call assert(rc /= CC_SUCCESS, "Should have rejected REAL value for INTEGER field")
+   call assert(rc == CC_SUCCESS, "REAL value should be accepted for INTEGER field LWI")
+   test_scalar_integer = metstate%get_2Dto0D_value_int("LWI", 1, 1)
+   call assert(test_scalar_integer == 2, "LWI[1,1] should be nint(1.6) = 2")
 
-   ! Test type mismatch (try to assign INTEGER to LOGICAL field)
+   ! Restore the 2D LWI pattern (the scalar broadcast above clobbered every cell)
+   ! so the later field-access checks still see the expected values.
+   call metstate%set_field("LWI", test_2d_integer, error_manager, rc)
+   call assert(rc == CC_SUCCESS, "Failed to restore LWI 2D pattern")
+
+   ! The INTEGER set_field does not provide a LOGICAL coercion path, so assigning
+   ! an INTEGER to a LOGICAL field is still rejected.
    call metstate%set_field("IsLand", test_scalar_integer, error_manager, rc)
    call assert(rc /= CC_SUCCESS, "Should have rejected INTEGER value for LOGICAL field")
 
