@@ -17,5 +17,7 @@
 # Catch-all
 *                       @ufs-community/catchem-core-team
 
-# Area owners (add as they are established; keep the core team on the line)
+# Area owners (add as they are established; keep the core team on the line).
+# Owners may be org teams or individual GitHub users; both need write access.
 # /src/process/dust/    @ufs-community/catchem-core-team @ufs-community/<area-team>
+# /src/process/seas/    @ufs-community/catchem-core-team @<github-username>
