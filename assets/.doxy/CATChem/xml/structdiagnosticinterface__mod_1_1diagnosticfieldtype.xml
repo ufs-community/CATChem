@@ -155,6 +155,7 @@
         <argsstring></argsstring>
         <name>data</name>
         <qualifiedname>diagnosticinterface_mod::diagnosticfieldtype::data</qualifiedname>
+        <initializer>= DiagnosticDataType()</initializer>
         <briefdescription>
 <para>Actual data storage. </para>
         </briefdescription>
