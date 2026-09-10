@@ -2,6 +2,40 @@
 
 <!-- version list -->
 
+## v2.1.0-rc.2 (2026-09-10)
+
+### Bug Fixes
+
+- Use pygrep to be platform agnostic ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+### Chores
+
+- Add initial CODEOWNERS ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+- Add initial CODEOWNERS file ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+- **modulefiles**: 🤖 sync from ufs-weather-model
+  ([#189](https://github.com/ufs-community/CATChem/pull/189),
+  [`91edb9a`](https://github.com/ufs-community/CATChem/commit/91edb9a5064192bbca3c9c608f18831686f42a81))
+
+### Documentation
+
+- Add info for a specific user ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+### Features
+
+- Add standalone driver for offline simulation
+  ([#169](https://github.com/ufs-community/CATChem/pull/169),
+  [`d228c8b`](https://github.com/ufs-community/CATChem/commit/d228c8b16b8b6e8542ffe81f9913cb25759c7c8e))
+
+- Rename to chem-core-team ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+
 ## v2.1.0-rc.1 (2026-08-24)
 
 ### Features
