@@ -414,6 +414,9 @@
 * **grid\_manager\_is\_ready** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_manager\_print\_info** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_manager\_validate** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
+* **get\_hybrid\_ab** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **get\_pedge** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **get\_pmid** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **get\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
 * **get\_required\_diagnostic\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **get\_required\_met\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
@@ -445,6 +448,7 @@
 ## h
 
 * **henrys\_law\_constant** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **hybrid\_grid\_supported** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 
 
 ## i
@@ -604,6 +608,7 @@
 * **metstate\_cleanup** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_deallocate\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_derive\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_ensure\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
@@ -622,8 +627,11 @@
 * **metstate\_get\_scalar\_value\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_init** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_is\_allocated** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_is\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_mark\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_print\_summary** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_reset** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_reset\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_real** ([**metstate\_mod**](namespacemetstate__mod.md))
@@ -633,6 +641,7 @@
 * **metstate\_set\_field\_scalar\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_scalar\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_scalar\_real** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_set\_soilm\_layer** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_validate** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **manager\_add\_met\_fields\_from\_process** ([**processmanager\_mod**](namespaceprocessmanager__mod.md))
 * **manager\_add\_process** ([**processmanager\_mod**](namespaceprocessmanager__mod.md))
@@ -851,6 +860,7 @@
 * **stability\_classification** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **stokes\_number** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **stokes\_settling\_velocity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **soilm\_layer\_from\_name** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **set\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
 * **set\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **set\_dust\_scheme** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
@@ -890,6 +900,7 @@
 
 ## t
 
+* **to\_upper\_local** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **timestate\_cleanup** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **timestate\_get\_memory\_usage** ([**timestate\_mod**](namespacetimestate__mod.md))
 * **timestate\_get\_status** ([**timestate\_mod**](namespacetimestate__mod.md))
@@ -945,6 +956,7 @@
 * **validate\_species\_mapping** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validate\_vertical\_distributions** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validate\_initialization** ([**init\_mod**](namespaceinit__mod.md))
+* **vertical\_interp\_pressure** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **virtual\_temperature** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **validate\_geos12\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **validate\_gong03\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))

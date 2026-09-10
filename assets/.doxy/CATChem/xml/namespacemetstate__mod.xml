@@ -3,6 +3,38 @@
   <compounddef id="namespacemetstate__mod" kind="namespace" language="Fortran">
     <compoundname>metstate_mod</compoundname>
     <innerclass refid="structmetstate__mod_1_1metstatetype" prot="public">metstate_mod::metstatetype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacemetstate__mod_1a7eb63f420837b17683f7db0243919ffc" prot="private" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter metstate_mod::n_soilm_prefix</definition>
+        <argsstring></argsstring>
+        <name>n_soilm_prefix</name>
+        <qualifiedname>metstate_mod::n_soilm_prefix</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="30" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacemetstate__mod_1a523f80066eea6c439365dfb81e5af7ee" prot="private" static="no" mutable="no">
+        <type>character(len=9), dimension(n_soilm_prefix), parameter</type>
+        <definition>character(len=9), dimension(n_soilm_prefix), parameter metstate_mod::soilm_prefixes</definition>
+        <argsstring></argsstring>
+        <name>soilm_prefixes</name>
+        <qualifiedname>metstate_mod::soilm_prefixes</qualifiedname>
+        <initializer>=       [ CHARACTER(len=9) :: &apos;SOILW&apos;, &apos;SOILM&apos;, &apos;SMOIS&apos;, &apos;SOILMOIST&apos; ]</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="31" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="31" bodyend="32"/>
+      </memberdef>
+    </sectiondef>
     <sectiondef kind="func">
       <memberdef kind="function" id="namespacemetstate__mod_1a34c09bab0116e192f36c8ad30437fad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -128,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="262" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="263" bodyend="308"/>
+        <location file="src/core/metstate_mod.F90" line="282" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="283" bodyend="328"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a3a12d6060918ef21dfc07ef0ede20164" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -194,7 +226,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="319" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="320" bodyend="357"/>
+        <location file="src/core/metstate_mod.F90" line="339" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="340" bodyend="377"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1af94d53b43a9666cfe96ee571e1f97732" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -248,7 +280,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="367" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="368" bodyend="383"/>
+        <location file="src/core/metstate_mod.F90" line="387" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="388" bodyend="403"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ac7c3f50ccce2187d9c34728dd429d27b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -302,7 +334,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="394" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="395" bodyend="470"/>
+        <location file="src/core/metstate_mod.F90" line="414" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="415" bodyend="490"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1adbc13fc61c54392327c0e6fbd62320c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -344,7 +376,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="479" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="480" bodyend="500"/>
+        <location file="src/core/metstate_mod.F90" line="499" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="500" bodyend="520"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a2d44b6cc481ac9f55be189b0a6c75721" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -376,7 +408,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="509" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="510" bodyend="515"/>
+        <location file="src/core/metstate_mod.F90" line="529" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="530" bodyend="535"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1aa249f491982f52da48ab64f3ab5a89a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer(kind=8) function</type>
@@ -408,7 +440,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="524" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="525" bodyend="541"/>
+        <location file="src/core/metstate_mod.F90" line="544" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="545" bodyend="561"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1affef03e2ba622b5299671b3f9bcf8495" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -438,7 +470,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="549" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="550" bodyend="567"/>
+        <location file="src/core/metstate_mod.F90" line="569" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="570" bodyend="587"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ab5ad342034bc1ea249f9b2a0fbbf2c4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -468,7 +500,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="573" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="574" bodyend="579"/>
+        <location file="src/core/metstate_mod.F90" line="593" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="594" bodyend="599"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a4ed3fa273728c68fd4c27ec0e4a6428f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -522,7 +554,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="613" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="614" bodyend="627"/>
+        <location file="src/core/metstate_mod.F90" line="633" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="634" bodyend="647"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a9659d0508e4c3f52282c956b3c47585f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -576,7 +608,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="637" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="638" bodyend="645"/>
+        <location file="src/core/metstate_mod.F90" line="657" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="658" bodyend="665"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a658afca560b8ad6be244edee083ccf8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -666,7 +698,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="659" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="660" bodyend="670"/>
+        <location file="src/core/metstate_mod.F90" line="679" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="680" bodyend="690"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a98280533eb98683db313c47cdc5b1457" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function, dimension(:), pointer</type>
@@ -696,7 +728,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="682" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="683" bodyend="696"/>
+        <location file="src/core/metstate_mod.F90" line="702" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="703" bodyend="716"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a358f3f0f8716e365efdbf7ffee034a91" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -727,7 +759,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="700" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="701" bodyend="710"/>
+        <location file="src/core/metstate_mod.F90" line="720" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="721" bodyend="730"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ab9a9ecb7d836311f167d53f827b3e989" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -750,7 +782,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="714" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="715" bodyend="720"/>
+        <location file="src/core/metstate_mod.F90" line="734" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="735" bodyend="740"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a9c4778c7cb67b8e15cc152024fd6577c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function, dimension(:), pointer</type>
@@ -781,7 +813,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="724" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="725" bodyend="738"/>
+        <location file="src/core/metstate_mod.F90" line="744" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="745" bodyend="758"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ae089bc822de8928f89dc95b7a3e6c4eb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -811,7 +843,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="741" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="742" bodyend="751"/>
+        <location file="src/core/metstate_mod.F90" line="761" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="762" bodyend="771"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a8b68c0d9b56708f019c5618916ab50bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -833,7 +865,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="754" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="755" bodyend="760"/>
+        <location file="src/core/metstate_mod.F90" line="774" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="775" bodyend="780"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a4d7396ce5f1adae28b946ea7af08d594" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function, dimension(:), pointer</type>
@@ -864,7 +896,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="764" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="765" bodyend="778"/>
+        <location file="src/core/metstate_mod.F90" line="784" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="785" bodyend="798"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a399692286817bd0791831e70c83794bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -894,7 +926,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="781" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="782" bodyend="791"/>
+        <location file="src/core/metstate_mod.F90" line="801" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="802" bodyend="811"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1acaa960c66ff9ab47dd186a6e0b8a3a31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>logical function</type>
@@ -916,7 +948,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="794" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="795" bodyend="800"/>
+        <location file="src/core/metstate_mod.F90" line="814" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="815" bodyend="820"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ab0292186d71f57e2109faf0407dcf40f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -959,7 +991,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="804" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="805" bodyend="831"/>
+        <location file="src/core/metstate_mod.F90" line="824" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="825" bodyend="851"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a3aba2e7d8f2d8499cb0c54037907b60d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1002,7 +1034,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="835" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="836" bodyend="862"/>
+        <location file="src/core/metstate_mod.F90" line="855" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="856" bodyend="882"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1acc7965adf4aaa746f0b8765feb88cd15" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1045,7 +1077,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="866" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="867" bodyend="893"/>
+        <location file="src/core/metstate_mod.F90" line="886" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="887" bodyend="913"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a4040a9fe78ca6c7e15d6d5e03e415902" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1135,7 +1167,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="908" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="909" bodyend="963"/>
+        <location file="src/core/metstate_mod.F90" line="928" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="929" bodyend="983"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a84b9b1e6c89a8ef61aed17b4e985c6fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1170,7 +1202,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="972" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="973" bodyend="1000"/>
+        <location file="src/core/metstate_mod.F90" line="992" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="993" bodyend="1021"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a7bcddc0bf136d8774b2d445bd045bde6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1205,7 +1237,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1004" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1005" bodyend="1032"/>
+        <location file="src/core/metstate_mod.F90" line="1025" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1026" bodyend="1053"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1aa729834ac04eb2278cae7e684113d67c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1240,7 +1272,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1036" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1037" bodyend="1064"/>
+        <location file="src/core/metstate_mod.F90" line="1057" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1058" bodyend="1085"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a01c15263bb0b19488b4e970db9f2af99" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1275,7 +1307,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1068" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1069" bodyend="1085"/>
+        <location file="src/core/metstate_mod.F90" line="1089" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1090" bodyend="1124"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a47e668d31b1678d2b8fc60e3212aa29f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1310,7 +1342,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1089" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1090" bodyend="1106"/>
+        <location file="src/core/metstate_mod.F90" line="1128" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1129" bodyend="1145"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a138cb770d9da73b895045f4b30274b84" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1345,7 +1377,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1110" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1111" bodyend="1127"/>
+        <location file="src/core/metstate_mod.F90" line="1149" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1150" bodyend="1166"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ab6c5e919099bf802c1509d9b8a4e0508" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1380,7 +1412,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1131" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1132" bodyend="1148"/>
+        <location file="src/core/metstate_mod.F90" line="1170" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1171" bodyend="1190"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1ad8c86b1fe5313cd2277c33c4bf6a9e96" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1415,7 +1447,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1152" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1153" bodyend="1169"/>
+        <location file="src/core/metstate_mod.F90" line="1194" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1195" bodyend="1211"/>
       </memberdef>
       <memberdef kind="function" id="namespacemetstate__mod_1a038177c77cc9989fa44ae3be6a914684" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1450,11 +1482,318 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1173" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1174" bodyend="1190"/>
+        <location file="src/core/metstate_mod.F90" line="1215" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1216" bodyend="1232"/>
       </memberdef>
-      <memberdef kind="function" id="namespacemetstate__mod_1adaadae5b0129dc77f98de284cab15d81" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacemetstate__mod_1ae4f130e7374dd36cd3da7e0218dd8c1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
-        <definition>subroutine metstate_mod::metstate_derive_field</definition>
+        <definition>subroutine metstate_mod::metstate_reset_field_set</definition>
+        <argsstring>(this)</argsstring>
+        <name>metstate_reset_field_set</name>
+        <qualifiedname>metstate_mod::metstate_reset_field_set</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset the per-timestep populated-field registry. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Clears the record of which fields have been provided (read/imported) or derived. Call this before a fresh import/read cycle so is_field_set reflects only the current timestep. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1243" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1244" bodyend="1245"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a643f2fd7fc8798408cbbd3f3405b6043" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_mark_field_set</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>metstate_mark_field_set</name>
+        <qualifiedname>metstate_mod::metstate_mark_field_set</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Record that a met field has been populated this timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Field name (compared case-insensitively) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1250" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1251" bodyend="1270"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1af0e7f3961c5d60828a792e4cd8c0a4a4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function metstate_mod::metstate_is_field_set</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>metstate_is_field_set</name>
+        <qualifiedname>metstate_mod::metstate_is_field_set</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Query whether a met field has been populated this timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Field name (compared case-insensitively) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>.true. if the field was read/imported or derived this timestep </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1276" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1277" bodyend="1290"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a529414f3bdbc22b4908da29fc7ab5ab7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure character(len=len(str)) function</type>
+        <definition>pure character(len=len(str)) function metstate_mod::to_upper_local</definition>
+        <argsstring>(str)</argsstring>
+        <name>to_upper_local</name>
+        <qualifiedname>metstate_mod::to_upper_local</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>str</defname>
+        </param>
+        <briefdescription>
+<para>Upper-case a string (module-local helper for field-name matching) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1294" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1295" bodyend="1302"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a7d474ce1ef5acbdf9aa474257e2d3f07" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure integer function</type>
+        <definition>pure integer function metstate_mod::soilm_layer_from_name</definition>
+        <argsstring>(field_name)</argsstring>
+        <name>soilm_layer_from_name</name>
+        <qualifiedname>metstate_mod::soilm_layer_from_name</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+<para>Map a soil-moisture layer field name to its 1-based layer index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Recognises per-layer soil-moisture fields written as &lt;prefix&gt;&lt;n&gt; where &lt;prefix&gt; is any entry of SOILM_PREFIXES (SOILW, SOILM, SMOIS, SOILMOIST, case-insensitive) and &lt;n&gt; is any positive integer. The number of layers is NOT fixed - it is taken from whatever the input file supplies. Returns 0 for any name that is not a recognised soil-moisture layer field.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Candidate field name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Positive layer index, or 0 if not a soil-moisture layer field </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1315" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1316" bodyend="1337"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1ab54f42890ba14356865c28741f77ad75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine metstate_mod::metstate_set_soilm_layer</definition>
+        <argsstring>(this, field_name, layer, field_data, error_mgr, rc)</argsstring>
+        <name>metstate_set_soilm_layer</name>
+        <qualifiedname>metstate_mod::metstate_set_soilm_layer</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>layer</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>field_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Route a single soil-moisture layer into the 3D SOILM array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Assembles the per-layer offline fields (see soilm_layer_from_name) into SOILM(:,:,n). SOILM is allocated lazily on the first layer received and its soil-layer dimension is grown on demand (preserving already-stored layers), so an arbitrary number of soil layers is supported without hardcoding a count. nSOIL is kept in sync with the current number of layers. In coupled runs SOILM is provided directly as a full 3D field and this path is not used.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Original field name (for the informational warning) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Soil layer index (1-based) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">field_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2D horizontal field for this layer [m3/m3] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1355" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1356" bodyend="1416"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1adef525406c0cf37b0595b175ef465ba7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>recursive subroutine</type>
+        <definition>recursive subroutine metstate_mod::metstate_ensure_field</definition>
+        <argsstring>(this, name, error_mgr, time_state, rc)</argsstring>
+        <name>metstate_ensure_field</name>
+        <qualifiedname>metstate_mod::metstate_ensure_field</qualifiedname>
+        <param>
+          <type>class(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structtimestate__mod_1_1timestatetype" kindref="compound">timestatetype</ref>), intent(inout), pointer</type>
+          <defname>time_state</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Ensure a prerequisite met field is populated, deriving it on demand. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If <computeroutput>name</computeroutput> was already provided (read/imported) or derived this timestep it is left untouched; otherwise it is derived. This lets derive_field resolve its own dependency chain (PS -&gt; PEDGE -&gt; PMID -&gt; AIRDEN/DELP/...) regardless of ordering, while never overwriting a value supplied by the host/reader.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>MetStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the prerequisite field to ensure </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">time_state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time state (needed by some derivations) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS or error code) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/metstate_mod.F90" line="1431" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1432" bodyend="1441"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacemetstate__mod_1a9ca9013d4a386013906998f22692a79e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>recursive subroutine</type>
+        <definition>recursive subroutine metstate_mod::metstate_derive_field</definition>
         <argsstring>(this, field_name, error_mgr, time_state, rc)</argsstring>
         <name>metstate_derive_field</name>
         <qualifiedname>metstate_mod::metstate_derive_field</qualifiedname>
@@ -1520,7 +1859,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/metstate_mod.F90" line="1205" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1206" bodyend="1668"/>
+        <location file="src/core/metstate_mod.F90" line="1453" column="1" bodyfile="src/core/metstate_mod.F90" bodystart="1454" bodyend="2064"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

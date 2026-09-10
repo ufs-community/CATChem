@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="72" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="72" bodyend="72"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="73" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="73" bodyend="73"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a2fd3ec9f5708b60d3c1b5406af0a5864" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="73" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="73" bodyend="73"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="74" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="74" bodyend="74"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3eb2c540ba47d42bc56aa2bb0cd2a177" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="74" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="74" bodyend="74"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="75" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a53f9c3b01866056cb50782039b3983c6" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="75" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="76" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a64467403a3b7706c72e2f4e0bdbf0a7a" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="78" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="78" bodyend="78"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="79" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="79" bodyend="79"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1a5c1d67fd5bcfd28b4944484ac0134b" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="81" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="81" bodyend="81"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="82" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a7311a2f3e957267a5df14dbfce2ad77b" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="82" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="82" bodyend="82"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="83" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="83" bodyend="83"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a3efb5cfdd48f16697dd01e4c71355b51" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="83" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="83" bodyend="83"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="84" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="84" bodyend="84"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a784c88e08509b7b5e8865071528d1bd2" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -136,7 +136,22 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="84" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="84" bodyend="84"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="85" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a692cb3d47baf4febc5337297f149cd21" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical settlingcommon_mod::settlingschemegocartconfig::maring_dust_only</definition>
+        <argsstring></argsstring>
+        <name>maring_dust_only</name>
+        <qualifiedname>settlingcommon_mod::settlingschemegocartconfig::maring_dust_only</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="86" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="86" bodyend="86"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1ac7efc42e3122e963d2ddb717ff0acddb" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -151,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="87" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="87" bodyend="87"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="89" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="89" bodyend="89"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a33450aca2b2c0e38c27899762287e534" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(7)</type>
@@ -165,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="88" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="88" bodyend="88"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="90" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="90" bodyend="90"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -190,7 +205,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="91" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="91" bodyend="-1"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="93" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="93" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1ab3a27b8e16c45b55b1dde2ed4ce829" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -209,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="92" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="92" bodyend="-1"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="94" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="94" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -217,7 +232,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/settling/SettlingCommon_Mod.F90" line="69" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="69" bodyend="93"/>
+    <location file="src/process/settling/SettlingCommon_Mod.F90" line="70" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="70" bodyend="95"/>
     <listofallmembers>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a64467403a3b7706c72e2f4e0bdbf0a7a" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>affects_full_column</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a53f9c3b01866056cb50782039b3983c6" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>algorithm_type</name></member>
@@ -225,6 +240,7 @@
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a784c88e08509b7b5e8865071528d1bd2" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>correction_maring</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a2fd3ec9f5708b60d3c1b5406af0a5864" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>description</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1ab3a27b8e16c45b55b1dde2ed4ce829" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>finalize</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a692cb3d47baf4febc5337297f149cd21" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>maring_dust_only</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1ac7efc42e3122e963d2ddb717ff0acddb" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>n_required_met_fields</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a33450aca2b2c0e38c27899762287e534" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>required_met_fields</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingschemegocartconfig_1a1a5c1d67fd5bcfd28b4944484ac0134b" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingschemegocartconfig</scope><name>scale_factor</name></member>

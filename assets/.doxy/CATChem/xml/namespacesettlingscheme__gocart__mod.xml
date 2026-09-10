@@ -20,10 +20,10 @@
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1aaeb4e16db9b09d9273320b3dd90d09ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1a9374f30bca3d6b9a414096479108cde9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public settlingscheme_gocart_mod::compute_gocart</definition>
-        <argsstring>(num_layers, num_species, params, airden, delp, pmid, rh, t, tstep, z, species_short_name, mie_data, species_mie_map, species_radius, species_density, species_conc, species_tendencies, settling_velocity_per_species_per_level, settling_flux_per_species, diagnostic_species_id)</argsstring>
+        <argsstring>(num_layers, num_species, params, airden, delp, pmid, rh, t, tstep, z, species_short_name, mie_data, species_mie_map, species_radius, species_density, species_is_dust, species_conc, species_tendencies, settling_velocity_per_species_per_level, settling_flux_per_species, diagnostic_species_id)</argsstring>
         <name>compute_gocart</name>
         <qualifiedname>settlingscheme_gocart_mod::compute_gocart</qualifiedname>
         <param>
@@ -85,6 +85,10 @@
         <param>
           <type>real(fp), dimension(:), intent(in)</type>
           <defname>species_density</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), intent(in)</type>
+          <defname>species_is_dust</defname>
         </param>
         <param>
           <type>real(fp), dimension(num_layers, num_species), intent(in)</type>
@@ -276,7 +280,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="68" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="90" bodyend="278"/>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="68" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="91" bodyend="295"/>
       </memberdef>
       <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1a3c2f3947823b2d9471df855507c7402c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -342,7 +346,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="295" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="296" bodyend="345"/>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="312" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="313" bodyend="362"/>
       </memberdef>
       <memberdef kind="function" id="namespacesettlingscheme__gocart__mod_1a91c8cecc4f6dc0432e15436d530c79b7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -564,7 +568,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="365" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="378" bodyend="413"/>
+        <location file="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" line="382" column="1" bodyfile="src/process/settling/schemes/SettlingScheme_GOCART_Mod.F90" bodystart="395" bodyend="430"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

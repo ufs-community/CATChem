@@ -38,6 +38,8 @@ MODULE extemisdata_mod
       INTEGER                       :: nx = 0
       INTEGER                       :: ny = 0
       INTEGER                       :: nz = 1
+      INTEGER                       :: nlev_file = 0
+      LOGICAL                       :: is_2d = .true.      
       REAL(fp)                      :: factors = 1.0_fp    
       REAL(fp), ALLOCATABLE         :: lat(:)
       REAL(fp), ALLOCATABLE         :: lon(:)
@@ -57,6 +59,7 @@ MODULE extemisdata_mod
       LOGICAL                       :: time_interpolate = .true. 
       LOGICAL                       :: diagnostic = .false. 
       REAL(fp), ALLOCATABLE         :: emission_data(:,:,:,:)
+      REAL(fp), ALLOCATABLE         :: emission_data_model(:,:,:,:)
       REAL(fp), ALLOCATABLE         :: interp_data_t1(:,:,:,:)
       REAL(fp), ALLOCATABLE         :: interp_data_t2(:,:,:,:)
       LOGICAL                       :: is_loaded = .false. 
@@ -78,6 +81,7 @@ MODULE extemisdata_mod
       INTEGER                                   :: irec = 0
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)
       LOGICAL                                   :: is_active = .true.  
+      LOGICAL                                   :: is_met = .false.   
       LOGICAL                                   :: gridded = .true.    
       LOGICAL                                   :: is_2d = .true.         
       LOGICAL                                   :: diagnostic = .true.  
@@ -92,6 +96,9 @@ MODULE extemisdata_mod
       CHARACTER(LEN=32)                         :: time_interpolation = 'none'
       CHARACTER(LEN=32)                         :: vertical_dist = 'none'
       LOGICAL                                   :: reverse_vertical = .false. 
+      LOGICAL                                   :: vertical_interp = .false. 
+      CHARACTER(LEN=32)                         :: vertical_pressure_mode = 'construct'
+      CHARACTER(LEN=64)                         :: vertical_pressure_var = ''
       CHARACTER(LEN=128)                        :: stkdmname = ''
       CHARACTER(LEN=128)                        :: stkhtname = ''
       CHARACTER(LEN=128)                        :: stktkname = ''
@@ -108,7 +115,7 @@ MODULE extemisdata_mod
       LOGICAL                                   :: use_oc_fbb = .false. 
       ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
       LOGICAL                                   :: diurnal_bb = .false. 
-      CHARACTER(LEN=16)                          :: apply_method = 'add'
+      CHARACTER(LEN=16)                         :: apply_method = 'add'
       LOGICAL                                   :: needs_time_blend = .false. 
 
    CONTAINS
@@ -202,6 +209,7 @@ CONTAINS
       rc = cc_success
 
       if (allocated(this%emission_data)) deallocate(this%emission_data)
+      if (allocated(this%emission_data_model)) deallocate(this%emission_data_model)
       if (allocated(this%lat)) deallocate(this%lat)
       if (allocated(this%lon)) deallocate(this%lon)
       if (allocated(this%stkdm)) deallocate(this%stkdm)

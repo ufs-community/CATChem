@@ -10,6 +10,8 @@
 * **avo** ([**constants**](namespaceconstants.md))
 * **a** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
 * **alpha** ([**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
+* **ak\_127l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **ap\_72l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **arrhenius\_rate** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **allocate\_metstate\_arrays** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **allocate\_met\_field** ([**state\_interface\_mod**](namespacestate__interface__mod.md), [**statemanager\_mod**](namespacestatemanager__mod.md))
@@ -26,6 +28,8 @@
 * **builder\_with\_name** ([**catchemcore\_mod**](namespacecatchemcore__mod.md))
 * **builder\_with\_verbose** ([**catchemcore\_mod**](namespacecatchemcore__mod.md))
 * **boltz** ([**constants**](namespaceconstants.md))
+* **bk\_127l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **bp\_72l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **brunt\_vaisala\_frequency** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **bulk\_richardson\_number** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **btu\_to\_j** ([**unitconversion\_mod**](namespaceunitconversion__mod.md))
@@ -519,6 +523,9 @@
 * **grid\_type\_2d** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_type\_3d** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
 * **grid\_type\_column** ([**gridmanager\_mod**](namespacegridmanager__mod.md))
+* **get\_hybrid\_ab** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **get\_pedge** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **get\_pmid** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **get\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
 * **get\_required\_diagnostic\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
 * **get\_required\_met\_fields** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md), [**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md), [**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md), [**processseasaltinterface\_mod**](namespaceprocessseasaltinterface__mod.md), [**processsettlinginterface\_mod**](namespaceprocesssettlinginterface__mod.md), [**processso4cheminterface\_mod**](namespaceprocessso4cheminterface__mod.md), [**processwetdepinterface\_mod**](namespaceprocesswetdepinterface__mod.md))
@@ -555,6 +562,7 @@
 
 * **h2omw** ([**constants**](namespaceconstants.md))
 * **henrys\_law\_constant** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **hybrid\_grid\_supported** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 
 
 ## i
@@ -757,6 +765,7 @@
 * **metstate\_cleanup** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_deallocate\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_derive\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_ensure\_field** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_get\_2dto0d\_value\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
@@ -775,8 +784,11 @@
 * **metstate\_get\_scalar\_value\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_init** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_is\_allocated** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_is\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_mark\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_print\_summary** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_reset** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_reset\_field\_set** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_2d\_real** ([**metstate\_mod**](namespacemetstate__mod.md))
@@ -786,6 +798,7 @@
 * **metstate\_set\_field\_scalar\_int** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_scalar\_logical** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_set\_field\_scalar\_real** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **metstate\_set\_soilm\_layer** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **metstate\_validate** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **missing** ([**precision\_mod**](namespaceprecision__mod.md))
 * **missing\_bool** ([**precision\_mod**](namespaceprecision__mod.md))
@@ -873,7 +886,10 @@
 * **netcdf\_write\_real\_4d** ([**catchemnetcdf\_mod**](namespacecatchemnetcdf__mod.md))
 * **netcdf\_write\_string** ([**catchemnetcdf\_mod**](namespacecatchemnetcdf__mod.md))
 * **ndrydtype** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md))
+* **n\_hybrid\_127l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **n\_hybrid\_72l** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **nuclear\_decay** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **n\_soilm\_prefix** ([**metstate\_mod**](namespacemetstate__mod.md))
 
 
 ## o
@@ -1061,6 +1077,8 @@
 * **stability\_classification** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **stokes\_number** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **stokes\_settling\_velocity** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
+* **soilm\_layer\_from\_name** ([**metstate\_mod**](namespacemetstate__mod.md))
+* **soilm\_prefixes** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **set\_carbchem\_scheme** ([**processcarbcheminterface\_mod**](namespaceprocesscarbcheminterface__mod.md))
 * **set\_drydep\_scheme** ([**processdrydepinterface\_mod**](namespaceprocessdrydepinterface__mod.md))
 * **set\_dust\_scheme** ([**processdustinterface\_mod**](namespaceprocessdustinterface__mod.md))
@@ -1114,6 +1132,7 @@
 ## t
 
 * **two\_thirds** ([**drydepscheme\_wesely\_mod**](namespacedrydepscheme__wesely__mod.md), [**drydepscheme\_zhang\_mod**](namespacedrydepscheme__zhang__mod.md))
+* **to\_upper\_local** ([**metstate\_mod**](namespacemetstate__mod.md))
 * **tiny\_** ([**precision\_mod**](namespaceprecision__mod.md))
 * **tiny\_dble** ([**precision\_mod**](namespaceprecision__mod.md))
 * **tiny\_real** ([**precision\_mod**](namespaceprecision__mod.md))
@@ -1180,6 +1199,7 @@
 * **validation\_success** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validation\_warning** ([**emissionconfigvalidator\_mod**](namespaceemissionconfigvalidator__mod.md))
 * **validate\_initialization** ([**init\_mod**](namespaceinit__mod.md))
+* **vertical\_interp\_pressure** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **virtual\_temperature** ([**met\_utilities\_mod**](namespacemet__utilities__mod.md))
 * **validate\_geos12\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))
 * **validate\_gong03\_config** ([**seasaltcommon\_mod**](namespaceseasaltcommon__mod.md))

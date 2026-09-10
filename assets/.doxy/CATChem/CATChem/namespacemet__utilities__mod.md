@@ -58,7 +58,11 @@
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**dew\_point**](#function-dew_point) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) rh) <br>_Calculate dew point temperature._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**dry\_adiabatic\_lapse\_rate**](#function-dry_adiabatic_lapse_rate) () <br>_Calculate dry adiabatic lapse rate._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**friction\_velocity**](#function-friction_velocity) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) tau, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) rho) <br>_Calculate friction velocity (u\*)_  |
+|  pure subroutine, public | [**get\_hybrid\_ab**](#function-get_hybrid_ab) (integer, intent(in) nlev, real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:), intent(out), allocatable ap, real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:), intent(out), allocatable bp, logical, intent(out) ok) <br>_Return the hybrid-sigma Ap/Bp coefficients for a given level count._  |
+|  pure real([**fp**](namespaceprecision__mod.md#variable-fp)) function, dimension(:,:,:), allocatable, public | [**get\_pedge**](#function-get_pedge) (real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:), intent(in) ps, integer, intent(in) nlev) <br>_Reconstruct wet-air edge pressures from surface pressure._  |
+|  pure real([**fp**](namespaceprecision__mod.md#variable-fp)) function, dimension(:,:,:), allocatable, public | [**get\_pmid**](#function-get_pmid) (real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:,:), intent(in) pedge) <br>_Layer mid-point pressure = mean of the bounding edge pressures._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**henrys\_law\_constant**](#function-henrys_law_constant) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) h0, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) dh, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t0) <br>_Calculate Henry's Law constant (temperature dependent)_  |
+|  pure logical function, public | [**hybrid\_grid\_supported**](#function-hybrid_grid_supported) (integer, intent(in) nlev) <br>_Report whether hybrid-sigma coefficients exist for a level count._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**latent\_heat\_vaporization**](#function-latent_heat_vaporization) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t) <br>_Calculate latent heat of vaporization (temperature dependent)_  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**mean\_free\_path\_air**](#function-mean_free_path_air) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) p) <br>_Calculate the mean free path of air molecules._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**mixing\_ratio**](#function-mixing_ratio) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) q) <br>_Calculate mixing ratio from specific humidity._  |
@@ -78,6 +82,7 @@
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**stokes\_number**](#function-stokes_number) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) rho\_p, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) d\_p, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) u, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) mu, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) l) <br>_Calculate Stokes number from base state variables._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**stokes\_settling\_velocity**](#function-stokes_settling_velocity) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) dp, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) rho\_p, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) rho\_a, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) mu, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) cc) <br>_Calculate Stokes settling velocity for a particle._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**ugm3\_to\_ppm**](#function-ugm3_to_ppm) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) ugm3, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) m, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) p) <br>_Convert ug/m3 to ppm._  |
+|  subroutine, public | [**vertical\_interp\_pressure**](#function-vertical_interp_pressure) (real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:,:), intent(in) src\_p, real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:,:), intent(in) src\_data, real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:,:), intent(in) dst\_p, real([**fp**](namespaceprecision__mod.md#variable-fp)), dimension(:,:,:), intent(out) dst\_data) <br>_Linearly interpolate a 3D field from source to target pressures._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**virtual\_temperature**](#function-virtual_temperature) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) t, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) qv) <br>_Calculate virtual temperature._  |
 |  real([**fp**](namespaceprecision__mod.md#variable-fp)) function, public | [**wind\_profile\_loglaw**](#function-wind_profile_loglaw) (real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) ustar, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) z, real([**fp**](namespaceprecision__mod.md#variable-fp)), intent(in) z0) <br>_Calculate wind speed at height z using the log-law._  |
 
@@ -360,6 +365,112 @@ Friction velocity [m/s]
 
 
 
+### function get\_hybrid\_ab 
+
+_Return the hybrid-sigma Ap/Bp coefficients for a given level count._ 
+```Fortran
+pure subroutine, public met_utilities_mod::get_hybrid_ab (
+    integer, intent(in) nlev,
+    real( fp ), dimension(:), intent(out), allocatable ap,
+    real( fp ), dimension(:), intent(out), allocatable bp,
+    logical, intent(out) ok
+) 
+```
+
+
+
+
+
+**Parameters:**
+
+
+* `nlev` Number of vertical layers 
+* `ap` Ap coefficients [Pa], size nlev+1 (unallocated if unsupported) 
+* `bp` Bp coefficients [unitless], size nlev+1 (unallocated if unsupported) 
+* `ok` .true. when coefficients were returned for nlev
+
+Coefficients are returned in the surface-first convention: Ap(1)/Bp(1) is the surface edge and Ap(nlev+1)/Bp(nlev+1) the model top. Ap is always returned in Pa (the 72-level table is stored in hPa and scaled here; the GFS 127-level table is already in Pa). The GFS coefficients are stored top-to-surface in the file, so both arrays are reversed together here to match the convention. Add a new case here (and in hybrid\_grid\_supported) to support another grid. 
+
+
+        
+
+<hr>
+
+
+
+### function get\_pedge 
+
+_Reconstruct wet-air edge pressures from surface pressure._ 
+```Fortran
+pure real( fp ) function, dimension(:,:,:), allocatable, public met_utilities_mod::get_pedge (
+    real( fp ), dimension(:,:), intent(in) ps,
+    integer, intent(in) nlev
+) 
+```
+
+
+
+
+
+**Parameters:**
+
+
+* `ps` Surface pressure [Pa], shape (nx, ny) 
+* `nlev` Number of vertical layers 
+
+
+
+**Returns:**
+
+Edge pressure [Pa], shape (nx, ny, nlev+1); size-zero if nlev is unsupported (guard callers with hybrid\_grid\_supported) GEOS-Chem GeosUtil/pressure\_mod.F90 (GET\_PEDGE)
+
+
+Pedge(i,j,L) = Ap(L) + Bp(L) \* Psurface(i,j)
+
+
+Ap (from get\_hybrid\_ab) and ps are both in Pa, so the result is in Pa. 
+
+
+        
+
+<hr>
+
+
+
+### function get\_pmid 
+
+_Layer mid-point pressure = mean of the bounding edge pressures._ 
+```Fortran
+pure real( fp ) function, dimension(:,:,:), allocatable, public met_utilities_mod::get_pmid (
+    real( fp ), dimension(:,:,:), intent(in) pedge
+) 
+```
+
+
+
+
+
+**Parameters:**
+
+
+* `pedge` Edge pressure [Pa], shape (nx, ny, nz+1) 
+
+
+
+**Returns:**
+
+Mid-layer pressure [Pa], shape (nx, ny, nz) GEOS-Chem GeosUtil/pressure\_mod.F90 (GET\_PCENTER) 
+
+
+
+
+
+        
+
+<hr>
+
+
+
 ### function henrys\_law\_constant 
 
 _Calculate Henry's Law constant (temperature dependent)_ 
@@ -392,6 +503,40 @@ Henry's Law constant at T [mol/(m^3\*Pa)] Sander2015
 
 
 
+
+
+        
+
+<hr>
+
+
+
+### function hybrid\_grid\_supported 
+
+_Report whether hybrid-sigma coefficients exist for a level count._ 
+```Fortran
+pure logical function, public met_utilities_mod::hybrid_grid_supported (
+    integer, intent(in) nlev
+) 
+```
+
+
+
+
+
+**Parameters:**
+
+
+* `nlev` Number of vertical layers (edges = nlev + 1) 
+
+
+
+**Returns:**
+
+.true. if Ap/Bp coefficients are defined for nlev
+
+
+Extend get\_hybrid\_ab (and this test) when adding new resolutions such as the GFS 127-level grid. 
 
 
         
@@ -1092,6 +1237,39 @@ Concentration [ppm]
 
 
 
+
+
+        
+
+<hr>
+
+
+
+### function vertical\_interp\_pressure 
+
+_Linearly interpolate a 3D field from source to target pressures._ 
+```Fortran
+subroutine, public met_utilities_mod::vertical_interp_pressure (
+    real( fp ), dimension(:,:,:), intent(in) src_p,
+    real( fp ), dimension(:,:,:), intent(in) src_data,
+    real( fp ), dimension(:,:,:), intent(in) dst_p,
+    real( fp ), dimension(:,:,:), intent(out) dst_data
+) 
+```
+
+
+
+
+
+**Parameters:**
+
+
+* `src_p` Source layer pressures [Pa], shape (nx,ny,nsrc) 
+* `src_data` Source field values, shape (nx,ny,nsrc) 
+* `dst_p` Target layer pressures [Pa], shape (nx,ny,ndst) 
+* `dst_data` Interpolated field values, shape (nx,ny,ndst)
+
+Column-by-column linear interpolation in pressure. Each source column is assumed monotonic in pressure (either order); the bracketing source layers for every target pressure are found by value, so the routine is agnostic to surface-first vs top-first storage as long as `src_p` and `src_data` share the same ordering. Target pressures that fall outside the source range use constant (nearest-layer) extrapolation so no spurious values are produced above the model top or below the surface. 
 
 
         

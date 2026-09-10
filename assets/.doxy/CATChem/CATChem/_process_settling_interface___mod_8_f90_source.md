@@ -309,6 +309,7 @@ contains
       integer, allocatable :: species_mie_map(:)  ! Mapping from process species to MieData indices
       real(fp), allocatable :: species_radius(:)
       real(fp), allocatable :: species_density(:)
+      logical, allocatable :: species_is_dust(:)
       real(fp), allocatable :: species_conc(:,:)
       real(fp), allocatable :: species_tendencies(:,:)
       integer :: n_species, n_levels, n_chem, n_emis, i, k
@@ -343,6 +344,7 @@ contains
       allocate(species_mie_map(n_species))
       allocate(species_radius(n_species))
       allocate(species_density(n_species))
+      allocate(species_is_dust(n_species))
       species_tendencies = 0.0_fp
 
       ! Get meteorological data pointer from virtual column (VirtualMet pattern)
@@ -374,6 +376,8 @@ contains
       species_radius(1:n_species) = this%process_config%settling_config%species_radius(1:n_species)
       ! Use species properties from process configuration
       species_density(1:n_species) = this%process_config%settling_config%species_density(1:n_species)
+      ! Use species properties from process configuration
+      species_is_dust(1:n_species) = this%process_config%settling_config%species_is_dust(1:n_species)
 
       ! Call the science scheme with optional diagnostic parameters
       ! Note: gocart uses the following diagnostic fields (if diagnostics enabled):
@@ -397,6 +401,7 @@ contains
             species_mie_map, &
             species_radius, &
             species_density, &
+            species_is_dust, &
             species_conc, &
             species_tendencies, &
             this%column_settling_velocity_per_species_per_level, &
@@ -420,6 +425,7 @@ contains
             species_mie_map, &
             species_radius, &
             species_density, &
+            species_is_dust, &
             species_conc, &
             species_tendencies &
             )

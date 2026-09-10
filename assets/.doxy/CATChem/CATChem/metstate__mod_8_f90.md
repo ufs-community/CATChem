@@ -100,7 +100,28 @@
 
 
 
+## Macros
 
+| Type | Name |
+| ---: | :--- |
+| define  | [**METSTATE\_FIELD\_DATA\_RANK3**](metstate__mod_8_f90.md#define-metstate_field_data_rank3)  `1`<br> |
+
+## Macro Definition Documentation
+
+
+
+
+
+### define METSTATE\_FIELD\_DATA\_RANK3 
+
+```Fortran
+#define METSTATE_FIELD_DATA_RANK3 `1`
+```
+
+
+
+
+<hr>
 
 ------------------------------
 The documentation for this class was generated from the following file `src/core/metstate_mod.F90`

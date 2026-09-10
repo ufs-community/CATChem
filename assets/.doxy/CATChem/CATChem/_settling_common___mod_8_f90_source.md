@@ -55,6 +55,7 @@ module settlingcommon_mod
       real(fp), allocatable :: species_density(:)      ! density for each species
       real(fp), allocatable :: species_mie_map(:)      ! mie_map for each species
       real(fp), allocatable :: species_radius(:)      ! radius for each species
+      logical, allocatable :: species_is_dust(:)      ! is_dust flag for each species
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -82,6 +83,7 @@ module settlingcommon_mod
       logical :: simple_scheme = .false.  ! read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
       integer :: swelling_method = 1  ! method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985
       logical :: correction_maring = .false.  ! correct the settling velocity following Maring et al, 2003
+      logical :: maring_dust_only = .true.  ! apply Maring (2003) correction to dust only (GOCART does not apply it to sea salt)
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 7
@@ -186,6 +188,9 @@ contains
       end if
       if (allocated(this%species_radius)) then
          deallocate(this%species_radius)
+      end if
+      if (allocated(this%species_is_dust)) then
+         deallocate(this%species_is_dust)
       end if
 
 
@@ -351,6 +356,7 @@ contains
       allocate(this%settling_config%species_density(this%settling_config%n_species))
       allocate(this%settling_config%species_mie_map(this%settling_config%n_species))
       allocate(this%settling_config%species_radius(this%settling_config%n_species))
+      allocate(this%settling_config%species_is_dust(this%settling_config%n_species))
 
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_aerosol -> AeroIndex
@@ -380,6 +386,7 @@ contains
             this%settling_config%species_mie_map(i) = -1  ! Default or error value
          end if
          this%settling_config%species_radius(i) = chem_state%ChemSpecies(species_idx)%radius
+         this%settling_config%species_is_dust(i) = chem_state%ChemSpecies(species_idx)%is_dust
       end do
 
    end subroutine load_species_from_chem_state
@@ -405,6 +412,10 @@ contains
       call config_manager%get_logical("processes/settling/gocart/correction_maring", &
          this%gocart_config%correction_maring, rc, .false.)
       if (rc /= cc_success) this%gocart_config%correction_maring = .false.
+
+      call config_manager%get_logical("processes/settling/gocart/maring_dust_only", &
+         this%gocart_config%maring_dust_only, rc, .true.)
+      if (rc /= cc_success) this%gocart_config%maring_dust_only = .true.
 
 
    end subroutine load_gocart_config

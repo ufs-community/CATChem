@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**settlingschemegocartconfig**](namespacesettlingcommon__mod.md#none-settlingschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden, real(fp), dimension(num\_layers), intent(in) delp, real(fp), dimension(num\_layers), intent(in) pmid, real(fp), dimension(num\_layers), intent(in) rh, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, real(fp), dimension(num\_layers+1), intent(in) z, character(len=32), dimension(:), intent(in) species\_short\_name, type(gocart2g\_mie), dimension(:), intent(in) mie\_data, integer, dimension(num\_species), intent(in) species\_mie\_map, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_density, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional settling\_velocity\_per\_species\_per\_level, real(fp), dimension(:), intent(inout), optional settling\_flux\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for gocart scheme._  |
+|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**settlingschemegocartconfig**](namespacesettlingcommon__mod.md#none-settlingschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden, real(fp), dimension(num\_layers), intent(in) delp, real(fp), dimension(num\_layers), intent(in) pmid, real(fp), dimension(num\_layers), intent(in) rh, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, real(fp), dimension(num\_layers+1), intent(in) z, character(len=32), dimension(:), intent(in) species\_short\_name, type(gocart2g\_mie), dimension(:), intent(in) mie\_data, integer, dimension(num\_species), intent(in) species\_mie\_map, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_density, logical, dimension(:), intent(in) species\_is\_dust, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional settling\_velocity\_per\_species\_per\_level, real(fp), dimension(:), intent(inout), optional settling\_flux\_per\_species, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for gocart scheme._  |
 
 
 
@@ -105,6 +105,7 @@ subroutine, public settlingscheme_gocart_mod::compute_gocart (
     integer, dimension(num_species), intent(in) species_mie_map,
     real(fp), dimension(:), intent(in) species_radius,
     real(fp), dimension(:), intent(in) species_density,
+    logical, dimension(:), intent(in) species_is_dust,
     real(fp), dimension(num_layers, num_species), intent(in) species_conc,
     real(fp), dimension(num_layers, num_species), intent(inout) species_tendencies,
     real(fp), dimension(:,:), intent(inout), optional settling_velocity_per_species_per_level,

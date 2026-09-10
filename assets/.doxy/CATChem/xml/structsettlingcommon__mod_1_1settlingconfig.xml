@@ -206,6 +206,20 @@
         </inbodydescription>
         <location file="src/process/settling/SettlingCommon_Mod.F90" line="56" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="56" bodyend="56"/>
       </memberdef>
+      <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingconfig_1a70b3659f403aab3b805f9f4687f0220c" prot="public" static="no" mutable="no">
+        <type>logical, dimension(:), allocatable</type>
+        <definition>logical, dimension(:), allocatable settlingcommon_mod::settlingconfig::species_is_dust</definition>
+        <argsstring></argsstring>
+        <name>species_is_dust</name>
+        <qualifiedname>settlingcommon_mod::settlingconfig::species_is_dust</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="57" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingconfig_1a3144e3e236bd4deb5ca5982312d77817" prot="public" static="no" mutable="no">
         <type>logical</type>
         <definition>logical settlingcommon_mod::settlingconfig::output_diagnostics</definition>
@@ -219,7 +233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="59" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="59" bodyend="59"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="60" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="60" bodyend="60"/>
       </memberdef>
       <memberdef kind="variable" id="structsettlingcommon__mod_1_1settlingconfig_1a5e917bbd2bfccd310a2209d3f825b670" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -234,7 +248,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="60" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="60" bodyend="60"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="61" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="61" bodyend="61"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -259,7 +273,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="63" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="63" bodyend="-1"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="64" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="64" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structsettlingcommon__mod_1_1settlingconfig_1a4c1ca55c7ecdaa68412b02eebd42cb82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -278,7 +292,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="64" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="64" bodyend="-1"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="65" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="65" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structsettlingcommon__mod_1_1settlingconfig_1a53e43ac03de2caf90273657ea1502bdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -297,7 +311,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/settling/SettlingCommon_Mod.F90" line="65" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="65" bodyend="-1"/>
+        <location file="src/process/settling/SettlingCommon_Mod.F90" line="66" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="66" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -305,7 +319,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/settling/SettlingCommon_Mod.F90" line="32" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="32" bodyend="66"/>
+    <location file="src/process/settling/SettlingCommon_Mod.F90" line="32" column="1" bodyfile="src/process/settling/SettlingCommon_Mod.F90" bodystart="32" bodyend="67"/>
     <listofallmembers>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1a5e917bbd2bfccd310a2209d3f825b670" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>diagnostic_frequency</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1adac70a993c9733118f8e1a5cb26913d8" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>diagnostic_species</name></member>
@@ -322,6 +336,7 @@
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1a678ff4ef866e915892b94a3ed820eaf9" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>scheme</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1a8fa5bc5165b1f4e6158c878ac3ecf240" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_density</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1ac294b6ba584fcef5e2a6ff40a920e5cc" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_indices</name></member>
+      <member refid="structsettlingcommon__mod_1_1settlingconfig_1a70b3659f403aab3b805f9f4687f0220c" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_is_dust</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1a040d7439097c68f7a7a879c4bba765dd" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_mie_map</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1ac05cdb177f3accb123bac02729b4b617" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_names</name></member>
       <member refid="structsettlingcommon__mod_1_1settlingconfig_1a4fa9a48900a2f91f1ea3fc00f8b14705" prot="public" virt="non-virtual"><scope>settlingcommon_mod::settlingconfig</scope><name>species_radius</name></member>
