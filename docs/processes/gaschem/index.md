@@ -53,17 +53,27 @@ A standout feature of the C++ core is the dynamic, zero-hardcoded coupling chann
 
 ## Configuration
 
-The process is dynamically added and configured via YAML layout files.
+The process is dynamically added and configured via YAML layout files. The MICM
+mechanism is supplied either as a **single-file MUSICA v1 configuration** (`config_file`)
+or as a **v0 CAMP multi-file directory** (`config_dir`). An explicit `config_file`
+always takes precedence; otherwise `config_dir` is probed for a `config.yaml` /
+`config.yml` v1 entry point before falling back to the v0 directory parse.
 
 ```yaml
 processes:
-  - name: "gaschem"
-    enabled: true
-    parameters:
-      config_dir: "src/external/musica/configs/tuvx/from_host/"
-    diagnostics:
-      - "photolysis_rate_jfoo"
+  gaschem:
+    activate: true
+    # Option A (preferred): MUSICA v1 single-file mechanism.
+    config_file: "src/external/musica/configs/v1/chapman/config.yaml"
+    # Option B: v0 CAMP mechanism directory (config.json + species.json + reactions.json).
+    # A directory that contains config.yaml/config.yml is auto-routed to the v1 parser.
+    # config_dir: "src/external/musica/configs/v0/chapman/"
 ```
+
+> **Note:** when migrating a v0 mechanism to v1, the photolysis reaction names must
+> match the TUV-x radiator labels: `gaschem` binds each `"PHOTO.<label>"` rate
+> parameter to the `photolysis_rate_<label>` diagnostic produced by the photolysis
+> process (e.g. v0 `jO3->O1D` vs v1 `jo3_b` are *different* labels).
 
 ---
 

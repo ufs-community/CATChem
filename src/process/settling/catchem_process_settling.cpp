@@ -23,10 +23,10 @@ namespace catchem {
         // writer after the bridge has modified host concentration memory.
         // A later host synchronization can then overwrite the settling result
         // (and the concentration presented to a coupled host) with stale data.
-        return make_contract(get_name(), {host_field_3d("T", "K"), host_field_3d("AIRDEN", "kg/m3"),
-                                          host_field_3d("DELP", "Pa"), host_field_3d("PMID", "Pa"),
-                                          host_field_3d("RH", "1"), host_field_interface("Z", "m"),
-                                          host_concentration()});
+        return make_contract(get_name(),
+                             {host_field_3d("T", "K"), host_field_3d("AIRDEN", "kg/m3"), host_field_3d("DELP", "Pa"),
+                              host_field_3d("PMID", "Pa"), host_field_3d("RH", "1"), host_field_interface("Z", "m"),
+                              host_concentration()});
     }
 
     SettlingProcess::SettlingProcess() : active_scheme("c++_kokkos"), fortran_callback(nullptr) {}

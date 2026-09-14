@@ -432,8 +432,7 @@ int catchem_state_get_species_conc_pointer_checked(void* state_ptr, int species_
         const double* concentration = state->chemistry().conc->host_read();
         if (!concentration)
             return CATCHEM_INVALID_STATE;
-        *ptr_out = const_cast<double*>(concentration) +
-                   static_cast<std::size_t>(species_index - 1) * dim1 * dim2;
+        *ptr_out = const_cast<double*>(concentration) + static_cast<std::size_t>(species_index - 1) * dim1 * dim2;
         return CATCHEM_SUCCESS;
     } catch (...) {
         return CATCHEM_INTERNAL_ERROR;

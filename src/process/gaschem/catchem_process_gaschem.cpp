@@ -6,6 +6,7 @@
 #include "catchem_process_registry.hpp"
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
 #include <iostream>
 
 namespace catchem {
@@ -22,8 +23,18 @@ namespace catchem {
     void GasChemProcess::init(std::shared_ptr<StateManager> state) {
         Logger::debug(state.get(), "GasChemProcess::init started");
 
-        // 1. Resolve configuration directory path dynamically via ConfigManager
+        // 1. Resolve configuration path dynamically via ConfigManager. An explicit
+        // "config_file" selects a single-file MUSICA mechanism (v1 format) and takes
+        // precedence over the "config_dir" directory (v0 CAMP layout) fallback.
         if (state->config_manager()) {
+            std::string file = state->config_manager()->get_string("processes/gaschem/config_file", "");
+            if (file.empty()) {
+                file = state->config_manager()->get_string("process/gaschem/config_file", "");
+            }
+            if (!file.empty()) {
+                this->config_file = file;
+            }
+
             std::string dir = state->config_manager()->get_string("processes/gaschem/config_dir", "");
             if (dir.empty()) {
                 dir = state->config_manager()->get_string("process/gaschem/config_dir", "");
@@ -47,11 +58,29 @@ namespace catchem {
             }
         }
 
-        Logger::info(state.get(), "GasChemProcess: resolved config directory", {{"dir", config_dir}});
+        // A directory may also hold a single-file (v1) mechanism; MUSICA's universal
+        // parser only routes directories to the v0 CAMP parser, so auto-detect the
+        // v1 YAML entry point (config.yaml / config.yml) before falling back to the
+        // directory itself. config.json is intentionally skipped: in a v0 CAMP layout
+        // it is the version-less camp-files manifest and must stay a directory parse.
+        if (this->config_file.empty() && !this->config_dir.empty()) {
+            for (const char* candidate : {"config.yaml", "config.yml"}) {
+                std::filesystem::path probe = std::filesystem::path(this->config_dir) / candidate;
+                if (std::filesystem::is_regular_file(probe)) {
+                    this->config_file = probe.string();
+                    break;
+                }
+            }
+        }
+
+        const std::string micm_config_path = this->config_file.empty() ? this->config_dir : this->config_file;
+        Logger::info(
+            state.get(), "GasChemProcess: resolved MICM configuration",
+            {{"path", micm_config_path}, {"type", this->config_file.empty() ? "directory (v0 CAMP)" : "file"}});
 
         // 2. Initialize MICM and State using musica library
         try {
-            micm_instance = std::make_unique<musica::MICM>(config_dir, musica::RosenbrockStandardOrder);
+            micm_instance = std::make_unique<musica::MICM>(micm_config_path, musica::RosenbrockStandardOrder);
             micm_state = std::make_unique<musica::State>(*micm_instance, state->column_count() * state->level_count());
             initialized = true;
             std::clog << "[INFO] GasChemProcess: initialized MICM successfully!" << std::endl;
