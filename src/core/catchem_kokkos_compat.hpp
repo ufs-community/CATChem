@@ -10,6 +10,16 @@
  */
 #pragma once
 
+// mdspan's multi-argument operator[] needs C++23; enable the reference
+// implementation's operator() so kernels can index views and mdspans
+// identically (Kokkos::View uses operator() natively). This must be set
+// before ANY <mdspan/mdspan.hpp> include, in both the Kokkos and host-only
+// flavors: under -std=gnu++23 the standalone header sees std::mdspan and
+// drops its operator(), breaking `view(i, j)` indexing across the core.
+#ifndef MDSPAN_USE_PAREN_OPERATOR
+#define MDSPAN_USE_PAREN_OPERATOR 1
+#endif
+
 #ifdef CATCHEM_ENABLE_KOKKOS
 
 #include <Kokkos_Core.hpp>
@@ -21,12 +31,6 @@
 // Kokkos::mdspan spellings.
 #ifndef MDSPAN_IMPL_STANDARD_NAMESPACE
 #define MDSPAN_IMPL_STANDARD_NAMESPACE Kokkos
-#endif
-// mdspan's multi-argument operator[] needs C++23; enable the reference
-// implementation's operator() so kernels can index views and mdspans
-// identically (Kokkos::View uses operator() natively).
-#ifndef MDSPAN_USE_PAREN_OPERATOR
-#define MDSPAN_USE_PAREN_OPERATOR 1
 #endif
 #include <mdspan/mdspan.hpp>
 
