@@ -1,0 +1,23 @@
+# Code owners for this UFS-Chem application repository.
+#
+# Policy (enforced by the repository rulesets, not by this file):
+#   - main:    2 approvals from @ufs-community/chem-core-team
+#   - develop: 1 approval  from @ufs-community/chem-core-team
+#   - Area owners listed below are auto-requested and their review is
+#     expected; the core team may approve on their behalf when they are
+#     unavailable or the change is trivial.
+#
+# Rules for editing this file:
+#   - The last matching pattern wins.
+#   - EVERY line must include @ufs-community/chem-core-team. A line
+#     without it removes the core team as owner of that path and lets an
+#     absent area owner block a merge. A pre-commit hook enforces this.
+#   - Keep the catch-all first and area lines below it, most specific last.
+
+# Catch-all
+*                       @ufs-community/chem-core-team
+
+# Area owners (add as they are established; keep the core team on the line).
+# Owners may be org teams or individual GitHub users; both need write access.
+# /src/process/dust/    @ufs-community/chem-core-team @ufs-community/<area-team>
+# /src/process/seas/    @ufs-community/chem-core-team @<github-username>

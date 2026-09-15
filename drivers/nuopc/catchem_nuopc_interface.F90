@@ -579,7 +579,9 @@ contains
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lat
       real(ESMF_KIND_R8), dimension(:,:), intent(in) :: lon
       integer, intent(in) :: nlev
-      type(ESMF_Info), intent(in) :: tracerinfo
+      ! Absent on the standalone path (no coupling partner advertises a tracer
+      ! field); required in practice for coupled runs, enforced below.
+      type(ESMF_Info), intent(in), optional :: tracerinfo
       type(ESMF_Grid), intent(in) :: input_grid
       type(ESMF_Time), intent(in), optional :: startTime,stopTime
       type(ESMF_TimeInterval), intent(in), optional :: timeStep
@@ -709,33 +711,48 @@ contains
       call cc_wrap%catchem_model%get_output_prefix(cc_wrap%output_prefix)
 
       !populate tracer mapping using process-local tracer_map
-      call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_names)) then
-         call ESMF_LogSetError(ESMF_RC_ARG_BAD, &
-            msg="CATChem requires tracerNames metadata on its rank-4 host tracer field", &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)
-         return
-      end if
-
-      ! - import tracer units if available
-      call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__)) return  ! bail out
-
-      if (.not.allocated(tracer_units)) then
-         allocate(tracer_units(size(tracer_names)), stat=stat)
-         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
-            msg="Unable to allocate internal workspace", &
+      if (present(tracerinfo)) then
+         call TracerInfoGet(tracerinfo, 'tracerNames', tracer_names, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__)) return  ! bail out
-         tracer_units = 'n/a'
-      else if (size(tracer_units) /= size(tracer_names)) then
-         call ESMF_LogSetError(ESMF_RC_ARG_BAD, &
-            msg='CATChem tracerUnits length does not match tracerNames length', &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)
-         return
+
+         if (.not.allocated(tracer_names)) then
+            call ESMF_LogSetError(ESMF_RC_ARG_BAD, &
+               msg="CATChem requires tracerNames metadata on its rank-4 host tracer field", &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            return
+         end if
+
+         ! - import tracer units if available
+         call TracerInfoGet(tracerinfo, 'tracerUnits', tracer_units, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+
+         if (.not.allocated(tracer_units)) then
+            allocate(tracer_units(size(tracer_names)), stat=stat)
+            if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+               msg="Unable to allocate internal workspace", &
+               line=__LINE__,  file=__FILE__)) return  ! bail out
+            tracer_units = 'n/a'
+         else if (size(tracer_units) /= size(tracer_names)) then
+            call ESMF_LogSetError(ESMF_RC_ARG_BAD, &
+               msg='CATChem tracerUnits length does not match tracerNames length', &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            return
+         end if
+      else
+         ! Standalone (no coupling partner): there is no imported tracer list to
+         ! map onto. Build empty name/unit lists so the (unused) NUOPC<->CATChem
+         ! tracer map is well-defined. A single CATChem model owns its species
+         ! through its YAML configuration rather than through coupling.
+         allocate(tracer_names(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer name list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
+         allocate(tracer_units(0), stat=stat)
+         if (ESMF_LogFoundAllocError(statusToCheck=stat, &
+            msg="Unable to allocate empty tracer unit list", &
+            line=__LINE__,  file=__FILE__)) return  ! bail out
       end if
 
       !copy to cc_wrap

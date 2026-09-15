@@ -77,7 +77,7 @@ When you are ready to submit your contribution, push your branch to your fork an
 
 - **Fill out the template**: Your pull request should include a clear description of the changes you have made and why. Please fill out the pull request template completely.
 - **Pass the checks**: Your pull request will be automatically tested by our continuous integration (CI) system. All checks must pass before your pull request can be merged.
-- **Respond to feedback**: The maintainers will review your pull request and may request changes. Please be responsive to their feedback.
+- **Respond to feedback**: Reviewers and approval requirements are defined in [`.github/CODEOWNERS`](https://github.com/ufs-community/CATChem/blob/develop/.github/CODEOWNERS); the header of that file explains the policy. Reviewers may request changes. Please be responsive to their feedback.
 
 ## Getting Help
 

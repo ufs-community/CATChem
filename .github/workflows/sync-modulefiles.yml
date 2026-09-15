@@ -5,6 +5,10 @@ on:
     - cron: "0 3 * * 1" # Every Monday at 3:00 AM UTC
   workflow_dispatch:
 
+concurrency:
+  group: modulefile-sync
+  cancel-in-progress: false
+
 jobs:
   update-and-pr:
     runs-on: ubuntu-latest
@@ -22,31 +26,43 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Clone ufs-weather-model and copy modulefiles
+        id: clone
         run: |
           git clone --depth 1 https://github.com/ufs-community/ufs-weather-model.git
+          echo "uwm_hash=$(git -C ufs-weather-model rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           mkdir -p modulefiles
           cp -r ufs-weather-model/modulefiles/* modulefiles/
           rm -rf ufs-weather-model
 
       - name: Cleanup and Replace Text
         run: |
-          # Consolidate deletions for ufs_common.lua while it still has its original name
-          sed -i -e '/mapl/d' \
-                 -e '/scotch/d' \
-                 -e '/gftl-shared/d' \
-                 -e '/w3emc/d' \
-                 -e '/ip/d' \
-                 -e '/sp/d' \
-                 -e '/g2tmpl/d' \
-                 -e '/g2/d' \
-                 -e '/crtm/d' \
-                 -e '/bacio/d' modulefiles/ufs_common.lua
+          # Remove unused module entries (anchored on the quoted Lua table key
+          # so we match exactly one line each and never a substring like "Description")
+          sed -i \
+            -e '/\["jasper"\]/d' \
+            -e '/\["libpng"\]/d' \
+            -e '/\["fms"\]/d' \
+            -e '/\["bacio"\]/d' \
+            -e '/\["crtm"\]/d' \
+            -e '/\["g2"\]/d' \
+            -e '/\["g2tmpl"\]/d' \
+            -e '/\["ip"\]/d' \
+            -e '/\["sp"\]/d' \
+            -e '/\["w3emc"\]/d' \
+            -e '/\["gftl-shared"\]/d' \
+            -e '/\["mapl"\]/d' \
+            -e '/\["scotch"\]/d' \
+            modulefiles/ufs_common.lua
 
-          # Replace model names globally
+          # Replace Weather-Model-specific references only. Leave generic "UFS"
+          # (build environment, prerequisites) since CATChem is part of the UFS
+          # enterprise and builds against that same shared stack.
           find modulefiles/ -type f -exec sed -i 's/UFS Weather Model/Configurable ATmospheric Chemistry Component/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/ufs-weather-model/CATChem/g' {} +
           find modulefiles/ -type f -exec sed -i 's/UFS Model/CATChem/g' {} +
+          find modulefiles/ -type f -exec sed -i 's/ufs_modules/catchem_modules/g' {} +
 
-      - name: Rename ufs_* to cece_* and update internal references
+      - name: Rename ufs_* to catchem_* and update internal references
         run: |
           # 1. Rename files using a Bash loop
           for file in modulefiles/ufs_*; do
@@ -86,14 +102,16 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Automated update: Sync modulefiles and clean up references"
-          branch: update-modulefiles
+          commit-message: "chore(modulefiles): 🤖 sync from ufs-weather-model"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          branch: "chore/update-modulefiles"
           delete-branch: true
-          title: "Automated PR: Sync modulefiles from ufs-weather-model"
+          title: "chore(modulefiles): 🤖 sync from ufs-weather-model"
           body: |
             This weekly automated PR:
-            - Syncs modulefiles from ufs-weather-model
-            - Removes deprecated or unused dependencies from ufs_common.lua
-            - Renames ufs_*.lua to catchem_*.lua and updates internal references
-            - Replaces model references with 'CATChem'
+            - Syncs modulefiles from [ufs-weather-model](https://github.com/ufs-community/ufs-weather-model/tree/${{ steps.clone.outputs.uwm_hash }}/modulefiles)
+            - Removes deprecated or unused dependencies from `ufs_common.lua`
+            - Renames `ufs_*.lua` to `catchem_*.lua` and updates internal references
+            - Replaces model references with "CATChem"
             - Runs pre-commit formatting
