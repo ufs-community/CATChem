@@ -70,3 +70,11 @@ prerelease = false
 [tool.semantic_release.branches.develop]
 match = "(^develop$)"
 prerelease = true
+
+[tool.pyscn.analysis]
+exclude_patterns = [
+    "**/build*/**",
+    "**/dist/**",
+    "**/tools/**",
+    "**/src/external/**",  # Replace with the actual name or path of your submodules folder
+]

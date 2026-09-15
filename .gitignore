@@ -9,6 +9,8 @@ out/
 *.dll
 .env*
 
+.pyscn/**
+
 # Doxygen
 *:Zone.Identifier
 docs2/html/
