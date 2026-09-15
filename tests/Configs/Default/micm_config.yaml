@@ -1,11 +1,12 @@
 version: "1.1.0"
-name: so2_loss
+name: AM4.1
 species:
   files:
-    - CATChem_species.yml
+    - species.yaml
 reactions:
   files:
-    - reactions.yaml
+    - reactions_si.yaml
+    - user_rxns_si.yaml
 phases:
   files:
     - phases.yaml

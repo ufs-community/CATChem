@@ -1,0 +1,2793 @@
+- gas phase: gas
+  name: jo2
+  products:
+  - coefficient: 2
+    species name: O
+  reactants:
+  - species name: O2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jo1d
+  products:
+  - species name: O1D
+  - species name: O2
+  reactants:
+  - species name: O3
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jo3p
+  products:
+  - species name: O
+  - species name: O2
+  reactants:
+  - species name: O3
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jn2o
+  products:
+  - species name: O1D
+  - species name: N2
+  reactants:
+  - species name: N2O
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jno
+  products:
+  - species name: O
+  - species name: N
+  reactants:
+  - species name: 'NO'
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jno2
+  products:
+  - species name: 'NO'
+  - species name: O
+  reactants:
+  - species name: NO2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jn2o5
+  products:
+  - species name: NO2
+  - species name: NO3
+  reactants:
+  - species name: N2O5
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jhno3
+  products:
+  - species name: NO2
+  - species name: OH
+  reactants:
+  - species name: HNO3
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jno3
+  products:
+  - coefficient: 0.89
+    species name: NO2
+  - coefficient: 0.11
+    species name: 'NO'
+  - coefficient: 0.89
+    species name: O
+  reactants:
+  - species name: NO3
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jho2no2
+  products:
+  - species name: NO2
+  - species name: HO2
+  reactants:
+  - species name: HO2NO2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jch3ooh
+  products:
+  - species name: CH2O
+  - species name: HO2
+  - species name: OH
+  reactants:
+  - species name: CH3OOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jch2o_a
+  products:
+  - species name: CO
+  - species name: HO2
+  - species name: H
+  reactants:
+  - species name: CH2O
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jch2o_b
+  products:
+  - species name: CO
+  - species name: H2
+  reactants:
+  - species name: CH2O
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jh2o
+  products:
+  - species name: OH
+  - species name: H
+  reactants:
+  - species name: H2O
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jh2o2
+  products:
+  - coefficient: 2
+    species name: OH
+  reactants:
+  - species name: H2O2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jch3cho
+  products:
+  - species name: CH3O2
+  - species name: CO
+  - species name: HO2
+  reactants:
+  - species name: CH3CHO
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jpooh
+  products:
+  - species name: CH3CHO
+  - species name: CH2O
+  - species name: HO2
+  - species name: OH
+  reactants:
+  - species name: POOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jch3co3h
+  products:
+  - species name: CH3O2
+  - species name: OH
+  - species name: CO2
+  reactants:
+  - species name: CH3COOOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jpan
+  products:
+  - coefficient: 0.6
+    species name: CH3CO3
+  - coefficient: 0.6
+    species name: NO2
+  - coefficient: 0.4
+    species name: CH3O2
+  - coefficient: 0.4
+    species name: NO3
+  reactants:
+  - species name: PAN
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmpan
+  products:
+  - species name: MAO3
+  - species name: NO2
+  reactants:
+  - species name: MPAN
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmacr_a
+  products:
+  - coefficient: 1.34
+    species name: HO2
+  - coefficient: 0.66
+    species name: MAO3
+  - coefficient: 1.34
+    species name: CH2O
+  - coefficient: 1.34
+    species name: CH3CO3
+  reactants:
+  - species name: MACR
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmacr_b
+  products:
+  - coefficient: 0.66
+    species name: OH
+  - coefficient: 1.34
+    species name: CO
+  reactants:
+  - species name: MACR
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmvk
+  products:
+  - coefficient: 0.7
+    species name: C3H6
+  - coefficient: 0.7
+    species name: CO
+  - coefficient: 0.3
+    species name: CH3O2
+  - coefficient: 0.3
+    species name: CH3CO3
+  reactants:
+  - species name: MVK
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jc2h5ooh
+  products:
+  - species name: CH3CHO
+  - species name: HO2
+  - species name: OH
+  reactants:
+  - species name: C2H5OOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jc3h7ooh
+  products:
+  - coefficient: 0.82
+    species name: CH3COCH3
+  - species name: OH
+  - species name: HO2
+  reactants:
+  - species name: C3H7OOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jacet
+  products:
+  - species name: CH3CO3
+  - species name: CH3O2
+  reactants:
+  - species name: CH3COCH3
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmgly
+  products:
+  - species name: CH3CO3
+  - species name: CO
+  - species name: HO2
+  reactants:
+  - species name: MGLY
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jglyoxal
+  products:
+  - coefficient: 2
+    species name: CO
+  - coefficient: 2
+    species name: HO2
+  reactants:
+  - species name: GLYX
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jisopooh
+  products:
+  - coefficient: 0.402
+    species name: MVK
+  - coefficient: 0.288
+    species name: MACR
+  - coefficient: 0.69
+    species name: CH2O
+  - species name: HO2
+  reactants:
+  - species name: ISOPOOH
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jhyac
+  products:
+  - species name: CH3CO3
+  - species name: HO2
+  - species name: CH2O
+  reactants:
+  - species name: HYAC
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jglyald
+  products:
+  - coefficient: 2
+    species name: HO2
+  - species name: CO
+  - species name: CH2O
+  reactants:
+  - species name: GLYALD
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jisopnb
+  products:
+  - species name: RCHO
+  - species name: NO2
+  - species name: HO2
+  reactants:
+  - species name: ISOPNB
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmacrn
+  products:
+  - species name: NO2
+  - species name: HYAC
+  - species name: MGLY
+  - coefficient: 0.5
+    species name: CH2O
+  - species name: HO2
+  - coefficient: 0.5
+    species name: CO
+  reactants:
+  - species name: MACRN
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jmvkn
+  products:
+  - species name: GLYALD
+  - species name: NO2
+  - species name: CH3CO3
+  reactants:
+  - species name: MVKN
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jr4n2
+  products:
+  - species name: NO2
+  - coefficient: 0.32
+    species name: CH3COCH3
+  - coefficient: 0.19
+    species name: MEK
+  - coefficient: 0.18
+    species name: CH3O2
+  - coefficient: 0.27
+    species name: HO2
+  - coefficient: 0.32
+    species name: CH3CHO
+  - coefficient: 0.13
+    species name: RCHO
+  reactants:
+  - species name: R4N2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jclono2
+  products:
+  - species name: Cl
+  - species name: NO3
+  reactants:
+  - species name: ClONO2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jhocl
+  products:
+  - species name: OH
+  - species name: Cl
+  reactants:
+  - species name: HOCl
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jcl2o2
+  products:
+  - coefficient: 2
+    species name: Cl
+  - species name: O2
+  reactants:
+  - species name: Cl2O2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jbrono2
+  products:
+  - species name: Br
+  - species name: NO3
+  reactants:
+  - species name: BrONO2
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jhobr
+  products:
+  - species name: OH
+  - species name: Br
+  reactants:
+  - species name: HOBr
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jbrcl
+  products:
+  - species name: Br
+  - species name: Cl
+  reactants:
+  - species name: BrCl
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jbro
+  products:
+  - species name: Br
+  - species name: O
+  reactants:
+  - species name: BrO
+  type: PHOTOLYSIS
+- gas phase: gas
+  name: jcl2
+  products:
+  - coefficient: 2
+    species name: Cl
+  reactants:
+  - species name: Cl2
+  type: PHOTOLYSIS
+- A: 4817712.608
+  C: -2060
+  gas phase: gas
+  name: uo_o2 (2)
+  products:
+  - coefficient: 2
+    species name: O2
+  reactants:
+  - species name: O
+  - species name: O3
+  type: ARRHENIUS
+- A: 9033211.14
+  C: -3600
+  gas phase: gas
+  name: uo_o2 (3)
+  products:
+  - species name: 'NO'
+  - species name: O
+  reactants:
+  - species name: N
+  - species name: O2
+  type: ARRHENIUS
+- A: 9033211.14
+  C: -3600
+  gas phase: gas
+  name: uo_o2 (4)
+  products:
+  - species name: N2
+  - species name: O
+  reactants:
+  - species name: N
+  - species name: 'NO'
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 2139.7045806619494
+  k0_B: -1.4
+  kinf_A: 662435.4835999999
+  kinf_B: 1.3
+  products:
+  - species name: CO2
+  - species name: HO2
+  reactants:
+  - species name: CO
+  - species name: OH
+  type: TROE
+- A: 72265689.12
+  gas phase: gas
+  name: uco_ohb (2)
+  products:
+  - species name: HO2
+  - species name: OH
+  reactants:
+  - species name: H2
+  - species name: O1D
+  type: ARRHENIUS
+- A: 10839853.367999999
+  C: 180
+  gas phase: gas
+  name: uco_ohb (4)
+  products:
+  - species name: H
+  - species name: O2
+  reactants:
+  - species name: O
+  - species name: OH
+  type: ARRHENIUS
+- A: 18066422.28
+  C: 200
+  gas phase: gas
+  name: uco_ohb (5)
+  products:
+  - species name: OH
+  - species name: O2
+  reactants:
+  - species name: HO2
+  - species name: O
+  type: ARRHENIUS
+- A: 1023763.9292
+  C: -940
+  gas phase: gas
+  name: ol_oh (1)
+  products:
+  - species name: HO2
+  - species name: O2
+  reactants:
+  - species name: OH
+  - species name: O3
+  type: ARRHENIUS
+- A: 6022.14076
+  C: -490
+  gas phase: gas
+  name: ol_ho2 (1)
+  products:
+  - species name: OH
+  - coefficient: 2
+    species name: O2
+  reactants:
+  - species name: HO2
+  - species name: O3
+  type: ARRHENIUS
+- A: 1083985.3368
+  gas phase: gas
+  name: uho2_ho2 (2)
+  products:
+  - species name: H2O
+  - species name: HO2
+  reactants:
+  - species name: H2O2
+  - species name: OH
+  type: ARRHENIUS
+- A: 28906275.648000002
+  C: 250
+  gas phase: gas
+  name: uho2_ho2 (3)
+  products:
+  - species name: H2O
+  - species name: O2
+  reactants:
+  - species name: OH
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1083985.3368
+  gas phase: gas
+  name: uho2_ho2 (4)
+  products:
+  - species name: H2O
+  - species name: O
+  reactants:
+  - coefficient: 2
+    species name: OH
+  type: ARRHENIUS
+- A: 1686199.4128
+  C: -1800
+  gas phase: gas
+  name: uho2_ho2 (5)
+  products:
+  - species name: H2O
+  - species name: HO2
+  reactants:
+  - species name: H2
+  - species name: OH
+  type: ARRHENIUS
+- A: 12947602.634
+  C: 110
+  gas phase: gas
+  name: o1d_n2 (1)
+  products:
+  - species name: O
+  - species name: N2
+  reactants:
+  - species name: O1D
+  - species name: N2
+  type: ARRHENIUS
+- A: 19873064.508
+  C: 55
+  gas phase: gas
+  name: o1d_o2 (1)
+  products:
+  - species name: O
+  - species name: O2
+  reactants:
+  - species name: O1D
+  - species name: O2
+  type: ARRHENIUS
+- A: 98160894.388
+  C: 60
+  gas phase: gas
+  name: ol_o1d (1)
+  products:
+  - coefficient: 2
+    species name: OH
+  reactants:
+  - species name: O1D
+  - species name: H2O
+  type: ARRHENIUS
+- A: 43660520.51
+  C: 20
+  gas phase: gas
+  name: ol_o1d (2)
+  products:
+  - coefficient: 2
+    species name: 'NO'
+  reactants:
+  - species name: N2O
+  - species name: O1D
+  type: ARRHENIUS
+- A: 27882511.718799997
+  C: 20
+  gas phase: gas
+  name: ol_o1d (3)
+  products:
+  - species name: N2
+  - species name: O2
+  reactants:
+  - species name: N2O
+  - species name: O1D
+  type: ARRHENIUS
+- A: 1987306.4508
+  C: 270
+  gas phase: gas
+  name: op_ho2 (1)
+  products:
+  - species name: NO2
+  - species name: OH
+  reactants:
+  - species name: 'NO'
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1806642.2280000001
+  C: -1500
+  gas phase: gas
+  name: op_ho2 (2)
+  products:
+  - species name: NO2
+  - species name: O2
+  reactants:
+  - species name: 'NO'
+  - species name: O3
+  type: ARRHENIUS
+- A: 3071291.7876
+  C: 210
+  gas phase: gas
+  name: op_ho2 (3)
+  products:
+  - species name: 'NO'
+  - species name: O2
+  reactants:
+  - species name: NO2
+  - species name: O
+  type: ARRHENIUS
+- A: 72265.68912
+  C: -2450
+  gas phase: gas
+  name: op_ho2 (4)
+  products:
+  - species name: NO3
+  - species name: O2
+  reactants:
+  - species name: NO2
+  - species name: O3
+  type: ARRHENIUS
+- A: 2107749.266
+  gas phase: gas
+  name: op_ho2 (5)
+  products:
+  - species name: OH
+  - species name: NO2
+  reactants:
+  - species name: NO3
+  - species name: HO2
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 725323.5866650676
+  k0_B: -4.4
+  kinf_A: 843099.7064
+  kinf_B: -0.7
+  products:
+  - species name: N2O5
+  reactants:
+  - species name: NO2
+  - species name: NO3
+  type: TROE
+- A: 0.0
+  gas phase: gas
+  name: un2o5 (1)
+  products:
+  - species name: HNO3
+  reactants:
+  - species name: N2O5
+  - species name: H2O
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 652791.2279985609
+  k0_B: -3
+  kinf_A: 16861994.128
+  kinf_B: 0
+  products:
+  - species name: HNO3
+  reactants:
+  - species name: NO2
+  - species name: OH
+  type: TROE
+- A: 9033211.14
+  C: 170
+  gas phase: gas
+  name: uoh_hno3 (2)
+  products:
+  - coefficient: 2
+    species name: NO2
+  reactants:
+  - species name: NO3
+  - species name: 'NO'
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 72532.35866650677
+  k0_B: -3.4
+  kinf_A: 1746420.8204
+  kinf_B: -1.1
+  products:
+  - species name: HO2NO2
+  reactants:
+  - species name: NO2
+  - species name: HO2
+  type: TROE
+- A: 782878.2988
+  C: 380
+  gas phase: gas
+  name: uho2_no2 (2)
+  products:
+  - species name: H2O
+  - species name: NO2
+  - species name: O2
+  reactants:
+  - species name: HO2NO2
+  - species name: OH
+  type: ARRHENIUS
+- A: 1475424.4862
+  C: -1775
+  gas phase: gas
+  name: uhno4 (2)
+  products:
+  - species name: CH3O2
+  - species name: H2O
+  - species name: LCH4
+  reactants:
+  - species name: CH4
+  - species name: OH
+  type: ARRHENIUS
+- A: 90332111.4
+  gas phase: gas
+  name: uhno4 (3)
+  products:
+  - coefficient: 0.75
+    species name: CH3O2
+  - coefficient: 0.75
+    species name: OH
+  - coefficient: 0.25
+    species name: CH2O
+  - coefficient: 0.2
+    species name: HO2
+  - coefficient: 0.2
+    species name: H
+  - coefficient: 0.05
+    species name: H2
+  reactants:
+  - species name: CH4
+  - species name: O1D
+  type: ARRHENIUS
+- A: 1686199.4128
+  C: 300
+  gas phase: gas
+  name: op_mo2 (1)
+  products:
+  - species name: CH2O
+  - species name: NO2
+  - species name: HO2
+  reactants:
+  - species name: CH3O2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 363135.08782799996
+  C: -453
+  gas phase: gas
+  name: op_mo2 (2)
+  products:
+  - coefficient: 2
+    species name: CH2O
+  - coefficient: 2
+    species name: HO2
+  reactants:
+  - coefficient: 2
+    species name: CH3O2
+  type: ARRHENIUS
+- A: 13850.923748
+  C: 677
+  gas phase: gas
+  name: op_mo2 (3)
+  products:
+  - species name: CH2O
+  - species name: CH3OH
+  reactants:
+  - coefficient: 2
+    species name: CH3O2
+  type: ARRHENIUS
+- A: 246907.77116
+  C: 750
+  gas phase: gas
+  name: op_mo2 (4)
+  products:
+  - species name: CH3OOH
+  - species name: O2
+  reactants:
+  - species name: CH3O2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 2288413.4888
+  C: 200
+  gas phase: gas
+  name: op_mo2 (5)
+  products:
+  - coefficient: 0.7
+    species name: CH3O2
+  - coefficient: 0.3
+    species name: OH
+  - coefficient: 0.3
+    species name: CH2O
+  - species name: H2O
+  reactants:
+  - species name: CH3OOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 204752.78584
+  C: -1900
+  gas phase: gas
+  name: op_mo2 (6)
+  products:
+  - species name: CO
+  - species name: HO2
+  - species name: HNO3
+  reactants:
+  - species name: CH2O
+  - species name: NO3
+  type: ARRHENIUS
+- A: 3312177.418
+  C: 125
+  gas phase: gas
+  name: op_mo2 (7)
+  products:
+  - species name: CO
+  - species name: H2O
+  - species name: HO2
+  reactants:
+  - species name: CH2O
+  - species name: OH
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 36266179.333253376
+  k0_B: -4.5
+  kinf_A: 4516605.57
+  kinf_B: -0.85
+  products:
+  - coefficient: 0.75
+    species name: EO2
+  - coefficient: 0.5
+    species name: CH2O
+  - coefficient: 0.25
+    species name: HO2
+  reactants:
+  - species name: OH
+  - species name: C2H4
+  type: TROE
+- A: 2529299.1192
+  C: 180
+  gas phase: gas
+  name: op_eo2 (1)
+  products:
+  - species name: EO
+  - species name: NO2
+  reactants:
+  - species name: EO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 6022.14076
+  gas phase: gas
+  name: op_eo2 (2)
+  products:
+  - species name: GLYALD
+  - species name: HO2
+  reactants:
+  - species name: EO
+  - species name: O2
+  type: ARRHENIUS
+- A: 160000000000.0
+  C: -4150
+  gas phase: gas
+  name: op_eo2 (3)
+  products:
+  - coefficient: 2
+    species name: CH2O
+  - species name: HO2
+  reactants:
+  - species name: EO
+  type: ARRHENIUS
+- A: 7226.568912
+  C: -2630
+  gas phase: gas
+  name: ol_c2h4 (1)
+  products:
+  - species name: CH2O
+  - coefficient: 0.12
+    species name: HO2
+  - coefficient: 0.5
+    species name: CO
+  - coefficient: 0.12
+    species name: OH
+  reactants:
+  - species name: C2H4
+  - species name: O3
+  type: ARRHENIUS
+- Fc: 0.5
+  gas phase: gas
+  k0_A: 2901294346.66027
+  k0_B: -3.5
+  kinf_A: 18066422.28
+  kinf_B: 0
+  products:
+  - species name: PO2
+  reactants:
+  - species name: C3H6
+  - species name: OH
+  type: TROE
+- A: 3312.177418
+  C: -1880
+  gas phase: gas
+  name: ol_c3h6 (1)
+  products:
+  - coefficient: 0.4
+    species name: CH3CHO
+  - coefficient: 0.244
+    species name: OH
+  - coefficient: 0.244
+    species name: HO2
+  - coefficient: 0.42
+    species name: CO
+  - coefficient: 0.58
+    species name: CH2O
+  - coefficient: 0.036
+    species name: CH3OH
+  reactants:
+  - species name: C3H6
+  - species name: O3
+  type: ARRHENIUS
+- A: 277018.47495999996
+  C: -1156
+  gas phase: gas
+  name: ol_c3h6 (2)
+  products:
+  - species name: R4N2
+  reactants:
+  - species name: C3H6
+  - species name: NO3
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_po2 (1)
+  products:
+  - species name: CH3CHO
+  - species name: CH2O
+  - species name: HO2
+  - species name: NO2
+  reactants:
+  - species name: PO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 451660.55700000003
+  C: 700
+  gas phase: gas
+  name: op_po2 (2)
+  products:
+  - species name: POOH
+  - species name: O2
+  reactants:
+  - species name: PO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 5287439.58728
+  C: 200
+  gas phase: gas
+  name: op_po2 (3)
+  products:
+  - coefficient: 0.791
+    species name: OH
+  - coefficient: 0.209
+    species name: PO2
+  - coefficient: 0.791
+    species name: RCHO
+  reactants:
+  - species name: POOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 2788251.1718800003
+  C: 350
+  gas phase: gas
+  name: op_po2 (4)
+  products:
+  - species name: H2O
+  - coefficient: 0.95
+    species name: CH3CO3
+  - coefficient: 0.95
+    species name: CH2O
+  - coefficient: 0.05
+    species name: CO
+  - coefficient: 0.05
+    species name: HO2
+  reactants:
+  - species name: CH3CHO
+  - species name: OH
+  type: ARRHENIUS
+- A: 843099.7064
+  C: -1900
+  gas phase: gas
+  name: op_po2 (5)
+  products:
+  - species name: CH3CO3
+  - species name: HNO3
+  reactants:
+  - species name: CH3CHO
+  - species name: NO3
+  type: ARRHENIUS
+- A: 4877934.0156
+  C: 270
+  gas phase: gas
+  name: op_ch3co3 (1)
+  products:
+  - species name: CH3O2
+  - species name: CO2
+  - species name: NO2
+  reactants:
+  - species name: CH3CO3
+  - species name: 'NO'
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 35178193.95325578
+  k0_B: -5.6
+  kinf_A: 5600590.9068
+  kinf_B: -1.5
+  products:
+  - species name: PAN
+  reactants:
+  - species name: CH3CO3
+  - species name: NO2
+  type: TROE
+- A: 313151.31952
+  C: 980
+  gas phase: gas
+  name: upan_f (2)
+  products:
+  - coefficient: 0.15
+    species name: O3
+  - coefficient: 0.44
+    species name: OH
+  - coefficient: 0.44
+    species name: CH3O2
+  - coefficient: 0.41
+    species name: CH3COOOH
+  reactants:
+  - species name: CH3CO3
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1204428.152
+  C: 500
+  gas phase: gas
+  name: upan_f (3)
+  products:
+  - coefficient: 0.9
+    species name: CH3O2
+  - species name: CH2O
+  - coefficient: 0.9
+    species name: HO2
+  - coefficient: 0.9
+    species name: CO2
+  reactants:
+  - species name: CH3CO3
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 2288413.4888
+  C: 200
+  gas phase: gas
+  name: upan_f (4)
+  products:
+  - coefficient: 0.5
+    species name: CH3CO3
+  - coefficient: 0.5
+    species name: CH2O
+  - coefficient: 0.5
+    species name: OH
+  reactants:
+  - species name: CH3COOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 1505535.19
+  C: 500
+  gas phase: gas
+  name: upan_b (2)
+  products:
+  - coefficient: 2
+    species name: CH3O2
+  - coefficient: 2
+    species name: CO2
+  reactants:
+  - coefficient: 2
+    species name: CH3CO3
+  type: ARRHENIUS
+- A: 4612959.82216
+  C: -1020
+  gas phase: gas
+  name: upan_b (3)
+  products:
+  - species name: C2H5O2
+  - species name: H2O
+  reactants:
+  - species name: C2H6
+  - species name: OH
+  type: ARRHENIUS
+- A: 1565756.5976
+  C: 365
+  gas phase: gas
+  name: op_c2h5o2 (1)
+  products:
+  - species name: CH3CHO
+  - species name: HO2
+  - species name: NO2
+  reactants:
+  - species name: C2H5O2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 451660.55700000003
+  C: 700
+  gas phase: gas
+  name: op_c2h5o2 (2)
+  products:
+  - species name: C2H5OOH
+  - species name: O2
+  reactants:
+  - species name: C2H5O2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 180664.2228
+  gas phase: gas
+  name: op_c2h5o2 (3)
+  products:
+  - coefficient: 0.75
+    species name: CH2O
+  - coefficient: 0.75
+    species name: CH3CHO
+  - species name: HO2
+  - coefficient: 0.25
+    species name: CH3OH
+  - coefficient: 0.25
+    species name: C2H5OH
+  reactants:
+  - species name: C2H5O2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 24690.777116
+  gas phase: gas
+  name: op_c2h5o2 (4)
+  products:
+  - coefficient: 2
+    species name: CH3CHO
+  - coefficient: 2
+    species name: HO2
+  reactants:
+  - coefficient: 2
+    species name: C2H5O2
+  type: ARRHENIUS
+- A: 3119468.91368
+  C: 200
+  gas phase: gas
+  name: op_c2h5o2 (5)
+  products:
+  - coefficient: 0.36
+    species name: C2H5O2
+  - coefficient: 0.64
+    species name: CH3CHO
+  - coefficient: 0.64
+    species name: OH
+  reactants:
+  - species name: C2H5OOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 9334318.178000001
+  C: -540
+  gas phase: gas
+  name: op_c2h5o2 (6)
+  products:
+  - species name: C3H7O2
+  reactants:
+  - species name: C4H10
+  - species name: OH
+  type: ARRHENIUS
+- A: 5239262.4612
+  C: -615
+  gas phase: gas
+  name: op_c2h5o2 (7)
+  products:
+  - species name: C3H7O2
+  - species name: H2O
+  reactants:
+  - species name: C3H8
+  - species name: OH
+  type: ARRHENIUS
+- A: 2529299.1192
+  C: 180
+  gas phase: gas
+  name: op_c3h7o2 (1)
+  products:
+  - coefficient: 0.82
+    species name: CH3COCH3
+  - species name: NO2
+  - species name: HO2
+  - coefficient: 0.27
+    species name: CH3CHO
+  reactants:
+  - species name: C3H7O2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 451660.55700000003
+  C: 700
+  gas phase: gas
+  name: op_c3h7o2 (2)
+  products:
+  - species name: C3H7OOH
+  - species name: O2
+  reactants:
+  - species name: C3H7O2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 225830.27850000001
+  C: -40
+  gas phase: gas
+  name: op_c3h7o2 (3)
+  products:
+  - species name: CH2O
+  - species name: HO2
+  - coefficient: 0.82
+    species name: CH3COCH3
+  reactants:
+  - species name: C3H7O2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 2288413.4888
+  C: 200
+  gas phase: gas
+  name: op_c3h7o2 (4)
+  products:
+  - species name: H2O
+  - species name: C3H7O2
+  reactants:
+  - species name: C3H7OOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 1746420.8204
+  C: -345
+  gas phase: gas
+  name: uoh_acet (2)
+  products:
+  - species name: HO2
+  - species name: CH2O
+  reactants:
+  - species name: OH
+  - species name: CH3OH
+  type: ARRHENIUS
+- A: 4155277.1244
+  C: -230
+  gas phase: gas
+  name: uoh_acet (3)
+  products:
+  - species name: HO2
+  - species name: CH3CHO
+  reactants:
+  - species name: OH
+  - species name: C2H5OH
+  type: ARRHENIUS
+- A: 18668636.356000002
+  C: 350
+  gas phase: gas
+  name: uoh_acet (4)
+  products:
+  - species name: ISOPO2
+  reactants:
+  - species name: ISOP
+  - species name: OH
+  type: ARRHENIUS
+- A: 407000000.0
+  C: -7694
+  gas phase: gas
+  name: uoh_acet (5)
+  products:
+  - species name: HO2
+  - species name: CH2O
+  - coefficient: 0.25
+    species name: MGLY
+  - coefficient: 0.5
+    species name: GLYALD
+  - coefficient: 0.25
+    species name: GLYX
+  - coefficient: 0.5
+    species name: HYAC
+  - species name: OH
+  reactants:
+  - species name: ISOPO2
+  type: ARRHENIUS
+- A: 6022.14076
+  C: -1970
+  gas phase: gas
+  name: ol_isop (1)
+  products:
+  - coefficient: 0.325
+    species name: MACR
+  - coefficient: 0.244
+    species name: MVK
+  - coefficient: 0.845
+    species name: CH2O
+  - coefficient: 0.11
+    species name: H2O2
+  - coefficient: 0.522
+    species name: CO
+  - coefficient: 0.199
+    species name: CH3CO3
+  - coefficient: 0.026
+    species name: HO2
+  - coefficient: 0.27
+    species name: OH
+  - coefficient: 0.128
+    species name: C3H6
+  - coefficient: 0.051
+    species name: CH3O2
+  reactants:
+  - species name: ISOP
+  - species name: O3
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_isopo2 (1)
+  products:
+  - coefficient: 0.9
+    species name: NO2
+  - coefficient: 0.9
+    species name: HO2
+  - coefficient: 0.9
+    species name: CH2O
+  - coefficient: 0.55
+    species name: MVK
+  - coefficient: 0.36
+    species name: MACR
+  - coefficient: 0.1
+    species name: ISOPNB
+  reactants:
+  - species name: ISOPO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 124056.099656
+  C: 1300
+  gas phase: gas
+  name: op_isopo2 (2)
+  products:
+  - coefficient: 0.937
+    species name: ISOPOOH
+  - coefficient: 0.063
+    species name: OH
+  - coefficient: 0.025
+    species name: MACR
+  - coefficient: 0.038
+    species name: MVK
+  - coefficient: 0.063
+    species name: HO2
+  - coefficient: 0.063
+    species name: CH2O
+  reactants:
+  - species name: ISOPO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 50405.3181612
+  gas phase: gas
+  name: op_isopo2 (3)
+  products:
+  - coefficient: 1.1
+    species name: HO2
+  - coefficient: 1.22
+    species name: CH2O
+  - coefficient: 0.28
+    species name: MVK
+  - coefficient: 0.18
+    species name: MACR
+  - coefficient: 0.3
+    species name: RCHO
+  - coefficient: 0.24
+    species name: CH3OH
+  - coefficient: 0.24
+    species name: ROH
+  reactants:
+  - species name: ISOPO2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 92740.967704
+  gas phase: gas
+  name: op_isopo2 (4)
+  products:
+  - coefficient: 1.28
+    species name: HO2
+  - coefficient: 0.92
+    species name: CH2O
+  - coefficient: 0.56
+    species name: MVK
+  - coefficient: 0.36
+    species name: MACR
+  - coefficient: 0.48
+    species name: ROH
+  - coefficient: 0.5
+    species name: RCHO
+  reactants:
+  - coefficient: 2
+    species name: ISOPO2
+  type: ARRHENIUS
+- A: 2173992.81436
+  C: 380
+  gas phase: gas
+  name: op_isopo2 (5)
+  products:
+  - species name: ISOPNBO2
+  reactants:
+  - species name: ISOPNB
+  - species name: OH
+  type: ARRHENIUS
+- A: 1445313.7824
+  C: 360
+  gas phase: gas
+  name: op_isopnbo2 (1)
+  products:
+  - coefficient: 0.09
+    species name: GLYALD
+  - coefficient: 0.09
+    species name: HYAC
+  - coefficient: 0.69
+    species name: CH2O
+  - coefficient: 0.88
+    species name: NO2
+  - coefficient: 0.44
+    species name: MACRN
+  - coefficient: 0.69
+    species name: HO2
+  - coefficient: 0.26
+    species name: MVKN
+  - coefficient: 0.42
+    species name: HNO3
+  reactants:
+  - species name: ISOPNBO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 52392.624612
+  C: 1650
+  gas phase: gas
+  name: op_isopnbo2 (2)
+  products:
+  - coefficient: 0.06
+    species name: GLYALD
+  - coefficient: 0.06
+    species name: HYAC
+  - coefficient: 0.44
+    species name: CH2O
+  - coefficient: 0.28
+    species name: MACRN
+  - coefficient: 0.16
+    species name: MVKN
+  - coefficient: 0.06
+    species name: NO2
+  - coefficient: 0.44
+    species name: HO2
+  - coefficient: 0.5
+    species name: OH
+  - coefficient: 0.5
+    species name: HNO3
+  reactants:
+  - species name: ISOPNBO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 0.22281920812
+  gas phase: gas
+  name: ol_isopnb (1)
+  products:
+  - coefficient: 0.61
+    species name: MVKN
+  - coefficient: 0.39
+    species name: MACRN
+  - coefficient: 0.27
+    species name: OH
+  - species name: CH2O
+  reactants:
+  - species name: ISOPNB
+  - species name: O3
+  type: ARRHENIUS
+- A: 2860516.861
+  C: 200
+  gas phase: gas
+  name: ol_isopnb (2)
+  products:
+  - coefficient: 0.387
+    species name: ISOPO2
+  - coefficient: 0.613
+    species name: OH
+  - coefficient: 0.613
+    species name: RCHO
+  reactants:
+  - species name: ISOPOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 11442067.444
+  C: 390
+  gas phase: gas
+  name: opl_isopnb (3)
+  products:
+  - species name: OH
+  - species name: IEPOX
+  reactants:
+  - species name: ISOPOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 34807973.5928
+  C: -400
+  gas phase: gas
+  name: ol_isopnb (4)
+  products:
+  - species name: IEPOXOO
+  reactants:
+  - species name: IEPOX
+  - species name: OH
+  type: ARRHENIUS
+- A: 124056.099656
+  C: 1300
+  gas phase: gas
+  name: ol_isopnb (5)
+  products:
+  - coefficient: 0.725
+    species name: HYAC
+  - coefficient: 0.275
+    species name: GLYALD
+  - coefficient: 0.275
+    species name: GLYX
+  - coefficient: 0.275
+    species name: MGLY
+  - coefficient: 1.125
+    species name: OH
+  - coefficient: 0.825
+    species name: HO2
+  - coefficient: 0.375
+    species name: CH2O
+  - coefficient: 0.251
+    species name: CO
+  reactants:
+  - species name: IEPOXOO
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_iepoxo2 (1)
+  products:
+  - coefficient: 0.725
+    species name: HYAC
+  - coefficient: 0.275
+    species name: GLYALD
+  - coefficient: 0.275
+    species name: GLYX
+  - coefficient: 0.275
+    species name: MGLY
+  - coefficient: 0.125
+    species name: OH
+  - coefficient: 0.825
+    species name: HO2
+  - coefficient: 0.375
+    species name: CH2O
+  - coefficient: 0.251
+    species name: CO
+  - species name: NO2
+  reactants:
+  - species name: IEPOXOO
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 1565756.5976
+  C: 610
+  gas phase: gas
+  name: op_iepoxo2 (2)
+  products:
+  - species name: MVKO2
+  reactants:
+  - species name: MVK
+  - species name: OH
+  type: ARRHENIUS
+- A: 511.8819646
+  C: -1520
+  gas phase: gas
+  name: ol_mvk (1)
+  products:
+  - coefficient: 0.202
+    species name: OH
+  - coefficient: 0.202
+    species name: HO2
+  - coefficient: 0.535
+    species name: CO
+  - coefficient: 0.05
+    species name: CH3CHO
+  - coefficient: 0.95
+    species name: MGLY
+  - coefficient: 0.05
+    species name: CH2O
+  reactants:
+  - species name: MVK
+  - species name: O3
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_mvko2 (1)
+  products:
+  - coefficient: 0.965
+    species name: NO2
+  - coefficient: 0.249
+    species name: HO2
+  - coefficient: 0.249
+    species name: CH2O
+  - coefficient: 0.716
+    species name: CH3CO3
+  - coefficient: 0.716
+    species name: GLYALD
+  - coefficient: 0.249
+    species name: MGLY
+  - coefficient: 0.035
+    species name: MVKN
+  reactants:
+  - species name: MVKO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 109602.961832
+  C: 1300
+  gas phase: gas
+  name: op_mvko2 (2)
+  products:
+  - coefficient: 0.38
+    species name: MVKOOH
+  - coefficient: 0.62
+    species name: OH
+  - coefficient: 0.37
+    species name: GLYALD
+  - coefficient: 0.37
+    species name: CH3CO3
+  - coefficient: 0.13
+    species name: MEK
+  - coefficient: 0.25
+    species name: HO2
+  - coefficient: 0.12
+    species name: CH2O
+  - coefficient: 0.12
+    species name: MGLY
+  - coefficient: 0.033
+    species name: RCHO
+  reactants:
+  - species name: MVKO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 50405.3181612
+  gas phase: gas
+  name: op_mvko2 (3)
+  products:
+  - coefficient: 0.64
+    species name: HO2
+  - coefficient: 0.89
+    species name: CH2O
+  - coefficient: 0.36
+    species name: CH3CO3
+  - coefficient: 0.36
+    species name: GLYALD
+  - coefficient: 0.14
+    species name: MGLY
+  - coefficient: 0.25
+    species name: MEK
+  - coefficient: 0.25
+    species name: CH3OH
+  - coefficient: 0.25
+    species name: ROH
+  reactants:
+  - species name: MVKO2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 5287439.58728
+  C: 200
+  gas phase: gas
+  name: op_mvko2 (4)
+  products:
+  - coefficient: 0.791
+    species name: OH
+  - coefficient: 0.791
+    species name: MEK
+  - coefficient: 0.209
+    species name: MVKO2
+  reactants:
+  - species name: MVKOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 963542.5216
+  gas phase: gas
+  name: op_mvko2 (5)
+  products:
+  - species name: NO3
+  - coefficient: 0.65
+    species name: MGLY
+  - coefficient: 0.35
+    species name: CH2O
+  reactants:
+  - species name: MVKN
+  - species name: OH
+  type: ARRHENIUS
+- A: 4817712.608
+  C: 380
+  gas phase: gas
+  name: op_mvko2 (6)
+  products:
+  - coefficient: 0.45
+    species name: MAO3
+  - coefficient: 0.55
+    species name: MACRO2
+  reactants:
+  - species name: MACR
+  - species name: OH
+  type: ARRHENIUS
+- A: 29000000.0
+  C: -5297
+  gas phase: gas
+  name: op_mvko2 (7)
+  products:
+  - species name: CO
+  - species name: HYAC
+  - species name: OH
+  reactants:
+  - species name: MACRO2
+  type: ARRHENIUS
+- A: 843.0997064000001
+  C: -2100
+  gas phase: gas
+  name: ol_macr (1)
+  products:
+  - coefficient: 0.261
+    species name: OH
+  - coefficient: 0.202
+    species name: HO2
+  - coefficient: 0.569
+    species name: CO
+  - coefficient: 0.88
+    species name: MGLY
+  - coefficient: 0.12
+    species name: CH2O
+  reactants:
+  - species name: MACR
+  - species name: O3
+  type: ARRHENIUS
+- A: 2047.5278584
+  gas phase: gas
+  name: ol_macr (2)
+  products:
+  - species name: MAO3
+  - species name: HNO3
+  reactants:
+  - species name: MACR
+  - species name: NO3
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_macro2 (1)
+  products:
+  - coefficient: 0.97
+    species name: NO2
+  - coefficient: 0.97
+    species name: HO2
+  - coefficient: 0.97
+    species name: HYAC
+  - coefficient: 0.97
+    species name: CO
+  - coefficient: 0.03
+    species name: MACRN
+  reactants:
+  - species name: MACRO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 109602.961832
+  C: 1300
+  gas phase: gas
+  name: op_macro2 (2)
+  products:
+  - coefficient: 0.42
+    species name: MACROOH
+  - coefficient: 0.58
+    species name: OH
+  - coefficient: 0.58
+    species name: HYAC
+  - coefficient: 0.58
+    species name: CO
+  - coefficient: 0.58
+    species name: HO2
+  reactants:
+  - species name: MACRO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 50405.3181612
+  gas phase: gas
+  name: op_macro2 (3)
+  products:
+  - coefficient: 0.595
+    species name: HYAC
+  - coefficient: 0.255
+    species name: MGLY
+  - coefficient: 0.595
+    species name: CO
+  - coefficient: 1.255
+    species name: CH2O
+  - coefficient: 1.7
+    species name: HO2
+  - coefficient: 0.15
+    species name: ROH
+  reactants:
+  - species name: MACRO2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 2649741.9343999997
+  C: 380
+  gas phase: gas
+  name: op_macro2 (5)
+  products:
+  - species name: HYAC
+  - species name: OH
+  reactants:
+  - species name: MACROOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 1927085.0432
+  gas phase: gas
+  name: op_macro2 (6)
+  products:
+  - species name: MACRNO2
+  reactants:
+  - species name: MACRN
+  - species name: OH
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_macrno2 (1)
+  products:
+  - coefficient: 0.08
+    species name: CH2O
+  - coefficient: 0.15
+    species name: NO3
+  - coefficient: 0.07
+    species name: MGLY
+  - coefficient: 0.85
+    species name: HYAC
+  - coefficient: 1.85
+    species name: NO2
+  reactants:
+  - species name: MACRNO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 109602.961832
+  C: 1300
+  gas phase: gas
+  name: op_macrno2 (2)
+  products:
+  - coefficient: 0.08
+    species name: CH2O
+  - coefficient: 0.15
+    species name: NO3
+  - coefficient: 0.07
+    species name: MGLY
+  - coefficient: 0.85
+    species name: HYAC
+  - coefficient: 0.85
+    species name: NO2
+  - species name: OH
+  reactants:
+  - species name: MACRNO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 4034834.3092
+  C: 340
+  gas phase: gas
+  name: op_mao3 (1)
+  products:
+  - species name: NO2
+  - coefficient: 0.5
+    species name: CH2O
+  - coefficient: 0.5
+    species name: CO
+  - coefficient: 0.5
+    species name: CH3O2
+  - coefficient: 0.5
+    species name: CH3CO3
+  reactants:
+  - species name: MAO3
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 258952.05268
+  C: 1040
+  gas phase: gas
+  name: op_mao3 (2)
+  products:
+  - coefficient: 0.44
+    species name: OH
+  - coefficient: 0.15
+    species name: O3
+  - coefficient: 0.59
+    species name: CH2O
+  - coefficient: 0.39
+    species name: CH3O2
+  - coefficient: 0.41
+    species name: MAOP
+  - coefficient: 0.39
+    species name: CO
+  reactants:
+  - species name: MAO3
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1011719.6476799999
+  C: 500
+  gas phase: gas
+  name: op_mao3 (3)
+  products:
+  - coefficient: 2
+    species name: CH2O
+  - species name: HO2
+  - species name: CH3CO3
+  reactants:
+  - species name: MAO3
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 112614.032212
+  C: 500
+  gas phase: gas
+  name: op_mao3 (4)
+  products:
+  - species name: CH2O
+  reactants:
+  - species name: MAO3
+  - species name: CH3O2
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 326395613.9992804
+  k0_B: -8.9
+  kinf_A: 4637048.3852
+  kinf_B: -0.2
+  products:
+  - species name: MPAN
+  reactants:
+  - species name: MAO3
+  - species name: NO2
+  type: TROE
+- A: 369157.228588
+  C: 200
+  gas phase: gas
+  name: umpan_b (2)
+  products:
+  - species name: MAO3
+  reactants:
+  - species name: MAOP
+  - species name: OH
+  type: ARRHENIUS
+- A: 2167970.6736
+  C: 380
+  gas phase: gas
+  name: umpan_b (3)
+  products:
+  - species name: MAOPO2
+  reactants:
+  - species name: MAOP
+  - species name: OH
+  type: ARRHENIUS
+- A: 109602.961832
+  C: 1300
+  gas phase: gas
+  name: umpan_b (4)
+  products:
+  - species name: HYAC
+  - coefficient: 2
+    species name: OH
+  reactants:
+  - species name: MAOPO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 50405.3181612
+  gas phase: gas
+  name: umpan_b (5)
+  products:
+  - coefficient: 0.7
+    species name: HYAC
+  - coefficient: 0.7
+    species name: OH
+  - species name: CH2O
+  - coefficient: 0.7
+    species name: HO2
+  - coefficient: 0.3
+    species name: C2H5OH
+  reactants:
+  - species name: MAOPO2
+  - species name: CH3O2
+  type: ARRHENIUS
+- A: 1415203.0786
+  C: 350
+  gas phase: gas
+  name: op_maopo2 (1)
+  products:
+  - species name: HYAC
+  - species name: OH
+  - species name: NO2
+  reactants:
+  - species name: MAOPO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 210774.9266
+  C: 350
+  gas phase: gas
+  name: op_maopo2 (2)
+  products:
+  - species name: HNO3
+  reactants:
+  - species name: MAOPO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 1686199.4128
+  C: 300
+  gas phase: gas
+  name: op_ato2 (1)
+  products:
+  - coefficient: 0.96
+    species name: NO2
+  - coefficient: 0.96
+    species name: CH2O
+  - coefficient: 0.96
+    species name: CH3CO3
+  - coefficient: 0.04
+    species name: R4N2
+  reactants:
+  - species name: ATO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 517904.10536
+  C: 700
+  gas phase: gas
+  name: op_ato2 (2)
+  products:
+  - coefficient: 0.15
+    species name: CH3CO3
+  - coefficient: 0.15
+    species name: OH
+  - coefficient: 0.15
+    species name: CH2O
+  - coefficient: 0.85
+    species name: ATOOH
+  reactants:
+  - species name: ATO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1601889.44216
+  C: 200
+  gas phase: gas
+  name: op_ato2 (3)
+  products:
+  - species name: ATO2
+  - species name: H2O
+  reactants:
+  - species name: ATOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 686524.04664
+  C: 200
+  gas phase: gas
+  name: op_ato2 (4)
+  products:
+  - species name: MGLY
+  - species name: OH
+  - species name: H2O
+  reactants:
+  - species name: ATOOH
+  - species name: OH
+  type: ARRHENIUS
+- A: 17464208.204
+  gas phase: gas
+  name: op_ato2 (5)
+  products:
+  - species name: HYAC
+  - species name: CO
+  - species name: NO2
+  reactants:
+  - species name: MPAN
+  - species name: OH
+  type: ARRHENIUS
+- A: 6022140.76
+  gas phase: gas
+  name: op_ato2 (6)
+  products:
+  - coefficient: 0.8
+    species name: CH2O
+  - coefficient: 0.8
+    species name: CO
+  - species name: HO2
+  - coefficient: 0.2
+    species name: GLYX
+  reactants:
+  - species name: GLYALD
+  - species name: OH
+  type: ARRHENIUS
+- A: 1866863.6356000002
+  C: 340
+  gas phase: gas
+  name: op_ato2 (7)
+  products:
+  - species name: HO2
+  - coefficient: 2
+    species name: CO
+  reactants:
+  - species name: GLYX
+  - species name: OH
+  type: ARRHENIUS
+- A: 240.8856304
+  gas phase: gas
+  name: op_ato2 (8)
+  products:
+  - species name: HNO3
+  - species name: HO2
+  - coefficient: 2
+    species name: CO
+  reactants:
+  - species name: GLYX
+  - species name: NO3
+  type: ARRHENIUS
+- A: 9033211.14
+  gas phase: gas
+  name: op_ato2 (9)
+  products:
+  - species name: CH3CO3
+  - species name: CO
+  reactants:
+  - species name: MGLY
+  - species name: OH
+  type: ARRHENIUS
+- A: 843099.7064
+  C: -1860
+  gas phase: gas
+  name: op_ato2 (10)
+  products:
+  - species name: HNO3
+  - species name: CO
+  - species name: CH3CO3
+  reactants:
+  - species name: MGLY
+  - species name: NO3
+  type: ARRHENIUS
+- A: 963542.5216
+  C: 305
+  gas phase: gas
+  name: op_ato2 (11)
+  products:
+  - species name: MGLY
+  - species name: HO2
+  reactants:
+  - species name: HYAC
+  - species name: OH
+  type: ARRHENIUS
+- A: 1987306.4508
+  C: -450
+  gas phase: gas
+  name: op_ato2 (12)
+  products:
+  - species name: INO2
+  reactants:
+  - species name: ISOP
+  - species name: NO3
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 350
+  gas phase: gas
+  name: op_ino2 (1)
+  products:
+  - coefficient: 0.7
+    species name: ISN1
+  - coefficient: 0.035
+    species name: MVK
+  - coefficient: 0.035
+    species name: MACR
+  - coefficient: 0.07
+    species name: CH2O
+  - coefficient: 0.8
+    species name: HO2
+  - coefficient: 1.3
+    species name: NO2
+  - coefficient: 0.23
+    species name: RCHO
+  reactants:
+  - species name: INO2
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 1385092.3747999999
+  gas phase: gas
+  name: op_ino2 (2)
+  products:
+  - coefficient: 0.7
+    species name: ISN1
+  - coefficient: 0.035
+    species name: MVK
+  - coefficient: 0.035
+    species name: MACR
+  - coefficient: 0.07
+    species name: CH2O
+  - coefficient: 0.8
+    species name: HO2
+  - coefficient: 1.3
+    species name: NO2
+  - coefficient: 0.23
+    species name: RCHO
+  reactants:
+  - species name: INO2
+  - species name: NO3
+  type: ARRHENIUS
+- A: 124056.099656
+  C: 1300
+  gas phase: gas
+  name: op_ino2 (3)
+  products:
+  - coefficient: 0.22
+    species name: MVK
+  - coefficient: 0.015
+    species name: MACR
+  - coefficient: 0.235
+    species name: OH
+  - coefficient: 0.235
+    species name: NO2
+  - coefficient: 0.235
+    species name: CH2O
+  - coefficient: 0.765
+    species name: INPN
+  reactants:
+  - species name: INO2
+  - species name: HO2
+  type: ARRHENIUS
+- A: 11442067.444
+  C: 390
+  gas phase: gas
+  name: op_ino2 (4)
+  products:
+  - species name: OH
+  - species name: NO2
+  - species name: MEK
+  reactants:
+  - species name: INPN
+  - species name: OH
+  type: ARRHENIUS
+- A: 3119468.91368
+  C: 200
+  gas phase: gas
+  name: op_ino2 (5)
+  products:
+  - coefficient: 0.36
+    species name: INO2
+  - coefficient: 0.64
+    species name: R4N2
+  - coefficient: 0.64
+    species name: OH
+  reactants:
+  - species name: INPN
+  - species name: OH
+  type: ARRHENIUS
+- A: 189697.43394000002
+  C: -448
+  gas phase: gas
+  name: op_ino2 (6)
+  products:
+  - species name: ISNOOA
+  - species name: HNO3
+  reactants:
+  - species name: ISN1
+  - species name: NO3
+  type: ARRHENIUS
+- A: 2408856.304
+  gas phase: gas
+  name: op_ino2 (7)
+  products:
+  - species name: NO2
+  - species name: R4N2
+  - species name: CO
+  - species name: HO2
+  reactants:
+  - species name: ISNOOA
+  - species name: NO3
+  type: ARRHENIUS
+- A: 4034834.3092
+  C: 340
+  gas phase: gas
+  name: op_ino2 (8)
+  products:
+  - species name: NO2
+  - species name: R4N2
+  - species name: CO
+  - species name: HO2
+  reactants:
+  - species name: ISNOOA
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 313151.31952
+  C: 980
+  gas phase: gas
+  name: op_ino2 (9)
+  products:
+  - coefficient: 0.25
+    species name: RCOOH
+  - coefficient: 0.25
+    species name: O3
+  - species name: HNO3
+  reactants:
+  - species name: ISNOOA
+  - species name: HO2
+  type: ARRHENIUS
+- A: 2499.1884154
+  C: -1520
+  gas phase: gas
+  name: op_ino2 (10)
+  products:
+  - coefficient: 0.3
+    species name: R4N2
+  - coefficient: 0.45
+    species name: CO
+  - coefficient: 0.85
+    species name: OH
+  - coefficient: 0.45
+    species name: HO2
+  - coefficient: 0.7
+    species name: GLYX
+  - coefficient: 0.7
+    species name: NO2
+  - coefficient: 0.7
+    species name: MGLY
+  reactants:
+  - species name: ISN1
+  - species name: O3
+  type: ARRHENIUS
+- A: 4504561.28848
+  C: 410
+  gas phase: gas
+  name: op_ino2 (11)
+  products:
+  - species name: ISNOOA
+  reactants:
+  - species name: ISN1
+  - species name: OH
+  type: ARRHENIUS
+- A: 963542.5216
+  gas phase: gas
+  name: op_ino2 (12)
+  products:
+  - species name: R4N1
+  - species name: H2O
+  reactants:
+  - species name: R4N2
+  - species name: OH
+  type: ARRHENIUS
+- A: 7226568.9120000005
+  C: 440
+  gas phase: gas
+  name: op_ino2 (13)
+  products:
+  - coefficient: 1.64
+    species name: ISOPO2
+  - coefficient: 0.1
+    species name: CH3COCH3
+  reactants:
+  - species name: C10H16
+  - species name: OH
+  type: ARRHENIUS
+- A: 319.17346028000003
+  C: -530
+  gas phase: gas
+  name: ol_c10h16 (1)
+  products:
+  - coefficient: 1.122
+    species name: MACR
+  - coefficient: 0.442
+    species name: MVK
+  - coefficient: 0.765
+    species name: O
+  - coefficient: 1.156
+    species name: OH
+  reactants:
+  - species name: C10H16
+  - species name: O3
+  type: ARRHENIUS
+- A: 722656.8912
+  C: 490
+  gas phase: gas
+  name: ol_c10h16 (2)
+  products:
+  - coefficient: 1.7
+    species name: ISOPO2
+  - species name: NO2
+  reactants:
+  - species name: C10H16
+  - species name: NO3
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 119678.39179973614
+  k0_B: -4.3
+  kinf_A: 963542.5216
+  kinf_B: 0
+  products:
+  - species name: SO4
+  reactants:
+  - species name: SO2
+  - species name: OH
+  type: TROE
+- A: 7226568.9120000005
+  C: -280
+  gas phase: gas
+  name: so2h (6)
+  products:
+  - species name: SO2
+  - species name: CH2O
+  reactants:
+  - species name: DMS
+  - species name: OH
+  type: ARRHENIUS
+- A: 114420.67444
+  C: 530
+  gas phase: gas
+  name: uoh_dms (2)
+  products:
+  - species name: SO2
+  - species name: HNO3
+  - species name: CH2O
+  reactants:
+  - species name: DMS
+  - species name: NO3
+  type: ARRHENIUS
+- A: 1023763.9292
+  C: -710
+  gas phase: gas
+  name: hn3h (2)
+  products:
+  - species name: H2O
+  - species name: HNO3
+  reactants:
+  - species name: NH3
+  - species name: OH
+  type: ARRHENIUS
+- A: 84309970.64
+  C: -470
+  gas phase: gas
+  name: strat13 (1)
+  products:
+  - species name: OH
+  - species name: O2
+  reactants:
+  - species name: H
+  - species name: O3
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 15957.118906631487
+  k0_B: -1.3
+  kinf_A: 28304061.572
+  kinf_B: -0.2
+  products:
+  - species name: HO2
+  reactants:
+  - species name: H
+  - species name: O2
+  type: TROE
+- A: 13850923.748000002
+  C: -200
+  gas phase: gas
+  name: strat20 (1)
+  products:
+  - species name: ClO
+  - species name: O2
+  reactants:
+  - species name: Cl
+  - species name: O3
+  type: ARRHENIUS
+- A: 16861994.128
+  C: 85
+  gas phase: gas
+  name: strat21 (1)
+  products:
+  - species name: Cl
+  - species name: O2
+  reactants:
+  - species name: O
+  - species name: ClO
+  type: ARRHENIUS
+- A: 3854170.0864
+  C: 290
+  gas phase: gas
+  name: strat22 (1)
+  products:
+  - species name: NO2
+  - species name: Cl
+  reactants:
+  - species name: ClO
+  - species name: 'NO'
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 65279.12279985608
+  k0_B: -3.4
+  kinf_A: 9033211.14
+  kinf_B: -1.9
+  products:
+  - species name: ClONO2
+  reactants:
+  - species name: ClO
+  - species name: NO2
+  type: TROE
+- A: 1746420.8204
+  C: -800
+  gas phase: gas
+  name: strat24 (1)
+  products:
+  - species name: ClO
+  - species name: NO3
+  reactants:
+  - species name: O
+  - species name: ClONO2
+  type: ARRHENIUS
+- A: 1565756.5976
+  C: -350
+  gas phase: gas
+  name: strat26 (1)
+  products:
+  - species name: H2O
+  - species name: Cl
+  reactants:
+  - species name: OH
+  - species name: HCl
+  type: ARRHENIUS
+- A: 10839853.367999999
+  C: 170
+  gas phase: gas
+  name: strat27 (1)
+  products:
+  - species name: HCl
+  - species name: O2
+  reactants:
+  - species name: Cl
+  - species name: HO2
+  type: ARRHENIUS
+- A: 1625978.0051999998
+  C: 220
+  gas phase: gas
+  name: strat28 (1)
+  products:
+  - species name: HOCl
+  - species name: O2
+  reactants:
+  - species name: ClO
+  - species name: HO2
+  type: ARRHENIUS
+- A: 4456384.1624
+  C: 270
+  gas phase: gas
+  name: strat29 (1)
+  products:
+  - species name: HO2
+  - species name: Cl
+  reactants:
+  - species name: ClO
+  - species name: OH
+  type: ARRHENIUS
+- A: 48779340.156
+  C: -30
+  gas phase: gas
+  name: strat33 (1)
+  products:
+  - species name: HCl
+  - species name: HO2
+  - species name: CO
+  reactants:
+  - species name: CH2O
+  - species name: Cl
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 250236.63739944831
+  k0_B: -1
+  kinf_A: 15657565.976
+  kinf_B: 0
+  products:
+  - species name: H2O2
+  reactants:
+  - coefficient: 2
+    species name: OH
+  type: TROE
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 5802.588693320541
+  k0_B: -4.5
+  kinf_A: 1204428.152
+  kinf_B: -2.4
+  products:
+  - species name: Cl2O2
+  reactants:
+  - coefficient: 2
+    species name: ClO
+  type: TROE
+- A: 10237639.292
+  C: -800
+  gas phase: gas
+  name: strat39 (1)
+  products:
+  - species name: BrO
+  - species name: O2
+  reactants:
+  - species name: Br
+  - species name: O3
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 188584.13253291757
+  k0_B: -3.2
+  kinf_A: 4155277.1244
+  kinf_B: -2.9
+  products:
+  - species name: BrONO2
+  reactants:
+  - species name: BrO
+  - species name: NO2
+  type: TROE
+- A: 1385092.3747999999
+  C: 260
+  gas phase: gas
+  name: strat41 (1)
+  products:
+  - species name: Br
+  - species name: Cl
+  - species name: O2
+  reactants:
+  - species name: BrO
+  - species name: ClO
+  type: ARRHENIUS
+- A: 2709963.3419999997
+  C: 460
+  gas phase: gas
+  name: strat42 (1)
+  products:
+  - species name: HOBr
+  - species name: O2
+  reactants:
+  - species name: BrO
+  - species name: HO2
+  type: ARRHENIUS
+- A: 5299483.868799999
+  C: 260
+  gas phase: gas
+  name: strat43 (1)
+  products:
+  - species name: Br
+  - species name: NO2
+  reactants:
+  - species name: BrO
+  - species name: 'NO'
+  type: ARRHENIUS
+- A: 72265689.12
+  C: -430
+  gas phase: gas
+  name: strat44 (1)
+  products:
+  - species name: BrO
+  - species name: OH
+  reactants:
+  - species name: HOBr
+  - species name: O
+  type: ARRHENIUS
+- A: 2890627.5648
+  C: -310
+  gas phase: gas
+  name: strat45 (1)
+  products:
+  - species name: HBr
+  - species name: O2
+  reactants:
+  - species name: Br
+  - species name: HO2
+  type: ARRHENIUS
+- A: 10237639.292
+  C: -800
+  gas phase: gas
+  name: strat46 (1)
+  products:
+  - species name: HBr
+  - species name: HO2
+  - species name: CO
+  reactants:
+  - species name: Br
+  - species name: CH2O
+  type: ARRHENIUS
+- A: 3312177.418
+  C: 200
+  gas phase: gas
+  name: strat47 (1)
+  products:
+  - species name: Br
+  - species name: H2O
+  reactants:
+  - species name: HBr
+  - species name: OH
+  type: ARRHENIUS
+- A: 246907.77116
+  C: 290
+  gas phase: gas
+  name: strat48 (1)
+  products:
+  - species name: BrCl
+  - species name: O2
+  reactants:
+  - species name: BrO
+  - species name: ClO
+  type: ARRHENIUS
+- A: 361328.4456
+  C: 230
+  gas phase: gas
+  name: strat69 (1)
+  products:
+  - species name: HCl
+  - species name: O2
+  reactants:
+  - species name: ClO
+  - species name: OH
+  type: ARRHENIUS
+- A: 27099.63342
+  C: -1260
+  gas phase: gas
+  name: strat58 (1)
+  products:
+  - species name: 'NO'
+  - species name: NO2
+  - species name: O2
+  reactants:
+  - species name: NO2
+  - species name: NO3
+  type: ARRHENIUS
+- A: 511881.9646
+  C: -2450
+  gas phase: gas
+  name: strat59 (1)
+  products:
+  - coefficient: 2
+    species name: NO2
+  - species name: O2
+  reactants:
+  - coefficient: 2
+    species name: NO3
+  type: ARRHENIUS
+- Fc: 0.6
+  gas phase: gas
+  k0_A: 32639.56139992804
+  k0_B: -1.5
+  kinf_A: 18066422.28
+  kinf_B: 0
+  products:
+  - species name: NO2
+  reactants:
+  - species name: 'NO'
+  - species name: O
+  type: TROE
+- A: 3492841.6408
+  C: 220
+  gas phase: gas
+  name: strat71 (1)
+  products:
+  - species name: N2O
+  - species name: O
+  reactants:
+  - species name: N
+  - species name: NO2
+  type: ARRHENIUS
+- gas phase: gas
+  name: LCH4
+  reactants:
+  - species name: LCH4
+  scaling factor: 3.17e-08
+  type: FIRST_ORDER_LOSS

@@ -2029,6 +2029,7 @@ contains
       if (yaml_rc == 0) then
          species%BackgroundVV = temp_real
          species%conc = species%BackgroundVV  ! Initialize concentration to background
+         write(*, '(A,A,A,ES10.3)') 'INFO: ', trim(species%short_name), ' Background Concentration = ', species%BackgroundVV
       else
          species%BackgroundVV = MISSING
       endif
@@ -2037,11 +2038,12 @@ contains
       species%is_valid = .true.
 
       ! Print species information in a single line
-      write(*, '(A,A,A,ES10.3,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
+      write(*, '(A,A,A,ES10.3,A,ES10.3,A,L1,A,L1,A,L1,A,L1,A,L1,A)') &
          'INFO: Loaded species "', trim(adjustl(species%short_name)), &
-         '" (MW=', species%mw_g, ', gas=', species%is_gas, &
-         ', aerosol=', species%is_aerosol, ', dust=', species%is_dust, &
-         ', seasalt=', species%is_seasalt, ', advected=', species%is_advected, ')'
+         '" (MW=', species%mw_g, ', BackgroundVV=', species%BackgroundVV, &
+         ', gas=', species%is_gas, ', aerosol=', species%is_aerosol, &
+         ', dust=', species%is_dust, ', seasalt=', species%is_seasalt, &
+         ', advected=', species%is_advected, ')'
 
    end subroutine load_species_properties
 
