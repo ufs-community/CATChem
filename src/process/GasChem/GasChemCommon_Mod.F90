@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! GasChem process and its schemes.
 !!
-!! Generated on: 2026-06-09T15:53:01.917893
+!! Generated on: 2026-08-24T17:51:00.492090
 !! Author: Maggie Bruckner
 !! Version: 1.0.0
 
@@ -13,7 +13,7 @@ module GasChemCommon_Mod
    use precision_mod, only: fp
    ! use precision_mod, only: fp
    use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
-      ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
+                        ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
    use ConfigManager_Mod, only: ConfigManagerType  ! ConfigManager integration
    use StateManager_Mod, only: StateManagerType  ! Add StateManager integration
 
@@ -50,6 +50,7 @@ module GasChemCommon_Mod
 
 
 
+      ! Species properties
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -77,8 +78,8 @@ module GasChemCommon_Mod
       character(len=256) :: mechanism = "mechanism_config.yaml"  ! MICM yaml file for chemical mechanism
 
       ! Required meteorological fields
-      integer :: n_required_met_fields = 4
-      character(len=32) :: required_met_fields(4)
+      integer :: n_required_met_fields = 5
+      character(len=32) :: required_met_fields(5)
 
    contains
       procedure, public :: validate => validate_no_phot_config
@@ -140,7 +141,7 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'no_phot' .and. &
-         .true.) then
+          .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
          return
@@ -162,7 +163,7 @@ contains
 
    end subroutine print_GasChem_config_summary
 
-   !> Finalize GasChem configuration
+      !> Finalize GasChem configuration
    subroutine finalize_GasChem_config(this)
       class(GasChemConfig), intent(inout) :: this
 
@@ -176,6 +177,7 @@ contains
          deallocate(this%species_indices)
       end if
 
+      ! Deallocate species properties arrays
 
 
       ! Deallocate diagnostic species array
@@ -257,7 +259,7 @@ contains
 
       ! Load diagnostic species list
       call config_manager%get_array("processes/GasChem/diag_species", this%GasChem_config%diagnostic_species, &
-         rc, default_values=["All"])
+                                    rc, default_values=["All"])
       if (rc /= CC_SUCCESS) then
          ! Default to all species if not specified
          allocate(this%GasChem_config%diagnostic_species(1))
@@ -280,9 +282,9 @@ contains
       ! Load scheme-specific configuration from master YAML
       scheme_name = trim(this%GasChem_config%scheme)
       select case (scheme_name)
-       case ('no_phot')
+      case ('no_phot')
          call this%load_no_phot_config(config_manager, error_handler)
-       case default
+      case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown GasChem scheme: " // trim(scheme_name), rc)
          return
@@ -303,6 +305,7 @@ contains
       type(ErrorManagerType), intent(inout) :: error_handler
 
       integer :: i, rc
+      integer :: species_idx
 
       if (.not. associated(chem_state)) then
          call error_handler%report_error(ERROR_INVALID_STATE, &
@@ -345,6 +348,8 @@ contains
       allocate(this%GasChem_config%species_names(this%GasChem_config%n_species))
       allocate(this%GasChem_config%species_indices(this%GasChem_config%n_species))
 
+      ! Allocate species properties arrays
+
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_gas -> GasIndex
       this%GasChem_config%species_indices(1:this%GasChem_config%n_species) = &
@@ -353,7 +358,7 @@ contains
       ! Get species names using the indices
       do i = 1, this%GasChem_config%n_species
          if (this%GasChem_config%species_indices(i) > 0 .and. &
-            this%GasChem_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
+             this%GasChem_config%species_indices(i) <= size(chem_state%SpeciesNames)) then
             this%GasChem_config%species_names(i) = &
                trim(chem_state%SpeciesNames(this%GasChem_config%species_indices(i)))
          else
@@ -363,6 +368,10 @@ contains
          end if
       end do
 
+      ! Load species properties from ChemState
+      do i = 1, this%GasChem_config%n_species
+         species_idx = this%GasChem_config%species_indices(i)
+      end do
 
    end subroutine load_species_from_chem_state
 
@@ -377,7 +386,7 @@ contains
 
       ! Load scheme parameters directly from processes/GasChem/no_phot/ in master YAML
       call config_manager%get_string("processes/GasChem/no_phot/mechanism", &
-         this%no_phot_config%mechanism, rc, "mechanism_config.yaml")
+           this%no_phot_config%mechanism, rc, "mechanism_config.yaml")
       if (rc /= CC_SUCCESS) this%no_phot_config%mechanism = "mechanism_config.yaml"
 
 
@@ -395,7 +404,7 @@ contains
 
       ! Validate scheme-specific config
       select case (trim(this%GasChem_config%scheme))
-       case ('no_phot')
+      case ('no_phot')
          call this%no_phot_config%validate(error_handler)
       end select
 
@@ -418,9 +427,9 @@ contains
       class(*), allocatable :: scheme_config
 
       select case (trim(this%GasChem_config%scheme))
-       case ('no_phot')
+      case ('no_phot')
          allocate(scheme_config, source=this%no_phot_config)
-       case default
+      case default
          ! Return null
       end select
 
@@ -442,7 +451,7 @@ contains
 
       ! Handle "All" case - map all available species
       if (this%GasChem_config%n_diagnostic_species == 1 .and. &
-         trim(this%GasChem_config%diagnostic_species(1)) == "All") then
+          trim(this%GasChem_config%diagnostic_species(1)) == "All") then
 
          ! Deallocate and reallocate for all species
          if (allocated(this%GasChem_config%diagnostic_species_id)) deallocate(this%GasChem_config%diagnostic_species_id)
@@ -478,8 +487,8 @@ contains
 
          if (.not. found_species) then
             write(error_msg, '(A,A,A)') "Diagnostic species '", &
-               trim(this%GasChem_config%diagnostic_species(i)), &
-               "' not found in process species list"
+                  trim(this%GasChem_config%diagnostic_species(i)), &
+                  "' not found in process species list"
             call error_handler%report_error(ERROR_NOT_FOUND, error_msg, rc)
             !return !do not return and the diagnostics for this unspecified species will be zero in the output
          end if

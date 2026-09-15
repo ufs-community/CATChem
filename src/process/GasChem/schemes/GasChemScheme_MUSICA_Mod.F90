@@ -17,7 +17,7 @@
 !! - Memory management and array allocation
 !! - Integration with host model time stepping
 !!
-!! Generated on: 2026-06-09T15:53:02.102110
+!! Generated on: 2026-08-24T17:51:00.650243
 !! Author: Maggie Bruckner
 !! Reference: MUSICA library
 module GasChemScheme_MUSICA_Mod
@@ -54,14 +54,16 @@ contains
    !! @param[in]  AIRMW    Required constant from Constants module
    !! @param[in]  airden    AIRDEN field [appropriate units]
    !! @param[in]  pmid    PMID field [appropriate units]
+   !! @param[in]  sphu    SPHU field [appropriate units]
    !! @param[in]  t    T field [appropriate units]
    !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  species_short_name    Species short_name property
    !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] total_rate_per_species_per_level    Net chemical change per species per level [ppmv/s] (num_layers, num_species)
    !! @param[inout] net_chemical_rate_per_species    Net chem rate [ppmv/s] (num_species)
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
-   impure subroutine compute_no_phot( &
+   impure subroutine compute_no_phot( &                                                                                           
       num_layers, &
       num_species, &
       params, &
@@ -69,15 +71,18 @@ contains
       AIRMW, &
       airden, &
       pmid, &
+      sphu, &
       t, &
       tstep, &
+      species_short_name, &
       species_conc, &
       species_tendencies, &
       rc, &
+      micm_in, state_in, &
       total_rate_per_species_per_level, &
       net_chemical_rate_per_species, &
       diagnostic_species_id &
-      )
+   )
 
       ! Arguments
       integer, intent(in) :: num_layers
@@ -87,11 +92,15 @@ contains
       real(fp), intent(in) :: AIRMW  ! Required constant from Constants module
       real(fp), intent(in) :: airden(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: pmid(num_layers)    ! 3D atmospheric field
+      real(fp), intent(in) :: sphu(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
+      character(len=32), intent(in) :: species_short_name(:)  ! Species short_name property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       integer, intent(out) :: rc  ! Return code (0 for success, non-zero for error)
+      type(micm_t), pointer, optional :: micm_in
+      type(state_t), pointer, optional :: state_in
       real(fp), intent(inout), optional :: total_rate_per_species_per_level(:,:)
       real(fp), intent(inout), optional :: net_chemical_rate_per_species(:)
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
@@ -99,6 +108,8 @@ contains
       ! Local variables
       integer :: k, species_idx, micm_sp_idx, rp_idx, nrp, idx
       integer :: diag_idx  ! For diagnostic species indexing
+      integer :: target_rp_internal_idx
+      integer :: species_idx_map(num_species) ! Indices mapping catchem species to micm species
       real(fp) :: rate_val
       real(fp) :: conc
       real(fp) :: elapsed, remaining, advanced
@@ -107,25 +118,43 @@ contains
       type(error_t) :: micm_error
       type(micm_t), pointer :: micm
       type(state_t), pointer :: state
+      logical :: micm_local_created = .false.
+      logical :: state_local_created = .false.
       integer :: solver_type
       character(len=:), allocatable :: rp_name
 
+
       rc = 0
       elapsed = 0.0_fp
-
-      ! Note: species_tendencies and diagnostic arrays are already initialized
-      ! by the host ProcessInterface before calling this subroutine.
+      ! Note: species_tendencies and diagnostic arrays are already initialized                                                    
+      ! by the host ProcessInterface before calling this subroutine.                                                              
       ! Do not re-initialize them here.
 
-      solver_type = RosenbrockStandardOrder
-      micm => micm_t(params%mechanism, solver_type, micm_error)
+      if (present(micm_in)) then
+         micm => micm_in
+      else
+         solver_type = RosenbrockStandardOrder
+         micm => micm_t(params%mechanism, solver_type, micm_error)
 
-      if (.not. micm_error%is_success()) then
-         write(*,'(A)') "Error creating MICM: ", micm_error%message()
-         rc = 1
-         return
+         if (.not. micm_error%is_success()) then
+            write(*,'(A)') "Error creating MICM: ", micm_error%message()
+            rc = 1
+            return
+         end if
+         micm_local_created = .true.
       end if
-      state => micm%get_state(num_layers,micm_error)
+
+      if (present(state_in)) then
+         state => state_in
+      else
+         state => micm%get_state(num_layers,micm_error)
+         if (.not. micm_error%is_success()) then
+            write(*,'(A)') "Error creating MICM state: ", micm_error%message()
+            rc = 1
+            return
+         end if
+         state_local_created = .true.
+      end if
       nrp = state%rate_parameters_ordering%size()
 
       ! initialize MICM rate parameters
@@ -135,7 +164,9 @@ contains
       do rp_idx = 1, nrp
          rp_name = trim(state%rate_parameters_ordering%name(rp_idx))
          if (rp_name(1:min(5,len(rp_name))) == 'LOSS.') then
-            rate_val = 1.0_8
+            rate_val = 1.0_fp
+         else
+            rate_val = 0.0_fp
          endif
          target_rp_internal_idx = state%rate_parameters_ordering%index(state%rate_parameters_ordering%name(rp_idx), micm_error)
 
@@ -147,15 +178,41 @@ contains
          end do
       end do
 
+      call map_catchem_micm_species(num_species,              &
+                                    state,            &
+                                    species_short_name,            &
+                                    species_idx_map)
+
       ! set up initial conditions for MICM
       do k = 1, num_layers
          state%conditions(k)%temperature = t(k)
          state%conditions(k)%pressure = pmid(k)
-         state%conditions(k)%air_density = airden(k) / (AIRMW / 1000.0_fp)
+         state%conditions(k)%air_density = pmid(k) / (RSTARG * t(k))
          do species_idx = 1, num_species
-            ! convert species concentrations from ppmv to mol/m3
-            conc = species_conc(k, species_idx) * 1.0e-6_fp * state%conditions(k)%air_density
-            micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + (species_idx-1)*state%species_strides%variable
+
+            micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + &
+                    (species_idx_map(species_idx)-1)*state%species_strides%variable
+
+            if (trim(species_short_name(species_idx)) == 'N2' .or. &
+                trim(species_short_name(species_idx)) == 'n2') then
+                ! Add N2 specific processing here
+                conc = 0.7808_fp * state%conditions(k)%air_density
+
+            else if (trim(species_short_name(species_idx)) == 'O2' .or. &
+                     trim(species_short_name(species_idx)) == 'o2') then
+               ! Add O2 specific processing here
+               conc = 0.2095_fp * state%conditions(k)%air_density
+
+            else if (trim(species_short_name(species_idx)) == 'H2O' .or. &
+                     trim(species_short_name(species_idx)) == 'h2o') then
+
+               ! Add H2O specific processing here
+               conc = (sphu(k) * state%conditions(k)%air_density) / 0.01801528_fp 
+            else
+               ! Default processing for all other chemical species
+               ! convert species concentrations from ppmv to mol/m3
+               conc = species_conc(k, species_idx) * 1.0e-6_fp * state%conditions(k)%air_density
+            endif
             state%concentrations(micm_sp_idx) = conc
          enddo
       enddo
@@ -174,7 +231,8 @@ contains
 
       do k = 1, num_layers
          do species_idx = 1, num_species
-            micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + (species_idx-1)*state%species_strides%variable
+            micm_sp_idx = 1 + (k-1)*state%species_strides%grid_cell + &
+                    (species_idx_map(species_idx)-1)*state%species_strides%variable
             ! convert final concentration back to ppmv from mol/m3
             conc = state%concentrations(micm_sp_idx)  / state%conditions(k)%air_density * 1e6_fp
 
@@ -204,13 +262,13 @@ contains
          end do
 
       end do
-
-      if (associated(state)) then
+      
+      if (state_local_created .and. associated(state)) then
          deallocate(state)
          state => null()
       end if
 
-      if (associated(micm)) then
+      if (micm_local_created .and. associated(micm)) then
          deallocate(micm)
          micm => null()
       end if
@@ -220,5 +278,36 @@ contains
    ! =======================================================================
    ! SCHEME-SPECIFIC HELPER SUBROUTINES
    ! =======================================================================
+   subroutine map_catchem_micm_species(nspecies,              &
+      micm_state,            &
+      catchem_species_names,            &
+      mapped_indicies)
+
+      IMPLICIT NONE
+
+      INTEGER, intent(in) :: nspecies ! number of species
+      type(state_t), pointer :: micm_state
+      character(len=32), intent(in) :: catchem_species_names(:)  ! Species short_name property
+
+      integer, intent(out) :: mapped_indicies(nspecies)
+
+      integer :: species_idx, micm_idx
+      type(error_t) :: micm_error
+
+      do species_idx = 1, nspecies
+         micm_idx = micm_state%species_ordering%index(trim(catchem_species_names(species_idx)), micm_error)
+
+         ! CRITICAL CHECK: Did MICM find the species name?
+         if (micm_idx < 0) then
+            print *, "FATAL ERROR: CATChem species '", trim(catchem_species_names(species_idx)), &
+                     "' could not be found in the MICM solver configuration!"
+            ! Optional: print micm_error message if your binding supports it
+            stop "CATChem-MICM Mapping Failed: Aborting execution during process_init."
+         end if
+
+         mapped_indicies(species_idx) = micm_idx
+      end do
+
+   end subroutine map_catchem_micm_species
 
 end module GasChemScheme_MUSICA_Mod

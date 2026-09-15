@@ -33,11 +33,15 @@ schemes:
     reference: "MUSICA library"
     author: "Maggie Bruckner"
 
+    required_species_properties:
+      - short_name
+
     required_met_fields: #needed for scheme calculations
       - TSTEP
       - T
       - AIRDEN
       - PMID
+      - SPHU
 
     required_constants:
       - RSTARG
