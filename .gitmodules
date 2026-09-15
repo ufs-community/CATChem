@@ -5,4 +5,4 @@
 [submodule "src/external/musica"]
 	path = src/external/musica
 	url = https://github.com/NCAR/musica.git
-	branch = v0.11.1.4
+	branch = main
