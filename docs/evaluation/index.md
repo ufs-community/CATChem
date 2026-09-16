@@ -57,7 +57,6 @@ And the following field campaigns to better understand emissions, processing, an
 
 - [Scientific References](../references.md)
 - [Testing Guide](../developer-guide/processes/testing.md)
-- [Performance Guide](../developer-guide/performance.md)
 - [Contributing Guide](../developer-guide/contributing.md)
 
 ## Support and Issues

@@ -338,8 +338,8 @@ call emission_process%run(container, rc)
 
 ## References
 
-- [CATChem Process Architecture Guide](../user-guide/advanced_topics/process-infrastructure.md)
+- [CATChem Process Architecture Guide](../developer-guide/processes/architecture.md)
 
-- [StateContainer Guide](../user-guide/advanced_topics/statecontainer.md)
+- [StateContainer Guide](../core-concepts/state-management.md)
 - [EmissionConfigValidator Documentation](../api/index.md#emission-configuration)
 - [ProcessInterface Documentation](../api/index.md#process-interface)

@@ -122,7 +122,7 @@ When citing CATChem in scientific publications:
 
 ```
 CATChem Development Team (2024). CATChem: Configurable ATmospheric CHEmistry model.
-Available at: https://github.com/your-org/catchem
+Available at: https://github.com/ufs-community/CATChem
 ```
 
 For specific process implementations, please also cite the relevant scientific references listed above.

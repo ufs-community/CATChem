@@ -24,7 +24,7 @@ jobs:
         run: pip install .
 
       - name: Build MkDocs site
-        run: mkdocs build
+        run: mkdocs build --strict
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'

@@ -768,9 +768,7 @@ end function catchem_initialize
 
 - [Build System](../user-guide/build-system.md)
 - [Process Architecture](processes/architecture.md)
-- [State Management](core/state-management.md)
-
-- [Performance Guide](performance.md)
+- [State Management](../core-concepts/state-management.md)
 
 ---
 

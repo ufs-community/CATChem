@@ -588,4 +588,3 @@ For HPC-specific installation issues:
 ## References
 
 - [Build System Documentation](build-system.md)
-- [Performance Guide](advanced_topics/performance.md)

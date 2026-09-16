@@ -664,7 +664,7 @@ mixing_ratio_mol = mixing_ratio_kg * mw_air / mw_species
 ## References
 
 - [CF Conventions](http://cfconventions.org/)
-- [NetCDF User Guide](https://www.unidata.ucar.edu/software/netcdf/docs/)
+- [NetCDF User Guide](https://docs.unidata.ucar.edu/netcdf-c/current/)
 - [EDGAR Emission Database](https://edgar.jrc.ec.europa.eu/)
 - [MEGAN Biogenic Emissions](https://bai.ess.uci.edu/megan/)
 - [Configuration Guide](configuration.md)

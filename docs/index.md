@@ -131,12 +131,6 @@ flowchart TB
 
 <div class="grid cards" markdown>
 
-- [:material-rocket-launch-outline: **Quick Start**](old_guides/quick-start/index.md)
-
-  ---
-
-  Get up and running with CATChem in minutes
-
 - [:material-book-open-variant: **User Guide**](user-guide/index.md)
 
   ---

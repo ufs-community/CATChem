@@ -19,14 +19,12 @@ CATChem uses a modular process-based architecture. Each atmospheric process is i
 
 ### Transport Processes
 - **[Settling](../processes/settling_process.md)** - Gravitational settling processes
-- **[Plumerise](../processes/plume_rise/plume_rise.md)** - Plume rise process for fires, industrial stacks, and other elevated point sources
 
 ### Chemical Processes
 
 More information coming soon!
 
 ### Emission Processes
-- **[Biogenic Emissions](../processes/biogenic_emission/biogenic_emission.md)** - Biogenic emissions from vegetation
 - **[Dust Emissions](../processes/dust/dust.md)** - Windblown dust emissions
 - **[Sea Salt Emissions](../processes/seasalt/index.md)** - Marine aerosol processes
 - **[External Emission Plume Rise](../processes/EXTERNAL_DATA_PLUME_RISE_SOLUTION.md)** - Complete solution for external emission data and plume rise
