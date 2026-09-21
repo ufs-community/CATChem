@@ -447,7 +447,8 @@ contains
             species_tendencies, &
             this%column_settling_velocity_per_species_per_level, &
             this%column_settling_flux_per_species, &
-            this%process_config%settling_config%diagnostic_species_id         )
+            this%process_config%settling_config%diagnostic_species_id, &
+            rc=rc)
       else
          ! Call without diagnostic outputs (optional parameters not passed)
          call compute_gocart( &
@@ -468,8 +469,18 @@ contains
             species_density, &
             species_is_dust, &
             species_conc, &
-            species_tendencies &
-            )
+            species_tendencies, &
+            rc=rc)
+      end if
+
+      ! A kernel failure must not reach the tracers: species_tendencies is
+      ! pre-zeroed, so writing it back would silently wipe every species the
+      ! scheme did not get to (issue #202). Leave the column untouched and
+      ! let the caller abort the step with a named error.
+      if (rc /= CC_SUCCESS) then
+         call CC_Error('GOCART settling scheme failed for this column; concentrations left unchanged', rc, &
+            ThisLoc='run_gocart_scheme_column (in module ProcessSettlingInterface_Mod.F90)')
+         return
       end if
 
       ! Apply tendencies back to virtual column based on tendency_mode
@@ -665,9 +676,9 @@ contains
          allocate(this%column_settling_velocity_per_species_per_level(nz, this%process_config%settling_config%n_diagnostic_species))
       end if
       if (allocated(this%column_settling_velocity_per_species_per_level)) this%column_settling_velocity_per_species_per_level = 0.0_fp
-      ! 1D diagnostic: species only
-      if (this%process_config%settling_config%n_species > 0) then
-         allocate(this%column_settling_flux_per_species(this%process_config%settling_config%n_species))
+      ! 1D diagnostic: diagnostic species only (indexed by diagnostic slot, like the velocity buffer)
+      if (this%process_config%settling_config%n_diagnostic_species > 0) then
+         allocate(this%column_settling_flux_per_species(this%process_config%settling_config%n_diagnostic_species))
       end if
       if (allocated(this%column_settling_flux_per_species)) this%column_settling_flux_per_species = 0.0_fp
 

@@ -64,6 +64,27 @@ foreach(test_data_file ${TEST_DATA_FILES})
   )
 endforeach()
 
+# CI has no GOCART optics tables (ExtData/monochromatic), which the Default
+# YAML's `simple_scheme: true` needs; run the harness on the metadata settling
+# path instead so the kernel executes and the zero-sum assertions are meaningful.
+file(
+  READ
+  "${CMAKE_CURRENT_BINARY_DIR}/CATChem_new_config.yml"
+  _settling_test_cfg
+)
+string(
+  REPLACE
+  "simple_scheme: true"
+  "simple_scheme: false"
+  _settling_test_cfg
+  "${_settling_test_cfg}"
+)
+file(
+  WRITE
+  "${CMAKE_CURRENT_BINARY_DIR}/CATChem_new_config.yml"
+  "${_settling_test_cfg}"
+)
+
 # Custom test targets with unique names
 add_custom_target(
   run_settling_unit
