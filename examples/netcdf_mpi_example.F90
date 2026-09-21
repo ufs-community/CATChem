@@ -7,7 +7,7 @@
 !!
 program netcdf_mpi_example
    use CATChemNetCDF_Mod
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
 #ifdef MPI_ENABLED
    use mpi
 #endif

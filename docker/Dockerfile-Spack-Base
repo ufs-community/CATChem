@@ -11,6 +11,7 @@ RUN apt-get update --yes && apt-get install --yes \
   python3-dev \
   gfortran \
   cmake \
+  ninja-build \
   curl \
   ca-certificates \
   libopenmpi-dev \

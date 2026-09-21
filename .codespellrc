@@ -1,3 +1,3 @@
 [codespell]
-ignore-words-list = inout,iland,parm,pres,NAM,preffixes,THIK,nam,SCRIP,revserse,infor
+ignore-words-list = inout,iland,parm,pres,NAM,preffixes,THIK,nam,SCRIP,revserse,infor,comin,copyin
 skip = ./src/external/yaml-cpp/*

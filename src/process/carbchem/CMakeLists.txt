@@ -7,8 +7,8 @@
 set(
   CARBCHEM_PROCESS_SOURCES
   CarbChemCommon_Mod.F90
-  ProcessCarbChemInterface_Mod.F90
-  CarbChemProcessCreator_Mod.F90
+  catchem_process_carbchem.cpp
+  CarbChemScienceBridge.F90
 )
 
 # Define carbchem scheme sources
@@ -21,8 +21,9 @@ set(CARBCHEM_ALL_SOURCES ${CARBCHEM_PROCESS_SOURCES} ${CARBCHEM_SCHEME_SOURCES})
 set(_lib CATChem_process_carbchem)
 add_library(${_lib} ${CARBCHEM_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 # Chemistry processes may need additional math libraries
@@ -35,18 +36,24 @@ set_target_properties(
 )
 
 # Include directories
-target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(
+  ${_lib}
+  PRIVATE ${CMAKE_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../core
+)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
   # Chemistry processes may benefit from aggressive optimization
   target_compile_options(
     ${_lib}
     PRIVATE $<$<CONFIG:Release>:-O3;-funroll-loops>
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
   target_compile_options(${_lib} PRIVATE $<$<CONFIG:Release>:-O3;-unroll>)
 endif()
 

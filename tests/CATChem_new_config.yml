@@ -16,6 +16,8 @@ simulation:
   emission_filename: ./CATChem_emission.yml
   verbose:
     activate: true
+    # log_level: debug   # optional logger threshold: debug | info | warn | error
+    #                    (overrides CATCHEM_LOG_LEVEL; default when unset: info)
 #============================================================================
 # Grid settings
 #============================================================================
@@ -39,6 +41,7 @@ diagnostics:
     frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
     format: "netcdf" #only format supported now
     compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
+    process_diagnostics: true #write per-process diagnostic variables (dust/seasalt emissions, fluxes, thresholds)
     diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5]  #list of species to output; empty list for all species
   collection:
     enabled: true
@@ -172,6 +175,7 @@ processes:
       scale_factor: 1.0
   dust:
     activate: true
+    scheme: fengsha
     scheme_opt: 1
     dust_drag_opt: 1
     dust_moist_opt: 1
@@ -207,7 +211,10 @@ processes:
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
+      # Wet swelling is selected per species via the __hydrophilic species
+      # attribute (hydrophilic -> Gerber growth matching the GOCART optics
+      # tables; hydrophobic -> no swelling), not a global method here.
+      swelling_rh_max: 0.95    # clamp RH used for wet-swelling growth; the optics tables plateau rEff at RH>=0.95
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
     activate: true
@@ -216,3 +223,7 @@ processes:
     scheme: 'gocart'
     gocart:
       update_so2: true #whether to update SO2 concentration based on chemical production/loss
+  carbchem:
+    activate: true
+    diagnostics: true
+    scheme: gocart

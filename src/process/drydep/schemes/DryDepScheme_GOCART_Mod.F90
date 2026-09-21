@@ -26,10 +26,10 @@
 !! https://doi.org/10.5194/gmd-17-1443-2024
 module DryDepScheme_GOCART_Mod
 
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    use DryDepCommon_Mod, only: DryDepSchemeGOCARTConfig
-   use error_mod, only: CC_SUCCESS, CC_Error
-   use Constants, only: Cp, g0, VON_KARMAN  !load the constants needed for this scheme
+   use catchem_bridge_error, only: CC_SUCCESS, CC_Error
+   use catchem_bridge_constants, only: Cp, g0, VON_KARMAN  !load the constants needed for this scheme
 
    implicit none
    private

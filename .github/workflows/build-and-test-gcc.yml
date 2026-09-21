@@ -6,6 +6,7 @@ on:
 
 env:
   BUILD_DIR: build
+  KOKKOS_VERSION: 5.1.1
 
 jobs:
   build-and-test:
@@ -23,10 +24,34 @@ jobs:
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y
-          libnetcdf-dev libnetcdff-dev
+          libnetcdf-dev libnetcdff-dev libyaml-cpp-dev
+
+      - name: Cache Kokkos
+        id: cache-kokkos
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/kokkos-install
+          key: kokkos-${{ env.KOKKOS_VERSION }}-ubuntu-24.04-gcc-${{ matrix.gcc-version }}
+
+      - name: Build and install Kokkos
+        if: steps.cache-kokkos.outputs.cache-hit != 'true'
+        run: |
+          curl -fsSL "https://github.com/kokkos/kokkos/releases/download/${KOKKOS_VERSION}/kokkos-${KOKKOS_VERSION}.tar.gz" -o kokkos.tar.gz
+          tar xzf kokkos.tar.gz
+          cmake -B kokkos-build -S "kokkos-${KOKKOS_VERSION}" \
+            -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/kokkos-install" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DKokkos_ENABLE_OPENMP=ON
+          cmake --build kokkos-build -j2 --target install
+        env:
+          FC: gfortran-${{ matrix.gcc-version }}
+          CC: gcc-${{ matrix.gcc-version }}
+          CXX: g++-${{ matrix.gcc-version }}
 
       - name: Configure
-        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF
+        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF -DCATCHEM_ENABLE_KOKKOS=ON -DCATCHEM_BUILD_MUSICA=ON
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/kokkos-install"
         env:
           FC: gfortran-${{ matrix.gcc-version }}
           CC: gcc-${{ matrix.gcc-version }}

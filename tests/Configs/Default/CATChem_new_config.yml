@@ -16,6 +16,8 @@ simulation:
   emission_filename: ./CATChem_emission.yml
   verbose:
     activate: true
+    # log_level: debug   # optional logger threshold: debug | info | warn | error
+    #                    (overrides CATCHEM_LOG_LEVEL; default when unset: info)
 #============================================================================
 # Grid settings
 #============================================================================
@@ -38,8 +40,9 @@ diagnostics:
     prefix: "catchem_diag"
     frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
     format: "netcdf" #only format supported now
-    compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
+    compress_lev: 2 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
     latlon_output: true #stitch cubed-sphere tiles into a single lat/lon file (only applies when tile count > 1)
+    process_diagnostics: true #write per-process diagnostic variables (dust/seasalt emissions, fluxes, thresholds); per-bin data as 3D (nx,ny,nbin)
     diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5, bc1, bc2, oc1, oc2, dust1, dust2, dust3, dust4, dust5]  #list of species to output; empty list for all species
   collection:
     enabled: true
@@ -48,23 +51,14 @@ diagnostics:
 # Optics files for Mie
 #============================================================================
 mie:
-  #directory: "/gpfs/f6/bil-fire3/world-shared/Emissions/NASA/ExtData/monochromatic/"  #location on gaeac6
-  #directory: "/scratch4/NCEPDEV/naqfc/Barry.Baker/Emissions/Emissions/NASA/ExtData/monochromatic/"  #location on ursa
   directory: "./ExtData/monochromatic/"  #in running directory after copying from the above directories
-  #directory: "../../../../../../optics/"
+  # Parity A/B baseline: same optics-table versions as the upstream/develop
+  # (Fortran-core) run.  The settling process reads rEff(rh) growth curves
+  # from these tables, so a version bump changes wet particle sizes and
+  # settling velocities -- sea salt and sulfate are the most hygroscopic and
+  # shift the most.  Keep both cores on identical tables for the core-vs-core
+  # comparison; bump versions deliberately afterwards.
   files:
-    # SS: opticsBands_SS.v3_3.RRTMG.nc
-    # DU: opticsBands_DU.v15_3.RRTMG.nc
-    # BC: opticsBands_BC.v1_3.RRTMG.nc
-    # OC: opticsBands_OC.v1_3.RRTMG.nc
-    # NI: opticsBands_NI.v2_5.RRTMG.nc
-    # SU: opticsBands_SU.v1_3.RRTMG.nc
-    # SS: optics_SS.v3_5.nc
-    # DU: optics_DU.v15_5.nc
-    # BC: optics_BC.v1_5.nc
-    # OC: optics_OC.v1_5.nc
-    # NI: optics_NI.v2_5.nc
-    # SU: optics_SU.v1_5.nc
     SS: optics_SS.v3_3.nc
     DU: optics_DU.v15_3.nc
     BC: optics_BC.v1_3.nc
@@ -85,12 +79,6 @@ run_phases:
       - drydep
       - so4chem
       - wetdep
-  # test2:
-  #   description: "Test phase 2"
-  #   processes:
-  #    - dust
-  #    - drydep
-  #    - wetdep
 
 #============================================================================
 # Settings for CATChem processes
@@ -448,8 +436,15 @@ processes:
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
+      # Parity A/B baseline: match the upstream/develop (Fortran-core) run
+      # exactly -- optics-table (Mie) settling with no Maring velocity
+      # correction.  The metadata path (simple_scheme: false) selects swelling
+      # per species via the __hydrophilic attribute and the swelling_rh_max
+      # clamp; neither applies here, so those keys are omitted.  Flip
+      # simple_scheme back to false (and set correction_maring as desired) to
+      # re-enable the branch's new settling science after the core-vs-core
+      # comparison is done.
       simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
       maring_dust_only: true  #apply Maring correction to dust only (true) or all species (false)
   so4chem:
@@ -466,3 +461,15 @@ processes:
     scheme: 'gocart'
     gocart:
       time_days_hydrophobic_to_hydrophilic: 2.5  # Rate of conversion of hydrophobic to hydrophilic [days]
+  # gaschem: MUSICA/MICM gas-phase chemistry (opt-in). The mechanism is supplied
+  # either as a single-file MUSICA v1 configuration (config_file, preferred) or as
+  # a v0 CAMP multi-file directory (config_dir). An explicit config_file wins;
+  # otherwise a config_dir holding config.yaml/config.yml auto-routes to the v1 parser.
+  # Photolysis coupling: each "PHOTO.<label>" rate parameter binds to the
+  # "photolysis_rate_<label>" diagnostic, so mechanism photolysis names must match
+  # the TUV-x radiator labels. See docs/processes/gaschem/index.md.
+  # gaschem:
+  #   activate: false
+  #   diagnostics: true
+  #   config_file: "src/external/musica/configs/v1/chapman/config.yaml"
+  #   # config_dir: "src/external/musica/configs/v0/chapman/"

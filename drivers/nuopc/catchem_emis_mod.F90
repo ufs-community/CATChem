@@ -29,24 +29,18 @@
 !! call catchem_emis_finalize(cc_wrap, rc)
 !! \endcode
 
-module catchem_emis_mod
+module catchem_nuopc_emis_mod
 
+   use iso_c_binding, only: c_ptr, c_char, c_int, c_double, c_null_char, c_associated, c_f_pointer
    use ESMF
    use NUOPC
    use aqmio
    use netcdf
    use catchem_regrid_mod, only: RegridCache, catchem_regrid_field, catchem_regrid_cleanup
-   use Precision_Mod, only: fp
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
-   use ConfigManager_Mod, only: ConfigManagerType, ConfigDataType, EmissionCategoryMapping, &
-      EmisSpeciesMappingEntry, EmissionMappingConfig
-   use StateManager_Mod, only: StateManagerType
-   use ChemState_Mod, only: ChemStateType
-   use MetState_Mod, only: MetStateType
-   use Met_Utilities_Mod, only: hybrid_grid_supported, get_pedge, get_pmid, vertical_interp_pressure
-   use TimeState_Mod, only: TimeStateType
-   use ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
-   use Constants, only: AIRMW, AVO
+   use catchem_bridge_precision, only: fp, is_exact_zero
+   use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE
+   use catchem_nuopc_emis_data_mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
+   use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
 
    implicit none
    private
@@ -58,15 +52,190 @@ module catchem_emis_mod
    public :: catchem_emis_write_diagnostics
    public :: catchem_map_points_to_grid
 
+   real(c_double), parameter :: g0 = 9.80665_c_double
+   real(c_double), parameter :: AIRMW = 28.9644_c_double
+   real(c_double), parameter :: AVO = 6.02214076e23_c_double
 
    !> \brief Parameters for emission handling
    integer, parameter :: EMIS_MAXSTR = 256
    integer, parameter :: EMIS_MAXFIELDS = 100
    real(fp), parameter :: EMIS_MISSING = -999.0_fp
 
-   !> Module-level regrid cache (weights computed once, reused)
-   type(RegridCache), save :: emis_regrid_cache
    real(fp), parameter :: EMIS_ACCEPT = 1.e+15_fp ! Same as MAPL library "undefval"
+   ! Observed ocean surface DMS rarely exceeds ~100 nmol/L; this rejects
+   ! unmasked land/fill-value contamination smeared into coastal cells by
+   ! conservative regridding, which otherwise feeds DMSemission unguarded.
+   real(fp), parameter :: DMS_OCEAN_NMOLL_MAX = 1.e+3_fp
+
+   interface
+      integer(c_int) function catchem_config_has_emission_mapping(core_ptr) bind(C, name="catchem_config_has_emission_mapping")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_emission_category_count(core_ptr) bind(C, name="catchem_config_get_emission_category_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_config_get_emission_category_name_at(core_ptr, index, name_out, max_len) &
+         bind(C, name="catchem_config_get_emission_category_name_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_is_emission_category_active(core_ptr, category_name) &
+         bind(C, name="catchem_config_is_emission_category_active")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+      end function
+
+      integer(c_int) function catchem_config_get_emission_field_count(core_ptr, category_name) &
+         bind(C, name="catchem_config_get_emission_field_count")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+      end function
+
+      subroutine catchem_config_get_emission_field_name_at(core_ptr, category_name, field_idx, name_out, max_len) &
+         bind(C, name="catchem_config_get_emission_field_name_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+         integer(c_int), value :: field_idx
+         character(kind=c_char), intent(out) :: name_out(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_emission_field_units(core_ptr, category_name, field_name, units_out, max_len) &
+         bind(C, name="catchem_config_get_emission_field_units")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+         character(kind=c_char), intent(in) :: field_name(*)
+         character(kind=c_char), intent(out) :: units_out(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_get_emission_species_map_count(core_ptr, category_name, field_name) &
+         bind(C, name="catchem_config_get_emission_species_map_count")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+         character(kind=c_char), intent(in) :: field_name(*)
+      end function
+
+      subroutine catchem_config_get_emission_species_map_at(core_ptr, category_name, field_name, map_idx, &
+         target_species_out, max_len, scale_out, species_idx_out) &
+         bind(C, name="catchem_config_get_emission_species_map_at")
+         import :: c_ptr, c_char, c_int, c_double
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: category_name(*)
+         character(kind=c_char), intent(in) :: field_name(*)
+         integer(c_int), value :: map_idx
+         character(kind=c_char), intent(out) :: target_species_out(*)
+         integer(c_int), value :: max_len
+         real(c_double), intent(out) :: scale_out
+         integer(c_int), intent(out) :: species_idx_out
+      end subroutine
+
+      integer(c_int) function catchem_config_get_yaml_bool(core_ptr, yaml_path, default_val) &
+         bind(C, name="catchem_config_get_yaml_bool")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: yaml_path(*)
+         integer(c_int), value :: default_val
+      end function
+
+      real(c_double) function catchem_config_get_yaml_double(core_ptr, yaml_path, default_val) &
+         bind(C, name="catchem_config_get_yaml_double")
+         import :: c_ptr, c_char, c_double
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: yaml_path(*)
+         real(c_double), value :: default_val
+      end function
+
+      subroutine catchem_config_get_yaml_string(core_ptr, yaml_path, val_out, max_len, default_val) &
+         bind(C, name="catchem_config_get_yaml_string")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: yaml_path(*)
+         character(kind=c_char), intent(out) :: val_out(*)
+         integer(c_int), value :: max_len
+         character(kind=c_char), intent(in) :: default_val(*)
+      end subroutine
+
+      subroutine catchem_config_find_fengsha_static_file(core_ptr, val_out, max_len) &
+         bind(C, name="catchem_config_find_fengsha_static_file")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(out) :: val_out(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_get_yaml_list_count(core_ptr, yaml_path) &
+         bind(C, name="catchem_config_get_yaml_list_count")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: yaml_path(*)
+      end function
+
+      subroutine catchem_config_get_yaml_list_at(core_ptr, yaml_path, index, val_out, max_len) &
+         bind(C, name="catchem_config_get_yaml_list_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: yaml_path(*)
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: val_out(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      type(c_ptr) function catchem_state_get_pointer_2d(state_ptr, name) bind(C, name="catchem_state_get_pointer_2d")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: state_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end function
+
+      type(c_ptr) function catchem_state_get_pointer_3d(state_ptr, name) bind(C, name="catchem_state_get_pointer_3d")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: state_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end function
+
+      type(c_ptr) function catchem_state_get_species_conc_pointer(state_ptr, index) &
+         bind(C, name="catchem_state_get_species_conc_pointer")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_count(state_ptr) bind(C, name="catchem_state_get_species_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+      end function
+
+      integer(c_int) function catchem_state_get_species_index(state_ptr, name) bind(C, name="catchem_state_get_species_index")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: state_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end function
+
+      integer(c_int) function catchem_state_is_species_gas(state_ptr, index) bind(C, name="catchem_state_is_species_gas")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      real(c_double) function catchem_state_get_species_mw(state_ptr, index) bind(C, name="catchem_state_get_species_mw")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+   end interface
 
    !> \brief Emission timing and alarm information
 contains
@@ -82,42 +251,38 @@ contains
    !! \param[in] config_manager Already loaded CATChem configuration manager
    !! \param[in] grid ESMF grid for I/O operations
    !! \param[out] rc Return code
-   subroutine catchem_emis_init(ext_emis_data, config_manager, nx, ny, nlev, clock, rc)
+   subroutine catchem_emis_init(ext_emis_data, core_ptr, nx, ny, nlev, clock, rc)
       implicit none
 
       type(ExtEmisDataType), intent(inout) :: ext_emis_data
-      type(ConfigManagerType), pointer, intent(in) :: config_manager
+      type(c_ptr), intent(in) :: core_ptr
       integer, intent(in) :: nx, ny, nlev
       type(ESMF_Clock), intent(in) :: clock
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc,  icat
-      logical :: extemis_activate
-      character(len=EMIS_MAXSTR) :: msg
+      integer :: localrc, icat, n_categories, active_category_index
+      logical :: extemis_activate, category_active
+      character(len=EMIS_MAXSTR) :: msg, category_name
       character(len=*), parameter :: pName = 'catchem_emis_init'
 
       ! Initialize
       rc = CC_SUCCESS
 
+      if (.not. c_associated(core_ptr)) return
+
       ! Check top-level processes/extemis/activate switch
-      call config_manager%get_logical('processes/extemis/activate', extemis_activate, localrc, .true.)
+      extemis_activate = (catchem_config_get_yaml_bool(core_ptr, 'processes/extemis/activate' // c_null_char, 1_c_int) /= 0)
       if (.not. extemis_activate) then
+#ifdef CATCHEM_TRACE_NUOPC
+         write(*,'(A)') '[CATCHEM DEBUG] catchem_emis_init: extemis disabled by processes/extemis/activate=false'
+         call flush(6)
+#endif
          call ESMF_LogWrite(trim(pName)//': External emissions disabled (processes/extemis/activate=false)', &
             ESMF_LOGMSG_INFO, rc=localrc)
-         return
-      end if
-
-      ! Check if emission mapping is loaded
-      if (.not. config_manager%config_data%emission_mapping%is_loaded) then
-         write(msg, '(A,A)') trim(pName), ': Emission mapping not loaded in ConfigManager'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-         rc = CC_FAILURE
-         return
       end if
 
       ! Initialize ExtEmisDataType with 0 to allow push-back population
-      ! We start with 0 and let add_category grow the array incrementally
       call ext_emis_data%init(0, 'CATChem NUOPC Emission Data', localrc)
       if (localrc /= CC_SUCCESS) then
          write(msg, '(A,A)') trim(pName), ': Failed to initialize ExtEmisDataType'
@@ -126,31 +291,53 @@ contains
          return
       end if
 
-      ! Enable global emission diagnostics - read from configuration or default to true
-      call config_manager%get_logical('processes/extemis/global_diagnostics', ext_emis_data%diagnostic, localrc, .true.)
+      ext_emis_data%diagnostic = (catchem_config_get_yaml_bool(core_ptr, 'processes/extemis/global_diagnostics' // c_null_char, 1_c_int) /= 0)
 
-      ! Populate emission categories from already-loaded configuration
-      do icat = 1, config_manager%config_data%emission_mapping%n_categories
+      if (extemis_activate) then
+         ! Check if emission mapping is loaded in C++ ConfigManager
+         if (catchem_config_has_emission_mapping(core_ptr) == 0) then
+            write(msg, '(A,A)') trim(pName), ': Emission mapping not loaded in C++ ConfigManager'
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+         else
+            n_categories = catchem_config_get_emission_category_count(core_ptr)
+            do icat = 0, n_categories - 1
+               call catchem_config_get_emission_category_name_at(core_ptr, icat, category_name, 64_c_int)
+               call clean_c_string(category_name)
+               category_active = (catchem_config_is_emission_category_active(core_ptr, trim(category_name) // c_null_char) /= 0)
 
-         if (config_manager%config_data%emission_mapping%categories(icat)%is_active) then
-            call catchem_emis_populate_category(ext_emis_data, &
-               config_manager%config_data%emission_mapping%categories(icat), &
-               config_manager, nx, ny, nlev, localrc)
-            if (localrc /= CC_SUCCESS) then
-               write(msg, '(A,A,A)') trim(pName), ': Failed to populate category ', &
-                  trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-               rc = CC_FAILURE
-               return
-            end if
+               ! Purely config-driven: a category (including dust/fengsha) is
+               ! populated only when the emission config marks it active and
+               ! declares its source_file and fields.  There is intentionally
+               ! NO fallback that force-activates dust or injects default field
+               ! names -- missing configuration must fail loudly, not be
+               ! silently synthesized (which risks diverging from the intended
+               ! inputs).
+               if (category_active) then
+                  call catchem_emis_populate_category(ext_emis_data, core_ptr, category_name, nx, ny, nlev, localrc)
+                  if (localrc /= CC_SUCCESS) then
+                     write(msg, '(A,A,A)') trim(pName), ': Failed to populate category ', trim(category_name)
+                     call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+                     rc = CC_FAILURE
+                     return
+                  end if
 
-            call catchem_emis_setup_timing(ext_emis_data%categories(icat), clock, localrc)
-
-            ! Cache the (static) meteorology-provider classification once here.
-            ext_emis_data%categories(icat)%is_met = emis_category_is_met(config_manager, icat)
-
+                  active_category_index = ext_emis_data%n_categories
+                  call catchem_emis_setup_timing(ext_emis_data%categories(active_category_index), clock, localrc)
+                  if (localrc /= CC_SUCCESS) then
+                     write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Failed timing setup for category: ', trim(category_name)
+                     call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
+                     rc = CC_FAILURE
+                     return
+                  end if
+               end if
+            end do
          end if
-      end do
+      end if
+
+#ifdef CATCHEM_TRACE_NUOPC
+      write(*,'(A,I0)') '[CATCHEM DEBUG] catchem_emis_init: n_categories=', ext_emis_data%n_categories
+      call flush(6)
+#endif
 
       call ESMF_LogWrite(trim(pName)//': Emission initialization completed', &
          ESMF_LOGMSG_INFO, rc=localrc)
@@ -165,23 +352,19 @@ contains
    !! \param[inout] ext_emis_data External emission data container
    !! \param[in] current_time Current model time
    !! \param[out] rc Return code
-   subroutine catchem_emis_update(ext_emis_data, current_time, state_manager, IO, grid, dt, rc)
+   subroutine catchem_emis_update(ext_emis_data, core_ptr, current_time, nlev, IO, grid, dt, rc)
       implicit none
 
       type(ExtEmisDataType), intent(inout) :: ext_emis_data
+      type(c_ptr), intent(in) :: core_ptr
       type(ESMF_Time), intent(in) :: current_time
-      type(StateManagerType), intent(inout) :: state_manager
+      integer, intent(in) :: nlev
       type(ESMF_GridComp), intent(inout) :: IO
       type(ESMF_Grid), intent(in) :: grid
       real(fp), intent(in) :: dt
       integer, intent(out) :: rc
 
       ! Local variables
-      type(ConfigManagerType),pointer :: config_manager
-      type(ErrorManagerType), pointer :: error_manager
-      type(MetStateType), pointer :: met_state
-      type(ChemStateType), pointer :: chem_state
-      type(TimeStateType), pointer :: time_state
       integer :: localrc, i, period_key
       integer :: blo_year, blo_month
       real(fp) :: bfrac
@@ -193,37 +376,16 @@ contains
       ! Skip if no emission categories were initialized (e.g. extemis disabled)
       if (ext_emis_data%n_categories == 0) return
 
-      ! Get managers from state manager
-      config_manager => state_manager%get_config_ptr()
-      error_manager => state_manager%get_error_manager()
-      met_state => state_manager%get_met_state_ptr()
-      chem_state => state_manager%get_chem_state_ptr()
-      time_state => state_manager%get_time_state_ptr()
-
-      ! Pass 1: read/blend every active category and apply ONLY the
-      ! meteorology-providing categories (those whose mappings all target
-      ! met_state via MET_ prefixes).  This guarantees the primary met fields
-      ! (PS, T, QV, ...) are populated before the pressure-derived fields
-      ! (PEDGE/PMID/DELP/AIRDEN) that the emission tendencies below require.
-      ! Applying emissions first would divide by an unpopulated (zero) DELP.
+      ! Loop through all emission categories and check if updates are needed
       do i = 1, ext_emis_data%n_categories
          if (.not. ext_emis_data%categories(i)%is_active) cycle
 
          ! Determine the current calendar period key for this category's frequency.
-         ! A period key encodes the calendar unit that triggers a new read:
-         !   daily -> yyyymmdd, monthly -> yyyymm, hourly -> yyyymmddhh, static -> 0.
-         ! When the key differs from last_period_key (including the sentinel -1 on
-         ! the first call), the emission data must be re-read.  This approach is
-         ! immune to the alarm-drift problem that occurs when simulations do not
-         ! start at a "natural" boundary (e.g. 06:00 start with daily data).
          call catchem_emis_period_key(ext_emis_data%categories(i)%frequency, &
             current_time, period_key, localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
 
-         ! For a single multi-record monthly climatology with linear time
-         ! interpolation, the interpolation bracket changes at mid-month (not at
-         ! the month start), so re-read the two bracketing slices at mid-month.
          if (trim(ext_emis_data%categories(i)%frequency) == 'monthly' .and. &
             trim(ext_emis_data%categories(i)%time_interpolation) == 'linear' .and. &
             ext_emis_data%categories(i)%n_times >= 2) then
@@ -241,386 +403,136 @@ contains
 
             call ESMF_LogWrite(trim(pName)//': reading emission for '// &
                trim(ext_emis_data%categories(i)%category_name)// &
-               " @ "//trim(timeString), ESMF_LOGMSG_INFO, rc=localrc)
+               " @ "//trim(timeString), ESMF_LOGMSG_DEBUG, rc=localrc)
 
-            ! For files without time-coordinate matching and no filename template,
-            ! advance irec sequentially (one slice per period).
             if (ext_emis_data%categories(i)%n_times == 0 .and. &
                index(trim(ext_emis_data%categories(i)%source_file), '%') == 0) then
                ext_emis_data%categories(i)%irec = ext_emis_data%categories(i)%irec + 1
             end if
 
-            call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
-               met_state%NLEVS, current_time, localrc)
+            call catchem_emis_read(ext_emis_data%categories(i), ext_emis_data%regrid_cache, IO, grid, &
+               nlev, current_time, localrc)
             if (localrc /= CC_SUCCESS) then
-               write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
+               write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Failed to read data for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+               rc = CC_FAILURE
+               return
             end if
 
             ext_emis_data%categories(i)%last_period_key = period_key
          end if
 
-         ! Recompute temporal blend weights every timestep for time-interpolated categories
          if (ext_emis_data%categories(i)%needs_time_blend) then
             call catchem_emis_blend_time(ext_emis_data%categories(i), current_time, localrc)
             if (localrc /= CC_SUCCESS) then
-               write(msg, '(A,A,A)') trim(pName), ': Failed to blend time for category: ', &
+               write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Failed to blend time for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+               rc = CC_FAILURE
+               return
             end if
          end if
 
-         ! Apply meteorology-providing categories now (pass 1) so that every
-         ! met_state primary they supply (PS, T, QV, ...) is populated before we
-         ! ensure the pressure-derived fields below.  Non-met (emission)
-         ! categories are deferred to pass 2.
-         if (ext_emis_data%categories(i)%is_met) then
-            call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
-            if (localrc /= CC_SUCCESS) then
-               write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
-                  trim(ext_emis_data%categories(i)%category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-            end if
-         end if
-      end do
-
-      ! Ensure the pressure-derived met fields used by the emission unit
-      ! conversions are available before the chemistry categories (pass 2) apply:
-      ! DELP (for kg/m2/s mass-flux -> mixing-ratio) and AIRDEN (for #/cm3
-      ! number-flux).  Derive each ONLY when it was not already populated this
-      ! timestep, which keeps the logic source-agnostic rather than keyed to any
-      ! particular category/field:
-      !   * coupled runs: the NUOPC import transform (run immediately before this
-      !     routine) already set DELP/AIRDEN, so is_field_set is .true. and the
-      !     imported values are left untouched;
-      !   * standalone/offline runs: the met categories above populated the
-      !     primaries and derive_field self-resolves the PS -> PEDGE -> PMID ->
-      !     {DELP, AIRDEN} chain from whichever category supplied them.
-      ! MetState's registry is reset each timestep, so this re-derives every step
-      ! from the current PS/T in the offline case (no staleness).
-      if (.not. met_state%is_field_set('DELP')) then
-         call met_state%derive_field('DELP', error_manager, time_state, localrc)
+         call catchem_emis_apply(ext_emis_data%categories(i), ext_emis_data%global_scale, core_ptr, dt, current_time, localrc)
          if (localrc /= CC_SUCCESS) then
-            call ESMF_LogWrite(trim(pName)//': could not derive DELP (surface pressure '// &
-               'PS may be unavailable); kg/m2/s emission unit conversion may be invalid', &
-               ESMF_LOGMSG_ERROR, rc=localrc)
-            rc = CC_FAILURE
-            return
-         end if
-      end if
-      if (.not. met_state%is_field_set('AIRDEN')) then
-         call met_state%derive_field('AIRDEN', error_manager, time_state, localrc)
-         if (localrc /= CC_SUCCESS) then
-            call ESMF_LogWrite(trim(pName)//': could not derive AIRDEN (PMID/T may be '// &
-               'unavailable); #/cm3 emission unit conversion may be invalid', &
-               ESMF_LOGMSG_ERROR, rc=localrc)
-            rc = CC_FAILURE
-            return
-         end if
-      end if
-
-      ! Pass 2: apply the remaining (non-met) emission categories to the chemical
-      ! state.  DELP/AIRDEN are now valid for the mass-flux unit conversions.
-      do i = 1, ext_emis_data%n_categories
-         if (.not. ext_emis_data%categories(i)%is_active) cycle
-         if (ext_emis_data%categories(i)%is_met) cycle
-
-         call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
-         if (localrc /= CC_SUCCESS) then
-            write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
+            write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Failed to apply emissions for category: ', &
                trim(ext_emis_data%categories(i)%category_name)
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
          end if
       end do
-      nullify(config_manager, met_state, chem_state, time_state) ! Clean up pointers
 
       call ESMF_LogWrite(trim(pName)//': Emission data updated', &
-         ESMF_LOGMSG_INFO, rc=localrc)
+         ESMF_LOGMSG_DEBUG, rc=localrc)
 
    end subroutine catchem_emis_update
 
-   !> \brief Classify an emission-mapping category as meteorology-providing.
-   !!
-   !! Returns .true. when every species mapping in the category targets a
-   !! meteorological field (name prefixed with 'MET_'/'met_'), meaning the
-   !! category populates met_state rather than the chemical state.  Such met
-   !! categories must be applied before the chemistry emission categories so
-   !! that the primary met fields (PS, T, QV, ...) are available for deriving
-   !! DELP/AIRDEN used in the emission unit conversions.
-   logical function emis_category_is_met(config_manager, icat) result(is_met)
-      type(ConfigManagerType), pointer, intent(in) :: config_manager
-      integer, intent(in) :: icat
-      integer :: ifield, ispec, nmap
-      character(len=64) :: tgt
-
-      is_met = .false.
-      if (.not. associated(config_manager)) return
-      if (.not. config_manager%config_data%emission_mapping%is_loaded) return
-      if (icat < 1 .or. icat > config_manager%config_data%emission_mapping%n_categories) return
-
-      associate (cat => config_manager%config_data%emission_mapping%categories(icat))
-         ! A category with no mappings is not treated as meteorology-providing.
-         if (cat%n_emission_species <= 0) return
-         do ifield = 1, cat%n_emission_species
-            nmap = cat%species_mappings(ifield)%n_mappings
-            if (nmap <= 0) return
-            do ispec = 1, nmap
-               tgt = adjustl(cat%species_mappings(ifield)%map(ispec))
-               if (len_trim(tgt) <= 4) return
-               if (tgt(1:4) /= 'MET_' .and. tgt(1:4) /= 'met_') return
-            end do
-         end do
-         is_met = .true.
-      end associate
-   end function emis_category_is_met
-
+   !> Inspect the source variables rather than assuming that every field in a
+   !! category has the category-level rank.  AQMIO files commonly combine
+   !! surface fields with fields carrying a record dimension, and some files
+   !! also contain native vertical fields in the same category.
    subroutine catchem_emis_detect_field_ranks(category, filename, rc)
-      !> \brief Auto-detect each field's 2D/3D rank from the NetCDF file.
-      !!
-      !! Opens the file for metadata inspection only (no data is read) and, for
-      !! every field in the category, sets \c field%is_2d based on the actual
-      !! variable rank after stripping a trailing time/record dimension.  This
-      !! lets a single file/category mix 2D and 3D variables while still being
-      !! read in a single data-open.  If the file or a variable cannot be
-      !! inspected, the field keeps the category-level \c is_2d as a fallback.
       type(ExtEmisCategoryType), intent(inout) :: category
       character(len=*),          intent(in)    :: filename
       integer,                   intent(out)   :: rc
 
-      integer :: ncStatus, ncid, ifield, varId, ndims, uid, spatial_ndims
-      integer :: nlev_var
+      integer :: nc_status, ncid, ifield, varid, ndims, uid, spatial_ndims, nlev_var
       integer, allocatable :: dimids(:)
-      character(len=NF90_MAX_NAME) :: dimName
+      character(len=NF90_MAX_NAME) :: dim_name
       logical :: is_time
 
       rc = CC_SUCCESS
-
-      ! Default every field to the category setting first, so any field we
-      ! cannot inspect below simply inherits the configured is_2d.
       do ifield = 1, category%n_fields
          category%fields(ifield)%is_2d = category%is_2d
+         category%fields(ifield)%nlev_file = 1
       end do
 
-      ncStatus = nf90_open(trim(filename), NF90_NOWRITE, ncid)
-      ! Non-fatal: this pass only refines is_2d. If the file can't be opened
-      ! for inspection, fields keep the category-level is_2d and the real
-      ! data-open (AQMIO_Open in catchem_emis_read) reports any genuine I/O
-      ! error via ESMF_LogFoundError, so we return rc=success here.
-      if (ncStatus /= NF90_NOERR) return
+      nc_status = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (nc_status /= NF90_NOERR) return
 
-      ! Identify the unlimited (record) dimension, if any
       uid = -1
-      ncStatus = nf90_inquire(ncid, unlimitedDimId=uid)
-
+      nc_status = nf90_inquire(ncid, unlimitedDimId=uid)
       do ifield = 1, category%n_fields
-         ncStatus = nf90_inq_varid(ncid, trim(category%fields(ifield)%field_name), varId)
-         if (ncStatus /= NF90_NOERR) cycle  ! variable absent -> keep default
-
-         ncStatus = nf90_inquire_variable(ncid, varId, ndims=ndims)
-         if (ncStatus /= NF90_NOERR .or. ndims < 1) cycle
+         nc_status = nf90_inq_varid(ncid, trim(category%fields(ifield)%field_name), varid)
+         if (nc_status /= NF90_NOERR) cycle
+         nc_status = nf90_inquire_variable(ncid, varid, ndims=ndims)
+         if (nc_status /= NF90_NOERR .or. ndims < 1) cycle
 
          allocate(dimids(ndims))
-         ncStatus = nf90_inquire_variable(ncid, varId, dimIds=dimids)
-         if (ncStatus /= NF90_NOERR) then
+         nc_status = nf90_inquire_variable(ncid, varid, dimIds=dimids)
+         if (nc_status /= NF90_NOERR) then
             deallocate(dimids)
             cycle
          end if
 
-         ! Strip a trailing time/record dimension (unlimited or name-based)
          spatial_ndims = ndims
          is_time = .false.
          if (uid /= -1 .and. dimids(ndims) == uid) then
             is_time = .true.
          else
-            dimName = ''
-            ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName)
-            if (ncStatus == NF90_NOERR) then
-               call to_lower_str(dimName)
-               if (index(dimName, 'time') > 0 .or. index(dimName, 'month') > 0 .or. &
-                  index(dimName, 'record') > 0) is_time = .true.
+            dim_name = ''
+            nc_status = nf90_inquire_dimension(ncid, dimids(ndims), name=dim_name)
+            if (nc_status == NF90_NOERR) then
+               dim_name = emis_lower(dim_name)
+               is_time = index(dim_name, 'time') > 0 .or. index(dim_name, 'month') > 0 .or. &
+                  index(dim_name, 'record') > 0
             end if
          end if
          if (is_time) spatial_ndims = ndims - 1
 
          category%fields(ifield)%is_2d = (spatial_ndims <= 2)
-
-         ! Record the source variable's vertical extent so 3D fields can be read
-         ! at their native resolution.  Storage order is (lon, lat, lev[, time]),
-         ! so the vertical is the last spatial dimension.  This lets edge met
-         ! fields (nz+1 levels, e.g. PFILSAN/PFLLSAN) be read at full size and
-         ! copied cleanly into the MetState without truncation.
          if (spatial_ndims >= 3) then
-            ncStatus = nf90_inquire_dimension(ncid, dimids(spatial_ndims), len=nlev_var)
-            if (ncStatus == NF90_NOERR) then
-               category%fields(ifield)%nlev_file = nlev_var
-            else
-               category%fields(ifield)%nlev_file = 0
-            end if
-         else
-            category%fields(ifield)%nlev_file = 1
+            nc_status = nf90_inquire_dimension(ncid, dimids(spatial_ndims), len=nlev_var)
+            if (nc_status == NF90_NOERR) category%fields(ifield)%nlev_file = nlev_var
          end if
-
          deallocate(dimids)
       end do
-
-      ncStatus = nf90_close(ncid)
-
+      nc_status = nf90_close(ncid)
    end subroutine catchem_emis_detect_field_ranks
 
-   !> \brief Ensure a 3D field's storage matches its native file vertical size.
-   !!
-   !! Returns the vertical level count the field should be read at (\c nlev_f)
-   !! and, if the field's \c emission_data is sized differently, reallocates it
-   !! (preserving nx/ny/n_times) so the file's native levels can be stored
-   !! without truncation.  This lets edge met fields with nz+1 levels
-   !! (e.g. PFILSAN/PFLLSAN) be read and copied verbatim into the MetState,
-   !! mirroring the coupled path.  For 2D fields, or when the vertical size
-   !! could not be detected, the model default \c nlev_default is used and no
-   !! reallocation occurs.
-   subroutine catchem_emis_size_field_vertical(field, nlev_default, nlev_f)
-      implicit none
+   !> Size storage to the native vertical extent of a detected 3D field.
+   subroutine catchem_emis_size_field_vertical(field, nlev_default, nlev_file)
       type(ExtEmisFieldType), intent(inout) :: field
       integer,                intent(in)    :: nlev_default
-      integer,                intent(out)   :: nlev_f
-      integer :: exnx, exny, ext
+      integer,                intent(out)   :: nlev_file
+      integer :: nx, ny, nt
 
-      nlev_f = nlev_default
+      nlev_file = nlev_default
       if (field%is_2d) return
-      if (field%nlev_file > 0) nlev_f = field%nlev_file
-
-      if (allocated(field%emission_data)) then
-         if (size(field%emission_data, 3) /= nlev_f) then
-            exnx = size(field%emission_data, 1)
-            exny = size(field%emission_data, 2)
-            ext  = size(field%emission_data, 4)
-            deallocate(field%emission_data)
-            allocate(field%emission_data(exnx, exny, nlev_f, ext))
-            field%emission_data = 0.0_fp
-            field%nz = nlev_f
-         end if
-      end if
-   end subroutine catchem_emis_size_field_vertical
-
-   !> \brief Pressure-interpolate a 3D field from file levels onto the model grid
-   !!
-   !! Fills \c field%emission_data_model (nx,ny,nz,1) by remapping the current
-   !! slice \c field%emission_data(:,:,:,1) from its native file levels to the
-   !! model's \c nz layers using linear-in-pressure interpolation.  Source-layer
-   !! pressures are reconstructed for \c vertical_pressure_mode=='construct' as
-   !! P = ap + bp*PS from the built-in hybrid coefficients (met_utilities_mod)
-   !! for the file's level count; the target pressures are the model mid-layer
-   !! pressures (\c met_state%PMID, or reconstructed from PS when unavailable).
-   !!
-   !! On any inability to build the pressures (unsupported grid, mismatched
-   !! horizontal shape, or the not-yet-implemented 'file' mode) it falls back to
-   !! a size-safe level copy so the field is still delivered at the model nz
-   !! (never wider than nz), which keeps the collective diagnostic write valid.
-   subroutine catchem_emis_vinterp_field(category, field, met_state, nz, rc)
-      implicit none
-      type(ExtEmisCategoryType), intent(in)    :: category
-      type(ExtEmisFieldType),    intent(inout) :: field
-      type(MetStateType),        intent(in)    :: met_state
-      integer,                   intent(in)    :: nz
-      integer,                   intent(out)   :: rc
-
-      integer :: localrc, nx, ny, nsrc, kcopy
-      logical :: ok, have_src, have_dst
-      real(fp), allocatable :: src_pmid(:,:,:), dst_pmid(:,:,:)
-      character(len=EMIS_MAXSTR) :: msg
-      character(len=32) :: pmode
-      character(len=*), parameter :: pName = 'catchem_emis_vinterp_field'
-
-      rc = CC_SUCCESS
+      if (field%nlev_file > 0) nlev_file = field%nlev_file
       if (.not. allocated(field%emission_data)) return
+      if (size(field%emission_data, 3) == nlev_file) return
 
-      nx   = size(field%emission_data, 1)
-      ny   = size(field%emission_data, 2)
-      nsrc = size(field%emission_data, 3)
-
-      ! (Re)allocate the model-level buffer to (nx,ny,nz,1).
-      if (allocated(field%emission_data_model)) then
-         if (size(field%emission_data_model,1) /= nx .or. &
-            size(field%emission_data_model,2) /= ny .or. &
-            size(field%emission_data_model,3) /= nz) then
-            deallocate(field%emission_data_model)
-         end if
-      end if
-      if (.not. allocated(field%emission_data_model)) &
-         allocate(field%emission_data_model(nx, ny, nz, 1))
-      field%emission_data_model = 0.0_fp
-
-      ! The horizontal grid of the field must match met_state (PS/PMID) for the
-      ! per-column pressures to be meaningful.  Otherwise fall back to a copy.
-      have_src = .false.
-      have_dst = .false.
-      if (allocated(met_state%PS)) then
-         if (size(met_state%PS,1) == nx .and. size(met_state%PS,2) == ny) then
-
-            ! ---- Source-layer pressures --------------------------------------
-            pmode = adjustl(category%vertical_pressure_mode)
-            call to_lower_str(pmode)
-            select case (trim(pmode))
-             case ('construct', 'hybrid', '')
-               if (hybrid_grid_supported(nsrc)) then
-                  src_pmid = get_pmid(get_pedge(met_state%PS, nsrc))
-                  have_src = (size(src_pmid,3) == nsrc)
-               else
-                  write(msg,'(A,A,I0,A,A)') trim(pName), ': no built-in hybrid grid for ', &
-                     nsrc, ' levels (category ', trim(category%category_name)//')'
-                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-               end if
-             case default
-               write(msg,'(A,A,A,A)') trim(pName), &
-                  ': vertical_pressure_mode="', trim(category%vertical_pressure_mode), &
-                  '" not implemented; falling back to a level copy'
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-            end select
-
-            ! ---- Target (model) layer pressures ------------------------------
-            if (have_src) then
-               if (allocated(met_state%PMID)) then
-                  if (size(met_state%PMID,1) == nx .and. size(met_state%PMID,2) == ny .and. &
-                     size(met_state%PMID,3) == nz .and. met_state%is_field_set('PMID')) then
-                     dst_pmid = met_state%PMID
-                     have_dst = .true.
-                  end if
-               end if
-               if (.not. have_dst .and. hybrid_grid_supported(nz)) then
-                  dst_pmid = get_pmid(get_pedge(met_state%PS, nz))
-                  have_dst = (size(dst_pmid,3) == nz)
-               end if
-            end if
-         end if
-      end if
-
-      if (have_src .and. have_dst) then
-         call vertical_interp_pressure(src_pmid, field%emission_data(:,:,:,1), &
-            dst_pmid, field%emission_data_model(:,:,:,1))
-      else
-         ! Safe fallback: copy the lowest min(nz,nsrc) levels so the field is
-         ! still nz-sized (avoids a native-depth collective write) even though
-         ! the pressures could not be built.
-         kcopy = min(nz, nsrc)
-         field%emission_data_model(:,:,1:kcopy,1) = field%emission_data(:,:,1:kcopy,1)
-         write(msg,'(A,A,A)') trim(pName), &
-            ': pressure interpolation unavailable, used level copy for ', &
-            trim(category%category_name)//'/'//trim(field%field_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-      end if
-
-   end subroutine catchem_emis_vinterp_field
-
-   !> \brief Lowercase an in-place string (ASCII)
-   subroutine to_lower_str(s)
-      implicit none
-      character(len=*), intent(inout) :: s
-      integer :: i, ic
-      do i = 1, len_trim(s)
-         ic = iachar(s(i:i))
-         if (ic >= iachar('A') .and. ic <= iachar('Z')) s(i:i) = achar(ic + 32)
-      end do
-   end subroutine to_lower_str
+      nx = size(field%emission_data, 1)
+      ny = size(field%emission_data, 2)
+      nt = size(field%emission_data, 4)
+      deallocate(field%emission_data)
+      allocate(field%emission_data(nx, ny, nlev_file, nt))
+      field%emission_data = 0.0_fp
+      field%nz = nlev_file
+   end subroutine catchem_emis_size_field_vertical
 
    !> \brief Read emission data from files
    !!
@@ -630,10 +542,11 @@ contains
    !! \param[inout] ext_emis_data External emission data container
    !! \param[in] category_name Name of emission category to read
    !! \param[out] rc Return code
-   subroutine catchem_emis_read(category, IO, grid, nlev, curr_time, rc)
+   subroutine catchem_emis_read(category, regrid_cache, IO, grid, nlev, curr_time, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
+      type(RegridCache), intent(inout) :: regrid_cache
       type(ESMF_GridComp), intent(inout) :: IO
       type(ESMF_Grid), intent(in) :: grid
       integer, intent(in) :: nlev
@@ -641,8 +554,7 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc,   ifield
-      integer :: nlev_f
+      integer :: localrc,   ifield, nlev_f
       character(len=EMIS_MAXSTR) :: msg, filename
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -650,7 +562,6 @@ contains
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
       character(len=*), parameter :: pName = 'catchem_emis_read'
       logical :: use_regrid
-      logical :: didRegrid
       logical :: file_exists
 
       rc = CC_SUCCESS
@@ -674,22 +585,20 @@ contains
          filename = trim(category%source_file)
       end if
 
-      if (len_trim(filename) == 0) then
-         write(msg, '(A,A,A)') trim(pName), ': No source file specified for category: ', trim(category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+      if (is_null_filename(filename)) then
+         write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: No valid source file specified for category: ', trim(category_name)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
          return
       end if
 
-      ! For template-resolved filenames, check that the file exists before attempting I/O.
-      ! If missing, log a warning and keep the last loaded data unchanged.
-      if (index(trim(category%source_file), '%') > 0) then
-         inquire(file=trim(filename), exist=file_exists)
-         if (.not. file_exists) then
-            write(msg, '(A,A,A)') trim(pName), ': File not found (holding last data): ', trim(filename)
-            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
-            return
-         end if
+      ! Check that the file exists before attempting I/O.
+      inquire(file=trim(filename), exist=file_exists)
+      if (.not. file_exists) then
+         write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Source file not found: ', trim(filename)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
       end if
 
       ! Populate time-coordinate cache if the file has changed (or first call)
@@ -710,11 +619,19 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
-      ! Detect each field's rank (2D vs 3D) from the actual NetCDF variable so a
-      ! single file/category can mix 2D and 3D fields and still be read in one
-      ! open.  Falls back to the category-level is_2d when a variable cannot be
-      ! inspected.  This is a cheap metadata-only open (no data is read here).
+      ! Keep the source-file rank authoritative.  The category-level is only a
+      ! fallback for variables that cannot be inspected.
       call catchem_emis_detect_field_ranks(category, filename, localrc)
+#ifdef CATCHEM_TRACE_NUOPC
+      do ifield = 1, category%n_fields
+         write(*,'(A,A,A,A,A,A,A,L1,A,I0)') '[CATCHEM DEBUG] AQMIO rank category=', trim(category_name), &
+            ' file=', trim(filename), &
+            ' field=', trim(category%fields(ifield)%field_name), &
+            ' is_2d=', category%fields(ifield)%is_2d, &
+            ' nlev_file=', category%fields(ifield)%nlev_file
+      end do
+      call flush(6)
+#endif
 
       ! Determine if this category needs runtime regridding.
       ! When regrid_method is set to anything other than 'none' (e.g.
@@ -733,7 +650,7 @@ contains
             rc = CC_FAILURE
             return
          end if
-         call catchem_emis_read_regrid(category, grid, nlev, filename, curr_time, rc)
+         call catchem_emis_read_regrid(category, regrid_cache, grid, nlev, filename, curr_time, rc)
          return
       end if
 
@@ -751,9 +668,6 @@ contains
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          else !3D field
-            ! Read at the file's native vertical size so nz+1 edge fields
-            ! (e.g. PFILSAN/PFLLSAN) are stored in full; falls back to the model
-            ! nlev when the file's vertical extent was not detected.
             call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
                typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev_f/), rc=localrc)
@@ -766,18 +680,8 @@ contains
             timeSlice=category % irec, iofmt=AQMIO_FMT_NETCDF, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-            ! Clean up field and close file before returning; log any cleanup
-            ! failure at the point of failure (still close the file afterward).
-            call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-               line=__LINE__,  file=__FILE__)) then
-               ! cleanup error already logged; still close the file below
-            end if
-            call AQMIO_Close(IO, rc=localrc)
-            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-               line=__LINE__,  file=__FILE__)) then
-               ! close error already logged; fall through to bail out
-            end if
+            ! Clean up field before returning
+            call ESMF_FieldDestroy(esmf_field, rc=localrc)
             return  ! bail out
          end if
 
@@ -786,18 +690,8 @@ contains
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field and close file before returning; log any cleanup
-               ! failure at the point of failure (still close the file afterward).
-               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__,  file=__FILE__)) then
-                  ! cleanup error already logged; still close the file below
-               end if
-               call AQMIO_Close(IO, rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__,  file=__FILE__)) then
-                  ! close error already logged; fall through to bail out
-               end if
+               ! Clean up field before returning
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
@@ -807,18 +701,8 @@ contains
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field and close file before returning; log any cleanup
-               ! failure at the point of failure (still close the file afterward).
-               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__,  file=__FILE__)) then
-                  ! cleanup error already logged; still close the file below
-               end if
-               call AQMIO_Close(IO, rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__,  file=__FILE__)) then
-                  ! close error already logged; fall through to bail out
-               end if
+               ! Clean up field before returning
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
@@ -830,10 +714,18 @@ contains
          end if
 
          category%fields(ifield)%is_loaded = .true.   !set to true; otherwise diagnostics will not be saved.
+#ifdef CATCHEM_TRACE_NUOPC
+         write(*,'(A,A,A,A,A,L1,A,L1,A,ES12.4,A,ES12.4)') '[CATCHEM DEBUG] AQMIO read category=', trim(category_name), &
+            ' field=', trim(category%fields(ifield)%field_name), &
+            ' emission_data=', allocated(category%fields(ifield)%emission_data), &
+            ' interp_t1=', allocated(category%fields(ifield)%interp_data_t1), &
+            ' min=', minval(category%fields(ifield)%emission_data), &
+            ' max=', maxval(category%fields(ifield)%emission_data)
+         call flush(6)
+#endif
 
-         ! Clean up ESMF field after data transfer. noGarbage=.true. forces ESMF
-         ! to release the field memory now instead of deferring to ESMF_Finalize.
-         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+         ! Clean up ESMF field after data transfer
+         call ESMF_FieldDestroy(esmf_field, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
 
@@ -842,18 +734,10 @@ contains
          field_data_3d => null()
       end do
 
-      ! Close the NetCDF file opened by AQMIO_Open above. Without this the
-      ! nf90_open handle (and its HDF5 buffers) leaks on every emission-period
-      ! read, growing RSS for the life of the run. AQMIO is CATChem-specific,
-      ! which is why the GOCART configuration does not exhibit this leak.
-      call AQMIO_Close(IO, rc=localrc)
-      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
-
       !!not sure why this write will crash the model
       write(msg, '(A,A,A)') trim(pName), ': Successfully read emission data for category ', &
          trim(category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_DEBUG, rc=localrc)
 
    end subroutine catchem_emis_read
 
@@ -861,11 +745,12 @@ contains
    !!
    !! Reads global lat-lon emission data and regrids it onto the model
    !! grid using ESMF bilinear regridding.  Route handles are cached in
-   !! the module-level emis_regrid_cache so weights are computed only once.
-   subroutine catchem_emis_read_regrid(category, grid, nlev, filename, curr_time, rc)
+   !! the component-owned regrid cache so weights are computed once per instance.
+   subroutine catchem_emis_read_regrid(category, regrid_cache, grid, nlev, filename, curr_time, rc)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
+      type(RegridCache),         intent(inout) :: regrid_cache
       type(ESMF_Grid),          intent(in)    :: grid
       integer,                  intent(in)    :: nlev
       character(len=*),         intent(in)    :: filename
@@ -873,8 +758,7 @@ contains
       integer,                  intent(out)   :: rc
 
       ! Local variables
-      integer :: localrc, ifield, klev
-      integer :: nlev_f
+      integer :: localrc, ifield, klev, nlev_f
       character(len=EMIS_MAXSTR) :: msg
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -887,7 +771,6 @@ contains
       logical :: multi_file_interp   ! t2 comes from a different file
       integer :: irec_next
       integer :: nx, ny
-      integer :: n_hours
       character(len=EMIS_MAXSTR) :: filename_next
       type(ESMF_Time) :: next_time
       type(ESMF_TimeInterval) :: period_step
@@ -928,12 +811,7 @@ contains
              case ('hourly')
                call ESMF_TimeIntervalSet(period_step, h=1, rc=localrc)
              case default
-               n_hours = parse_hourly_interval(category%frequency)
-               if (n_hours > 0) then
-                  call ESMF_TimeIntervalSet(period_step, h=n_hours, rc=localrc)
-               else
-                  call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
-               end if
+               call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
             end select
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -955,7 +833,7 @@ contains
                write(msg, '(A,A,A,A)') trim(pName), &
                   ': multi-file time_interp for ', trim(category_name), &
                   ' next_file='//trim(filename_next)
-               call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+               call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_DEBUG, rc=localrc)
             end if
          else
             ! Same-file interpolation
@@ -968,7 +846,7 @@ contains
             write(msg, '(A,A,A,I3,A,I3)') trim(pName), &
                ': time_interp read for ', trim(category_name), &
                category%irec, '  and next=', irec_next
-            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+            call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_DEBUG, rc=localrc)
          end if
       end if
 
@@ -983,7 +861,7 @@ contains
          if (category%fields(ifield)%is_2d) then
             ! --- 2D field ---
             call catchem_regrid_field( &
-               cache     = emis_regrid_cache, &
+               cache     = regrid_cache, &
                filename  = trim(filename), &
                varname   = trim(category%fields(ifield)%field_name), &
                dstField  = esmf_field, &
@@ -995,22 +873,14 @@ contains
                rc        = localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, file=__FILE__)) then
-                  ! cleanup error already logged; fall through to bail out
-               end if
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
                return
             end if
 
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, file=__FILE__)) then
-                  ! cleanup error already logged; fall through to bail out
-               end if
+               call ESMF_FieldDestroy(esmf_field, rc=localrc)
                return
             end if
 
@@ -1026,7 +896,7 @@ contains
                ! Regrid the next time slice (from same file or next-period file)
                if (multi_file_interp) then
                   call catchem_regrid_field( &
-                     cache     = emis_regrid_cache, &
+                     cache     = regrid_cache, &
                      filename  = trim(filename_next), &
                      varname   = trim(category%fields(ifield)%field_name), &
                      dstField  = esmf_field, &
@@ -1038,7 +908,7 @@ contains
                      rc        = localrc)
                else
                   call catchem_regrid_field( &
-                     cache     = emis_regrid_cache, &
+                     cache     = regrid_cache, &
                      filename  = trim(filename), &
                      varname   = trim(category%fields(ifield)%field_name), &
                      dstField  = esmf_field, &
@@ -1051,11 +921,7 @@ contains
                end if
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                     line=__LINE__, file=__FILE__)) then
-                     ! cleanup error already logged; fall through to bail out
-                  end if
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
                   return
                end if
 
@@ -1076,12 +942,10 @@ contains
             end if
          else
             ! --- 3D field: regrid each vertical level as a 2D slab ---
-            ! Size storage to the file's native vertical extent so nz+1 edge
-            ! fields are held in full (falls back to model nlev if undetected).
             call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
             do klev = 1, nlev_f
                call catchem_regrid_field( &
-                  cache     = emis_regrid_cache, &
+                  cache     = regrid_cache, &
                   filename  = trim(filename), &
                   varname   = trim(category%fields(ifield)%field_name), &
                   dstField  = esmf_field, &
@@ -1094,22 +958,14 @@ contains
                   rc        = localrc)
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                     line=__LINE__, file=__FILE__)) then
-                     ! cleanup error already logged; fall through to bail out
-                  end if
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
                   return
                end if
 
                call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                     line=__LINE__, file=__FILE__)) then
-                     ! cleanup error already logged; fall through to bail out
-                  end if
+                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
                   return
                end if
 
@@ -1123,7 +979,7 @@ contains
 
                   if (multi_file_interp) then
                      call catchem_regrid_field( &
-                        cache     = emis_regrid_cache, &
+                        cache     = regrid_cache, &
                         filename  = trim(filename_next), &
                         varname   = trim(category%fields(ifield)%field_name), &
                         dstField  = esmf_field, &
@@ -1136,7 +992,7 @@ contains
                         rc        = localrc)
                   else
                      call catchem_regrid_field( &
-                        cache     = emis_regrid_cache, &
+                        cache     = regrid_cache, &
                         filename  = trim(filename), &
                         varname   = trim(category%fields(ifield)%field_name), &
                         dstField  = esmf_field, &
@@ -1150,11 +1006,7 @@ contains
                   end if
                   if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                     call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
-                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
-                        line=__LINE__, file=__FILE__)) then
-                        ! cleanup error already logged; fall through to bail out
-                     end if
+                     call ESMF_FieldDestroy(esmf_field, rc=localrc)
                      return
                   end if
 
@@ -1185,8 +1037,15 @@ contains
          end if
 
          category%fields(ifield)%is_loaded = .true.
+#ifdef CATCHEM_TRACE_NUOPC
+         write(*,'(A,A,A,A,A,L1,A,L1)') '[CATCHEM DEBUG] AQMIO regrid read category=', trim(category_name), &
+            ' field=', trim(category%fields(ifield)%field_name), &
+            ' emission_data=', allocated(category%fields(ifield)%emission_data), &
+            ' interp_t1=', allocated(category%fields(ifield)%interp_data_t1)
+         call flush(6)
+#endif
 
-         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+         call ESMF_FieldDestroy(esmf_field, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
@@ -1195,48 +1054,10 @@ contains
 
       write(msg, '(A,A,A)') trim(pName), &
          ': Successfully read & regridded emission data for category ', trim(category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(msg, ESMF_LOGMSG_DEBUG, rc=localrc)
 
    end subroutine catchem_emis_read_regrid
 
-   !> \brief Get emission data for a specific field and location
-   !!
-   !! Returns emission rates for specified field at grid location.
-   !! Provides interface similar to aqm_emis_get.
-   !!
-   !! \param[in] ext_emis_data External emission data container
-   !! \param[in] category_name Name of emission category
-   !! \param[in] field_name Name of emission field
-   !! \param[in] i Longitude index
-   !! \param[in] j Latitude index
-   !! \param[in] k Vertical index (optional)
-   !! \return Emission rate [kg/m2/s]
-   function catchem_emis_get(ext_emis_data, field_name, i, j, k) result(emission_rate)
-      implicit none
-
-      type(ExtEmisDataType), intent(in) :: ext_emis_data
-      character(len=*), intent(in) :: field_name
-      integer, intent(in) :: i, j
-      integer, intent(in), optional :: k
-      real(fp) :: emission_rate
-
-      ! Local variables
-      integer :: kk
-      real(fp) :: rate
-
-      kk = 1
-      if (present(k)) kk = k
-
-      ! Get emission rate from ExtEmisDataType
-      rate = ext_emis_data%get_emission_rate(field_name, i, j, kk)
-
-      ! Apply any additional scaling or processing
-      emission_rate = rate
-
-   end function catchem_emis_get
-
-   !> \brief Apply emission data to chemical state
-   !!
    !> \brief Distribute 2D surface emissions vertically based on specified method
    !!
    !! Based on GOCART2G SulfateDistributeEmissions and distribute_aviation_emissions.
@@ -1262,12 +1083,13 @@ contains
    !! \param[in] met_state Meteorological state (DELP, AIRDEN, PBLH)
    !! \param[in] vertical_dist Distribution method name
    !! \param[in] nx,ny,nz Grid dimensions
-   subroutine distribute_emissions_vertical(emission_flux, met_state, vertical_dist, nx, ny, nz)
-      use Constants, only: g0
+   subroutine distribute_emissions_vertical(emission_flux, delp, airden, pblh, vertical_dist, nx, ny, nz)
       implicit none
 
       real(fp), intent(inout) :: emission_flux(:,:,:)
-      type(MetStateType), intent(in) :: met_state
+      real(fp), intent(in) :: delp(:,:,:)
+      real(fp), intent(in) :: airden(:,:,:)
+      real(fp), intent(in) :: pblh(:,:)
       character(len=*), intent(in) :: vertical_dist
       integer, intent(in) :: nx, ny, nz
 
@@ -1275,6 +1097,7 @@ contains
       integer :: i, j, k
       real(fp) :: ps, p0, p1, z0_col, z1_col, dz, deltaz, deltap
       real(fp) :: p100, p500, pPBL, p9000, p10000, zpbl
+      logical :: found100, found500, foundPBL, found9000, found10000
       real(fp) :: f_dist, emis_sfc
       real(fp) :: p_top, p_bot  ! pressure range for distribution
 
@@ -1283,8 +1106,8 @@ contains
       !   LTO (Landing/Take-Off):     0 -   100 m
       !   CDS (Climb/Descent):      100 -  9000 m
       !   CRS (Cruise):            9000 - 10000 m
-      real(fp), parameter :: AVN_LTO_BOT =     0.0_fp
-      real(fp), parameter :: AVN_LTO_TOP =   100.0_fp
+      ! Only the CDS/CRS tops are needed numerically; the LTO bounds (0-100 m)
+      ! are the p100 level computed below.
       real(fp), parameter :: AVN_CDS_TOP =  9.0e3_fp
       real(fp), parameter :: AVN_CRS_TOP = 10.0e3_fp
 
@@ -1310,57 +1133,62 @@ contains
          do i = 1, nx
             ! Save surface emission value (2D data is stored in k=1 slot)
             emis_sfc = emission_flux(i, j, 1)
-            if (emis_sfc == 0.0_fp) cycle
+            if (is_exact_zero(emis_sfc)) cycle
 
             ! Compute surface pressure by summing all layer thicknesses
             ps = 0.0_fp
             do k = 1, nz
-               ps = ps + met_state%DELP(i, j, k)
+               ps = ps + delp(i, j, k)
             end do
 
             ! Find pressure at target altitudes by walking from surface (k=1) upward (k=nz)
             p0 = ps
             z0_col = 0.0_fp
-            p100   = 0.0_fp
-            p500   = 0.0_fp
-            pPBL   = 0.0_fp
-            p9000  = 0.0_fp
-            p10000 = 0.0_fp
+            p100   = 0.0_fp;  found100   = .false.
+            p500   = 0.0_fp;  found500   = .false.
+            pPBL   = 0.0_fp;  foundPBL   = .false.
+            p9000  = 0.0_fp;  found9000  = .false.
+            p10000 = 0.0_fp;  found10000 = .false.
 
             do k = 1, nz
-               p1 = p0 - met_state%DELP(i, j, k)
-               dz = met_state%DELP(i, j, k) / (met_state%AIRDEN(i, j, k) * g0)
+               p1 = p0 - delp(i, j, k)
+               dz = delp(i, j, k) / (airden(i, j, k) * g0)
                z1_col = z0_col + dz
 
-               if (p100 == 0.0_fp .and. z0_col < 100.0_fp .and. z1_col >= 100.0_fp) then
+               if (.not. found100 .and. z0_col < 100.0_fp .and. z1_col >= 100.0_fp) then
                   deltaz = z1_col - 100.0_fp
-                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  deltap = deltaz * airden(i, j, k) * g0
                   p100 = p1 + deltap
+                  found100 = .true.
                end if
 
-               if (p500 == 0.0_fp .and. z0_col < 500.0_fp .and. z1_col >= 500.0_fp) then
+               if (.not. found500 .and. z0_col < 500.0_fp .and. z1_col >= 500.0_fp) then
                   deltaz = z1_col - 500.0_fp
-                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  deltap = deltaz * airden(i, j, k) * g0
                   p500 = p1 + deltap
+                  found500 = .true.
                end if
 
-               zpbl = max(met_state%PBLH(i, j), 100.0_fp)
-               if (pPBL == 0.0_fp .and. z0_col < zpbl .and. z1_col >= zpbl) then
+               zpbl = max(pblh(i, j), 100.0_fp)
+               if (.not. foundPBL .and. z0_col < zpbl .and. z1_col >= zpbl) then
                   deltaz = z1_col - zpbl
-                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  deltap = deltaz * airden(i, j, k) * g0
                   pPBL = p1 + deltap
+                  foundPBL = .true.
                end if
 
-               if (p9000 == 0.0_fp .and. z0_col < AVN_CDS_TOP .and. z1_col >= AVN_CDS_TOP) then
+               if (.not. found9000 .and. z0_col < AVN_CDS_TOP .and. z1_col >= AVN_CDS_TOP) then
                   deltaz = z1_col - AVN_CDS_TOP
-                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  deltap = deltaz * airden(i, j, k) * g0
                   p9000 = p1 + deltap
+                  found9000 = .true.
                end if
 
-               if (p10000 == 0.0_fp .and. z0_col < AVN_CRS_TOP .and. z1_col >= AVN_CRS_TOP) then
+               if (.not. found10000 .and. z0_col < AVN_CRS_TOP .and. z1_col >= AVN_CRS_TOP) then
                   deltaz = z1_col - AVN_CRS_TOP
-                  deltap = deltaz * met_state%AIRDEN(i, j, k) * g0
+                  deltap = deltaz * airden(i, j, k) * g0
                   p10000 = p1 + deltap
+                  found10000 = .true.
                end if
 
                p0 = p1
@@ -1368,11 +1196,11 @@ contains
             end do
 
             ! Fallback: if target height was never reached, use top-of-atmosphere pressure
-            if (p100   == 0.0_fp) p100   = p0
-            if (p500   == 0.0_fp) p500   = p0
-            if (pPBL   == 0.0_fp) pPBL   = p0
-            if (p9000  == 0.0_fp) p9000  = p0
-            if (p10000 == 0.0_fp) p10000 = p0
+            if (.not. found100)   p100   = p0
+            if (.not. found500)   p500   = p0
+            if (.not. foundPBL)   pPBL   = p0
+            if (.not. found9000)  p9000  = p0
+            if (.not. found10000) p10000 = p0
 
             ! Determine pressure range for this distribution type
             ! p_bot = higher pressure (lower altitude), p_top = lower pressure (higher altitude)
@@ -1419,7 +1247,7 @@ contains
 
             p0 = ps
             do k = 1, nz
-               p1 = p0 - met_state%DELP(i, j, k)
+               p1 = p0 - delp(i, j, k)
 
                ! Compute fractional overlap of this model layer with the target pressure range
                ! p0 = pressure at layer bottom (higher pressure, lower altitude)
@@ -1428,7 +1256,7 @@ contains
 
                if (p0 <= p_bot .and. p1 >= p_top) then
                   ! Layer fully within target range
-                  f_dist = met_state%DELP(i, j, k) / (p_bot - p_top)
+                  f_dist = delp(i, j, k) / (p_bot - p_top)
                else if (p0 > p_bot .and. p1 >= p_top .and. p1 < p_bot) then
                   ! Layer straddles bottom boundary (extends below target)
                   f_dist = (p_bot - max(p1, p_top)) / (p_bot - p_top)
@@ -1458,92 +1286,33 @@ contains
    !! would produce and scaling down if it exceeds max_bb_exttau (30.0).
    !! Follows GOCART2G CAEmission pattern.
    !!
+   !! Placeholder: the Mie-based AOT check is not implemented yet, so the
+   !! factor is 1 everywhere. The inputs are carried so the intended
+   !! interface is visible at the call site.
+   !!
    !! \param[in]  emission_flux  3D emission flux after vertical distribution [kg/m2/s]
    !! \param[in]  scale_factor   Species-specific scale factor from mapping
    !! \param[in]  dt             Time step [s]
-   !! \param[in]  met_state      Meteorological state (for RH)
-   !! \param[in]  chem_state     Chemical state (for MieData)
-   !! \param[in]  species_idx    Species index in chem_state
    !! \param[out] f_bb           2D scaling factor [0..1] per column
    !! \param[out] rc             Return code
    subroutine compute_bb_emission_factor(emission_flux, scale_factor, dt, &
-      met_state, chem_state, species_idx, &
       f_bb, rc)
-      use Constants, only: g0
       implicit none
 
       real(fp), intent(in)    :: emission_flux(:,:,:)
       real(fp), intent(in)    :: scale_factor
       real(fp), intent(in)    :: dt
-      type(MetStateType), intent(in)  :: met_state
-      type(ChemStateType), intent(in) :: chem_state
-      integer, intent(in)    :: species_idx
       real(fp), intent(out)   :: f_bb(:,:)
-      integer, intent(out)   :: rc
+      integer, intent(out)    :: rc
 
-      ! Local variables
-      integer :: nx, ny, nz, i, j, k, mie_idx, ibin
-      real, allocatable :: q_mass(:,:,:), rh_r4(:,:,:), tau(:,:,:)
-      real(fp) :: exttau_bb, cutoff_bb_exttau
-      integer :: localrc
-      character(len=*), parameter :: pName = 'compute_bb_emission_factor'
-      character(len=EMIS_MAXSTR) :: msg
-
-      ! Parameters following GOCART2G CAEmission
-      real(fp), parameter :: max_bb_exttau = 30.0_fp  ! daily maximum AOT from BB
-      integer, parameter  :: nbin = 2  ! hardcoded for carbonaceous aerosols
+      ! Inputs are not used by the placeholder; reference them so the
+      ! signature stays stable without unused-argument warnings (the
+      ! assumed-shape array via size(), scalars via associate).
+      associate(unused_scale => scale_factor, unused_dt => dt); end associate
+      if (size(emission_flux) >= 0) continue
 
       rc = CC_SUCCESS
       f_bb = 1.0_fp
-
-      ! Scale daily max AOT to per-timestep cutoff (GOCART2G: cdt / (24*3600) * max_bb_exttau)
-      cutoff_bb_exttau = (dt / 86400.0_fp) * max_bb_exttau
-
-      ! Check species has Mie data
-      if (.not. allocated(chem_state%SpcMieMap)) return
-      if (species_idx < 1 .or. species_idx > size(chem_state%SpcMieMap)) return
-      mie_idx = chem_state%SpcMieMap(species_idx)
-      if (mie_idx <= 0) return
-
-      nx = size(emission_flux, 1)
-      ny = size(emission_flux, 2)
-      nz = size(emission_flux, 3)
-
-      ! Allocate working arrays as default real (GOCART2G_Mie uses default real)
-      allocate(q_mass(nx, ny, nz), rh_r4(nx, ny, nz), tau(nx, ny, nz))
-
-      ! Relative humidity clamped to [0, 0.99] for Mie table lookup
-      rh_r4 = real(min(max(met_state%RH, 0.0_fp), 0.99_fp))
-
-      ! Column mass from emission [kg/m2]: flux [kg/m2/s] * scale * dt [s]
-      q_mass = real(emission_flux * scale_factor * dt)
-
-      ! Sum extinction optical depth over all Mie bins
-      do j = 1, ny
-         do i = 1, nx
-            exttau_bb = 0.0_fp
-            do ibin = 1, min(nbin, chem_state%MieData(mie_idx)%nbin)
-               call chem_state%MieData(mie_idx)%Query( &
-                  550.0e-9, ibin, q_mass(i:i,j:j,:), rh_r4(i:i,j:j,:), &
-                  tau=tau(i:i,j:j,:), rc=localrc)
-               if (localrc /= CC_SUCCESS) then
-                  write(msg, '(A,A,I0,A,I0)') trim(pName), &
-                     ': Mie Query failed for species ', species_idx, ' bin ', ibin
-                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-                  cycle
-               end if
-               do k = 1, nz
-                  exttau_bb = exttau_bb + real(tau(i,j,k), fp)
-               end do
-            end do
-            if (exttau_bb > cutoff_bb_exttau) then
-               f_bb(i,j) = cutoff_bb_exttau / exttau_bb
-            end if
-         end do
-      end do
-
-      deallocate(q_mass, rh_r4, tau)
-
    end subroutine compute_bb_emission_factor
 
    !> \brief Apply diurnal cycle to biomass burning emissions
@@ -1626,7 +1395,6 @@ contains
       real(fp) :: secs, secs_local, aBoreal, aNonBoreal, alpha
       real(fp) :: fBoreal, fNonBoreal
       integer :: nhms
-      character(len=*), parameter :: pName = 'apply_biomass_diurnal'
 
       rc = CC_SUCCESS
 
@@ -1657,7 +1425,7 @@ contains
       ! Apply diurnal factors depending on latitude
       do j = 1, ny
          do i = 1, nx
-            if (emission_2d(i,j) == 0.0_fp) cycle
+            if (is_exact_zero(emission_2d(i,j))) cycle
 
             ! Find corresponding index in diurnal cycle array
             ! 240 = 24*60*60 / 360 (seconds per degree of longitude)
@@ -1694,70 +1462,136 @@ contains
    !! \param[in] met_state Meteorological state for unit conversion
    !! \param[in] dt Time step [s]
    !! \param[out] rc Return code
-   subroutine catchem_emis_apply(category, icat, global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, rc)
-      use Constants, only: g0, AIRMW  ! Gravitational acceleration and air molecular weight
+   subroutine catchem_emis_apply(category, global_scale, core_ptr, dt, current_time, rc)
+      use catchem_bridge_constants, only: g0, AIRMW
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
-      integer, intent(in) :: icat !category index in the ext_emis_data
       real(fp), intent(in) :: global_scale
-      type(ConfigManagerType), intent(in) :: config_manager
-      type(ErrorManagerType), pointer, intent(inout) :: error_manager
-      type(ChemStateType), intent(inout) :: chem_state
-      type(MetStateType), intent(inout) :: met_state
+      type(c_ptr), intent(in), optional :: core_ptr
       real(fp), intent(in) :: dt
       type(ESMF_Time), intent(in) :: current_time
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc, ifield, ispec, n_mapped_species, species_idx
-      integer :: nx, ny, nz, n_species, i, j, k
-      integer :: nlev_f, kcopy
+      integer :: localrc, ifield, ispec, n_mapped_species
+      integer :: nx, ny, nz, i, j, k
       character(len=EMIS_MAXSTR) :: msg, field_name, category_name
-      character(len=64) :: mapped_species_name  ! Single species name
-      real(fp) :: scale_factor  ! Single scale factor
-      integer :: species_index  ! Single species index in chem_state
+      character(len=64) :: mapped_species_name
+      real(c_double) :: scale_factor
+      integer(c_int) :: species_index
       character(len=*), parameter :: pName = 'catchem_emis_apply'
 
-      ! Arrays for full domain processing
-      real(fp), allocatable :: concentrations(:,:,:,:)  ! (nx,ny,nz,n_species)
-      real(fp), allocatable :: emission_flux(:,:,:)       ! (nx,ny,nz) - emission rate [kg/m2/s]
-      real(fp), allocatable :: species_tendency(:,:,:)  ! (nx,ny,nz) - species tendency [mol/mol/s]
-      real(fp), allocatable :: f_bb(:,:)                 ! (nx,ny) - BB emission scaling factor
-      real(fp) :: converter
+      real(fp), allocatable :: emission_flux(:,:,:)
+      real(c_double) :: converter, dqa
+      logical :: is_gas
+
+      type(c_ptr) :: state_ptr, c_conc, c_airden, c_pedge, c_pblh, c_lon, c_lat
+      real(c_double), pointer :: f_conc(:,:,:)
+      real(c_double), pointer :: f_airden(:,:,:)
+      real(c_double), pointer :: f_pedge(:,:,:)
+      real(c_double), pointer :: f_pblh(:,:)
+      real(c_double), pointer :: f_lon(:,:)
+      real(c_double), pointer :: f_lat(:,:)
+      real(fp), allocatable :: f_delp(:,:,:)
+      real(fp), allocatable :: f_bb(:,:)
+
+      interface
+         type(c_ptr) function catchem_core_get_state_manager(core_ptr) bind(C, name="catchem_core_get_state_manager")
+            import :: c_ptr
+            type(c_ptr), value :: core_ptr
+         end function
+         integer(c_int) function catchem_state_is_species_gas(state_ptr, index) bind(C, name="catchem_state_is_species_gas")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index
+         end function
+         real(c_double) function catchem_state_get_species_mw(state_ptr, index) bind(C, name="catchem_state_get_species_mw")
+            import :: c_ptr, c_int, c_double
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index
+         end function
+         type(c_ptr) function catchem_state_get_pointer_2d(state_ptr, name) bind(C, name="catchem_state_get_pointer_2d")
+            import :: c_ptr, c_char
+            type(c_ptr), value :: state_ptr
+            character(kind=c_char), intent(in) :: name(*)
+         end function
+         type(c_ptr) function catchem_state_get_pointer_3d(state_ptr, name) bind(C, name="catchem_state_get_pointer_3d")
+            import :: c_ptr, c_char
+            type(c_ptr), value :: state_ptr
+            character(kind=c_char), intent(in) :: name(*)
+         end function
+         integer(c_int) function catchem_state_get_species_conc_pointer_checked( &
+            state_ptr, index, dim1, dim2, ptr_out) bind(C, name="catchem_state_get_species_conc_pointer_checked")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index, dim1, dim2
+            type(c_ptr), intent(out) :: ptr_out
+         end function
+         integer(c_int) function catchem_state_mark_chem_host_modified(state_ptr) &
+            bind(C, name="catchem_state_mark_chem_host_modified")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+         end function
+      end interface
 
       rc = CC_SUCCESS
+      if (.not. present(core_ptr)) return
+      if (.not. c_associated(core_ptr)) return
 
-      ! Point/volcanic categories inject directly into the 3D column at their
-      ! mapped grid cells and plume altitude; dispatch to the dedicated handler.
       if (is_point_category(category)) then
-         call catchem_emis_apply_points(category, icat, global_scale, config_manager, &
-            chem_state, met_state, dt, rc)
+         call catchem_emis_apply_points(category, global_scale, core_ptr, dt, rc)
          return
       end if
 
-      ! Get dimensions
-      nx = size(met_state%DELP, 1)
-      ny = size(met_state%DELP, 2)
-      nz = size(met_state%DELP, 3)
-      n_species = chem_state%nSpecies
+      state_ptr = catchem_core_get_state_manager(core_ptr)
+      if (.not. c_associated(state_ptr)) return
 
-      ! Get current concentrations for all species
-      allocate(concentrations(nx, ny, nz, n_species))
-      call chem_state%get_all_concentrations(concentrations, localrc)
-      if (localrc /= CC_SUCCESS) then
-         write(msg, '(A,A)') trim(pName), ': Failed to get concentrations from chem_state'
+      ! Get dimensions from the first loaded field
+      nx = 0; ny = 0; nz = 0
+      do ifield = 1, category%n_fields
+         if (category%fields(ifield)%is_loaded .and. allocated(category%fields(ifield)%emission_data)) then
+            nx = size(category%fields(ifield)%emission_data, 1)
+            ny = size(category%fields(ifield)%emission_data, 2)
+            nz = size(category%fields(ifield)%emission_data, 3)
+            exit
+         end if
+      end do
+
+      if (nx == 0 .or. ny == 0 .or. nz == 0) return
+
+      ! Get meteorological state pointers
+      c_pedge = catchem_state_get_pointer_3d(state_ptr, 'PEDGE' // c_null_char)
+      c_airden = catchem_state_get_pointer_3d(state_ptr, 'AIRDEN_DRY' // c_null_char)
+      c_pblh = catchem_state_get_pointer_2d(state_ptr, 'PBLH' // c_null_char)
+      c_lon = catchem_state_get_pointer_2d(state_ptr, 'LON' // c_null_char)
+      c_lat = catchem_state_get_pointer_2d(state_ptr, 'LAT' // c_null_char)
+
+      if (.not. c_associated(c_pedge) .or. .not. c_associated(c_airden)) then
+         write(msg, '(A,A)') trim(pName), ': Failed to get PEDGE or AIRDEN_DRY pointers'
          call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
          rc = CC_FAILURE
-         deallocate(concentrations)
          return
       end if
 
-      ! Allocate working arrays
-      allocate(emission_flux(nx, ny, nz))
-      allocate(species_tendency(nx, ny, nz))
+      call c_f_pointer(c_pedge, f_pedge, [nx, ny, nz+1])
+      call c_f_pointer(c_airden, f_airden, [nx, ny, nz])
+      if (c_associated(c_pblh)) call c_f_pointer(c_pblh, f_pblh, [nx, ny])
+      if (c_associated(c_lon)) call c_f_pointer(c_lon, f_lon, [nx, ny])
+      if (c_associated(c_lat)) call c_f_pointer(c_lat, f_lat, [nx, ny])
 
-      ! Get category name
+      allocate(emission_flux(nx, ny, nz))
+      allocate(f_delp(nx, ny, nz))
+
+      ! Compute f_delp from f_pedge (PEDGE goes from top to surface)
+      do k = 1, nz
+         do j = 1, ny
+            do i = 1, nx
+               f_delp(i, j, k) = abs(f_pedge(i, j, k) - f_pedge(i, j, k+1))
+            end do
+         end do
+      end do
+
       category_name = trim(category%category_name)
 
       ! Loop through all fields in this category
@@ -1765,225 +1599,121 @@ contains
          if (.not. category%fields(ifield)%is_loaded .or. .not. allocated(category%fields(ifield)%emission_data)) cycle
 
          field_name = trim(category%fields(ifield)%field_name)
-
-         ! Optionally remap a native-level 3D field (e.g. a 127-level oxidant)
-         ! onto the model nz grid by linear-in-pressure interpolation.  This
-         ! (re)builds emission_data_model each timestep from the current PS/PMID
-         ! and the (possibly time-blended) emission_data, so the field is used
-         ! and diagnosed on the model grid rather than truncated.
-         if (category%vertical_interp .and. .not. category%fields(ifield)%is_2d .and. &
-            size(category%fields(ifield)%emission_data, 3) /= nz) then
-            call catchem_emis_vinterp_field(category, category%fields(ifield), met_state, nz, localrc)
-         else if (allocated(category%fields(ifield)%emission_data_model)) then
-            ! No longer needed (config changed or size now matches) -> drop it.
-            deallocate(category%fields(ifield)%emission_data_model)
-         end if
-
-         ! Get emission data for entire domain [kg/m2/s]
-         ! Prefer the model-grid buffer when a pressure remap was performed;
-         ! otherwise copy up to the model's nz levels into the working buffer.
-         ! Fields read at their native vertical size (e.g. nz+1 edge met fields)
-         ! can have more levels than nz; those are passed straight from
-         ! emission_data in the MET_ 3D branch below, so a size-safe partial copy
-         ! here keeps the chemistry/2D paths (which operate on nz) valid.
-         if (allocated(category%fields(ifield)%emission_data_model)) then
-            emission_flux(:,:,:) = category%fields(ifield)%emission_data_model(:,:,:,1)
-         else
-            nlev_f = size(category%fields(ifield)%emission_data, 3)
-            kcopy = min(nz, nlev_f)
-            emission_flux(:,:,:) = 0.0_fp
-            emission_flux(:,:,1:kcopy) = category%fields(ifield)%emission_data(:,:,1:kcopy,1)
-         end if
-
-         ! Apply category and global scaling factors
+         emission_flux(:,:,:) = category%fields(ifield)%emission_data(:,:,:,1)
          emission_flux = emission_flux * category%global_scale * global_scale
 
-         ! Apply diurnal biomass burning cycle if enabled (before vertical distribution)
-         if (category%diurnal_bb) then
-            call apply_biomass_diurnal(emission_flux(:,:,1), met_state%LON, met_state%LAT, &
-               current_time, nx, ny, localrc)
+         if (category%diurnal_bb .and. c_associated(c_lon) .and. c_associated(c_lat)) then
+            call apply_biomass_diurnal(emission_flux(:,:,1), real(f_lon, fp), real(f_lat, fp), current_time, nx, ny, localrc)
          end if
 
-         ! Apply vertical distribution if configured (redistributes 2D surface emission to 3D)
          if (trim(category%vertical_dist) /= 'none' .and. trim(category%vertical_dist) /= '') then
-            call distribute_emissions_vertical(emission_flux, met_state, category%vertical_dist, nx, ny, nz)
+            if (c_associated(c_pblh)) then
+               call distribute_emissions_vertical(emission_flux, f_delp, real(f_airden, fp), real(f_pblh, fp), &
+                  category%vertical_dist, nx, ny, nz)
+            else
+               write(msg, '(A,A)') trim(pName), ': Missing PBLH for vertical distribution'
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            end if
          end if
 
-         ! Direct mapping access using same indices (one-to-one correspondence)
-         ! Add sanity checks to ensure category and field names match
-         if (icat > config_manager%config_data%emission_mapping%n_categories) then
-            write(msg, '(A,A,I0,A,I0)') trim(pName), ': Category index out of bounds: ', &
-               icat, ' > ', config_manager%config_data%emission_mapping%n_categories
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-            cycle
-         end if
+         n_mapped_species = catchem_config_get_emission_species_map_count(core_ptr, trim(category_name) // c_null_char, trim(field_name) // c_null_char)
 
-         if (ifield > config_manager%config_data%emission_mapping%categories(icat)%n_emission_species) then
-            write(msg, '(A,A,I0,A,I0)') trim(pName), ': Field index out of bounds: ', &
-               ifield, ' > ', config_manager%config_data%emission_mapping%categories(icat)%n_emission_species
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-            cycle
-         end if
-
-         ! Sanity check: verify category names match
-         if (trim(category_name) /= trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)) then
-            write(msg, '(A,A,A,A,A)') trim(pName), ': Category name mismatch: ', &
-               trim(category_name), ' != ', &
-               trim(config_manager%config_data%emission_mapping%categories(icat)%category_name)
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-            cycle
-         end if
-
-         ! Sanity check: verify field names match
-         if (trim(field_name) /= trim(config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%emission_field)) then
-            write(msg, '(A,A,A,A,A)') trim(pName), ': Field name mismatch: ', &
-               trim(field_name), ' != ', &
-               trim(config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%emission_field)
-            call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-            cycle
-         end if
-
-         ! Direct access to species mapping data (no search needed)
-         n_mapped_species = config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%n_mappings
-
-         ! Apply emissions to each mapped species
          do ispec = 1, n_mapped_species
-            ! Get mapping data directly for this species
-            mapped_species_name = config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%map(ispec)
-            scale_factor = config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%scale(ispec)
-            species_index = config_manager%config_data%emission_mapping%categories(icat)%species_mappings(ifield)%index(ispec)
+            call catchem_config_get_emission_species_map_at(core_ptr, trim(category_name) // c_null_char, trim(field_name) // c_null_char, ispec - 1, &
+               mapped_species_name, 64_c_int, scale_factor, species_index)
+            call clean_c_string(mapped_species_name)
 
-            if (len_trim(mapped_species_name) == 0) cycle
-
-            ! Get species index from mapping (or lookup if fallback was used)
-            species_idx = species_index
-            if (species_idx <= 0) then
-               !check if this is to map to metstate variable since we read in some met variables from emissin reading too.
-               !In the emission map yaml file, if the mapped_species_name starts with "MET_" or "met_", we will treat it as a met variable
-               !and set the met state instead of chem state. The rest of the name after "MET_" should match the field name in met state.
+            if (species_index <= 0) then
+               ! Try MET alias if it maps to MET_
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
-                  ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
-                  if (category%fields(ifield)%is_2d) then
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
-                  else if (allocated(category%fields(ifield)%emission_data_model) .or. &
-                     size(category%fields(ifield)%emission_data, 3) == nz) then
-                     ! Model-grid data: either pressure-interpolated into
-                     ! emission_data_model (already in emission_flux above) or a
-                     ! native nz-level field.  Both are nz-sized in emission_flux.
-                     call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
-                  else
-                     ! Native-size 3D met field (e.g. nz+1 edge fields like
-                     ! PFILSAN/PFLLSAN): pass the full column straight from
-                     ! emission_data so set_field copies every level verbatim,
-                     ! matching the coupled path.  Apply the same category/global
-                     ! scaling that emission_flux received above.
-                     call met_state%set_field(trim(mapped_species_name(5:)), &
-                        category%fields(ifield)%emission_data(:,:,:,1) &
-                        * category%global_scale * global_scale * scale_factor, &
-                        error_manager, localrc)
-                  end if
-                  if (localrc /= CC_SUCCESS) then
-                     write(msg, '(A,A)') trim(pName), ': Failed to set met_state'
-                     call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-                     rc = CC_FAILURE
-                  end if
-                  cycle !do not move to chemstate below
-               end if
-               ! Fallback case - need to lookup species index
-               species_idx = chem_state%find_species(trim(mapped_species_name))
-               if (species_idx <= 0) then
-                  write(msg, '(A,A,A)') trim(pName), ': Species not found in chem_state: ', &
-                     trim(mapped_species_name)
-                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+                  ! Meteorological fields are already bound in StateManager during NUOPC import
                   cycle
                end if
+               cycle
             end if
 
-            ! Unit conversion factor: emission flux (kg/m2/s) -> mass mixing ratio (kg/kg) -> model concentration units
-            !   Step 1 (in loop below): kg/m2/s * dt[s] * g0[m/s2] / DELP[Pa] = kg/kg  (mass mixing ratio)
-            !   Step 2 (here):           kg/kg * converter = final model units
-            ! For gas species:    converter = AIRMW/MW_species * 1e6 => kg/kg -> ppmv (parts per million by volume)
-            ! For aerosol species: converter = 1e9                  => kg/kg -> ug/kg (micrograms per kilogram)
-            if (chem_state%ChemSpecies(species_idx)%is_gas) then
-               converter = AIRMW / chem_state%ChemSpecies(species_idx)%mw_g * 1.0e6_fp
+            if (catchem_state_get_species_conc_pointer_checked(state_ptr, species_index, &
+               int(nx * ny, c_int), int(nz, c_int), c_conc) /= 0_c_int) then
+               rc = CC_FAILURE
+               return
+            end if
+
+            call c_f_pointer(c_conc, f_conc, [nx, ny, nz])
+
+            is_gas = (catchem_state_is_species_gas(state_ptr, species_index) /= 0)
+
+            if (is_gas) then
+               converter = AIRMW / catchem_state_get_species_mw(state_ptr, species_index) * 1.0e6_c_double
             else
-               converter = 1.0e9_fp
+               converter = 1.0e9_c_double
             end if
-            species_tendency = 0.0_fp
 
-            do j = 1, ny
-               do i = 1, nx
+            ! Apply BB emission factor if needed (only OC/BC aerosols)
+            if (category%use_oc_fbb .and. .not. is_gas .and. &
+               (mapped_species_name(1:2) == 'oc' .or. mapped_species_name(1:2) == 'OC' .or. &
+               mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
+               if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
+               call compute_bb_emission_factor(emission_flux, real(scale_factor, fp), dt, f_bb, localrc)
+               if (localrc == CC_SUCCESS) then
                   do k = 1, nz
+                     emission_flux(:,:,k) = emission_flux(:,:,k) * f_bb(:,:)
+                  end do
+               end if
+            end if
+
+            ! Preserve the legacy CATChem replacement contract.  The legacy
+            ! adapter constructed a zeroed full-domain tendency and assigned
+            ! it wholesale for a "replace" category.  Clearing first is
+            ! therefore required even when a source cell is zero, missing, or
+            ! rejected (for example an invalid ocean-DMS climatology value).
+            ! Without this, non-advected inputs such as dms_in retain stale
+            ! values in the persistent unified chemistry buffer and continue
+            ! to drive subsequent process timesteps.
+            if (trim(category%apply_method) == 'replace') f_conc = 0.0_c_double
+
+            do k = 1, nz
+               do j = 1, ny
+                  do i = 1, nx
                      if (emission_flux(i,j,k) > 0.0_fp) then
                         select case (trim(category%fields(ifield)%units))
                          case('nmol/l', 'nmol/L', 'NMOL/L')
-                           ! Special case for DMS read in with nmol/L unit (Note: this is in water)
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor
+                           ! Reject unmasked fill-value/land contamination before it reaches DMSemission.
+                           if (.not. ieee_is_finite(emission_flux(i,j,k)) .or. &
+                              emission_flux(i,j,k) > DMS_OCEAN_NMOLL_MAX) cycle
+                           dqa = emission_flux(i,j,k) * scale_factor
                          case ('1/cm3', '1/cm^3', '#/cm3', 'molec/cm3')
-                           ! Special case for GMI oxidants OH which is in #/cm3 in the file (TODO:make sure the input file unit).
-                           ! convert from #/cm3 to ppm to keep consistent with other species units
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / met_state%AIRDEN(i,j,k) * 1.e3
+                           dqa = emission_flux(i,j,k) * scale_factor / AVO * AIRMW / f_airden(i,j,k) * 1.e3_c_double
                          case ('mol/mol', 'MOL/MOL')
-                           ! GMI NO3 and H2O2 are in mol/mol volume mixing ratio. Change to ppm
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor * 1.e6_fp
+                           dqa = emission_flux(i,j,k) * scale_factor * 1.e6_c_double
                          case ('kg/m2/s', 'KG/M2/S')
-                           ! Unit chain: [kg/m2/s] * scale * dt[s] * g0[m/s2] / DELP[Pa] * converter
-                           !           = [kg/m2/s] * [s] * [m/s2] / [kg/m/s2 / m2] * converter
-                           !           = [kg/kg] * converter
-                           !           = [ug/kg] for aerosols (converter=1e9)
-                           !           = [ppmv]  for gases    (converter=AIRMW/MW*1e6)
-
-                           !safety check following GOCART
                            if (1.01_fp * emission_flux(i,j,k) / category%global_scale / global_scale > EMIS_ACCEPT) cycle
-                           species_tendency(i,j,k) = emission_flux(i,j,k) * scale_factor *dt * g0 / met_state%DELP(i,j,k) * converter
+                           dqa = emission_flux(i,j,k) * scale_factor * dt * g0 / f_delp(i,j,k) * converter
                          case default
                            write(msg, '(A,A,A)') trim(pName), ': Unrecognized emission field units: ', &
                               trim(category%fields(ifield)%units)
                            call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+                           dqa = 0.0_c_double
                         end select
+
+                        if (trim(category%apply_method) == 'replace') then
+                           f_conc(i,j,k) = dqa
+                        else
+                           f_conc(i,j,k) = f_conc(i,j,k) + dqa
+                        end if
                      end if
                   end do
                end do
             end do
 
-            ! Add tendency to concentrations
-            ! Apply Mie-based BB emission scaling factor if enabled
-            ! Only for OC and BrC species (matching GOCART: prefix=='OC' or 'BR')
-            if (category%use_oc_fbb .and. &
-               .not. chem_state%ChemSpecies(species_idx)%is_gas .and. &
-               (mapped_species_name(1:2) == 'oc' .or. mapped_species_name(1:2) == 'OC' .or. &
-               mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
-               if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
-               call compute_bb_emission_factor(emission_flux, scale_factor, dt, &
-                  met_state, chem_state, species_idx, f_bb, localrc)
-               if (localrc == CC_SUCCESS) then
-                  do k = 1, nz
-                     species_tendency(:,:,k) = species_tendency(:,:,k) * f_bb(:,:)
-                  end do
-               end if
-            end if
-            ! Apply tendency: 'add' accumulates, 'replace' overwrites concentration
-            if (trim(category%apply_method) == 'replace') then
-               concentrations(:,:,:,species_idx) = species_tendency(:,:,:)
-            else
-               concentrations(:,:,:,species_idx) = concentrations(:,:,:,species_idx) + species_tendency(:,:,:)
-            end if
+         end do
+      end do
 
-         end do !end of mapped species loop
-
-      end do ! end of field loop
-
-
-      ! Set updated concentrations back to chemical state
-      call chem_state%set_all_concentrations(concentrations, localrc)
-      if (localrc /= CC_SUCCESS) then
-         write(msg, '(A,A)') trim(pName), ': Failed to set concentrations in chem_state'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+      if (catchem_state_mark_chem_host_modified(state_ptr) /= 0_c_int) then
          rc = CC_FAILURE
+         return
       end if
 
-      ! Clean up
-      deallocate(concentrations, emission_flux, species_tendency)
+      deallocate(f_delp, emission_flux)
       if (allocated(f_bb)) deallocate(f_bb)
    end subroutine catchem_emis_apply
 
@@ -2185,7 +1915,7 @@ contains
       deallocate(tlat, tlon, temis, tbot, ttop)
 
       write(msg, '(A,I0,A,A)') trim(pName)//': read ', npts, ' point sources from ', trim(filename)
-      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_DEBUG, rc=localrc)
 
    end subroutine catchem_emis_read_points
 
@@ -2220,7 +1950,6 @@ contains
       real(ESMF_KIND_R8), allocatable :: locmind(:), glomind(:), locpet(:), glopet(:)
       integer, allocatable :: lmi(:), lmj(:)
       real(fp), parameter :: dtol = 1.0e-9_fp
-      character(len=*), parameter :: pName = 'catchem_map_points_to_grid'
 
       rc = CC_SUCCESS
 
@@ -2306,146 +2035,225 @@ contains
    !! rate (pemis) is taken in the file's native units [kg/s]; any mass conversion
    !! to the target species (e.g. kg S/s -> kg SO2/s, scale=2.0) is supplied through
    !! the species-map scale factor, exactly as for gridded emissions.
-   subroutine catchem_emis_apply_points(category, icat, global_scale, config_manager, &
-      chem_state, met_state, dt, rc)
-      use Constants, only: g0, AIRMW
+   subroutine catchem_emis_apply_points(category, global_scale, core_ptr, dt, rc)
+      use catchem_bridge_constants, only: g0, AIRMW
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
-      integer, intent(in) :: icat
       real(fp), intent(in) :: global_scale
-      type(ConfigManagerType), intent(in) :: config_manager
-      type(ChemStateType), intent(inout) :: chem_state
-      type(MetStateType), intent(inout) :: met_state
+      type(c_ptr), intent(in) :: core_ptr
       real(fp), intent(in) :: dt
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc, nx, ny, nz, n_species, ifield, ispec, it, k, i, j
-      integer :: npts, species_idx, ksel, n_mapped
-      real(fp), allocatable :: concentrations(:,:,:,:)
-      real(fp) :: area, fluxcol, hlow, hup, dzv, zb, zt, ovlp, frac
-      real(fp) :: converter, scale_factor, dmr
+      integer :: localrc, nx, ny, nz, ifield, ispec, it, k, i, j
+      integer :: npts, ksel, n_mapped_species
+      real(c_double) :: area, fluxcol, hlow, hup, dzv, zb, zt, ovlp, frac
+      real(c_double) :: converter, scale_factor, dmr
       character(len=64) :: mapped_species_name
-      character(len=EMIS_MAXSTR) :: msg
+      character(len=EMIS_MAXSTR) :: category_name, field_name
       character(len=*), parameter :: pName = 'catchem_emis_apply_points'
 
+      integer(c_int) :: species_index
+      logical :: is_gas
+
+      type(c_ptr) :: state_ptr, c_conc, c_area, c_pedge, c_z, c_lat, c_lon
+      real(c_double), pointer :: f_conc(:,:,:)
+      real(c_double), pointer :: f_area(:,:)
+      real(c_double), pointer :: f_pedge(:,:,:)
+      real(c_double), pointer :: f_z(:,:,:)
+      real(c_double), pointer :: f_lat(:,:)
+      real(c_double), pointer :: f_lon(:,:)
+      real(fp), allocatable :: f_delp(:,:,:)
+
+      interface
+         type(c_ptr) function catchem_core_get_state_manager(core_ptr) bind(C, name="catchem_core_get_state_manager")
+            import :: c_ptr
+            type(c_ptr), value :: core_ptr
+         end function
+         integer(c_int) function catchem_state_is_species_gas(state_ptr, index) bind(C, name="catchem_state_is_species_gas")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index
+         end function
+         real(c_double) function catchem_state_get_species_mw(state_ptr, index) bind(C, name="catchem_state_get_species_mw")
+            import :: c_ptr, c_int, c_double
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index
+         end function
+         type(c_ptr) function catchem_state_get_pointer_2d(state_ptr, name) bind(C, name="catchem_state_get_pointer_2d")
+            import :: c_ptr, c_char
+            type(c_ptr), value :: state_ptr
+            character(kind=c_char), intent(in) :: name(*)
+         end function
+         type(c_ptr) function catchem_state_get_pointer_3d(state_ptr, name) bind(C, name="catchem_state_get_pointer_3d")
+            import :: c_ptr, c_char
+            type(c_ptr), value :: state_ptr
+            character(kind=c_char), intent(in) :: name(*)
+         end function
+         integer(c_int) function catchem_state_get_species_conc_pointer_checked( &
+            state_ptr, index, dim1, dim2, ptr_out) bind(C, name="catchem_state_get_species_conc_pointer_checked")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index, dim1, dim2
+            type(c_ptr), intent(out) :: ptr_out
+         end function
+         integer(c_int) function catchem_state_mark_chem_host_modified(state_ptr) &
+            bind(C, name="catchem_state_mark_chem_host_modified")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+         end function
+         integer(c_int) function catchem_state_get_nx(state_ptr) bind(C, name="catchem_state_get_nx")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+         end function
+         integer(c_int) function catchem_state_get_ny(state_ptr) bind(C, name="catchem_state_get_ny")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+         end function
+         integer(c_int) function catchem_state_get_nz(state_ptr) bind(C, name="catchem_state_get_nz")
+            import :: c_ptr, c_int
+            type(c_ptr), value :: state_ptr
+         end function
+      end interface
+
       rc = CC_SUCCESS
+      if (.not. c_associated(core_ptr)) return
 
-      nx = size(met_state%DELP, 1)
-      ny = size(met_state%DELP, 2)
-      nz = size(met_state%DELP, 3)
-      n_species = chem_state%nSpecies
+      state_ptr = catchem_core_get_state_manager(core_ptr)
+      if (.not. c_associated(state_ptr)) return
 
-      ! Map points to the local grid once per read (ip is dropped on each re-read)
+      nx = catchem_state_get_nx(state_ptr)
+      ny = catchem_state_get_ny(state_ptr)
+      nz = catchem_state_get_nz(state_ptr)
+
+      c_lat = catchem_state_get_pointer_2d(state_ptr, 'LAT' // c_null_char)
+      c_lon = catchem_state_get_pointer_2d(state_ptr, 'LON' // c_null_char)
+      c_area = catchem_state_get_pointer_2d(state_ptr, 'AREA_M2' // c_null_char)
+      c_pedge = catchem_state_get_pointer_3d(state_ptr, 'PEDGE' // c_null_char)
+      c_z = catchem_state_get_pointer_3d(state_ptr, 'Z' // c_null_char)
+
+      if (.not. c_associated(c_lat) .or. .not. c_associated(c_lon) .or. .not. c_associated(c_area) .or. &
+         .not. c_associated(c_pedge) .or. .not. c_associated(c_z)) then
+         call ESMF_LogWrite(trim(pName)//': Missing pointers for points emission.', ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
+      end if
+
+      call c_f_pointer(c_lat, f_lat, [nx, ny])
+      call c_f_pointer(c_lon, f_lon, [nx, ny])
+      call c_f_pointer(c_area, f_area, [nx, ny])
+      call c_f_pointer(c_pedge, f_pedge, [nx, ny, nz+1])
+      call c_f_pointer(c_z, f_z, [nx, ny, nz+1])
+
+      allocate(f_delp(nx, ny, nz))
+      do k = 1, nz
+         do j = 1, ny
+            do i = 1, nx
+               f_delp(i, j, k) = abs(f_pedge(i, j, k) - f_pedge(i, j, k+1))
+            end do
+         end do
+      end do
+
+      ! Map points to the local grid once per read
       do ifield = 1, category%n_fields
          if (category%fields(ifield)%npts <= 0) cycle
          if (.not. allocated(category%fields(ifield)%ip)) then
             call catchem_map_points_to_grid(category%fields(ifield)%lat, &
                category%fields(ifield)%lon, category%fields(ifield)%npts, &
-               met_state%LAT, met_state%LON, category%fields(ifield)%ip, &
+               real(f_lat, fp), real(f_lon, fp), category%fields(ifield)%ip, &
                category%fields(ifield)%jp, localrc)
             if (localrc /= CC_SUCCESS) then
-               call ESMF_LogWrite(trim(pName)//': point-to-grid mapping failed', &
-                  ESMF_LOGMSG_ERROR, rc=localrc)
+               call ESMF_LogWrite(trim(pName)//': point-to-grid mapping failed', ESMF_LOGMSG_ERROR, rc=localrc)
                rc = CC_FAILURE
                return
             end if
          end if
       end do
 
-      allocate(concentrations(nx, ny, nz, n_species))
-      call chem_state%get_all_concentrations(concentrations, localrc)
-      if (localrc /= CC_SUCCESS) then
-         call ESMF_LogWrite(trim(pName)//': failed to get concentrations', &
-            ESMF_LOGMSG_ERROR, rc=localrc)
-         rc = CC_FAILURE
-         deallocate(concentrations)
-         return
-      end if
+      category_name = trim(category%category_name)
 
       do ifield = 1, category%n_fields
          if (.not. category%fields(ifield)%is_loaded) cycle
          npts = category%fields(ifield)%npts
          if (npts <= 0) cycle
 
-         n_mapped = config_manager%config_data%emission_mapping% &
-            categories(icat)%species_mappings(ifield)%n_mappings
+         field_name = trim(category%fields(ifield)%field_name)
+         n_mapped_species = catchem_config_get_emission_species_map_count(core_ptr, trim(category_name) // c_null_char, trim(field_name) // c_null_char)
 
-         do ispec = 1, n_mapped
-            mapped_species_name = config_manager%config_data%emission_mapping% &
-               categories(icat)%species_mappings(ifield)%map(ispec)
-            scale_factor = config_manager%config_data%emission_mapping% &
-               categories(icat)%species_mappings(ifield)%scale(ispec)
-            species_idx = config_manager%config_data%emission_mapping% &
-               categories(icat)%species_mappings(ifield)%index(ispec)
+         do ispec = 1, n_mapped_species
+            call catchem_config_get_emission_species_map_at(core_ptr, trim(category_name) // c_null_char, trim(field_name) // c_null_char, ispec - 1, &
+               mapped_species_name, 64_c_int, scale_factor, species_index)
+            call clean_c_string(mapped_species_name)
 
-            if (len_trim(mapped_species_name) == 0) cycle
-            if (species_idx <= 0) species_idx = chem_state%find_species(trim(mapped_species_name))
-            if (species_idx <= 0) then
-               call ESMF_LogWrite(trim(pName)//': species not found: '// &
-                  trim(mapped_species_name), ESMF_LOGMSG_WARNING, rc=localrc)
-               cycle
+            if (species_index <= 0) cycle
+
+            if (catchem_state_get_species_conc_pointer_checked(state_ptr, species_index, &
+               int(nx * ny, c_int), int(nz, c_int), c_conc) /= 0_c_int) then
+               rc = CC_FAILURE
+               return
             end if
 
-            ! kg/kg -> model units (ppmv for gases, ug/kg for aerosols)
-            if (chem_state%ChemSpecies(species_idx)%is_gas) then
-               converter = AIRMW / chem_state%ChemSpecies(species_idx)%mw_g * 1.0e6_fp
+            call c_f_pointer(c_conc, f_conc, [nx, ny, nz])
+
+            is_gas = (catchem_state_is_species_gas(state_ptr, species_index) /= 0)
+
+            if (is_gas) then
+               converter = AIRMW / catchem_state_get_species_mw(state_ptr, species_index) * 1.0e6_c_double
             else
-               converter = 1.0e9_fp
+               converter = 1.0e9_c_double
             end if
 
             do it = 1, npts
                i = category%fields(ifield)%ip(it)
                j = category%fields(ifield)%jp(it)
-               if (i < 1 .or. j < 1) cycle      ! not owned by this PE
+               ! The distributed locator assigns each global point to exactly
+               ! one PET and deliberately stores (-1,-1) on every non-owner.
+               ! Those points are not errors on this local tile.
+               if (i == -1 .and. j == -1) cycle
+               if (i < 1 .or. i > nx .or. j < 1 .or. j > ny) then
+                  call ESMF_LogWrite(trim(pName)//': invalid local point-source mapping', &
+                     ESMF_LOGMSG_ERROR, rc=localrc)
+                  rc = CC_FAILURE
+                  return
+               end if
 
-               area = met_state%AREA_M2(i,j)
-               if (area <= 1.0_fp) cycle
+               area = f_area(i,j)
+               if (area <= 1.0_c_double) cycle
 
-               ! Column-integrated flux [kg species/m2/s]: raw per-point rate
-               ! divided by cell area, then category + global + species-map scaling
-               ! (the map scale converts file units to the target species mass).
                fluxcol = category%fields(ifield)%pemis(it) / area * &
                   scale_factor * category%global_scale * global_scale
-               if (fluxcol <= 0.0_fp) cycle
+               if (fluxcol <= 0.0_c_double) cycle
 
                hlow = category%fields(ifield)%pbot(it)
                hup  = category%fields(ifield)%ptop(it)
 
                if (hup > hlow) then
-                  ! Explosive plume: emit in the top third of the cloud column
-                  hlow = hup - (hup - hlow) / 3.0_fp
-                  dzv  = max(hup - hlow, tiny(1.0_fp))
+                  ! Explosive plume
+                  hlow = hup - (hup - hlow) / 3.0_c_double
+                  dzv  = max(hup - hlow, tiny(1.0_c_double))
                   do k = 1, nz
-                     zb = min(met_state%Z(i,j,k), met_state%Z(i,j,k+1))
-                     zt = max(met_state%Z(i,j,k), met_state%Z(i,j,k+1))
+                     zb = min(f_z(i,j,k), f_z(i,j,k+1))
+                     zt = max(f_z(i,j,k), f_z(i,j,k+1))
                      ovlp = min(zt, hup) - max(zb, hlow)
-                     if (ovlp <= 0.0_fp) cycle
+                     if (ovlp <= 0.0_c_double) cycle
                      frac = ovlp / dzv
-                     dmr = fluxcol * frac * dt * g0 / met_state%DELP(i,j,k)
-                     concentrations(i,j,k,species_idx) = &
-                        concentrations(i,j,k,species_idx) + dmr * converter
+                     dmr = fluxcol * frac * dt * g0 / f_delp(i,j,k)
+                     f_conc(i,j,k) = f_conc(i,j,k) + dmr * converter
                   end do
                else
-                  ! Degassing: deposit all mass in the layer containing the vent
-                  ksel = find_point_layer(met_state%Z(i,j,:), hlow, nz)
-                  dmr = fluxcol * dt * g0 / met_state%DELP(i,j,ksel)
-                  concentrations(i,j,ksel,species_idx) = &
-                     concentrations(i,j,ksel,species_idx) + dmr * converter
+                  ! Degassing
+                  ksel = find_point_layer(real(f_z(i,j,:), fp), real(hlow, fp), nz)
+                  dmr = fluxcol * dt * g0 / f_delp(i,j,ksel)
+                  f_conc(i,j,ksel) = f_conc(i,j,ksel) + dmr * converter
                end if
             end do
          end do
       end do
 
-      call chem_state%set_all_concentrations(concentrations, localrc)
-      if (localrc /= CC_SUCCESS) then
-         call ESMF_LogWrite(trim(pName)//': failed to set concentrations', &
-            ESMF_LOGMSG_ERROR, rc=localrc)
-         rc = CC_FAILURE
-      end if
+      deallocate(f_delp)
 
-      deallocate(concentrations)
+      if (catchem_state_mark_chem_host_modified(state_ptr) /= 0_c_int) rc = CC_FAILURE
 
    end subroutine catchem_emis_apply_points
    !!
@@ -2480,7 +2288,7 @@ contains
       ! Check if diagnostics are enabled globally
       if (.not. ext_emis_data%diagnostic) then
          call ESMF_LogWrite(trim(pName)//': Global emission diagnostics disabled', &
-            ESMF_LOGMSG_INFO, rc=localrc)
+            ESMF_LOGMSG_DEBUG, rc=localrc)
          return
       end if
 
@@ -2512,14 +2320,6 @@ contains
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
                   description, units, filename, time_slice, localrc)
-            else if (allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data_model)) then
-               ! 3D field remapped onto the model grid (pressure interpolation):
-               ! write the model-level buffer so the field's vertical dimension
-               ! matches the model nz (and the diagnostic file), keeping the
-               ! collective parallel write consistent across PEs.
-               call write_emission_field_3d(IO, grid, field_name, &
-                  ext_emis_data%categories(icat)%fields(ifield)%emission_data_model(:,:,:,1), &
-                  description, units, filename, time_slice, localrc)
             else
                ! 3D point source or vertical emission field
                call write_emission_field_3d(IO, grid, field_name, &
@@ -2535,7 +2335,7 @@ contains
             else
                write(msg, '(A,A,A,A,A)') trim(pName), ': Wrote emission field ', &
                   trim(field_name), ' from category ', trim(category_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_DEBUG, rc=localrc)
             end if
          end do
       end do
@@ -2576,6 +2376,7 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
+      integer :: i, j
       !character(len=*), parameter :: pName = 'write_emission_field_2d'
 
       rc = CC_SUCCESS
@@ -2597,22 +2398,23 @@ contains
       ! Get field data pointer and copy emission data
       call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
       if (rc /= ESMF_SUCCESS) then
-         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
+         call ESMF_FieldDestroy(esmf_field, rc=rc)
          return
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      ! Whole-array (shape-based) copy: on a decomposed grid the ESMF field
-      ! pointer has DE-local/global index bounds (lower bound /= 1) while
-      ! emission_data is 1-based; intrinsic assignment copies by position.
-      field_data_2d(:,:) = real(emission_data(:,:), ESMF_KIND_R4)
+      do j = 1, size(emission_data, 2)
+         do i = 1, size(emission_data, 1)
+            field_data_2d(i, j) = real(emission_data(i, j), ESMF_KIND_R4)
+         end do
+      end do
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
          iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
-      ! Clean up. noGarbage=.true. releases memory now instead of at ESMF_Finalize.
-      call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
+      ! Clean up
+      call ESMF_FieldDestroy(esmf_field, rc=rc)
 
    end subroutine write_emission_field_2d
 
@@ -2647,6 +2449,7 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
+      integer :: i, j, k
       !character(len=*), parameter :: pName = 'write_emission_field_3d'
 
       rc = CC_SUCCESS
@@ -2670,21 +2473,25 @@ contains
       ! Get field data pointer and copy emission data
       call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
       if (rc /= ESMF_SUCCESS) then
-         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
+         call ESMF_FieldDestroy(esmf_field, rc=rc)
          return
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      ! Whole-array (shape-based) copy: see write_emission_field_2d. The
-      ! decomposed ESMF field pointer has non-1 horizontal lower bounds.
-      field_data_3d(:,:,:) = real(emission_data(:,:,:), ESMF_KIND_R4)
+      do k = 1, size(emission_data, 3)
+         do j = 1, size(emission_data, 2)
+            do i = 1, size(emission_data, 1)
+               field_data_3d(i, j, k) = real(emission_data(i, j, k), ESMF_KIND_R4)
+            end do
+         end do
+      end do
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
          iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
-      ! Clean up. noGarbage=.true. releases memory now instead of at ESMF_Finalize.
-      call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
+      ! Clean up
+      call ESMF_FieldDestroy(esmf_field, rc=rc)
 
    end subroutine write_emission_field_3d
 
@@ -2716,7 +2523,7 @@ contains
       end if
 
       ! Clean up regrid route-handle cache
-      call catchem_regrid_cleanup(emis_regrid_cache, rc=localrc)
+      call catchem_regrid_cleanup(ext_emis_data%regrid_cache, rc=localrc)
 
       call ESMF_LogWrite(trim(pName)//': Emission data finalized', &
          ESMF_LOGMSG_INFO, rc=localrc)
@@ -2732,144 +2539,195 @@ contains
    !! \param[in] config_manager Already loaded CATChem configuration manager
    !! \param[in] category_name Name of the category
    !! \param[out] rc Return code
-   subroutine parse_emission_category(category, config_manager, category_name, rc, diag_species)
+   subroutine parse_emission_category(category, core_ptr, category_name, rc, diag_species)
       implicit none
 
       type(ExtEmisCategoryType), intent(inout) :: category
-      type(ConfigManagerType), intent(inout) :: config_manager
+      type(c_ptr), intent(in) :: core_ptr
       character(len=*), intent(in) :: category_name
       integer, intent(out) :: rc
-      character(len=64), optional, allocatable, intent(out) :: diag_species(:)  ! Array for diagnostic species
+      character(len=64), optional, allocatable, intent(out) :: diag_species(:)
 
-      ! Local variables
-      integer :: localrc
-      character(len=EMIS_MAXSTR) :: config_path
-      !character(len=*), parameter :: pName = 'parse_emission_category'
+      integer :: i, n_diag
+      character(len=EMIS_MAXSTR) :: config_path, item_path, c_buf, clean_cat_name
 
       rc = CC_SUCCESS
 
-      ! Build configuration path for this category
-      write(config_path, '(A,A)') 'processes/extemis/', trim(category_name)
+      clean_cat_name = category_name
+      call clean_c_string(clean_cat_name)
 
-      ! Read all properties directly into category fields
-      call config_manager%get_string(trim(config_path)//'/source_file', category%source_file, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/format', category%format, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/frequency', category%frequency, localrc, '')
-      call config_manager%get_logical(trim(config_path)//'/gridded', category%gridded, localrc, .true.)
-      call config_manager%get_logical(trim(config_path)//'/is_2d', category%is_2d, localrc, .true.)
-      call config_manager%get_logical(trim(config_path)//'/diagnostics', category%diagnostic, localrc, .false.)
-      call config_manager%get_real(trim(config_path)//'/scale_factor', category%global_scale, localrc, 1.0_fp)
+      config_path = 'processes/extemis/' // trim(clean_cat_name)
 
-      ! Read coordinate names
-      call config_manager%get_string(trim(config_path)//'/lat_name', category%latname, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/lon_name', category%lonname, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/regrid_method', category%regrid_method, localrc, 'none')
-      call config_manager%get_string(trim(config_path)//'/time_interpolation', category%time_interpolation, localrc, 'none')
-      call config_manager%get_string(trim(config_path)//'/vertical_dist', category%vertical_dist, localrc, 'none')
-      call config_manager%get_logical(trim(config_path)//'/reverse_vertical', category%reverse_vertical, localrc, .false.)
+      ! source_file
+      item_path = trim(config_path) // '/source_file'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%source_file = trim(c_buf)
 
-      ! Pressure-based vertical interpolation of 3D fields onto the model grid.
-      call config_manager%get_logical(trim(config_path)//'/vertical_interp', &
-         category%vertical_interp, localrc, .false.)
-      call config_manager%get_string(trim(config_path)//'/vertical_pressure_mode', &
-         category%vertical_pressure_mode, localrc, 'construct')
-      call config_manager%get_string(trim(config_path)//'/vertical_pressure_var', &
-         category%vertical_pressure_var, localrc, '')
+      ! format
+      item_path = trim(config_path) // '/format'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%format = trim(c_buf)
 
-      ! Read stack parameter names (for point sources)
-      call config_manager%get_string(trim(config_path)//'/stack_diameter', category%stkdmname, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/stack_height', category%stkhtname, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/stack_temperature', category%stktkname, localrc, '')
-      call config_manager%get_string(trim(config_path)//'/stack_velocity', category%stkvename, localrc, '')
+      ! frequency
+      item_path = trim(config_path) // '/frequency'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%frequency = trim(c_buf)
 
-      ! Read topfraction and plume rise (for fire/point sources)
-      call config_manager%get_real(trim(config_path)//'/topfraction', category%topfraction, localrc, -1.0_fp)
-      call config_manager%get_string(trim(config_path)//'/plume_rise', category%plumerise, localrc, '')
+      ! gridded
+      item_path = trim(config_path) // '/gridded'
+      category%gridded = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 1_c_int) /= 0)
 
-      ! Read diagnostic species list using get_array
-      call config_manager%get_array(trim(config_path)//'/diag_list', diag_species, localrc, default_values=["All"])
+      ! is_2d
+      item_path = trim(config_path) // '/is_2d'
+      category%is_2d = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 1_c_int) /= 0)
 
-      ! Carbon emission factor (Mie-based BB AOT limiter)
-      call config_manager%get_logical(trim(config_path)//'/use_oc_fbb', &
-         category%use_oc_fbb, localrc, .false.)
+      ! diagnostics
+      item_path = trim(config_path) // '/diagnostics'
+      category%diagnostic = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 0_c_int) /= 0)
 
-      ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
-      call config_manager%get_logical(trim(config_path)//'/diurnal_bb', &
-         category%diurnal_bb, localrc, .false.)
+      ! scale_factor
+      item_path = trim(config_path) // '/scale_factor'
+      category%global_scale = catchem_config_get_yaml_double(core_ptr, trim(item_path) // c_null_char, 1.0_c_double)
 
-      ! Apply method: 'add' (default, accumulate onto concentration) or 'replace' (overwrite)
-      call config_manager%get_string(trim(config_path)//'/apply_method', &
-         category%apply_method, localrc, 'add')
+      ! lat_name, lon_name, regrid_method, time_interpolation, vertical_dist
+      item_path = trim(config_path) // '/lat_name'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%latname = trim(c_buf)
 
+      item_path = trim(config_path) // '/lon_name'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%lonname = trim(c_buf)
+
+      item_path = trim(config_path) // '/regrid_method'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'none' // c_null_char)
+      call clean_c_string(c_buf)
+      category%regrid_method = trim(c_buf)
+
+      item_path = trim(config_path) // '/time_interpolation'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'none' // c_null_char)
+      call clean_c_string(c_buf)
+      category%time_interpolation = trim(c_buf)
+
+      item_path = trim(config_path) // '/vertical_dist'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'none' // c_null_char)
+      call clean_c_string(c_buf)
+      category%vertical_dist = trim(c_buf)
+
+      item_path = trim(config_path) // '/reverse_vertical'
+      category%reverse_vertical = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 0_c_int) /= 0)
+
+      ! Stack parameters
+      item_path = trim(config_path) // '/stack_diameter'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%stkdmname = trim(c_buf)
+
+      item_path = trim(config_path) // '/stack_height'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%stkhtname = trim(c_buf)
+
+      item_path = trim(config_path) // '/stack_temperature'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%stktkname = trim(c_buf)
+
+      item_path = trim(config_path) // '/stack_velocity'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%stkvename = trim(c_buf)
+
+      ! Topfraction and plume rise
+      item_path = trim(config_path) // '/topfraction'
+      category%topfraction = catchem_config_get_yaml_double(core_ptr, trim(item_path) // c_null_char, -1.0_c_double)
+
+      item_path = trim(config_path) // '/plume_rise'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, '' // c_null_char)
+      call clean_c_string(c_buf)
+      category%plumerise = trim(c_buf)
+
+      ! Diurnal / OC / apply_method
+      item_path = trim(config_path) // '/use_oc_fbb'
+      category%use_oc_fbb = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 0_c_int) /= 0)
+
+      item_path = trim(config_path) // '/diurnal_bb'
+      category%diurnal_bb = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 0_c_int) /= 0)
+
+      item_path = trim(config_path) // '/apply_method'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'add' // c_null_char)
+      call clean_c_string(c_buf)
+      category%apply_method = trim(c_buf)
+
+      ! Diagnostic species list
+      item_path = trim(config_path) // '/diag_list'
+      n_diag = catchem_config_get_yaml_list_count(core_ptr, trim(item_path) // c_null_char)
+      if (present(diag_species)) then
+         if (n_diag > 0) then
+            allocate(diag_species(n_diag))
+            do i = 1, n_diag
+               call catchem_config_get_yaml_list_at(core_ptr, trim(item_path) // c_null_char, int(i - 1, c_int), c_buf, 64_c_int)
+               call clean_c_string(c_buf)
+               diag_species(i) = trim(c_buf)
+            end do
+         else
+            allocate(diag_species(1))
+            diag_species(1) = "All"
+         end if
+      end if
    end subroutine parse_emission_category
 
-   !> \brief Populate emission category in ExtEmisDataType
-   !!
-   !! Creates ExtEmisCategoryType and ExtEmisFieldType objects
-   !! and adds them to the ExtEmisDataType structure.
-   !!
-   !! \param[inout] ext_emis_data External emission data container
-   !! \param[in] category_mapping Emission category mapping from ConfigDataType
-   !! \param[in] config_manager Already loaded CATChem configuration manager for reading additional properties
-   !! \param[in] grid ESMF grid for field creation
-   !! \param[out] rc Return code
-   subroutine catchem_emis_populate_category(ext_emis_data, category_mapping, config_manager, nx, ny, nlev, rc)
+   subroutine catchem_emis_populate_category(ext_emis_data, core_ptr, category_name, nx, ny, nlev, rc)
       implicit none
 
       type(ExtEmisDataType), intent(inout) :: ext_emis_data
-      type(EmissionCategoryMapping), intent(in) :: category_mapping
-      type(ConfigManagerType), intent(inout) :: config_manager
+      type(c_ptr), intent(in) :: core_ptr
+      character(len=*), intent(in) :: category_name
       integer, intent(in) :: nx, ny, nlev
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc, ispec, i_diag
-      character(len=EMIS_MAXSTR) :: msg, field_name
+      integer :: localrc, ispec, i_diag, n_fields, n_species_fields
+      character(len=EMIS_MAXSTR) :: field_name, field_units, species_list_path
       type(ExtEmisCategoryType) :: new_category
       type(ExtEmisFieldType) :: new_field
-      character(len=64), allocatable :: diag_species_list(:)  ! Array for diagnostic species
-      character(len=*), parameter :: pName = 'catchem_emis_populate_category'
+      character(len=64), allocatable :: diag_species_list(:)
 
       rc = CC_SUCCESS
 
-      ! Initialize new category
-      call new_category%init(category_mapping%category_name, 0, & !category_mapping%n_emission_species, &
-         'Emission category: '//trim(category_mapping%category_name), localrc)
-      if (localrc /= CC_SUCCESS) then
-         write(msg, '(A,A)') trim(pName), ': Failed to initialize category'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-         rc = CC_FAILURE
-         return
-      end if
+      call new_category%init(category_name, 0, 'Emission category: '//trim(category_name), localrc)
+      if (localrc /= CC_SUCCESS) return
 
-      ! Set category properties from mapping
-      new_category%is_active = category_mapping%is_active
+      new_category%is_active = (catchem_config_is_emission_category_active(core_ptr, trim(category_name) // c_null_char) /= 0)
 
-      ! Parse additional properties from configuration using ConfigManager functions
-      call parse_emission_category(new_category, config_manager, category_mapping%category_name, localrc, diag_species_list)
-      if (localrc /= CC_SUCCESS) then
-         write(msg, '(A,A,A)') trim(pName), ': Failed to parse category properties: ', &
-            trim(category_mapping%category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-         ! Continue anyway with default properties
-      end if
+      call parse_emission_category(new_category, core_ptr, category_name, localrc, diag_species_list)
 
-      ! Create emission fields from species mappings
-      do ispec = 1, category_mapping%n_emission_species
-         field_name = trim(category_mapping%species_mappings(ispec)%emission_field)
+      n_fields = catchem_config_get_emission_field_count(core_ptr, trim(category_name) // c_null_char)
 
-         ! Initialize field with default dimensions (would get from file metadata in practice)
-         call new_field%init(field_name, nx, ny, nlev, 1, &  ! assuming 1 time step
-            trim(category_mapping%species_mappings(ispec)%units), localrc)
+      do ispec = 0, n_fields - 1
+         call catchem_config_get_emission_field_name_at(core_ptr, trim(category_name) // c_null_char, ispec, field_name, 64_c_int)
+         call clean_c_string(field_name)
+         ! Field units are part of the emission mapping contract.  Most sources
+         ! are mass fluxes, but some inputs (e.g., an ocean concentration) are
+         ! state fields and must not inherit the mass-flux default.
+         call catchem_config_get_emission_field_units(core_ptr, trim(category_name) // c_null_char, &
+            trim(field_name) // c_null_char, field_units, int(EMIS_MAXSTR, c_int))
+         call clean_c_string(field_units)
+         if (len_trim(field_units) == 0) field_units = 'kg/m2/s'
+         call new_field%init(field_name, nx, ny, nlev, 1, trim(field_units), localrc)
          if (localrc == CC_SUCCESS) then
-            new_field%long_name = trim(category_mapping%species_mappings(ispec)%long_name)
-
-            ! Check if diagnostics should be enabled for this field
-            ! Must meet all conditions: global diagnostics, category diagnostics, and field in diag_list
+            new_field%long_name = trim(field_name)
+#ifdef CATCHEM_TRACE_NUOPC
+            write(*,'(A,A,A,A)') '[CATCHEM DEBUG] AQMIO populate category=', trim(category_name), &
+               ' field=', trim(field_name)
+            call flush(6)
+#endif
             if (ext_emis_data%diagnostic .and. new_category%diagnostic) then
-               ! Check if field_name is in the diagnostic list array
-               if ( allocated(diag_species_list)) then
-                  ! if save out all species in this category
+               if (allocated(diag_species_list)) then
                   if (size(diag_species_list) == 1 .and. trim(diag_species_list(1)) == 'All') then
                      new_field%diagnostic = .true.
                   else
@@ -2884,25 +2742,40 @@ contains
             end if
 
             call new_category%add_field(new_field, localrc)
-            if (localrc /= CC_SUCCESS) then
-               write(msg, '(A,A,A)') trim(pName), ': Failed to add field: ', trim(field_name)
-               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-            end if
+         end if
+      end do
+
+      species_list_path = 'processes/extemis/' // trim(category_name) // '/species'
+      n_species_fields = catchem_config_get_yaml_list_count(core_ptr, trim(species_list_path) // c_null_char)
+      if (n_species_fields == 0) then
+         species_list_path = 'process/extemis/' // trim(category_name) // '/species'
+         n_species_fields = catchem_config_get_yaml_list_count(core_ptr, trim(species_list_path) // c_null_char)
+      end if
+
+      do ispec = 0, n_species_fields - 1
+         call catchem_config_get_yaml_list_at(core_ptr, trim(species_list_path) // c_null_char, &
+            int(ispec, c_int), field_name, 64_c_int)
+         call clean_c_string(field_name)
+         if (len_trim(field_name) == 0) cycle
+         if (new_category%find_field(trim(field_name)) > 0) cycle
+
+         call catchem_config_get_emission_field_units(core_ptr, trim(category_name) // c_null_char, &
+            trim(field_name) // c_null_char, field_units, int(EMIS_MAXSTR, c_int))
+         call clean_c_string(field_units)
+         if (len_trim(field_units) == 0) field_units = 'kg/m2/s'
+         call new_field%init(field_name, nx, ny, nlev, 1, trim(field_units), localrc)
+         if (localrc == CC_SUCCESS) then
+            new_field%long_name = trim(field_name)
+#ifdef CATCHEM_TRACE_NUOPC
+            write(*,'(A,A,A,A)') '[CATCHEM DEBUG] AQMIO populate species-list category=', trim(category_name), &
+               ' field=', trim(field_name)
+            call flush(6)
+#endif
+            call new_category%add_field(new_field, localrc)
          end if
       end do
 
       call ext_emis_data%add_category(new_category, localrc)
-      if (localrc /= CC_SUCCESS) then
-         write(msg, '(A,A)') trim(pName), ': Failed to add category to ExtEmisDataType'
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
-         rc = CC_FAILURE
-         return
-      end if
-
-      write(msg, '(A,A,A)') trim(pName), ': Successfully populated category ', &
-         trim(category_mapping%category_name)
-      call ESMF_LogWrite(msg, ESMF_LOGMSG_INFO, rc=localrc)
-
    end subroutine catchem_emis_populate_category
 
    !> \brief Initialize emission timing for one category
@@ -2924,10 +2797,8 @@ contains
 
       integer            :: localrc
       integer            :: curr_month, curr_year, start_month, start_year
-      integer            :: n_hours
       type(ESMF_Time)         :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
-      character(len=*), parameter :: pName = 'catchem_emis_setup_timing'
 
       rc = CC_SUCCESS
 
@@ -2940,7 +2811,7 @@ contains
       ! contains more time slices than the arithmetic assumption (e.g. 14-month files).
       if (trim(category%frequency) /= 'static' .and. &
          index(trim(category%source_file), '%') == 0 .and. &
-         len_trim(category%source_file) > 0 .and. &
+         .not. is_null_filename(category%source_file) .and. &
          category%n_times == 0) then
          call catchem_emis_read_time_coord(trim(category%source_file), category, localrc)
          ! Non-fatal: if time coord read fails, fall through to arithmetic below
@@ -2968,13 +2839,7 @@ contains
          select case (trim(category%frequency))
           case ('hourly');  call ESMF_TimeIntervalSet(timeInterval, h=1,   rc=localrc)
           case ('weekly');  call ESMF_TimeIntervalSet(timeInterval, d=7,   rc=localrc)
-          case default
-            n_hours = parse_hourly_interval(category%frequency)
-            if (n_hours > 0) then
-               call ESMF_TimeIntervalSet(timeInterval, h=n_hours, rc=localrc)
-            else
-               call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
-            end if
+          case default;     call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
          end select
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -2983,95 +2848,6 @@ contains
 
    end subroutine catchem_emis_setup_timing
 
-   !> \brief Map emission species to CATChem chemical species
-   !!
-   !! Maps emission field names to CATChem species names using
-   !! the emission mapping configuration from ConfigDataType.
-   !!
-   !! \param[in] emission_mapping Emission mapping configuration from ConfigDataType
-   !! \param[in] category_name Name of emission category
-   !! \param[in] emis_field_name Emission field name from file
-   !! \param[out] catchem_species Array of CATChem species names
-   !! \param[out] scale_factors Array of scaling factors for each species
-   !! \param[out] species_indices Array of chemical species indices in chem_state
-   !! \param[out] n_species Number of mapped species
-   !! \param[out] rc Return code
-   subroutine catchem_emis_map_species(emission_mapping, category_name, emis_field_name, &
-      catchem_species, scale_factors, species_indices, n_species, rc)
-      implicit none
-
-      type(EmissionMappingConfig), intent(in) :: emission_mapping
-      character(len=*), intent(in) :: category_name
-      character(len=*), intent(in) :: emis_field_name
-      character(len=64), intent(out) :: catchem_species(:)
-      real(fp), intent(out) :: scale_factors(:)
-      integer, intent(out) :: species_indices(:)
-      integer, intent(out) :: n_species
-      integer, intent(out) :: rc
-
-      ! Local variables
-      integer ::  j, icat, ispec, localrc
-      character(len=EMIS_MAXSTR) :: msg
-      character(len=*), parameter :: pName = 'catchem_emis_map_species'
-
-      rc = CC_SUCCESS
-      n_species = 0
-      catchem_species = ''
-      scale_factors = 0.0_fp
-      species_indices = 0
-
-      ! Find the category in emission mapping
-      do icat = 1, emission_mapping%n_categories
-         if (trim(emission_mapping%categories(icat)%category_name) == trim(category_name)) then
-            ! Find the species mapping in this category
-            do ispec = 1, emission_mapping%categories(icat)%n_emission_species
-               if (trim(emission_mapping%categories(icat)%species_mappings(ispec)%emission_field) == trim(emis_field_name)) then
-                  ! Found the mapping - copy data
-                  n_species = emission_mapping%categories(icat)%species_mappings(ispec)%n_mappings
-                  do j = 1, min(n_species, size(catchem_species))
-                     catchem_species(j) = emission_mapping%categories(icat)%species_mappings(ispec)%map(j)
-                     scale_factors(j) = emission_mapping%categories(icat)%species_mappings(ispec)%scale(j)
-                     species_indices(j) = emission_mapping%categories(icat)%species_mappings(ispec)%index(j)
-                  end do
-                  return
-               end if
-            end do
-            exit  ! Found category but no matching field
-         end if
-      end do
-
-      ! If we get here, no mapping was found - use fallback
-      ! Note: For fallback cases, species indices will be 0 and need to be resolved later
-      select case (trim(emis_field_name))
-       case ('EMIS_NO', 'NO')
-         n_species = 1
-         catchem_species(1) = 'NO'
-         scale_factors(1) = 1.0_fp
-         species_indices(1) = 0  ! Will need lookup
-       case ('EMIS_NO2', 'NO2')
-         n_species = 1
-         catchem_species(1) = 'NO2'
-         scale_factors(1) = 1.0_fp
-         species_indices(1) = 0  ! Will need lookup
-       case ('EMIS_SO2', 'SO2')
-         n_species = 1
-         catchem_species(1) = 'SO2'
-         scale_factors(1) = 1.0_fp
-         species_indices(1) = 0  ! Will need lookup
-       case ('EMIS_CO', 'CO')
-         n_species = 1
-         catchem_species(1) = 'CO'
-         scale_factors(1) = 1.0_fp
-         species_indices(1) = 0  ! Will need lookup
-       case default
-         ! Unknown mapping
-         write(msg, '(A,A,A,A,A)') trim(pName), ': No mapping found for field: ', &
-            trim(emis_field_name), ' in category: ', trim(category_name)
-         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
-      end select
-
-   end subroutine catchem_emis_map_species
-
    !> \brief Compute a calendar period key that changes each time data should be re-read
    !!
    !! Returns an integer whose value changes when the model time crosses a period
@@ -3079,25 +2855,18 @@ contains
    !! last_period_key) always differs from a real key, forcing the first read.
    !!
    !! Key encoding:
-   !!   hourly            -> yyyymmddhh
-   !!   <N>hourly         -> yyyymmdd * 100 + (hh / N)  (e.g. 3hourly, 6hourly, 12hourly)
-   !!   daily             -> yyyymmdd
-   !!   weekly            -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
+   !!   hourly   -> yyyymmddhh
+   !!   daily    -> yyyymmdd
+   !!   weekly   -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
    !!   monthly / yearmonth -> yyyymm
-   !!   static            -> 0  (constant; first read triggered by last_period_key=-1)
-   !!
-   !! Note: the gate only controls WHEN a re-read is triggered.  The actual time
-   !! slice is always chosen by catchem_emis_find_time_index via time-coordinate
-   !! matching, so it is correct for any cadence; the frequency just avoids
-   !! redundant reads (e.g. "3hourly" re-reads only on 3-hour boundaries).
+   !!   static   -> 0  (constant; first read triggered by last_period_key=-1)
    subroutine catchem_emis_period_key(frequency, curr_time, key, rc)
       character(len=*), intent(in)  :: frequency
       type(ESMF_Time),  intent(in)  :: curr_time
       integer,          intent(out) :: key
       integer,          intent(out) :: rc
 
-      integer :: localrc, yy, mm, dd, hh, doy, n_hours
-      character(len=*), parameter :: pName = 'catchem_emis_period_key'
+      integer :: localrc, yy, mm, dd, hh, doy
 
       rc = CC_SUCCESS
       key = 0
@@ -3119,54 +2888,10 @@ contains
        case ('static')
          key = 0   ! never changes; first read triggered by last_period_key = -1
        case default
-         ! Sub-daily "<N>hourly" cadence (e.g. 3hourly, 6hourly): change the key
-         ! only when the model crosses an N-hour boundary.  Unrecognized strings
-         ! fall back to daily (previous behavior).
-         n_hours = parse_hourly_interval(frequency)
-         if (n_hours > 0) then
-            key = yy*1000000 + mm*10000 + dd*100 + (hh / n_hours)
-         else
-            key = yy*10000 + mm*100 + dd   ! treat unknown as daily
-         end if
+         key = yy*10000 + mm*100 + dd   ! treat unknown as daily
       end select
 
    end subroutine catchem_emis_period_key
-
-   !> \brief Parse a sub-daily "<N>hourly" frequency string.
-   !!
-   !! Recognizes strings of the form \c "<int>hourly" (case-insensitive suffix),
-   !! such as "3hourly", "6hourly", "12hourly".  Returns the integer N (>0) on
-   !! success, or -1 when the string is not of that form.
-   pure integer function parse_hourly_interval(frequency) result(nhr)
-      character(len=*), intent(in) :: frequency
-      integer :: i, ndig, ios
-      character(len=len(frequency)) :: f, suffix
-
-      nhr = -1
-      f = adjustl(frequency)
-
-      ! Count the leading run of digits
-      ndig = 0
-      do i = 1, len_trim(f)
-         if (f(i:i) >= '0' .and. f(i:i) <= '9') then
-            ndig = i
-         else
-            exit
-         end if
-      end do
-      if (ndig == 0 .or. ndig >= len_trim(f)) return
-
-      ! Case-insensitive check that the remainder is exactly "hourly"
-      suffix = f(ndig+1:len_trim(f))
-      do i = 1, len_trim(suffix)
-         if (suffix(i:i) >= 'A' .and. suffix(i:i) <= 'Z') &
-            suffix(i:i) = achar(iachar(suffix(i:i)) + 32)
-      end do
-      if (trim(suffix) /= 'hourly') return
-
-      read(f(1:ndig), *, iostat=ios) nhr
-      if (ios /= 0 .or. nhr <= 0) nhr = -1
-   end function parse_hourly_interval
 
    !> \brief Replace all occurrences of old_str with new_str in str (in-place)
    subroutine str_replace_all(str, old_str, new_str)
@@ -3203,7 +2928,6 @@ contains
       character(len=4) :: y4
       character(len=2) :: m2, d2, h2
       character(len=3) :: j3
-      character(len=*), parameter :: pName = 'resolve_filename_template'
 
       rc = CC_SUCCESS
 
@@ -3243,15 +2967,32 @@ contains
       integer :: localrc, nt
       integer, allocatable :: dates(:), secs(:)
       character(len=EMIS_MAXSTR) :: msg
+      logical :: file_exists
       character(len=*), parameter :: pName = 'catchem_emis_read_time_coord'
 
       rc = CC_SUCCESS
       category%n_times = 0
 
+      if (is_null_filename(filename)) then
+         write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: No valid filename specified for category: ', trim(category%category_name)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
+      end if
+
+      inquire(file=trim(filename), exist=file_exists)
+      if (.not. file_exists) then
+         write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: File not found for time coord: ', trim(filename)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
+      end if
+
       call AQMIO_ReadTimeCoord(trim(filename), nt, dates, secs, rc=localrc)
       if (localrc /= ESMF_SUCCESS) then
-         write(msg, '(A,A,A)') trim(pName), ': Failed reading time coord from: ', trim(filename)
-         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
+         write(msg, '(A,A,A)') trim(pName), ': FATAL ERROR: Failed reading time coord from: ', trim(filename)
+         call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
          return
       end if
 
@@ -3268,7 +3009,7 @@ contains
       deallocate(dates, secs)
 
       write(msg, '(A,A,I0,A,A)') trim(pName), ': Cached ', nt, ' time slices from ', trim(filename)
-      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_INFO, rc=localrc)
+      call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_DEBUG, rc=localrc)
 
    end subroutine catchem_emis_read_time_coord
 
@@ -3290,7 +3031,6 @@ contains
       integer :: curr_date, curr_secs, tc_date_i, tc_secs_i, slice_month
       integer :: target_year, target_month
       real(fp) :: frac_dummy
-      character(len=*), parameter :: pName = 'catchem_emis_find_time_index'
 
       rc = CC_SUCCESS
       irec = 1
@@ -3427,7 +3167,6 @@ contains
       integer  :: localrc, yy, mm, dd, hh, mn, ss
       integer  :: up_year, up_month, dim_curr, dim_lo, dim_up
       real(fp) :: pos, mid_curr, span
-      character(len=*), parameter :: pName = 'catchem_emis_month_bracket'
 
       rc = CC_SUCCESS
       frac = 0.0_fp
@@ -3489,4 +3228,24 @@ contains
       end if
    end function days_in_month_func
 
-end module catchem_emis_mod
+
+   !> Helper: Clean C-string null terminator and pad with spaces
+   subroutine clean_c_string(str)
+      character(len=*), intent(inout) :: str
+      integer :: idx
+      idx = index(str, c_null_char)
+      if (idx > 0) then
+         str(idx:) = ' '
+      end if
+   end subroutine clean_c_string
+
+   !> Helper: Check if filename is empty, null, or none
+   elemental logical function is_null_filename(fn)
+      character(len=*), intent(in) :: fn
+      character(len=EMIS_MAXSTR) :: s
+      s = adjustl(fn)
+      is_null_filename = (len_trim(s) == 0 .or. &
+         trim(s) == 'null' .or. trim(s) == 'NULL' .or. trim(s) == 'Null' .or. &
+         trim(s) == 'none' .or. trim(s) == 'NONE' .or. trim(s) == 'None')
+   end function is_null_filename
+end module catchem_nuopc_emis_mod

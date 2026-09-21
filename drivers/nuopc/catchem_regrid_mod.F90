@@ -83,10 +83,8 @@ contains
 
       ! -- local variables
       integer :: localrc, ncid, ncStatus
-      integer :: nlon, nlat, ndims, xtype, uid
-      integer :: timeDimLen, idx
-      integer, allocatable :: dimids(:)
-      character(len=ESMF_MAXSTR) :: dimName
+      integer :: nlon, nlat
+      integer :: idx
       real(ESMF_KIND_R8), allocatable :: lonCoord(:), latCoord(:)
       real(ESMF_KIND_R4), pointer     :: srcPtr(:,:) => null()
       real(ESMF_KIND_R4), pointer     :: dstPtr(:,:) => null()
@@ -240,7 +238,7 @@ contains
          call cache%add(nlon, nlat, regridMethod, srcGrid, srcField, routeHandle, idx)
 
          call ESMF_LogWrite("catchem_regrid_field: Computed regrid weights for "// &
-            trim(filename), ESMF_LOGMSG_INFO, rc=localrc)
+            trim(filename), ESMF_LOGMSG_DEBUG, rc=localrc)
       else
          srcField    = cache%entries(idx)%srcField
          routeHandle = cache%entries(idx)%routeHandle
@@ -384,7 +382,6 @@ contains
 
       integer :: ncStatus, varId, ndims
       integer, allocatable :: dimids(:)
-      integer :: dimId
 
       rc = ESMF_SUCCESS
 

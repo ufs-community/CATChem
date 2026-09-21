@@ -22,7 +22,7 @@
 !! Reference: Jaeglé et al. [2011]
 module SeaSaltScheme_GEOS12_Mod
 
-   use precision_mod, only: fp, zero, rae
+   use catchem_bridge_precision, only: fp, zero, rae
    use SeaSaltCommon_Mod, only: SeaSaltSchemeGEOS12Config
 
    implicit none
@@ -141,6 +141,12 @@ contains
       real(fp) :: fsstemis
       real(fp) :: fhoppel
       real(fp) :: scale
+
+      ! `species_radius`, `species_conc` are part of the shared scheme calling convention and
+      ! intentionally unused by this scheme; reference them so the interface
+      ! stays uniform without an unused-dummy-argument warning.
+      associate(unused_species_radius => species_radius); end associate
+      associate(unused_species_conc => species_conc); end associate
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
@@ -297,41 +303,6 @@ contains
       end if ! do_seasalt
 
    end subroutine compute_geos12
-
-   ! =======================================================================
-   ! SCHEME-SPECIFIC HELPER SUBROUTINES
-   ! =======================================================================
-   ! Add your custom scientific algorithms here as pure functions/subroutines
-   ! Examples: environmental response functions, species-specific calculations, etc.
-
-   !> Example helper function for environmental response
-   pure function compute_environmental_response_geos12(met_value, reference_value) result(factor)
-      real(fp), intent(in) :: met_value       ! Meteorological value
-      real(fp), intent(in) :: reference_value ! Reference value
-      real(fp) :: factor
-
-      ! Simple exponential response - customize for your scheme
-      factor = exp((met_value - reference_value) / reference_value)
-      factor = max(0.0_fp, min(10.0_fp, factor))  ! Reasonable bounds
-   end function compute_environmental_response_geos12
-
-   !> Example helper function for species-specific scaling
-   pure function compute_species_scaling_geos12(species_idx, params) result(scaling)
-      integer, intent(in) :: species_idx
-      type(SeaSaltSchemeGEOS12Config), intent(in) :: params
-      real(fp) :: scaling
-
-      ! Species-specific scaling - customize for your scheme
-      select case (species_idx)
-       case (1)
-         scaling = 1.0_fp    ! First species baseline
-       case (2:3)
-         scaling = 0.5_fp    ! Reduced emission for species 2-3
-       case default
-         scaling = 0.1_fp    ! Low emission for other species
-      end select
-
-   end function compute_species_scaling_geos12
 
    !>
    !! \brief Jeagle et al. 2012 SST correction

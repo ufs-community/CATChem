@@ -1,132 +1,582 @@
 !> \file CATChem_API.F90
-!! \brief Streamlined CATChem API for host model integration
-!! \ingroup catchem_api
+!! \brief Modernized high-level BIND(C) API for host model integration
 !!
-!! \author CATChem Development Team
-!! \date 2025
-!! \version 2.1
-!!
-!! This module provides a streamlined, lightweight API for integrating CATChem
-!! into different modeling architectures. It leverages the existing core
-!! architecture without duplicating functionality, providing clean interfaces
-!! for the most common integration patterns.
-!!
-!! Key design principles:
-!! - Lightweight wrapper around existing core components
-!! - Support for multiple processes and run phases
-!! - Streamlined data exchange with host models
-!! - Clear error handling and status reporting
-!! - No duplication of existing types (ConfigManager, StateManager, etc.)
-!!
-!! Usage pattern:
-!! 1. Initialize with configuration file
-!! 2. Setup grid geometry
-!! 3. Add processes as needed
-!! 4. Configure run phases (optional)
-!! 5. Execute timesteps or phases
-!! 6. Exchange data with host model
-!! 7. Retrieve diagnostics
-!! 8. Finalize
+!! This module provides the standard, backward-compatible CATChem_Model
+!! derived type used by Earth System drivers (like NUOPC and UFS).
+!! It delegates all memory management, synchronization, and process scheduling
+!! directly to the modernized top-down C++ Core via standard BIND(C) bridges.
 !!
 module CATChem_API
-   use Precision_Mod, only: fp
-   use constants, only : MAX_LEN_NAME, MAX_LEN_PATH
-   use Error_Mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
-   use CATChemCore_Mod, only: CATChemCoreType, CATChemBuilderType
-   use StateManager_Mod, only: StateManagerType
-   use ProcessManager_Mod, only: ProcessManagerType
-   use GridManager_Mod, only: GridManagerType
-   use DiagnosticManager_Mod, only: DiagnosticManagerType
-   use MetState_Mod, only: MetStateType
-   use ChemState_Mod, only: ChemStateType
-   use ConfigManager_Mod, only: ConfigDataType
-   use DiagnosticInterface_Mod, only: DiagnosticRegistryType, DiagnosticFieldType, &
-      DIAG_REAL_SCALAR, DIAG_REAL_1D, DIAG_REAL_2D, DIAG_REAL_3D, &
-      DIAG_INTEGER_SCALAR, DIAG_INTEGER_1D, DIAG_INTEGER_2D, DIAG_INTEGER_3D
-   use ProcessInterface_Mod, only: ProcessInterface
-   ! Import process registration functions
-   use SeaSaltProcessCreator_Mod, only: register_seasalt_process
-   use DustProcessCreator_Mod, only: register_dust_process
-   use DryDepProcessCreator_Mod, only: register_drydep_process
-   use WetDepProcessCreator_Mod, only: register_wetdep_process
-   use SettlingProcessCreator_Mod, only: register_settling_process
-   use so4ChemProcessCreator_Mod, only: register_so4chem_process
-   use CarbChemProcessCreator_Mod, only: register_carbchem_process
+   use iso_c_binding
+   use catchem_bridge_precision, only: fp
+   use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE
 
    implicit none
    private
 
-   ! Public interface types and constants
-   public :: CATChem_Model
+   public :: CATChem_Model, catchem_diag_register_contract_checked, catchem_diag_get_contract
 
-   !> Main CATChem API interface type
-   !! This type provides a simplified interface to the CATChem core functionality
-   !! while maintaining access to all necessary components for host model integration.
+   !=========================================================================
+   ! C-API Interfaces to catchem_api.cpp
+   !=========================================================================
+   interface
+      integer(c_int) function catchem_core_create_from_config_with_grid_checked(config_file, ncols, nlevels, core_out) &
+         bind(C, name="catchem_core_create_from_config_with_grid_checked")
+         import :: c_char, c_ptr, c_int
+         character(kind=c_char), intent(in) :: config_file(*)
+         integer(c_int), value :: ncols, nlevels
+         type(c_ptr), intent(out) :: core_out
+      end function
+
+      integer(c_int) function catchem_core_destroy_checked(core_ptr) bind(C, name="catchem_core_destroy_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_core_get_state_manager_checked(core_ptr, state_out) &
+         bind(C, name="catchem_core_get_state_manager_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+         type(c_ptr), intent(out) :: state_out
+      end function
+
+      integer(c_int) function catchem_get_last_error(buffer, max_len) bind(C, name="catchem_get_last_error")
+         import :: c_char, c_int
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end function
+
+      type(c_ptr) function catchem_core_create_from_config(config_file) bind(C, name="catchem_core_create_from_config")
+         import :: c_char, c_ptr
+         character(kind=c_char), intent(in) :: config_file(*)
+      end function
+
+      type(c_ptr) function catchem_core_create_from_config_with_grid(config_file, ncols, nlevels) &
+         bind(C, name="catchem_core_create_from_config_with_grid")
+         import :: c_char, c_ptr, c_int
+         character(kind=c_char), intent(in) :: config_file(*)
+         integer(c_int), value :: ncols, nlevels
+      end function
+
+      subroutine catchem_core_destroy(core_ptr) bind(C, name="catchem_core_destroy")
+         import :: c_ptr
+         type(c_ptr), value :: core_ptr
+      end subroutine
+
+      subroutine catchem_register_carbchem_cpp() bind(C, name="catchem_register_carbchem_cpp")
+      end subroutine
+
+      subroutine catchem_register_drydep_cpp() bind(C, name="catchem_register_drydep_cpp")
+      end subroutine
+
+      subroutine catchem_register_dust_cpp() bind(C, name="catchem_register_dust_cpp")
+      end subroutine
+
+      subroutine catchem_register_seasalt_cpp() bind(C, name="catchem_register_seasalt_cpp")
+      end subroutine
+
+      subroutine catchem_register_settling_cpp() bind(C, name="catchem_register_settling_cpp")
+      end subroutine
+
+      subroutine catchem_register_so4chem_cpp() bind(C, name="catchem_register_so4chem_cpp")
+      end subroutine
+
+      subroutine catchem_register_wetdep_cpp() bind(C, name="catchem_register_wetdep_cpp")
+      end subroutine
+
+      type(c_ptr) function catchem_core_get_state_manager(core_ptr) bind(C, name="catchem_core_get_state_manager")
+         import :: c_ptr
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_core_add_process_by_name(core_ptr, name) bind(C, name="catchem_core_add_process_by_name")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end subroutine
+
+      integer(c_int) function catchem_core_get_num_processes(core_ptr) bind(C, name="catchem_core_get_num_processes")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_core_get_num_processes_checked(core_ptr, count_out) &
+         bind(C, name="catchem_core_get_num_processes_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), intent(out) :: count_out
+      end function
+
+      integer(c_int) function catchem_core_get_required_host_field_count_checked(core_ptr, count_out) &
+         bind(C, name="catchem_core_get_required_host_field_count_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), intent(out) :: count_out
+      end function
+
+      integer(c_int) function catchem_core_get_required_host_field_name_checked(core_ptr, index, name_out, name_out_len) &
+         bind(C, name="catchem_core_get_required_host_field_name_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index, name_out_len
+         character(kind=c_char), intent(out) :: name_out(*)
+      end function
+
+      integer(c_int) function catchem_core_run_timestep(core_ptr, dt) bind(C, name="catchem_core_run_timestep")
+         import :: c_ptr, c_double, c_int
+         type(c_ptr), value :: core_ptr
+         real(c_double), value :: dt
+      end function
+
+      subroutine catchem_state_bind_met_3d(state_ptr, name, ptr) bind(C, name="catchem_state_bind_met_3d")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: state_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         type(c_ptr), value :: ptr
+      end subroutine
+
+      integer(c_int) function catchem_state_bind_met_3d_checked(state_ptr, name, ptr, dim1, dim2, dim3) &
+         bind(C, name="catchem_state_bind_met_3d_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: state_ptr, ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), value :: dim1, dim2, dim3
+      end function
+
+      integer(c_int) function catchem_state_bind_met_3d_axis_checked(state_ptr, name, ptr, dim1, dim2, dim3, axis) &
+         bind(C, name="catchem_state_bind_met_3d_axis_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: state_ptr, ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), value :: dim1, dim2, dim3, axis
+      end function
+
+      subroutine catchem_state_bind_met_2d(state_ptr, name, ptr) bind(C, name="catchem_state_bind_met_2d")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: state_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         type(c_ptr), value :: ptr
+      end subroutine
+
+      integer(c_int) function catchem_state_bind_met_2d_checked(state_ptr, name, ptr, dim1, dim2) &
+         bind(C, name="catchem_state_bind_met_2d_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: state_ptr, ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), value :: dim1, dim2
+      end function
+
+      subroutine catchem_state_bind_unified_chemistry(state_ptr, ptr) bind(C, name="catchem_state_bind_unified_chemistry")
+         import :: c_ptr
+         type(c_ptr), value :: state_ptr
+         type(c_ptr), value :: ptr
+      end subroutine
+
+      integer(c_int) function catchem_state_bind_unified_chemistry_checked(state_ptr, ptr, dim1, dim2, dim3) &
+         bind(C, name="catchem_state_bind_unified_chemistry_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr, ptr
+         integer(c_int), value :: dim1, dim2, dim3
+      end function
+
+      subroutine catchem_state_sync_to_device(state_ptr) bind(C, name="catchem_state_sync_to_device")
+         import :: c_ptr
+         type(c_ptr), value :: state_ptr
+      end subroutine
+
+      integer(c_int) function catchem_state_sync_to_device_checked(state_ptr) &
+         bind(C, name="catchem_state_sync_to_device_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+      end function
+
+      subroutine catchem_state_sync_to_host(state_ptr) bind(C, name="catchem_state_sync_to_host")
+         import :: c_ptr
+         type(c_ptr), value :: state_ptr
+      end subroutine
+
+      integer(c_int) function catchem_state_sync_to_host_checked(state_ptr) &
+         bind(C, name="catchem_state_sync_to_host_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+      end function
+
+      type(c_ptr) function catchem_state_get_species_conc_pointer(state_ptr, index) &
+         bind(C, name="catchem_state_get_species_conc_pointer")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+
+      integer(c_int) function catchem_state_get_species_conc_pointer_checked(state_ptr, index, dim1, dim2, ptr_out) &
+         bind(C, name="catchem_state_get_species_conc_pointer_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index, dim1, dim2
+         type(c_ptr), intent(out) :: ptr_out
+      end function
+
+      subroutine catchem_get_grid_dimensions(core_ptr, nx, ny, nz) bind(C, name="catchem_get_grid_dimensions")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), intent(out) :: nx, ny, nz
+      end subroutine
+
+      real(c_double) function catchem_get_config_timestep(core_ptr) bind(C, name="catchem_get_config_timestep")
+         import :: c_ptr, c_double
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_output_frequency(core_ptr) &
+         bind(C, name="catchem_config_get_output_frequency")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_compress_level(core_ptr) &
+         bind(C, name="catchem_config_get_compress_level")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_config_get_output_directory(core_ptr, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_directory")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_output_prefix(core_ptr, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_prefix")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_get_latlon_output(core_ptr) &
+         bind(C, name="catchem_config_get_latlon_output")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_diag_enabled(core_ptr) &
+         bind(C, name="catchem_config_get_diag_enabled")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_process_diagnostics_enabled(core_ptr) &
+         bind(C, name="catchem_config_get_process_diagnostics_enabled")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_config_get_diag_species_count(core_ptr) &
+         bind(C, name="catchem_config_get_diag_species_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_config_get_diag_species_at(core_ptr, index, buffer, max_len) &
+         bind(C, name="catchem_config_get_diag_species_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_get_output_attribute_count(core_ptr) &
+         bind(C, name="catchem_config_get_output_attribute_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_config_get_output_attribute_key_at(core_ptr, index, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_attribute_key_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_output_attribute_value_at(core_ptr, index, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_attribute_value_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_config_file_path(core_ptr, buffer, max_len) &
+         bind(C, name="catchem_config_get_config_file_path")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_get_build_version(buffer, max_len) &
+         bind(C, name="catchem_get_build_version")
+         import :: c_char, c_int
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_get_build_commit(buffer, max_len) &
+         bind(C, name="catchem_get_build_commit")
+         import :: c_char, c_int
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      integer(c_int) function catchem_config_get_process_active(core_ptr, process_name) &
+         bind(C, name="catchem_config_get_process_active")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: process_name(*)
+      end function
+
+      integer(c_int) function catchem_config_has_emission_mapping(core_ptr) &
+         bind(C, name="catchem_config_has_emission_mapping")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      type(c_ptr) function catchem_diag_get_pointer(core_ptr, name) bind(C, name="catchem_diag_get_pointer")
+         import :: c_ptr, c_char
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end function
+
+      integer(c_int) function catchem_diag_get_pointer_checked(core_ptr, name, rank, dims, ptr_out) &
+         bind(C, name="catchem_diag_get_pointer_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), value :: rank
+         integer(c_int), intent(in) :: dims(*)
+         type(c_ptr), intent(out) :: ptr_out
+      end function
+
+      integer(c_int) function catchem_diag_get_rank(core_ptr, name) bind(C, name="catchem_diag_get_rank")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+      end function
+
+      integer(c_int) function catchem_diag_get_rank_checked(core_ptr, name, rank_out) &
+         bind(C, name="catchem_diag_get_rank_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), intent(out) :: rank_out
+      end function
+
+      subroutine catchem_diag_get_dims(core_ptr, name, dims_out) bind(C, name="catchem_diag_get_dims")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), intent(out) :: dims_out(*)
+      end subroutine
+
+      integer(c_int) function catchem_diag_get_dims_checked(core_ptr, name, dims_out, dims_length) &
+         bind(C, name="catchem_diag_get_dims_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), intent(out) :: dims_out(*)
+         integer(c_int), value :: dims_length
+      end function
+
+      subroutine catchem_diag_register(core_ptr, name, desc, units, rank, dim1, dim2, dim3) &
+         bind(C, name="catchem_diag_register")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         character(kind=c_char), intent(in) :: desc(*)
+         character(kind=c_char), intent(in) :: units(*)
+         integer(c_int), value :: rank, dim1, dim2, dim3
+      end subroutine
+
+      integer(c_int) function catchem_diag_register_checked(core_ptr, name, desc, units, rank, dim1, dim2, dim3) &
+         bind(C, name="catchem_diag_register_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*), desc(*), units(*)
+         integer(c_int), value :: rank, dim1, dim2, dim3
+      end function
+
+      integer(c_int) function catchem_diag_register_contract_checked(core_ptr, name, desc, units, rank, dims, axes, &
+         policy, reset_value) &
+         bind(C, name="catchem_diag_register_contract_checked")
+         import :: c_ptr, c_char, c_int, c_double
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*), desc(*), units(*)
+         integer(c_int), value :: rank, policy
+         integer(c_int), intent(in) :: dims(*), axes(*)
+         real(c_double), value :: reset_value
+      end function
+
+      integer(c_int) function catchem_diag_get_contract(core_ptr, name, generation, availability, latest_writer, &
+         policy) bind(C, name="catchem_diag_get_contract")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), intent(out) :: generation, availability, latest_writer, policy
+      end function
+
+      subroutine catchem_diag_sync_to_host(core_ptr) bind(C, name="catchem_diag_sync_to_host")
+         import :: c_ptr
+         type(c_ptr), value :: core_ptr
+      end subroutine
+
+      integer(c_int) function catchem_diag_get_count(core_ptr) bind(C, name="catchem_diag_get_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      integer(c_int) function catchem_diag_get_count_checked(core_ptr, count_out) &
+         bind(C, name="catchem_diag_get_count_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), intent(out) :: count_out
+      end function
+
+      subroutine catchem_diag_get_name_at(core_ptr, index, name_out) bind(C, name="catchem_diag_get_name_at")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: name_out(*)
+      end subroutine
+
+      integer(c_int) function catchem_diag_get_name_at_checked(core_ptr, index, name_out, name_length) &
+         bind(C, name="catchem_diag_get_name_at_checked")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index, name_length
+         character(kind=c_char), intent(out) :: name_out(*)
+      end function
+
+      integer(c_int) function catchem_state_get_species_count(state_ptr) bind(C, name="catchem_state_get_species_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+      end function
+
+      integer(c_int) function catchem_state_set_physical_validation_policy_checked(state_ptr, policy) &
+         bind(C, name="catchem_state_set_physical_validation_policy_checked")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: policy
+      end function
+
+      integer(c_int) function catchem_state_get_physical_validation_report_checked( &
+         state_ptr, issue_count, detail, detail_length) &
+         bind(C, name="catchem_state_get_physical_validation_report_checked")
+         import :: c_ptr, c_int, c_char
+         type(c_ptr), value :: state_ptr
+         integer(c_int), intent(out) :: issue_count
+         character(kind=c_char), intent(out) :: detail(*)
+         integer(c_int), value :: detail_length
+      end function
+
+      real(c_double) function catchem_state_get_species_mw(state_ptr, index) bind(C, name="catchem_state_get_species_mw")
+         import :: c_ptr, c_int, c_double
+         type(c_ptr), value :: state_ptr
+         integer(c_int), value :: index
+      end function
+   end interface
+
+   !=========================================================================
+   ! CATChem_Model Derived Type
+   !=========================================================================
    type :: CATChem_Model
-      private
-      ! Core engine - uses existing CATChemCore infrastructure
-      type(CATChemCoreType) :: core
-
-      ! Configuration and status tracking
+      type(c_ptr) :: cpp_core_ptr = c_null_ptr
+      type(c_ptr) :: state_mgr_ptr = c_null_ptr
+      character(len=64), allocatable, public :: required_fields(:)
+      integer :: nx = 0
+      integer :: ny = 0
+      integer :: nz = 0
       logical :: initialized = .false.
-      logical :: grid_setup = .false.
-      logical :: enable_run_phase = .false.
-      character(len=MAX_LEN_PATH) :: config_file = ''
-      character(len=MAX_LEN_NAME), allocatable, public :: required_fields(:)
-      type(ErrorManagerType) :: error_manager
-
-      ! Grid information
-      integer :: nx = 0, ny = 0, nz = 0
-      integer :: nsoil = 4, nsoiltype = 19, nsurftype = 20
-
+      character(len=512), public :: last_error = ''
    contains
-      ! Basic lifecycle methods
       procedure :: initialize => model_initialize
       procedure :: finalize => model_finalize
-
-      ! Grid access (no separate setup needed now)
-      procedure :: get_grid_dimensions => model_get_grid_dimensions
-
-      ! Process management
       procedure :: add_process => model_add_process
-      procedure :: get_process_names => model_get_process_names
       procedure :: get_num_processes => model_get_num_processes
-      procedure, private :: model_register_process
-
-      ! Run execution
+      procedure :: load_required_fields => model_load_required_fields
       procedure :: run_timestep => model_run_timestep
-      procedure :: run_phase => model_run_phase
-      procedure :: run_all_phases => model_run_all_phases
-      procedure :: get_phase_names => model_get_phase_names
-
-      ! Data exchange methods
-      procedure :: set_chemistry => model_set_chemistry
-      procedure :: get_chemistry => model_get_chemistry
-
-      ! Diagnostic methods
       procedure :: get_diagnostic_names => model_get_diagnostic_names
       procedure :: get_diagnostic => model_get_diagnostic
-      procedure :: get_all_diagnostics => model_get_all_diagnostics
-
-      ! Utility methods
-      procedure :: is_ready => model_is_ready
+      procedure :: register_diagnostic => model_register_diagnostic
+      procedure :: get_diagnostic_ptr => model_get_diagnostic_ptr
+      procedure :: get_species_conc_ptr => model_get_species_conc_ptr
+      procedure :: get_diag_index_from_field => model_get_diag_index_from_field
+      procedure :: get_required_met_index => model_get_required_met_index
+      procedure :: get_grid_dimensions => model_get_grid_dimensions
       procedure :: is_initialized => model_is_initialized
-      procedure :: get_required_met_index  => model_get_required_met_index
-      procedure :: get_diag_index_from_field  => model_get_diag_index_from_field
-
-      ! Core access methods (for advanced users)
-      procedure :: get_state_manager => model_get_state_manager
-      procedure :: get_process_manager => model_get_process_manager
-      procedure :: get_error_manager => model_get_error_manager
-      procedure :: get_grid_manager => model_get_grid_manager
-      procedure :: get_diagnostic_manager => model_get_diagnostic_manager
+      procedure :: bind_met_3d => model_bind_met_3d
+      procedure :: bind_met_3d_axis => model_bind_met_3d_axis
+      procedure :: bind_met_2d => model_bind_met_2d
+      procedure :: bind_unified_chemistry_3d => model_bind_unified_chemistry_3d
+      procedure :: bind_unified_chemistry_4d => model_bind_unified_chemistry_4d
+      generic :: bind_unified_chemistry => bind_unified_chemistry_3d, bind_unified_chemistry_4d
+      procedure :: get_output_frequency => model_get_output_frequency
+      procedure :: get_compress_level => model_get_compress_level
+      procedure :: get_output_directory => model_get_output_directory
+      procedure :: get_output_prefix => model_get_output_prefix
+      procedure :: is_latlon_output_enabled => model_is_latlon_output_enabled
+      procedure :: is_diag_enabled => model_is_diag_enabled
+      procedure :: is_process_diag_enabled => model_is_process_diag_enabled
+      procedure :: get_diag_species_count => model_get_diag_species_count
+      procedure :: get_diag_species_at => model_get_diag_species_at
+      procedure :: get_output_attribute_count => model_get_output_attribute_count
+      procedure :: get_output_attribute_at => model_get_output_attribute_at
+      procedure :: get_config_file_path => model_get_config_file_path
+      procedure :: get_build_version => model_get_build_version
+      procedure :: get_build_commit => model_get_build_commit
+      procedure :: is_process_active => model_is_process_active
+      procedure :: has_emission_mapping => model_has_emission_mapping
+      procedure :: set_physical_validation_policy => model_set_physical_validation_policy
+      procedure :: get_physical_validation_report => model_get_physical_validation_report
    end type CATChem_Model
 
 contains
 
-   !> Initialize the CATChem model with configuration file and grid dimensions
-   !! This method sets up the core CATChem infrastructure using the builder pattern,
-   !! loads configuration from the specified file, and sets up the grid geometry.
+   subroutine capture_boundary_error(this)
+      class(CATChem_Model), intent(inout) :: this
+      character(kind=c_char) :: buffer(512)
+      integer :: i, ignored_status
+      this%last_error = ''
+      ignored_status = catchem_get_last_error(buffer, int(size(buffer), c_int))
+      do i = 1, min(len(this%last_error), size(buffer))
+         if (buffer(i) == c_null_char) exit
+         this%last_error(i:i) = buffer(i)
+      end do
+   end subroutine capture_boundary_error
+
+   ! Helper to convert standard Fortran string to null-terminated C char array
+   subroutine to_c_string(f_str, c_arr)
+      character(len=*), intent(in) :: f_str
+      character(kind=c_char), intent(out) :: c_arr(*)
+      integer :: i, f_len
+
+      f_len = len_trim(f_str)
+      ! Strip any trailing c_null_char if present in f_str
+      if (f_len > 0) then
+         if (f_str(f_len:f_len) == c_null_char) f_len = f_len - 1
+      end if
+      do i = 1, f_len
+         c_arr(i) = f_str(i:i)
+      end do
+      c_arr(f_len+1) = c_null_char
+   end subroutine to_c_string
+
+   ! Initialize CATChem model and load configuration
    subroutine model_initialize(this, config_file, nx, ny, nz, nsoil, nsoiltype, nsurftype, rc)
       class(CATChem_Model), intent(inout) :: this
       character(len=*), intent(in) :: config_file
@@ -134,858 +584,310 @@ contains
       integer, intent(in), optional :: nsoil, nsoiltype, nsurftype
       integer, intent(out) :: rc
 
-      type(CATChemBuilderType) :: builder
-      type(ConfigDataType), pointer :: config_data => null()
+      character(kind=c_char) :: c_filename(512)
+      integer(c_int) :: c_status
 
-      rc = CC_SUCCESS
-      call this%error_manager%init()
+      call to_c_string(config_file, c_filename)
 
-      ! Validate inputs
-      if (len_trim(config_file) == 0) then
-         call this%error_manager%push_context('model_initialize', 'validating configuration file')
-         call this%error_manager%report_error(1001, 'Configuration file path is empty', rc)
-         call this%error_manager%pop_context()
+      call catchem_register_carbchem_cpp()
+      call catchem_register_drydep_cpp()
+      call catchem_register_dust_cpp()
+      call catchem_register_seasalt_cpp()
+      call catchem_register_settling_cpp()
+      call catchem_register_so4chem_cpp()
+      call catchem_register_wetdep_cpp()
+
+      ! Retain the C++ configuration error if construction fails.  This is a
+      ! plain C pointer output, so no ESMF descriptor crosses the ABI.
+      c_status = catchem_core_create_from_config_with_grid_checked( &
+         c_filename, int(nx*ny, c_int), int(nz, c_int), this%cpp_core_ptr)
+      if (c_status /= 0_c_int) then
+         call capture_boundary_error(this)
+         rc = CC_FAILURE
          return
-      endif
-
-      if (nx <= 0 .or. ny <= 0 .or. nz <= 0) then
-         call this%error_manager%push_context('model_initialize', 'validating grid dimensions')
-         call this%error_manager%report_error(1001, 'Grid dimensions must be positive', rc)
-         call this%error_manager%pop_context()
+      end if
+      if (.not. c_associated(this%cpp_core_ptr)) then
+         rc = CC_FAILURE
+         this%last_error = 'core_create_from_config_with_grid returned a null handle without a boundary error'
          return
-      endif
+      end if
 
-      ! Store config file path and grid dimensions
-      this%config_file = trim(config_file)
+      this%state_mgr_ptr = catchem_core_get_state_manager(this%cpp_core_ptr)
+      if (.not. c_associated(this%state_mgr_ptr)) then
+         call catchem_core_destroy(this%cpp_core_ptr)
+         this%cpp_core_ptr = c_null_ptr
+         rc = CC_FAILURE
+         this%last_error = 'core_get_state_manager returned a null handle'
+         return
+      end if
+
+      ! Host-local dimensions are authoritative
       this%nx = nx
       this%ny = ny
       this%nz = nz
 
-      ! Store soil and surface parameters (use provided values or defaults)
-      if (present(nsoil)) this%nsoil = nsoil
-      if (present(nsoiltype)) this%nsoiltype = nsoiltype
-      if (present(nsurftype)) this%nsurftype = nsurftype
-
-      ! Initialize core using builder pattern with grid information
-      call builder%init()
-      builder = builder%with_name('CATChem_API_Instance')
-      builder = builder%with_config(config_file)
-      builder = builder%with_grid(nx, ny, nz, this%nsoil, this%nsoiltype, this%nsurftype)
-      call builder%build(this%core, rc)
-
+      call this%load_required_fields(rc)
       if (rc /= CC_SUCCESS) then
-         call this%error_manager%push_context('model_initialize', 'building CATChem core')
-         call this%error_manager%report_error(1014, 'Failed to initialize CATChem core with config: ' // trim(config_file), rc)
-         call this%error_manager%pop_context()
+         call catchem_core_destroy(this%cpp_core_ptr)
+         this%cpp_core_ptr = c_null_ptr
+         this%state_mgr_ptr = c_null_ptr
          return
-      endif
+      end if
 
       this%initialized = .true.
-      this%grid_setup = .true.  ! Grid is now set up during initialization
-
-      ! Get configuration data from core
-      config_data => this%core%get_config()
-      if ( .not. associated(config_data)) then
-         call this%error_manager%push_context('model_initialize', 'accessing configuration data')
-         call this%error_manager%report_error(1002, 'Required managers or config data not available', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-      this%enable_run_phase = config_data%run_phases_enabled
-
+      rc = CC_SUCCESS
    end subroutine model_initialize
 
-   !> Finalize the CATChem model and clean up resources
+   ! Finalize model and release memory
    subroutine model_finalize(this, rc)
       class(CATChem_Model), intent(inout) :: this
       integer, intent(out) :: rc
 
-      rc = CC_SUCCESS
-
-      if (.not. this%initialized) then
-         rc = CC_SUCCESS  ! Already finalized
-         return
-      endif
-
-      ! Finalize core
-      call this%core%finalize(rc)
-      if (rc /= CC_SUCCESS) then
-         call this%error_manager%push_context('model_finalize', 'finalizing CATChem core')
-         call this%error_manager%report_error(1015, 'Core finalization had issues', rc)
-         call this%error_manager%pop_context()
-         ! Don't return failure for finalization warnings
+      if (c_associated(this%cpp_core_ptr)) then
+         call catchem_core_destroy(this%cpp_core_ptr)
          rc = CC_SUCCESS
-      endif
-
-      ! Reset state
+         this%cpp_core_ptr = c_null_ptr
+         this%state_mgr_ptr = c_null_ptr
+      else
+         rc = CC_SUCCESS
+      end if
       this%initialized = .false.
-      this%grid_setup = .false.
-      this%enable_run_phase = .false.
-      this%nx = 0
-      this%ny = 0
-      this%nz = 0
-      this%nsoil = 4
-      this%nsoiltype = 19
-      this%nsurftype = 20
-      this%config_file = ''
-      if (allocated(this%required_fields)) deallocate(this%required_fields)
+      if (rc == CC_SUCCESS) this%last_error = ''
    end subroutine model_finalize
 
-   !> Get current grid dimensions
-   subroutine model_get_grid_dimensions(this, nx, ny, nz, nsoil, nsoiltype, nsurftype)
-      class(CATChem_Model), intent(in) :: this
-      integer, intent(out) :: nx, ny, nz
-      integer, intent(out), optional :: nsoil, nsoiltype, nsurftype
-
-      nx = this%nx
-      ny = this%ny
-      nz = this%nz
-      if (present(nsoil)) nsoil = this%nsoil
-      if (present(nsoiltype)) nsoiltype = this%nsoiltype
-      if (present(nsurftype)) nsurftype = this%nsurftype
-   end subroutine model_get_grid_dimensions
-
-   !> Add all enabled processes from configuration
-   !! This method reads the ConfigManager data and adds all processes where enabled = true
-   !! It automatically registers and adds each enabled process to the core.
+   ! Validate process registration state.
+   !! NOTE: This routine does not add processes.  All science processes are
+   !! registered with the C++ ProcessRegistry during model_initialize and are
+   !! instantiated from the runtime YAML (processes/<name>/activate) while the
+   !! Core is constructed.  This entry point is retained for API compatibility
+   !! and only verifies that the underlying Core handle is present; process
+   !! selection is configuration-driven, not call-driven.
    subroutine model_add_process(this, rc)
-      use ConfigManager_Mod, only: ConfigDataType
       class(CATChem_Model), intent(inout) :: this
       integer, intent(out) :: rc
 
-      type(ConfigDataType), pointer :: config_data => null()
-      type(ProcessManagerType), pointer :: process_mgr => null()
-      integer :: i, reg_rc, add_rc, num_fields
-
-      rc = CC_SUCCESS
-
-      if (.not. this%initialized) then
-         call this%error_manager%push_context('model_add_process', 'checking initialization status')
-         call this%error_manager%report_error(1003, 'Model must be initialized first', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Get configuration data from core
-      config_data => this%core%get_config()
-      if (.not. associated(config_data)) then
-         call this%error_manager%push_context('model_add_process', 'accessing configuration data')
-         call this%error_manager%report_error(1002, 'Configuration data not available', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Get process manager
-      process_mgr => this%core%get_process_manager()
-      if (.not. associated(process_mgr)) then
-         call this%error_manager%push_context('model_add_process', 'accessing process manager')
-         call this%error_manager%report_error(1014, 'ProcessManager not available from core', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Check if processes are available (either run phase or direct processes)
-      if (.not. allocated(config_data%run_phase_processes)) then
-         call this%error_manager%push_context('model_add_process', 'checking process configuration')
-         call this%error_manager%report_error(1002, 'No processes configured', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Loop through all processes in configuration and add enabled ones
-      do i = 1, size(config_data%run_phase_processes)
-         if (config_data%run_phase_processes(i)%enabled) then
-
-            ! Automatically register the process based on its name
-            call this%model_register_process(config_data%run_phase_processes(i)%name, process_mgr, reg_rc)
-            if (reg_rc /= CC_SUCCESS) then
-               write(*,'(A,A,A)') 'Warning: Failed to register enabled process: ', &
-                  trim(config_data%run_phase_processes(i)%name), '. Skipping this process.'
-               cycle  ! Skip this process and continue with others
-            endif
-
-            ! Add process to core
-            call this%core%add_process(config_data%run_phase_processes(i)%name, add_rc)
-            if (add_rc /= CC_SUCCESS) then
-               write(*,'(A,A,A)') 'Warning: Failed to add enabled process to core: ', &
-                  trim(config_data%run_phase_processes(i)%name), '. Skipping this process.'
-               cycle  ! Skip this process and continue with others
-            endif
-
-            write(*,'(A,A)') 'Successfully added enabled process: ', &
-               trim(config_data%run_phase_processes(i)%name)
-         else
-            write(*,'(A,A)') 'Skipping disabled process: ', &
-               trim(config_data%run_phase_processes(i)%name)
-         endif
-      end do
-
-      ! Get required met fields from process_mgr
-      if (allocated(process_mgr%required_met_fields)) then
-         num_fields = size(process_mgr%required_met_fields)
-         allocate(this%required_fields(num_fields))
-         this%required_fields = process_mgr%required_met_fields
+      if (c_associated(this%cpp_core_ptr)) then
+         rc = CC_SUCCESS
       else
-         call this%error_manager%push_context('model_add_process', 'checking required met fields')
-         call this%error_manager%report_error(1014, 'No met fields found', rc)
-         call this%error_manager%pop_context()
-      endif
-
+         rc = CC_FAILURE
+         this%last_error = 'model_add_process called before model_initialize: no Core handle'
+      end if
    end subroutine model_add_process
 
-   !> Automatically register a process based on its name
-   !! This is a private helper method that calls the appropriate registration function
-   !! based on the process name.
-   subroutine model_register_process(this, process_name, process_mgr, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), intent(in) :: process_name
-      type(ProcessManagerType), intent(inout) :: process_mgr
-      integer, intent(out) :: rc
-
-      rc = CC_SUCCESS
-
-      ! Dispatch to the appropriate registration function based on process name
-      select case (trim(process_name))
-       case ('seasalt')
-         call register_seasalt_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering seasalt process')
-            call this%error_manager%report_error(1014, 'Failed to register seasalt process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('dust')
-         call register_dust_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering dust process')
-            call this%error_manager%report_error(1014, 'Failed to register dust process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('drydep')
-         call register_drydep_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering drydep process')
-            call this%error_manager%report_error(1014, 'Failed to register drydep process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('wetdep')
-         call register_wetdep_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering wetdep process')
-            call this%error_manager%report_error(1014, 'Failed to register wetdep process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('settling')
-         call register_settling_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering settling process')
-            call this%error_manager%report_error(1014, 'Failed to register settling process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('so4chem')
-         call register_so4chem_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering so4chem process')
-            call this%error_manager%report_error(1014, 'Failed to register so4chem process', rc)
-            call this%error_manager%pop_context()
-         endif
-       case ('carbchem')
-         call register_carbchem_process(process_mgr, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_register_process', 'registering carbchem process')
-            call this%error_manager%report_error(1014, 'Failed to register carbchem process', rc)
-            call this%error_manager%pop_context()
-         endif
-         ! case ('chemistry')
-         !    call register_chemistry_process(process_mgr, rc)
-
-       case default
-         call this%error_manager%push_context('model_register_process', 'validating process type')
-         call this%error_manager%report_error(1016, 'Unknown process type: ' // trim(process_name) // &
-            '. Supported processes: seasalt, dust, drydep, wetdep, settling, so4chem, carbchem', rc)
-         call this%error_manager%pop_context()
-      end select
-
-   end subroutine model_register_process
-
-   !> Get names of all configured processes
-   subroutine model_get_process_names(this, process_names, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), allocatable, intent(out) :: process_names(:)
-      integer, intent(out) :: rc
-
-      type(ProcessManagerType), pointer :: process_mgr => null()
-      character(len=MAX_LEN_NAME) :: temp_names(50)  ! Temporary array with max size
-      integer :: count, i
-
-      rc = CC_SUCCESS
-
-      if (.not. this%initialized) then
-         allocate(process_names(0))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get process manager from core
-      process_mgr => this%core%get_process_manager()
-      if (.not. associated(process_mgr)) then
-         allocate(process_names(0))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get process list from ProcessManager
-      call process_mgr%list_processes(temp_names, count)
-
-      ! Allocate output array with actual count
-      allocate(process_names(count))
-
-      ! Copy the actual process names
-      do i = 1, count
-         process_names(i) = temp_names(i)
-      end do
-
-   end subroutine model_get_process_names
-
-   !> Get number of configured processes
+   ! Get number of active processes
    function model_get_num_processes(this) result(num_processes)
       class(CATChem_Model), intent(inout) :: this
       integer :: num_processes
-
-      type(ProcessManagerType), pointer :: process_mgr => null()
-      character(len=MAX_LEN_NAME) :: temp_names(50)  ! Temporary array with max size
-
-      num_processes = 0
-
-      if (.not. this%initialized) return
-
-      ! Get process manager from core
-      process_mgr => this%core%get_process_manager()
-      if (.not. associated(process_mgr)) return
-
-      ! Get process count from ProcessManager
-      call process_mgr%list_processes(temp_names, num_processes)
-
+      num_processes = int(catchem_core_get_num_processes(this%cpp_core_ptr))
    end function model_get_num_processes
 
+   ! Load active process-contract requirements for host-owned fields.
+   subroutine model_load_required_fields(this, rc)
+      class(CATChem_Model), intent(inout) :: this
+      integer, intent(out) :: rc
 
-   !> Run a single timestep
-   !! This method executes one timestep of the CATChem simulation
+      character(kind=c_char) :: c_name(64)
+      integer(c_int) :: c_count, c_status
+      integer :: i, j
+
+      if (allocated(this%required_fields)) deallocate(this%required_fields)
+      c_count = 0_c_int
+      c_status = catchem_core_get_required_host_field_count_checked(this%cpp_core_ptr, c_count)
+      if (c_status /= 0_c_int) then
+         call capture_boundary_error(this)
+         rc = CC_FAILURE
+         return
+      end if
+
+      allocate(this%required_fields(int(c_count)))
+      this%required_fields = ''
+      do i = 1, int(c_count)
+         c_name = c_null_char
+         c_status = catchem_core_get_required_host_field_name_checked(this%cpp_core_ptr, int(i - 1, c_int), &
+            c_name, int(size(c_name), c_int))
+         if (c_status /= 0_c_int) then
+            call capture_boundary_error(this)
+            deallocate(this%required_fields)
+            rc = CC_FAILURE
+            return
+         end if
+         do j = 1, size(c_name)
+            if (c_name(j) == c_null_char) exit
+            this%required_fields(i)(j:j) = c_name(j)
+         end do
+      end do
+      rc = CC_SUCCESS
+   end subroutine model_load_required_fields
+
+   ! Execute standard timestep
    subroutine model_run_timestep(this, timestep, dt, rc)
       class(CATChem_Model), intent(inout) :: this
-      integer, intent(in) :: timestep         ! Current timestep number
-      real(fp), intent(in) :: dt              ! Timestep size [s]
+      integer, intent(in) :: timestep
+      real(fp), intent(in) :: dt
       integer, intent(out) :: rc
 
-      rc = CC_SUCCESS
-
-      if (.not. this%is_ready()) then
-         call this%error_manager%push_context('model_run_timestep', 'checking model readiness')
-         call this%error_manager%report_error(1003, 'Model is not ready to run timestep', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      if (dt <= 0.0_fp) then
-         call this%error_manager%push_context('model_run_timestep', 'validating timestep size')
-         call this%error_manager%report_error(1001, 'Timestep size must be positive', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      if (this%enable_run_phase) then
-         call this%run_all_phases(rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_run_timestep', 'running all phases')
-            call this%error_manager%report_error(1015, 'Failed to run all phases during timestep', rc)
-            call this%error_manager%pop_context()
-            return
-         endif
+      if (c_associated(this%cpp_core_ptr)) then
+         call catchem_state_sync_to_device(this%state_mgr_ptr)
+         rc = catchem_core_run_timestep(this%cpp_core_ptr, real(dt, c_double))
+         if (rc == CC_SUCCESS) then
+            call catchem_state_sync_to_host(this%state_mgr_ptr)
+         end if
       else
-         ! Run the core timestep
-         call this%core%run_timestep(timestep, dt, rc)
-         if (rc /= CC_SUCCESS) then
-            call this%error_manager%push_context('model_run_timestep', 'running core timestep')
-            call this%error_manager%report_error(1015, 'Failed to run all processes during timestep', rc)
-            call this%error_manager%pop_context()
-            return
-         endif
-      endif
+         rc = CC_FAILURE
+         this%last_error = 'run_timestep: model is not initialized'
+      end if
    end subroutine model_run_timestep
 
-   !> Run a specific phase
-   !! This method executes a named phase of the simulation
-   subroutine model_run_phase(this, phase_name, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), intent(in) :: phase_name
-      integer, intent(out) :: rc
-
-      type(ProcessManagerType), pointer :: process_mgr => null()
-      type(StateManagerType), pointer :: state_mgr => null()
-      type(ConfigDataType), pointer :: config_data => null()
-
-      rc = CC_SUCCESS
-
-      if (.not. this%is_ready()) then
-         call this%error_manager%push_context('model_run_phase', 'checking model readiness')
-         call this%error_manager%report_error(1003, 'Model is not ready for phase execution', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Get managers and config data
-      process_mgr => this%core%get_process_manager()
-      state_mgr => this%core%get_state_manager()
-      config_data => this%core%get_config()
-
-      if (.not. associated(process_mgr) .or. .not. associated(state_mgr) .or. .not. associated(config_data)) then
-         call this%error_manager%push_context('model_run_phase', 'accessing required managers')
-         call this%error_manager%report_error(1014, 'Required managers or config data not available', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Run the specific phase via ProcessManager
-      call process_mgr%run_phase(phase_name, config_data, state_mgr, rc)
-      if (rc /= CC_SUCCESS) then
-         call this%error_manager%push_context('model_run_phase', 'executing phase: ' // trim(phase_name))
-         call this%error_manager%report_error(1015, 'Failed to run phase: ' // trim(phase_name), rc)
-         call this%error_manager%pop_context()
-      endif
-
-   end subroutine model_run_phase
-
-   !> Run all configured phases in sequence
-   !! This method executes all phases in the order they were configured using ConfigManager data
-   subroutine model_run_all_phases(this, rc)
-      class(CATChem_Model), intent(inout) :: this
-      integer, intent(out) :: rc
-
-      type(ProcessManagerType), pointer :: process_mgr => null()
-      type(StateManagerType), pointer :: state_mgr => null()
-      type(ConfigDataType), pointer :: config_data => null()
-
-      rc = CC_SUCCESS
-
-      if (.not. this%is_ready()) then
-         call this%error_manager%push_context('model_run_all_phases', 'checking model readiness')
-         call this%error_manager%report_error(1003, 'Model is not ready for phase execution', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Get managers and config data
-      process_mgr => this%core%get_process_manager()
-      state_mgr => this%core%get_state_manager()
-      config_data => this%core%get_config()
-
-      if (.not. associated(process_mgr) .or. .not. associated(state_mgr) .or. .not. associated(config_data)) then
-         call this%error_manager%push_context('model_run_all_phases', 'accessing required managers')
-         call this%error_manager%report_error(1014, 'Required managers or config data not available', rc)
-         call this%error_manager%pop_context()
-         return
-      endif
-
-      ! Run all phases in sequence using ConfigManager data
-      call process_mgr%run_all_phases(config_data, state_mgr, rc)
-      if (rc /= CC_SUCCESS) then
-         call this%error_manager%push_context('model_run_all_phases', 'executing all phases')
-         call this%error_manager%report_error(1015, 'Failed to run all phases', rc)
-         call this%error_manager%pop_context()
-      endif
-
-   end subroutine model_run_all_phases
-
-   !> Get names of configured run phases
-   !! Note: This now gets phase information from ConfigManager
-   subroutine model_get_phase_names(this, phase_names, rc)
-      use ConfigManager_Mod, only: ConfigDataType
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), allocatable, intent(out) :: phase_names(:)
-      integer, intent(out) :: rc
-
-      type(ConfigDataType), pointer :: config_data => null()
-      integer :: i
-
-      rc = CC_SUCCESS
-
-      if (.not. this%initialized) then
-         allocate(phase_names(0))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get configuration data from core
-      config_data => this%core%get_config()
-      if (.not. associated(config_data)) then
-         allocate(phase_names(0))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Check if run phases are available
-      if (.not. allocated(config_data%run_phases)) then
-         allocate(phase_names(0))
-         return
-      endif
-
-      allocate(phase_names(size(config_data%run_phases)))
-      do i = 1, size(config_data%run_phases)
-         phase_names(i) = config_data%run_phases(i)%name
-      end do
-
-   end subroutine model_get_phase_names
-
-
-   !> Set chemical concentrations from host model
-   !! This method transfers chemical species data from the host model to CATChem
-   subroutine model_set_chemistry(this, species_names, concentrations, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), intent(in) :: species_names(:)
-      real(fp), intent(in) :: concentrations(:,:,:,:)  ! [species, nx, ny, nz]
-      integer, intent(out) :: rc
-
-      type(StateManagerType), pointer :: state_mgr => null()
-      type(ChemStateType), pointer :: chem_state => null()
-      integer :: num_species
-
-      rc = CC_SUCCESS
-      ! Initialize error handling
-
-      if (.not. this%is_ready()) then
-         ! Error: 'Model is not ready for chemistry data'
-         rc = CC_FAILURE
-         return
-      endif
-
-      num_species = size(species_names)
-      if (num_species /= size(concentrations, 1)) then
-         ! Error: 'Number of species names does not match concentration dimensions'
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get state manager and chemistry state
-      state_mgr => this%core%get_state_manager()
-      if (.not. associated(state_mgr)) then
-         ! Error: 'State manager not available'
-         rc = CC_FAILURE
-         return
-      endif
-
-      chem_state => state_mgr%get_chem_state_ptr()
-      if (.not. associated(chem_state)) then
-         ! Error: 'Chemistry state not available'
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! TODO: Implement chemistry data transfer
-      ! This would involve mapping species names to indices and copying data
-      ! Error: 'Chemistry data transfer not yet implemented'
-      rc = CC_FAILURE
-
-   end subroutine model_set_chemistry
-
-   !> Get chemical concentrations to host model
-   !! This method transfers chemical species data from CATChem to the host model
-   subroutine model_get_chemistry(this, species_names, concentrations, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), allocatable, intent(out) :: species_names(:)
-      real(fp), allocatable, intent(out) :: concentrations(:,:,:,:)  ! [species, nx, ny, nz]
-      integer, intent(out) :: rc
-
-      type(StateManagerType), pointer :: state_mgr => null()
-      type(ChemStateType), pointer :: chem_state => null()
-
-      rc = CC_SUCCESS
-
-      if (.not. this%is_ready()) then
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get state manager and chemistry state
-      state_mgr => this%core%get_state_manager()
-      if (.not. associated(state_mgr)) then
-         rc = CC_FAILURE
-         return
-      endif
-
-      chem_state => state_mgr%get_chem_state_ptr()
-      if (.not. associated(chem_state)) then
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! TODO: Implement chemistry data retrieval
-      ! This would involve getting species names and copying concentration data
-      allocate(species_names(0))
-      allocate(concentrations(0, this%nx, this%ny, this%nz))
-
-   end subroutine model_get_chemistry
-
-
-   !> Get names of available diagnostics
-   !! This method retrieves the names of all available diagnostic fields
+   ! Get available diagnostic field names
    subroutine model_get_diagnostic_names(this, diagnostic_names, diagnostic_fields, rc)
       class(CATChem_Model), intent(inout) :: this
       character(len=*), allocatable, intent(out) :: diagnostic_names(:)
       character(len=*), allocatable, optional, intent(out) :: diagnostic_fields(:)
       integer, intent(out) :: rc
 
-      type(DiagnosticManagerType), pointer :: diag_mgr => null()
-      type(DiagnosticRegistryType), pointer :: registry => null()
-      character(len=MAX_LEN_NAME), allocatable :: process_list(:), field_names(:)
-      integer :: num_processes, i, j, field_count, total_fields, name_idx
-      integer :: local_rc
+      integer :: i, count
+      integer(c_int) :: c_count, status
+      character(kind=c_char) :: c_name(64)
+      character(len=64) :: f_name
+
+      status = catchem_diag_get_count_checked(this%cpp_core_ptr, c_count)
+      if (status /= 0_c_int) then
+         allocate(diagnostic_names(0))
+         if (present(diagnostic_fields)) allocate(diagnostic_fields(0))
+         rc = int(status)
+         call capture_boundary_error(this)
+         return
+      end if
+      count = int(c_count)
+      allocate(diagnostic_names(count))
+      if (present(diagnostic_fields)) allocate(diagnostic_fields(count))
+
+      do i = 1, count
+         status = catchem_diag_get_name_at_checked(this%cpp_core_ptr, int(i - 1, c_int), c_name, 64_c_int)
+         if (status /= 0_c_int) then
+            rc = int(status)
+            call capture_boundary_error(this)
+            return
+         end if
+         f_name = ""
+         block
+            integer :: j
+            do j = 1, 64
+               if (c_name(j) == c_null_char) exit
+               f_name(j:j) = c_name(j)
+            end do
+         end block
+         diagnostic_names(i) = trim(f_name)
+         if (present(diagnostic_fields)) diagnostic_fields(i) = trim(f_name)
+      end do
 
       rc = CC_SUCCESS
-      ! Initialize error handling
-
-      if (.not. this%initialized) then
-         allocate(diagnostic_names(0))
-         ! Error: 'Model not initialized'
-         rc = CC_FAILURE
-         return
-      endif
-
-      diag_mgr => this%core%get_diagnostic_manager()
-      if (.not. associated(diag_mgr)) then
-         allocate(diagnostic_names(0))
-         ! Error: 'Diagnostic manager not available'
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Get list of all processes with diagnostics
-      call diag_mgr%list_processes(process_list, num_processes, local_rc)
-      if (local_rc /= CC_SUCCESS .or. num_processes == 0) then
-         allocate(diagnostic_names(0))
-         return  ! No processes or failed to get list - return empty array
-      endif
-
-      ! Count total diagnostic fields across all processes
-      total_fields = 0
-      do i = 1, num_processes
-         call diag_mgr%get_process_registry(process_list(i), registry, local_rc)
-         if (local_rc == CC_SUCCESS .and. associated(registry)) then
-            total_fields = total_fields + registry%get_field_count()
-         endif
-      end do
-
-      ! Allocate output array
-      allocate(diagnostic_names(total_fields))
-      if (present(diagnostic_fields))  allocate( diagnostic_fields(total_fields) )
-
-      ! Collect all diagnostic field names with process prefix
-      name_idx = 0
-      do i = 1, num_processes
-         call diag_mgr%get_process_registry(process_list(i), registry, local_rc)
-         if (local_rc == CC_SUCCESS .and. associated(registry)) then
-            field_count = registry%get_field_count()
-            if (field_count > 0) then
-               allocate(field_names(field_count))
-               call registry%list_fields(field_names, field_count)
-
-               do j = 1, field_count
-                  name_idx = name_idx + 1
-                  ! Create qualified name: process_name.field_name
-                  diagnostic_names(name_idx) = trim(process_list(i)) // '.' // trim(field_names(j))
-                  if (present(diagnostic_fields)) diagnostic_fields(name_idx) = trim(field_names(j))
-               end do
-
-               deallocate(field_names)
-            endif
-         endif
-      end do
-
-      ! Clean up
-      if (allocated(process_list)) deallocate(process_list)
-
    end subroutine model_get_diagnostic_names
 
-   !> Get a specific diagnostic field
-   !! This method retrieves data for a named diagnostic field
+   ! Retrieve individual diagnostic data mapped directly from C++ heap
    subroutine model_get_diagnostic(this, diagnostic_name, diagnostic_data, rc)
       class(CATChem_Model), intent(inout) :: this
       character(len=*), intent(in) :: diagnostic_name
       real(fp), allocatable, intent(out) :: diagnostic_data(:,:,:)
       integer, intent(out) :: rc
 
-      type(DiagnosticManagerType), pointer :: diag_mgr => null()
-      character(len=MAX_LEN_NAME) :: process_name, field_name
-      integer :: local_rc, dot_pos, data_type
-      real(fp) :: scalar_value
-      real(fp), pointer :: array_1d_ptr(:) => null()
-      real(fp), pointer :: array_2d_ptr(:,:) => null()
-      real(fp), pointer :: array_3d_ptr(:,:,:) => null()
-      logical :: found = .false.
+      character(kind=c_char) :: c_name(64)
+      type(c_ptr) :: raw_ptr
+      integer(c_int) :: rank, dims(3)
+      real(c_double), pointer :: f_ptr_2d(:,:) => null()
+      real(c_double), pointer :: f_ptr_3d(:,:,:) => null()
 
-      rc = CC_SUCCESS
-      ! Initialize error handling
-
-      if (.not. this%initialized) then
-         ! Error: 'Model not initialized'
-         rc = CC_FAILURE
+      call to_c_string(diagnostic_name, c_name)
+      raw_ptr = c_null_ptr
+      rc = int(catchem_diag_get_rank_checked(this%cpp_core_ptr, c_name, rank))
+      if (rc /= CC_SUCCESS) then
+         call capture_boundary_error(this)
          return
-      endif
-
-      diag_mgr => this%core%get_diagnostic_manager()
-      if (.not. associated(diag_mgr)) then
-         ! Error: 'Diagnostic manager not available'
-         rc = CC_FAILURE
+      end if
+      dims = 0
+      rc = int(catchem_diag_get_dims_checked(this%cpp_core_ptr, c_name, dims, 3_c_int))
+      if (rc /= CC_SUCCESS) then
+         call capture_boundary_error(this)
          return
-      endif
-
-      ! Parse diagnostic name (format: process_name.field_name)
-      dot_pos = index(diagnostic_name, '.')
-      if (dot_pos <= 1) then
-         ! Error: 'Invalid diagnostic name format. Expected: process_name.field_name'
-         rc = CC_FAILURE
+      end if
+      rc = int(catchem_diag_get_pointer_checked(this%cpp_core_ptr, c_name, rank, dims, raw_ptr))
+      if (rc /= CC_SUCCESS .or. .not. c_associated(raw_ptr)) then
+         call capture_boundary_error(this)
          return
-      endif
+      end if
 
-      process_name = diagnostic_name(1:dot_pos-1)
-      field_name = diagnostic_name(dot_pos+1:)
-
-      ! Get field value using DiagnosticManager
-      call diag_mgr%get_field_value(process_name, field_name, &
-         scalar_value, array_1d_ptr, array_2d_ptr, array_3d_ptr, &
-         data_type, rc = local_rc)
-
-      if (local_rc /= CC_SUCCESS) then
-         ! Error: 'Failed to retrieve diagnostic field: ' // trim(diagnostic_name)
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Allocate and populate output array based on data type
       allocate(diagnostic_data(this%nx, this%ny, this%nz))
       diagnostic_data = 0.0_fp
 
-      select case (data_type)
-       case (DIAG_REAL_SCALAR)
-         diagnostic_data = scalar_value
-         found = .true.
-
-       case (DIAG_REAL_2D)
-         if (associated(array_2d_ptr)) then
-            ! Copy 2D data to first level of 3D array
-            diagnostic_data(:,:,1) = array_2d_ptr
-            found = .true.
-         endif
-
-       case (DIAG_REAL_3D)
-         if (associated(array_3d_ptr)) then
-            diagnostic_data = array_3d_ptr
-            found = .true.
-         endif
-
-       case default
-         ! Error: 'Unsupported diagnostic data type for: ' // trim(diagnostic_name)
-         rc = CC_FAILURE
-         return
-      end select
-
-      if (.not. found) then
-         ! Error: 'No data available for diagnostic: ' // trim(diagnostic_name)
-         rc = CC_FAILURE
-      endif
-
-   end subroutine model_get_diagnostic
-
-   !> Get all diagnostic data
-   !! This method retrieves all available diagnostic data
-   subroutine model_get_all_diagnostics(this, diagnostic_names, diagnostic_data, rc)
-      class(CATChem_Model), intent(inout) :: this
-      character(len=*), allocatable, intent(out) :: diagnostic_names(:)
-      real(fp), allocatable, intent(out) :: diagnostic_data(:,:,:,:)  ! [diag, nx, ny, nz]
-      integer, intent(out) :: rc
-
-      type(DiagnosticManagerType), pointer :: diag_mgr => null()
-      integer :: local_rc
+      if (rank == 2) then
+         call c_f_pointer(raw_ptr, f_ptr_2d, [dims(1), dims(2)])
+         if (dims(2) == this%nz .and. dims(1) == this%nx * this%ny) then
+            diagnostic_data = real(reshape(f_ptr_2d, [this%nx, this%ny, this%nz]), fp)
+         else if (dims(1) == this%nx * this%ny) then
+            diagnostic_data(:,:,1) = real(reshape(f_ptr_2d(:,1), [this%nx, this%ny]), fp)
+         end if
+      else if (rank == 3) then
+         call c_f_pointer(raw_ptr, f_ptr_3d, [dims(1), dims(2), dims(3)])
+         if (dims(1) == this%nx .and. dims(2) == this%ny .and. dims(3) == this%nz) then
+            diagnostic_data = real(f_ptr_3d, fp)
+         else
+            deallocate(diagnostic_data)
+            rc = CC_FAILURE
+            return
+         end if
+      end if
 
       rc = CC_SUCCESS
-      ! Initialize error handling
+   end subroutine model_get_diagnostic
 
-      if (.not. this%initialized) then
-         ! Error: 'Model not initialized'
-         allocate(diagnostic_names(0))
-         allocate(diagnostic_data(0, this%nx, this%ny, this%nz))
-         rc = CC_FAILURE
-         return
-      endif
-
-      diag_mgr => this%core%get_diagnostic_manager()
-      if (.not. associated(diag_mgr)) then
-         ! Error: 'Diagnostic manager not available'
-         allocate(diagnostic_names(0))
-         allocate(diagnostic_data(0, this%nx, this%ny, this%nz))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! First get all diagnostic field names
-      call this%get_diagnostic_names(diagnostic_names, rc =local_rc)
-      if (local_rc /= CC_SUCCESS) then
-         ! Error: 'Failed to get diagnostic names'
-         allocate(diagnostic_data(0, this%nx, this%ny, this%nz))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! Collect all diagnostic data using DiagnosticManager
-      call diag_mgr%collect_all_diagnostics(local_rc)
-      if (local_rc /= CC_SUCCESS) then
-         ! Error: 'Failed to collect diagnostic data'
-         allocate(diagnostic_data(size(diagnostic_names), this%nx, this%ny, this%nz))
-         rc = CC_FAILURE
-         return
-      endif
-
-      ! For now, allocate the data array but don't populate it
-      ! TODO: Extract individual diagnostic values and populate diagnostic_data array
-      ! This would require iterating through diagnostic_names and calling get_field_value for each
-      allocate(diagnostic_data(size(diagnostic_names), this%nx, this%ny, this%nz))
-      diagnostic_data = 0.0_fp
-
-      ! Note: The actual data collection has been performed and stored in each field's
-      ! DiagnosticDataType structure. Individual fields can be accessed using get_diagnostic()
-
-   end subroutine model_get_all_diagnostics
-
-   !> Get diagnostic index based on field name
+   ! Find index of registered diagnostic name
    function model_get_diag_index_from_field(this, field_name) result(found_index)
       class(CATChem_Model), intent(inout) :: this
       character(len=*), intent(in) :: field_name
-      character(len=MAX_LEN_NAME), allocatable :: diagnostic_names(:)
-      character(len=MAX_LEN_NAME), allocatable :: diagnostic_fields(:)
-      integer :: found_index, rc, i
+      integer :: found_index
+
+      character(len=128), allocatable :: diagnostic_names(:)
+      integer :: rc, i
 
       found_index = 0
-      call this%get_diagnostic_names(diagnostic_names, diagnostic_fields, rc)
-      if (allocated(diagnostic_fields)) then
-         do i = 1, size(diagnostic_fields)
-            if (trim(field_name) == trim(diagnostic_fields(i))) then
+      call this%get_diagnostic_names(diagnostic_names, rc=rc)
+      if (allocated(diagnostic_names)) then
+         do i = 1, size(diagnostic_names)
+            if (trim(field_name) == trim(diagnostic_names(i))) then
                found_index = i
-               exit !exit the loop once found; TODO: this assumes we do not have duplicated field names
+               exit
             end if
          end do
-      else
-         write(*,'(A)') ' Warning: No diagnostic fields are registered!!'
       end if
    end function model_get_diag_index_from_field
 
-   !> Check if model is ready to run
-   !! This method checks if all necessary components are initialized and configured
-   function model_is_ready(this) result(is_ready)
+   ! Required met field utility
+   function model_get_required_met_index(this, var_name) result(found_index)
       class(CATChem_Model), intent(inout) :: this
-      logical :: is_ready
+      character(len=*), intent(in) :: var_name
+      integer :: found_index, i
 
-      is_ready = this%initialized .and. this%grid_setup .and. (this%get_num_processes() > 0)
-   end function model_is_ready
+      found_index = 0
+      if (.not. allocated(this%required_fields)) return
+      do i = 1, size(this%required_fields)
+         if (trim(var_name) == trim(this%required_fields(i))) then
+            found_index = i
+            return
+         end if
+      end do
+   end function model_get_required_met_index
 
-   !> Check if model is initialized
+   ! Grid dimension query
+   subroutine model_get_grid_dimensions(this, nx, ny, nz)
+      class(CATChem_Model), intent(in) :: this
+      integer, intent(out) :: nx, ny, nz
+
+      nx = this%nx
+      ny = this%ny
+      nz = this%nz
+   end subroutine model_get_grid_dimensions
+
+   ! Status checking
    function model_is_initialized(this) result(is_initialized)
       class(CATChem_Model), intent(in) :: this
       logical :: is_initialized
@@ -993,66 +895,374 @@ contains
       is_initialized = this%initialized
    end function model_is_initialized
 
-   !> get required met index for all the required met variables registered in process manager
-   function model_get_required_met_index(this, var_name) result(found_index)
+   subroutine model_set_physical_validation_policy(this, policy, rc)
       class(CATChem_Model), intent(inout) :: this
-      character(len=*), intent(in) :: var_name
-      integer :: found_index
+      integer, intent(in) :: policy
+      integer, intent(out) :: rc
+
+      rc = int(catchem_state_set_physical_validation_policy_checked( &
+         this%state_mgr_ptr, int(policy, c_int)))
+      if (rc /= CC_SUCCESS) call capture_boundary_error(this)
+   end subroutine model_set_physical_validation_policy
+
+   subroutine model_get_physical_validation_report(this, issue_count, detail, rc)
+      class(CATChem_Model), intent(inout) :: this
+      integer, intent(out) :: issue_count
+      character(len=*), intent(out) :: detail
+      integer, intent(out) :: rc
+      character(kind=c_char) :: c_detail(1024)
+      integer(c_int) :: c_count, status
       integer :: i
 
-      found_index = 0
-      if (allocated(this%required_fields)) then
-         do i = 1, size(this%required_fields)
-            if (trim(var_name) == trim(this%required_fields(i))) then
-               found_index = i
-               exit !exit the loop once found
-            end if
-         end do
-      else
-         write(*,'(A)') ' Warning: No met fields are registered!!'
+      issue_count = 0
+      detail = ''
+      status = catchem_state_get_physical_validation_report_checked( &
+         this%state_mgr_ptr, c_count, c_detail, int(size(c_detail), c_int))
+      rc = int(status)
+      issue_count = int(c_count)
+      if (status /= 0_c_int) then
+         call capture_boundary_error(this)
+         return
       end if
-   end function model_get_required_met_index
+      do i = 1, min(len(detail), size(c_detail))
+         if (c_detail(i) == c_null_char) exit
+         detail(i:i) = c_detail(i)
+      end do
+   end subroutine model_get_physical_validation_report
 
-   !> Get direct access to the error manager
-   function model_get_error_manager(this) result(error_mgr_ptr)
-      class(CATChem_Model), intent(inout), target :: this
-      type(ErrorManagerType), pointer :: error_mgr_ptr
-
-      error_mgr_ptr => this%error_manager
-   end function model_get_error_manager
-
-   ! Core access methods for advanced users
-
-   !> Get direct access to the state manager (advanced usage)
-   function model_get_state_manager(this) result(state_mgr_ptr)
+   ! Bind a 3D meteorological field
+   subroutine model_bind_met_3d(this, name, arr, rc)
       class(CATChem_Model), intent(inout) :: this
-      type(StateManagerType), pointer :: state_mgr_ptr
+      character(len=*), intent(in) :: name
+      real(c_double), target, contiguous, intent(in) :: arr(:,:,:)
+      integer, optional, intent(out) :: rc
 
-      state_mgr_ptr => this%core%get_state_manager()
-   end function model_get_state_manager
+      character(kind=c_char) :: c_name(64)
+      integer(c_int) :: status
 
-   !> Get direct access to the process manager (advanced usage)
-   function model_get_process_manager(this) result(process_mgr_ptr)
+      call to_c_string(name, c_name)
+      ! Route through the checked binder so an array whose extents do not
+      ! match the state contract is rejected with the exact boundary status
+      ! (e.g. extent mismatch) instead of being silently accepted.  CATChem
+      ! flattens the two horizontal Fortran dimensions into one column axis.
+      status = catchem_state_bind_met_3d_checked(this%state_mgr_ptr, c_name, c_loc(arr(1,1,1)), &
+         int(size(arr, 1) * size(arr, 2), c_int), int(size(arr, 3), c_int), 1_c_int)
+      if (present(rc)) then
+         rc = int(status)
+         if (status /= 0_c_int) call capture_boundary_error(this)
+      end if
+   end subroutine model_bind_met_3d
+
+   ! Bind a 3D meteorological field with an explicit vertical semantic axis.
+   ! CATChem stores horizontal Fortran dimensions as one flattened column axis.
+   subroutine model_bind_met_3d_axis(this, name, arr, semantic_axis, rc)
       class(CATChem_Model), intent(inout) :: this
-      type(ProcessManagerType), pointer :: process_mgr_ptr
+      character(len=*), intent(in) :: name
+      real(c_double), target, contiguous, intent(in) :: arr(:,:,:)
+      integer, intent(in) :: semantic_axis
+      integer, optional, intent(out) :: rc
 
-      process_mgr_ptr => this%core%get_process_manager()
-   end function model_get_process_manager
+      character(kind=c_char) :: c_name(64)
+      integer(c_int) :: status
 
-   !> Get direct access to the grid manager (advanced usage)
-   function model_get_grid_manager(this) result(grid_mgr_ptr)
+      call to_c_string(name, c_name)
+      status = catchem_state_bind_met_3d_axis_checked(this%state_mgr_ptr, c_name, c_loc(arr(1,1,1)), &
+         int(size(arr, 1) * size(arr, 2), c_int), int(size(arr, 3), c_int), 1_c_int, int(semantic_axis, c_int))
+      if (present(rc)) then
+         if (status == 0_c_int) then
+            rc = CC_SUCCESS
+         else
+            rc = CC_FAILURE
+            call capture_boundary_error(this)
+         end if
+      end if
+   end subroutine model_bind_met_3d_axis
+
+   ! Bind a 2D meteorological field
+   subroutine model_bind_met_2d(this, name, arr, rc)
       class(CATChem_Model), intent(inout) :: this
-      type(GridManagerType), pointer :: grid_mgr_ptr
+      character(len=*), intent(in) :: name
+      real(c_double), target, contiguous, intent(in) :: arr(:,:)
+      integer, optional, intent(out) :: rc
 
-      grid_mgr_ptr => this%core%get_grid_manager()
-   end function model_get_grid_manager
+      character(kind=c_char) :: c_name(64)
 
-   !> Get direct access to the diagnostic manager (advanced usage)
-   function model_get_diagnostic_manager(this) result(diag_mgr_ptr)
+      call to_c_string(name, c_name)
+      call catchem_state_bind_met_2d(this%state_mgr_ptr, c_name, c_loc(arr(1,1)))
+      if (present(rc)) rc = CC_SUCCESS
+   end subroutine model_bind_met_2d
+
+   ! Bind unified chemical concentrations 3D array
+   subroutine model_bind_unified_chemistry_3d(this, arr, rc)
       class(CATChem_Model), intent(inout) :: this
-      type(DiagnosticManagerType), pointer :: diag_mgr_ptr
+      real(c_double), target, contiguous, intent(in) :: arr(:,:,:)
+      integer, optional, intent(out) :: rc
 
-      diag_mgr_ptr => this%core%get_diagnostic_manager()
-   end function model_get_diagnostic_manager
+      call catchem_state_bind_unified_chemistry(this%state_mgr_ptr, c_loc(arr(1,1,1)))
+      if (present(rc)) rc = CC_SUCCESS
+   end subroutine model_bind_unified_chemistry_3d
+
+   ! Bind unified chemical concentrations 4D array
+   subroutine model_bind_unified_chemistry_4d(this, arr, rc)
+      class(CATChem_Model), intent(inout) :: this
+      real(c_double), target, contiguous, intent(in) :: arr(:,:,:,:)
+      integer, optional, intent(out) :: rc
+
+      call catchem_state_bind_unified_chemistry(this%state_mgr_ptr, c_loc(arr(1,1,1,1)))
+      if (present(rc)) rc = CC_SUCCESS
+   end subroutine model_bind_unified_chemistry_4d
+
+   ! Register a 3D diagnostic field in the C++ DiagnosticManager.
+   !
+   ! By default the field is DiagnosticPolicy::Instantaneous, which the C++
+   ! manager resets (full-array memset) at the start of every timestep.  Hosts
+   ! that fully overwrite the field each step (e.g. the PM2.5/PM10 diagnostics)
+   ! can pass persistent=.true. to select DiagnosticPolicy::Persistent and skip
+   ! that per-step reset; the writer must then guarantee every element is
+   ! rewritten before the field is read.
+   subroutine model_register_diagnostic(this, name, desc, units, dims, rc, persistent)
+      class(CATChem_Model), intent(inout) :: this
+      character(len=*), intent(in) :: name, desc, units
+      integer, intent(in) :: dims(3)
+      integer, intent(out) :: rc
+      logical, optional, intent(in) :: persistent
+
+      character(kind=c_char) :: c_name(64), c_desc(128), c_units(64)
+      integer(c_int) :: c_dims(3), c_axes(3)
+      integer, parameter :: POLICY_INSTANTANEOUS = 0, POLICY_PERSISTENT = 2
+      integer, parameter :: AXIS_COLUMN = 0, AXIS_LEVEL = 1, AXIS_SPECIES = 4
+
+      rc = CC_FAILURE
+      if (.not. c_associated(this%cpp_core_ptr)) return
+      call to_c_string(name, c_name)
+      call to_c_string(desc, c_desc)
+      call to_c_string(units, c_units)
+      if (present(persistent) .and. persistent) then
+         ! Match the axes DiagnosticManager::register_field() would derive for a
+         ! 3D field (Column, Level, Species) so re-registration stays consistent.
+         c_dims = int(dims, c_int)
+         c_axes = [AXIS_COLUMN, AXIS_LEVEL, AXIS_SPECIES]
+         rc = int(catchem_diag_register_contract_checked(this%cpp_core_ptr, c_name, c_desc, c_units, &
+            3_c_int, c_dims, c_axes, int(POLICY_PERSISTENT, c_int), 0.0_c_double))
+      else
+         rc = int(catchem_diag_register_checked(this%cpp_core_ptr, c_name, c_desc, c_units, &
+            3_c_int, int(dims(1), c_int), int(dims(2), c_int), int(dims(3), c_int)))
+      end if
+      if (rc /= CC_SUCCESS) call capture_boundary_error(this)
+   end subroutine model_register_diagnostic
+
+   subroutine model_get_species_conc_ptr(this, species_index, ptr3d, dims, rc)
+      class(CATChem_Model), intent(inout) :: this
+      integer, intent(in) :: species_index
+      real(fp), pointer, intent(out) :: ptr3d(:,:,:)
+      integer, intent(in) :: dims(3)
+      integer, intent(out) :: rc
+      type(c_ptr) :: raw_ptr
+      integer(c_int) :: status
+
+      rc = CC_FAILURE
+      nullify(ptr3d)
+      if (.not. c_associated(this%state_mgr_ptr)) return
+      status = catchem_state_get_species_conc_pointer_checked(this%state_mgr_ptr, int(species_index, c_int), &
+         int(dims(1) * dims(2), c_int), int(dims(3), c_int), raw_ptr)
+      if (status /= 0_c_int .or. .not. c_associated(raw_ptr)) then
+         rc = int(status)
+         call capture_boundary_error(this)
+         return
+      end if
+      call c_f_pointer(raw_ptr, ptr3d, dims)
+      rc = CC_SUCCESS
+   end subroutine model_get_species_conc_ptr
+
+   ! Map the C++-owned storage of a registered 3D diagnostic for in-place
+   ! writes (zero-copy; the same memory NUOPC export and NetCDF output read)
+   subroutine model_get_diagnostic_ptr(this, name, ptr3d, dims, rc)
+      class(CATChem_Model), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      real(fp), pointer, intent(out) :: ptr3d(:, :, :)
+      integer, intent(in) :: dims(3)
+      integer, intent(out) :: rc
+
+      character(kind=c_char) :: c_name(64)
+      type(c_ptr) :: raw_ptr
+      integer(c_int) :: c_dims(3), status
+
+      rc = CC_FAILURE
+      nullify(ptr3d)
+      if (.not. c_associated(this%cpp_core_ptr)) return
+      call to_c_string(name, c_name)
+      c_dims = int(dims, c_int)
+      status = catchem_diag_get_pointer_checked(this%cpp_core_ptr, c_name, 3_c_int, c_dims, raw_ptr)
+      if (status /= 0_c_int .or. .not. c_associated(raw_ptr)) then
+         rc = int(status)
+         call capture_boundary_error(this)
+         return
+      end if
+      call c_f_pointer(raw_ptr, ptr3d, dims)
+      rc = CC_SUCCESS
+   end subroutine model_get_diagnostic_ptr
+
+   function model_get_output_frequency(this) result(freq)
+      class(CATChem_Model), intent(in) :: this
+      integer :: freq
+      freq = int(catchem_config_get_output_frequency(this%cpp_core_ptr))
+   end function model_get_output_frequency
+
+   function model_get_compress_level(this) result(clev)
+      class(CATChem_Model), intent(in) :: this
+      integer :: clev
+      clev = int(catchem_config_get_compress_level(this%cpp_core_ptr))
+   end function model_get_compress_level
+
+   subroutine model_get_output_directory(this, dir_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: dir_out
+      character(kind=c_char) :: c_buf(256)
+      integer :: i
+      call catchem_config_get_output_directory(this%cpp_core_ptr, c_buf, 256_c_int)
+      dir_out = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         dir_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_output_directory
+
+   subroutine model_get_output_prefix(this, prefix_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: prefix_out
+      character(kind=c_char) :: c_buf(256)
+      integer :: i
+      call catchem_config_get_output_prefix(this%cpp_core_ptr, c_buf, 256_c_int)
+      prefix_out = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         prefix_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_output_prefix
+
+   function model_is_latlon_output_enabled(this) result(enabled)
+      class(CATChem_Model), intent(in) :: this
+      logical :: enabled
+      enabled = (catchem_config_get_latlon_output(this%cpp_core_ptr) /= 0_c_int)
+   end function model_is_latlon_output_enabled
+
+   function model_is_diag_enabled(this) result(enabled)
+      class(CATChem_Model), intent(in) :: this
+      logical :: enabled
+      enabled = (catchem_config_get_diag_enabled(this%cpp_core_ptr) /= 0_c_int)
+   end function model_is_diag_enabled
+
+   !> \brief True when diagnostics.output/process_diagnostics is enabled in the
+   !! runtime YAML.  DEPRECATED: the NUOPC driver no longer consults this key
+   !! -- per-process diagnostics are written whenever they are registered and
+   !! runtime diagnostics are enabled (parity with the legacy Fortran core).
+   !! The accessor is retained only so existing configs keep parsing.
+   function model_is_process_diag_enabled(this) result(enabled)
+      class(CATChem_Model), intent(in) :: this
+      logical :: enabled
+      enabled = (catchem_config_get_process_diagnostics_enabled(this%cpp_core_ptr) /= 0_c_int)
+   end function model_is_process_diag_enabled
+
+   function model_get_diag_species_count(this) result(count)
+      class(CATChem_Model), intent(in) :: this
+      integer :: count
+      count = int(catchem_config_get_diag_species_count(this%cpp_core_ptr))
+   end function model_get_diag_species_count
+
+   subroutine model_get_diag_species_at(this, index, species_name)
+      class(CATChem_Model), intent(in) :: this
+      integer, intent(in) :: index
+      character(len=*), intent(out) :: species_name
+      character(kind=c_char) :: c_buf(128)
+      integer :: i
+      call catchem_config_get_diag_species_at(this%cpp_core_ptr, int(index - 1, c_int), c_buf, 128_c_int)
+      species_name = ""
+      do i = 1, 128
+         if (c_buf(i) == c_null_char) exit
+         species_name(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_diag_species_at
+
+   function model_get_output_attribute_count(this) result(count)
+      class(CATChem_Model), intent(in) :: this
+      integer :: count
+      count = int(catchem_config_get_output_attribute_count(this%cpp_core_ptr))
+   end function model_get_output_attribute_count
+
+   subroutine model_get_output_attribute_at(this, index, attr_name, attr_value)
+      class(CATChem_Model), intent(in) :: this
+      integer, intent(in) :: index
+      character(len=*), intent(out) :: attr_name, attr_value
+      character(kind=c_char) :: c_buf(256)
+      integer :: i
+
+      call catchem_config_get_output_attribute_key_at(this%cpp_core_ptr, int(index - 1, c_int), c_buf, 256_c_int)
+      attr_name = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         attr_name(i:i) = c_buf(i)
+      end do
+
+      call catchem_config_get_output_attribute_value_at(this%cpp_core_ptr, int(index - 1, c_int), c_buf, 256_c_int)
+      attr_value = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         attr_value(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_output_attribute_at
+
+   subroutine model_get_config_file_path(this, path_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: path_out
+      character(kind=c_char) :: c_buf(512)
+      integer :: i
+      call catchem_config_get_config_file_path(this%cpp_core_ptr, c_buf, 512_c_int)
+      path_out = ""
+      do i = 1, 512
+         if (c_buf(i) == c_null_char) exit
+         path_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_config_file_path
+
+   subroutine model_get_build_version(this, version_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: version_out
+      character(kind=c_char) :: c_buf(64)
+      integer :: i
+      call catchem_get_build_version(c_buf, 64_c_int)
+      version_out = ""
+      do i = 1, 64
+         if (c_buf(i) == c_null_char) exit
+         version_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_build_version
+
+   subroutine model_get_build_commit(this, commit_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: commit_out
+      character(kind=c_char) :: c_buf(64)
+      integer :: i
+      call catchem_get_build_commit(c_buf, 64_c_int)
+      commit_out = ""
+      do i = 1, 64
+         if (c_buf(i) == c_null_char) exit
+         commit_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_build_commit
+
+   function model_is_process_active(this, process_name) result(active)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(in) :: process_name
+      logical :: active
+      character(kind=c_char) :: c_name(128)
+      call to_c_string(process_name, c_name)
+      active = (catchem_config_get_process_active(this%cpp_core_ptr, c_name) /= 0_c_int)
+   end function model_is_process_active
+
+   function model_has_emission_mapping(this) result(has_mapping)
+      class(CATChem_Model), intent(in) :: this
+      logical :: has_mapping
+      has_mapping = (catchem_config_has_emission_mapping(this%cpp_core_ptr) /= 0_c_int)
+   end function model_has_emission_mapping
 
 end module CATChem_API

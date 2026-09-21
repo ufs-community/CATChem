@@ -1,45 +1,40 @@
+---
+type: explanation
+category: explanation
+tags: [configuration, yaml, cpp-core, config-manager]
+---
+
 # Configuration System
 
-This section describes the configuration system in CATChem, which is designed to be flexible, powerful, and easy to use.
+This section describes the C++ configuration system in CATChem (`catchem::ConfigManager`), which provides type-safe, hierarchical YAML configuration parsing.
 
 ## Overview
 
-The configuration system in CATChem is based on YAML, a human-readable data serialization format. It is designed to be hierarchical, type-safe, and self-documenting. The system is built around the `ConfigManagerType`, which is a centralized configuration management object that provides a consistent interface for loading, accessing, and validating configuration settings.
+The configuration system in CATChem is based on YAML, parsed natively in C++ via `yaml-cpp`. The system is centered around `catchem::ConfigManager`, which loads, validates, and exposes typed structures for simulation parameters, grid specifications, process activation settings, diagnostic settings, species properties, and emission category mappings.
 
 ## Core Concepts
 
-### Hierarchical Structure
+### Hierarchical Structure & Type Safety
 
-The configuration system is hierarchical, which means that configuration settings can be organized into a tree-like structure. This makes it easy to manage complex configurations and to reuse common settings across different model runs.
+Configuration files (`CATChem_config.yml`, `CATChem_species.yml`, `CATChem_emission.yml`) organize model settings hierarchically:
 
-### Type Safety
+- **Simulation**: Name, species file path, emission mapping file path, verbosity.
+- **Grid**: Vertical levels (`number_of_levels`), soil layers.
+- **Timesteps**: Transport timestep, chemistry timestep.
+- **Diagnostics**: Output frequency, output directory, output variable lists.
+- **Processes**: Per-process activation (`activate`), scheme choices (`scheme`), and scheme parameters.
+- **Species**: Molecular weights, gas/aerosol flags, dry/wet deposition parameters, particle radii, densities, and Mie parameters.
+- **Emission Mappings**: Source categories, variable mapping names, regridding metadata, and scale factors.
 
-The configuration system is type-safe, which means that it automatically validates the data types of configuration settings. This helps to prevent errors and to ensure that the model is configured correctly.
+## C++ Configuration Ownership
 
-### Environment Variables
+The C++ `ConfigManager` loads configuration files via:
 
-The configuration system supports environment variable substitution, which allows you to use environment variables to set configuration settings. This is useful for setting machine-specific or user-specific settings.
+```cpp
+catchem::ConfigManager config_mgr;
+config_mgr.load_from_file("CATChem_config.yml");
+config_mgr.load_species_file("CATChem_species.yml");
+config_mgr.load_emission_mapping_file("CATChem_emission.yml");
+```
 
-### Validation
-
-The configuration system provides a comprehensive validation mechanism that allows you to define a schema for your configuration files. The schema can be used to validate the structure and content of your configuration files, as well as to provide default values for optional settings.
-
-### Documentation
-
-The configuration system is self-documenting, which means that you can include comments in your configuration files to explain the meaning of different settings. This makes it easy for other users to understand and modify your configuration files.
-
-## Configuration Loading
-
-The `ConfigManagerType` provides a `load_file` method that can be used to load a configuration file. The method automatically handles file inheritance, environment variable substitution, and validation.
-
-## Configuration Access
-
-The `ConfigManagerType` provides a `get` method that can be used to access configuration settings. The method automatically handles type conversion and provides a default value if the setting is not found.
-
-## Advanced Features
-
-The configuration system provides a number of advanced features, including:
-
-- **Conditional Configuration**: This feature allows you to define different configuration settings for different systems or environments.
-- **Dynamic Configuration**: This feature allows you to modify the configuration at runtime.
-- **Configuration Tools**: The system provides a set of command-line tools for validating, comparing, and generating configuration files.
+Host models and NUOPC query configuration data directly through C API bindings (`catchem_config_get_yaml_bool`, `catchem_config_get_output_frequency`, etc.) without Fortran configuration objects.

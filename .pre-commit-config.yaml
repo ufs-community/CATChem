@@ -1,3 +1,14 @@
+# Vendored upstream code is excluded globally so every hook — present and
+# future — skips it. First-party code under src/external (the external CMakeLists.txt,
+# vendor READMEs) stays linted.
+exclude: |
+    (?x)^(
+        src/external/yaml-cpp/.*|
+        src/external/GOCART/.*|
+        src/external/musica/.*|
+        src/external/mdspan/include/.*
+    )$
+
 repos:
   - repo: meta
     hooks:
@@ -9,19 +20,10 @@ repos:
     hooks:
       - id: trailing-whitespace
         args: ['--markdown-linebreak-ext=md,markdown']
-        exclude: |
-            (?x)^(
-                src/external/yaml-cpp/.*
-            )$
       - id: end-of-file-fixer
-        exclude: |
-            (?x)^(
-                src/external/yaml-cpp/.*
-            )$
       - id: check-yaml
         exclude: |
             (?x)^(
-                src/external/yaml-cpp/.*|
                 mkdocs.yml
             )$
 
@@ -38,9 +40,7 @@ repos:
                 src/process/old/.*\.F90|
                 src/process/Process_driver_template.F90|
                 drivers/ccpp/.*\.F90|
-                parameters/.*\.F90|
-                src/external/GOCART/.*|
-                src/external/yaml-cpp/.*
+                parameters/.*\.F90
             )$
 
   - repo: https://github.com/BlankSpruce/gersemi
@@ -49,8 +49,7 @@ repos:
       - id: gersemi
         args: [--in-place, --indent=2]
         exclude: (?x)^(
-            cmake/FindNetCDF.cmake|
-            src/external/yaml-cpp/.*
+            cmake/FindNetCDF.cmake
           )$
 
   - repo: https://github.com/codespell-project/codespell
@@ -62,10 +61,14 @@ repos:
                 src/process/old/.*\.F90|
                 drivers/ccpp/.*\.F90|
                 parameters/.*\.F90|
-                src/external/GOCART/.*|
-                src/external/yaml-cpp/.*|
                 CHANGELOG.md
             )$
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+      - id: clang-format
+        types_or: [c++, c]
 
   - repo: local
     hooks:

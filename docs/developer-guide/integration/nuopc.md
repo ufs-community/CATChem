@@ -315,6 +315,82 @@ program NUOPC_CATChem_App
 end program NUOPC_CATChem_App
 ```
 
+## Process diagnostic output
+
+When `diagnostics.output.enabled` and `diagnostics.output.process_diagnostics` are true,
+the NUOPC run-phase export writes every diagnostic field the C++ process layer registered
+in the `DiagnosticManager` — there is no per-process allowlist. The writer dispatches on
+each field's **semantic axes** (see
+[Diagnostic System](../../core-concepts/diagnostics.md#registering-with-the-axes--labels-contract)),
+never on its name or storage rank:
+
+| Registered axes | NetCDF variable |
+|---|---|
+| `{Column, Singleton}` | one 2-D `(x, y)` variable |
+| `{Column, Level}` | one 3-D `(x, y, lev)` variable, vertical extent intact |
+| `{Column, Species}` / `{Column, Category}` | one 2-D variable **per slot**, named `<field>_<label>` |
+| `{Column, Level, Species}` / `{Column, Level, Category}` | one 3-D `(x, y, lev)` variable **per slot**, named `<field>_<label>` |
+
+### Output variable inventory
+
+| Process | Variables (per slot = unpacked, one per bin/species label) |
+|---|---|
+| dust | `dust_emission_total`, `dust_horizontal_flux`, `dust_moisture_correction`, `dust_effective_threshold` (2-D); `dust_emission_bin_<bin>`, `dust_utar_threshold_<bin>` (2-D per bin) |
+| seasalt | `seasalt_mass_emission_total`, `seasalt_number_emission_total` (2-D); `seasalt_mass_emission_bins_<bin>`, `seasalt_number_emission_bins_<bin>` (2-D per bin) |
+| settling | `settling_flux_per_species_<sp>` (2-D); `settling_velocity_per_species_per_level_<sp>` (3-D) |
+| carbchem | `carbchem_prod_mass_<sp>`, `carbchem_phobic_mass_<sp>` (3-D); `carbchem_loss_flux_<sp>`, `carbchem_phobic_flux_<sp>` (2-D) |
+| drydep | `drydep_con_per_species_<sp>`, `drydep_velocity_per_species_<sp>` (2-D) |
+| so4chem | `PSO4_from_gaseous_SO2_per_level`, `PSO4_from_aqueous_SO2_per_level`, `Production_rate_<sp>` (3-D); `DMS_emission_flux` (2-D) |
+| wetdep | `wetdep_mass_<sp>`, `wetdep_flux_<sp>` (3-D) |
+
+Slot labels are the species `short_name` / canonical bin names from the same resolved
+list that orders the physics slots, so `<field>_<label>` always addresses the matching
+data column.
+
+### Breaking change: compact parents replaced by unpacked variables
+
+The packed dust/sea-salt variables that briefly existed on the `feature/add_simple_scheme`
+branch — `dust_emission_bin`, `dust_utar_threshold`, `seasalt_mass_emission_bins`,
+`seasalt_number_emission_bins` written with a trailing unnamed bin axis — are **replaced,
+not duplicated**, by the per-label variables above. No configuration switch is provided.
+Downstream consumers that parsed `<parent>` with a trailing bin dimension must switch to
+`<parent>_<label>` (e.g. `dust_emission_bin` + bin index → `dust_emission_bin_dust1`).
+Equivalently: `ncdiff` of an old compact slice against the new named variable is zero.
+
+### Volume control: `diag_list`
+
+`diagnostics.output.diag_list` narrows what reaches the file:
+
+```yaml
+diagnostics:
+  output:
+    diag_list: ["dust_emission_total", "settling_flux_per_species"]
+```
+
+An entry matches an output variable when it equals the name or the name starts with
+`entry_` — so a parent selector (`settling_flux_per_species`) covers every unpacked
+child, while a full child name (`dust_emission_bin_dust1`) selects just that child.
+An empty or absent list writes everything. Selectors that match nothing are reported
+as a single aggregated warning on the first output; the run is never interrupted.
+
+### Provenance global attributes
+
+Every diagnostic file carries run-level global attributes:
+
+- `catchem_core_version`, `catchem_core_commit`, `config_file` — core provenance,
+  captured at build/configure time and from the loaded YAML path;
+- `institution`, `source`, `references`, `Conventions` — CF-convention defaults;
+- anything under `diagnostics.output.attributes` — added after the core keys, so a
+  user entry **overrides** a core key of the same name:
+
+```yaml
+diagnostics:
+  output:
+    attributes:
+      institution: "Example Lab"
+      references: "CATChem v1.0 run"
+```
+
 ## Advanced Features
 
 ### Regridding and Interpolation

@@ -1,397 +1,364 @@
 # Configuration System
 
-CATChem uses a flexible YAML-based configuration system for all model settings.
+CATChem is configured through a small set of YAML files parsed by the C++
+`ConfigManager` (`src/core/catchem_config_manager.{hpp,cpp}`). This page
+describes the format the code actually reads.
 
-## Overview
+!!! important
+    There is **no** environment-variable substitution, no `!ENV`/`!CASE` tag
+    support, and no `INHERIT`/file-merging in the current loader. Files are read
+    verbatim with `YAML::LoadFile`, and an unrecognized tag such as `!ENV` makes
+    the load fail. Any earlier documentation describing those features was
+    aspirational and does not reflect the shipped code.
 
-The configuration system provides:
+## Files and how they are loaded
 
-- **Hierarchical Structure**: Organized configuration with inheritance
-- **Type Safety**: Automatic validation and type checking
-- **Environment Variables**: Support for environment variable substitution
-- **Validation**: Comprehensive input validation
-- **Documentation**: Self-documenting configuration files
+A run is driven by one **main configuration file** plus two companion files
+named from within it:
 
-## Configuration File Structure
+| File | Selected by | Loaded with |
+| --- | --- | --- |
+| Main config (`CATChem_new_config.yml`) | the driver / host | `load_from_file()` |
+| Species / mechanism file | `simulation.species_filename` | `load_species_file()` |
+| Emission mapping file | `simulation.emission_filename` | `load_emission_mapping_file()` |
 
-```yaml
-# Main CATChem configuration file
-site_name: "My CATChem Run"
-description: "Description of this model run"
+`Core::initialize()` performs the sequence (see `src/core/catchem_core.cpp`):
 
-# Model domain and timing
-domain:
-  grid_type: "lat_lon"           # lat_lon, cubed_sphere, unstructured
-  resolution: "0.25deg"          # Grid resolution
-  vertical_levels: 64            # Number of vertical levels
+1. `load_from_file(config_file)` — parse the main file and echo the effective
+   YAML to `stdout`, so the run log records exactly what was parsed.
+2. `load_species_file(...)` and `load_emission_mapping_file(...)` — the two
+   companion paths are resolved **relative to the main config file's location**.
+3. `validate_or_throw()` — strict schema and range validation (see
+   "Validation summary"). A failure throws and aborts initialization.
 
-time:
-  start_date: "2025-01-01T00:00:00Z"
-  end_date: "2025-01-02T00:00:00Z"
-  time_step: 300                 # Seconds
+The grid owned by a coupled host (column count, level count) overrides
+`simulation/nx` and `simulation/ny` and `grid/number_of_levels`; for a
+standalone run the YAML values win.
 
-# Atmospheric processes
-processes:
-  - name: "settling"
-    scheme: "Stokesscheme"
-    enabled: true
-    parameters:
-      cfl_max: 0.8
-      max_substeps: 20
+## Top-level keys
 
-  - name: "chemistry"
-    scheme: "GOCART"
-    enabled: true
-    parameters:
-      solver_tolerance: 1.0e-6
+Strict validation accepts **only** these top-level keys; an unknown one is
+reported as `"unknown top-level configuration key"`:
 
-# Chemical species
-species:
-  - name: "dust1"
-    long_name: "Fine dust"
-    units: "kg/kg"
-    molecular_weight: 28.0
-
-  - name: "dust2"
-    long_name: "Coarse dust"
-    units: "kg/kg"
-    molecular_weight: 28.0
-
-# Input/Output
-input:
-  meteorology:
-    file: "met_data.nc"
-    format: "netcdf"
-
-  emissions:
-    file: "emissions.nc"
-    format: "netcdf"
-
-output:
-  file: "catchem_output.nc"
-  format: "netcdf"
-  frequency: 3600               # Output frequency in seconds
-
-  # Diagnostic output
-  diagnostics:
-    settling_velocity:
-      enabled: true
-      frequency: 3600
-      description: "Gravitational settling velocity"
-
-    concentration:
-      enabled: true
-      frequency: 1800
-      description: "Species concentrations"
+```
+simulation  mechanism  physical_validation  grid  timesteps
+diagnostics  mie  run_phases  processes  process
 ```
 
-## Configuration Loading
+`process` is a legacy alias for `processes`; both are parsed into the same map.
 
-### Basic Usage
+## `simulation`
+
+```yaml
+simulation:
+  name: test
+  start_date: 20240501 0000      # stored as an opaque string
+  end_date:   20240501 0100
+  species_filename:  ./CATChem_species.yml     # companion file
+  emission_filename: ./CATChem_emission.yml    # companion file
+  verbose:
+    activate: true               # -> data.simulation.verbose_enabled
+    # log_level: debug           # optional; see "Logging" below
+  # The keys below are optional runtime overrides
+  nx: 4
+  ny: 1
+  nz: 64
+  timestep: 3600                 # seconds; "dt" is accepted as a synonym
+  nsteps: 1
+```
+
+- `name`, `start_date`, `end_date` are strings; the core does not parse the dates.
+- `species_filename` / `emission_filename` point at the companion files.
+- `nx`, `ny`, `nz`, `timestep`/`dt`, `nsteps` populate the runtime block used by
+  standalone runs; a coupled host supplies its own grid instead.
+
+## `grid` and `timesteps`
+
+```yaml
+grid:
+  number_of_levels: 64           # also sets the runtime level count
+  number_of_soil_layers: 4
+timesteps:
+  transport_timestep_in_s: 10
+  chemistry_timestep_in_s: 60
+```
+
+## `physical_validation`
+
+Controls how out-of-physical-range state is handled at runtime. Must be one of
+three values; anything else throws during parse.
+
+```yaml
+physical_validation:
+  policy: reject                 # reject | warn_and_clamp | count_and_continue
+```
+
+## `mechanism`
+
+Optional metadata describing the chemical mechanism.
+
+```yaml
+mechanism:
+  identity: "RADM2"                     # -> data.mechanism_identity
+  capabilities: [photolysis, aqueous]   # -> data.mechanism_capabilities
+```
+
+## `diagnostics`
+
+```yaml
+diagnostics:
+  output:
+    enabled: true
+    directory: "./output"
+    prefix: "catchem_diag"
+    frequency: 3600              # seconds between output writes
+    format: "netcdf"             # only "netcdf" passes validation
+    compress_lev: 2              # 0 = off, 1-9 = increasing compression
+    diag_list: [so2, so4, dust1] # species to write; empty = all
+  collection:
+    enabled: true
+    buffer_size: 1000
+```
+
+!!! warning
+    `diagnostics.output.latlon_output` and the top-level `mie` block appear in
+    some shipped example configs but are **not read by the current loader**.
+    `mie` is accepted by validation, so it is harmless; `latlon_output` is simply
+    ignored. Do not rely on either key to change behavior.
+
+!!! deprecated
+    `diagnostics.output/process_diagnostics` no longer suppresses process
+    diagnostic output — it is a **deprecated no-op** retained only for
+    configuration compatibility. Remove it from control files; it has no
+    effect. Per-process diagnostics are now controlled entirely by each
+    process's own `diagnostics:` flag (see *Process diagnostics* below).
+
+### Process diagnostics (all schemes)
+
+Setting `processes/<name>/diagnostics: true` registers that process's scheme
+diagnostics; the optional `processes/<name>/diag_species:` list narrows them to
+the named species (default = the process's own species subset, resolved at
+runtime against the active mechanism). A `diag_species` name outside the
+process's species set fails at initialization. Registered fields are written to
+`catchem_diag*.nc` whenever runtime diagnostics are enabled — there is no
+separate output switch.
+
+```yaml
+processes:
+  settling:
+    diagnostics: true
+    diag_species: [so4, bc1, dust3, seas3]   # optional; default = process set
+  dust:
+    diagnostics: true                         # diag_species optional (dust bins only)
+```
+
+## `run_phases`
+
+Defines the ordered process schedule. Each phase lists processes by name, and
+the names must match keys under `processes`.
+
+```yaml
+run_phases:
+  test1:
+    description: "Test phase 1"
+    processes:
+      - seasalt
+      - dust
+      - carbchem
+      - settling
+      - drydep
+      - so4chem
+      - wetdep
+```
+
+## `processes` (and legacy `process`)
+
+A map of process name to configuration block. The framework consumes these keys
+directly: `activate`, `diagnostics`, `scheme`, `gas_scheme`, `aero_scheme`,
+`diag_species`. Any **nested map** under a process is that scheme's option
+block, and each leaf option is checked against the scheme's accepted options
+during process initialization — so a typo fails loudly instead of silently
+keeping a compiled default.
+
+```yaml
+processes:
+  seasalt:
+    activate: true
+    diagnostics: true
+    diag_species: []
+    scheme: 'geos12'
+    geos12:                      # scheme option block
+      scale_factor: 1.0
+      weibull_flag: false
+  drydep:
+    activate: true
+    gas_scheme: 'wesely'         # drydep uses two scheme selectors
+    aero_scheme: 'gocart'
+    gocart:
+      scale_factor: 1.0
+      resuspension: false
+  dust:
+    activate: true
+    scheme: 'fengsha'
+    fengsha:
+      alpha: 0.20
+      gamma: 1.0
+      drag_option: 1
+```
+
+### External emissions (`extemis`)
+
+`extemis` groups named source categories (`anthro1`, `bio`, `fire`, `dust`,
+`fengsha`, ...). The emission driver reads each category through the path-based
+getters rather than the generic process parser, so category keys are not
+validated against a fixed schema. Common category keys:
+
+```yaml
+processes:
+  extemis:
+    activate: true
+    diagnostics: true
+    global_factor: 1.0
+    fire:
+      activate: true
+      scale_factor: 0.7778
+      source_file: "ExtData/QFED/%y4/%m2/qfed2.emis_so2.006.%y4%m2%d2.nc4"
+      format: "netcdf"           # "netcdf", or "volcano" for the point-source reader
+      gridded: true
+      is_2d: true
+      regrid_method: conserve    # bilinear (default) | neareststod | conserve | patch | none
+      time_interpolation: linear # "linear" enables time interpolation; otherwise none
+      lat_name: "lat"
+      lon_name: "lon"
+      vertical_dist: "Ppbl"      # none | P100 | P500 | Ppbl | aviation* ...
+      frequency: "daily"         # daily | monthly | hourly | static
+      apply_method: "replace"    # add (default) | replace
+      diagnostics: true
+      diag_list: [biomass]
+```
+
+`source_file` supports the `%y4`/`%m2`/`%d2` date tokens (year, month, day),
+expanded by the emission reader. This is the only templating the configuration
+system supports.
+
+## Companion files
+
+### Species / mechanism file
+
+A YAML **sequence**. Each entry has a `name` plus optional `__`-prefixed
+attribute keys and physical metadata:
+
+```yaml
+- name: so2
+  __description: Sulfur dioxide
+  __is_gas: true
+  __is_drydep: true
+  __is_wetdep: true
+  molecular weight [kg mol-1]: 64.04e-3
+  __henry_k0: 1.22
+  __henry_cr: 3100.0
+  __dd_f0: 0.0
+  __dd_hstar: 1.0e+5
+```
+
+- Species names must be unique after case normalization; duplicates are an error.
+- Quote `NO` and similar values — YAML otherwise reads them as booleans.
+
+### Emission mapping file
+
+A map of **category → field → mapping**. Each field declares units, one scale
+factor per mapped species, and the species (or `MET_`-namespace target) it feeds:
+
+```yaml
+anthro1:
+  SO2:
+    long_name: "Sulfur Dioxide"
+    units: "kg/m2/s"
+    scale: [0.97, 0.045]         # one entry per mapped species
+    map: ["so2", "so4"]
+```
+
+Mapped targets that are not `MET_`-prefixed must exist in the active mechanism,
+otherwise validation reports `"target is absent from active mechanism"`.
+
+## Logging
+
+Runtime log verbosity is resolved in priority order:
+
+1. **YAML wins:** `simulation.verbose.log_level` sets the threshold through
+   `Logger::set_level()`. Accepted values, case-insensitive: `debug`, `info`,
+   `warn` (`warning` accepted), `error`. An unrecognized value throws during
+   parse. When the key is absent, the current setting is kept.
+2. **Environment fallback:** if no YAML level has been set, `CATCHEM_LOG_LEVEL`
+   is used with the same accepted values, read once at first use.
+3. **Default:** `info` when neither is provided, keeping production runs quiet.
+
+```yaml
+simulation:
+  verbose:
+    activate: true
+    log_level: debug             # overrides CATCHEM_LOG_LEVEL
+```
+
+`Logger::debug()`, `info()`, `warn()`, and `error()` respect the threshold.
+Guard expensive debug-only work with `Logger::enabled(Logger::Level::Debug)`.
+
+## Accessing configuration at runtime
+
+### C++ (`ConfigManager`)
+
+Parsed values are available on `config.data` (`data.simulation`, `data.grid`,
+`data.diagnostics`, `data.processes`, ...). Path queries use `/`-separated keys
+and return the supplied default when a node is missing or cannot convert:
+
+```cpp
+catchem::ConfigManager config;
+config.load_from_file("CATChem_new_config.yml");
+
+bool sea_active = config.get_bool("processes/seasalt/activate", false);
+std::string scheme = config.get_string("processes/seasalt/scheme", "");
+int levels = config.get_int("grid/number_of_levels", 0);
+auto diag_list = config.get_string_list("processes/extemis/anthro1/diag_list");
+```
+
+### Fortran / NUOPC
+
+The `CATChem_Model` facade loads the main file during `initialize()` and exposes
+typed accessors (`is_process_active`, `get_output_directory`,
+`is_latlon_output_enabled`, ...). The emission and interface modules read
+arbitrary YAML through the C-bound path getters
+(`catchem_config_get_yaml_bool`, `_double`, `_int`, `_string`, `_list_count`,
+`_list_at`).
 
 ```fortran
-use ConfigManager_Mod
-
-type(ConfigManagerType) :: config
+type(CATChem_Model) :: model
 integer :: rc
-
-! Load configuration
-call config%load_file("catchem.yml", rc)
-if (rc /= CC_SUCCESS) then
-  call error_handler%log_error("Failed to load configuration", rc)
-  stop
-end if
-
-! Access configuration values
-real(fp) :: time_step
-logical :: process_enabled
-character(len=:), allocatable :: scheme_name
-
-call config%get("time.time_step", time_step, rc)
-call config%get("processes.settling.enabled", process_enabled, rc)
-call config%get("processes.settling.scheme", scheme_name, rc)
+call model%initialize("CATChem_new_config.yml", nx, ny, nz, rc=rc)
 ```
 
-### Process Configuration
-
-```fortran
-! Get process-specific configuration
-type(ConfigDataType), pointer :: process_config
-
-process_config => config%get_section("processes.settling")
-if (.not. associated(process_config)) then
-  call error_handler%log_error("Settling process not configured")
-  return
-end if
-
-! Access process parameters
-real(fp) :: cfl_max
-call process_config%get("parameters.cfl_max", cfl_max, default=0.8_fp, rc=rc)
-```
-
-## Configuration Validation
-
-### Automatic Validation
-
-```fortran
-! Configuration schema definition
-type(ConfigSchemaType) :: schema
-
-! Define required fields
-call schema%add_required("time.start_date", "string")
-call schema%add_required("time.end_date", "string")
-call schema%add_required("time.time_step", "real", min_value=1.0_fp)
-
-! Define optional fields with defaults
-call schema%add_optional("output.frequency", "integer", default=3600)
-
-! Validate configuration
-call config%validate(schema, rc)
-if (rc /= CC_SUCCESS) then
-  call error_handler%log_error("Configuration validation failed", rc)
-end if
-```
-
-### Custom Validation
-
-```fortran
-! Custom validation for process parameters
-subroutine validate_settling_config(config, rc)
-  type(ConfigDataType), intent(in) :: config
-  integer, intent(out) :: rc
-
-  real(fp) :: cfl_max
-  integer :: max_substeps
-
-  ! Validate CFL limit
-  call config%get("cfl_max", cfl_max, rc)
-  if (cfl_max <= 0.0_fp .or. cfl_max > 1.0_fp) then
-    call error_handler%log_error("CFL limit must be between 0 and 1")
-    rc = CC_INVALID_INPUT
-    return
-  end if
-
-  ! Validate substep limit
-  call config%get("max_substeps", max_substeps, rc)
-  if (max_substeps < 1 .or. max_substeps > 100) then
-    call error_handler%log_error("Max substeps must be between 1 and 100")
-    rc = CC_INVALID_INPUT
-    return
-  end if
-
-  rc = CC_SUCCESS
-end subroutine
-```
-
-## Environment Variables
-
-### Variable Substitution
-
-```yaml
-# Use environment variables in configuration
-input:
-  meteorology:
-    file: !ENV ${METDATA_PATH}/met_${YYYYMMDD}.nc
-
-output:
-  directory: !ENV [OUTPUT_DIR, "./output"]  # With default fallback
-
-# System configuration
-parallel:
-  num_threads: !ENV [OMP_NUM_THREADS, 4]
-
-database:
-  connection: !ENV DATABASE_URL  # Required environment variable
-```
-
-### Environment Setup
-
-```bash
-# Set environment variables
-export METDATA_PATH="/data/meteorology"
-export OUTPUT_DIR="/scratch/catchem/output"
-export OMP_NUM_THREADS=8
-export DATABASE_URL="postgresql://user:pass@host/db"
-
-# Run CATChem
-./catchem_driver --config production.yml
-```
-
-## Configuration Inheritance
-
-### Base Configuration
-
-```yaml
-# base.yml - Common configuration
-domain:
-  grid_type: "lat_lon"
-  vertical_levels: 64
-
-time:
-  time_step: 300
-
-processes:
-  - name: "settling"
-    scheme: "Stokesscheme"
-    enabled: true
-    parameters:
-      cfl_max: 0.8
-```
-
-### Derived Configuration
-
-```yaml
-# experiment.yml - Specific experiment
-INHERIT: base.yml
-
-site_name: "Dust Storm Experiment"
-
-# Override specific settings
-time:
-  start_date: "2025-03-15T00:00:00Z"
-  end_date: "2025-03-20T00:00:00Z"
-
-# Add experiment-specific processes
-processes:
-  - name: "dust"
-    scheme: "AFWA"
-    enabled: true
-```
-
-## Advanced Features
-
-### Conditional Configuration
-
-```yaml
-# Platform-specific settings
-system: !ENV [SYSTEM_TYPE, "generic"]
-
-processes:
-  - name: "settling"
-    scheme: "Stokesscheme"
-    enabled: true
-    parameters:
-      # Different parameters for different systems
-      cfl_max: !CASE
-        - condition: ${system} == "hpc"
-          value: 0.9
-        - condition: ${system} == "workstation"
-          value: 0.6
-        - default: 0.8
-```
-
-### Dynamic Configuration
-
-```fortran
-! Runtime configuration updates
-call config%set("processes.settling.parameters.cfl_max", 0.9_fp, rc)
-call config%save_file("updated_config.yml", rc)
-
-! Temporary configuration overrides
-call config%push_context()
-call config%set("output.frequency", 1800, rc)
-! ... run with modified config ...
-call config%pop_context()  ! Restore original values
-```
-
-## Configuration Tools
-
-### Validation Utility
-
-```bash
-# Validate configuration file
-catchem_config_validator --config experiment.yml --schema catchem.schema
-
-# Check for missing required fields
-catchem_config_validator --check-required experiment.yml
-
-# Generate configuration template
-catchem_config_generator --template basic > new_config.yml
-```
-
-### Configuration Diff
-
-```bash
-# Compare configurations
-catchem_config_diff base.yml experiment.yml
-
-# Show effective configuration after inheritance
-catchem_config_show --effective experiment.yml
-```
-
-## Best Practices
-
-### Organization
-
-1. **Hierarchical Structure**: Group related settings together
-2. **Clear Naming**: Use descriptive parameter names
-3. **Documentation**: Include comments explaining settings
-4. **Validation**: Always validate configuration before use
-5. **Defaults**: Provide sensible defaults for optional parameters
-
-### Performance
-
-```yaml
-# Performance-oriented configuration
-performance:
-  # Memory management
-  memory:
-    initial_pool_size: "1GB"
-    max_pool_size: "8GB"
-
-  # Threading
-  threading:
-    num_threads: !ENV [OMP_NUM_THREADS, 8]
-    thread_affinity: "close"
-
-  # I/O optimization
-  io:
-    buffer_size: "64MB"
-    parallel_io: true
-```
-
-### Debugging
-
-```yaml
-# Debug configuration
-debug:
-  enabled: !ENV [DEBUG_MODE, false]
-  level: "verbose"
-
-  # Process-specific debugging
-  processes:
-    settling: "debug"
-    chemistry: "info"
-
-logging:
-  level: !ENV [LOG_LEVEL, "info"]
-  file: "catchem.log"
-  console: true
-```
-
-## Troubleshooting
-
-### Common Issues
-
-- **YAML Syntax Errors**: Use YAML validator to check syntax
-- **Missing Environment Variables**: Check variable names and availability
-- **Type Mismatches**: Verify data types match expected types
-- **Invalid Values**: Check parameter ranges and constraints
-
-### Debug Configuration Loading
-
-```fortran
-! Enable configuration debugging
-call config%set_debug_mode(.true.)
-call config%load_file("config.yml", rc)
-
-! This will print detailed loading information:
-! - File inheritance chain
-! - Environment variable substitutions
-! - Type conversions
-! - Validation results
-```
-
----
-
-*The configuration system is designed to be both powerful and user-friendly, supporting everything from simple test cases to complex operational deployments.*
+## Validation summary
+
+`validate_or_throw()` reports an issue for any of:
+
+- Root is not a mapping; unknown top-level key.
+- `simulation/nx`, `simulation/ny`, `grid/number_of_levels`, or
+  `simulation/nsteps` not positive; `simulation/timestep` outside `(0, 86400]`.
+- Negative `grid/number_of_soil_layers`, or negative `timesteps/*_in_s`.
+- `diagnostics/output.enabled` with a non-positive `frequency`, `compress_lev`
+  outside `0..9`, or a `format` other than `netcdf`.
+- `diagnostics/collection.enabled` with a non-positive `buffer_size`.
+- Missing `species_filename`, an empty species list, or an empty/duplicate
+  species name.
+- Emission `scale`/`map` length mismatch, or a mapped non-`MET_` target absent
+  from the mechanism.
+- `physical_validation/policy` or `simulation/verbose/log_level` not a
+  recognized value — these throw immediately during parse.
+
+## Environment variables
+
+Only two variables affect behavior, and neither modifies the configuration tree:
+
+| Variable | Effect |
+| --- | --- |
+| `CATCHEM_LOG_LEVEL` | Logger threshold, used when no YAML `log_level` is set. |
+| `NO_COLOR` | If non-empty, disables ANSI color in log output. |

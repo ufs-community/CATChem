@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "snapshots": [
+    {"checkpoint": "initial", "fields": {"CHEM_CONC": {"units": "kg/kg", "shape": [1, 2, 1], "species": ["so2"], "values": [1e-9, 2e-9]}}},
+    {"checkpoint": "after:seasalt", "fields": {"CHEM_CONC": {"units": "kg/kg", "shape": [1, 2, 1], "species": ["so2"], "values": [1.1000000000001e-9, 2.2e-9]}}}
+  ]
+}

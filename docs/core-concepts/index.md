@@ -16,4 +16,6 @@ CATChem is built upon several interconnected core concepts that ensure its flexi
 
 -   **[Configuration System](configuration.md)**: Delve into the flexible YAML-based configuration system that provides hierarchical structure, type safety, environment variable support, and robust validation for all model settings.
 
+-   **[Core Runtime Contracts](core-runtime-contracts.md)**: Mechanism discovery, YAML process activation, process field contracts, lifecycle ownership, physical validation, and migration guidance.
+
 These core concepts work together to provide a powerful and adaptable framework for atmospheric chemistry modeling.

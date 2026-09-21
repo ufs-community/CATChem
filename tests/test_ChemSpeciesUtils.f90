@@ -6,7 +6,7 @@ program test_ChemSpeciesUtils
    use testing_mod, only: assert, assert_close
    use ChemSpeciesUtils_Mod
    use StateManager_Mod, only: StateManagerType
-   use Error_Mod, only: CC_SUCCESS
+   use catchem_bridge_error, only: CC_SUCCESS
 
    implicit none
 

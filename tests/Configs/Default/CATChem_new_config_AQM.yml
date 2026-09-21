@@ -236,7 +236,10 @@ processes:
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      swelling_method: 1    # 1 for Fitzgerald 1975; 2 for Gerber 1985 if simple_scheme is false
+      # Wet swelling is selected per species via the __hydrophilic species
+      # attribute (hydrophilic -> Gerber growth matching the GOCART optics
+      # tables; hydrophobic -> no swelling), not a global method here.
+      swelling_rh_max: 0.95    # clamp RH used for wet-swelling growth; the optics tables plateau rEff at RH>=0.95
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
     activate: true

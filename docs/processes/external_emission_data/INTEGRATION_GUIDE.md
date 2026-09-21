@@ -24,7 +24,7 @@ The External Emission Data Process is a special type of process in CATChem that 
 
 ### Core Components
 
-1. **ExtEmisData_Mod.F90** (existing core module)
+1. **catchem_emis_data_mod.F90** (existing core module)
    - `ExtEmisDataType`: Main container for external emission data
    - `ExtEmisCategoryType`: Groups emissions by source category
    - `ExtEmisFieldType`: Individual emission fields
@@ -39,13 +39,13 @@ The External Emission Data Process is a special type of process in CATChem that 
    - `Elevated3D`: Handles 3D elevated emissions with vertical distribution
    - `TemporalProfiles`: Manages temporal scaling and profiles
 
-## Integration with Existing ExtEmisData_Mod
+## Integration with Existing catchem_emis_data_mod
 
-The generated process works alongside the existing `ExtEmisData_Mod.F90` module:
+The generated process works alongside the existing `catchem_emis_data_mod.F90` module:
 
 ```fortran
 ! The existing module provides the core data structures
-USE ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
+USE catchem_emis_data_mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
 
 ! The new process provides the process interface
 USE ProcessExternalEmissionDataInterface_Mod, only: ProcessExternalEmissionDataInterface
@@ -56,9 +56,6 @@ USE ProcessExternalEmissionDataInterface_Mod, only: ProcessExternalEmissionDataI
 ### 1. Driver Integration
 
 ```fortran
-! Driver loads external emission files
-call driver%load_emission_files(emission_files, ext_emis_data, rc)
-
 ! Process validates and manages the data
 call external_emission_process%initialize(config, ext_emis_data, rc)
 call external_emission_process%validate_data(rc)

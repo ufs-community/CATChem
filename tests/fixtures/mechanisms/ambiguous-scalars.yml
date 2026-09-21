@@ -1,0 +1,6 @@
+mechanism:
+  identity: scalar-types
+  capabilities: [photolysis]
+values:
+  string_no: "NO"
+  boolean_no: false

@@ -1,0 +1,7 @@
+- name: xenon_a
+  aliases: [xa]
+  roles: [transport.primary]
+- name: radical_b
+  roles: [photolysis.ozone]
+- name: aerosol_c
+  roles: [aerosol.reference]

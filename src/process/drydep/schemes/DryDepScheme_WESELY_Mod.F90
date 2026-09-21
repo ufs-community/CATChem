@@ -22,10 +22,10 @@
 !! Reference: Wesely, M. L. [1989] Parameterization of surface resistances to gaseous dry deposition...
 module DryDepScheme_WESELY_Mod
 
-   use precision_mod, only: fp, rae
-   use error_mod, only: CC_SUCCESS, CC_Error
+   use catchem_bridge_precision, only: fp, rae
+   use catchem_bridge_error, only: CC_SUCCESS, CC_Error
    use DryDepCommon_Mod, only: DryDepSchemeWESELYConfig
-   use Constants, only: PI, H2OMW, AVO, VON_KARMAN, RSTARG  !load the constants needed for this scheme
+   use catchem_bridge_constants, only: PI, H2OMW, AVO, VON_KARMAN, RSTARG  !load the constants needed for this scheme
 
    implicit none
    private
@@ -982,6 +982,10 @@ contains
       !=================================================================
       ! DIFFG begins here!
       !=================================================================
+      if (XM <= 0.0_fp .or. TK <= 0.0_fp) then
+         DIFF_G = 1.0e-5_fp
+         return
+      end if
 
       ! Air density [molec/m3]
       AIRDEN = ( PRESS * AVO ) / ( RSTARG * TK )

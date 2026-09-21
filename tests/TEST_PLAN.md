@@ -39,7 +39,7 @@ This document outlines a comprehensive test plan for all 29 core modules in the 
 24. `met_utilities_mod.F90` - Meteorological utilities
 
 ### Extension Modules
-25. `ExtEmisData_Mod.F90` - External emission data
+25. `catchem_emis_data_mod.F90` - External emission data
 26. `EmissionConfigValidator_Mod.F90` - Emission configuration validation
 27. `UnitConversion_Mod.F90` - Unit conversion utilities
 28. `utilities_mod.F90` - General utilities
@@ -103,7 +103,7 @@ Automated regression tests will:
 - metstate_mod
 - species_mod
 - met_utilities_mod
-- ExtEmisData_Mod
+- catchem_emis_data_mod
 
 ### Phase 6: Final Modules and Integration (Week 6)
 - EmissionConfigValidator_Mod

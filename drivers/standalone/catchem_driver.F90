@@ -50,7 +50,7 @@ module catchem_driver
 
    use catchem_standalone_grid_mod, only: CATChemGridConfig, create_standalone_grid
 
-   use Constants, only: MAX_LEN_PATH
+   use catchem_bridge_constants, only: MAX_LEN_PATH
 
    implicit none
    private

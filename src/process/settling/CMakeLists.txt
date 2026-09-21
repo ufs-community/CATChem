@@ -7,8 +7,8 @@
 set(
   SETTLING_PROCESS_SOURCES
   SettlingCommon_Mod.F90
-  ProcessSettlingInterface_Mod.F90
-  SettlingProcessCreator_Mod.F90
+  SettlingScienceBridge.F90
+  catchem_process_settling.cpp
 )
 
 # Define settling scheme sources
@@ -21,10 +21,9 @@ set(SETTLING_ALL_SOURCES ${SETTLING_PROCESS_SOURCES} ${SETTLING_SCHEME_SOURCES})
 set(_lib CATChem_process_settling)
 add_library(${_lib} ${SETTLING_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
-
-# Additional dependencies
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Set module directory
 set_target_properties(
@@ -37,9 +36,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions

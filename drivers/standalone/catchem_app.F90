@@ -31,7 +31,7 @@ program catchem_app
    use NUOPC
    use catchem_driver, only: driver_SS => SetServices, set_driver_config_file
 
-   use Constants, only: MAX_LEN_PATH
+   use catchem_bridge_constants, only: MAX_LEN_PATH
 
    implicit none
 

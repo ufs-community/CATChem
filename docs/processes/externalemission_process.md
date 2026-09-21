@@ -71,7 +71,7 @@ call container%emis_state%accumulate_emissions(species_idx, emission_rates)
 ```fortran
 use ExternalEmissionProcess_Mod
 use State_Mod
-use Error_Mod
+use catchem_bridge_error
 
 implicit none
 

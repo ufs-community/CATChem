@@ -7,7 +7,7 @@
 !!
 module HostCATChemInterface_Mod
    use CATChemAPI_Mod
-   use precision_mod
+   use catchem_bridge_precision
    implicit none
    private
 
@@ -616,7 +616,7 @@ end module HostCATChemInterface_Mod
 !> Example program demonstrating the host model integration
 program host_model_integration_example
    use HostCATChemInterface_Mod
-   use precision_mod
+   use catchem_bridge_precision
    implicit none
 
    type(HostCATChemInterfaceType) :: catchem_interface
