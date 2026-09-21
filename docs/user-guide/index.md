@@ -18,22 +18,19 @@ CATChem uses a modular process-based architecture. Each atmospheric process is i
 - **[Process Overview](../processes/index.md)** - Introduction to CATChem processes
 
 ### Transport Processes
-- **[Settling](../processes/settling_process.md)** - Gravitational settling processes
+- **[Settling](../processes/settling/settling.md)** - Gravitational settling processes
 
 ### Chemical Processes
-
-More information coming soon!
+- **[Carbon Chemistry](../processes/carbchem/carbchem.md)** - Carbonaceous aerosol chemistry
+- **[Sulfate Chemistry](../processes/so4chem/so4chem.md)** - Sulfate aerosol chemistry
 
 ### Emission Processes
 - **[Dust Emissions](../processes/dust/dust.md)** - Windblown dust emissions
-- **[Sea Salt Emissions](../processes/seasalt/index.md)** - Marine aerosol processes
-- **[External Emission Plume Rise](../processes/EXTERNAL_DATA_PLUME_RISE_SOLUTION.md)** - Complete solution for external emission data and plume rise
-- **[External Emissions](../processes/external_emission_data/external_emission_data.md)** - Data management for external emissions in CATChem
-     -  **[Integration Guide](../processes/external_emission_data/INTEGRATION_GUIDE.md)** - Integration Guide for external emissions
+- **[Sea Salt Emissions](../processes/seasalt/seasalt.md)** - Marine aerosol processes
 
 ### Loss Processes
-
-More information coming soon!
+- **[Dry Deposition](../processes/drydep/drydep.md)** - Surface dry deposition
+- **[Wet Deposition](../processes/wetdep/wetdep.md)** - Precipitation scavenging
 
 ## Core Concepts
 

@@ -221,6 +221,7 @@ nav:
     - index.md
     - What's New: whats-new.md
     - License: license.md
+    - References: references.md
   - User Guide:
     - user-guide/index.md
     - Overview: user-guide/overview.md
@@ -231,12 +232,13 @@ nav:
     - Input Files: user-guide/input-files.md
   - Processes:
     - Process Overview: processes/index.md
-    - Dust Process: processes/dust_process.md
-    - External Emission Process: processes/externalemission_process.md
-    - Settling Process: processes/settling_process.md
-    - Settling Velocity Process: processes/settlingvelocity_process.md
-    - Test Process: processes/testprocess_process.md
-    - Vertical Diffusion Process: processes/vertical_diffusion_process.md
+    - Carbon Chemistry: processes/carbchem/carbchem.md
+    - Dry Deposition: processes/drydep/drydep.md
+    - Dust: processes/dust/dust.md
+    - Sea Salt: processes/seasalt/seasalt.md
+    - Settling: processes/settling/settling.md
+    - Sulfate Chemistry: processes/so4chem/so4chem.md
+    - Wet Deposition: processes/wetdep/wetdep.md
   - Developer Guide:
     - developer-guide/index.md
     - Contributing Guide: developer-guide/contributing.md
@@ -258,6 +260,7 @@ nav:
   - Core Concepts:
     - core-concepts/index.md
     - State Management: core-concepts/state-management.md
+    - External Emission Data: core-concepts/external-emission-data.md
     - Column Virtualization: core-concepts/column-virtualization.md
     - Diagnostic System: core-concepts/diagnostics.md
     - Error Handling: core-concepts/error-handling.md

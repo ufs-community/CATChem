@@ -25,6 +25,7 @@ CATChem version 2.0 was released in July 2026 (**[v2.0.0](https://github.com/ufs
 - **API Documentation** - Auto-generated API docs with MkDoxy integration
 - **User Guides** - Comprehensive process documentation and tutorials
 - **Developer Resources** - Architecture guides and contribution guidelines
+- **Consolidated Process Docs** - Process documentation reorganized to one page per implemented process, with verified DOI citations
 
 #### 🛠️ Technical Improvements
 - **CMake Modernization** - Updated build system for modular components
