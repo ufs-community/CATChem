@@ -52,6 +52,12 @@ diagnostics:
 #============================================================================
 mie:
   directory: "./ExtData/monochromatic/"  #in running directory after copying from the above directories
+  # Parity A/B baseline: same optics-table versions as the upstream/develop
+  # (Fortran-core) run.  The settling process reads rEff(rh) growth curves
+  # from these tables, so a version bump changes wet particle sizes and
+  # settling velocities -- sea salt and sulfate are the most hygroscopic and
+  # shift the most.  Keep both cores on identical tables for the core-vs-core
+  # comparison; bump versions deliberately afterwards.
   files:
     SS: optics_SS.v3_3.nc
     DU: optics_DU.v15_3.nc
@@ -430,12 +436,17 @@ processes:
     scheme: 'gocart'
     gocart:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
-      simple_scheme: false  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      # Wet swelling is selected per species via the __hydrophilic species
-      # attribute (hydrophilic -> Gerber growth matching the GOCART optics
-      # tables; hydrophobic -> no swelling), not a global method here.
-      swelling_rh_max: 0.95    # clamp RH used for wet-swelling growth; the optics tables plateau rEff at RH>=0.95
-      correction_maring: true  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+      # Parity A/B baseline: match the upstream/develop (Fortran-core) run
+      # exactly -- optics-table (Mie) settling with no Maring velocity
+      # correction.  The metadata path (simple_scheme: false) selects swelling
+      # per species via the __hydrophilic attribute and the swelling_rh_max
+      # clamp; neither applies here, so those keys are omitted.  Flip
+      # simple_scheme back to false (and set correction_maring as desired) to
+      # re-enable the branch's new settling science after the core-vs-core
+      # comparison is done.
+      simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
+      maring_dust_only: true  #apply Maring correction to dust only (true) or all species (false)
   so4chem:
     activate: true
     diagnostics: true

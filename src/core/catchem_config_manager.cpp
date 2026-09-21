@@ -614,11 +614,36 @@ namespace catchem {
                     data.diagnostics.output.compress_lev = value_or<int>(output["compress_lev"], 0);
                     data.diagnostics.output.process_diagnostics = value_or<bool>(output["process_diagnostics"], false);
                     data.diagnostics.output.diag_list = string_vector_or_empty(output["diag_list"]);
+                    if (output["attributes"] && output["attributes"].IsMap()) {
+                        for (const auto& attr : output["attributes"]) {
+                            if (attr.second)
+                                data.diagnostics.output.attributes[attr.first.as<std::string>()] =
+                                    attr.second.as<std::string>();
+                        }
+                    }
                 }
                 if (diagnostics["collection"]) {
                     const YAML::Node collection = diagnostics["collection"];
                     data.diagnostics.collection.enabled = value_or<bool>(collection["enabled"], false);
                     data.diagnostics.collection.buffer_size = value_or<int>(collection["buffer_size"], 0);
+                }
+            }
+            if (config["mie"] && config["mie"].IsMap()) {
+                const YAML::Node mie = config["mie"];
+                data.mie = MieConfig{};
+                data.mie.directory = value_or<std::string>(mie["directory"], "./");
+                if (mie["files"] && mie["files"].IsMap()) {
+                    // yaml-cpp preserves the document order of map children, so the
+                    // load sequence below is deterministic across ranks.
+                    for (const auto& entry : mie["files"]) {
+                        const std::string type = entry.first.as<std::string>();
+                        const std::string file = entry.second ? entry.second.as<std::string>() : "";
+                        if (type.empty())
+                            throw std::invalid_argument("mie.files contains an empty aerosol type key");
+                        if (file.empty())
+                            throw std::invalid_argument("mie.files entry '" + type + "' has no optics file name");
+                        data.mie.files.emplace_back(type, file);
+                    }
                 }
             }
             parse_processes(config["processes"], data);

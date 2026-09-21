@@ -63,13 +63,3 @@ target_compile_options(${_lib} PRIVATE ${_catchem_compiler_options})
 # install(TARGETS catchem_nuopc_driver
 #   RUNTIME DESTINATION bin
 # )
-
-# # Install configuration files
-# install(FILES
-#   ../../parm/config/catchem_nuopc_metadata.yml
-#   ../../parm/catchem_output_config.yml
-#   ../../parm/catchem_input_config.yml
-#   ../../parm/catchem_field_config.yml
-#   ../../parm/catchem_nuopc_config.yml
-#   DESTINATION share/catchem/configs
-# )

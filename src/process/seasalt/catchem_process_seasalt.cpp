@@ -22,6 +22,39 @@ void run_seasalt_science_bridge(int n_cols, int n_levels, int n_species, int n_t
 
 namespace catchem {
 
+    namespace {
+
+        /// Resolve the canonical sea-salt bins (SEAS1..SEAS5) to global
+        /// species indices.  Shared by init() and run() so the diagnostic bin
+        /// order and the physics bin order are guaranteed identical: the
+        /// schemes' local species_idx space (1..n_seasalt) is defined by THIS
+        /// sequence.  Every bin must exist by canonical name and carry valid
+        /// physical properties (same throws run() has always enforced).
+        std::vector<int> resolved_seasalt_bins(const std::shared_ptr<StateManager>& state) {
+            // Route legacy size bins by canonical name rather than declaration
+            // position.  Their ordering is part of the GEOS/Gong scheme contract.
+            constexpr std::array<const char*, 5> seasalt_bin_names = {"SEAS1", "SEAS2", "SEAS3", "SEAS4", "SEAS5"};
+            std::vector<int> ss_global_indices;
+            ss_global_indices.reserve(seasalt_bin_names.size());
+            for (const char* name : seasalt_bin_names) {
+                const auto found = state->chemistry().species_name_to_index.find(name);
+                if (found == state->chemistry().species_name_to_index.end())
+                    throw std::runtime_error("SeaSalt requires canonical species '" + std::string(name) + "'");
+                const int index = found->second;
+                const auto& meta = state->chemistry().species_list[index];
+                if (!meta.is_seasalt)
+                    throw std::runtime_error("SeaSalt species '" + meta.short_name + "' must set is_seasalt: true");
+                if (!(meta.density > 0.0 && meta.radius > 0.0 && meta.lower_radius > 0.0 &&
+                      meta.upper_radius > meta.lower_radius && meta.mw_g > 0.0))
+                    throw std::runtime_error("SeaSalt species '" + meta.short_name +
+                                             "' requires explicit density, radius bounds, and molecular weight");
+                ss_global_indices.push_back(index);
+            }
+            return ss_global_indices;
+        }
+
+    } // namespace
+
     ProcessContract SeaSaltProcess::get_contract() const {
         std::vector<FieldAccessContract> fields{host_field_interface("PEDGE", "Pa"),
                                                 host_field_3d("DELP", "Pa"),
@@ -79,6 +112,35 @@ namespace catchem {
                        {"geos12/scale_factor", std::to_string(geos12_scale_factor)},
                        {"geos12/weibull_flag", geos12_weibull_flag ? "true" : "false"}});
 
+        // 3. Per-process diagnostics (parity with legacy): the schemes match
+        // diagnostic_species_id(diag_idx) == species_idx, where species_idx is
+        // the LOCAL bin position (1..n_seasalt) in the canonical SEAS1..SEAS5
+        // order run() feeds the bridge.  Build the ids in THAT space, honoring
+        // a diag_species subset (names matched against short_name exactly as
+        // dust/settling do).
+        const auto ss_global_indices = resolved_seasalt_bins(state);
+        {
+            std::vector<int> selected_local; // 1-based positions in the bin list
+            if (!settings.diag_species.empty()) {
+                for (const auto& name : settings.diag_species) {
+                    int found = -1;
+                    for (size_t bin = 0; bin < ss_global_indices.size(); ++bin) {
+                        if (state->chemistry().species_list[ss_global_indices[bin]].short_name == name) {
+                            found = static_cast<int>(bin) + 1;
+                            break;
+                        }
+                    }
+                    if (found < 0)
+                        throw std::invalid_argument("SeaSalt diag_species names a non-sea-salt species: " + name);
+                    selected_local.push_back(found);
+                }
+            } else {
+                for (size_t bin = 0; bin < ss_global_indices.size(); ++bin)
+                    selected_local.push_back(static_cast<int>(bin) + 1);
+            }
+            diagnostic_species_id = selected_local;
+        }
+
         if (!diagnostics_enabled)
             return;
         if (state->diagnostic_manager()) {
@@ -88,21 +150,31 @@ namespace catchem {
             state->diagnostic_manager()->register_field("seasalt_number_emission_total", "Total Number Emission",
                                                         "#/m2/s", DiagType::FIELD_2D, dims_1d);
 
-            // Per-bin emissions register as one compact [ncols, n_seasalt]
-            // field each, so the NUOPC driver can write a single 3D
-            // (nx, ny, nbin) variable instead of one field per size bin.
-            // Bin order is the canonical SEAS1..SEAS5 order used by run().
-            int n_seasalt_bins = 0;
-            for (const auto& meta : state->chemistry().species_list) {
-                if (meta.is_seasalt)
-                    ++n_seasalt_bins;
-            }
-            if (n_seasalt_bins > 0) {
-                std::vector<int> dims_bins = {state->column_count(), n_seasalt_bins};
-                state->diagnostic_manager()->register_field("seasalt_mass_emission_bins", "Mass Emission Per Bin",
-                                                            "kg/m2/s", DiagType::FIELD_2D, dims_bins);
-                state->diagnostic_manager()->register_field("seasalt_number_emission_bins", "Number Emission Per Bin",
-                                                            "#/m2/s", DiagType::FIELD_2D, dims_bins);
+            // Per-bin emissions register as one compact [ncols, n_diag] field
+            // each with a Category axis and per-slot labels; the NUOPC driver
+            // unpacks them into one named 2D variable per size bin (feature 013).
+            // n_diag is the (possibly subsetted) diagnostic bin count;
+            // column-major layout matches the bridge's [n_cols, n_diag_species].
+            const int n_diag = static_cast<int>(diagnostic_species_id.size());
+            if (n_diag > 0) {
+                std::vector<int> dims_bins = {state->column_count(), n_diag};
+                // diagnostic_species_id holds LOCAL bin positions (1-based) into
+                // the canonical resolved_seasalt_bins order run() feeds the
+                // bridge, so slot i's label is that bin's short_name (FR-006).
+                std::vector<std::string> ss_bin_labels;
+                ss_bin_labels.reserve(ss_global_indices.size());
+                for (const int local : diagnostic_species_id)
+                    ss_bin_labels.push_back(
+                        state->chemistry().species_list[ss_global_indices[static_cast<size_t>(local) - 1]].short_name);
+                const std::vector<SemanticAxis> axes_bin = {SemanticAxis::Column, SemanticAxis::Category};
+                state->diagnostic_manager()->register_field_contract("seasalt_mass_emission_bins", "Mass Emission Per Bin",
+                                                                    "kg/m2/s", DiagType::FIELD_2D, dims_bins,
+                                                                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
+                                                                    ss_bin_labels);
+                state->diagnostic_manager()->register_field_contract("seasalt_number_emission_bins", "Number Emission Per Bin",
+                                                                    "#/m2/s", DiagType::FIELD_2D, dims_bins,
+                                                                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
+                                                                    ss_bin_labels);
             }
         }
     }
@@ -132,7 +204,6 @@ namespace catchem {
         require_field_pointer("SeaSalt", "DELP", delp_ptr);
 
         // 2. Identify and slice SeaSalt-only chemical species to comply with science solver limits
-        std::vector<int> ss_global_indices;
         std::vector<double> density;
         std::vector<double> radius;
         std::vector<double> lower_radius;
@@ -140,22 +211,12 @@ namespace catchem {
         std::vector<char> is_gas;
         std::vector<double> mw_g;
 
-        // Route legacy size bins by canonical name rather than declaration
-        // position.  Their ordering is part of the GEOS/Gong scheme contract.
-        constexpr std::array<const char*, 5> seasalt_bin_names = {"SEAS1", "SEAS2", "SEAS3", "SEAS4", "SEAS5"};
-        for (const char* name : seasalt_bin_names) {
-            const auto found = state->chemistry().species_name_to_index.find(name);
-            if (found == state->chemistry().species_name_to_index.end())
-                throw std::runtime_error("SeaSalt requires canonical species '" + std::string(name) + "'");
-            const int index = found->second;
+        // Canonical SEAS1..SEAS5 resolution is shared with init() so the
+        // diagnostic ids (built there) index the same local bin order the
+        // physics arrays use here.
+        const auto ss_global_indices = resolved_seasalt_bins(state);
+        for (const int index : ss_global_indices) {
             const auto& meta = state->chemistry().species_list[index];
-            if (!meta.is_seasalt)
-                throw std::runtime_error("SeaSalt species '" + meta.short_name + "' must set is_seasalt: true");
-            if (!(meta.density > 0.0 && meta.radius > 0.0 && meta.lower_radius > 0.0 &&
-                  meta.upper_radius > meta.lower_radius && meta.mw_g > 0.0))
-                throw std::runtime_error("SeaSalt species '" + meta.short_name +
-                                         "' requires explicit density, radius bounds, and molecular weight");
-            ss_global_indices.push_back(index);
             density.push_back(meta.density);
             radius.push_back(meta.radius);
             lower_radius.push_back(meta.lower_radius);
@@ -205,9 +266,9 @@ namespace catchem {
                 : nullptr;
 
         // Per-bin diagnostics write straight into the compact registered
-        // fields ([ncols, n_seasalt], column-major).  The bridge's Fortran
-        // shape is [n_cols, n_species] with n_species = n_seasalt, so the
-        // memory layout matches with no gather/scatter step.
+        // fields ([ncols, n_diag], column-major).  The bridge's Fortran shape
+        // is [n_cols, n_diag_species], so the memory layout matches with no
+        // gather/scatter step.
         double* diag_mass_bin_ptr =
             diagnostics_enabled && state->diagnostic_manager()
                 ? (double*)state->diagnostic_manager()->get_host_pointer("seasalt_mass_emission_bins")
@@ -216,22 +277,30 @@ namespace catchem {
             diagnostics_enabled && state->diagnostic_manager()
                 ? (double*)state->diagnostic_manager()->get_host_pointer("seasalt_number_emission_bins")
                 : nullptr;
-        if (diagnostics_enabled) {
+
+        // diagnostic_species_id (built in init) holds 1-based LOCAL bin
+        // positions, optionally subset by processes.seasalt.diag_species: the
+        // scheme runs over all n_seasalt bins internally but only fills the
+        // diagnostic slots named in the subset.  The Fortran dummy is
+        // declared diagnostic_species_id(max(n_diag_species,1)); when
+        // diagnostics are off the bridge still forwards the array to the
+        // scheme, so pass a valid size-1 dummy holding 0 — it matches no
+        // 1-based species_idx and the scheme writes nothing (mirrors
+        // settling/dust's no_diag_species guard).
+        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        static const int no_diag_species = 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
+        if (forward_diag) {
             const int registered_bins =
                 diag_mass_bin_ptr
                     ? static_cast<int>(
                           state->diagnostic_manager()->get_field("seasalt_mass_emission_bins")->dimensions[1])
                     : 0;
-            if (registered_bins < n_seasalt)
+            if (registered_bins < n_diag_species)
                 throw std::runtime_error("SeaSalt diagnostic bin capacity (" + std::to_string(registered_bins) +
-                                         ") is smaller than the " + std::to_string(n_seasalt) +
-                                         " configured sea-salt bins");
-        }
-
-        // Dynamic ID array mapping diagnostic species (1-based index in the sliced sea salt subset!)
-        std::vector<int> diagnostic_species_id(n_seasalt);
-        for (int i = 0; i < n_seasalt; ++i) {
-            diagnostic_species_id[i] = i + 1;
+                                         ") is smaller than the " + std::to_string(n_diag_species) +
+                                         " selected diagnostic sea-salt bins");
         }
 
         // 5. Invoke flat science bridge (operates on the full conc array;
@@ -243,8 +312,7 @@ namespace catchem {
             frocean_ptr, frseaice_ptr, lat_ptr, lon_ptr, sst_ptr, u10m_ptr, v10m_ptr, ustar_ptr, delp_ptr,
             density.data(), radius.data(), lower_radius.data(), upper_radius.data(), (bool*)is_gas.data(), mw_g.data(),
             bin_species_names.data(), state->chemistry().species_names_c_arr.data(), conc_ptr, full_tendency.data(),
-            diag_mass_total_ptr, diag_num_total_ptr, diag_mass_bin_ptr, diag_num_bin_ptr, diagnostic_species_id.data(),
-            diagnostic_species_id.size());
+            diag_mass_total_ptr, diag_num_total_ptr, diag_mass_bin_ptr, diag_num_bin_ptr, diag_ids, n_diag_species);
 
         if (state->chemistry().conc)
             state->chemistry().conc->mark_host_modified();

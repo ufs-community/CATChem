@@ -88,8 +88,15 @@ contains
       type(c_ptr), value :: diag_moisture_correction
       type(c_ptr), value :: diag_effective_threshold
       type(c_ptr), value :: diag_utar_threshold
+      ! Per-process diagnostics.  The diag_* pointers reference
+      ! DiagnosticManager field storage; they are null (and n_diag_species is
+      ! 0) when diagnostics are disabled, so the per-bin pointers are only
+      ! c_f_pointer'd when n_diag_species > 0.  diagnostic_species_id holds
+      ! 1-based LOCAL bin positions within the canonical dust-bin subset the
+      ! scheme iterates (species_idx space); the size-1 dummy is never
+      ! dereferenced when n_diag_species == 0 (mirrors the settling bridge).
       integer(c_int), value :: n_diag_species
-      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+      integer(c_int), intent(in) :: diagnostic_species_id(max(n_diag_species,1))
 
       ! Local Fortran Pointers
       real(c_double), pointer :: f_airden(:,:), f_delp(:,:)
@@ -122,11 +129,13 @@ contains
       real(fp) :: f_species_upper_radius(n_species)
 
       real(fp) :: col_emission_total
-      real(fp) :: col_emission_bin(n_species)
+      ! Per-bin diagnostic scratch is sized by the diag_species subset count,
+      ! not the bin count: the scheme fills slot diag_idx (1..n_diag_species).
+      real(fp) :: col_emission_bin(max(n_diag_species,1))
       real(fp) :: col_horizontal_flux
       real(fp) :: col_moisture_correction
       real(fp) :: col_effective_threshold
-      real(fp) :: col_utar_threshold(n_species)
+      real(fp) :: col_utar_threshold(max(n_diag_species,1))
 
       type(DustSchemeFENGSHAConfig) :: fengsha_config
       type(DustSchemeGINOUXConfig)  :: ginoux_config
@@ -211,13 +220,13 @@ contains
       call c_f_pointer(species_lower_radius, f_lower_radius, [n_species])
       call c_f_pointer(species_upper_radius, f_upper_radius, [n_species])
 
-      if (diagnostics /= 0) then
+      if (diagnostics /= 0 .and. n_diag_species > 0) then
          call c_f_pointer(diag_emission_total, f_diag_emission_total, [n_cols])
-         call c_f_pointer(diag_emission_bin, f_diag_emission_bin, [n_cols, n_species])
+         call c_f_pointer(diag_emission_bin, f_diag_emission_bin, [n_cols, n_diag_species])
          call c_f_pointer(diag_horizontal_flux, f_diag_horizontal_flux, [n_cols])
          call c_f_pointer(diag_moisture_correction, f_diag_moisture_correction, [n_cols])
          call c_f_pointer(diag_effective_threshold, f_diag_effective_threshold, [n_cols])
-         call c_f_pointer(diag_utar_threshold, f_diag_utar_threshold, [n_cols, n_species])
+         call c_f_pointer(diag_utar_threshold, f_diag_utar_threshold, [n_cols, n_diag_species])
       end if
 
       ! Cast species properties to fp precision
@@ -295,13 +304,13 @@ contains
          end do
 
          ! Write diagnostics
-         if (diagnostics /= 0) then
+         if (diagnostics /= 0 .and. n_diag_species > 0) then
             f_diag_emission_total(icol) = real(col_emission_total, c_double)
-            f_diag_emission_bin(icol, :) = real(col_emission_bin, c_double)
+            f_diag_emission_bin(icol, :) = real(col_emission_bin(1:n_diag_species), c_double)
             f_diag_horizontal_flux(icol) = real(col_horizontal_flux, c_double)
             f_diag_moisture_correction(icol) = real(col_moisture_correction, c_double)
             f_diag_effective_threshold(icol) = real(col_effective_threshold, c_double)
-            f_diag_utar_threshold(icol, :) = real(col_utar_threshold, c_double)
+            f_diag_utar_threshold(icol, :) = real(col_utar_threshold(1:n_diag_species), c_double)
          end if
 
       end do

@@ -90,6 +90,33 @@ int main(int argc, char* argv[]) {
         so4chem->run(state);
         state->sync_to_host();
 
+        // The shared config selects processes.so4chem.diag_species = [so2, so4],
+        // so each gets its own Production_rate_<sp> field.  Regression: the
+        // bridge used to copy the FIRST diagnostic slot into every field, so
+        // Production_rate_so4 duplicated Production_rate_so2.  Each field must
+        // carry its OWN species' production rate, so the two buffers must not
+        // be identical, and the SO4 field must be non-zero (the scheme fills
+        // the SO4 slot from SO2 oxidation).
+        {
+            const auto manager = core->get_diagnostic_manager();
+            assert(manager->has_field("Production_rate_so2"));
+            assert(manager->has_field("Production_rate_so4"));
+            const double* a = (const double*)manager->get_host_pointer("Production_rate_so2");
+            const double* b = (const double*)manager->get_host_pointer("Production_rate_so4");
+            assert(a != nullptr && b != nullptr);
+            bool differ = false;
+            bool so4_nonzero = false;
+            for (int i = 0; i < n_cols * n_levels; ++i) {
+                if (a[i] != b[i])
+                    differ = true;
+                if (b[i] != 0.0)
+                    so4_nonzero = true;
+            }
+            assert(differ && "Production_rate fields must not duplicate the first slot");
+            assert(so4_nonzero && "Production_rate_so4 must carry the SO4 slot, not zeros");
+            std::cout << "  PASS per-slot production-rate fields differ" << std::endl;
+        }
+
         std::cout << "SUCCESS: SO4chem process executed successfully." << std::endl;
     }
     Kokkos::finalize();

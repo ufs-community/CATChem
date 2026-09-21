@@ -114,7 +114,6 @@ diagnostics:
     frequency: 3600              # seconds between output writes
     format: "netcdf"             # only "netcdf" passes validation
     compress_lev: 2              # 0 = off, 1-9 = increasing compression
-    process_diagnostics: true    # per-process diagnostic variables
     diag_list: [so2, so4, dust1] # species to write; empty = all
   collection:
     enabled: true
@@ -126,6 +125,32 @@ diagnostics:
     some shipped example configs but are **not read by the current loader**.
     `mie` is accepted by validation, so it is harmless; `latlon_output` is simply
     ignored. Do not rely on either key to change behavior.
+
+!!! deprecated
+    `diagnostics.output/process_diagnostics` no longer suppresses process
+    diagnostic output — it is a **deprecated no-op** retained only for
+    configuration compatibility. Remove it from control files; it has no
+    effect. Per-process diagnostics are now controlled entirely by each
+    process's own `diagnostics:` flag (see *Process diagnostics* below).
+
+### Process diagnostics (all schemes)
+
+Setting `processes/<name>/diagnostics: true` registers that process's scheme
+diagnostics; the optional `processes/<name>/diag_species:` list narrows them to
+the named species (default = the process's own species subset, resolved at
+runtime against the active mechanism). A `diag_species` name outside the
+process's species set fails at initialization. Registered fields are written to
+`catchem_diag*.nc` whenever runtime diagnostics are enabled — there is no
+separate output switch.
+
+```yaml
+processes:
+  settling:
+    diagnostics: true
+    diag_species: [so4, bc1, dust3, seas3]   # optional; default = process set
+  dust:
+    diagnostics: true                         # diag_species optional (dust bins only)
+```
 
 ## `run_phases`
 

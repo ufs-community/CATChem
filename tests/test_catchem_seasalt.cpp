@@ -98,6 +98,29 @@ int main(int argc, char* argv[]) {
             assert(manager->get_field("seasalt_mass_emission_total")->dimensions == std::vector<int>({n_cols, 1}));
         }
 
+        // A diag_species subset must shrink the per-bin fields to [ncols, 1]
+        // and map the id to the LOCAL bin position (SEAS3 -> 3), matching the
+        // space the schemes search.  register_field throws on different-dims
+        // re-registration, so this runs on a fresh Core.  init() reads only
+        // the config and the chemistry mechanism, so no met fields are needed.
+        {
+            auto core2 = std::make_shared<catchem::Core>(n_cols, n_levels, n_species);
+            auto state2 = core2->get_state_manager();
+            auto cfg2 = std::make_shared<catchem::ConfigManager>();
+            cfg2->load_from_file("CATChem_new_config.yml");
+            cfg2->data.processes["seasalt"].diagnostics = true;
+            cfg2->data.processes["seasalt"].diag_species = {"seas3"};
+            state2->attach_config_manager(cfg2);
+            state2->load_species_config(species_path);
+            auto seasalt2 = catchem::ProcessRegistry::get_instance().create("seasalt");
+            seasalt2->init(state2);
+            const auto mgr2 = core2->get_diagnostic_manager();
+            assert(mgr2->get_field("seasalt_mass_emission_bins")->dimensions == std::vector<int>({n_cols, 1}));
+            assert(mgr2->get_field("seasalt_number_emission_bins")->dimensions == std::vector<int>({n_cols, 1}));
+            assert(mgr2->get_field("seasalt_mass_emission_total")->dimensions == std::vector<int>({n_cols, 1}));
+            std::cout << "  PASS diag_species subset: per-bin fields register as [ncols, 1]" << std::endl;
+        }
+
         seasalt->run(state);
         state->sync_to_host();
 

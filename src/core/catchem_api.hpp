@@ -164,6 +164,16 @@ int catchem_config_get_diag_enabled(void* core_ptr);
 int catchem_config_get_process_diagnostics_enabled(void* core_ptr);
 int catchem_config_get_diag_species_count(void* core_ptr);
 void catchem_config_get_diag_species_at(void* core_ptr, int index, char* buffer, int max_len);
+/// diagnostics.output.attributes (feature 013, FR-011): run-level NetCDF global
+/// attributes.  Iteration order is the map's key order, so it is deterministic.
+int catchem_config_get_output_attribute_count(void* core_ptr);
+void catchem_config_get_output_attribute_key_at(void* core_ptr, int index, char* buffer, int max_len);
+void catchem_config_get_output_attribute_value_at(void* core_ptr, int index, char* buffer, int max_len);
+/// Path of the YAML the configuration was loaded from ("" before load).
+void catchem_config_get_config_file_path(void* core_ptr, char* buffer, int max_len);
+/// Build provenance baked in at configure time (feature 013, FR-011).
+void catchem_get_build_version(char* buffer, int max_len);
+void catchem_get_build_commit(char* buffer, int max_len);
 int catchem_config_get_process_active(void* core_ptr, const char* process_name);
 int catchem_config_has_emission_mapping(void* core_ptr);
 int catchem_config_get_emission_category_count(void* core_ptr);
@@ -277,6 +287,12 @@ void catchem_diag_get_name_at(void* core_ptr, int index, char* name_out);
 int catchem_diag_get_name_at_checked(void* core_ptr, int index, char* name_out, int name_length);
 int catchem_diag_get_units_checked(void* core_ptr, const char* name, char* units_out, int units_length);
 int catchem_diag_get_description_checked(void* core_ptr, const char* name, char* desc_out, int desc_length);
+/// SemanticAxis ordinals per dimension (length == rank). axes_length must be >= rank.
+int catchem_diag_get_axes_checked(void* core_ptr, const char* name, int* axes_out, int axes_length);
+/// Label for slot `slot` (0-based) of the field's packed (Species/Category) dimension.
+/// Non-zero when the field has no packed dimension or `slot` is out of range.
+int catchem_diag_get_unpack_label_at_checked(void* core_ptr, const char* name, int slot, char* label_out,
+                                             int label_length);
 
 // YAML Species Metadata
 void catchem_state_load_species_config(void* state_ptr, const char* filename);

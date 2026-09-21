@@ -130,6 +130,30 @@ int main(int argc, char* argv[]) {
             assert(manager->get_field("dust_emission_total")->dimensions == std::vector<int>({n_cols, 1}));
         }
 
+        // A diag_species subset must shrink the per-bin fields to [ncols, 1].
+        // register_field throws "Incompatible diagnostic re-registration" on
+        // different-dims re-registration, so this MUST run on a fresh
+        // Core/state.  init() reads only the config and the chemistry
+        // mechanism, so no met fields need binding here.
+        {
+            auto core2 = std::make_shared<catchem::Core>(n_cols, n_levels, n_species);
+            auto state2 = core2->get_state_manager();
+            auto cfg2 = std::make_shared<catchem::ConfigManager>();
+            cfg2->load_from_file("CATChem_new_config.yml");
+            cfg2->data.processes["dust"].diagnostics = true;
+            cfg2->data.processes["dust"].diag_species = {
+                state->chemistry().species_list[dust_indices.back()].short_name};
+            state2->attach_config_manager(cfg2);
+            state2->load_species_config(species_path);
+            auto dust2 = catchem::ProcessRegistry::get_instance().create("dust");
+            dust2->init(state2);
+            const auto mgr2 = core2->get_diagnostic_manager();
+            assert(mgr2->get_field("dust_emission_bin")->dimensions == std::vector<int>({n_cols, 1}));
+            assert(mgr2->get_field("dust_utar_threshold")->dimensions == std::vector<int>({n_cols, 1}));
+            assert(mgr2->get_field("dust_emission_total")->dimensions == std::vector<int>({n_cols, 1}));
+            std::cout << "  PASS diag_species subset: per-bin fields register as [ncols, 1]" << std::endl;
+        }
+
         // FENGSHA gates emission on saltation: the White horizontal flux is
         // max(0, R*ustar - ustar_threshold*H) * (...)^2, so emission only
         // occurs when the drag-scaled friction velocity exceeds the moisture-
@@ -166,6 +190,28 @@ int main(int argc, char* argv[]) {
         const double emitting_total = total_dust();
         assert(emitting_total > 0.0 && "FENGSHA must emit dust under saltation-favorable inputs");
         std::cout << "  Scenario A (emitting): total surface dust = " << emitting_total << std::endl;
+
+        // Regression guard for the diagnostic index space: the scheme fills
+        // per-bin slots by LOCAL bin position (diagnostic_species_id(diag_idx)
+        // == species_idx over the 1..n_dust slice).  With the old GLOBAL ids
+        // the compact field stayed ~all zeros; under the default (all-bin)
+        // diag set the emitting column must show positive per-bin emission.
+        {
+            const auto manager = core->get_diagnostic_manager();
+            const int n_dust = static_cast<int>(dust_indices.size());
+            const double* emission_bin =
+                static_cast<const double*>(manager->get_host_pointer("dust_emission_bin"));
+            assert(emission_bin != nullptr);
+            bool any_positive = false;
+            for (int i = 0; i < n_cols * n_dust; ++i) {
+                assert(std::isfinite(emission_bin[i]));
+                assert(emission_bin[i] >= 0.0);
+                if (emission_bin[i] > 0.0)
+                    any_positive = true;
+            }
+            assert(any_positive && "dust_emission_bin must be populated in LOCAL bin index space");
+            std::cout << "  Scenario A (emitting): dust_emission_bin populated" << std::endl;
+        }
 
         // --- Scenario B: saltation-suppressed -> dust MUST be zero ----------
         // Same wind, but the drag-scaled friction velocity R*ustar is far

@@ -61,6 +61,44 @@ int main(int argc, char* argv[]) {
         auto carbchem = catchem::ProcessRegistry::get_instance().create("carbchem");
         assert(carbchem != nullptr);
         carbchem->init(state);
+
+        // The default diagnostic set is the explicit carbon species (oc1, oc2,
+        // bc1, bc2) resolved against the mechanism, NOT the whole catalog.
+        // Packed fields therefore carry a species dimension of n_diag, not
+        // n_species.  The Default mechanism carries all four carbon species.
+        {
+            const auto manager = core->get_diagnostic_manager();
+            assert(manager->has_field("carbchem_prod_mass"));
+            assert(manager->get_field("carbchem_prod_mass")->dimensions ==
+                   std::vector<int>({n_cols, n_levels, 4}));
+            assert(manager->get_field("carbchem_loss_flux")->dimensions == std::vector<int>({n_cols, 4}));
+            assert(manager->get_field("carbchem_phobic_mass")->dimensions ==
+                   std::vector<int>({n_cols, n_levels, 4}));
+            assert(manager->get_field("carbchem_phobic_flux")->dimensions == std::vector<int>({n_cols, 4}));
+            std::cout << "  PASS default carbon set: fields register with species dim = 4" << std::endl;
+        }
+
+        // A diag_species subset must shrink the species dimension to 1 and map
+        // to the GLOBAL 1-based species index (the space the scheme matches on).
+        // register_field throws on different-dims re-registration, so this runs
+        // on a fresh Core.  init() reads only config + mechanism.
+        {
+            auto core2 = std::make_shared<catchem::Core>(n_cols, n_levels, n_species);
+            auto state2 = core2->get_state_manager();
+            auto cfg2 = std::make_shared<catchem::ConfigManager>();
+            cfg2->load_from_file("CATChem_new_config.yml");
+            cfg2->data.processes["carbchem"].diagnostics = true;
+            cfg2->data.processes["carbchem"].diag_species = {"bc2"};
+            state2->attach_config_manager(cfg2);
+            state2->load_species_config(species_path);
+            auto carbchem2 = catchem::ProcessRegistry::get_instance().create("carbchem");
+            carbchem2->init(state2);
+            const auto mgr2 = core2->get_diagnostic_manager();
+            assert(mgr2->get_field("carbchem_prod_mass")->dimensions == std::vector<int>({n_cols, n_levels, 1}));
+            assert(mgr2->get_field("carbchem_loss_flux")->dimensions == std::vector<int>({n_cols, 1}));
+            std::cout << "  PASS diag_species subset: fields register with species dim = 1" << std::endl;
+        }
+
         carbchem->run(state);
         state->sync_to_host();
 

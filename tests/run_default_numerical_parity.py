@@ -45,6 +45,20 @@ def stage(run_dir: Path, source_root: Path, columns: int, levels: int, processes
         raise RuntimeError("could not isolate the test1 process phase in the staged configuration")
     config.write_text(config_text, encoding="utf-8")
     (run_dir / "CATChem_parity_zero_emissions.yml").write_text("categories: {}\n", encoding="utf-8")
+    # The Default config's settling baseline reads GOCART optics tables from
+    # a path relative to the run directory, so every staged run needs them.
+    # Copy exactly the filenames the staged config references out of the
+    # shared optics fixture directory; a missing table aborts the C++ core
+    # (fail-loud) and would silently freeze legacy settling, so fail here.
+    if "settling" in processes:
+        optics_source = source_root / "specs" / "tmp"
+        optics_target = run_dir / "ExtData" / "monochromatic"
+        optics_target.mkdir(parents=True, exist_ok=True)
+        for filename in re.findall(r"(optics_\S+\.nc)", config_text):
+            source = optics_source / filename
+            if not source.is_file():
+                raise SystemExit(f"settling optics fixture missing: {source}")
+            shutil.copy2(source, optics_target / filename)
     profile = run_dir / "default_parity_met.json"
     subprocess.run(
         [sys.executable, str(source_root / "tests" / "build_parity_met_profile.py"),

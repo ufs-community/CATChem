@@ -353,6 +353,10 @@ void CatchemPropertiesTest_SpeciesMetadataAPI() {
     assert(catchem_state_is_species_aerosol(&state, msa_idx) == 1);
     assert(catchem_state_is_species_drydep(&state, msa_idx) == 1);
     assert(catchem_state_is_species_wetdep(&state, msa_idx) == 1);
+    // This fixture (tests/CATChem_species.yml) intentionally keeps the
+    // optics-table physical properties; the parity A/B baseline lives in
+    // tests/Configs/Default/CATChem_species.yml and is covered by
+    // test_catchem_settling / the parity runners.
     assert(catchem_state_get_species_radius(&state, msa_idx) == 0.35);
     assert(catchem_state_get_species_density(&state, msa_idx) == 1700.0);
 
@@ -360,9 +364,9 @@ void CatchemPropertiesTest_SpeciesMetadataAPI() {
     assert(dust1_idx > 0);
     assert(catchem_state_is_species_dust(&state, dust1_idx) == 1);
     assert(catchem_state_is_species_aerosol(&state, dust1_idx) == 1);
-    // Dust dry effective radius/density come from the GOCART DU optics table
-    // (optics_DU.v15_3.nc) so the metadata settling path matches the
-    // optics-table (simple_scheme) path.
+    // Fixture-only: the 49-species unit fixture carries the GOCART DU
+    // optics-table radius/density.  See the Default file for the parity
+    // baseline values.
     assert(catchem_state_get_species_density(&state, dust1_idx) == 2650.0);
     assert(catchem_state_get_species_radius(&state, dust1_idx) == 0.6359);
     assert(catchem_state_get_species_lower_radius(&state, dust1_idx) == 0.1);

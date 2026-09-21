@@ -49,6 +49,7 @@ module AQMIO
    public :: AQMIO_Write1D
    public :: AQMIO_Read1D
    public :: AQMIO_ReadTimeCoord
+   public :: AQMIO_WriteGlobalAttrs
 
    ! Lat/lon stitched output support
    public :: AQMIO_LatlonInit
@@ -3779,6 +3780,88 @@ contains
 #endif
 
    end subroutine AQMIO_Write1D
+
+   !> \brief Write run-level global attributes to an existing NetCDF file.
+   !!
+   !! Global attributes must be set while the file is in define mode, which
+   !! AQMIO owns internally (research D7): this routine opens the file,
+   !! enters define mode, writes every (name, value) pair, and leaves
+   !! define mode again.  The driver layer never calls nf90_create or
+   !! nf90_redef directly.  Attributes are idempotent: calling this again
+   !! with the same values simply overwrites them.
+   !!
+   !! \param filename NetCDF filename (must exist)
+   !! \param names    Attribute names, names(1:n)
+   !! \param values   Attribute values, values(1:n)
+   !! \param n        Number of attributes
+   !! \param rc       Return code
+   subroutine AQMIO_WriteGlobalAttrs(filename, names, values, n, rc)
+      character(len=*), intent(in) :: filename
+      character(len=*), intent(in) :: names(:)
+      character(len=*), intent(in) :: values(:)
+      integer, intent(in) :: n
+      integer, intent(out), optional :: rc
+
+#if HAVE_NETCDF
+      integer :: localrc, ncid, k
+
+      if (present(rc)) rc = ESMF_SUCCESS
+
+      localrc = nf90_open(trim(filename), NF90_WRITE, ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+            msg="Error opening NetCDF file for global attributes: "//trim(filename)// &
+                ": "//trim(nf90_strerror(localrc)), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return  ! bail out
+      end if
+
+      localrc = nf90_redef(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error entering define mode for global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         localrc = nf90_close(ncid)
+         return  ! bail out
+      end if
+
+      do k = 1, n
+         localrc = nf90_put_att(ncid, NF90_GLOBAL, trim(names(k)), trim(values(k)))
+         if (localrc /= NF90_NOERR) then
+            call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+               msg="Error writing global attribute "//trim(names(k))//" in "//trim(filename), &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            localrc = nf90_enddef(ncid)
+            localrc = nf90_close(ncid)
+            return  ! bail out
+         end if
+      end do
+
+      localrc = nf90_enddef(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error leaving define mode after global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         localrc = nf90_close(ncid)
+         return  ! bail out
+      end if
+
+      localrc = nf90_close(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error closing file after global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         if (present(rc)) rc = ESMF_FAILURE
+         return  ! bail out
+      end if
+#else
+      if (present(rc)) rc = ESMF_FAILURE
+      call ESMF_LogSetError(ESMF_RC_LIB_NOT_PRESENT, &
+         msg="NetCDF not available", &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)
+#endif
+
+   end subroutine AQMIO_WriteGlobalAttrs
 
    !> \brief Read 1D data directly from NetCDF file (consolidated function)
    !!

@@ -200,6 +200,7 @@ MODULE catchem_nuopc_emis_data_mod
       !> \brief Find emission field across all categories
       !! \copydoc extemidata_find_field
       PROCEDURE :: find_emission_field => extemidata_find_field
+      PROCEDURE :: find_emission_field_in_category => extemidata_find_field_in_category
       !> \brief Get emission rate for a specific field and location
       !! \copydoc extemidata_get_emission_rate
       PROCEDURE :: get_emission_rate => extemidata_get_emission_rate
@@ -867,6 +868,28 @@ CONTAINS
       end do
 
    end function extemidata_find_field
+
+   !> Find an emission field within a named category.
+   function extemidata_find_field_in_category(this, category_name, field_name) result(field_ptr)
+      implicit none
+      class(ExtEmisDataType), intent(in), target :: this
+      character(len=*), intent(in) :: category_name
+      character(len=*), intent(in) :: field_name
+      type(ExtEmisFieldType), pointer :: field_ptr
+
+      integer :: icat, field_idx
+
+      field_ptr => null()
+      if (.not. allocated(this%categories)) return
+
+      do icat = 1, this%n_categories
+         if (trim(this%categories(icat)%category_name) /= trim(category_name)) cycle
+         field_idx = this%categories(icat)%find_field(field_name)
+         if (field_idx > 0) field_ptr => this%categories(icat)%fields(field_idx)
+         return
+      end do
+
+   end function extemidata_find_field_in_category
 
    !> \brief Get emission rate for a specific field and location
    !!

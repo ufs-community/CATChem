@@ -16,13 +16,14 @@ The Settling process implements Process for computing gravitational settling of 
 **Name:** `gocart`
 **Description:** GOCART gravitational settling scheme
 **Author:** Wei Li
-**Reference:** GOCART2G process library `Chem_Settling` function
+**Reference:** GOCART2G process library `Chem_Settling` (metadata path) and
+`Chem_SettlingSimple` (optics-table path) functions
 #### Parameters
 
 | Parameter | Default | Range | Description |
 |-----------|---------|--------|-------------|
 | `scale_factor` | 1.0 |  -  | settling velocity factor |
-| `simple_scheme` | False |  -  | read in mie data for wet particles if true; otherwise calculate particles wet swelling internally. **Note:** `true` requires Mie optics tables and is unsupported by the C++ core; the process fails loudly if enabled. |
+| `simple_scheme` | False |  -  | Read wet-particle radius and density from NetCDF Mie optics tables when `true`; otherwise compute wet swelling internally from species metadata (Gerber/Fitzgerald). Both paths are supported by the C++ core and are numerically identical to `upstream/develop`. See [Optics tables](#optics-tables-simple_scheme-true) below. |
 | `swelling_method` | 1 |  -  | method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985 |
 | `correction_maring` | False |  -  | correct the settling velocity following Maring et al, 2003 |
 
@@ -36,9 +37,54 @@ The Settling process implements Process for computing gravitational settling of 
 - `PMID` - Layer mid-level pressure [Pa], required for scheme computation
 - `DELP` - Layer pressure thickness [Pa], required for scheme computation
 
-> The `gocart` scheme delegates to the upstream GOCART2G `Chem_Settling`
-> kernel so results are numerically identical to `upstream/develop`. Missing
-> or stale fields raise an explicit error before the kernel is invoked.
+> The `gocart` scheme delegates to the upstream GOCART2G `Chem_Settling` /
+> `Chem_SettlingSimple` kernels so results are numerically identical to
+> `upstream/develop`. Missing or stale fields raise an explicit error before the
+> kernel is invoked.
+
+### Optics tables (`simple_scheme: true`)
+
+The optics-table path reproduces the legacy GOCART2G wet-particle settling by
+reading a per-aerosol-type **Mie lookup table** instead of computing swelling in
+code. Configuration lives in a top-level `mie:` section, and each aerosol species
+selects its table through its `__mie_name` attribute:
+
+```yaml
+mie:
+  directory: "./ExtData/monochromatic/"   # joined with each file below
+  files:
+    DU: optics_DU.v15_5.nc    # dust   (bins 1-5)
+    SS: optics_SS.v3_5.nc     # sea salt
+    BC: optics_BC.v1_5.nc     # black carbon
+    OC: optics_OC.v1_5.nc     # organic carbon
+    SU: optics_SU.v1_5.nc     # sulfate (so4, msa)
+    NI: optics_NI.v2_5.nc     # nitrate
+    BRC: optics_BRC.v1_5.nc   # brown carbon
+
+processes:
+  settling:
+    scheme: gocart
+    gocart:
+      simple_scheme: true
+```
+
+- **Type → table binding.** A species' `__mie_name` (e.g. `DU`) is matched
+  (trimmed, case-sensitive) against the `mie.files` keys; the species then uses
+  that table and selects its bin from the trailing digit of its short name
+  (`dust4` → bin 4). This mirrors the legacy `chemstate_init_mie_data` map exactly.
+- **Required table variables.** The `simple_scheme` kernel reads `rhop` (wet
+  particle density) and `growth_factor` from the NetCDF table. Use the complete
+  table versions that carry them (the trailing `_5` GOCART releases); a table
+  missing `rhop` makes the reader fall back to its `-999.` sentinel and the
+  species silently fail to settle.
+- **Failure behaviour.** At `init` (before any time step) the process aborts
+  loudly, naming the offending item, if: `simple_scheme: true` with an empty
+  `mie.files`; the `mie.directory` is not readable; a listed file is missing; the
+  NetCDF table fails to open; or a settling species has an empty/unmatched
+  `__mie_name`. There is no silent fallback to the metadata path.
+- **Parity.** The optics path is certified against the legacy Fortran oracle
+  (`tests/run_settling_optics_parity.py`) to single-precision round-off; see
+  `specs/012-settling-optics-parity/quickstart.md`.
 
 
 

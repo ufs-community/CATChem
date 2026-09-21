@@ -113,8 +113,12 @@ contains
       ! Sliced concentration and tendencies in solver precision
       real(fp) :: f_conc(1, n_species)
       real(fp) :: col_tendencies(1, n_species)
-      real(fp) :: col_diag_con(n_species)
-      real(fp) :: col_diag_vel(n_species)
+      ! Diagnostic slot buffers are sized by the (is_drydep) subset count: the
+      ! schemes index drydep_*_per_species(diag_idx) over
+      ! [1, size(diagnostic_species_id)] and never touch the catalog tail.
+      ! max(...,1) keeps the declaration valid when no species is drydep.
+      real(fp) :: col_diag_con(max(n_diag_species, 1_c_int))
+      real(fp) :: col_diag_vel(max(n_diag_species, 1_c_int))
 
       type(DryDepSchemeWESELYConfig) :: wesely_config
       type(DryDepSchemeGOCARTConfig) :: gocart_config
@@ -190,8 +194,13 @@ contains
       call c_f_pointer(c_tendency, tendency, [n_cols, n_levels, n_species])
 
       if (diagnostics /= 0) then
-         call c_f_pointer(c_diag_con, diag_con, [n_cols, n_species])
-         call c_f_pointer(c_diag_vel, diag_vel, [n_cols, n_species])
+         ! The C++ caller allocates the diagnostic buffer at the (is_drydep)
+         ! subset extent, n_diag_species columns, not the full catalog.  The
+         ! schemes scatter into slots [1, n_diag_species] of col_diag_*, so
+         ! pointing here at n_species would read the unwritten tail past the
+         ! buffer (feature 013).
+         call c_f_pointer(c_diag_con, diag_con, [n_cols, n_diag_species])
+         call c_f_pointer(c_diag_vel, diag_vel, [n_cols, n_diag_species])
       endif
 
       ! Keep the canonical chemistry catalog with the concentration and

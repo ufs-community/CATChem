@@ -22,6 +22,10 @@ namespace catchem {
         DiagType type;
         std::vector<int> dimensions;
         std::vector<SemanticAxis> axes;
+        /// Human-readable label for each position of the field's single packed
+        /// (Species or Category) dimension; empty when no dimension is packed.
+        /// Index i is the 0-based slot the scheme writes, NOT a global species index.
+        std::vector<std::string> unpack_labels;
         std::size_t generation = 0;
         std::size_t registration_generation = 0;
         AvailabilityState availability = AvailabilityState::Unavailable;
@@ -56,7 +60,7 @@ namespace catchem {
         DiagnosticField(const std::string& name_val, const std::string& desc_val, const std::string& units_val,
                         DiagType type_val, const std::vector<int>& dims,
                         DiagnosticPolicy policy = DiagnosticPolicy::Instantaneous, double reset = 0.0,
-                        std::vector<SemanticAxis> semantic_axes = {});
+                        std::vector<SemanticAxis> semantic_axes = {}, std::vector<std::string> labels = {});
 
         void sync_to_host();
         void sync_to_device();

@@ -93,10 +93,15 @@
   __is_drydep: true
   __is_wetdep: true
   molecular weight [kg mol-1]: 96.10e-3
-  # Use the sulfate accumulation-mode physical properties.  Zero-valued
-  # legacy placeholders are unsafe once MSA reaches aerosol dry/wet-deposition
-  # and settling calculations.
-  __radius: 0.35
+  # Parity A/B baseline: the legacy placeholder radius was 0.0, which sits
+  # below the wetdep washout fine/coarse threshold (0.05 um) and selects the
+  # fine-aerosol washout formula (near-zero below-cloud loss).  The new core
+  # rejects any aerosol with non-positive radius, so 0.01 is used instead --
+  # it reproduces the legacy fine-branch behavior exactly (the magnitude is
+  # only ever compared against the threshold) while satisfying validation.
+  # Density 1700 replaces the legacy 0.0 placeholder for the same reason; on
+  # the optics-table settling path both values are unused.
+  __radius: 0.01
   __density: 1700.0
   __dd_f0: 0.0
   __dd_hstar: 0.0
@@ -115,12 +120,17 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 12.01e-3    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
-  # Dry effective radius/bin edges from the GOCART BC optics table (optics_BC.v1_3.nc).
-  __radius: 0.03921
+  # Parity A/B baseline: legacy radius/bin edges.  The optics-table radii
+  # (0.03921 um) fall below the wetdep washout fine/coarse threshold (0.05 um)
+  # and flip bc1/bc2 onto the fine washout formula, cutting below-cloud
+  # scavenging of black carbon by orders of magnitude.  Restore the upstream
+  # values so branch-vs-develop runs are comparable; re-apply the optics-table
+  # radii after the core-vs-core comparison is done.
+  __radius: 0.35   #gocart is 0.35; GC is 0.087
   __density: 1800.0
   __dd_DvzAerSnow: 0.03
-  __lower_radius: 0.005
-  __upper_radius: 0.30
+  __lower_radius: 0.1
+  __upper_radius: 1.0
   __is_hydrophilic: false   # bc1 is the freshly emitted hydrophobic mode (no wet swelling)
   __wd_rainouteff: [0.0, 0.0, 0.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
@@ -133,12 +143,13 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 12.01e-3    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
-  # Dry effective radius/bin edges from the GOCART BC optics table (optics_BC.v1_3.nc).
-  __radius: 0.03921
+  # Parity A/B baseline: legacy radius/bin edges (see bc1 note on the washout
+  # fine/coarse threshold).
+  __radius: 0.35   #gocart is 0.35; GC is 0.087
   __density: 1800.0
   __dd_DvzAerSnow: 0.03
-  __lower_radius: 0.005
-  __upper_radius: 0.30
+  __lower_radius: 0.1
+  __upper_radius: 1.0
   __is_hydrophilic: true   # bc2 is the aged hydrophilic mode (swells with RH)
   __wd_rainouteff: [1.0, 1.0, 1.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
@@ -151,12 +162,12 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 12.01e-3    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
-  # Dry effective radius/bin edges from the GOCART OC optics table (optics_OC.v1_3.nc).
-  __radius: 0.08766
+  # Parity A/B baseline: legacy radius/bin edges (see bc1 note).
+  __radius: 0.35   #gocart is 0.35; GC is 0.087
   __density: 1800.0
   __dd_DvzAerSnow: 0.03
-  __lower_radius: 0.005
-  __upper_radius: 0.30
+  __lower_radius: 0.1
+  __upper_radius: 1.0
   __is_hydrophilic: false   # oc1 is the freshly emitted hydrophobic mode (no wet swelling)
   __wd_rainouteff: [0.0, 0.0, 0.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
@@ -169,12 +180,12 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 12.01e-3    #gocart is 180 g/mol but it seems not used in gocart processes. So we go with GC
-  # Dry effective radius/bin edges from the GOCART OC optics table (optics_OC.v1_3.nc).
-  __radius: 0.08766
+  # Parity A/B baseline: legacy radius/bin edges (see bc1 note).
+  __radius: 0.35   #gocart is 0.35; GC is 0.087
   __density: 1800.0
   __dd_DvzAerSnow: 0.03
-  __lower_radius: 0.005
-  __upper_radius: 0.30
+  __lower_radius: 0.1
+  __upper_radius: 1.0
   __is_hydrophilic: true   # oc2 is the aged hydrophilic mode (swells with RH)
   __wd_rainouteff: [1.0, 1.0, 1.0]
   __t_chem_loss: -1.0  #Rate of chemical destruction of carbon species [days]; Note -1 (any negative value) means carbon loss is turned off by default.
@@ -187,10 +198,12 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 29.00e-3
-  # Dry effective radius/density from the GOCART DU optics table (optics_DU.v15_3.nc),
-  # matching the simple_scheme (optics-table) settling path. Dust does not swell.
-  __radius: 0.6359
-  __density: 2650.
+  # Parity A/B baseline: legacy radius/density.  These feed the dust
+  # resuspension branch of GOCART drydep and the Fengsha size-distribution
+  # bin weights; the optics-table values (0.6359 um / 2650) can be re-applied
+  # after the core-vs-core comparison.
+  __radius: 0.73
+  __density: 2500.
   __is_dust: true
   __is_aerosol: true
   __is_hydrophilic: false   # dust does not swell (optics-table growth = 1.0)
@@ -206,7 +219,7 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 29.00e-3
-  __radius: 1.3244
+  __radius: 1.4   # Parity A/B baseline: legacy value (optics-table: 1.3244)
   __density: 2650.
   __is_dust: true
   __is_aerosol: true
@@ -223,7 +236,7 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 29.00e-3
-  __radius: 2.3012
+  __radius: 2.4   # Parity A/B baseline: legacy value (optics-table: 2.3012)
   __density: 2650.
   __is_dust: true
   __is_aerosol: true
@@ -240,7 +253,7 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 29.00e-3
-  __radius: 4.1672
+  __radius: 4.5   # Parity A/B baseline: legacy value (optics-table: 4.1672)
   __density: 2650.
   __is_dust: true
   __is_aerosol: true
@@ -257,7 +270,7 @@
   __dd_f0: 0.0
   __dd_hstar: 0.0
   molecular weight [kg mol-1]: 29.00e-3
-  __radius: 7.6707
+  __radius: 8.0   # Parity A/B baseline: legacy value (optics-table: 7.6707)
   __density: 2650.
   __is_dust: true
   __is_aerosol: true

@@ -111,11 +111,18 @@ namespace catchem {
 
         // 1. Sync device to host
 
-        if (!state->meteorology().AIRDEN_DRY && state->meteorology().PMID && state->meteorology().T) {
+        // Derived fields are retained across timesteps but invalidated when a
+        // new NUOPC import generation begins.  Pointer existence therefore
+        // does not mean that AIRDEN_DRY is current.
+        if (state->meteorology().PMID && state->meteorology().T) {
             state->derive_airden_dry();
         }
 
+        const auto import_generation = state->current_import_generation();
         if (!state->meteorology().T || !state->meteorology().PMID || !state->meteorology().AIRDEN_DRY ||
+            !state->meteorology().T->is_current(import_generation) ||
+            !state->meteorology().PMID->is_current(import_generation) ||
+            !state->meteorology().AIRDEN_DRY->is_current(import_generation) ||
             !state->chemistry().conc) {
             throw std::runtime_error(
                 "GasChem requires current T, PMID, AIRDEN_DRY, and chemistry concentration fields");

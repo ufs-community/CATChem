@@ -50,8 +50,15 @@ contains
       type(c_ptr), value :: diag_phobic_mass
       type(c_ptr), value :: diag_phobic_flux
 
+      ! Per-process diagnostics.  The diag_* pointers reference
+      ! DiagnosticManager field storage; they are null (and n_diag_species is
+      ! 0) when diagnostics are disabled or no species are selected, so the
+      ! pointers are only c_f_pointer'd when n_diag_species > 0.
+      ! diagnostic_species_id holds 1-based GLOBAL catalog positions (the
+      ! space the GOCART scheme matches on); the size-1 dummy is never
+      ! dereferenced when n_diag_species == 0 (mirrors the other bridges).
       integer(c_int), value :: n_diag_species
-      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+      integer(c_int), intent(in) :: diagnostic_species_id(max(n_diag_species,1))
 
       ! Local Fortran Pointers for multidimensional mapping
       real(c_double), pointer :: f_airden(:,:), f_delp(:,:), f_pmid(:,:)
@@ -72,10 +79,10 @@ contains
       real(fp) :: col_conc(n_levels, n_species)
       real(fp) :: col_tendency(n_levels, n_species)
 
-      real(fp) :: col_prod_mass(n_levels, n_species)
-      real(fp) :: col_loss_flux(n_species)
-      real(fp) :: col_phobic_mass(n_levels, n_species)
-      real(fp) :: col_phobic_flux(n_species)
+      real(fp) :: col_prod_mass(n_levels, max(n_diag_species,1))
+      real(fp) :: col_loss_flux(max(n_diag_species,1))
+      real(fp) :: col_phobic_mass(n_levels, max(n_diag_species,1))
+      real(fp) :: col_phobic_flux(max(n_diag_species,1))
 
       ! Control structures
       type(CarbChemSchemeGOCARTConfig) :: gocart_config
@@ -105,11 +112,11 @@ contains
       call c_f_pointer(conc, f_conc, [n_cols, n_levels, n_species])
       call c_f_pointer(tendency, f_tendency, [n_cols, n_levels, n_species])
 
-      if (diagnostics /= 0) then
-         call c_f_pointer(diag_prod_mass, f_diag_prod_mass, [n_cols, n_levels, n_species])
-         call c_f_pointer(diag_loss_flux, f_diag_loss_flux, [n_cols, n_species])
-         call c_f_pointer(diag_phobic_mass, f_diag_phobic_mass, [n_cols, n_levels, n_species])
-         call c_f_pointer(diag_phobic_flux, f_diag_phobic_flux, [n_cols, n_species])
+      if (diagnostics /= 0 .and. n_diag_species > 0) then
+         call c_f_pointer(diag_prod_mass, f_diag_prod_mass, [n_cols, n_levels, n_diag_species])
+         call c_f_pointer(diag_loss_flux, f_diag_loss_flux, [n_cols, n_diag_species])
+         call c_f_pointer(diag_phobic_mass, f_diag_phobic_mass, [n_cols, n_levels, n_diag_species])
+         call c_f_pointer(diag_phobic_flux, f_diag_phobic_flux, [n_cols, n_diag_species])
       end if
 
       ! Map metadata
@@ -164,11 +171,14 @@ contains
             end if
          end do
 
-         if (diagnostics /= 0) then
-            f_diag_prod_mass(icol, :, :) = real(col_prod_mass(:, :), c_double)
-            f_diag_loss_flux(icol, :) = real(col_loss_flux(:), c_double)
-            f_diag_phobic_mass(icol, :, :) = real(col_phobic_mass(:, :), c_double)
-            f_diag_phobic_flux(icol, :) = real(col_phobic_flux(:), c_double)
+         if (diagnostics /= 0 .and. n_diag_species > 0) then
+            ! The scheme already scattered each species into its diag_idx
+            ! slot (1..n_diag_species), so the copy is a straight 1:1 write of
+            ! the ndiag-wide buffers into the registered field storage.
+            f_diag_prod_mass(icol, :, 1:n_diag_species) = real(col_prod_mass(:, 1:n_diag_species), c_double)
+            f_diag_loss_flux(icol, 1:n_diag_species) = real(col_loss_flux(1:n_diag_species), c_double)
+            f_diag_phobic_mass(icol, :, 1:n_diag_species) = real(col_phobic_mass(:, 1:n_diag_species), c_double)
+            f_diag_phobic_flux(icol, 1:n_diag_species) = real(col_phobic_flux(1:n_diag_species), c_double)
          end if
 
       end do

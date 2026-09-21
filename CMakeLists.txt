@@ -22,6 +22,27 @@ project(CATChem VERSION ${CATCHEM_VERSION} LANGUAGES Fortran C CXX)
 set(CATCHEM_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set(CATCHEM_SRC_DIR "${CATCHEM_ROOT_DIR}/src")
 
+# Build provenance baked into the core so diagnostic files can carry it
+# (feature 013, FR-011/C-10).  The git commit is captured at configure time;
+# a non-repository or missing-git source tree degrades to "unknown" rather
+# than failing the build.
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${CATCHEM_ROOT_DIR}/.git")
+  execute_process(
+    COMMAND "${GIT_EXECUTABLE}" rev-parse --short HEAD
+    WORKING_DIRECTORY "${CATCHEM_ROOT_DIR}"
+    OUTPUT_VARIABLE CATCHEM_GIT_COMMIT
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+    RESULT_VARIABLE _catchem_git_result
+  )
+  if(NOT _catchem_git_result EQUAL 0)
+    set(CATCHEM_GIT_COMMIT "unknown")
+  endif()
+else()
+  set(CATCHEM_GIT_COMMIT "unknown")
+endif()
+
 # Deprecated: ENABLE_KOKKOS was renamed to CATCHEM_ENABLE_KOKKOS to match the
 # other CATCHEM_* options. Honor the old name for out-of-tree callers.
 if(DEFINED ENABLE_KOKKOS AND NOT DEFINED CATCHEM_ENABLE_KOKKOS)

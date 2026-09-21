@@ -76,5 +76,6 @@ exclude_patterns = [
     "**/build*/**",
     "**/dist/**",
     "**/tools/**",
+    "**/util/**"
     "**/src/external/**",  # Replace with the actual name or path of your submodules folder
 ]

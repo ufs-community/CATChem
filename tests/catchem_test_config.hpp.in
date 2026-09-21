@@ -5,5 +5,7 @@ namespace catchem {
     namespace test {
         constexpr std::string_view SOURCE_DIR = "@PROJECT_SOURCE_DIR@";
         constexpr std::string_view TEST_DIR = "@CMAKE_CURRENT_SOURCE_DIR@";
+        // Aerosol optics (Mie) tables used by the settling simple_scheme path.
+        constexpr std::string_view OPTICS_DIR = "@PROJECT_SOURCE_DIR@/specs/tmp";
     }
 }

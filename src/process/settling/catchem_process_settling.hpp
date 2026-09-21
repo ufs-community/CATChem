@@ -1,6 +1,7 @@
 #pragma once
 #include "catchem_process_interface.hpp"
 #include <functional>
+#include <string>
 #include <vector>
 
 namespace catchem {
@@ -14,8 +15,10 @@ namespace catchem {
         // (processes/settling/gocart/*).  They are forwarded verbatim to the
         // Fortran science bridge, which reproduces the upstream GOCART2G
         // settling path.  scale_factor is retained for configuration parity;
-        // the upstream metadata path does not consume it.  simple_scheme
-        // requires Mie tables and stays unsupported (init rejects it).
+        // the upstream metadata path does not consume it.  simple_scheme selects
+        // the optics-table (Mie) path; when true the tables named by the
+        // top-level "mie:" section are loaded during init and every settling
+        // species must resolve one through its __mie_name.
         double gocart_scale_factor = 1.0;
         bool gocart_simple_scheme = false;
         double gocart_swelling_rh_max = 0.95;
@@ -30,6 +33,21 @@ namespace catchem {
         std::vector<double> host_rhop_dry;
         std::vector<int> host_is_dust;        // 0/1 per settling species
         std::vector<int> host_is_hydrophilic; // 0/1 per settling species (drives wet swelling)
+        // Per settling species' __mie_name (32-byte fixed width, same packing as
+        // aerosol_species_names).  The Fortran bridge maps these to loaded table
+        // indices; empty means unresolved and aborts initialization on the optics path.
+        std::vector<char> aerosol_mie_names;
+        // True once run_settling_mie_init has loaded the tables for this process.
+        bool mie_initialized = false;
+
+        // Per-process scheme diagnostics (specs: process-diagnostics-parity).
+        // diagnostics_enabled mirrors processes/settling/diagnostics;
+        // diagnostic_species_id holds 1-based LOCAL positions within the
+        // aerosol subset the bridge gathers (species_mie_map order), matching
+        // the species_idx the scheme loops over.
+        bool diagnostics_enabled = false;
+        std::vector<int> diagnostic_species_id;
+        std::vector<std::string> diagnostic_species_names; // parallel to ids, for run() lookups
 
     public:
         SettlingProcess();

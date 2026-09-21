@@ -181,7 +181,13 @@ contains
       ! metadata (non-Mie) path matches the optics-table settling without any
       ! runtime dependency on the optics files.  A non-positive cap disables
       ! the clamp.
-      if (params%swelling_rh_max > 0.0_fp) then
+      !
+      ! The clamp is metadata-path only: on the simple_scheme path
+      ! Chem_SettlingSimple performs its own RH->bin LUT lookup, which already
+      ! plateaus, and the upstream/develop oracle passes UNCLAMPED RH to it.
+      ! Pre-clamping here would alter the table lookup versus the legacy core
+      ! and break numerical parity.
+      if (.not. params%simple_scheme .and. params%swelling_rh_max > 0.0_fp) then
          GOCART_RH(:,:,:) = min(GOCART_RH(:,:,:), params%swelling_rh_max)
       end if
 

@@ -256,24 +256,36 @@ namespace catchem {
         std::vector<double> o3_profile(state->level_count(), 0.0);
         std::vector<double> temp_profile(state->level_count(), 0.0);
 
-        if (!state->meteorology().BXHEIGHT && state->meteorology().PEDGE && state->meteorology().T) {
+        // Derived fields remain allocated between imports, so require the
+        // current generation rather than using pointer existence as the
+        // freshness test.
+        if (state->meteorology().PEDGE && state->meteorology().T) {
             state->derive_bxheight();
         }
-        if (!state->meteorology().AIRDEN_DRY && state->meteorology().PMID && state->meteorology().T) {
+        if (state->meteorology().PMID && state->meteorology().T) {
             state->derive_airden_dry();
         }
+
+        const auto import_generation = state->current_import_generation();
 
         require_field_pointer("Photolysis", "LAT",
                               state->meteorology().LAT ? state->meteorology().LAT->host_write() : nullptr);
         require_field_pointer("Photolysis", "LON",
                               state->meteorology().LON ? state->meteorology().LON->host_write() : nullptr);
         require_field_pointer("Photolysis", "BXHEIGHT",
-                              state->meteorology().BXHEIGHT ? state->meteorology().BXHEIGHT->host_write() : nullptr);
+                              state->meteorology().BXHEIGHT &&
+                                      state->meteorology().BXHEIGHT->is_current(import_generation)
+                                  ? state->meteorology().BXHEIGHT->host_read()
+                                  : nullptr);
         require_field_pointer("Photolysis", "AIRDEN_DRY",
-                              state->meteorology().AIRDEN_DRY ? state->meteorology().AIRDEN_DRY->host_write()
-                                                              : nullptr);
+                              state->meteorology().AIRDEN_DRY &&
+                                      state->meteorology().AIRDEN_DRY->is_current(import_generation)
+                                  ? state->meteorology().AIRDEN_DRY->host_read()
+                                  : nullptr);
         require_field_pointer("Photolysis", "T",
-                              state->meteorology().T ? state->meteorology().T->host_write() : nullptr);
+                              state->meteorology().T && state->meteorology().T->is_current(import_generation)
+                                  ? state->meteorology().T->host_read()
+                                  : nullptr);
         require_field_pointer("Photolysis", "CHEM_CONC",
                               state->chemistry().conc ? state->chemistry().conc->host_write() : nullptr);
 

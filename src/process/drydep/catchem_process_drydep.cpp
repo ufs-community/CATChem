@@ -68,7 +68,7 @@ namespace catchem {
         state->derive_salinity();
         state->derive_landuse_categories();
         state->derive_obk();
-        state->derive_surface_cloud_fraction();
+        state->derive_column_cloud_fraction();
         state->derive_suncosmid();
     }
 
@@ -122,12 +122,31 @@ namespace catchem {
 
         if (!diagnostics_enabled)
             return;
-        // 2. Register C++ Diagnostic fields
-        std::vector<int> dims_2d = {state->column_count(), state->species_count()};
-        state->diagnostic_manager()->register_field("drydep_con_per_species", "Deposition Concentration", "ug/kg",
-                                                    DiagType::FIELD_2D, dims_2d);
-        state->diagnostic_manager()->register_field("drydep_velocity_per_species", "Deposition Velocity", "m/s",
-                                                    DiagType::FIELD_2D, dims_2d);
+        // 2. Register C++ Diagnostic fields.  The packed species axis is the
+        // diagnostic (is_drydep) subset, NOT the full catalog: the schemes
+        // scatter each species into its diag_idx slot in [1, n_diag_species],
+        // so a [ncol, n_species] buffer leaves the non-drydep tail unwritten.
+        // Registering at [ncol, n_diag] with a Species axis and per-slot labels
+        // lets the NUOPC driver unpack one named variable per drydep species
+        // (feature 013).  diagnostic_species_id holds GLOBAL 1-based catalog
+        // positions, so slot i's label is species_list[id-1].short_name (FR-006).
+        const int n_diag = static_cast<int>(diagnostic_species_id.size());
+        // A mechanism may configure no is_drydep species; with an empty packed
+        // axis there is nothing to register (matches the seasalt/settling guards).
+        if (n_diag > 0) {
+            std::vector<int> dims_2d = {state->column_count(), n_diag};
+            std::vector<std::string> drydep_labels;
+            drydep_labels.reserve(diagnostic_species_id.size());
+            for (const int gid : diagnostic_species_id)
+                drydep_labels.push_back(state->chemistry().species_list[static_cast<size_t>(gid) - 1].short_name);
+            const std::vector<SemanticAxis> axes_2d = {SemanticAxis::Column, SemanticAxis::Species};
+            state->diagnostic_manager()->register_field_contract(
+                "drydep_con_per_species", "Deposition Concentration", "ug/kg", DiagType::FIELD_2D, dims_2d,
+                DiagnosticPolicy::Instantaneous, 0.0, axes_2d, drydep_labels);
+            state->diagnostic_manager()->register_field_contract(
+                "drydep_velocity_per_species", "Deposition Velocity", "m/s", DiagType::FIELD_2D, dims_2d,
+                DiagnosticPolicy::Instantaneous, 0.0, axes_2d, drydep_labels);
+        }
     }
 
     void DryDepProcess::run(std::shared_ptr<StateManager> state) {

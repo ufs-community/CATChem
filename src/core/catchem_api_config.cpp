@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <sstream>
 #include <vector>
 
@@ -329,6 +330,66 @@ void catchem_config_get_diag_species_at(void* core_ptr, int index, char* buffer,
     } else {
         copy_string_to_buffer("", buffer, max_len);
     }
+}
+
+int catchem_config_get_output_attribute_count(void* core_ptr) {
+    if (core_ptr == nullptr)
+        return 0;
+    auto* core = static_cast<catchem::Core*>(core_ptr);
+    return static_cast<int>(core->get_config_manager()->data.diagnostics.output.attributes.size());
+}
+
+void catchem_config_get_output_attribute_key_at(void* core_ptr, int index, char* buffer, int max_len) {
+    if (core_ptr == nullptr)
+        return;
+    auto* core = static_cast<catchem::Core*>(core_ptr);
+    const auto& attributes = core->get_config_manager()->data.diagnostics.output.attributes;
+    auto it = attributes.begin();
+    std::advance(it, index);
+    if (index >= 0 && it != attributes.end()) {
+        copy_string_to_buffer(it->first, buffer, max_len);
+    } else {
+        copy_string_to_buffer("", buffer, max_len);
+    }
+}
+
+void catchem_config_get_output_attribute_value_at(void* core_ptr, int index, char* buffer, int max_len) {
+    if (core_ptr == nullptr)
+        return;
+    auto* core = static_cast<catchem::Core*>(core_ptr);
+    const auto& attributes = core->get_config_manager()->data.diagnostics.output.attributes;
+    auto it = attributes.begin();
+    std::advance(it, index);
+    if (index >= 0 && it != attributes.end()) {
+        copy_string_to_buffer(it->second, buffer, max_len);
+    } else {
+        copy_string_to_buffer("", buffer, max_len);
+    }
+}
+
+void catchem_config_get_config_file_path(void* core_ptr, char* buffer, int max_len) {
+    if (core_ptr == nullptr)
+        return;
+    auto* core = static_cast<catchem::Core*>(core_ptr);
+    copy_string_to_buffer(core->get_config_manager()->config_file_path, buffer, max_len);
+}
+
+// Build provenance is injected by CMake (see src/core/CMakeLists.txt).  A source
+// tree configured without those definitions still links; the attributes degrade
+// to "unknown" instead of an empty string.
+#ifndef CATCHEM_BUILD_VERSION
+#define CATCHEM_BUILD_VERSION "unknown"
+#endif
+#ifndef CATCHEM_BUILD_COMMIT
+#define CATCHEM_BUILD_COMMIT "unknown"
+#endif
+
+void catchem_get_build_version(char* buffer, int max_len) {
+    copy_string_to_buffer(CATCHEM_BUILD_VERSION, buffer, max_len);
+}
+
+void catchem_get_build_commit(char* buffer, int max_len) {
+    copy_string_to_buffer(CATCHEM_BUILD_COMMIT, buffer, max_len);
 }
 
 int catchem_config_get_process_active(void* core_ptr, const char* process_name) {

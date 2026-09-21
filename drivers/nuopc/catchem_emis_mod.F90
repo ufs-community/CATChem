@@ -449,6 +449,91 @@ contains
 
    end subroutine catchem_emis_update
 
+   !> Inspect the source variables rather than assuming that every field in a
+   !! category has the category-level rank.  AQMIO files commonly combine
+   !! surface fields with fields carrying a record dimension, and some files
+   !! also contain native vertical fields in the same category.
+   subroutine catchem_emis_detect_field_ranks(category, filename, rc)
+      type(ExtEmisCategoryType), intent(inout) :: category
+      character(len=*),          intent(in)    :: filename
+      integer,                   intent(out)   :: rc
+
+      integer :: nc_status, ncid, ifield, varid, ndims, uid, spatial_ndims, nlev_var
+      integer, allocatable :: dimids(:)
+      character(len=NF90_MAX_NAME) :: dim_name
+      logical :: is_time
+
+      rc = CC_SUCCESS
+      do ifield = 1, category%n_fields
+         category%fields(ifield)%is_2d = category%is_2d
+         category%fields(ifield)%nlev_file = 1
+      end do
+
+      nc_status = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      if (nc_status /= NF90_NOERR) return
+
+      uid = -1
+      nc_status = nf90_inquire(ncid, unlimitedDimId=uid)
+      do ifield = 1, category%n_fields
+         nc_status = nf90_inq_varid(ncid, trim(category%fields(ifield)%field_name), varid)
+         if (nc_status /= NF90_NOERR) cycle
+         nc_status = nf90_inquire_variable(ncid, varid, ndims=ndims)
+         if (nc_status /= NF90_NOERR .or. ndims < 1) cycle
+
+         allocate(dimids(ndims))
+         nc_status = nf90_inquire_variable(ncid, varid, dimIds=dimids)
+         if (nc_status /= NF90_NOERR) then
+            deallocate(dimids)
+            cycle
+         end if
+
+         spatial_ndims = ndims
+         is_time = .false.
+         if (uid /= -1 .and. dimids(ndims) == uid) then
+            is_time = .true.
+         else
+            dim_name = ''
+            nc_status = nf90_inquire_dimension(ncid, dimids(ndims), name=dim_name)
+            if (nc_status == NF90_NOERR) then
+               dim_name = emis_lower(dim_name)
+               is_time = index(dim_name, 'time') > 0 .or. index(dim_name, 'month') > 0 .or. &
+                  index(dim_name, 'record') > 0
+            end if
+         end if
+         if (is_time) spatial_ndims = ndims - 1
+
+         category%fields(ifield)%is_2d = (spatial_ndims <= 2)
+         if (spatial_ndims >= 3) then
+            nc_status = nf90_inquire_dimension(ncid, dimids(spatial_ndims), len=nlev_var)
+            if (nc_status == NF90_NOERR) category%fields(ifield)%nlev_file = nlev_var
+         end if
+         deallocate(dimids)
+      end do
+      nc_status = nf90_close(ncid)
+   end subroutine catchem_emis_detect_field_ranks
+
+   !> Size storage to the native vertical extent of a detected 3D field.
+   subroutine catchem_emis_size_field_vertical(field, nlev_default, nlev_file)
+      type(ExtEmisFieldType), intent(inout) :: field
+      integer,                intent(in)    :: nlev_default
+      integer,                intent(out)   :: nlev_file
+      integer :: nx, ny, nt
+
+      nlev_file = nlev_default
+      if (field%is_2d) return
+      if (field%nlev_file > 0) nlev_file = field%nlev_file
+      if (.not. allocated(field%emission_data)) return
+      if (size(field%emission_data, 3) == nlev_file) return
+
+      nx = size(field%emission_data, 1)
+      ny = size(field%emission_data, 2)
+      nt = size(field%emission_data, 4)
+      deallocate(field%emission_data)
+      allocate(field%emission_data(nx, ny, nlev_file, nt))
+      field%emission_data = 0.0_fp
+      field%nz = nlev_file
+   end subroutine catchem_emis_size_field_vertical
+
    !> \brief Read emission data from files
    !!
    !! Reads emission data from NetCDF files using AQMIO module
@@ -469,7 +554,7 @@ contains
       integer, intent(out) :: rc
 
       ! Local variables
-      integer :: localrc,   ifield
+      integer :: localrc,   ifield, nlev_f
       character(len=EMIS_MAXSTR) :: msg, filename
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -534,6 +619,20 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
+      ! Keep the source-file rank authoritative.  The category-level is only a
+      ! fallback for variables that cannot be inspected.
+      call catchem_emis_detect_field_ranks(category, filename, localrc)
+#ifdef CATCHEM_TRACE_NUOPC
+      do ifield = 1, category%n_fields
+         write(*,'(A,A,A,A,A,A,A,L1,A,I0)') '[CATCHEM DEBUG] AQMIO rank category=', trim(category_name), &
+            ' file=', trim(filename), &
+            ' field=', trim(category%fields(ifield)%field_name), &
+            ' is_2d=', category%fields(ifield)%is_2d, &
+            ' nlev_file=', category%fields(ifield)%nlev_file
+      end do
+      call flush(6)
+#endif
+
       ! Determine if this category needs runtime regridding.
       ! When regrid_method is set to anything other than 'none' (e.g.
       ! bilinear, neareststod, conserve, ...) the file is assumed to be
@@ -563,14 +662,15 @@ contains
 
       do ifield = 1, category%n_fields
          !create field to receive data
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
                typekind=ESMF_TYPEKIND_R4, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          else !3D field
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
-               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev/), rc=localrc)
+               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev_f/), rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          end if
@@ -585,7 +685,7 @@ contains
             return  ! bail out
          end if
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             !get data pointer and assign to emission field array
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -607,7 +707,7 @@ contains
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
             if (category%reverse_vertical) then
-               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev:1:-1), fp)  !reverse vertical level
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev_f:1:-1), fp)  !reverse vertical level
             else
                category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)
             end if
@@ -658,7 +758,7 @@ contains
       integer,                  intent(out)   :: rc
 
       ! Local variables
-      integer :: localrc, ifield, klev
+      integer :: localrc, ifield, klev, nlev_f
       character(len=EMIS_MAXSTR) :: msg
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -758,7 +858,7 @@ contains
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             ! --- 2D field ---
             call catchem_regrid_field( &
                cache     = regrid_cache, &
@@ -842,7 +942,8 @@ contains
             end if
          else
             ! --- 3D field: regrid each vertical level as a 2D slab ---
-            do klev = 1, nlev
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
+            do klev = 1, nlev_f
                call catchem_regrid_field( &
                   cache     = regrid_cache, &
                   filename  = trim(filename), &
@@ -872,7 +973,7 @@ contains
                   nx = size(field_data_2d, 1)
                   ny = size(field_data_2d, 2)
                   if (.not. allocated(category%fields(ifield)%interp_data_t1)) then
-                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t1(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -910,7 +1011,7 @@ contains
                   end if
 
                   if (.not. allocated(category%fields(ifield)%interp_data_t2)) then
-                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t2(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -925,12 +1026,12 @@ contains
             ! Reverse vertical levels if configured (apply to both stored slices)
             if (category%reverse_vertical) then
                category%fields(ifield)%emission_data(:,:,:,1) = &
-                  category%fields(ifield)%emission_data(:,:,nlev:1:-1,1)
+                  category%fields(ifield)%emission_data(:,:,nlev_f:1:-1,1)
                if (do_time_interp) then
                   category%fields(ifield)%interp_data_t1(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t1(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t1(:,:,nlev_f:1:-1,1)
                   category%fields(ifield)%interp_data_t2(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t2(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t2(:,:,nlev_f:1:-1,1)
                end if
             end if
          end if
@@ -2213,7 +2314,8 @@ contains
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
 
             ! Write field based on whether it's gridded (2D) or not (3D)
-            if (ext_emis_data%categories(icat)%gridded .and. ext_emis_data%categories(icat)%is_2d) then
+            if (ext_emis_data%categories(icat)%gridded .and. &
+               ext_emis_data%categories(icat)%fields(ifield)%is_2d) then
                ! 2D gridded emission field
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &

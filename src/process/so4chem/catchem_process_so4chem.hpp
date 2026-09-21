@@ -20,7 +20,6 @@ namespace catchem {
         std::vector<int> nymd_last;
         std::vector<int> nhms_last_recycle;
         std::vector<double> xh2o2_init;
-        std::vector<double> pso4_so2;
         std::vector<double> pso4_g_so2;
         std::vector<double> pso4_aq_so2;
         std::vector<double> pso2_dms;

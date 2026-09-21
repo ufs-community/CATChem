@@ -4,6 +4,7 @@
 #include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include <algorithm>
+#include <cctype>
 #include <iostream>
 
 extern "C" {
@@ -53,26 +54,71 @@ namespace catchem {
                       {{"scheme", active_scheme},
                        {"gocart/time_days_hydrophobic_to_hydrophilic", std::to_string(gocart_time_days)}});
 
-        // 1. Setup diagnostic species ID dynamically (using a dummy is_carbchem flag if we had one, but we map all
-        // indices here for simplicity since CarbChem filters internally)
-        for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
-            diagnostic_species_id.push_back(i + 1); // 1-based for Fortran bridge
+        // 1. Resolve the diagnostic species set (parity with legacy).  The
+        // GOCART scheme matches diagnostic_species_id(diag_idx) == species_idx
+        // where species_idx is the GLOBAL catalog position (it loops over the
+        // full species list it is handed), so ids live in global 1-based
+        // space.  Default set = the explicit carbon species the scheme
+        // converts (oc1/oc2, bc1/bc2, plus br1/br2 where configured); an
+        // explicit diag_species overrides it and must name real mechanism
+        // species (fail-loud).  Names resolve case-insensitively against the
+        // mechanism's canonical (upper-cased) name map.
+        diagnostic_species_id.clear();
+        const auto& settings = configured->second;
+        const std::vector<std::string> default_carbon = {"oc1", "oc2", "bc1", "bc2", "br1", "br2"};
+        const auto& requested = settings.diag_species.empty() ? default_carbon : settings.diag_species;
+        for (const auto& name : requested) {
+            std::string canonical = name;
+            std::transform(canonical.begin(), canonical.end(), canonical.begin(),
+                           [](unsigned char c) { return std::toupper(c); });
+            const auto found = state->chemistry().species_name_to_index.find(canonical);
+            if (found == state->chemistry().species_name_to_index.end()) {
+                if (settings.diag_species.empty())
+                    continue; // default set: tolerate species absent from this mechanism
+                throw std::invalid_argument("CarbChem diag_species names an unknown species: " + name);
+            }
+            diagnostic_species_id.push_back(found->second + 1); // global, 1-based for the bridge
         }
 
         if (!diagnostics_enabled)
             return;
-        // 2. Register C++ Diagnostic fields
-        std::vector<int> dims_3d = {state->column_count(), state->level_count(), state->species_count()};
-        std::vector<int> dims_2d = {state->column_count(), state->species_count()};
+        // 2. Register C++ Diagnostic fields.  The species dimension is the
+        // (possibly defaulted) diagnostic count, not the full catalog: the
+        // scheme scatters each species into its diag_idx slot, so packed
+        // [ncol, nz, ndiag] / [ncol, ndiag] layouts match the bridge shape.
+        const int n_diag = static_cast<int>(diagnostic_species_id.size());
+        // A mechanism may configure none of the default carbon species; with an
+        // empty packed axis there is nothing to register (matches the seasalt/
+        // settling guards).
+        if (n_diag > 0) {
+            std::vector<int> dims_3d = {state->column_count(), state->level_count(), n_diag};
+            std::vector<int> dims_2d = {state->column_count(), n_diag};
 
-        state->diagnostic_manager()->register_field("carbchem_prod_mass", "Carbon Chemistry Production Mass", "kg/kg",
-                                                    DiagType::FIELD_3D, dims_3d);
-        state->diagnostic_manager()->register_field("carbchem_loss_flux", "Carbon Chemistry Loss Flux", "kg/m2/s",
-                                                    DiagType::FIELD_2D, dims_2d);
-        state->diagnostic_manager()->register_field("carbchem_phobic_mass", "Carbon Chemistry Phobic to Philic Mass",
-                                                    "kg/kg", DiagType::FIELD_3D, dims_3d);
-        state->diagnostic_manager()->register_field("carbchem_phobic_flux", "Carbon Chemistry Phobic to Philic Flux",
-                                                    "kg/m2/s", DiagType::FIELD_2D, dims_2d);
+            // Packed-axis labels: diagnostic_species_id holds GLOBAL 1-based
+            // catalog positions (the space the GOCART scheme matches), so slot
+            // i's label is that species' short_name (FR-006).  The NUOPC driver
+            // unpacks each field into one named variable per species (feature 013).
+            std::vector<std::string> carbon_labels;
+            carbon_labels.reserve(diagnostic_species_id.size());
+            for (const int gid : diagnostic_species_id)
+                carbon_labels.push_back(state->chemistry().species_list[static_cast<size_t>(gid) - 1].short_name);
+            const std::vector<SemanticAxis> axes_3d = {SemanticAxis::Column, SemanticAxis::Level,
+                                                       SemanticAxis::Species};
+            const std::vector<SemanticAxis> axes_2d = {SemanticAxis::Column, SemanticAxis::Species};
+
+            state->diagnostic_manager()->register_field_contract(
+                "carbchem_prod_mass", "Carbon Chemistry Production Mass", "kg/kg", DiagType::FIELD_3D, dims_3d,
+                DiagnosticPolicy::Instantaneous, 0.0, axes_3d, carbon_labels);
+            state->diagnostic_manager()->register_field_contract(
+                "carbchem_loss_flux", "Carbon Chemistry Loss Flux", "kg/m2/s", DiagType::FIELD_2D, dims_2d,
+                DiagnosticPolicy::Instantaneous, 0.0, axes_2d, carbon_labels);
+            state->diagnostic_manager()->register_field_contract(
+                "carbchem_phobic_mass", "Carbon Chemistry Phobic to Philic Mass", "kg/kg", DiagType::FIELD_3D, dims_3d,
+                DiagnosticPolicy::Instantaneous, 0.0, axes_3d, carbon_labels);
+            state->diagnostic_manager()->register_field_contract(
+                "carbchem_phobic_flux", "Carbon Chemistry Phobic to Philic Flux", "kg/m2/s", DiagType::FIELD_2D,
+                dims_2d, DiagnosticPolicy::Instantaneous, 0.0, axes_2d, carbon_labels);
+        }
     }
 
     void CarbChemProcess::run(std::shared_ptr<StateManager> state) {
@@ -123,14 +169,23 @@ namespace catchem {
             t_chem_loss[i] = state->chemistry().species_list[i].t_chem_loss;
         }
 
-        // 5. Invoke flat science bridge
+        // 5. Invoke flat science bridge.  diagnostic_species_id (built in
+        // init) holds GLOBAL 1-based catalog indices — the space the GOCART
+        // scheme matches on.  When diagnostics are off the bridge still
+        // forwards the array to the scheme, so pass a valid size-1 dummy
+        // holding 0 — it matches no 1-based species_idx and the scheme writes
+        // nothing (mirrors the settling/dust/seasalt no_diag_species guard).
+        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        static const int no_diag_species = 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
         run_carbchem_science_bridge(
             state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
             active_scheme.c_str(), diagnostics_enabled ? 1 : 0, gocart_time_days, state->clock().year,
             state->clock().month, state->clock().day, state->clock().hour, state->clock().minute, state->clock().second,
             airden_ptr, delp_ptr, pmid_ptr, t_chem_loss.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
-            mock_tendency.data(), diag_prod_mass, diag_loss_flux, diag_phobic_mass, diag_phobic_flux,
-            diagnostic_species_id.data(), diagnostic_species_id.size());
+            mock_tendency.data(), diag_prod_mass, diag_loss_flux, diag_phobic_mass, diag_phobic_flux, diag_ids,
+            n_diag_species);
 
         if (state->chemistry().conc)
             state->chemistry().conc->mark_host_modified();

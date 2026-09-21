@@ -91,14 +91,19 @@ namespace catchem {
 
         if (state->diagnostic_manager()) {
             std::vector<int> dims_2d = {state->column_count(), state->level_count()};
+            // Explicit axes: one field per species, vertical axis is Level
+            // (feature 013).  The writer never shape-guesses a single-level column.
+            const std::vector<SemanticAxis> axes_level = {SemanticAxis::Column, SemanticAxis::Level};
             for (const auto i : selected) {
                 auto& meta = state->chemistry().species_list[i];
                 std::string mass_name = "wetdep_mass_" + meta.short_name;
                 std::string flux_name = "wetdep_flux_" + meta.short_name;
-                state->diagnostic_manager()->register_field(mass_name, "Wet Mass " + meta.short_name, "kg/m2",
-                                                            DiagType::FIELD_2D, dims_2d);
-                state->diagnostic_manager()->register_field(flux_name, "Wet Flux " + meta.short_name, "kg/m2/s",
-                                                            DiagType::FIELD_2D, dims_2d);
+                state->diagnostic_manager()->register_field_contract(mass_name, "Wet Mass " + meta.short_name, "kg/m2",
+                                                                     DiagType::FIELD_2D, dims_2d,
+                                                                     DiagnosticPolicy::Instantaneous, 0.0, axes_level);
+                state->diagnostic_manager()->register_field_contract(flux_name, "Wet Flux " + meta.short_name,
+                                                                     "kg/m2/s", DiagType::FIELD_2D, dims_2d,
+                                                                     DiagnosticPolicy::Instantaneous, 0.0, axes_level);
             }
         }
     }

@@ -288,6 +288,52 @@ module CATChem_API
          integer(c_int), value :: max_len
       end subroutine
 
+      integer(c_int) function catchem_config_get_output_attribute_count(core_ptr) &
+         bind(C, name="catchem_config_get_output_attribute_count")
+         import :: c_ptr, c_int
+         type(c_ptr), value :: core_ptr
+      end function
+
+      subroutine catchem_config_get_output_attribute_key_at(core_ptr, index, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_attribute_key_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_output_attribute_value_at(core_ptr, index, buffer, max_len) &
+         bind(C, name="catchem_config_get_output_attribute_value_at")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         integer(c_int), value :: index
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_config_get_config_file_path(core_ptr, buffer, max_len) &
+         bind(C, name="catchem_config_get_config_file_path")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_get_build_version(buffer, max_len) &
+         bind(C, name="catchem_get_build_version")
+         import :: c_char, c_int
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
+      subroutine catchem_get_build_commit(buffer, max_len) &
+         bind(C, name="catchem_get_build_commit")
+         import :: c_char, c_int
+         character(kind=c_char), intent(out) :: buffer(*)
+         integer(c_int), value :: max_len
+      end subroutine
+
       integer(c_int) function catchem_config_get_process_active(core_ptr, process_name) &
          bind(C, name="catchem_config_get_process_active")
          import :: c_ptr, c_char, c_int
@@ -488,6 +534,11 @@ module CATChem_API
       procedure :: is_process_diag_enabled => model_is_process_diag_enabled
       procedure :: get_diag_species_count => model_get_diag_species_count
       procedure :: get_diag_species_at => model_get_diag_species_at
+      procedure :: get_output_attribute_count => model_get_output_attribute_count
+      procedure :: get_output_attribute_at => model_get_output_attribute_at
+      procedure :: get_config_file_path => model_get_config_file_path
+      procedure :: get_build_version => model_get_build_version
+      procedure :: get_build_commit => model_get_build_commit
       procedure :: is_process_active => model_is_process_active
       procedure :: has_emission_mapping => model_has_emission_mapping
       procedure :: set_physical_validation_policy => model_set_physical_validation_policy
@@ -1102,8 +1153,10 @@ contains
    end function model_is_diag_enabled
 
    !> \brief True when diagnostics.output/process_diagnostics is enabled in the
-   !! runtime YAML.  Gates the per-process diagnostic variables (dust/seasalt
-   !! emissions, fluxes, thresholds) written by the NUOPC driver.
+   !! runtime YAML.  DEPRECATED: the NUOPC driver no longer consults this key
+   !! -- per-process diagnostics are written whenever they are registered and
+   !! runtime diagnostics are enabled (parity with the legacy Fortran core).
+   !! The accessor is retained only so existing configs keep parsing.
    function model_is_process_diag_enabled(this) result(enabled)
       class(CATChem_Model), intent(in) :: this
       logical :: enabled
@@ -1129,6 +1182,73 @@ contains
          species_name(i:i) = c_buf(i)
       end do
    end subroutine model_get_diag_species_at
+
+   function model_get_output_attribute_count(this) result(count)
+      class(CATChem_Model), intent(in) :: this
+      integer :: count
+      count = int(catchem_config_get_output_attribute_count(this%cpp_core_ptr))
+   end function model_get_output_attribute_count
+
+   subroutine model_get_output_attribute_at(this, index, attr_name, attr_value)
+      class(CATChem_Model), intent(in) :: this
+      integer, intent(in) :: index
+      character(len=*), intent(out) :: attr_name, attr_value
+      character(kind=c_char) :: c_buf(256)
+      integer :: i
+
+      call catchem_config_get_output_attribute_key_at(this%cpp_core_ptr, int(index - 1, c_int), c_buf, 256_c_int)
+      attr_name = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         attr_name(i:i) = c_buf(i)
+      end do
+
+      call catchem_config_get_output_attribute_value_at(this%cpp_core_ptr, int(index - 1, c_int), c_buf, 256_c_int)
+      attr_value = ""
+      do i = 1, 256
+         if (c_buf(i) == c_null_char) exit
+         attr_value(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_output_attribute_at
+
+   subroutine model_get_config_file_path(this, path_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: path_out
+      character(kind=c_char) :: c_buf(512)
+      integer :: i
+      call catchem_config_get_config_file_path(this%cpp_core_ptr, c_buf, 512_c_int)
+      path_out = ""
+      do i = 1, 512
+         if (c_buf(i) == c_null_char) exit
+         path_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_config_file_path
+
+   subroutine model_get_build_version(this, version_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: version_out
+      character(kind=c_char) :: c_buf(64)
+      integer :: i
+      call catchem_get_build_version(c_buf, 64_c_int)
+      version_out = ""
+      do i = 1, 64
+         if (c_buf(i) == c_null_char) exit
+         version_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_build_version
+
+   subroutine model_get_build_commit(this, commit_out)
+      class(CATChem_Model), intent(in) :: this
+      character(len=*), intent(out) :: commit_out
+      character(kind=c_char) :: c_buf(64)
+      integer :: i
+      call catchem_get_build_commit(c_buf, 64_c_int)
+      commit_out = ""
+      do i = 1, 64
+         if (c_buf(i) == c_null_char) exit
+         commit_out(i:i) = c_buf(i)
+      end do
+   end subroutine model_get_build_commit
 
    function model_is_process_active(this, process_name) result(active)
       class(CATChem_Model), intent(in) :: this

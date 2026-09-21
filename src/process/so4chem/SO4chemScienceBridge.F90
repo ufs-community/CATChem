@@ -23,7 +23,8 @@ contains
       c_conc, c_tendency, &
    ! Persistent states
       c_firsttime, c_nymd_last, c_nhms_last_recycle, c_xh2o2_init, &
-      c_pso4_so2, c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux, &
+      c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux, &
+      c_diag_prod_rate, &
       diagnostic_species_id, n_diag_species &
       ) bind(C, name="run_so4chem_science_bridge")
 
@@ -43,14 +44,20 @@ contains
       type(c_ptr), value :: c_hflux, c_lat, c_lon, c_lwi, c_pblh, c_u10m, c_ustar, c_v10m, c_z0h
       type(c_ptr), value :: c_conc, c_tendency
       type(c_ptr), value :: c_firsttime, c_nymd_last, c_nhms_last_recycle, c_xh2o2_init
-      type(c_ptr), value :: c_pso4_so2, c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux
+      type(c_ptr), value :: c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux
+      ! Packed per-species production-rate diagnostic field [n_cols, n_levels,
+      ! n_diag_species] (C++ scratch, scattered into one registered
+      ! Production_rate_<sp> field per slot by the process layer).  Null, and
+      ! n_diag_species 0, when diagnostics are off or no species are selected.
+      ! Replaces the former diagnostic-only pso4_so2 single-slot buffer.
+      type(c_ptr), value :: c_diag_prod_rate
 
       ! Metadata
       real(c_double), intent(in) :: species_mw_g(n_species)
       character(kind=c_char), intent(in) :: species_names(32, n_species)
 
       integer(c_int), value :: n_diag_species
-      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+      integer(c_int), intent(in) :: diagnostic_species_id(max(n_diag_species,1))
 
       ! Slicing array pointers pointing directly to double precision (c_double) C++ views
       real(c_double), pointer :: airden(:,:), cldf(:,:), delp(:,:), pmid(:,:), t_air(:,:), z_edges(:,:)
@@ -61,7 +68,8 @@ contains
       ! Persistent pointers pointing to double precision C++ views
       logical(c_bool), pointer :: firsttime(:)
       integer, pointer :: nymd_last(:), nhms_last_recycle(:)
-      real(c_double), pointer :: xh2o2_init(:,:), pso4_so2(:,:), pso4_g_so2(:,:), pso4_aq_so2(:,:), pso2_dms(:,:), dms_flux(:)
+      real(c_double), pointer :: xh2o2_init(:,:), pso4_g_so2(:,:), pso4_aq_so2(:,:), pso2_dms(:,:), dms_flux(:)
+      real(c_double), pointer :: diag_prod_rate(:,:,:)
 
       ! Loop variables
       integer :: icol, i, j, ispec
@@ -87,17 +95,19 @@ contains
       real(fp) :: col_updated(n_levels, n_species)
       ! Local arrays to resolve Fortran BIND(C) allocatable constraints & rank matches
       real(fp), allocatable :: local_xh2o2_init(:)
-      real(fp) :: col_prod_rate(n_levels, n_species)
+      ! The scheme fills Production_rate_per_species_per_level(:, diag_idx) for
+      ! diag_idx = 1..n_diag_species only (MSA/SO2/SO4 by name), so the buffer
+      ! is n_diag_species wide, not full-catalog.
+      real(fp) :: col_prod_rate(n_levels, max(n_diag_species,1))
       real(fp) :: col_pso4_g(n_levels)
       real(fp) :: col_pso4_aq(n_levels)
       real(fp) :: col_dms_flux
 
       type(SO4chemSchemeGOCARTConfig) :: gocart_config
 
-      ! `diagnostics` is part of the shared science-bridge calling convention;
-      ! so4chem does not emit per-process diagnostics yet, so reference it here
-      ! to keep the bridge signature uniform without an unused-argument warning.
-      associate(unused_diagnostics => diagnostics); end associate
+      ! so4chem emits per-process diagnostics only when the C++ layer registers
+      ! them; the packed diag_prod_rate field is bound below (guarded by the
+      ! same diagnostics flag), so `diagnostics` is genuinely used here.
 
       ! Apply the YAML tuning options staged by the C++ process layer so the
       ! scheme no longer runs on compiled defaults alone.
@@ -129,11 +139,14 @@ contains
       call c_f_pointer(c_nymd_last,         nymd_last,         [n_cols])
       call c_f_pointer(c_nhms_last_recycle, nhms_last_recycle, [n_cols])
       call c_f_pointer(c_xh2o2_init,         xh2o2_init,         [n_cols, n_levels])
-      call c_f_pointer(c_pso4_so2,          pso4_so2,          [n_cols, n_levels])
       call c_f_pointer(c_pso4_g_so2,        pso4_g_so2,        [n_cols, n_levels])
       call c_f_pointer(c_pso4_aq_so2,       pso4_aq_so2,       [n_cols, n_levels])
       call c_f_pointer(c_pso2_dms,          pso2_dms,          [n_cols, n_levels])
       call c_f_pointer(c_dms_flux,          dms_flux,          [n_cols])
+
+      if (diagnostics /= 0 .and. n_diag_species > 0) then
+         call c_f_pointer(c_diag_prod_rate, diag_prod_rate, [n_cols, n_levels, n_diag_species])
+      end if
 
       ! Extract real species names from flat char array passed via BIND(C)
       do i = 1, n_species
@@ -222,10 +235,20 @@ contains
          xh2o2_init(icol, :) = real(local_xh2o2_init, c_double)
          deallocate(local_xh2o2_init)
 
-         pso4_so2(icol, :)    = real(col_prod_rate(:, 1), c_double) ! Maps Production_rate for first diagnostic species (e.g. SO2)
          pso4_g_so2(icol, :)  = real(col_pso4_g, c_double)
          pso4_aq_so2(icol, :) = real(col_pso4_aq, c_double)
          dms_flux(icol)       = real(col_dms_flux, c_double)
+
+         ! Per-slot production-rate diagnostics: the scheme already scattered
+         ! each named species (MSA/SO2/SO4) into its diag_idx slot, so copy
+         ! slot-for-slot into the packed [n_cols, n_levels, n_diag_species]
+         ! buffer.  The former pso4_so2 single-slot write (which collapsed every
+         ! species onto slot 1) is removed.
+         if (diagnostics /= 0 .and. n_diag_species > 0) then
+            do ispec = 1, n_diag_species
+               diag_prod_rate(icol, :, ispec) = real(col_prod_rate(:, ispec), c_double)
+            end do
+         end if
       end do
 
    end subroutine run_so4chem_science_bridge

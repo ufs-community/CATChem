@@ -6,6 +6,7 @@
 #include "catchem_state_manager.hpp"
 #include <cassert>
 #include <cmath>
+#include <cstring>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -149,6 +150,83 @@ namespace {
         return false;
     }
 
+    // Diagnostics: enabling them registers velocity/flux fields sized to the
+    // aerosol subset, and the filled velocity must be non-negative, finite, and
+    // (for a loaded column with mass) non-zero somewhere.
+    void test_settling_diagnostics() {
+        Fixture fix;
+        auto core = std::make_shared<catchem::Core>(fix.n_cols, fix.n_levels, fix.n_species);
+        auto state = bind_state(core, fix, FieldFlag::F_ALL);
+        auto config = settling_config(true, false);
+        // Turn diagnostics on for the settling process.  The shared test YAML
+        // carries a settling diag_species subset; clear it so the default
+        // (every aerosol) applies and the field dims match the aerosol subset.
+        config->data.processes["settling"].diagnostics = true;
+        config->data.processes["settling"].diag_species.clear();
+        state->attach_config_manager(config);
+
+        auto settling = catchem::ProcessRegistry::get_instance().create("settling");
+        settling->init(state);
+        settling->run(state);
+        state->sync_to_host();
+
+        const auto mgr = core->get_diagnostic_manager();
+        const int n_aerosol = static_cast<int>(state->chemistry().aerosol_indices.size());
+        assert(n_aerosol > 0);
+        assert(mgr->has_field("settling_velocity_per_species_per_level"));
+        assert(mgr->has_field("settling_flux_per_species"));
+        assert(mgr->get_field("settling_velocity_per_species_per_level")->dimensions ==
+               std::vector<int>({fix.n_cols, fix.n_levels, n_aerosol}));
+        assert(mgr->get_field("settling_flux_per_species")->dimensions ==
+               std::vector<int>({fix.n_cols, n_aerosol}));
+
+        const double* vel =
+            static_cast<const double*>(mgr->get_host_pointer("settling_velocity_per_species_per_level"));
+        assert(vel != nullptr);
+        const int n = fix.n_cols * fix.n_levels * n_aerosol;
+        for (int i = 0; i < n; ++i) {
+            assert(std::isfinite(vel[i]));
+            assert(vel[i] >= 0.0); // GOCART clamps negative vsettle to zero
+        }
+        bool any_positive = false;
+        for (int i = 0; i < n; ++i)
+            if (vel[i] > 0.0) { any_positive = true; break; }
+        assert(any_positive && "settling velocity diagnostics must be populated by the bridge");
+        std::cout << "  PASS settling_diagnostics: fields present, velocity finite & >= 0" << std::endl;
+    }
+
+    // Regression: enabling diagnostics must not perturb the science.  Run the
+    // identical fixture twice — once with diagnostics off, once on — and assert
+    // the resulting concentration buffers are bit-identical.
+    void test_settling_diag_off_matches() {
+        auto run_once = [](bool diagnostics, std::vector<double>& conc_out) {
+            Fixture fix;
+            auto core = std::make_shared<catchem::Core>(fix.n_cols, fix.n_levels, fix.n_species);
+            auto state = bind_state(core, fix, FieldFlag::F_ALL);
+            auto config = settling_config(true, false);
+            config->data.processes["settling"].diagnostics = diagnostics;
+            state->attach_config_manager(config);
+            state->clock().timestep = 3600.0;
+
+            auto settling = catchem::ProcessRegistry::get_instance().create("settling");
+            settling->init(state);
+            settling->run(state);
+            state->sync_to_host();
+            conc_out = fix.conc;
+        };
+
+        std::vector<double> off, on;
+        run_once(false, off);
+        run_once(true, on);
+        assert(off.size() == on.size() && !off.empty());
+        for (size_t i = 0; i < off.size(); ++i) {
+            // Bit-identical: diagnostics are a read-only side product of the
+            // same compute_gocart call, so any difference is a wiring bug.
+            assert(std::memcmp(&off[i], &on[i], sizeof(double)) == 0);
+        }
+        std::cout << "  PASS settling_diag_off_matches: tendencies bit-identical with diagnostics on" << std::endl;
+    }
+
 } // namespace
 
 int main(int argc, char* argv[]) {
@@ -263,6 +341,9 @@ int main(int argc, char* argv[]) {
               "seas5 depletes at the top of the column (radius reached kernel in µm)");
         check(seas_diff > 0.0, "sea-salt tendency changes with maring_dust_only");
         check(dust_diff == 0.0, "dust tendency is unchanged by maring_dust_only (always corrected)");
+
+        test_settling_diagnostics();
+        test_settling_diag_off_matches();
 
         std::cout << (failures == 0 ? "SUCCESS: all settling assertions passed.\n"
                                     : "FAILURE: " + std::to_string(failures) + " settling assertion(s) failed.\n");

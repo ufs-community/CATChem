@@ -4,7 +4,6 @@
 #include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include <algorithm>
-#include <array>
 #include <cctype>
 #include <cmath>
 #include <iostream>
@@ -31,6 +30,43 @@ void run_dust_science_bridge(int n_cols, int n_levels, int n_species, int n_tota
 }
 
 namespace catchem {
+
+    namespace {
+
+        /// Resolve the canonical dust bins (DUST1..DUSTn) to global species
+        /// indices.  Shared by init() and run() so the diagnostic bin order
+        /// and the physics bin order are guaranteed identical: the schemes'
+        /// local species_idx space (1..n_dust) is defined by THIS sequence.
+        /// The bin count is derived from the is_dust metadata, never
+        /// hardcoded; every bin must exist by canonical name and carry valid
+        /// physical properties (same throws run() has always enforced).
+        std::vector<int> resolved_dust_bins(const std::shared_ptr<StateManager>& state) {
+            std::size_t bin_count = 0;
+            for (const auto& meta : state->chemistry().species_list)
+                if (meta.is_dust)
+                    ++bin_count;
+            std::vector<int> dust_global_indices;
+            dust_global_indices.reserve(bin_count);
+            for (std::size_t bin = 1; bin <= bin_count; ++bin) {
+                const std::string name = "DUST" + std::to_string(bin);
+                const auto found = state->chemistry().species_name_to_index.find(name);
+                if (found == state->chemistry().species_name_to_index.end())
+                    throw std::runtime_error("Dust requires canonical species '" + name + "'");
+                const int index = found->second;
+                const auto& meta = state->chemistry().species_list[index];
+                if (!meta.is_dust)
+                    throw std::runtime_error("Dust species '" + meta.short_name + "' must set is_dust: true");
+                if (!(meta.density > 0.0 && meta.radius > 0.0 && meta.lower_radius > 0.0 &&
+                      meta.upper_radius > meta.lower_radius))
+                    throw std::runtime_error("Dust species '" + meta.short_name +
+                                             "' requires explicit positive density, radius, lower_radius, and "
+                                             "upper_radius");
+                dust_global_indices.push_back(index);
+            }
+            return dust_global_indices;
+        }
+
+    } // namespace
 
     ProcessContract DustProcess::get_contract() const {
         std::vector<FieldAccessContract> fields{host_field_interface("PEDGE", "Pa"), host_field_3d("DELP", "Pa"),
@@ -125,35 +161,74 @@ namespace catchem {
                            {"ginoux/Ch_DU", ch_du_joined}});
         }
 
-        // 3. Setup diagnostic species ID dynamically based on is_dust metadata switch
-        for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
-            if (state->chemistry().species_list[i].is_dust) {
-                diagnostic_species_id.push_back(i + 1); // 1-based for Fortran bridge
+        // 3. Per-process diagnostics (parity with legacy): the schemes match
+        // diagnostic_species_id(diag_idx) == species_idx, where species_idx is
+        // the LOCAL bin position (1..n_dust) in the canonical-name bin order
+        // run() feeds the bridge.  Build the ids in THAT space, honoring a
+        // diag_species subset (names matched against short_name exactly as
+        // settling does).
+        const auto dust_global_indices = resolved_dust_bins(state);
+        {
+            std::vector<int> selected_local; // 1-based positions in the bin list
+            if (!settings.diag_species.empty()) {
+                for (const auto& name : settings.diag_species) {
+                    int found = -1;
+                    for (size_t bin = 0; bin < dust_global_indices.size(); ++bin) {
+                        if (state->chemistry().species_list[dust_global_indices[bin]].short_name == name) {
+                            found = static_cast<int>(bin) + 1;
+                            break;
+                        }
+                    }
+                    if (found < 0)
+                        throw std::invalid_argument("Dust diag_species names a non-dust species: " + name);
+                    selected_local.push_back(found);
+                }
+            } else {
+                for (size_t bin = 0; bin < dust_global_indices.size(); ++bin)
+                    selected_local.push_back(static_cast<int>(bin) + 1);
             }
+            diagnostic_species_id = selected_local;
         }
 
         if (!diagnostics_enabled)
             return;
 
         // 4. Register C++ Diagnostic fields (registering 1D fields as 2D with second dimension of 1).
-        // Per-bin fields use a compact [ncols, n_dust] layout so the NUOPC
-        // driver can emit them as a single 3D (nx, ny, nbin) variable; the
-        // science bridge already writes exactly that column-major shape.
+        // Per-bin fields use a compact [ncols, n_diag] layout with a Category
+        // axis and per-slot labels; the NUOPC driver unpacks them into one
+        // named 2D variable per bin (feature 013).  The science bridge already
+        // writes exactly that column-major shape.
+        const int n_diag = static_cast<int>(diagnostic_species_id.size());
         std::vector<int> dims_1d_as_2d = {state->column_count(), 1};
-        std::vector<int> dims_bins = {state->column_count(), static_cast<int>(diagnostic_species_id.size())};
+        std::vector<int> dims_bins = {state->column_count(), n_diag};
+
+        // Per-bin labels: diagnostic_species_id holds LOCAL bin positions (1-based)
+        // into the canonical resolved_dust_bins order run() feeds the bridge, so
+        // slot i's label is the short_name of that bin — never a global catalog
+        // index (index-space rule, FR-006).
+        std::vector<std::string> dust_bin_labels;
+        dust_bin_labels.reserve(dust_global_indices.size());
+        for (const int local : diagnostic_species_id)
+            dust_bin_labels.push_back(
+                state->chemistry().species_list[dust_global_indices[static_cast<size_t>(local) - 1]].short_name);
+        const std::vector<SemanticAxis> axes_bin = {SemanticAxis::Column, SemanticAxis::Category};
 
         state->diagnostic_manager()->register_field("dust_emission_total", "Total Dust Emission", "kg/m2/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
-        state->diagnostic_manager()->register_field("dust_emission_bin", "Dust Emission Per Bin", "kg/m2/s",
-                                                    DiagType::FIELD_2D, dims_bins);
+        state->diagnostic_manager()->register_field_contract("dust_emission_bin", "Dust Emission Per Bin", "kg/m2/s",
+                                                             DiagType::FIELD_2D, dims_bins,
+                                                             DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
+                                                             dust_bin_labels);
         state->diagnostic_manager()->register_field("dust_horizontal_flux", "Dust Horizontal Flux", "kg/m/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
         state->diagnostic_manager()->register_field("dust_moisture_correction", "Dust Moisture Correction", "unitless",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
         state->diagnostic_manager()->register_field("dust_effective_threshold", "Dust Effective Threshold", "m/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
-        state->diagnostic_manager()->register_field("dust_utar_threshold", "Dust Ustar Threshold Per Bin", "m/s",
-                                                    DiagType::FIELD_2D, dims_bins);
+        state->diagnostic_manager()->register_field_contract("dust_utar_threshold", "Dust Ustar Threshold Per Bin",
+                                                             "m/s", DiagType::FIELD_2D, dims_bins,
+                                                             DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
+                                                             dust_bin_labels);
     }
 
     void DustProcess::run(std::shared_ptr<StateManager> state) {
@@ -289,28 +364,20 @@ namespace catchem {
         // 4. Route the legacy dust bins by their canonical names.  The science
         // kernel assigns bin physics positionally, so deriving that position
         // from YAML declaration order would silently map a reordered species
-        // list onto the wrong bins.
-        std::vector<int> dust_global_indices;
+        // list onto the wrong bins.  init() resolves the SAME sequence for
+        // the diagnostic bin order (resolved_dust_bins), keeping the local
+        // species_idx space identical on both sides of the bridge.
+        const auto dust_global_indices = resolved_dust_bins(state);
         std::vector<double> density;
         std::vector<double> radius;
         std::vector<double> lower_radius;
         std::vector<double> upper_radius;
-        constexpr std::array<const char*, 5> dust_bin_names = {"DUST1", "DUST2", "DUST3", "DUST4", "DUST5"};
-        for (const char* name : dust_bin_names) {
-            const auto found = state->chemistry().species_name_to_index.find(name);
-            if (found == state->chemistry().species_name_to_index.end())
-                throw std::runtime_error("Dust requires canonical species '" + std::string(name) + "'");
-            const int index = found->second;
+        density.reserve(dust_global_indices.size());
+        radius.reserve(dust_global_indices.size());
+        lower_radius.reserve(dust_global_indices.size());
+        upper_radius.reserve(dust_global_indices.size());
+        for (const int index : dust_global_indices) {
             const auto& meta = state->chemistry().species_list[index];
-            if (!meta.is_dust)
-                throw std::runtime_error("Dust species '" + meta.short_name + "' must set is_dust: true");
-            if (!(meta.density > 0.0 && meta.radius > 0.0 && meta.lower_radius > 0.0 &&
-                  meta.upper_radius > meta.lower_radius))
-                throw std::runtime_error(
-                    "Dust species '" + meta.short_name +
-                    "' requires explicit positive density, radius, lower_radius, and upper_radius");
-
-            dust_global_indices.push_back(index);
             density.push_back(meta.density);
             radius.push_back(meta.radius);
             lower_radius.push_back(meta.lower_radius);
@@ -344,11 +411,19 @@ namespace catchem {
         std::vector<double> full_tendency(
             static_cast<size_t>(state->column_count()) * state->level_count() * n_total_species, 0.0);
 
-        // diagnostic_species_id remains the per-bin subset index (1..n_dust):
-        // the scheme still runs over n_dust bins internally.
-        std::vector<int> local_diagnostic_species_id(n_dust);
-        for (int local_idx = 0; local_idx < n_dust; ++local_idx)
-            local_diagnostic_species_id[local_idx] = local_idx + 1;
+        // diagnostic_species_id (built in init) holds 1-based LOCAL bin
+        // positions, optionally subset by processes.dust.diag_species: the
+        // scheme runs over all n_dust bins internally but only fills the
+        // diagnostic slots named in the subset.  The Fortran dummy is
+        // declared diagnostic_species_id(max(n_diag_species,1)); when
+        // diagnostics are off the bridge still forwards the array to the
+        // scheme, so pass a valid size-1 dummy holding 0 — it matches no
+        // 1-based species_idx and the scheme writes nothing (mirrors
+        // settling's no_diag_species guard).
+        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        static const int no_diag_species = 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
 
         // 5. Invoke flat science bridge
         run_dust_science_bridge(
@@ -361,8 +436,7 @@ namespace catchem {
             v10m_ptr, ustar_ptr, ustar_th_ptr, z0_ptr, density.data(), radius.data(), lower_radius.data(),
             upper_radius.data(), bin_species_names.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
             full_tendency.data(), diag_emission_total, diag_emission_bin, diag_horizontal_flux,
-            diag_moisture_correction, diag_effective_threshold, diag_utar_threshold, local_diagnostic_species_id.data(),
-            local_diagnostic_species_id.size());
+            diag_moisture_correction, diag_effective_threshold, diag_utar_threshold, diag_ids, n_diag_species);
 
         if (state->chemistry().conc)
             state->chemistry().conc->mark_host_modified();

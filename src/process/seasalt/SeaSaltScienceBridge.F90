@@ -50,6 +50,14 @@ contains
       type(c_ptr), value :: c_conc, c_tendency
       type(c_ptr), value :: c_diag_mass_total, c_diag_num_total, c_diag_mass_bin, c_diag_num_bin
 
+      ! Per-process diagnostics.  The diag_* pointers reference
+      ! DiagnosticManager field storage; they are null (and n_diag_species is
+      ! 0) when diagnostics are disabled or no bins are selected, so the
+      ! per-bin pointers are only c_f_pointer'd when n_diag_species > 0.
+      ! diagnostic_species_id holds 1-based LOCAL bin positions within the
+      ! canonical SEAS1..SEAS5 subset the scheme iterates (species_idx space);
+      ! the size-1 dummy is never dereferenced when n_diag_species == 0
+      ! (mirrors the settling/dust bridges).  The total fields stay [n_cols].
       integer(c_int), value :: n_diag_species
       real(c_double), intent(in) :: species_density(n_species)
       real(c_double), intent(in) :: species_radius(n_species)
@@ -58,12 +66,13 @@ contains
       logical(c_bool), intent(in) :: is_gas_arr(n_species)
       real(c_double), intent(in) :: species_mw_g(n_species)
 
-      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+      integer(c_int), intent(in) :: diagnostic_species_id(max(n_diag_species,1))
 
       ! Slicing array pointers mapping directly to C++ 8-byte double views
       real(c_double), pointer :: frocean(:), frseaice(:), lat(:), lon(:), sst(:), u10m(:), v10m(:), ustar(:), delp(:,:)
       real(c_double), pointer :: conc(:,:,:), tendency(:,:,:)
-      real(c_double), pointer :: diag_mass_total(:), diag_num_total(:), diag_mass_bin(:,:), diag_num_bin(:,:)
+      real(c_double), pointer :: diag_mass_total(:), diag_num_total(:)
+      real(c_double), pointer :: diag_mass_bin(:,:), diag_num_bin(:,:)
 
       ! Loop variables
       integer :: icol, i, k
@@ -87,7 +96,7 @@ contains
 
       ! Local diagnostic buffers in fp precision
       real(fp) :: col_mass_total, col_num_total
-      real(fp) :: col_mass_bin(n_species), col_num_bin(n_species)
+      real(fp) :: col_mass_bin(max(n_diag_species,1)), col_num_bin(max(n_diag_species,1))
 
       type(SeaSaltSchemeGONG97Config) :: gong97_config
       type(SeaSaltSchemeGONG03Config) :: gong03_config
@@ -147,8 +156,10 @@ contains
       if (diagnostics /= 0) then
          call c_f_pointer(c_diag_mass_total, diag_mass_total, [n_cols])
          call c_f_pointer(c_diag_num_total,  diag_num_total,  [n_cols])
-         call c_f_pointer(c_diag_mass_bin,   diag_mass_bin,   [n_cols, n_species])
-         call c_f_pointer(c_diag_num_bin,    diag_num_bin,    [n_cols, n_species])
+         if (n_diag_species > 0) then
+            call c_f_pointer(c_diag_mass_bin, diag_mass_bin, [n_cols, n_diag_species])
+            call c_f_pointer(c_diag_num_bin,  diag_num_bin,  [n_cols, n_diag_species])
+         end if
       end if
 
       ! Cast metadata properties once
@@ -236,12 +247,17 @@ contains
                max(0.0_c_double, conc(icol, 1, target_species(i)) + real(dqa, c_double))
          end do
 
-         ! Write diagnostics back to C++ pointers with double casting
+         ! Write diagnostics back to C++ pointers with double casting.  The
+         ! per-bin arrays are n_diag_species wide (the selected subset); the
+         ! scheme already scattered each bin into its diag_idx slot, so the
+         ! copy is a straight 1:1 column write.
          if (diagnostics /= 0) then
             diag_mass_total(icol) = real(col_mass_total, c_double)
             diag_num_total(icol)  = real(col_num_total, c_double)
-            diag_mass_bin(icol, :) = real(col_mass_bin, c_double)
-            diag_num_bin(icol, :)  = real(col_num_bin, c_double)
+            if (n_diag_species > 0) then
+               diag_mass_bin(icol, 1:n_diag_species) = real(col_mass_bin(1:n_diag_species), c_double)
+               diag_num_bin(icol, 1:n_diag_species)  = real(col_num_bin(1:n_diag_species), c_double)
+            end if
          end if
       end do
 

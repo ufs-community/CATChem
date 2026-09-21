@@ -208,22 +208,13 @@ contains
             wetdep_flux_per_species_per_level=col_diag_flux, &
             diagnostic_species_id=diagnostic_species_id)
 
-         ! compute_jacob returns a finite-step tendency in the native
-         ! aerosol (ug/kg/s) or gas (ppmv/s) units.  Apply it to the
-         ! concentration state while preserving species with zero tendency.
-         !
-         ! The new concentration is clamped at zero to reproduce upstream's
-         ! contract exactly: upstream compute_jacob stores max(0, conc) as the
-         ! REPLACEMENT value and the interface assigns new_conc = tendency.
-         ! Here the scheme returns a rate ((new-old)/dt), so old + dt*rate
-         ! reconstructs the same new value, but the round-trip through /dt then
-         ! *dt (and the SO4 production term added after the max(0,.) clamp) can
-         ! undershoot below zero.  The max(0,.) below restores the positivity
-         ! guarantee upstream has, eliminating negative concentrations.
+         ! compute_jacob preserves the legacy CATChem replacement contract:
+         ! species_tendencies contains the post-wetdep concentration in the
+         ! native aerosol (ug/kg) or gas (ppmv) units, rather than a rate.
+         ! The upstream ProcessWetDep interface assigns this value directly.
          do ispec = 1, n_species
             tendency(icol, :, ispec) = real(col_tendencies(:, ispec), c_double)
-            conc(icol, :, ispec) = max( 0.0_c_double, &
-               conc(icol, :, ispec) + real(dt * col_tendencies(:, ispec), c_double) )
+            conc(icol, :, ispec) = real(col_tendencies(:, ispec), c_double)
          end do
 
          if (diagnostics /= 0) then

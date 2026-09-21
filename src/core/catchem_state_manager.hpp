@@ -798,7 +798,7 @@ namespace catchem {
             met.RH->set_generation(import_generation);
         }
 
-        void derive_surface_cloud_fraction() {
+        void derive_column_cloud_fraction() {
             if (const auto out = find_field<2>("CLDFRC"); out && out->is_current(import_generation))
                 return;
             auto cldf = find_field<3>("CLDF");
@@ -810,11 +810,16 @@ namespace catchem {
             cldf->sync_to_host();
             const double* src = cldf->host_data();
             // Legacy parity: the upstream metstate_mod derives CLDFRC as the
-            // surface-layer cloud fraction (`CLDFRC(:,:) = CLDF(:,:,1)`), not a
-            // vertical sum.  The C++ vertical order is bottom-to-top, so the
-            // surface layer is level index 0.  Match that exactly.
-            for (int c = 0; c < n_cols; ++c)
-                buffer->at(c) = src[static_cast<std::size_t>(c)];
+            // column-total cloud fraction (`CLDFRC(:,:) = SUM(CLDF, DIM=3)`),
+            // not the surface layer.  The sum may exceed one where clouds
+            // overlap multiple layers; upstream applies no clamp, so neither
+            // do we.
+            for (int c = 0; c < n_cols; ++c) {
+                double total = 0.0;
+                for (int lev = 0; lev < n_levels; ++lev)
+                    total += src[static_cast<std::size_t>(c) + static_cast<std::size_t>(lev) * n_cols];
+                buffer->at(c) = total;
+            }
             auto derived = find_field<2>("CLDFRC");
             derived->mark_host_modified();
             derived->set_generation(import_generation);

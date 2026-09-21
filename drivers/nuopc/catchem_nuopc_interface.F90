@@ -37,13 +37,18 @@ module catchem_nuopc_interface
    use catchem_bridge_error, only: ErrorManagerType
    use catchem_nuopc_emis_data_mod, only: ExtEmisDataType, ExtEmisFieldType  ! External emissions data types
    use aqmio, only: AQMIO_Create, AQMIO_Destroy, AQMIO_Write, AQMIO_Close, AQMIO_Write1D, AQMIO_FMT_NETCDF, &
-      AQMIO_LatlonInit, AQMIO_LatlonCleanup
+      AQMIO_WriteGlobalAttrs, AQMIO_LatlonInit, AQMIO_LatlonCleanup
    use catchem_latlon_output_mod, only: latlon_diag_set_time, latlon_diag_is_init
    use catchem_nuopc_emis_mod
 
    implicit none
 
    integer, parameter :: DIAG_REAL_SCALAR = 0, DIAG_REAL_1D = 1, DIAG_REAL_2D = 2, DIAG_REAL_3D = 3
+   ! Ordinals of catchem::SemanticAxis, mirrored so the axes-driven writer can
+   ! dispatch on axis meaning instead of array shape.  Keep in lockstep with
+   ! src/core/catchem_field_contract.hpp:24.
+   integer, parameter :: AXIS_COLUMN = 0, AXIS_LEVEL = 1, AXIS_INTERFACE = 2, &
+      AXIS_SOILLAYER = 3, AXIS_SPECIES = 4, AXIS_CATEGORY = 5, AXIS_SINGLETON = 6
    integer, parameter :: TRACER_HOST_OWNED = 0, TRACER_CHEMICAL = 1, TRACER_DIAGNOSTIC = 2
 
    interface
@@ -138,6 +143,30 @@ module catchem_nuopc_interface
          character(kind=c_char), intent(in) :: name(*)
          character(kind=c_char), intent(out) :: desc_out(*)
          integer(c_int), value :: desc_length
+      end function
+
+      ! Axes / unpack-label getters for the generic axes-driven writer. These
+      ! out-params are written ONLY on the success path, so they must be
+      ! intent(inout), not intent(out): intent(out) lets -O3 discard the
+      ! caller's pre-clear when the C side returns early on an error (FFI trap).
+      integer(c_int) function catchem_diag_get_axes_checked(core_ptr, name, axes_out, axes_length) &
+         bind(C, name="catchem_diag_get_axes_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), intent(inout) :: axes_out(*)
+         integer(c_int), value :: axes_length
+      end function
+
+      integer(c_int) function catchem_diag_get_unpack_label_at_checked(core_ptr, name, slot, label_out, &
+         label_length) &
+         bind(C, name="catchem_diag_get_unpack_label_at_checked")
+         import :: c_ptr, c_char, c_int
+         type(c_ptr), value :: core_ptr
+         character(kind=c_char), intent(in) :: name(*)
+         integer(c_int), value :: slot
+         character(kind=c_char), intent(inout) :: label_out(*)
+         integer(c_int), value :: label_length
       end function
 
       subroutine catchem_diag_sync_to_host(core_ptr) &
@@ -325,6 +354,9 @@ module catchem_nuopc_interface
    public :: get_n_import_fields, get_import_field_info  ! Safe field_config access
    public :: get_n_export_fields, get_export_field_info  ! Safe field_config access
    public :: update_pm_diagnostics  ! Exposed for the NUOPC transform test harness
+   public :: write_process_diagnostics  ! Exposed for the diagnostic-output test harness (feature 013)
+   public :: write_global_attributes    ! Exposed for the diagnostic-output test harness (feature 013)
+   public :: update_time_variable  ! Exposed for the diagnostic-output test harness (feature 013)
    public :: TRACER_HOST_OWNED, TRACER_CHEMICAL, TRACER_DIAGNOSTIC  ! Tracer-map contract values for the test harness
    public :: catchem_nuopc_get_physical_validation_report
 
@@ -421,6 +453,7 @@ module catchem_nuopc_interface
       ! Time slice tracking for NetCDF output
       integer :: current_time_slice = 0
       logical :: pm_diag_registered = .false.  !< Track PM diagnostic registration per-instance
+      logical :: diag_list_warned = .false.    !< diag_list unmatched-selector warning emitted once per run
    end type cc_wrap_type
 
    type CATChem_InternalState
@@ -976,22 +1009,6 @@ contains
       if (allocated(field_config%import_fields)) deallocate(field_config%import_fields)
       if (allocated(field_config%export_fields)) deallocate(field_config%export_fields)
 
-      ! ! Initialize CF input system
-      ! call cf_input_init('catchem_input_config.yml', grid, errflg)
-      ! if (errflg /= ESMF_SUCCESS) then
-      !   errmsg = 'Error initializing CF input system'
-      !   errflg = CC_FAILURE
-      !   return
-      ! end if
-
-      ! ! Initialize NetCDF output system
-      ! call output_diagnostics_init('catchem_output_config.yml', grid, errflg)
-      ! if (errflg /= ESMF_SUCCESS) then
-      !   errmsg = 'Error initializing NetCDF output system'
-      !   errflg = CC_FAILURE
-      !   return
-      ! end if
-
    end subroutine catchem_nuopc_init
 
    !> Get process-local CATChem wrapper (guaranteed thread/process safe)
@@ -1188,20 +1205,26 @@ contains
    !! This removes any hardcoded field-name alias from the binding code -- the
    !! config alone decides which field (dust.sep, fengsha.PC/albedo_drag, ...)
    !! supplies each MET_* target.
-   function resolve_emission_field_for_target(cc_wrap, target_name) result(field_out)
+   function resolve_emission_field_for_target(cc_wrap, target_name, map_scale, category_scale, category_out) result(field_out)
 
       type(cc_wrap_type), intent(inout) :: cc_wrap
       character(len=*), intent(in) :: target_name
+      real(c_double), intent(out) :: map_scale
+      real(c_double), intent(out) :: category_scale
+      character(len=*), intent(out) :: category_out
       character(len=64) :: field_out
 
       type(c_ptr) :: core_ptr
       character(len=64) :: category_name, field_name, mapped_species
       integer(c_int) :: n_categories, n_fields, n_maps
-      integer :: icat, ifield, imap
+      integer :: icat, ifield, imap, jcat
       real(c_double) :: scale_factor
       integer(c_int) :: species_index
 
       field_out = ''
+      category_out = ''
+      map_scale = 1.0_c_double
+      category_scale = 1.0_c_double
       core_ptr = cc_wrap%catchem_model%cpp_core_ptr
       if (.not. c_associated(core_ptr)) return
       if (catchem_config_has_emission_mapping(core_ptr) == 0_c_int) return
@@ -1224,6 +1247,14 @@ contains
                call trim_at_null(mapped_species)
                if (trim(mapped_species) == trim(target_name)) then
                   field_out = trim(field_name)
+                  category_out = trim(category_name)
+                  map_scale = scale_factor
+                  do jcat = 1, cc_wrap%ext_emis%n_categories
+                     if (trim(cc_wrap%ext_emis%categories(jcat)%category_name) == trim(category_name)) then
+                        category_scale = real(cc_wrap%ext_emis%categories(jcat)%global_scale, c_double)
+                        exit
+                     end if
+                  end do
                   return
                end if
             end do
@@ -1252,7 +1283,10 @@ contains
       integer, intent(out) :: rc
 
       type(ExtEmisFieldType), pointer :: src_field
-      character(len=64) :: resolved_field
+      character(len=64) :: resolved_field, resolved_category
+      character(len=256) :: resolved_source_file
+      real(c_double) :: map_scale, category_scale
+      integer :: i, j
 
       rc = CC_SUCCESS
 
@@ -1262,13 +1296,34 @@ contains
       ! mapping entirely in configuration (dust.sep -> MET_SSM,
       ! fengsha.PC/albedo_drag -> MET_RDRAG, ...), with no hardcoded field-name
       ! aliases in code and no substring/fuzzy matching.
-      resolved_field = resolve_emission_field_for_target(cc_wrap, target_name)
+      resolved_field = resolve_emission_field_for_target(cc_wrap, target_name, map_scale, category_scale, resolved_category)
 
       src_field => null()
       if (len_trim(resolved_field) > 0) &
-         src_field => cc_wrap%ext_emis%find_emission_field(trim(resolved_field))
+         src_field => cc_wrap%ext_emis%find_emission_field_in_category(trim(resolved_category), trim(resolved_field))
       if (associated(src_field)) then
-         call bind_static_field_data(cc_wrap, src_field, met_name, met_buffer, scale, rc)
+#ifdef CATCHEM_TRACE_NUOPC
+         resolved_source_file = ''
+         do i = 1, cc_wrap%ext_emis%n_categories
+            if (trim(cc_wrap%ext_emis%categories(i)%category_name) == trim(resolved_category)) then
+               resolved_source_file = trim(cc_wrap%ext_emis%categories(i)%source_file)
+               exit
+            end if
+         end do
+         write(*,'(A,A,A,A,A,A,A,A,A,ES12.4)') '[CATCHEM DEBUG] bind_static_field met=', trim(met_name), &
+            ' source_category=', trim(resolved_category), ' source_field=', trim(resolved_field), &
+            ' source_file=', trim(resolved_source_file), &
+            ' scale=', scale * map_scale * category_scale * real(cc_wrap%ext_emis%global_scale, c_double)
+         if (allocated(src_field%emission_data)) then
+            write(*,'(A,A,A,ES12.4,A,ES12.4)') '[CATCHEM DEBUG] bind_static_field source=', trim(resolved_field), &
+               ' min=', minval(src_field%emission_data(:,:,1,1)), ' max=', maxval(src_field%emission_data(:,:,1,1))
+         else
+            write(*,'(A,A)') '[CATCHEM DEBUG] bind_static_field source has no emission_data: ', trim(resolved_field)
+         end if
+         call flush(6)
+#endif
+         call bind_static_field_data(cc_wrap, src_field, met_name, met_buffer, &
+            scale * map_scale * category_scale * real(cc_wrap%ext_emis%global_scale, c_double), rc)
          return
       end if
 
@@ -1309,16 +1364,13 @@ contains
 
       rc = CC_SUCCESS
 
-      if (allocated(src_field%interp_data_t1)) then
-         nx = size(src_field%interp_data_t1, 1)
-         ny = size(src_field%interp_data_t1, 2)
-         if (size(src_field%interp_data_t1, 3) < 1 .or. size(src_field%interp_data_t1, 4) < 1) return
-         if (.not. allocated(met_buffer) .or. size(met_buffer, 1) /= nx .or. size(met_buffer, 2) /= ny) then
-            if (allocated(met_buffer)) deallocate(met_buffer)
-            allocate(met_buffer(nx, ny))
-         end if
-         met_buffer = real(src_field%interp_data_t1(:,:,1,1), c_double) * scale
-      else if (allocated(src_field%emission_data)) then
+      ! emission_data is the canonical current field.  For temporally
+      ! interpolated categories catchem_emis_blend_time has already combined
+      ! interp_data_t1/interp_data_t2 into emission_data before this routine
+      ! runs.  Reading interp_data_t1 here would feed the old bracket into the
+      ! process while AQMIO diagnostics (and the legacy metstate path) report
+      ! the blended field.
+      if (allocated(src_field%emission_data)) then
          nx = size(src_field%emission_data, 1)
          ny = size(src_field%emission_data, 2)
          if (size(src_field%emission_data, 3) < 1 .or. size(src_field%emission_data, 4) < 1) return
@@ -1327,6 +1379,11 @@ contains
             allocate(met_buffer(nx, ny))
          end if
          met_buffer = real(src_field%emission_data(:,:,1,1), c_double) * scale
+#ifdef CATCHEM_TRACE_NUOPC
+         write(*,'(A,A,A,ES12.4,A,ES12.4)') '[CATCHEM DEBUG] bind_static_field final=', trim(met_name), &
+            ' min=', minval(met_buffer), ' max=', maxval(met_buffer)
+         call flush(6)
+#endif
       else
          return
       end if
@@ -2196,6 +2253,14 @@ contains
       call update_time_variable(cc_wrap, filename, time_on_file, cc_wrap%current_time_slice, rc)
       if (rc /= CC_SUCCESS) return
 
+      ! Stamp run-level provenance (version/commit/config + CF defaults +
+      ! diagnostics.output.attributes) onto the file just created (FR-011).
+      call write_global_attributes(cc_wrap, filename, rc)
+      if (rc /= CC_SUCCESS) then
+         write(*,'(A)') 'Warning: Failed to write diagnostic global attributes.'
+         rc = CC_SUCCESS
+      end if
+
       !write extemission fields if needed
       call catchem_emis_write_diagnostics(cc_wrap%ext_emis, cc_wrap%current_time_slice, cc_wrap%iocomp, cc_wrap%grid, filename, rc)
       if (rc /= CC_SUCCESS) then
@@ -2225,22 +2290,33 @@ contains
 
    end subroutine catchem_diagnostics_write
 
-   !> \brief Write diagnostics for a specific process
+   !> \brief Write every registered process diagnostic to the NetCDF file
    !!
-   !! Discovers the fields the C++ process layer registered in the
-   !! DiagnosticManager and writes the dust_ and seasalt_ prefixed ones to
-   !! the NetCDF diagnostic file.  Per-column fields (registered shape
-   !! [ncols, 1]) are written as 2D (nx, ny) variables; per-bin fields
-   !! (shape [ncols, nbin]) are written as a single 3D (nx, ny, nbin)
-   !! variable whose third axis follows the mechanism's dust/seasalt bin
-   !! order (the bin species names are appended to the description).
+   !! Generic axes-driven writer (feature 013).  Discovers all fields the C++
+   !! process layer registered in the DiagnosticManager and writes each one
+   !! according to what its axes MEAN, never according to its name prefix or
+   !! storage rank (spec FR-002):
+   !!
+   !!   {Column, Singleton}               -> one 2D (nx, ny) variable
+   !!   {Column, Level}                   -> one 3D (nx, ny, nlev) variable
+   !!   {Column, Species|Category}        -> one 2D variable per slot,
+   !!                                         named <field>_<label>
+   !!   {Column, Level, Species|Category} -> one 3D variable per slot,
+   !!                                         named <field>_<label>
+   !!
+   !! Packed (Species/Category) dimensions are UNPACKED into named variables
+   !! and the compact parent is not written (spec A-004).  Labels come from
+   !! the registration contract, which is built from the same resolved
+   !! species/bin list the scheme iterates (FR-006); a packed field without a
+   !! complete label set is a hard error naming the field (FR-008), never a
+   !! silent column_N or a silent drop.
    !!
    !! The diagnostic storage is column-major with the same flattened column
-   !! index (col = i + (j-1)*nx) the science bridges use, so the [ncols, n]
-   !! buffer reinterprets directly as (nx, ny[, nbin]) with no reshaping.
+   !! index (col = i + (j-1)*nx) the science bridges use, so the [ncols, ...]
+   !! buffer reinterprets directly as (nx, ny, ...) with no reshaping, and a
+   !! slot slice is a contiguous rank-3 view.
    !!
-   !! Gated by diagnostics/output/enabled (checked by the caller) and
-   !! diagnostics/output/process_diagnostics.
+   !! Gated by diagnostics/output/enabled (checked by the caller).
    !!
    !! \param cc_wrap CATChem wrapper containing model state and configuration
    !! \param process_name Name of the process ('all' selects every process)
@@ -2254,22 +2330,25 @@ contains
 
       ! Local variables
       integer(c_int) :: c_status, c_count, i, rank
-      integer(c_int) :: dims(3), n_dust, n_seasalt, n_species
-      integer :: nx, ny, k
-      character(kind=c_char) :: c_name(64), c_species_name(64)
-      character(kind=c_char) :: c_units(32), c_desc(256)
-      character(len=64) :: field_name, species_name
+      integer(c_int) :: dims(3), axes(3)
+      integer :: nx, ny, slot, nslot
+      character(kind=c_char) :: c_name(64)
+      character(kind=c_char) :: c_units(32), c_desc(256), c_label(64)
+      character(len=64) :: field_name, label_str
+      character(len=128) :: var_name
       character(len=32) :: units_str
-      character(len=256) :: desc_str, bin_list
+      character(len=256) :: desc_str
+      character(len=128), allocatable :: selectors(:)
+      logical, allocatable :: sel_matched(:)
+      character(len=4096) :: warn_msg
+      integer :: ns, s
+      logical :: selected
       type(c_ptr) :: raw_ptr
-      real(fp), pointer :: ptr_2d(:,:) => null()
-      real(fp), pointer :: ptr_3d(:,:,:) => null()
-      logical :: is_dust_field, is_seasalt_field
+      real(fp), pointer :: view_3d(:,:,:) => null()
+      real(fp), pointer :: view_4d(:,:,:,:) => null()
+      logical :: packed
 
       rc = CC_SUCCESS
-
-      ! Gate: per-process diagnostic output is opt-in.
-      if (.not. cc_wrap%catchem_model%is_process_diag_enabled()) return
 
       nx = cc_wrap%catchem_model%nx
       ny = cc_wrap%catchem_model%ny
@@ -2278,27 +2357,27 @@ contains
       ! before reading raw pointers (no-op in host-only builds).
       call catchem_diag_sync_to_host(cc_wrap%catchem_model%cpp_core_ptr)
 
+      ! diagnostics.output.diag_list selects which variables reach the file
+      ! (FR-009).  An empty list means "everything".  Matching operates on
+      ! the output variable name: an entry equals the name, or the name
+      ! starts with entry_'_' so a parent selector covers its unpacked
+      ! children.  Reloaded per write so a re-initialised model is never
+      ! filtered by a stale selector list.
+      ns = cc_wrap%catchem_model%get_diag_species_count()
+      ! Guard against a previous early-exit write leaving the arrays allocated.
+      if (allocated(selectors)) deallocate(selectors)
+      if (allocated(sel_matched)) deallocate(sel_matched)
+      allocate(selectors(max(ns, 1)))
+      allocate(sel_matched(max(ns, 1)))
+      selectors = ''
+      sel_matched = .false.
+      do s = 1, ns
+         call cc_wrap%catchem_model%get_diag_species_at(s, selectors(s))
+      end do
       c_status = catchem_diag_get_count_checked(cc_wrap%catchem_model%cpp_core_ptr, c_count)
       if (c_status /= 0_c_int) then
          rc = CC_FAILURE
          return
-      end if
-
-      ! Bin counts used to validate per-bin field extents, from the loaded
-      ! species mechanism metadata.
-      n_dust = 0
-      n_seasalt = 0
-      n_species = 0
-      c_status = catchem_state_get_species_count_checked(cc_wrap%catchem_model%state_mgr_ptr, n_species)
-      if (c_status == 0_c_int) then
-         do i = 1, n_species
-            if (catchem_state_is_species_dust(cc_wrap%catchem_model%state_mgr_ptr, int(i, c_int)) /= 0) then
-               n_dust = n_dust + 1
-            end if
-            if (catchem_state_is_species_seasalt(cc_wrap%catchem_model%state_mgr_ptr, int(i, c_int)) /= 0) then
-               n_seasalt = n_seasalt + 1
-            end if
-         end do
       end if
 
       do i = 0, c_count - 1
@@ -2307,36 +2386,33 @@ contains
          if (c_status /= 0_c_int) cycle
          call catchem_c_string_to_fortran(c_name, field_name)
 
-         is_dust_field = (index(field_name, 'dust_') == 1)
-         is_seasalt_field = (index(field_name, 'seasalt_') == 1)
-         if (.not. (is_dust_field .or. is_seasalt_field)) cycle
          if (trim(process_name) /= 'all') then
-            if (.not. ((trim(process_name) == 'dust' .and. is_dust_field) .or. &
-               (trim(process_name) == 'seasalt' .and. is_seasalt_field))) cycle
+            if (index(field_name, trim(process_name) // '_') /= 1) cycle
          end if
 
          rank = 0
          c_status = catchem_diag_get_rank_checked(cc_wrap%catchem_model%cpp_core_ptr, &
             trim(field_name) // c_null_char, rank)
-         if (c_status /= 0_c_int .or. rank /= 2_c_int) cycle
+         if (c_status /= 0_c_int) cycle
 
          dims = 0
          c_status = catchem_diag_get_dims_checked(cc_wrap%catchem_model%cpp_core_ptr, &
             trim(field_name) // c_null_char, dims, 3_c_int)
          if (c_status /= 0_c_int) cycle
-         ! Process diagnostics are flattened over columns: [ncols, 1] totals
-         ! or [ncols, nbin] per-bin arrays.  Anything else (e.g. a 3D field
-         ! a host registered under the same prefix) is not ours to write.
-         if (dims(1) /= nx * ny .or. dims(2) < 1) then
+
+         axes = -1
+         c_status = catchem_diag_get_axes_checked(cc_wrap%catchem_model%cpp_core_ptr, &
+            trim(field_name) // c_null_char, axes, 3_c_int)
+         if (c_status /= 0_c_int) then
+            write(*,'(A,A)') 'ERROR: Cannot read the axis contract for diagnostic: ', trim(field_name)
+            rc = CC_FAILURE
+            return
+         end if
+
+         ! Process diagnostics are flattened over this PE's columns; a field
+         ! whose leading extent is not nx*ny cannot be mapped onto the grid.
+         if (axes(1) /= AXIS_COLUMN .or. dims(1) /= nx * ny) then
             write(*,'(A,A)') 'Warning: Skipping process diagnostic with unexpected shape: ', trim(field_name)
-            cycle
-         end if
-         if (is_dust_field .and. dims(2) > 1 .and. dims(2) /= n_dust) then
-            write(*,'(A,A)') 'Warning: Skipping process diagnostic, bin count mismatch: ', trim(field_name)
-            cycle
-         end if
-         if (is_seasalt_field .and. dims(2) > 1 .and. dims(2) /= n_seasalt) then
-            write(*,'(A,A)') 'Warning: Skipping process diagnostic, bin count mismatch: ', trim(field_name)
             cycle
          end if
 
@@ -2351,56 +2427,177 @@ contains
 
          raw_ptr = c_null_ptr
          c_status = catchem_diag_get_pointer_checked(cc_wrap%catchem_model%cpp_core_ptr, &
-            trim(field_name) // c_null_char, 2_c_int, dims, raw_ptr)
+            trim(field_name) // c_null_char, rank, dims, raw_ptr)
          if (c_status /= 0_c_int .or. .not. c_associated(raw_ptr)) then
             write(*,'(A,A)') 'Warning: Could not map process diagnostic storage: ', trim(field_name)
             cycle
          end if
 
-         if (dims(2) == 1) then
-            ! Per-column field: reinterpret [ncols,1] as (nx,ny) 2D output.
-            call c_f_pointer(raw_ptr, ptr_2d, [nx, ny])
-            call write_diagnostic_field(cc_wrap, trim(field_name), DIAG_REAL_2D, 0.0_fp, &
-               array_2d_ptr=ptr_2d, description=trim(desc_str), &
-               units=trim(units_str), filename=filename, rc=rc)
-            nullify(ptr_2d)
-         else
-            ! Per-bin field: reinterpret [ncols,nbin] as (nx,ny,nbin) 3D
-            ! output.  The third axis follows mechanism declaration order, so
-            ! list the bin species names in the description for consumers.
-            bin_list = ''
-            do k = 1, n_species
-               c_status = catchem_state_get_species_name_at_checked( &
-                  cc_wrap%catchem_model%state_mgr_ptr, int(k, c_int), c_species_name, 64_c_int)
-               if (c_status /= 0_c_int) cycle
-               call catchem_c_string_to_fortran(c_species_name, species_name)
-               if (is_dust_field) then
-                  if (catchem_state_is_species_dust(cc_wrap%catchem_model%state_mgr_ptr, &
-                     int(k, c_int)) == 0) cycle
-               else
-                  if (catchem_state_is_species_seasalt(cc_wrap%catchem_model%state_mgr_ptr, &
-                     int(k, c_int)) == 0) cycle
+         ! Classify the trailing axis: a Species/Category axis is a packed
+         ! dimension and unpacks to one named variable per slot.
+         packed = .false.
+         nslot = 1
+         select case (int(rank))
+         case (2)
+            select case (int(axes(2)))
+            case (AXIS_SINGLETON)
+               if (dims(2) /= 1) then
+                  write(*,'(A,A)') 'ERROR: Singleton-axis diagnostic without extent 1: ', trim(field_name)
+                  rc = CC_FAILURE
+                  return
                end if
-               if (len_trim(bin_list) > 0) bin_list = trim(bin_list) // ','
-               bin_list = trim(bin_list) // trim(species_name)
-            end do
-            if (len_trim(bin_list) > 0) then
-               desc_str = trim(desc_str) // ' [bins: ' // trim(bin_list) // ']'
+            case (AXIS_LEVEL)
+               ! Written whole as 3D: the level axis stays intact (FR-003).
+            case (AXIS_SPECIES, AXIS_CATEGORY)
+               packed = .true.
+               nslot = int(dims(2))
+            case default
+               write(*,'(A,A)') 'ERROR: Unsupported second axis on diagnostic: ', trim(field_name)
+               rc = CC_FAILURE
+               return
+            end select
+         case (3)
+            if (int(axes(2)) /= AXIS_LEVEL) then
+               write(*,'(A,A)') 'ERROR: Unsupported second axis on diagnostic: ', trim(field_name)
+               rc = CC_FAILURE
+               return
             end if
-            call c_f_pointer(raw_ptr, ptr_3d, [nx, ny, int(dims(2))])
-            call write_diagnostic_field(cc_wrap, trim(field_name), DIAG_REAL_3D, 0.0_fp, &
-               array_3d_ptr=ptr_3d, description=trim(desc_str), &
-               units=trim(units_str), filename=filename, rc=rc)
-            nullify(ptr_3d)
-         end if
+            select case (int(axes(3)))
+            case (AXIS_SPECIES, AXIS_CATEGORY)
+               packed = .true.
+               nslot = int(dims(3))
+            case default
+               write(*,'(A,A)') 'ERROR: Unsupported third axis on diagnostic: ', trim(field_name)
+               rc = CC_FAILURE
+               return
+            end select
+         case default
+            write(*,'(A,A)') 'ERROR: Unsupported rank on diagnostic: ', trim(field_name)
+            rc = CC_FAILURE
+            return
+         end select
 
-         if (rc /= CC_SUCCESS) then
-            write(*,'(A,A)') 'Warning: Failed to write process diagnostic: ', trim(field_name)
-            rc = CC_SUCCESS
+         if (.not. packed) then
+            call diag_selector_select(selectors, sel_matched, ns, trim(field_name), selected)
+            if (selected) then
+               if (int(rank) == 2 .and. int(axes(2)) == AXIS_SINGLETON) then
+                  ! Per-column total: reinterpret [ncols,1] as (nx,ny) 2D output.
+                  call c_f_pointer(raw_ptr, view_3d, [nx, ny, 1])
+                  call write_diagnostic_field(cc_wrap, trim(field_name), DIAG_REAL_2D, 0.0_fp, &
+                     array_2d_ptr=view_3d(:,:,1), description=trim(desc_str), &
+                     units=trim(units_str), filename=filename, rc=rc)
+               else
+                  ! Per-level field: reinterpret [ncols,nlev] as (nx,ny,nlev) so
+                  ! the vertical dimension is never truncated (FR-003).
+                  call c_f_pointer(raw_ptr, view_3d, [nx, ny, int(dims(2))])
+                  call write_diagnostic_field(cc_wrap, trim(field_name), DIAG_REAL_3D, 0.0_fp, &
+                     array_3d_ptr=view_3d, description=trim(desc_str), &
+                     units=trim(units_str), filename=filename, rc=rc)
+               end if
+               nullify(view_3d)
+               if (rc /= CC_SUCCESS) then
+                  write(*,'(A,A)') 'Warning: Failed to write process diagnostic: ', trim(field_name)
+                  rc = CC_SUCCESS
+               end if
+            end if
+         else
+            ! Unpacked: one variable per slot named <field>_<label>.  A slot
+            ! without a label is a contract violation -> fail loudly (FR-008).
+            if (int(rank) == 2) then
+               call c_f_pointer(raw_ptr, view_3d, [nx, ny, nslot])
+            else
+               call c_f_pointer(raw_ptr, view_4d, [nx, ny, int(dims(2)), nslot])
+            end if
+            do slot = 1, nslot
+               c_label = ' '
+               c_status = catchem_diag_get_unpack_label_at_checked( &
+                  cc_wrap%catchem_model%cpp_core_ptr, trim(field_name) // c_null_char, &
+                  int(slot - 1, c_int), c_label, 64_c_int)
+               if (c_status /= 0_c_int) then
+                  write(*,'(A,I0,A,A)') 'ERROR: Packed diagnostic slot ', slot - 1, &
+                     ' has no label for field: ', trim(field_name)
+                  rc = CC_FAILURE
+                  return
+               end if
+               call catchem_c_string_to_fortran(c_label, label_str)
+               var_name = trim(field_name) // '_' // trim(label_str)
+               call diag_selector_select(selectors, sel_matched, ns, trim(var_name), selected)
+               if (.not. selected) cycle
+               if (int(rank) == 2) then
+                  call write_diagnostic_field(cc_wrap, trim(var_name), DIAG_REAL_2D, 0.0_fp, &
+                     array_2d_ptr=view_3d(:,:,slot), description=trim(desc_str), &
+                     units=trim(units_str), filename=filename, rc=rc)
+               else
+                  call write_diagnostic_field(cc_wrap, trim(var_name), DIAG_REAL_3D, 0.0_fp, &
+                     array_3d_ptr=view_4d(:,:,:,slot), description=trim(desc_str), &
+                     units=trim(units_str), filename=filename, rc=rc)
+               end if
+               if (rc /= CC_SUCCESS) then
+                  write(*,'(A,A)') 'Warning: Failed to write process diagnostic: ', trim(var_name)
+                  rc = CC_SUCCESS
+               end if
+            end do
+            nullify(view_3d)
+            nullify(view_4d)
          end if
       end do
 
+      ! FR-009: every selector that matched nothing is reported once,
+      ! aggregated into a single warning.  Never fatal, never silent.
+      if (ns > 0 .and. .not. cc_wrap%diag_list_warned) then
+         warn_msg = ''
+         do s = 1, ns
+            if (.not. sel_matched(s)) then
+               if (len_trim(warn_msg) > 0) warn_msg = trim(warn_msg) // ', '
+               warn_msg = trim(warn_msg) // trim(selectors(s))
+            end if
+         end do
+         if (len_trim(warn_msg) > 0) then
+            write(*,'(A,A)') 'Warning: diag_list selector(s) matched no diagnostic field: ', &
+               trim(warn_msg)
+         end if
+         cc_wrap%diag_list_warned = .true.
+      end if
+
+      deallocate(selectors, sel_matched)
+
    end subroutine write_process_diagnostics
+
+   !> \brief Test an output variable name against the diag_list selectors.
+   !!
+   !! An entry matches when it equals the name or the name starts with
+   !! entry_'_' (data-model §6.1), so a parent selector covers every
+   !! unpacked <field>_<label> child while a full child name selects just
+   !! that child.  Matching a selector marks it as used for the
+   !! aggregated unmatched-selector warning.  With an empty selector list
+   !! everything matches (FR-009: empty list = everything).
+   !!
+   !! \param selectors  Selector strings (diag_list)
+   !! \param matched    Per-selector hit flags, updated on a match
+   !! \param ns         Number of valid selector entries
+   !! \param var_name   Output variable name to test
+   !! \param selected   .true. when the variable must be written
+   subroutine diag_selector_select(selectors, matched, ns, var_name, selected)
+      character(len=*), intent(in) :: selectors(:)
+      logical, intent(inout) :: matched(:)
+      integer, intent(in) :: ns
+      character(len=*), intent(in) :: var_name
+      logical, intent(out) :: selected
+      integer :: s
+
+      selected = .true.
+      if (ns == 0) return
+      selected = .false.
+      do s = 1, ns
+         if (trim(selectors(s)) == trim(var_name)) then
+            matched(s) = .true.
+            selected = .true.
+         else if (index(trim(var_name) // '_', trim(selectors(s)) // '_') == 1) then
+            matched(s) = .true.
+            selected = .true.
+         end if
+      end do
+   end subroutine diag_selector_select
 
    !> \brief Write individual diagnostic field to NetCDF
    !!
@@ -2423,8 +2620,8 @@ contains
       integer, intent(in) :: data_type
       real(fp), intent(in) :: scalar_value
       real(fp), pointer, optional, intent(in) :: array_1d_ptr(:)
-      real(fp), pointer, optional, intent(in) :: array_2d_ptr(:,:)
-      real(fp), pointer, optional, intent(in) :: array_3d_ptr(:,:,:)
+      real(fp), optional, intent(in) :: array_2d_ptr(:,:)
+      real(fp), optional, intent(in) :: array_3d_ptr(:,:,:)
       character(len=*), intent(in) :: description
       character(len=*), intent(in) :: units
       character(len=*), intent(in) :: filename
@@ -2455,10 +2652,6 @@ contains
             rc = CC_FAILURE
             return
          end if
-         if (.not. associated(array_2d_ptr)) then
-            rc = CC_FAILURE
-            return
-         end if
          esmf_field = ESMF_FieldCreate(cc_wrap%grid, &
             name=trim(field_name), &
             typekind=ESMF_TYPEKIND_R4, &
@@ -2486,10 +2679,6 @@ contains
 
        case (DIAG_REAL_3D)
          if (.not. present(array_3d_ptr)) then
-            rc = CC_FAILURE
-            return
-         end if
-         if (.not. associated(array_3d_ptr)) then
             rc = CC_FAILURE
             return
          end if
@@ -2527,9 +2716,9 @@ contains
          return
       end select
 
-      ! TODO: Add NetCDF attributes for description and units
-      ! This would require extending AQMIO or using NetCDF directly
-      ! For now, we rely on the working AQMIO functionality
+      ! Run-level provenance (description/units are per-variable ESMF metadata;
+      ! the global attributes live in write_global_attributes ->
+      ! AQMIO_WriteGlobalAttrs, feature 013 FR-011).
 
       ! Clean up
       if (ESMF_FieldIsCreated(esmf_field)) then
@@ -3084,6 +3273,111 @@ contains
       end if
 
    end subroutine update_time_variable
+
+   !> \brief Write run-level provenance as NetCDF global attributes.
+   !!
+   !! Core provenance (build version, git commit, config identity) plus the
+   !! CF provenance defaults required by FR-011 are written first; entries
+   !! from diagnostics.output.attributes are appended afterwards so a user
+   !! key overrides a core key on collision (contract C-10, §6.2).  The
+   !! attributes are applied through AQMIO_WriteGlobalAttrs because global
+   !! attributes must be set in define mode, which AQMIO owns (research D7);
+   !! the driver never calls nf90_create/nf90_redef directly.
+   !!
+   !! Must be called after the file exists (update_time_variable creates it).
+   !! Multi-tile runs mirror update_time_variable's per-tile file naming.
+   !!
+   !! \param cc_wrap CATChem wrapper containing model state and configuration
+   !! \param filename NetCDF filename just created/updated
+   !! \param rc Return code
+   subroutine write_global_attributes(cc_wrap, filename, rc)
+      type(cc_wrap_type), intent(inout) :: cc_wrap
+      character(len=*), intent(in) :: filename
+      integer, intent(out) :: rc
+
+      integer, parameter :: max_attrs = 64
+      character(len=128) :: names(max_attrs)
+      character(len=512) :: values(max_attrs)
+      character(len=64) :: version_str, commit_str
+      character(len=512) :: config_str, attr_key, attr_val
+      character(len=256) :: tileFilename
+      character(len=16) :: tileSuffix
+      type(ESMF_Grid) :: grid
+      type(ESMF_VM) :: vm
+      integer :: n, na, i, tile, tileCount, dotpos, localPet
+
+      rc = CC_SUCCESS
+
+      n = 0
+      ! --- core provenance, written first so user keys can override ---
+      call cc_wrap%catchem_model%get_build_version(version_str)
+      call cc_wrap%catchem_model%get_build_commit(commit_str)
+      call cc_wrap%catchem_model%get_config_file_path(config_str)
+      n = n + 1; names(n) = 'catchem_core_version'; values(n) = trim(version_str)
+      n = n + 1; names(n) = 'catchem_core_commit';  values(n) = trim(commit_str)
+      n = n + 1; names(n) = 'config_file';          values(n) = trim(config_str)
+      ! --- FR-011 defaults for the CF provenance block ---
+      n = n + 1; names(n) = 'institution'; values(n) = 'UFS Community'
+      n = n + 1; names(n) = 'source';      values(n) = 'CATChem'
+      n = n + 1; names(n) = 'references';  values(n) = 'https://github.com/UFS-Community/CATChem'
+      n = n + 1; names(n) = 'Conventions'; values(n) = 'CF-1.11'
+
+      ! --- user attributes from diagnostics.output.attributes (C-10) ---
+      na = cc_wrap%catchem_model%get_output_attribute_count()
+      do i = 1, na
+         if (n >= max_attrs) then
+            write(*,'(A,I0,A)') 'Warning: global attributes truncated at ', max_attrs, &
+               ' entries; remaining diagnostics.output.attributes ignored.'
+            exit
+         end if
+         call cc_wrap%catchem_model%get_output_attribute_at(i, attr_key, attr_val)
+         n = n + 1
+         names(n) = trim(attr_key)
+         values(n) = trim(attr_val)
+      end do
+
+      ! Determine tile count to match AQMIO's per-tile file naming, exactly as
+      ! update_time_variable does for the time axis.
+      call ESMF_GridCompGet(cc_wrap%iocomp, grid=grid, vm=vm, rc=rc)
+      if (rc /= ESMF_SUCCESS) then
+         rc = CC_FAILURE
+         return
+      end if
+      call ESMF_GridGet(grid, tileCount=tileCount, rc=rc)
+      if (rc /= ESMF_SUCCESS) then
+         rc = CC_FAILURE
+         return
+      end if
+
+      if (tileCount > 1 .and. index(filename, '<tile>') == 0) then
+         do tile = 1, tileCount
+            write(tileSuffix, '(".tile",I0)') tile
+            dotpos = index(filename, '.', back=.true.)
+            if (dotpos > 1) then
+               tileFilename = filename(1:dotpos-1) // trim(tileSuffix) // trim(filename(dotpos:))
+            else
+               tileFilename = trim(filename) // trim(tileSuffix)
+            end if
+            call AQMIO_WriteGlobalAttrs(tileFilename, names, values, n, rc=rc)
+            if (rc /= ESMF_SUCCESS) then
+               rc = CC_FAILURE
+               return
+            end if
+         end do
+      else
+         ! Single tile: only PET 0 owns the file (mirrors AQMIO_Write1D).
+         call ESMF_VMGet(vm, localPet=localPet, rc=rc)
+         if (rc == ESMF_SUCCESS .and. localPet == 0) then
+            call AQMIO_WriteGlobalAttrs(filename, names, values, n, rc=rc)
+            if (rc /= ESMF_SUCCESS) then
+               rc = CC_FAILURE
+               return
+            end if
+         end if
+         rc = CC_SUCCESS
+      end if
+
+   end subroutine write_global_attributes
 
    !> \brief Initialize output timing
    !!

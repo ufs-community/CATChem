@@ -44,3 +44,42 @@ The diagnostic system in CATChem provides a number of advanced features, includi
 Diagnostic registration is idempotent only for an identical name, type, units, and shape. Incompatible re-registration fails without replacing live storage. Pointer retrieval validates rank and every extent; a destination that cannot represent all semantic axes must request an explicit selection instead of receiving an implicit first-species or first-level slice.
 
 Host and device diagnostic writers declare the current side. Final timestep synchronization copies only from the latest writer, preserving diagnostics produced by host-side Fortran bridges as well as execution-space kernels.
+
+## Registering with the axes + labels contract
+
+Processes register diagnostic fields through `DiagnosticManager::register_field_contract`,
+which pairs every dimension with a **semantic axis** so the NUOPC writer can decide *what
+the variable means* instead of guessing from names or storage rank:
+
+| `SemanticAxis` | Meaning | Written as |
+|---|---|---|
+| `Column` | Flattened local columns (`col = i + (j-1)*nx`), leading axis, always | grid `(x, y)` |
+| `Singleton` | Extent-1 trailing axis (a per-column total) | 2D variable |
+| `Level` | Vertical level axis | 3D variable, `lev` dimension kept intact |
+| `Species` / `Category` | **Packed** axis: one slot per species/bin | one variable per slot, named `<field>_<label>` |
+| `Interface`, `SoilLayer` | Reserved surface axes | not yet emitted |
+
+A packed axis must carry one **unpack label** per slot — typically the species
+`short_name` or bin label — supplied at registration and taken from the same
+resolved species/bin list the scheme iterates, so output names always match the
+data layout:
+
+```cpp
+state->diagnostic_manager()->register_field_contract(
+    "dust_emission_bin", "Dust Emission Per Bin", "kg/m2/s",
+    {ncol, nbins}, {SemanticAxis::Column, SemanticAxis::Category},
+    dust_bin_labels);   // e.g. {"dust1", "dust3", ...}
+```
+
+The contract is validated strictly at registration (fail fast, fail loudly):
+
+- at most **one** packed (`Species`/`Category`) axis per field;
+- label count **equals** the packed extent — and labels are required exactly when
+  the field has a packed axis;
+- every label is NetCDF-name-safe (`[A-Za-z_][A-Za-z0-9_]*`) and unique;
+- the leading axis is `Column` with extent equal to the run's column count.
+
+A packed field whose slot has no label is a hard writer error naming the field —
+never an anonymous `column_N` and never a silent drop. See
+[NUOPC Integration](../developer-guide/integration/nuopc.md#process-diagnostic-output)
+for how the contract maps to the output file.

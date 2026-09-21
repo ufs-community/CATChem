@@ -13,9 +13,9 @@ void run_so4chem_science_bridge(int n_cols, int n_levels, int n_species, double 
                                 double* z_edges, double* hflux, double* lat, double* lon, int* lwi, double* pblh,
                                 double* u10m, double* ustar, double* v10m, double* z0h, double* species_mw_g,
                                 const char* species_names, double* conc, double* tendency, bool* c_firsttime,
-                                int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init, double* c_pso4_so2,
+                                int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init,
                                 double* c_pso4_g_so2, double* c_pso4_aq_so2, double* c_pso2_dms, double* c_dms_flux,
-                                const int* diagnostic_species_id, int n_diag_species);
+                                double* c_diag_prod_rate, const int* diagnostic_species_id, int n_diag_species);
 }
 
 namespace catchem {
@@ -53,7 +53,8 @@ namespace catchem {
         // Read scheme tuning options from the runtime YAML.  Each lookup falls
         // back to the compiled default declared in SO4chemCommon_Mod.F90, so a
         // configuration that omits the option keeps current behavior.
-        gocart_update_so2 = configured->second.get_bool("gocart/update_so2", gocart_update_so2);
+        const auto& settings = configured->second;
+        gocart_update_so2 = settings.get_bool("gocart/update_so2", gocart_update_so2);
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
@@ -90,40 +91,68 @@ namespace catchem {
         nymd_last.assign(state->column_count(), 0);
         nhms_last_recycle.assign(state->column_count(), 0);
         xh2o2_init.assign(state->column_count() * state->level_count(), 0.0);
-        pso4_so2.assign(state->column_count() * state->level_count(), 0.0);
         pso4_g_so2.assign(state->column_count() * state->level_count(), 0.0);
         pso4_aq_so2.assign(state->column_count() * state->level_count(), 0.0);
         pso2_dms.assign(state->column_count() * state->level_count(), 0.0);
         dms_flux.assign(state->column_count(), 0.0);
 
-        // 2. Register diagnostics
+        // 2. Resolve the diagnostic species set (parity with legacy).  The
+        // GOCART scheme matches diagnostic_species_id(diag_idx) == species_idx
+        // where species_idx is the GLOBAL catalog position, so ids live in
+        // global 1-based space.  Default set = the species the legacy so4chem
+        // process is configured with (the sulfur chain plus its oxidants); the
+        // scheme only fills MSA/SO2/SO4 slots, so the others register as zeros
+        // exactly as legacy does.  An explicit diag_species overrides the
+        // default and must name a real mechanism species (fail-loud).  Names
+        // resolve case-insensitively against the mechanism.
+        // Built before the diagnostics gate so the ids are always available to
+        // run() (mirrors dust/seasalt/carbchem).
+        diagnostic_species_id.clear();
+        {
+            const std::vector<std::string> default_sulfur = {"dms", "so2", "so4", "msa", "h2o2", "oh", "no3",
+                                                             "dms_in"};
+            const auto& requested = settings.diag_species.empty() ? default_sulfur : settings.diag_species;
+            for (const auto& species_name : requested) {
+                if (!chemistry.mechanism->contains(species_name)) {
+                    if (settings.diag_species.empty())
+                        continue; // default set: tolerate species absent from this mechanism
+                    throw std::invalid_argument("SO4Chem diag_species names an unknown species: " + species_name);
+                }
+                diagnostic_species_id.push_back(static_cast<int>(chemistry.mechanism->index_of(species_name)) + 1);
+            }
+        }
+
+        if (!diagnostics_enabled)
+            return;
+
+        // 3. Register diagnostics.  Axes are explicit so the writer never
+        // shape-guesses: a single-level column would otherwise mis-resolve a
+        // _per_level field as a singleton (feature 013).
         if (state->diagnostic_manager()) {
             std::vector<int> dims_2d = {state->column_count(), state->level_count()};
             std::vector<int> dims_1d = {state->column_count(), 1};
+            const std::vector<SemanticAxis> axes_level = {SemanticAxis::Column, SemanticAxis::Level};
+            const std::vector<SemanticAxis> axes_single = {SemanticAxis::Column, SemanticAxis::Singleton};
 
-            state->diagnostic_manager()->register_field("PSO4_from_gaseous_SO2_per_level", "PSO4 gas source", "kg/kg/s",
-                                                        DiagType::FIELD_2D, dims_2d);
-            state->diagnostic_manager()->register_field("PSO4_from_aqueous_SO2_per_level", "PSO4 aq source", "kg/kg/s",
-                                                        DiagType::FIELD_2D, dims_2d);
-            state->diagnostic_manager()->register_field("DMS_emission_flux", "DMS emission surface flux", "kg/m2/s",
-                                                        DiagType::FIELD_2D, dims_1d);
+            state->diagnostic_manager()->register_field_contract("PSO4_from_gaseous_SO2_per_level", "PSO4 gas source",
+                                                                 "kg/kg/s", DiagType::FIELD_2D, dims_2d,
+                                                                 DiagnosticPolicy::Instantaneous, 0.0, axes_level);
+            state->diagnostic_manager()->register_field_contract("PSO4_from_aqueous_SO2_per_level", "PSO4 aq source",
+                                                                 "kg/kg/s", DiagType::FIELD_2D, dims_2d,
+                                                                 DiagnosticPolicy::Instantaneous, 0.0, axes_level);
+            state->diagnostic_manager()->register_field_contract("DMS_emission_flux", "DMS emission surface flux",
+                                                                 "kg/m2/s", DiagType::FIELD_2D, dims_1d,
+                                                                 DiagnosticPolicy::Instantaneous, 0.0, axes_single);
 
-            const auto configured = state->config_manager() ? state->config_manager()->data.processes.find("so4chem")
-                                                            : std::map<std::string, ProcessConfig>::const_iterator{};
-            const bool has_config =
-                state->config_manager() && configured != state->config_manager()->data.processes.end();
-            const auto diagnostic_names = has_config ? configured->second.diag_species : std::vector<std::string>{};
-            for (const auto& species_name : diagnostic_names) {
-                if (state->chemistry().mechanism && state->chemistry().mechanism->contains(species_name)) {
-                    const auto i = state->chemistry().mechanism->index_of(species_name);
-                    const auto& meta = state->chemistry().species_list[i];
-                    std::string diag_name = "Production_rate_" + meta.short_name;
-                    state->diagnostic_manager()->register_field(diag_name, "Production rate " + meta.short_name,
-                                                                "kg/kg/s", DiagType::FIELD_2D, dims_2d);
-
-                    // Track diagnostic species index (1-based)
-                    diagnostic_species_id.push_back(i + 1);
-                }
+            // One Production_rate_<sp> field per selected species (names
+            // unchanged from the legacy per-species convention).  run() fills
+            // each field from its OWN slot of the bridge's packed buffer.
+            for (const int global_index : diagnostic_species_id) {
+                const auto& meta = state->chemistry().species_list[static_cast<std::size_t>(global_index - 1)];
+                std::string diag_name = "Production_rate_" + meta.short_name;
+                state->diagnostic_manager()->register_field_contract(
+                    diag_name, "Production rate " + meta.short_name, "kg/kg/s", DiagType::FIELD_2D, dims_2d,
+                    DiagnosticPolicy::Instantaneous, 0.0, axes_level);
             }
         }
     }
@@ -194,7 +223,20 @@ namespace catchem {
             mw_g[i] = state->chemistry().species_list[i].mw_g;
         }
 
-        // 5. Invoke flat science bridge
+        // 5. Invoke flat science bridge.  diagnostic_species_id (built in
+        // init) holds GLOBAL 1-based catalog indices — the space the GOCART
+        // scheme matches on.  The packed diag_prod_rate scratch receives one
+        // [ncol, nz] slab per selected species so each Production_rate_<sp>
+        // field gets its OWN slot (the former pso4_so2 buffer collapsed every
+        // species onto slot 1).  When diagnostics are off, forward a valid
+        // size-1 id dummy holding 0 and a zero count (mirrors the other
+        // bridges' no_diag_species guard).
+        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        static const int no_diag_species = 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
+        const int slab = state->column_count() * state->level_count();
+        std::vector<double> diag_prod_rate(static_cast<size_t>(slab) * (forward_diag ? n_diag_species : 1), 0.0);
         run_so4chem_science_bridge(
             state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
             diagnostics_enabled ? 1 : 0, gocart_update_so2 ? 1 : 0, state->clock().year, state->clock().month,
@@ -202,8 +244,8 @@ namespace catchem {
             delp_ptr, pmid_ptr, t_ptr, z_ptr, hflux_ptr, lat_ptr, lon_ptr, lwi.data(), pblh_ptr, u10m_ptr, ustar_ptr,
             v10m_ptr, const_cast<double*>(z0_ptr), mw_g.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
             mock_tendency.data(), (bool*)firsttime.data(), nymd_last.data(), nhms_last_recycle.data(),
-            xh2o2_init.data(), pso4_so2.data(), pso4_g_so2.data(), pso4_aq_so2.data(), pso2_dms.data(), dms_flux.data(),
-            diagnostic_species_id.data(), diagnostic_species_id.size());
+            xh2o2_init.data(), pso4_g_so2.data(), pso4_aq_so2.data(), pso2_dms.data(), dms_flux.data(),
+            diag_prod_rate.data(), diag_ids, n_diag_species);
 
         // 6. Map persistent column diagnostics straight to registered C++ Diagnostics Views
         if (state->diagnostic_manager() && diagnostics_enabled) {
@@ -220,14 +262,15 @@ namespace catchem {
             if (diag_dms_flux)
                 std::copy(dms_flux.begin(), dms_flux.end(), diag_dms_flux);
 
-            // Map individual species production rate arrays (mapping levels and columns)
-            for (const auto diagnostic_index : diagnostic_species_id) {
-                const auto& meta = state->chemistry().species_list[static_cast<std::size_t>(diagnostic_index - 1)];
+            // Scatter each packed slot into its own Production_rate_<sp> field
+            // (field names unchanged from the legacy per-species convention).
+            for (int d = 0; d < n_diag_species; ++d) {
+                const auto& meta = state->chemistry().species_list[static_cast<std::size_t>(diagnostic_species_id[d]) - 1];
                 std::string diag_name = "Production_rate_" + meta.short_name;
                 double* diag_prod = (double*)state->diagnostic_manager()->get_host_pointer(diag_name);
-                if (diag_prod) {
-                    std::copy(pso4_so2.begin(), pso4_so2.end(), diag_prod);
-                }
+                if (diag_prod)
+                    std::copy(diag_prod_rate.begin() + static_cast<std::ptrdiff_t>(d) * slab,
+                              diag_prod_rate.begin() + static_cast<std::ptrdiff_t>(d + 1) * slab, diag_prod);
             }
         }
 
