@@ -121,6 +121,14 @@ References for the schemes implemented in the [CATChem processes](processes/inde
 
 37. **Collow, A. B., et al.** (2024). Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS). *Geoscientific Model Development*, 17, 1443-1468. <https://doi.org/10.5194/gmd-17-1443-2024>
 
+## UFS-Chem References
+
+The two papers documenting UFS-Chem version 1.0 (see [UFS-Chem](ufschem/index.md)).
+
+38. **He, J., Zhang, L., Schwantes, R. H., Baker, B., et al.** (2026). Incorporating gas-phase chemistry into the Unified Forecast System (UFS) for global air quality applications. *Journal of Advances in Modeling Earth Systems*, 18(3). <https://doi.org/10.1029/2025MS005299>
+
+39. **Zhang, L., Li, H., Grell, G. A., Bhattacharjee, P. S., et al.** (2026). Development of the CCPP-based GEFS-aerosols component in the Unified Forecast System for subseasonal prediction (UFS-Chem v1.0). *Geoscientific Model Development*, 19, 8597–8626. <https://doi.org/10.5194/gmd-19-8597-2026>
+
 ## Contributing References
 
 If you have scientific papers, reports, or other references that should be included in this list, please:
