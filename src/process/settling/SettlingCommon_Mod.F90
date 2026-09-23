@@ -404,7 +404,72 @@ contains
          this%settling_config%species_is_dust(i) = chem_state%ChemSpecies(species_idx)%is_dust
       end do
 
+      ! Optics tables without a wet-density variable would make the optics-table
+      ! settling path compute negative fall speeds; derive the density instead.
+      call repair_mie_density(this, chem_state)
+
    end subroutine load_species_from_chem_state
+
+   !> Fill in the wet particle density of any Mie table bin that lacks it.
+   !!
+   !! GOCART2G_MieMod stores rhop = -999 when the optics file has no `rhop`
+   !! variable (true of the optics_*.v1_3 / v3_3 / v15_3 tables shipped with the
+   !! UFS regression-test input data). Chem_SettlingSimple feeds that value to
+   !! Chem_CalcVsettle, so every settling velocity on the simple_scheme path
+   !! comes out negative (CATChem issue #202). Reconstruct rhop(rh) from the
+   !! table's own effective radius and the species' dry density from the species
+   !! YAML, the way the newer tables define it: dry mass plus condensed water.
+   subroutine repair_mie_density(this, chem_state)
+      use ChemState_Mod, only: ChemStateType
+      class(SettlingProcessConfig), intent(inout) :: this
+      type(ChemStateType), pointer, intent(in) :: chem_state
+
+      real(fp), parameter :: rho_water = 1000.0_fp  ! [kg m-3]
+      integer :: i, m, bin, p, irh
+      real(fp) :: rhod, r_dry, r_wet, r_dry3, r_wet3
+
+      if (.not. allocated(chem_state%MieData)) return
+
+      do i = 1, this%settling_config%n_species
+         m = this%settling_config%species_mie_map(i)
+         if (m < 1 .or. m > size(chem_state%MieData)) cycle
+         if (.not. associated(chem_state%MieData(m)%rhop)) cycle
+         if (.not. associated(chem_state%MieData(m)%reff)) cycle
+
+         ! Same bin rule as compute_gocart: trailing digit 1-5 selects the bin.
+         bin = 1
+         p = len_trim(this%settling_config%species_names(i))
+         if (p >= 1) then
+            select case (this%settling_config%species_names(i)(p:p))
+             case ('1'); bin = 1
+             case ('2'); bin = 2
+             case ('3'); bin = 3
+             case ('4'); bin = 4
+             case ('5'); bin = 5
+            end select
+         end if
+         if (bin > chem_state%MieData(m)%nbin) bin = 1
+
+         if (chem_state%MieData(m)%rhop(1, bin) > 0.0_fp) cycle  ! table has it
+
+         rhod = this%settling_config%species_density(i)
+         if (rhod <= 0.0_fp) cycle  ! nothing to derive from; leave for validation
+
+         r_dry = real(chem_state%MieData(m)%reff(1, bin), fp)   ! rh = 0 entry
+         if (r_dry <= 0.0_fp) cycle
+         r_dry3 = r_dry**3
+         do irh = 1, chem_state%MieData(m)%nrh
+            r_wet = max(real(chem_state%MieData(m)%reff(irh, bin), fp), r_dry)
+            r_wet3 = r_wet**3
+            chem_state%MieData(m)%rhop(irh, bin) = &
+               real((rhod * r_dry3 + rho_water * (r_wet3 - r_dry3)) / r_wet3, kind(chem_state%MieData(m)%rhop))
+         end do
+         write(*, '(A,A,A,I0,A,ES10.3,A)') 'INFO: settling: Mie table "', &
+            trim(chem_state%MieNames(m)), '" bin ', bin, &
+            ' has no rhop; derived wet density from rEff and dry density ', rhod, ' kg/m3'
+      end do
+
+   end subroutine repair_mie_density
 
 
    !> Load gocart scheme configuration from master YAML
@@ -514,6 +579,7 @@ contains
       ! Allocate diagnostic species indices array
       if (allocated(this%settling_config%diagnostic_species_id)) deallocate(this%settling_config%diagnostic_species_id)
       allocate(this%settling_config%diagnostic_species_id(this%settling_config%n_diagnostic_species))
+      this%settling_config%diagnostic_species_id = 0  ! 0 = unresolved: never matches a species index
 
       ! Map each diagnostic species name to its index in species_names
       do i = 1, this%settling_config%n_diagnostic_species

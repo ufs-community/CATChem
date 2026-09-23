@@ -550,6 +550,7 @@ contains
       ! Allocate diagnostic species indices array
       if (allocated(this%wetdep_config%diagnostic_species_id)) deallocate(this%wetdep_config%diagnostic_species_id)
       allocate(this%wetdep_config%diagnostic_species_id(this%wetdep_config%n_diagnostic_species))
+      this%wetdep_config%diagnostic_species_id = 0  ! 0 = unresolved: never matches a species index
 
       ! Map each diagnostic species name to its index in species_names
       do i = 1, this%wetdep_config%n_diagnostic_species

@@ -65,6 +65,7 @@ contains
    !! @param[inout] settling_velocity_per_species_per_level    settling velocity per species per level [m/s] (num_layers, num_species)
    !! @param[inout] settling_flux_per_species    settling flux per species across column [kg/m2/s] (num_species)
    !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
+   !! @param[out] rc Error status: CC_SUCCESS, or non-zero if Mie mapping or a GOCART settling call failed
    subroutine compute_gocart( &
       num_layers, &
       num_species, &
@@ -86,7 +87,8 @@ contains
       species_tendencies, &
       settling_velocity_per_species_per_level, &
       settling_flux_per_species, &
-      diagnostic_species_id &
+      diagnostic_species_id, &
+      rc &
       )
       ! Uses
       USE GOCART2G_Process, only: Chem_SettlingSimple, Chem_Settling
@@ -112,9 +114,14 @@ contains
       real(fp), intent(inout), optional :: settling_velocity_per_species_per_level(:,:)
       real(fp), intent(inout), optional :: settling_flux_per_species(:)
       integer, intent(in), optional :: diagnostic_species_id(:)  ! Indices mapping diagnostic species to species array
+      ! Error status returned to the caller (CC_SUCCESS or the failing GOCART/Mie code).
+      ! It used to be a local, so a failure inside this routine was invisible to the
+      ! process interface, which then wrote the pre-zeroed tendencies back over the
+      ! tracers and left every settling diagnostic at zero (CATChem issue #202).
+      integer, intent(out) :: rc
 
       ! Local variables
-      integer :: rc, species_idx, p
+      integer :: species_idx, p
       integer :: diag_idx  ! For diagnostic species indexing
       integer :: bin  ! For bin index
       integer :: klid  ! For pressure lid index

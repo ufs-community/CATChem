@@ -97,6 +97,13 @@ program test_settling_integration
       goto 999
    end if
    write(output_unit,'(A)') '  ✓ Meteorological conditions configured'
+   call setup_chem(core, rc)
+   if (rc /= CC_SUCCESS) then
+      write(error_unit,'(A)') 'ERROR: Failed to seed aerosol concentrations'
+      all_tests_passed = .false.
+      goto 999
+   end if
+   write(output_unit,'(A)') '  ✓ Aerosol concentrations seeded (settling flux needs mass to move)'
 
    ! Step 3: Testing settling process with all schemes
    write(output_unit,'(A)') ''
@@ -175,6 +182,36 @@ program test_settling_integration
 contains
 
    !> Set up realistic meteorological conditions for settling testing
+   !> Seed every aerosol species with a non-zero mixing ratio.
+   !! The chem state starts at zero; with nothing in the column the settling
+   !! flux diagnostic is legitimately zero even when the kernel runs, so the
+   !! zero-sum assertion on settling_flux_* would be meaningless (issue #202).
+   subroutine setup_chem(core_arg, rc_arg)
+      type(CATChemCoreType), intent(inout) :: core_arg
+      integer, intent(out) :: rc_arg
+
+      type(StateManagerType), pointer :: state_mgr
+      type(ChemStateType), pointer :: chem_state
+      integer :: s, n_seeded
+
+      rc_arg = CC_SUCCESS
+      state_mgr => core_arg%get_state_manager()
+      chem_state => state_mgr%get_chem_state_ptr()
+      if (.not. associated(chem_state)) then
+         rc_arg = CC_FAILURE
+         return
+      end if
+
+      n_seeded = 0
+      do s = 1, chem_state%nSpecies
+         if (.not. chem_state%ChemSpecies(s)%is_aerosol) cycle
+         if (.not. associated(chem_state%ChemSpecies(s)%conc)) cycle
+         chem_state%ChemSpecies(s)%conc(:,:,:) = 1.0_fp   ! ug/kg, uniform column
+         n_seeded = n_seeded + 1
+      end do
+      if (n_seeded == 0) rc_arg = CC_FAILURE
+   end subroutine setup_chem
+
    subroutine setup_met(core_arg, rc_arg)
       type(CATChemCoreType), intent(inout) :: core_arg
       integer, intent(out) :: rc_arg
@@ -535,8 +572,8 @@ contains
             if (field_passed) then
                ! Check if sum of array is zero
                if (rae(sum(array_1d_ptr), 0.0_fp)) then
-                  write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
-                  !field_passed = .false.
+                  write(error_unit,'(A,A)') '    ERROR: Field has zero sum (all elements are zero): ', trim(field_name)
+                  field_passed = .false.  ! settling always produces a velocity and a flux; all-zero means the kernel did not run (issue #202)
                else
                   write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if
@@ -576,10 +613,12 @@ contains
             end do outer_loop_2d
 
             if (field_passed) then
+               write(output_unit,'(A,A,A,ES12.4,A,ES12.4)') '        stats ', trim(field_name), &
+                  ': max = ', maxval(array_2d_ptr), '  min = ', minval(array_2d_ptr)
                ! Check if sum of array is zero
                if (rae(sum(array_2d_ptr), 0.0_fp)) then
-                  write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
-                  !field_passed = .false.
+                  write(error_unit,'(A,A)') '    ERROR: Field has zero sum (all elements are zero): ', trim(field_name)
+                  field_passed = .false.  ! settling always produces a velocity and a flux; all-zero means the kernel did not run (issue #202)
                else
                   write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if
@@ -621,10 +660,13 @@ contains
             end do outer_loop_3d
 
             if (field_passed) then
+               write(output_unit,'(A,A,A,ES12.4,A,ES12.4,A,ES12.4)') '        stats ', trim(field_name), &
+                  ': max = ', maxval(array_3d_ptr), '  max(k=1,surface) = ', maxval(array_3d_ptr(:,:,1)), &
+                  '  max(k=top) = ', maxval(array_3d_ptr(:,:,size(array_3d_ptr,3)))
                ! Check if sum of array is zero
                if (rae(sum(array_3d_ptr), 0.0_fp)) then
-                  write(error_unit,'(A,A)') '    WARNING: Field has zero sum (all elements are zero): ', trim(field_name)
-                  !field_passed = .false.
+                  write(error_unit,'(A,A)') '    ERROR: Field has zero sum (all elements are zero): ', trim(field_name)
+                  field_passed = .false.  ! settling always produces a velocity and a flux; all-zero means the kernel did not run (issue #202)
                else
                   write(output_unit,'(A,A)') '        ✓ All array elements are finite and non-negative: ', trim(field_name)
                end if

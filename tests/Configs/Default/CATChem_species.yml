@@ -89,8 +89,14 @@
   __is_aerosol: true   #gocart treat it as a gas, but we treat it as aerosol
   __is_drydep: true
   __is_wetdep: true
-  __radius: 0.0 #placeholder
-  __density: 0.0 #placeholder
+  # The former 0.0 placeholders make GOCART Chem_Settling reject the species
+  # (non-positive radius) on the metadata settling path (simple_scheme: false),
+  # which aborted the kernel for every species after msa (issue #202). Values
+  # match feature/rework: 0.01 um stays below the wetdep fine/coarse washout
+  # threshold (0.05 um), so wet deposition behaves as before; both are unused on
+  # the optics-table settling path (simple_scheme: true).
+  __radius: 0.01
+  __density: 1700.0
   __dd_f0: 0.0
   __dd_hstar: 0.0
   __dd_DvzAerSnow: 0.03
