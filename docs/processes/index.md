@@ -42,13 +42,24 @@ Processes involving multiple atmospheric phases:
 
 ## Available Processes
 
-- **[SeaSalt](seasalt/index.md)** - SeaSalt atmospheric process
-- **[Dust](dust/index.md)** - Dust atmospheric process
-- **[Dust](dust/index.md)** - Emission process (sources)
-- **[CleanTest](cleantest/index.md)** - Emission process (sources)
-- **[SeaSalt](seasalt/index.md)** - Emission process (sources)
-- **[TestProcess](testprocess/index.md)** - Emission process (sources)
-*This section will be automatically updated as new processes are generated.*
+**Emission**
+
+- **[Dust](dust/dust.md)** - Windblown mineral dust emission (FENGSHA, GINOUX)
+- **[Sea Salt](seasalt/seasalt.md)** - Marine aerosol emission (GEOS12, GONG03, GONG97)
+
+**Chemistry**
+
+- **[Carbon Chemistry](carbchem/carbchem.md)** - Carbonaceous aerosol chemistry (GOCART)
+- **[Sulfate Chemistry](so4chem/so4chem.md)** - Sulfate aerosol chemistry (GOCART)
+
+**Deposition**
+
+- **[Dry Deposition](drydep/drydep.md)** - Surface dry deposition (GOCART, WESELY, ZHANG)
+- **[Wet Deposition](wetdep/wetdep.md)** - Precipitation scavenging (JACOB)
+
+**Transport**
+
+- **[Settling](settling/settling.md)** - Gravitational settling (GOCART)
 
 ## Using Processes
 
@@ -83,7 +94,7 @@ end type
 
 ## Creating New Processes
 
-See the [Process Generator Tutorial](../developer-guide/processes/generator-tutorial.md) for detailed instructions on creating new processes.
+See the [Process Generator Tutorial](../developer-guide/processes/process-generator.md) for detailed instructions on creating new processes.
 
 ## Process Development
 

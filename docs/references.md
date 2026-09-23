@@ -92,6 +92,43 @@ This document contains scientific references and citations relevant to CATChem d
 
 27. **Sandve, G. K., et al.** (2013). Ten simple rules for reproducible computational research. *PLoS computational biology*, 9(10), e1003285.
 
+## CATChem Process Scheme References
+
+References for the schemes implemented in the [CATChem processes](processes/index.md).
+
+### Dust
+
+28. **Ginoux, P., et al.** (2001). Sources and distributions of dust aerosols simulated with the GOCART model. *Journal of Geophysical Research*, 106(D17), 20255-20273. <https://doi.org/10.1029/2000JD000053>
+29. **Zhang, L., et al.** (2022). Development and evaluation of the Aerosol Forecast Member in the National Center for Environment Prediction (NCEP)'s Global Ensemble Forecast System (GEFS-Aerosols v1). *Geoscientific Model Development*, 15, 5337-5369. <https://doi.org/10.5194/gmd-15-5337-2022>
+
+### Sea Salt
+
+30. **Gong, S. L., Barrie, L. A., & Blanchet, J.-P.** (1997). Modeling sea-salt aerosols in the atmosphere: 1. Model development. *Journal of Geophysical Research*, 102(D3), 3805-3818. <https://doi.org/10.1029/96JD02953>
+31. **Gong, S. L.** (2003). A parameterization of sea-salt aerosol source function for sub- and super-micron particles. *Global Biogeochemical Cycles*, 17(4), 1097. <https://doi.org/10.1029/2003GB002079>
+32. **Jaeglé, L., et al.** (2011). Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations. *Atmospheric Chemistry and Physics*, 11(7), 3137-3157. <https://doi.org/10.5194/acp-11-3137-2011>
+
+### Dry Deposition
+
+33. **Wesely, M. L.** (1989). Parameterization of surface resistances to gaseous dry deposition in regional-scale numerical models. *Atmospheric Environment*, 23(6), 1293-1304. <https://doi.org/10.1016/0004-6981(89)90153-4>
+34. **Zhang, L., Gong, S., Padro, J., & Barrie, L.** (2001). A size-segregated particle dry deposition scheme for an atmospheric aerosol module. *Atmospheric Environment*, 35(3), 549-560. <https://doi.org/10.1016/S1352-2310(00)00326-5>
+35. **Emerson, E. W., et al.** (2020). Revisiting particle dry deposition and its role in radiative effect estimates. *Proceedings of the National Academy of Sciences*, 117(42), 26076-26082. <https://doi.org/10.1073/pnas.2014761117>
+
+### Wet Deposition
+
+36. **Liu, H., Jacob, D. J., Bey, I., & Yantosca, R. M.** (2001). Constraints from 210Pb and 7Be on wet deposition and transport in a global three-dimensional chemical tracer model driven by assimilated meteorological fields. *Journal of Geophysical Research*, 106(D11), 12109-12128. <https://doi.org/10.1029/2000JD900839>
+
+### Chemistry and Settling (GOCART-2G)
+
+37. **Collow, A. B., et al.** (2024). Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS). *Geoscientific Model Development*, 17, 1443-1468. <https://doi.org/10.5194/gmd-17-1443-2024>
+
+## UFS-Chem References
+
+The two papers documenting UFS-Chem version 1.0 (see [UFS-Chem](ufschem/index.md)).
+
+38. **He, J., Zhang, L., Schwantes, R. H., Baker, B., et al.** (2026). Incorporating gas-phase chemistry into the Unified Forecast System (UFS) for global air quality applications. *Journal of Advances in Modeling Earth Systems*, 18(3). <https://doi.org/10.1029/2025MS005299>
+
+39. **Zhang, L., Li, H., Grell, G. A., Bhattacharjee, P. S., et al.** (2026). Development of the CCPP-based GEFS-aerosols component in the Unified Forecast System for subseasonal prediction (UFS-Chem v1.0). *Geoscientific Model Development*, 19, 8597–8626. <https://doi.org/10.5194/gmd-19-8597-2026>
+
 ## Contributing References
 
 If you have scientific papers, reports, or other references that should be included in this list, please:
@@ -122,7 +159,7 @@ When citing CATChem in scientific publications:
 
 ```
 CATChem Development Team (2024). CATChem: Configurable ATmospheric CHEmistry model.
-Available at: https://github.com/your-org/catchem
+Available at: https://github.com/ufs-community/CATChem
 ```
 
 For specific process implementations, please also cite the relevant scientific references listed above.

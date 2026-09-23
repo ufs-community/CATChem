@@ -1,1 +1,19 @@
-Copyright (C) 2023 Cooperative Institute for Research In Environmental Sciences and Cooperative Institute for Satellite Earth System Studies
+CATChem (Configurable ATmospheric Chemistry)
+Copyright 2023-2026 Cooperative Institute for Research in Environmental Sciences (CIRES),
+Cooperative Institute for Satellite Earth System Studies (CISESS), and contributors
+
+This product includes software developed at the National Oceanic and Atmospheric
+Administration (NOAA) by the Office of Oceanic and Atmospheric Research, including the
+Air Resources Laboratory, the Chemical Sciences Laboratory, and the Global Systems
+Laboratory; by the National Weather Service; and by partner cooperative institutes
+(https://github.com/ufs-community/CATChem).
+
+Software code created by U.S. Government employees is not subject to copyright in the
+United States (17 U.S.C. §105). The United States/Department of Commerce reserves
+all rights to seek and obtain copyright protection in countries other than the United
+States for Software authored in its entirety by the Department of Commerce. To this end,
+the Department of Commerce hereby grants to Recipient a royalty-free, nonexclusive
+license to use, copy, and create derivative works of the Software outside of the United
+States.
+
+Licensed under the Apache License, Version 2.0. See the LICENSE file.

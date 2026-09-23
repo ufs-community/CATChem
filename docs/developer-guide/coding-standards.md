@@ -90,7 +90,7 @@ All code must be documented using Doxygen-style comments. See the [Documentation
 
 Robust error handling is critical.
 
-- **Use the `ErrorManagerType`**: For all new code, use the modern error handling system as described in the [Error Handling Guide](core/error-handling.md).
+- **Use the `ErrorManagerType`**: For all new code, use the modern error handling system as described in the [Error Handling Guide](../core-concepts/error-handling.md).
 - **Return Codes**: All subroutines that can fail must have a return code argument (`rc`).
 - **Check Return Codes**: Always check the return code of any subroutine that you call.
 - **Provide Context**: Use the `push_context` and `pop_context` procedures of the `ErrorManagerType` to provide a clear context for errors.
