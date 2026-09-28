@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
         state->bind_met_field_2d("U10M", u10m.data());
         state->bind_met_field_2d("V10M", v10m.data());
         state->bind_met_field_2d("LWI", lwi.data());
+        // NUOPC supplies Z0 but not Z0H. SO4chem must derive Z0H = 0.1 * Z0.
         state->bind_met_field_2d("Z0", z0.data());
         state->bind_met_field_3d("T", temperature.data());
         state->bind_met_field_3d("AIRDEN", airden.data());

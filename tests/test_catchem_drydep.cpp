@@ -77,6 +77,7 @@ namespace {
             auto& proc = runtime_config->data.processes["drydep"];
             proc.activate = true;
             proc.diagnostics = true;
+            proc.diag_species.clear(); // Match the user's [] configuration: all drydep-enabled species.
             proc.set_settings_node(settings);
         }
         state->attach_config_manager(runtime_config);
@@ -218,15 +219,28 @@ int main(int argc, char* argv[]) {
             bool all_finite = true;
             std::size_t nan_count = 0;
             if (diag && diag->has_field("drydep_velocity_per_species")) {
+                const auto& dims = diag->get_field("drydep_velocity_per_species")->dimensions;
                 const double* vel =
                     static_cast<const double*>(diag->get_host_read_pointer("drydep_velocity_per_species"));
-                const std::size_t n = static_cast<std::size_t>(fix.n_cols) * fix.n_species;
+                check(dims.size() == 2 && dims[0] == fix.n_cols && dims[1] > 0,
+                      "drydep velocity diagnostic has packed column/species dimensions");
+                const std::size_t n = static_cast<std::size_t>(dims[0]) * static_cast<std::size_t>(dims[1]);
+                double max_velocity = 0.0;
                 for (std::size_t i = 0; i < n; ++i) {
                     if (!std::isfinite(vel[i])) {
                         all_finite = false;
                         ++nan_count;
                     }
+                    max_velocity = std::max(max_velocity, vel[i]);
                 }
+                check(max_velocity >= 1.0e-4, "deposition velocity diagnostic is populated with the GOCART floor");
+                std::cout << "  drydep velocity max = " << max_velocity << " m/s\n";
+                std::cout << "  drydep velocity slots:";
+                const auto& labels = diag->get_unpack_labels("drydep_velocity_per_species");
+                for (int slot = 0; slot < dims[1]; ++slot)
+                    std::cout << " " << labels[static_cast<std::size_t>(slot)] << "="
+                              << vel[static_cast<std::size_t>(slot) * dims[0]];
+                std::cout << "\n";
             }
             check(all_finite, "all deposition velocities finite (no NaN from z-slot mixup)");
             if (!all_finite)
@@ -237,6 +251,63 @@ int main(int argc, char* argv[]) {
             bool conc_finite = std::all_of(conc, conc + static_cast<size_t>(fix.n_cols) * fix.n_levels * fix.n_species,
                                            [](double v) { return std::isfinite(v); });
             check(conc_finite, "concentrations remain finite after drydep");
+        }
+
+        // --- SO2 diagnostic follows the bound concentration column by column --
+        // Use a strongly nonuniform surface SO2 pattern.  This catches a
+        // species/column stride error that a max-only diagnostic comparison
+        // would miss: drydep_con_so2 must be exactly the concentration loss
+        // applied to the corresponding surface column.
+        {
+            Fixture fix;
+            const int so2_species = 0; // Default fixture catalog: so2 is slot 0.
+            const std::vector<double> initial_so2 = {1.0e-12, 1.0e-10, 1.0e-8, 1.0e-6};
+            for (int col = 0; col < fix.n_cols; ++col)
+                fix.chem_conc[static_cast<std::size_t>(col) +
+                              static_cast<std::size_t>(fix.n_cols) * fix.n_levels * so2_species] =
+                    initial_so2[static_cast<std::size_t>(col)];
+
+            auto core = std::make_shared<catchem::Core>(fix.n_cols, fix.n_levels, fix.n_species);
+            auto state = bind_state(core, fix, F_ALL);
+            state->clock().timestep = 3600.0;
+            auto drydep = catchem::ProcessRegistry::get_instance().create("drydep");
+            drydep->prepare_inputs(state);
+            drydep->init(state);
+            drydep->run(state);
+            state->sync_to_host();
+
+            auto* diag = state->diagnostic_manager().get();
+            bool diagnostic_matches_loss = diag && diag->has_field("drydep_con_per_species");
+            if (diagnostic_matches_loss) {
+                const auto& labels = diag->get_unpack_labels("drydep_con_per_species");
+                const auto slot_it = std::find(labels.begin(), labels.end(), "so2");
+                diagnostic_matches_loss = slot_it != labels.end();
+                if (diagnostic_matches_loss) {
+                    const int slot = static_cast<int>(std::distance(labels.begin(), slot_it));
+                    const double* deposited =
+                        static_cast<const double*>(diag->get_host_read_pointer("drydep_con_per_species"));
+                    for (int col = 0; col < fix.n_cols; ++col) {
+                        const std::size_t chemistry_index =
+                            static_cast<std::size_t>(col) +
+                            static_cast<std::size_t>(fix.n_cols) * fix.n_levels * so2_species;
+                        const double applied_loss =
+                            initial_so2[static_cast<std::size_t>(col)] - fix.chem_conc[chemistry_index];
+                        const double reported_loss =
+                            deposited[static_cast<std::size_t>(col) + static_cast<std::size_t>(fix.n_cols) * slot];
+                        const double tolerance = std::max(1.0e-20, std::abs(applied_loss) * 1.0e-5);
+                        diagnostic_matches_loss =
+                            diagnostic_matches_loss && std::abs(reported_loss - applied_loss) <= tolerance;
+                    }
+                    // The deliberately increasing input makes the diagnostic
+                    // extrema a stride/layout assertion as well as a value check.
+                    diagnostic_matches_loss =
+                        diagnostic_matches_loss &&
+                        deposited[static_cast<std::size_t>(slot) * fix.n_cols] <
+                            deposited[static_cast<std::size_t>(slot) * fix.n_cols + fix.n_cols - 1];
+                }
+            }
+            check(diagnostic_matches_loss,
+                  "drydep_con_so2 equals the applied SO2 loss in every column (including min/max ordering)");
         }
 
         std::cout << (failures == 0 ? "SUCCESS: all drydep assertions passed.\n"

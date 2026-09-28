@@ -16,7 +16,10 @@ namespace catchem {
         bool gocart_update_so2 = true;
 
         // Persistent column states
-        std::vector<char> firsttime;
+        // Stored as C int rather than char/bool so the Fortran bridge has an
+        // exact, alias-safe integer(c_int) ABI.  std::vector<bool> is packed
+        // and vector<char> cannot legally be reinterpreted as bool*.
+        std::vector<int> firsttime;
         std::vector<int> nymd_last;
         std::vector<int> nhms_last_recycle;
         std::vector<double> xh2o2_init;

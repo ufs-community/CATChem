@@ -374,22 +374,23 @@ void catchem_config_get_config_file_path(void* core_ptr, char* buffer, int max_l
     copy_string_to_buffer(core->get_config_manager()->config_file_path, buffer, max_len);
 }
 
-// Build provenance is injected by CMake (see src/core/CMakeLists.txt).  A source
-// tree configured without those definitions still links; the attributes degrade
-// to "unknown" instead of an empty string.
-#ifndef CATCHEM_BUILD_VERSION
-#define CATCHEM_BUILD_VERSION "unknown"
-#endif
-#ifndef CATCHEM_BUILD_COMMIT
-#define CATCHEM_BUILD_COMMIT "unknown"
+// IntelLLVM's compiler wrapper strips quotes from command-line definitions.
+// Its compiler macros select token stringification; other compilers receive
+// regular string-literal definitions from CMake.
+#if defined(__INTEL_LLVM_COMPILER) || defined(__INTEL_COMPILER)
+#define CATCHEM_STRINGIFY_IMPL(value) #value
+#define CATCHEM_STRINGIFY(value) CATCHEM_STRINGIFY_IMPL(value)
+#define CATCHEM_PROVENANCE_STRING(value) CATCHEM_STRINGIFY(value)
+#else
+#define CATCHEM_PROVENANCE_STRING(value) value
 #endif
 
 void catchem_get_build_version(char* buffer, int max_len) {
-    copy_string_to_buffer(CATCHEM_BUILD_VERSION, buffer, max_len);
+    copy_string_to_buffer(CATCHEM_PROVENANCE_STRING(CATCHEM_BUILD_VERSION), buffer, max_len);
 }
 
 void catchem_get_build_commit(char* buffer, int max_len) {
-    copy_string_to_buffer(CATCHEM_BUILD_COMMIT, buffer, max_len);
+    copy_string_to_buffer(CATCHEM_PROVENANCE_STRING(CATCHEM_BUILD_COMMIT), buffer, max_len);
 }
 
 int catchem_config_get_process_active(void* core_ptr, const char* process_name) {

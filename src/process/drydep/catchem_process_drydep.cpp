@@ -265,8 +265,14 @@ namespace catchem {
         double* diag_con = nullptr;
         double* diag_vel = nullptr;
         if (diagnostics_enabled) {
-            diag_con = (double*)state->diagnostic_manager()->get_host_pointer("drydep_con_per_species");
-            diag_vel = (double*)state->diagnostic_manager()->get_host_pointer("drydep_velocity_per_species");
+            // The Fortran bridge fills these buffers in place.  Use the write
+            // accessor so the diagnostic manager records the host as the
+            // current copy; a read accessor can leave a stale device copy in
+            // control and cause the NUOPC exporter to see zeros later.
+            diag_con =
+                static_cast<double*>(state->diagnostic_manager()->get_host_write_pointer("drydep_con_per_species"));
+            diag_vel = static_cast<double*>(
+                state->diagnostic_manager()->get_host_write_pointer("drydep_velocity_per_species"));
         }
 
         // 4. Retrieve species configuration properties from ChemState

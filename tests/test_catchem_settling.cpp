@@ -114,7 +114,7 @@ namespace {
         YAML::Node gocart;
         gocart["scale_factor"] = 1.0;
         gocart["simple_scheme"] = false;
-        gocart["swelling_rh_max"] = 0.95;
+        gocart["swelling_method"] = 1;
         gocart["correction_maring"] = correction_maring;
         gocart["maring_dust_only"] = maring_dust_only;
         YAML::Node settings;
@@ -177,8 +177,7 @@ namespace {
         assert(mgr->has_field("settling_flux_per_species"));
         assert(mgr->get_field("settling_velocity_per_species_per_level")->dimensions ==
                std::vector<int>({fix.n_cols, fix.n_levels, n_aerosol}));
-        assert(mgr->get_field("settling_flux_per_species")->dimensions ==
-               std::vector<int>({fix.n_cols, n_aerosol}));
+        assert(mgr->get_field("settling_flux_per_species")->dimensions == std::vector<int>({fix.n_cols, n_aerosol}));
 
         const double* vel =
             static_cast<const double*>(mgr->get_host_pointer("settling_velocity_per_species_per_level"));
@@ -190,7 +189,10 @@ namespace {
         }
         bool any_positive = false;
         for (int i = 0; i < n; ++i)
-            if (vel[i] > 0.0) { any_positive = true; break; }
+            if (vel[i] > 0.0) {
+                any_positive = true;
+                break;
+            }
         assert(any_positive && "settling velocity diagnostics must be populated by the bridge");
         std::cout << "  PASS settling_diagnostics: fields present, velocity finite & >= 0" << std::endl;
     }

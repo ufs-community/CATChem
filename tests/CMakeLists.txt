@@ -10,6 +10,46 @@ configure_file(
   "${CMAKE_CURRENT_BINARY_DIR}/catchem_test_config.hpp"
 )
 
+# The complete Mie optics tables are external test data.  They are deliberately
+# excluded from the source tree (the full set is approximately 1.4 GB), so a
+# clean checkout must not register tests that require them.  Developers and
+# dedicated parity jobs can provide the tables at this cache-configurable path.
+set(
+  CATCHEM_SETTLING_OPTICS_FIXTURE_DIR
+  "${CMAKE_SOURCE_DIR}/specs/tmp"
+  CACHE PATH
+  "Directory containing external settling optics NetCDF fixtures"
+)
+set(
+  _catchem_settling_optics_fixture_files
+  optics_SS.v3_3.nc
+  optics_DU.v15_3.nc
+  optics_BC.v1_3.nc
+  optics_OC.v1_3.nc
+  optics_SU.v1_3.nc
+  optics_SS.v3_5.nc
+  optics_DU.v15_5.nc
+  optics_BC.v1_5.nc
+  optics_OC.v1_5.nc
+  optics_SU.v1_5.nc
+  optics_NI.v2_5.nc
+  optics_BRC.v1_5.nc
+)
+set(CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES TRUE)
+foreach(_fixture IN LISTS _catchem_settling_optics_fixture_files)
+  if(NOT EXISTS "${CATCHEM_SETTLING_OPTICS_FIXTURE_DIR}/${_fixture}")
+    set(CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES FALSE)
+    break()
+  endif()
+endforeach()
+if(NOT CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES)
+  message(
+    STATUS
+    "Settling optics fixture tests disabled: provide complete NetCDF tables in "
+    "${CATCHEM_SETTLING_OPTICS_FIXTURE_DIR} to enable them."
+  )
+endif()
+
 # Attach one or more semicolon-separated integrity labels to tests while
 # rejecting misspelled test names at configure time.
 function(catchem_label_tests labels)
@@ -443,25 +483,27 @@ add_process_unit_test(option_propagation CATChem_process_settling)
 # top-level "mie:" configuration parsing.  Both read the generated
 # catchem_test_config.hpp (optics fixture directory), so the binary dir is
 # added to the include path explicitly.
-add_executable(test_catchem_settling_optics test_catchem_settling_optics.cpp)
-target_link_libraries(
-  test_catchem_settling_optics
-  PRIVATE CATChem_core_cpp CATChem_core CATChem_process_settling
-)
-target_include_directories(
-  test_catchem_settling_optics
-  PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
-)
-set_target_properties(
-  test_catchem_settling_optics
-  PROPERTIES CXX_STANDARD 20 LINKER_LANGUAGE CXX
-)
-add_test(
-  NAME test_catchem_settling_optics
-  COMMAND test_catchem_settling_optics
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-catchem_label_tests("process;settling;optics" test_catchem_settling_optics)
+if(CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES)
+  add_executable(test_catchem_settling_optics test_catchem_settling_optics.cpp)
+  target_link_libraries(
+    test_catchem_settling_optics
+    PRIVATE CATChem_core_cpp CATChem_core CATChem_process_settling
+  )
+  target_include_directories(
+    test_catchem_settling_optics
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  set_target_properties(
+    test_catchem_settling_optics
+    PROPERTIES CXX_STANDARD 20 LINKER_LANGUAGE CXX
+  )
+  add_test(
+    NAME test_catchem_settling_optics
+    COMMAND test_catchem_settling_optics
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  catchem_label_tests("process;settling;optics" test_catchem_settling_optics)
+endif()
 
 add_executable(test_catchem_config_mie test_catchem_config_mie.cpp)
 target_link_libraries(
@@ -609,16 +651,19 @@ if(PYTHON_EXECUTABLE)
   # C++ equivalents of the legacy per-process integration tests.  Each case
   # enters through the C++ core, binds the shared MET/species fixture, and
   # runs exactly one process from the Default configuration.
-  foreach(
-    process_name
+  set(
+    _catchem_cpp_integration_processes
     seasalt
     dust
     carbchem
-    settling
     drydep
     so4chem
     wetdep
   )
+  if(CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES)
+    list(APPEND _catchem_cpp_integration_processes settling)
+  endif()
+  foreach(process_name IN LISTS _catchem_cpp_integration_processes)
     add_test(
       NAME test_cpp_${process_name}_integration
       COMMAND
@@ -647,15 +692,17 @@ if(PYTHON_EXECUTABLE)
 
   # Missing-host-input guard: dropping PMID from the staged MET profile must
   # abort the settling process with a named error (spec 011 US1).
-  add_test(
-    NAME test_cpp_settling_missing_pmid
-    COMMAND
-      ${PYTHON_EXECUTABLE}
-      ${CMAKE_CURRENT_SOURCE_DIR}/run_cpp_process_integration.py
-      --candidate-runner $<TARGET_FILE:default_parity_candidate_runner>
-      --process settling --drop-field PMID --source-root ${CMAKE_SOURCE_DIR}
-  )
-  catchem_label_tests("integration;cpp;settling" test_cpp_settling_missing_pmid)
+  if(CATCHEM_HAVE_SETTLING_OPTICS_FIXTURES)
+    add_test(
+      NAME test_cpp_settling_missing_pmid
+      COMMAND
+        ${PYTHON_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/run_cpp_process_integration.py
+        --candidate-runner $<TARGET_FILE:default_parity_candidate_runner>
+        --process settling --drop-field PMID --source-root ${CMAKE_SOURCE_DIR}
+    )
+    catchem_label_tests("integration;cpp;settling" test_cpp_settling_missing_pmid)
+  endif()
 endif()
 
 # Multi-Atmospheric Scenario Property Test

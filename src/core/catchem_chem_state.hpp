@@ -24,6 +24,7 @@ namespace catchem {
         // Pre-filtered category lists (0-based)
         std::vector<int> gas_indices;
         std::vector<int> aerosol_indices;
+        std::vector<int> settling_indices;
         std::vector<int> tracer_indices;
         std::vector<int> advected_indices;
         std::vector<int> drydep_indices;
@@ -41,6 +42,7 @@ namespace catchem {
 
             gas_indices.clear();
             aerosol_indices.clear();
+            settling_indices.clear();
             tracer_indices.clear();
             advected_indices.clear();
             drydep_indices.clear();
@@ -75,6 +77,7 @@ namespace catchem {
                 meta.is_advected = sp.is_advected;
                 meta.is_drydep = sp.is_drydep;
                 meta.is_wetdep = sp.is_wetdep;
+                meta.do_settling = sp.do_settling && meta.is_aerosol;
                 meta.is_photolysis = sp.is_photolysis;
                 meta.is_gocart_aero = sp.is_gocart_aero && !meta.is_gas;
                 meta.is_dust = sp.is_dust && !meta.is_gas;
@@ -123,6 +126,8 @@ namespace catchem {
                     gas_indices.push_back(index);
                 if (meta.is_aerosol)
                     aerosol_indices.push_back(index);
+                if (meta.is_aerosol && meta.do_settling)
+                    settling_indices.push_back(index);
                 if (meta.is_tracer)
                     tracer_indices.push_back(index);
                 if (meta.is_advected)

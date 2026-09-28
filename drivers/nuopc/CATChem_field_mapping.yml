@@ -7,8 +7,7 @@ import_fields:
   # RH is intentionally NOT imported. Upstream/develop derives RH internally
   # from T, QV, PMID (met_utilities::relative_humidity), and the C++ core uses
   # the identical formula. Importing a host RH here would override the
-  # derivation and diverge hydrophilic swelling (settling/wetdep) from the
-  # legacy baseline. Keep RH derived to preserve numerical parity.
+  # derivation and diverge the legacy settling/wet-deposition baseline.
   - standard_name: "inst_geop_interface"
     catchem_var: "Z"
     dimensions: 3

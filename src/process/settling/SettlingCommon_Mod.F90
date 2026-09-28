@@ -53,10 +53,7 @@ module SettlingCommon_Mod
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! settling velocity factor
       logical :: simple_scheme = .false.  ! read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      ! Wet swelling is now selected per species via the __hydrophilic species
-      ! attribute (hydrophilic -> Gerber growth, hydrophobic -> none), not a
-      ! single global method.
-      real(fp) :: swelling_rh_max = 0.95  ! clamp RH used for wet-swelling growth; the GOCART optics tables plateau rEff at RH>=0.95
+      integer :: swelling_method = 1  ! 1 Fitzgerald 1975; 2 Gerber 1985
       logical :: correction_maring = .false.  ! correct the settling velocity following Maring et al, 2003
       logical :: maring_dust_only = .true.  ! apply Maring (2003) correction to dust only (GOCART does not apply it to sea salt)
 

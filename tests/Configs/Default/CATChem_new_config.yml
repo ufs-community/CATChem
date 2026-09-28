@@ -268,7 +268,7 @@ processes:
       diagnostics: true
       diag_list: [bc_aviation]
     point: #not used for now
-      activate: true
+      activate: false
       scale_factor: 1.0
       topfraction: -1.0
       source_file: "INPUT/PT.nc"
@@ -438,13 +438,10 @@ processes:
       scale_factor: 1.0 #not doing anything for now since we cannot edit gocart2g module
       # Parity A/B baseline: match the upstream/develop (Fortran-core) run
       # exactly -- optics-table (Mie) settling with no Maring velocity
-      # correction.  The metadata path (simple_scheme: false) selects swelling
-      # per species via the __hydrophilic attribute and the swelling_rh_max
-      # clamp; neither applies here, so those keys are omitted.  Flip
-      # simple_scheme back to false (and set correction_maring as desired) to
-      # re-enable the branch's new settling science after the core-vs-core
-      # comparison is done.
+      # correction.  The metadata path (simple_scheme: false) uses
+      # swelling_method below.
       simple_scheme: true  #read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
+      swelling_method: 1   # 1 Fitzgerald 1975; 2 Gerber 1985 when simple_scheme is false
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
       maring_dust_only: true  #apply Maring correction to dust only (true) or all species (false)
   so4chem:

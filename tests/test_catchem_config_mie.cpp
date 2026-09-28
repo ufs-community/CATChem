@@ -42,15 +42,14 @@ int main() {
 
     // 1. Full section parses with directory and ordered file pairs.
     {
-        write("mie_full.yml",
-              "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
-              "mie:\n"
-              "  directory: \"./ExtData/monochromatic/\"\n"
-              "  files:\n"
-              "    SS: optics_SS.v3_3.nc\n"
-              "    DU: optics_DU.v15_3.nc\n"
-              "    BC: optics_BC.v1_3.nc\n"
-              "    NI: optics_NI.v2_5.nc\n");
+        write("mie_full.yml", "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
+                              "mie:\n"
+                              "  directory: \"./ExtData/monochromatic/\"\n"
+                              "  files:\n"
+                              "    SS: optics_SS.v3_3.nc\n"
+                              "    DU: optics_DU.v15_3.nc\n"
+                              "    BC: optics_BC.v1_3.nc\n"
+                              "    NI: optics_NI.v2_5.nc\n");
         catchem::ConfigManager cfg;
         cfg.load_from_file("mie_full.yml");
         check(cfg.data.mie.directory == "./ExtData/monochromatic/", "mie.directory parsed");
@@ -86,11 +85,10 @@ int main() {
 
     // 3. Directory omitted -> default './' with files still parsed.
     {
-        write("mie_nodefault.yml",
-              "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
-              "mie:\n"
-              "  files:\n"
-              "    SU: optics_SU.v1_3.nc\n");
+        write("mie_nodefault.yml", "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
+                                   "mie:\n"
+                                   "  files:\n"
+                                   "    SU: optics_SU.v1_3.nc\n");
         catchem::ConfigManager cfg;
         cfg.load_from_file("mie_nodefault.yml");
         check(cfg.data.mie.directory == "./", "mie.directory omitted defaults to './'");
@@ -99,11 +97,10 @@ int main() {
 
     // 4. Empty file value is rejected at load (fail loud, FR-009 adjacent).
     {
-        write("mie_emptyfile.yml",
-              "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
-              "mie:\n"
-              "  files:\n"
-              "    DU: \"\"\n");
+        write("mie_emptyfile.yml", "simulation:\n  nx: 1\n  ny: 1\n  nz: 1\n"
+                                   "mie:\n"
+                                   "  files:\n"
+                                   "    DU: \"\"\n");
         catchem::ConfigManager cfg;
         check(threw_containing([&] { cfg.load_from_file("mie_emptyfile.yml"); }, "no optics file name"),
               "empty optics file name is rejected naming the type");

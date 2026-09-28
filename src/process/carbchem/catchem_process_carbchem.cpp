@@ -54,30 +54,28 @@ namespace catchem {
                       {{"scheme", active_scheme},
                        {"gocart/time_days_hydrophobic_to_hydrophilic", std::to_string(gocart_time_days)}});
 
-        // 1. Resolve the diagnostic species set (parity with legacy).  The
-        // GOCART scheme matches diagnostic_species_id(diag_idx) == species_idx
-        // where species_idx is the GLOBAL catalog position (it loops over the
-        // full species list it is handed), so ids live in global 1-based
-        // space.  Default set = the explicit carbon species the scheme
-        // converts (oc1/oc2, bc1/bc2, plus br1/br2 where configured); an
-        // explicit diag_species overrides it and must name real mechanism
-        // species (fail-loud).  Names resolve case-insensitively against the
-        // mechanism's canonical (upper-cased) name map.
+        // 1. Resolve the diagnostic species set.  The scheme matches
+        // diagnostic_species_id(diag_idx) == species_idx where species_idx is
+        // the GLOBAL catalog position, so ids live in global 1-based space.
+        // An empty diag_species means every mechanism species; the science
+        // scheme writes only the species it handles.  This keeps diagnostic
+        // selection mechanism/config driven instead of embedding a species
+        // catalog in the process adapter.
         diagnostic_species_id.clear();
         const auto& settings = configured->second;
-        const std::vector<std::string> default_carbon = {"oc1", "oc2", "bc1", "bc2", "br1", "br2"};
-        const auto& requested = settings.diag_species.empty() ? default_carbon : settings.diag_species;
-        for (const auto& name : requested) {
-            std::string canonical = name;
-            std::transform(canonical.begin(), canonical.end(), canonical.begin(),
-                           [](unsigned char c) { return std::toupper(c); });
-            const auto found = state->chemistry().species_name_to_index.find(canonical);
-            if (found == state->chemistry().species_name_to_index.end()) {
-                if (settings.diag_species.empty())
-                    continue; // default set: tolerate species absent from this mechanism
-                throw std::invalid_argument("CarbChem diag_species names an unknown species: " + name);
+        if (settings.diag_species.empty()) {
+            for (std::size_t index = 0; index < state->chemistry().species_list.size(); ++index)
+                diagnostic_species_id.push_back(static_cast<int>(index) + 1);
+        } else {
+            for (const auto& name : settings.diag_species) {
+                std::string canonical = name;
+                std::transform(canonical.begin(), canonical.end(), canonical.begin(),
+                               [](unsigned char c) { return std::toupper(c); });
+                const auto found = state->chemistry().species_name_to_index.find(canonical);
+                if (found == state->chemistry().species_name_to_index.end())
+                    throw std::invalid_argument("CarbChem diag_species names an unknown species: " + name);
+                diagnostic_species_id.push_back(found->second + 1); // global, 1-based for the bridge
             }
-            diagnostic_species_id.push_back(found->second + 1); // global, 1-based for the bridge
         }
 
         if (!diagnostics_enabled)
@@ -148,10 +146,10 @@ namespace catchem {
         double* diag_phobic_flux = nullptr;
 
         if (state->diagnostic_manager() && diagnostics_enabled) {
-            diag_prod_mass = (double*)state->diagnostic_manager()->get_host_pointer("carbchem_prod_mass");
-            diag_loss_flux = (double*)state->diagnostic_manager()->get_host_pointer("carbchem_loss_flux");
-            diag_phobic_mass = (double*)state->diagnostic_manager()->get_host_pointer("carbchem_phobic_mass");
-            diag_phobic_flux = (double*)state->diagnostic_manager()->get_host_pointer("carbchem_phobic_flux");
+            diag_prod_mass = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_prod_mass");
+            diag_loss_flux = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_loss_flux");
+            diag_phobic_mass = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_phobic_mass");
+            diag_phobic_flux = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_phobic_flux");
         }
 
         double* conc_ptr = state->chemistry().conc ? state->chemistry().conc->host_write() : nullptr;

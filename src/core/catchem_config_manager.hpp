@@ -128,6 +128,9 @@ namespace catchem {
         bool is_advected = true;
         bool is_drydep = false;
         bool is_wetdep = false;
+        // Optional per-process overrides.  Defaults are derived from the
+        // phase/deposition metadata above so existing mechanisms are unchanged.
+        bool do_settling = true;
         bool is_photolysis = false;
         bool is_gocart_aero = false;
         bool is_dust = false;

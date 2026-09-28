@@ -51,7 +51,9 @@ target_include_directories(CATChem_core_cpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # Build provenance for diagnostic global attributes (feature 013, FR-011).
 target_compile_definitions(
   CATChem_core_cpp
-  PUBLIC CATCHEM_BUILD_VERSION="${CATCHEM_VERSION_FULL}" CATCHEM_BUILD_COMMIT="${CATCHEM_GIT_COMMIT}"
+  PUBLIC
+    CATCHEM_BUILD_VERSION="${CATCHEM_VERSION_FULL}"
+    CATCHEM_BUILD_COMMIT="${CATCHEM_GIT_COMMIT}"
 )
 
 if(CATCHEM_ENABLE_KOKKOS)

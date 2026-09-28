@@ -21,7 +21,7 @@ namespace catchem {
         // species must resolve one through its __mie_name.
         double gocart_scale_factor = 1.0;
         bool gocart_simple_scheme = false;
-        double gocart_swelling_rh_max = 0.95;
+        int gocart_swelling_method = 1;
         bool gocart_correction_maring = false;
         bool gocart_maring_dust_only = true;
 
@@ -31,8 +31,7 @@ namespace catchem {
         std::vector<char> aerosol_species_names;
         std::vector<double> host_radius_dry; // micrometres, as configured
         std::vector<double> host_rhop_dry;
-        std::vector<int> host_is_dust;        // 0/1 per settling species
-        std::vector<int> host_is_hydrophilic; // 0/1 per settling species (drives wet swelling)
+        std::vector<int> host_is_dust; // 0/1 per settling species
         // Per settling species' __mie_name (32-byte fixed width, same packing as
         // aerosol_species_names).  The Fortran bridge maps these to loaded table
         // indices; empty means unresolved and aborts initialization on the optics path.

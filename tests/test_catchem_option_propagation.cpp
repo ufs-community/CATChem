@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
                 << "    gocart:\n"
                 << "      scale_factor: 1.0\n"
                 << "      simple_scheme: true\n"
-                << "      swelling_rh_max: 0.95\n"
+                << "      swelling_method: 1\n"
                 << "      correction_maring: true\n";
             out.close();
             cfg.load_from_file("opt_prop_good.yml");

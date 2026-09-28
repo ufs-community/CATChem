@@ -1295,24 +1295,67 @@ contains
    !! \param[in]  dt             Time step [s]
    !! \param[out] f_bb           2D scaling factor [0..1] per column
    !! \param[out] rc             Return code
-   subroutine compute_bb_emission_factor(emission_flux, scale_factor, dt, &
+   subroutine compute_bb_emission_factor(emission_flux, rh, mie_name, scale_factor, dt, &
       f_bb, rc)
       implicit none
 
       real(fp), intent(in)    :: emission_flux(:,:,:)
+      real(c_double), intent(in) :: rh(:,:,:)
+      character(len=*), intent(in) :: mie_name
       real(fp), intent(in)    :: scale_factor
       real(fp), intent(in)    :: dt
       real(fp), intent(out)   :: f_bb(:,:)
       integer, intent(out)    :: rc
+      real(c_double), allocatable :: flux_columns(:,:), rh_columns(:,:), factors(:)
+      character(kind=c_char) :: mie_name_c(64)
+      integer(c_int) :: limiter_rc
+      integer :: nx, ny, nz, i, j, k, column
 
-      ! Inputs are not used by the placeholder; reference them so the
-      ! signature stays stable without unused-argument warnings (the
-      ! assumed-shape array via size(), scalars via associate).
-      associate(unused_scale => scale_factor, unused_dt => dt); end associate
-      if (size(emission_flux) >= 0) continue
+      interface
+         subroutine run_emission_mie_factor(n_columns, n_levels, mie_name_c, flux, rh, &
+            scale_factor, dt, factor, limiter_rc) bind(C, name='run_emission_mie_factor')
+            import :: c_int, c_double, c_char
+            integer(c_int), value :: n_columns, n_levels
+            character(kind=c_char), intent(in) :: mie_name_c(64)
+            real(c_double), intent(in) :: flux(n_columns,n_levels), rh(n_columns,n_levels)
+            real(c_double), value :: scale_factor, dt
+            real(c_double), intent(out) :: factor(n_columns)
+            integer(c_int), intent(out) :: limiter_rc
+         end subroutine run_emission_mie_factor
+      end interface
 
-      rc = CC_SUCCESS
+      nx = size(emission_flux,1); ny = size(emission_flux,2); nz = size(emission_flux,3)
+      allocate(flux_columns(nx*ny,nz), rh_columns(nx*ny,nz), factors(nx*ny))
+      column = 0
+      do j = 1, ny
+         do i = 1, nx
+            column = column + 1
+            do k = 1, nz
+               flux_columns(column,k) = real(emission_flux(i,j,k), c_double)
+               rh_columns(column,k) = rh(i,j,k)
+            end do
+         end do
+      end do
+      mie_name_c = c_null_char
+      do i = 1, min(len_trim(mie_name), 63)
+         mie_name_c(i) = mie_name(i:i)
+      end do
+      call run_emission_mie_factor(int(nx*ny,c_int), int(nz,c_int), mie_name_c, &
+         flux_columns, rh_columns, real(scale_factor,c_double), real(dt,c_double), factors, limiter_rc)
       f_bb = 1.0_fp
+      if (limiter_rc == 0_c_int) then
+         column = 0
+         do j = 1, ny
+            do i = 1, nx
+               column = column + 1
+               f_bb(i,j) = real(factors(column), fp)
+            end do
+         end do
+         rc = CC_SUCCESS
+      else
+         rc = CC_FAILURE
+      end if
+      deallocate(flux_columns, rh_columns, factors)
    end subroutine compute_bb_emission_factor
 
    !> \brief Apply diurnal cycle to biomass burning emissions
@@ -1477,22 +1520,23 @@ contains
       integer :: localrc, ifield, ispec, n_mapped_species
       integer :: nx, ny, nz, i, j, k
       character(len=EMIS_MAXSTR) :: msg, field_name, category_name
-      character(len=64) :: mapped_species_name
+      character(len=64) :: mapped_species_name, species_mie_name
       real(c_double) :: scale_factor
       integer(c_int) :: species_index
       character(len=*), parameter :: pName = 'catchem_emis_apply'
 
       real(fp), allocatable :: emission_flux(:,:,:)
       real(c_double) :: converter, dqa
-      logical :: is_gas
+      logical :: is_gas, apply_bb_factor
 
-      type(c_ptr) :: state_ptr, c_conc, c_airden, c_pedge, c_pblh, c_lon, c_lat
+      type(c_ptr) :: state_ptr, c_conc, c_airden, c_pedge, c_pblh, c_lon, c_lat, c_rh
       real(c_double), pointer :: f_conc(:,:,:)
       real(c_double), pointer :: f_airden(:,:,:)
       real(c_double), pointer :: f_pedge(:,:,:)
       real(c_double), pointer :: f_pblh(:,:)
       real(c_double), pointer :: f_lon(:,:)
       real(c_double), pointer :: f_lat(:,:)
+      real(c_double), pointer :: f_rh(:,:,:)
       real(fp), allocatable :: f_delp(:,:,:)
       real(fp), allocatable :: f_bb(:,:)
 
@@ -1511,6 +1555,13 @@ contains
             type(c_ptr), value :: state_ptr
             integer(c_int), value :: index
          end function
+         subroutine catchem_state_get_species_mie_name(state_ptr, index, name_out) &
+            bind(C, name="catchem_state_get_species_mie_name")
+            import :: c_ptr, c_int, c_char
+            type(c_ptr), value :: state_ptr
+            integer(c_int), value :: index
+            character(kind=c_char), intent(out) :: name_out(*)
+         end subroutine
          type(c_ptr) function catchem_state_get_pointer_2d(state_ptr, name) bind(C, name="catchem_state_get_pointer_2d")
             import :: c_ptr, c_char
             type(c_ptr), value :: state_ptr
@@ -1566,6 +1617,7 @@ contains
       c_pblh = catchem_state_get_pointer_2d(state_ptr, 'PBLH' // c_null_char)
       c_lon = catchem_state_get_pointer_2d(state_ptr, 'LON' // c_null_char)
       c_lat = catchem_state_get_pointer_2d(state_ptr, 'LAT' // c_null_char)
+      c_rh = catchem_state_get_pointer_3d(state_ptr, 'RH' // c_null_char)
 
       if (.not. c_associated(c_pedge) .or. .not. c_associated(c_airden)) then
          write(msg, '(A,A)') trim(pName), ': Failed to get PEDGE or AIRDEN_DRY pointers'
@@ -1579,6 +1631,7 @@ contains
       if (c_associated(c_pblh)) call c_f_pointer(c_pblh, f_pblh, [nx, ny])
       if (c_associated(c_lon)) call c_f_pointer(c_lon, f_lon, [nx, ny])
       if (c_associated(c_lat)) call c_f_pointer(c_lat, f_lat, [nx, ny])
+      if (c_associated(c_rh)) call c_f_pointer(c_rh, f_rh, [nx, ny, nz])
 
       allocate(emission_flux(nx, ny, nz))
       allocate(f_delp(nx, ny, nz))
@@ -1641,6 +1694,9 @@ contains
             call c_f_pointer(c_conc, f_conc, [nx, ny, nz])
 
             is_gas = (catchem_state_is_species_gas(state_ptr, species_index) /= 0)
+            species_mie_name = ''
+            call catchem_state_get_species_mie_name(state_ptr, species_index, species_mie_name)
+            call clean_c_string(species_mie_name)
 
             if (is_gas) then
                converter = AIRMW / catchem_state_get_species_mw(state_ptr, species_index) * 1.0e6_c_double
@@ -1648,17 +1704,23 @@ contains
                converter = 1.0e9_c_double
             end if
 
-            ! Apply BB emission factor if needed (only OC/BC aerosols)
-            if (category%use_oc_fbb .and. .not. is_gas .and. &
-               (mapped_species_name(1:2) == 'oc' .or. mapped_species_name(1:2) == 'OC' .or. &
-               mapped_species_name(1:2) == 'br' .or. mapped_species_name(1:2) == 'BR')) then
+            ! Legacy FBB applies to organic/brown-carbon optics classes.  Use
+            ! configured species optics metadata, never tracer names.
+            apply_bb_factor = category%use_oc_fbb .and. .not. is_gas .and. &
+               (emis_lower(trim(species_mie_name)) == 'oc' .or. emis_lower(trim(species_mie_name)) == 'br')
+            if (apply_bb_factor .and. c_associated(c_rh)) then
                if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
-               call compute_bb_emission_factor(emission_flux, real(scale_factor, fp), dt, f_bb, localrc)
-               if (localrc == CC_SUCCESS) then
-                  do k = 1, nz
-                     emission_flux(:,:,k) = emission_flux(:,:,k) * f_bb(:,:)
-                  end do
+               call compute_bb_emission_factor(emission_flux, f_rh, trim(species_mie_name), &
+                  real(scale_factor, fp), dt, f_bb, localrc)
+               if (localrc /= CC_SUCCESS) then
+                  f_bb = 1.0_fp
+                  write(msg, '(A,A,A,A)') trim(pName), ': Mie fire limiter unavailable for target ', &
+                     trim(mapped_species_name), ' (emission retained)'
+                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
                end if
+            else if (apply_bb_factor) then
+               if (.not. allocated(f_bb)) allocate(f_bb(nx, ny))
+               f_bb = 1.0_fp
             end if
 
             ! Preserve the legacy CATChem replacement contract.  The legacy
@@ -1695,6 +1757,8 @@ contains
                            dqa = 0.0_c_double
                         end select
 
+                        if (apply_bb_factor .and. allocated(f_bb)) dqa = dqa * real(f_bb(i,j), c_double)
+
                         if (trim(category%apply_method) == 'replace') then
                            f_conc(i,j,k) = dqa
                         else
@@ -1704,6 +1768,16 @@ contains
                   end do
                end do
             end do
+
+#ifdef CATCHEM_TRACE_NUOPC
+            if (emis_lower(trim(mapped_species_name)) == 'bc1') then
+               write(*,'(A,A,A,A,A,ES12.4,A,ES12.4,A,ES12.4)') &
+                  '[CATCHEM TRACE] BC1 after emission category=', trim(category_name), &
+                  ' field=', trim(field_name), ' min=', minval(f_conc), &
+                  ' max=', maxval(f_conc), ' sum=', sum(f_conc)
+               call flush(6)
+            end if
+#endif
 
          end do
       end do
@@ -2320,6 +2394,13 @@ contains
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
                   description, units, filename, time_slice, localrc)
+            else if (allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data_model)) then
+               ! Pressure-interpolated emissions must be diagnosed on the
+               ! model vertical grid.  Writing the native source buffer here
+               ! can give the collective field a different vertical extent.
+               call write_emission_field_3d(IO, grid, field_name, &
+                  ext_emis_data%categories(icat)%fields(ifield)%emission_data_model(:,:,:,1), &
+                  description, units, filename, time_slice, localrc)
             else
                ! 3D point source or vertical emission field
                call write_emission_field_3d(IO, grid, field_name, &
@@ -2376,7 +2457,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
-      integer :: i, j
       !character(len=*), parameter :: pName = 'write_emission_field_2d'
 
       rc = CC_SUCCESS
@@ -2403,11 +2483,9 @@ contains
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do j = 1, size(emission_data, 2)
-         do i = 1, size(emission_data, 1)
-            field_data_2d(i, j) = real(emission_data(i, j), ESMF_KIND_R4)
-         end do
-      end do
+      ! ESMF decomposed-field pointers can have non-1 lower bounds.  Whole
+      ! array assignment copies by position and preserves the global layout.
+      field_data_2d(:,:) = real(emission_data(:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
@@ -2449,7 +2527,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k
       !character(len=*), parameter :: pName = 'write_emission_field_3d'
 
       rc = CC_SUCCESS
@@ -2478,13 +2555,9 @@ contains
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do k = 1, size(emission_data, 3)
-         do j = 1, size(emission_data, 2)
-            do i = 1, size(emission_data, 1)
-               field_data_3d(i, j, k) = real(emission_data(i, j, k), ESMF_KIND_R4)
-            end do
-         end do
-      end do
+      ! See the 2-D writer: do not assume DE-local horizontal bounds start at
+      ! one when populating a field that AQMIO will assemble globally.
+      field_data_3d(:,:,:) = real(emission_data(:,:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &

@@ -3,6 +3,7 @@
 #include "catchem_error.hpp"
 #include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
+#include <algorithm>
 #include <array>
 #include <iostream>
 
@@ -12,26 +13,27 @@ void run_so4chem_science_bridge(int n_cols, int n_levels, int n_species, double 
                                 double* airden, double* cldf, double* delp, double* pmid, double* t_air,
                                 double* z_edges, double* hflux, double* lat, double* lon, int* lwi, double* pblh,
                                 double* u10m, double* ustar, double* v10m, double* z0h, double* species_mw_g,
-                                const char* species_names, double* conc, double* tendency, bool* c_firsttime,
-                                int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init,
-                                double* c_pso4_g_so2, double* c_pso4_aq_so2, double* c_pso2_dms, double* c_dms_flux,
-                                double* c_diag_prod_rate, const int* diagnostic_species_id, int n_diag_species);
+                                const char* species_names, double* conc, double* tendency, int* c_firsttime,
+                                int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init, double* c_pso4_g_so2,
+                                double* c_pso4_aq_so2, double* c_pso2_dms, double* c_dms_flux, double* c_diag_prod_rate,
+                                const int* diagnostic_species_id, int n_diag_species);
 }
 
 namespace catchem {
 
     ProcessContract SO4chemProcess::get_contract() const {
-        return make_contract(get_name(), {host_field_3d("T", "K"), host_field_3d("PMID", "Pa"),
-                                          host_field_interface("PEDGE", "Pa"), host_field_interface("Z", "m"),
-                                          host_field_3d("DELP", "Pa"), host_field_3d("AIRDEN", "kg/m3"),
-                                          host_field_3d("CLDF", "1"), host_field_2d("HFLUX", "W/m2"),
-                                          host_field_2d("LAT", "degrees", FieldRequirement::Required,
-                                                        AccessIntent::Read, PersistencePolicy::Persistent),
-                                          host_field_2d("LON", "degrees", FieldRequirement::Required,
-                                                        AccessIntent::Read, PersistencePolicy::Persistent),
-                                          host_field_2d("PBLH", "m"), host_field_2d("USTAR", "m/s"),
-                                          host_field_2d("U10M", "m/s"), host_field_2d("V10M", "m/s"),
-                                          host_field_2d("LWI", "1"), host_field_2d("Z0", "m"), host_concentration()});
+        return make_contract(
+            get_name(), {host_field_3d("T", "K"), host_field_3d("PMID", "Pa"), host_field_interface("PEDGE", "Pa"),
+                         host_field_interface("Z", "m"), host_field_3d("DELP", "Pa"), host_field_3d("AIRDEN", "kg/m3"),
+                         host_field_3d("CLDF", "1"), host_field_2d("HFLUX", "W/m2"),
+                         host_field_2d("LAT", "degrees", FieldRequirement::Required, AccessIntent::Read,
+                                       PersistencePolicy::Persistent),
+                         host_field_2d("LON", "degrees", FieldRequirement::Required, AccessIntent::Read,
+                                       PersistencePolicy::Persistent),
+                         host_field_2d("PBLH", "m"), host_field_2d("USTAR", "m/s"), host_field_2d("U10M", "m/s"),
+                         host_field_2d("V10M", "m/s"), host_field_2d("LWI", "1"),
+                         host_field_2d("Z0H", "m", FieldRequirement::Optional),
+                         host_field_2d("Z0", "m", FieldRequirement::Optional), host_concentration()});
     }
 
     SO4chemProcess::SO4chemProcess() : active_scheme("gocart"), diagnostics_enabled(true) {}
@@ -109,8 +111,7 @@ namespace catchem {
         // run() (mirrors dust/seasalt/carbchem).
         diagnostic_species_id.clear();
         {
-            const std::vector<std::string> default_sulfur = {"dms", "so2", "so4", "msa", "h2o2", "oh", "no3",
-                                                             "dms_in"};
+            const std::vector<std::string> default_sulfur = {"dms", "so2", "so4", "msa", "h2o2", "oh", "no3", "dms_in"};
             const auto& requested = settings.diag_species.empty() ? default_sulfur : settings.diag_species;
             for (const auto& species_name : requested) {
                 if (!chemistry.mechanism->contains(species_name)) {
@@ -150,9 +151,9 @@ namespace catchem {
             for (const int global_index : diagnostic_species_id) {
                 const auto& meta = state->chemistry().species_list[static_cast<std::size_t>(global_index - 1)];
                 std::string diag_name = "Production_rate_" + meta.short_name;
-                state->diagnostic_manager()->register_field_contract(
-                    diag_name, "Production rate " + meta.short_name, "kg/kg/s", DiagType::FIELD_2D, dims_2d,
-                    DiagnosticPolicy::Instantaneous, 0.0, axes_level);
+                state->diagnostic_manager()->register_field_contract(diag_name, "Production rate " + meta.short_name,
+                                                                     "kg/kg/s", DiagType::FIELD_2D, dims_2d,
+                                                                     DiagnosticPolicy::Instantaneous, 0.0, axes_level);
             }
         }
     }
@@ -204,12 +205,53 @@ namespace catchem {
         require_field_pointer("SO4chem", "U10M", u10m_ptr);
         require_field_pointer("SO4chem", "V10M", v10m_ptr);
 
-        const double* z0_ptr = state->read_field<2>("Z0");
-        require_field_pointer("SO4chem", "Z0", z0_ptr);
+        // SulfateChemDriver uses thermal roughness in its resistance term.
+        // NUOPC provides momentum roughness (Z0), but not necessarily thermal
+        // roughness (Z0H). Preserve an explicitly supplied Z0H; otherwise use
+        // the UFS/GOCART convention after NUOPC has converted Z0 from cm to m:
+        // Z0H = 0.01 * raw Z0 = Z0 in the already-converted CATChem state.
+        const double* z0h_ptr = state->read_field<2>("Z0H");
+        std::vector<double> z0h_from_z0;
+        if (!z0h_ptr) {
+            const double* z0_ptr = state->read_field<2>("Z0");
+            require_field_pointer("SO4chem", "Z0 (required when Z0H is unavailable)", z0_ptr);
+            z0h_from_z0.resize(state->column_count());
+            for (int col = 0; col < state->column_count(); ++col)
+                z0h_from_z0[col] = 0.01 * z0_ptr[col];
+            z0h_ptr = z0h_from_z0.data();
+        }
 
         // 3. Chemical and Tendency Views
         double* conc_ptr = state->chemistry().conc ? state->chemistry().conc->host_write() : nullptr;
         require_field_pointer("SO4chem", "CHEM_CONC", conc_ptr);
+
+#ifdef CATCHEM_TRACE_NUOPC
+        // This is deliberately immediately before the science bridge.  It
+        // reports the exact post-AQMIO/post-emission values consumed by
+        // GOCART, including the concentration units used by SO4chem.  A
+        // mismatch here is an exchange/units problem; a match here with a
+        // divergent production rate isolates the issue to the kernel/met.
+        const auto& chemistry_for_trace = state->chemistry();
+        const auto trace_species = [&](const char* name) {
+            if (!chemistry_for_trace.mechanism || !chemistry_for_trace.mechanism->contains(name))
+                return;
+            const auto index = chemistry_for_trace.mechanism->index_of(name);
+            const auto* values =
+                conc_ptr + static_cast<std::size_t>(index) * state->column_count() * state->level_count();
+            const auto count = static_cast<std::size_t>(state->column_count()) * state->level_count();
+            auto [lo, hi] = std::minmax_element(values, values + count);
+            Logger::debug(state.get(), "SO4chem pre-bridge concentration",
+                          {{"species", name}, {"min", std::to_string(*lo)}, {"max", std::to_string(*hi)}});
+        };
+        trace_species("dms");
+        trace_species("so2");
+        trace_species("so4");
+        trace_species("msa");
+        trace_species("h2o2");
+        trace_species("oh");
+        trace_species("no3");
+        trace_species("dms_in");
+#endif
 
         // Allocate local tendencies buffer
         std::vector<double> mock_tendency(state->column_count() * state->level_count() * state->species_count(), 0.0);
@@ -242,18 +284,18 @@ namespace catchem {
             diagnostics_enabled ? 1 : 0, gocart_update_so2 ? 1 : 0, state->clock().year, state->clock().month,
             state->clock().day, state->clock().hour, state->clock().minute, state->clock().second, airden_ptr, cldf_ptr,
             delp_ptr, pmid_ptr, t_ptr, z_ptr, hflux_ptr, lat_ptr, lon_ptr, lwi.data(), pblh_ptr, u10m_ptr, ustar_ptr,
-            v10m_ptr, const_cast<double*>(z0_ptr), mw_g.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
-            mock_tendency.data(), (bool*)firsttime.data(), nymd_last.data(), nhms_last_recycle.data(),
+            v10m_ptr, const_cast<double*>(z0h_ptr), mw_g.data(), state->chemistry().species_names_c_arr.data(),
+            conc_ptr, mock_tendency.data(), firsttime.data(), nymd_last.data(), nhms_last_recycle.data(),
             xh2o2_init.data(), pso4_g_so2.data(), pso4_aq_so2.data(), pso2_dms.data(), dms_flux.data(),
             diag_prod_rate.data(), diag_ids, n_diag_species);
 
         // 6. Map persistent column diagnostics straight to registered C++ Diagnostics Views
         if (state->diagnostic_manager() && diagnostics_enabled) {
             double* diag_pso4_g =
-                (double*)state->diagnostic_manager()->get_host_pointer("PSO4_from_gaseous_SO2_per_level");
+                (double*)state->diagnostic_manager()->get_host_write_pointer("PSO4_from_gaseous_SO2_per_level");
             double* diag_pso4_aq =
-                (double*)state->diagnostic_manager()->get_host_pointer("PSO4_from_aqueous_SO2_per_level");
-            double* diag_dms_flux = (double*)state->diagnostic_manager()->get_host_pointer("DMS_emission_flux");
+                (double*)state->diagnostic_manager()->get_host_write_pointer("PSO4_from_aqueous_SO2_per_level");
+            double* diag_dms_flux = (double*)state->diagnostic_manager()->get_host_write_pointer("DMS_emission_flux");
 
             if (diag_pso4_g)
                 std::copy(pso4_g_so2.begin(), pso4_g_so2.end(), diag_pso4_g);
@@ -265,9 +307,10 @@ namespace catchem {
             // Scatter each packed slot into its own Production_rate_<sp> field
             // (field names unchanged from the legacy per-species convention).
             for (int d = 0; d < n_diag_species; ++d) {
-                const auto& meta = state->chemistry().species_list[static_cast<std::size_t>(diagnostic_species_id[d]) - 1];
+                const auto& meta =
+                    state->chemistry().species_list[static_cast<std::size_t>(diagnostic_species_id[d]) - 1];
                 std::string diag_name = "Production_rate_" + meta.short_name;
-                double* diag_prod = (double*)state->diagnostic_manager()->get_host_pointer(diag_name);
+                double* diag_prod = (double*)state->diagnostic_manager()->get_host_write_pointer(diag_name);
                 if (diag_prod)
                     std::copy(diag_prod_rate.begin() + static_cast<std::ptrdiff_t>(d) * slab,
                               diag_prod_rate.begin() + static_cast<std::ptrdiff_t>(d + 1) * slab, diag_prod);

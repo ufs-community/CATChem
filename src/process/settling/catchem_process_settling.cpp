@@ -14,9 +14,9 @@ namespace catchem {
 
     extern "C" void run_settling_science_bridge(
         int n_columns, int n_levels, int n_aerosols, int n_total_species, double dt, double scale_factor,
-        double swelling_rh_max, int correction_maring, int maring_dust_only, double* airden, double* delp,
-        const double* pmid, double* rh, double* temperature, double* z_edge, const char* aerosol_species_names,
-        const char* species_names, const int* species_is_dust, const int* species_is_hydrophilic, const double* radius,
+        int swelling_method, int correction_maring, int maring_dust_only, const double* airden, const double* delp,
+        const double* pmid, const double* rh, const double* temperature, const double* z_edge,
+        const char* aerosol_species_names, const char* species_names, const int* species_is_dust, const double* radius,
         const double* density, double* concentration, int simple_scheme, const char* aerosol_mie_names,
         double* diag_velocity, double* diag_flux, const int* diagnostic_species_id, int n_diag_species, int* bridge_rc);
 
@@ -73,15 +73,13 @@ namespace catchem {
         // back to the compiled default declared in SettlingCommon_Mod.F90.
         gocart_scale_factor = configured->second.get_double("gocart/scale_factor", gocart_scale_factor);
         gocart_simple_scheme = configured->second.get_bool("gocart/simple_scheme", gocart_simple_scheme);
-        gocart_swelling_rh_max = configured->second.get_double("gocart/swelling_rh_max", gocart_swelling_rh_max);
+        gocart_swelling_method = configured->second.get_int("gocart/swelling_method", gocart_swelling_method);
         gocart_correction_maring = configured->second.get_bool("gocart/correction_maring", gocart_correction_maring);
         gocart_maring_dust_only = configured->second.get_bool("gocart/maring_dust_only", gocart_maring_dust_only);
         if (!(gocart_scale_factor > 0.0))
             throw std::invalid_argument("Settling gocart scale_factor must be positive");
-        // A non-positive cap disables the clamp; otherwise it must be a valid RH fraction.
-        if (gocart_swelling_rh_max > 1.0)
-            throw std::invalid_argument(
-                "Settling gocart swelling_rh_max must be <= 1.0 (RH fraction), or <= 0 to disable");
+        if (gocart_swelling_method != 1 && gocart_swelling_method != 2)
+            throw std::invalid_argument("Settling gocart swelling_method must be 1 (Fitzgerald) or 2 (Gerber)");
 
         diagnostics_enabled = configured->second.diagnostics;
 
@@ -136,23 +134,22 @@ namespace catchem {
              {"gocart/simple_scheme", gocart_simple_scheme ? "true (optics tables)" : "false (species metadata)"},
              {"gocart/swelling",
               gocart_simple_scheme ? "optics-table rEff(rh) LUT" : "per-species __hydrophilic (Gerber when true)"},
-             {"gocart/swelling_rh_max", std::to_string(gocart_swelling_rh_max)},
+             {"gocart/swelling_method", std::to_string(gocart_swelling_method)},
              {"gocart/optics_directory", gocart_simple_scheme ? config->data.mie.directory : "(unused)"},
              {"gocart/optics_tables", gocart_simple_scheme ? std::to_string(mie_type_labels.size()) : "0"}});
         for (const auto& label : mie_type_labels)
             Logger::debug(state.get(), "Settling optics table", {{"binding", label}});
 
-        int num_aerosols = state->chemistry().aerosol_indices.size();
+        int num_aerosols = state->chemistry().settling_indices.size();
         if (num_aerosols > 0) {
             aerosol_species_names.assign(static_cast<size_t>(num_aerosols) * 32, ' ');
             aerosol_mie_names.assign(static_cast<size_t>(num_aerosols) * 32, ' ');
             host_radius_dry.assign(num_aerosols, 0.0);
             host_rhop_dry.assign(num_aerosols, 0.0);
             host_is_dust.assign(num_aerosols, 0);
-            host_is_hydrophilic.assign(num_aerosols, 1);
 
             for (int i = 0; i < num_aerosols; ++i) {
-                int ispec = state->chemistry().aerosol_indices[i];
+                int ispec = state->chemistry().settling_indices[i];
                 double r_val = state->chemistry().species_list[ispec].radius;
                 double d_val = state->chemistry().species_list[ispec].density;
                 if (!(r_val > 0.0 && d_val > 0.0))
@@ -163,12 +160,6 @@ namespace catchem {
                 host_radius_dry[i] = r_val;
                 host_rhop_dry[i] = d_val;
                 host_is_dust[i] = state->chemistry().species_list[ispec].is_dust ? 1 : 0;
-                // Per-species hygroscopicity drives wet-particle swelling: a
-                // hydrophilic aerosol grows with RH (Gerber), a hydrophobic one
-                // settles at its dry size.  Replaces the old global
-                // swelling_method knob.  Ignored on the optics-table path where
-                // the table itself encodes the size response.
-                host_is_hydrophilic[i] = state->chemistry().species_list[ispec].is_hydrophilic ? 1 : 0;
                 std::copy_n(state->chemistry().species_names_c_arr.data() + static_cast<size_t>(ispec) * 32, 32,
                             aerosol_species_names.data() + static_cast<size_t>(i) * 32);
                 const std::string& mie_name = state->chemistry().species_list[ispec].mie_name;
@@ -181,7 +172,7 @@ namespace catchem {
                 // species at init instead of surfacing as the Fortran bridge_rc==2
                 // backstop at the first step (specs/012 FR-009).
                 for (int i = 0; i < num_aerosols; ++i) {
-                    const int ispec = state->chemistry().aerosol_indices[i];
+                    const int ispec = state->chemistry().settling_indices[i];
                     const std::string species_name = state->chemistry().species_list[ispec].short_name;
                     const std::string trimmed =
                         trim_trailing_spaces(std::string(aerosol_mie_names.data() + static_cast<size_t>(i) * 32, 32));
@@ -207,7 +198,7 @@ namespace catchem {
         // diagnostic_species_id indexes the aerosol subset (1..num_aerosols),
         // which is the species_idx space compute_gocart iterates.
         {
-            const auto& aerosol_idx = state->chemistry().aerosol_indices;
+            const auto& aerosol_idx = state->chemistry().settling_indices;
             const auto& settings = configured->second;
             std::vector<int> selected_local; // 1-based positions into aerosol subset
             if (!settings.diag_species.empty()) {
@@ -247,10 +238,9 @@ namespace catchem {
                 state->diagnostic_manager()->register_field_contract(
                     "settling_velocity_per_species_per_level", "Settling velocity", "m/s", DiagType::FIELD_3D, dims_vel,
                     DiagnosticPolicy::Instantaneous, 0.0, axes_vel, diagnostic_species_names);
-                state->diagnostic_manager()->register_field_contract("settling_flux_per_species", "Settling column flux",
-                                                                    "kg/m2/s", DiagType::FIELD_2D, dims_flux,
-                                                                    DiagnosticPolicy::Instantaneous, 0.0, axes_flux,
-                                                                    diagnostic_species_names);
+                state->diagnostic_manager()->register_field_contract(
+                    "settling_flux_per_species", "Settling column flux", "kg/m2/s", DiagType::FIELD_2D, dims_flux,
+                    DiagnosticPolicy::Instantaneous, 0.0, axes_flux, diagnostic_species_names);
             }
         }
     }
@@ -274,7 +264,7 @@ namespace catchem {
         // host-provided fields while supplying only absent prerequisites.
         prepare_inputs(state);
 
-        int num_aerosols = state->chemistry().aerosol_indices.size();
+        int num_aerosols = state->chemistry().settling_indices.size();
         if (num_aerosols == 0) {
             Logger::info(state.get(), "Settling skipped: no aerosol species registered", {});
             return;
@@ -283,8 +273,8 @@ namespace catchem {
         require_field_pointer("Settling", "T", state->meteorology().T ? state->meteorology().T->host_data() : nullptr);
         require_field_pointer("Settling", "AIRDEN",
                               state->meteorology().AIRDEN ? state->meteorology().AIRDEN->host_data() : nullptr);
-        double* delp = state->write_field<3>("DELP");
-        double* z_edge = state->write_field<3>("Z");
+        const double* delp = state->read_field<3>("DELP");
+        const double* z_edge = state->read_field<3>("Z");
         const double* pmid = state->read_field<3>("PMID");
         require_field_pointer("Settling", "DELP", delp);
         require_field_pointer("Settling", "PMID", pmid);
@@ -298,9 +288,8 @@ namespace catchem {
         double* diag_velocity = nullptr;
         double* diag_flux = nullptr;
         if (diagnostics_enabled && state->diagnostic_manager() && !diagnostic_species_id.empty()) {
-            diag_velocity =
-                static_cast<double*>(state->diagnostic_manager()->get_host_pointer(
-                    "settling_velocity_per_species_per_level"));
+            diag_velocity = static_cast<double*>(
+                state->diagnostic_manager()->get_host_pointer("settling_velocity_per_species_per_level"));
             diag_flux =
                 static_cast<double*>(state->diagnostic_manager()->get_host_pointer("settling_flux_per_species"));
         }
@@ -310,18 +299,17 @@ namespace catchem {
         // (it is never dereferenced in that case).  std::vector::data() of an empty vector may
         // be nullptr, which would form a Fortran pointer to nothing; pass a valid dummy instead.
         static const int no_diag_species = 0;
-        const int* diag_ids =
-            diagnostic_species_id.empty() ? &no_diag_species : diagnostic_species_id.data();
+        const int* diag_ids = diagnostic_species_id.empty() ? &no_diag_species : diagnostic_species_id.data();
 
         run_settling_science_bridge(
             state->column_count(), state->level_count(), num_aerosols, state->species_count(), state->clock().timestep,
-            gocart_scale_factor, gocart_swelling_rh_max, gocart_correction_maring ? 1 : 0,
+            gocart_scale_factor, gocart_swelling_method, gocart_correction_maring ? 1 : 0,
             gocart_maring_dust_only ? 1 : 0, state->meteorology().AIRDEN->host_data(), delp, pmid,
             state->meteorology().RH->host_data(), state->meteorology().T->host_data(), z_edge,
             aerosol_species_names.data(), state->chemistry().species_names_c_arr.data(), host_is_dust.data(),
-            host_is_hydrophilic.data(), host_radius_dry.data(), host_rhop_dry.data(),
-            state->chemistry().conc->host_write(), gocart_simple_scheme ? 1 : 0, aerosol_mie_names.data(),
-            diag_velocity, diag_flux, diag_ids, n_diag_species, &bridge_rc);
+            host_radius_dry.data(), host_rhop_dry.data(), state->chemistry().conc->host_write(),
+            gocart_simple_scheme ? 1 : 0, aerosol_mie_names.data(), diag_velocity, diag_flux, diag_ids, n_diag_species,
+            &bridge_rc);
         if (bridge_rc == 2)
             throw std::runtime_error(
                 "Settling optics-table mapping failed: a settling species did not resolve to a loaded Mie table");
@@ -341,7 +329,7 @@ void catchem_register_settling_cpp() {
     catchem::ProcessRegistry::get_instance().register_process(
         "settling", []() { return std::make_shared<catchem::SettlingProcess>(); }, {},
         catchem::make_settings_validator("settling",
-                                         {"gocart/scale_factor", "gocart/simple_scheme", "gocart/swelling_rh_max",
+                                         {"gocart/scale_factor", "gocart/simple_scheme", "gocart/swelling_method",
                                           "gocart/correction_maring", "gocart/maring_dust_only"}));
 }
 }

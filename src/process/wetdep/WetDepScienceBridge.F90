@@ -14,7 +14,7 @@ contains
    ! 3D Met Pointers
       c_airden_dry, c_mairden, c_pedge, c_pfilsan, c_pfllsan, c_reevapls, c_t_air, &
    ! Metadata
-      species_is_aerosol, species_henry_cr, species_henry_k0, species_henry_pKa, &
+      species_is_aerosol, species_is_wetdep, species_henry_cr, species_henry_k0, species_henry_pKa, &
       species_wd_retfactor, species_wd_LiqAndGas, species_wd_convfacI2G, species_wd_rainouteff, species_wd_reevap_frac, &
       species_radius, species_mw_g, species_names, &
    ! Concentrations, Tendencies & Diagnostics
@@ -38,6 +38,7 @@ contains
 
       ! Metadata dummy arrays in double precision to match C++
       logical(c_bool), intent(in) :: species_is_aerosol(n_species)
+      logical(c_bool), intent(in) :: species_is_wetdep(n_species)
       real(c_double), intent(in) :: species_henry_cr(n_species)
       real(c_double), intent(in) :: species_henry_k0(n_species)
       real(c_double), intent(in) :: species_henry_pKa(n_species)
@@ -75,6 +76,7 @@ contains
 
       ! Casted metadata properties
       logical :: f_is_aerosol(n_species)
+      logical :: f_is_wetdep(n_species)
       real(fp) :: f_henry_cr(n_species)
       real(fp) :: f_henry_k0(n_species)
       real(fp) :: f_henry_pKa(n_species)
@@ -154,6 +156,7 @@ contains
 
       ! Copy to standard logical arrays & cast doubles once
       f_is_aerosol      = species_is_aerosol
+      f_is_wetdep       = species_is_wetdep
       f_henry_cr        = real(species_henry_cr, fp)
       f_henry_k0        = real(species_henry_k0, fp)
       f_henry_pKa       = real(species_henry_pKa, fp)
@@ -200,7 +203,7 @@ contains
             n_levels, n_species, jacob_config, &
             f_airden_dry, f_mairden, f_pedge, f_pfilsan, f_pfllsan, &
             f_reevapls, f_t_air, real(dt, fp), &
-            f_is_aerosol, dummy_sp_names, f_henry_cr, f_henry_k0, f_henry_pKa, &
+            f_is_aerosol, f_is_wetdep, dummy_sp_names, f_henry_cr, f_henry_k0, f_henry_pKa, &
             f_wd_retfactor, f_wd_LiqAndGas, f_wd_convfacI2G, f_wd_rainouteff, &
             col_wd_reevap_frac, f_radius, f_mw_g, &
             f_conc, col_tendencies, &

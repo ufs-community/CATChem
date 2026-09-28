@@ -122,8 +122,7 @@ namespace catchem {
         if (!state->meteorology().T || !state->meteorology().PMID || !state->meteorology().AIRDEN_DRY ||
             !state->meteorology().T->is_current(import_generation) ||
             !state->meteorology().PMID->is_current(import_generation) ||
-            !state->meteorology().AIRDEN_DRY->is_current(import_generation) ||
-            !state->chemistry().conc) {
+            !state->meteorology().AIRDEN_DRY->is_current(import_generation) || !state->chemistry().conc) {
             throw std::runtime_error(
                 "GasChem requires current T, PMID, AIRDEN_DRY, and chemistry concentration fields");
         }

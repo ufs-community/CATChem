@@ -214,7 +214,7 @@ processes:
       # Wet swelling is selected per species via the __hydrophilic species
       # attribute (hydrophilic -> Gerber growth matching the GOCART optics
       # tables; hydrophobic -> no swelling), not a global method here.
-      swelling_rh_max: 0.95    # clamp RH used for wet-swelling growth; the optics tables plateau rEff at RH>=0.95
+      swelling_method: 1       # 1 Fitzgerald 1975; 2 Gerber 1985
       correction_maring: false  #correction settling velocity following Maring et al, 2003 for both simple and non-simple schemes
   so4chem:
     activate: true

@@ -24,6 +24,7 @@ namespace catchem {
         bool is_advected = true;
         bool is_drydep = false;
         bool is_wetdep = false;
+        bool do_settling = false;
         bool is_photolysis = false;
         bool is_gocart_aero = false;
         bool is_dust = false;

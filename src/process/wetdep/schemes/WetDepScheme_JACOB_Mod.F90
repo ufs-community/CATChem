@@ -71,6 +71,7 @@ contains
    !! @param[in]  t    T field [appropriate units]
    !! @param[in]  tstep    Time step [s] - retrieved from process interface
    !! @param[in]  species_is_aerosol    Species is_aerosol property
+   !! @param[in]  species_is_wetdep     Species is_wetdep participation flag
    !! @param[in]  species_short_name    Species short_name property
    !! @param[in]  species_henry_cr    Species henry_cr property
    !! @param[in]  species_henry_k0    Species henry_k0 property
@@ -101,6 +102,7 @@ contains
       t, &
       tstep, &
       species_is_aerosol, &
+      species_is_wetdep, &
       species_short_name, &
       species_henry_cr, &
       species_henry_k0, &
@@ -132,6 +134,7 @@ contains
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
       logical, intent(in) :: species_is_aerosol(:)  ! Species is_aerosol property
+      logical, intent(in) :: species_is_wetdep(:)  ! Species wet-deposition participation flag
       character(len=32), intent(in) :: species_short_name(:)  ! Species short_name property
       real(fp), intent(in) :: species_henry_cr(:)  ! Species henry_cr property
       real(fp), intent(in) :: species_henry_k0(:)  ! Species henry_k0 property
@@ -297,6 +300,16 @@ contains
 
       ! loop each species for wet deposition calculation
       do species_idx = 1, num_species
+         ! Species outside the wet-deposition subset are untouched.  The legacy
+         ! ProcessWetDepInterface builds its scheme input from ChemState's
+         ! WetdepIndex (is_wetdep filter), so non-participating species are
+         ! neither scavenged nor reported.  The science bridge copies the
+         ! tendency back onto the concentration (replacement contract), so
+         ! echoing the input here leaves the tracer exactly unchanged.
+         if (.not. species_is_wetdep(species_idx)) then
+            species_tendencies(:, species_idx) = species_conc(:, species_idx)
+            cycle
+         end if
          !get input concentration for this species
          ! -- initialize concentrations array, converting from ug/kg or ppmv to kg/m2
          if (species_is_aerosol(species_idx)) then

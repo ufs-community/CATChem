@@ -1,5 +1,5 @@
 module SO4chemScienceBridge_Mod
-   use iso_c_binding, only: c_ptr, c_f_pointer, c_double, c_char, c_associated, c_bool, c_int
+   use iso_c_binding, only: c_ptr, c_f_pointer, c_double, c_char, c_associated, c_int
    use catchem_bridge_precision, only: fp
    use catchem_bridge_constants, only: g0, Cpd, AVO, VON_KARMAN, AIRMW, PI
    use SO4chemCommon_Mod, only: SO4chemSchemeGOCARTConfig
@@ -62,12 +62,12 @@ contains
       ! Slicing array pointers pointing directly to double precision (c_double) C++ views
       real(c_double), pointer :: airden(:,:), cldf(:,:), delp(:,:), pmid(:,:), t_air(:,:), z_edges(:,:)
       real(c_double), pointer :: hflux(:), lat(:), lon(:), pblh(:), u10m(:), ustar(:), v10m(:), z0h(:)
-      integer, pointer :: lwi(:)
+      integer(c_int), pointer :: lwi(:)
       real(c_double), pointer :: conc(:,:,:), tendency(:,:,:)
 
       ! Persistent pointers pointing to double precision C++ views
-      logical(c_bool), pointer :: firsttime(:)
-      integer, pointer :: nymd_last(:), nhms_last_recycle(:)
+      integer(c_int), pointer :: firsttime(:)
+      integer(c_int), pointer :: nymd_last(:), nhms_last_recycle(:)
       real(c_double), pointer :: xh2o2_init(:,:), pso4_g_so2(:,:), pso4_aq_so2(:,:), pso2_dms(:,:), dms_flux(:)
       real(c_double), pointer :: diag_prod_rate(:,:,:)
 
@@ -196,7 +196,7 @@ contains
          local_xh2o2_init = real(xh2o2_init(icol, :), fp)
 
          ! Copy logical value
-         f_firsttime = firsttime(icol)
+         f_firsttime = (firsttime(icol) /= 0_c_int)
 
          ! Execute GOCART sulfur chemistry solver
          call compute_gocart( &
@@ -231,7 +231,7 @@ contains
          conc(icol, :, :) = real(col_updated, c_double)
 
          ! Copy persistent changes and diagnostics back to C++ buffers (casting to c_double)
-         firsttime(icol)     = f_firsttime
+         firsttime(icol)     = merge(1_c_int, 0_c_int, f_firsttime)
          xh2o2_init(icol, :) = real(local_xh2o2_init, c_double)
          deallocate(local_xh2o2_init)
 

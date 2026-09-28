@@ -167,14 +167,12 @@ namespace catchem {
                     ss_bin_labels.push_back(
                         state->chemistry().species_list[ss_global_indices[static_cast<size_t>(local) - 1]].short_name);
                 const std::vector<SemanticAxis> axes_bin = {SemanticAxis::Column, SemanticAxis::Category};
-                state->diagnostic_manager()->register_field_contract("seasalt_mass_emission_bins", "Mass Emission Per Bin",
-                                                                    "kg/m2/s", DiagType::FIELD_2D, dims_bins,
-                                                                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
-                                                                    ss_bin_labels);
-                state->diagnostic_manager()->register_field_contract("seasalt_number_emission_bins", "Number Emission Per Bin",
-                                                                    "#/m2/s", DiagType::FIELD_2D, dims_bins,
-                                                                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
-                                                                    ss_bin_labels);
+                state->diagnostic_manager()->register_field_contract(
+                    "seasalt_mass_emission_bins", "Mass Emission Per Bin", "kg/m2/s", DiagType::FIELD_2D, dims_bins,
+                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin, ss_bin_labels);
+                state->diagnostic_manager()->register_field_contract(
+                    "seasalt_number_emission_bins", "Number Emission Per Bin", "#/m2/s", DiagType::FIELD_2D, dims_bins,
+                    DiagnosticPolicy::Instantaneous, 0.0, axes_bin, ss_bin_labels);
             }
         }
     }

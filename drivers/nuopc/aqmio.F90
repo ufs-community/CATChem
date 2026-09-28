@@ -3811,7 +3811,7 @@ contains
       if (localrc /= NF90_NOERR) then
          call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
             msg="Error opening NetCDF file for global attributes: "//trim(filename)// &
-                ": "//trim(nf90_strerror(localrc)), &
+            ": "//trim(nf90_strerror(localrc)), &
             line=__LINE__, file=__FILE__, rcToReturn=rc)
          return  ! bail out
       end if

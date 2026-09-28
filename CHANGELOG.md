@@ -34,8 +34,8 @@
   process now calls the legacy Fortran kernel with the full GOCART2G argument
   contract (`PMID`, `DELP`, `Z` edges, wet-radius Mie data) instead of the
   branch-local C++ `Stokes`/`Maring` reimplementation, which has been deleted.
-  The `swelling_rh_max` RH clamp now applies only to the metadata path, matching
-  the upstream oracle's unclamped RH on the optics-table path.
+  The metadata path also restores the upstream `swelling_method` option and
+  leaves RH unmodified before entering `Chem_Settling`.
 - **drydep**: the GOCART aerosol scheme consumes geometric height (`Z`) for its
   surface layer slot instead of the pressure edge array, removing the
   `log(0)`-driven NaN in `drydepf` when `PEDGE` is uniform.

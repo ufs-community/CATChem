@@ -487,7 +487,11 @@ contains
       character(len=*), intent(in) :: unit
       character(len=128) :: normalized
       normalized = trim(adjustl(lowercase(unit)))
-      is_ppm_unit = normalized == 'ppm'
+      ! UFS/NUOPC metadata uses both ``ppm`` and ``ppmv`` for gas-volume
+      ! mixing ratios.  They are the same CATChem-native unit; accepting both
+      ! prevents the import path from silently treating a valid gas tracer as
+      ! an unsupported unit.
+      is_ppm_unit = normalized == 'ppm' .or. normalized == 'ppmv'
    end function is_ppm_unit
 
    pure logical function is_micro_mass_mixing_ratio_unit(unit)
@@ -1284,9 +1288,11 @@ contains
 
       type(ExtEmisFieldType), pointer :: src_field
       character(len=64) :: resolved_field, resolved_category
-      character(len=256) :: resolved_source_file
       real(c_double) :: map_scale, category_scale
+#ifdef CATCHEM_TRACE_NUOPC
+      character(len=256) :: resolved_source_file
       integer :: i, j
+#endif
 
       rc = CC_SUCCESS
 
@@ -1686,10 +1692,17 @@ contains
       !local vars
       real(ESMF_KIND_R8), pointer :: fptr4d(:,:,:,:), fptr3d(:,:,:), fptr2d(:,:)
       integer :: met_index, v_cc, v, found_index, expected_levels, expected_tracers, localrc
+#ifdef CATCHEM_TRACE_NUOPC
+      integer :: bc1_host_index, bc1_catchem_index
+#endif
       integer(c_int) :: catchem_status, species_count
       logical :: tracer_shape_valid
       type(ESMF_Info) :: field_info
       character(len=64) :: observed_units
+#ifdef CATCHEM_TRACE_NUOPC
+      real(ESMF_KIND_R8) :: bc1_raw_min, bc1_raw_max, bc1_raw_sum
+      real(ESMF_KIND_R8) :: bc1_mapped_min, bc1_mapped_max, bc1_mapped_sum
+#endif
 
       ! `required` is carried in the signature for the import loop but the
       ! missing-field policy is enforced by the caller; reference it so the
@@ -1958,6 +1971,41 @@ contains
             rc = ESMF_FAILURE
             return
          end if
+
+#ifdef CATCHEM_TRACE_NUOPC
+         ! BC1 is the direct source of PhobicToPhilic_flux_bc1.  Report the
+         ! exact host slot and mapped state values before any CATChem process
+         ! executes.  This separates tracer exchange/unit conversion errors
+         ! from the carbon science kernel and from diagnostic output packing.
+         bc1_host_index = 0
+         bc1_catchem_index = 0
+         do v = 1, min(size(fptr4d, 4), size(cc_wrap%tracer_map%names))
+            if (lowercase(trim(cc_wrap%tracer_map%names(v))) == 'bc1') then
+               bc1_host_index = v
+               bc1_catchem_index = cc_wrap%tracer_map%nuopc_to_cc(v)
+               exit
+            end if
+         end do
+         if (bc1_host_index > 0 .and. bc1_catchem_index > 0 .and. bc1_catchem_index <= v_cc) then
+            bc1_raw_min = minval(fptr4d(:,:,:,bc1_host_index))
+            bc1_raw_max = maxval(fptr4d(:,:,:,bc1_host_index))
+            bc1_raw_sum = sum(fptr4d(:,:,:,bc1_host_index))
+            bc1_mapped_min = minval(cc_wrap%chem_buf_4d(:,:,:,bc1_catchem_index))
+            bc1_mapped_max = maxval(cc_wrap%chem_buf_4d(:,:,:,bc1_catchem_index))
+            bc1_mapped_sum = sum(cc_wrap%chem_buf_4d(:,:,:,bc1_catchem_index))
+            write(*,'(A,I0,A,I0,A,A,A,ES12.4,A,ES12.4,A,ES12.4,A,ES12.4,A,ES12.4,A,ES12.4)') &
+               '[CATCHEM TRACE] BC1 import host_slot=', bc1_host_index, &
+               ' catchem_index=', bc1_catchem_index, ' units=', trim(cc_wrap%tracer_map%units(bc1_host_index)), &
+               ' factor=', cc_wrap%tracer_map%host_to_catchem(bc1_host_index), &
+               ' raw_min=', bc1_raw_min, ' raw_max=', bc1_raw_max, ' raw_sum=', bc1_raw_sum, &
+               ' mapped_min=', bc1_mapped_min, ' mapped_max=', bc1_mapped_max, ' mapped_sum=', bc1_mapped_sum
+            call flush(6)
+         else
+            write(*,'(A,I0,A,I0)') '[CATCHEM TRACE] BC1 import mapping missing host_slot=', bc1_host_index, &
+               ' catchem_index=', bc1_catchem_index
+            call flush(6)
+         end if
+#endif
 
          ! Direct pointer mapping to C++ core StateManager via persistent contiguous buffer
          call cc_wrap%catchem_model%bind_unified_chemistry(cc_wrap%chem_buf_4d, rc)
@@ -2438,40 +2486,40 @@ contains
          packed = .false.
          nslot = 1
          select case (int(rank))
-         case (2)
+          case (2)
             select case (int(axes(2)))
-            case (AXIS_SINGLETON)
+             case (AXIS_SINGLETON)
                if (dims(2) /= 1) then
                   write(*,'(A,A)') 'ERROR: Singleton-axis diagnostic without extent 1: ', trim(field_name)
                   rc = CC_FAILURE
                   return
                end if
-            case (AXIS_LEVEL)
+             case (AXIS_LEVEL)
                ! Written whole as 3D: the level axis stays intact (FR-003).
-            case (AXIS_SPECIES, AXIS_CATEGORY)
+             case (AXIS_SPECIES, AXIS_CATEGORY)
                packed = .true.
                nslot = int(dims(2))
-            case default
+             case default
                write(*,'(A,A)') 'ERROR: Unsupported second axis on diagnostic: ', trim(field_name)
                rc = CC_FAILURE
                return
             end select
-         case (3)
+          case (3)
             if (int(axes(2)) /= AXIS_LEVEL) then
                write(*,'(A,A)') 'ERROR: Unsupported second axis on diagnostic: ', trim(field_name)
                rc = CC_FAILURE
                return
             end if
             select case (int(axes(3)))
-            case (AXIS_SPECIES, AXIS_CATEGORY)
+             case (AXIS_SPECIES, AXIS_CATEGORY)
                packed = .true.
                nslot = int(dims(3))
-            case default
+             case default
                write(*,'(A,A)') 'ERROR: Unsupported third axis on diagnostic: ', trim(field_name)
                rc = CC_FAILURE
                return
             end select
-         case default
+          case default
             write(*,'(A,A)') 'ERROR: Unsupported rank on diagnostic: ', trim(field_name)
             rc = CC_FAILURE
             return
@@ -2565,10 +2613,12 @@ contains
 
    !> \brief Test an output variable name against the diag_list selectors.
    !!
-   !! An entry matches when it equals the name or the name starts with
-   !! entry_'_' (data-model §6.1), so a parent selector covers every
-   !! unpacked <field>_<label> child while a full child name selects just
-   !! that child.  Matching a selector marks it as used for the
+   !! An entry matches when it equals the name, the name starts with
+   !! entry_'_' (a parent selector), or the name ends with '_'//entry
+   !! (a species/slot selector).  The latter preserves the documented
+   !! species-list behavior for unpacked process diagnostics, e.g. `so2`
+   !! selects `drydep_con_per_species_so2`, `drydep_velocity_per_species_so2`,
+   !! and `wetdep_*_so2`.  Matching a selector marks it as used for the
    !! aggregated unmatched-selector warning.  With an empty selector list
    !! everything matches (FR-009: empty list = everything).
    !!
@@ -2583,7 +2633,7 @@ contains
       integer, intent(in) :: ns
       character(len=*), intent(in) :: var_name
       logical, intent(out) :: selected
-      integer :: s
+      integer :: s, selector_len, var_len
 
       selected = .true.
       if (ns == 0) return
@@ -2595,6 +2645,19 @@ contains
          else if (index(trim(var_name) // '_', trim(selectors(s)) // '_') == 1) then
             matched(s) = .true.
             selected = .true.
+         else
+            ! diagnostics.output.diag_list is also a species selector in
+            ! the shipped configurations.  Packed process fields are
+            ! unpacked as <field>_<species>, so match the terminal token
+            ! without allowing a partial token match.
+            selector_len = len_trim(selectors(s))
+            var_len = len_trim(var_name)
+            if (selector_len > 0 .and. var_len > selector_len + 1) then
+               if (var_name(var_len - selector_len:var_len) == '_' // trim(selectors(s))) then
+                  matched(s) = .true.
+                  selected = .true.
+               end if
+            end if
          end if
       end do
    end subroutine diag_selector_select
@@ -2631,7 +2694,7 @@ contains
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k, time_slice
+      integer :: time_slice
 
       ! Only the 2D/3D array kinds are written today; the scalar and 1D inputs
       ! are part of the generic writer signature and intentionally unused.
@@ -2669,11 +2732,11 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do j = 1, size(array_2d_ptr, 2)
-            do i = 1, size(array_2d_ptr, 1)
-               field_data_2d(i, j) = real(array_2d_ptr(i, j), ESMF_KIND_R4)
-            end do
-         end do
+         ! The ESMF field pointer may carry DE-local/global lower bounds that
+         ! are not one.  Intrinsic assignment copies by array position and is
+         ! therefore safe for every decomposition; explicit 1-based indexing
+         ! can leave gaps or address the wrong part of a distributed field.
+         field_data_2d(:,:) = real(array_2d_ptr(:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
@@ -2701,13 +2764,9 @@ contains
          !set values
          call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
          if (rc /= ESMF_SUCCESS) return
-         do k = 1, size(array_3d_ptr, 3)
-            do j = 1, size(array_3d_ptr, 2)
-               do i = 1, size(array_3d_ptr, 1)
-                  field_data_3d(i, j, k) = real(array_3d_ptr(i, j, k), ESMF_KIND_R4)
-               end do
-            end do
-         end do
+         ! See the 2-D case above: preserve the ESMF DE bounds and copy by
+         ! position rather than assuming local horizontal bounds start at one.
+         field_data_3d(:,:,:) = real(array_3d_ptr(:,:,:), ESMF_KIND_R4)
          call AQMIO_Write(cc_wrap%iocomp, (/esmf_field/), timeSlice=time_slice, compressLev=cc_wrap%compress_lev, &
             fileName=trim(filename), iofmt=AQMIO_FMT_NETCDF, rc=rc)
 

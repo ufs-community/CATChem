@@ -83,9 +83,8 @@ int main() {
     // --- feature 013 T021: strict packed-axis validation (INV-3..7) ---
     // Each rejected contract throws before mutating the manager, so the tests
     // are independent and share one manager.
-    auto rejects = [&](const char* name, const std::vector<int>& d,
-                      const std::vector<catchem::SemanticAxis>& a,
-                      const std::vector<std::string>& l) {
+    auto rejects = [&](const char* name, const std::vector<int>& d, const std::vector<catchem::SemanticAxis>& a,
+                       const std::vector<std::string>& l) {
         bool thrown = false;
         try {
             manager->register_field_contract(name, "d", "kg", catchem::DiagType::FIELD_2D, d,
@@ -102,18 +101,15 @@ int main() {
                    {"a", "b"}));
     // INV-4: a packed axis must carry exactly one label per slot.
     assert(rejects("inv4_short", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"a"}));
-    assert(rejects("inv4_long", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species},
-                   {"a", "b", "c"}));
+    assert(rejects("inv4_long", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"a", "b", "c"}));
     assert(rejects("inv4_none", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {}));
     // INV-5: labels with nothing to label are a contract bug.
     assert(rejects("inv5", {2, 1}, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Singleton}, {"a"}));
     // INV-6: labels must be NetCDF-name-safe.
-    assert(rejects("inv6_digit", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species},
-                   {"1bad", "ok"}));
-    assert(rejects("inv6_dash", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species},
-                   {"has-dash", "ok"}));
-    assert(rejects("inv6_empty", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species},
-                   {"", "ok"}));
+    assert(rejects("inv6_digit", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"1bad", "ok"}));
+    assert(
+        rejects("inv6_dash", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"has-dash", "ok"}));
+    assert(rejects("inv6_empty", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"", "ok"}));
     // INV-7: duplicate labels would unpack to the same variable name.
     assert(rejects("inv7", two, {catchem::SemanticAxis::Column, catchem::SemanticAxis::Species}, {"a", "a"}));
     // A fully valid packed contract still registers (positive control).

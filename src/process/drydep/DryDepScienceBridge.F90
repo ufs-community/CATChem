@@ -125,6 +125,7 @@ contains
       type(DryDepSchemeZHANGConfig) :: zhang_config
 
       ! Convert C strings to Fortran strings
+      local_gas = ''
       icol = 1
       do while (icol < 64)
          if (gas_scheme(icol) == c_null_char) exit
@@ -133,6 +134,7 @@ contains
       end do
       local_gas = trim(adjustl(local_gas))
 
+      local_aero = ''
       icol = 1
       do while (icol < 64)
          if (aero_scheme(icol) == c_null_char) exit

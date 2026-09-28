@@ -215,20 +215,18 @@ namespace catchem {
 
         state->diagnostic_manager()->register_field("dust_emission_total", "Total Dust Emission", "kg/m2/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
-        state->diagnostic_manager()->register_field_contract("dust_emission_bin", "Dust Emission Per Bin", "kg/m2/s",
-                                                             DiagType::FIELD_2D, dims_bins,
-                                                             DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
-                                                             dust_bin_labels);
+        state->diagnostic_manager()->register_field_contract(
+            "dust_emission_bin", "Dust Emission Per Bin", "kg/m2/s", DiagType::FIELD_2D, dims_bins,
+            DiagnosticPolicy::Instantaneous, 0.0, axes_bin, dust_bin_labels);
         state->diagnostic_manager()->register_field("dust_horizontal_flux", "Dust Horizontal Flux", "kg/m/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
         state->diagnostic_manager()->register_field("dust_moisture_correction", "Dust Moisture Correction", "unitless",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
         state->diagnostic_manager()->register_field("dust_effective_threshold", "Dust Effective Threshold", "m/s",
                                                     DiagType::FIELD_2D, dims_1d_as_2d);
-        state->diagnostic_manager()->register_field_contract("dust_utar_threshold", "Dust Ustar Threshold Per Bin",
-                                                             "m/s", DiagType::FIELD_2D, dims_bins,
-                                                             DiagnosticPolicy::Instantaneous, 0.0, axes_bin,
-                                                             dust_bin_labels);
+        state->diagnostic_manager()->register_field_contract(
+            "dust_utar_threshold", "Dust Ustar Threshold Per Bin", "m/s", DiagType::FIELD_2D, dims_bins,
+            DiagnosticPolicy::Instantaneous, 0.0, axes_bin, dust_bin_labels);
     }
 
     void DustProcess::run(std::shared_ptr<StateManager> state) {

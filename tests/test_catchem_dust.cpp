@@ -199,8 +199,7 @@ int main(int argc, char* argv[]) {
         {
             const auto manager = core->get_diagnostic_manager();
             const int n_dust = static_cast<int>(dust_indices.size());
-            const double* emission_bin =
-                static_cast<const double*>(manager->get_host_pointer("dust_emission_bin"));
+            const double* emission_bin = static_cast<const double*>(manager->get_host_pointer("dust_emission_bin"));
             assert(emission_bin != nullptr);
             bool any_positive = false;
             for (int i = 0; i < n_cols * n_dust; ++i) {

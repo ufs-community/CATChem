@@ -10,11 +10,11 @@ void run_wetdep_science_bridge(int n_cols, int n_levels, int n_species, double d
                                double jacob_scale_factor, double jacob_radius_threshold, int jacob_so4_gocart_resusp,
                                double jacob_so4_washout_eff, double* airden_dry, double* mairden, double* pedge,
                                double* pfilsan, double* pfllsan, double* reevapls, double* t_air, bool* is_aerosol,
-                               double* henry_cr, double* henry_k0, double* henry_pKa, double* wd_retfactor,
-                               bool* wd_LiqAndGas, double* wd_convfacI2G, double* wd_rainouteff, double* wd_reevap_frac,
-                               double* radius, double* mw_g, const char* species_names, double* conc, double* tendency,
-                               double* diag_mass, double* diag_flux, const int* diagnostic_species_id,
-                               int n_diag_species);
+                               bool* is_wetdep, double* henry_cr, double* henry_k0, double* henry_pKa,
+                               double* wd_retfactor, bool* wd_LiqAndGas, double* wd_convfacI2G, double* wd_rainouteff,
+                               double* wd_reevap_frac, double* radius, double* mw_g, const char* species_names,
+                               double* conc, double* tendency, double* diag_mass, double* diag_flux,
+                               const int* diagnostic_species_id, int n_diag_species);
 }
 
 namespace catchem {
@@ -142,6 +142,7 @@ namespace catchem {
 
         // 3. Extract species configuration properties from ChemState
         std::vector<char> is_aerosol(state->species_count(), 0);
+        std::vector<char> is_wetdep(state->species_count(), 0);
         std::vector<double> henry_cr(state->species_count(), 0.0);
         std::vector<double> henry_k0(state->species_count(), 0.0);
         std::vector<double> henry_pKa(state->species_count(), 0.0);
@@ -160,6 +161,7 @@ namespace catchem {
         for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
             auto& meta = state->chemistry().species_list[i];
             is_aerosol[i] = meta.is_aerosol ? 1 : 0;
+            is_wetdep[i] = meta.is_wetdep ? 1 : 0;
             henry_k0[i] = meta.henry_k0;
             henry_cr[i] = meta.henry_cr;
             henry_pKa[i] = meta.henry_pKa;
@@ -167,7 +169,10 @@ namespace catchem {
             wd_LiqAndGas[i] = meta.wd_LiqAndGas ? 1 : 0;
             wd_convfacI2G[i] = meta.wd_convfacI2G;
             wd_reevap_frac[i] = meta.wd_reevap_frac;
-            if (meta.is_aerosol && (!(meta.radius > 0.0) || !(meta.mw_g > 0.0)))
+            // Only wet-deposition participants need particle properties: the
+            // scheme leaves non-participants untouched (legacy WetdepIndex
+            // filter parity), so their radius is never consulted.
+            if (meta.is_wetdep && meta.is_aerosol && (!(meta.radius > 0.0) || !(meta.mw_g > 0.0)))
                 throw std::runtime_error("WetDep aerosol '" + meta.short_name +
                                          "' requires explicit radius and molecular weight");
             if (meta.is_wetdep && !meta.is_aerosol && !(meta.mw_g > 0.0))
@@ -190,10 +195,11 @@ namespace catchem {
             state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
             diagnostics_enabled ? 1 : 0, jacob_scale_factor, jacob_radius_threshold, jacob_so4_gocart_resusp ? 1 : 0,
             jacob_so4_washout_eff, airden_dry_ptr, airden_ptr, pedge_ptr, pfilsan_ptr, pfllsan_ptr, reevapls_ptr, t_ptr,
-            (bool*)is_aerosol.data(), henry_cr.data(), henry_k0.data(), henry_pKa.data(), wd_retfactor.data(),
-            (bool*)wd_LiqAndGas.data(), wd_convfacI2G.data(), wd_rainouteff.data_handle(), wd_reevap_frac.data(),
-            radius.data(), mw_g.data(), state->chemistry().species_names_c_arr.data(), conc_ptr, mock_tendency.data(),
-            diag_mass_bin.data(), diag_flux_bin.data(), diagnostic_species_id.data(), diagnostic_species_id.size());
+            (bool*)is_aerosol.data(), (bool*)is_wetdep.data(), henry_cr.data(), henry_k0.data(), henry_pKa.data(),
+            wd_retfactor.data(), (bool*)wd_LiqAndGas.data(), wd_convfacI2G.data(), wd_rainouteff.data_handle(),
+            wd_reevap_frac.data(), radius.data(), mw_g.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
+            mock_tendency.data(), diag_mass_bin.data(), diag_flux_bin.data(), diagnostic_species_id.data(),
+            diagnostic_species_id.size());
 
         // 5. Map 3D diagnostics back to the individually registered fields.
         // The JACOB scheme stores each selected species at its position

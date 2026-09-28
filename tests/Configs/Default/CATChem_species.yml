@@ -71,7 +71,6 @@
 - name: dms
   __description: Dimethyl sulfide
   molecular weight [kg mol-1]: 62.13e-3
-  __radius: 0.0
   __is_gas: true   #gocart treat it as a gas without dry and wet deposition
   __is_dust: false
   __is_aerosol: false
@@ -90,8 +89,8 @@
   # (ug/kg), alongside SO4.  It must remain an aerosol through the CATChem
   # import/export and deposition paths.
   __is_aerosol: true
-  __is_drydep: true
-  __is_wetdep: true
+  __is_drydep: false
+  __is_wetdep: false
   molecular weight [kg mol-1]: 96.10e-3
   # Parity A/B baseline: the legacy placeholder radius was 0.0, which sits
   # below the wetdep washout fine/coarse threshold (0.05 um) and selects the

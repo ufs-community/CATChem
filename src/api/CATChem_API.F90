@@ -823,8 +823,19 @@ contains
          call c_f_pointer(raw_ptr, f_ptr_2d, [dims(1), dims(2)])
          if (dims(2) == this%nz .and. dims(1) == this%nx * this%ny) then
             diagnostic_data = real(reshape(f_ptr_2d, [this%nx, this%ny, this%nz]), fp)
-         else if (dims(1) == this%nx * this%ny) then
+         else if (dims(1) == this%nx * this%ny .and. dims(2) == 1) then
             diagnostic_data(:,:,1) = real(reshape(f_ptr_2d(:,1), [this%nx, this%ny]), fp)
+         else
+            ! A rank-2 field whose trailing extent is neither the model level
+            ! count nor one is a packed diagnostic (for example a species or
+            ! category axis).  This legacy 3-D accessor has no slot argument,
+            ! so returning column 1 would silently relabel the first packed
+            ! species as the requested field.  Packed callers must use the
+            ! contract-aware pointer/axis API used by the NUOPC diagnostic
+            ! writer.
+            deallocate(diagnostic_data)
+            rc = CC_FAILURE
+            return
          end if
       else if (rank == 3) then
          call c_f_pointer(raw_ptr, f_ptr_3d, [dims(1), dims(2), dims(3)])

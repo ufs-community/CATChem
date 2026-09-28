@@ -785,12 +785,21 @@ int main(int argc, char* argv[]) {
             std::vector<double> mock_pmid(n_cols * n_levels, 90000.0);
             std::vector<double> mock_t(n_cols * n_levels, 288.15);
             std::vector<double> mock_pedge(n_cols * (n_levels + 1), 100000.0);
+            std::vector<double> mock_z(n_cols * (n_levels + 1), 0.0);
 
             std::vector<double> mock_hflux(n_cols, 100.0);
             std::vector<double> mock_lat(n_cols, 40.0);
             std::vector<double> mock_lon(n_cols, -80.0);
             std::vector<double> mock_pblh(n_cols, 1000.0);
             std::vector<double> mock_ustar(n_cols, 0.5);
+            std::vector<double> mock_u10m(n_cols, 3.0);
+            std::vector<double> mock_v10m(n_cols, 1.0);
+            std::vector<double> mock_z0h(n_cols, 0.001);
+            std::vector<double> mock_lwi(n_cols, 1.0);
+
+            for (int level = 0; level <= n_levels; ++level)
+                for (int col = 0; col < n_cols; ++col)
+                    mock_z[static_cast<std::size_t>(col) + static_cast<std::size_t>(n_cols) * level] = 100.0 * level;
 
             std::vector<double> mock_chem_state(n_cols * n_levels * n_species, 1.0);
 
@@ -800,12 +809,17 @@ int main(int argc, char* argv[]) {
             catchem_state_bind_met_3d(state, "PMID", mock_pmid.data());
             catchem_state_bind_met_3d(state, "T", mock_t.data());
             catchem_state_bind_met_3d(state, "PEDGE", mock_pedge.data());
+            catchem_state_bind_met_3d(state, "Z", mock_z.data());
 
             catchem_state_bind_met_2d(state, "HFLUX", mock_hflux.data());
             catchem_state_bind_met_2d(state, "LAT", mock_lat.data());
             catchem_state_bind_met_2d(state, "LON", mock_lon.data());
             catchem_state_bind_met_2d(state, "PBLH", mock_pblh.data());
             catchem_state_bind_met_2d(state, "USTAR", mock_ustar.data());
+            catchem_state_bind_met_2d(state, "U10M", mock_u10m.data());
+            catchem_state_bind_met_2d(state, "V10M", mock_v10m.data());
+            catchem_state_bind_met_2d(state, "Z0H", mock_z0h.data());
+            catchem_state_bind_met_2d(state, "LWI", mock_lwi.data());
 
             catchem_state_bind_unified_chemistry(state, mock_chem_state.data());
             catchem_state_sync_to_device(state);
@@ -817,7 +831,9 @@ int main(int argc, char* argv[]) {
             catchem_core_run_timestep(core, 3600.0);
 
             double* diag_gas_source = (double*)catchem_diag_get_pointer(core, "PSO4_from_gaseous_SO2_per_level");
+            double* diag_aqueous_source = (double*)catchem_diag_get_pointer(core, "PSO4_from_aqueous_SO2_per_level");
             assert(diag_gas_source != nullptr);
+            assert(diag_aqueous_source != nullptr);
 
             std::cout << "SUCCESS: SO4chem Direct Adapter executed and populated diagnostics!\n";
             catchem_core_destroy(core);
