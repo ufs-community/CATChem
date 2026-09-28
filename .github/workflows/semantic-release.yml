@@ -39,15 +39,18 @@ jobs:
       new_release_version: ${{ steps.release.outputs.version }}
       new_release_published: ${{ steps.release.outputs.released }}
       is_prerelease: ${{ steps.eval.outputs.is_prerelease }}
+    env:
+      SEMVER_APP_ID: ${{ secrets.SEMVER_APP_ID }}
+      SEMVER_APP_PRIVATE_KEY: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
 
     steps:
       - name: Generate GitHub App Token (if configured)
         id: app-token
-        if: ${{ secrets.SEMVER_APP_ID != '' && secrets.SEMVER_APP_PRIVATE_KEY != '' }}
+        if: env.SEMVER_APP_ID != '' && env.SEMVER_APP_PRIVATE_KEY != ''
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.SEMVER_APP_ID }}
-          private-key: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
+          client-id: ${{ env.SEMVER_APP_ID }}
+          private-key: ${{ env.SEMVER_APP_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v7
