@@ -24,15 +24,23 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ### Container
 
-The official UFS-Chem and CATChem images are recommended for developers and interested users.
+The official UFS-Chem and CATChem container images are recommended for developers and interested users. The foundational Spack base environment is maintained and published externally by [ufs-chem-container](https://github.com/ufs-community/ufs-chem-container).
 
 1. Base image for developers:
 
+    Development builds (`develop`) use the pre-release candidate base image:
+
     ```bash
     # Mounts the CATChem root directory to /opt/project inside the container
-    docker run -it --rm --platform linux/amd64 -v <CATChem root directory>:/opt/project noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
+    docker run -it --rm --platform linux/amd64 -v <CATChem root directory>:/opt/project noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:latest
     # Now inside the container...
     cd /opt/project # <-- changes made in this directory will be reflected in the local file system
+    ```
+
+    Production builds (`main`) use the stable production base image:
+
+    ```bash
+    docker run -it --rm --platform linux/amd64 -v <CATChem root directory>:/opt/project noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
     ```
 
 2. Running a pre-installed and tested CATChem:

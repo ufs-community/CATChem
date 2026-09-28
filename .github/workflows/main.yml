@@ -15,19 +15,34 @@ permissions:
   id-token: write
 
 jobs:
+  verify-docker-tag:
+    name: Verify Docker Base Tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Verify Dockerfile base image tag
+        env:
+          TARGET: ${{ github.base_ref || github.ref_name }}
+        run: |
+          python3 .github/workflows/scripts/verify_docker_tag.py
+
   docker-setup:
     runs-on: ubuntu-latest
     outputs:
-      base_project_name_dev: ${{ steps.vars.outputs.base_project_name_dev }}
+      base_image_dev: ${{ steps.vars.outputs.base_image_dev }}
+      base_image_prod: ${{ steps.vars.outputs.base_image_prod }}
       project_name_dev: ${{ steps.vars.outputs.project_name_dev }}
-      base_project_name: ${{ steps.vars.outputs.base_project_name }}
       project_name: ${{ steps.vars.outputs.project_name }}
     steps:
       - id: vars
+        env:
+          DOCKER_ORG: ${{ vars.DOCKER_ORG || 'noaaepic' }}
         run: |
-          echo "base_project_name_dev=ufschem-spack-base-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
+          echo "base_image_dev=${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13-dev:latest" >> "$GITHUB_OUTPUT"
+          echo "base_image_prod=${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13:latest" >> "$GITHUB_OUTPUT"
           echo "project_name_dev=catchem-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
-          echo "base_project_name=ufschem-spack-base-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
           echo "project_name=catchem-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
 
   lint:
@@ -43,13 +58,26 @@ jobs:
     needs: [docker-setup]
     uses: ./.github/workflows/docker.yml
     with:
-      base_project_name: ${{ needs.docker-setup.outputs.base_project_name_dev }}
       project_name: catchem-dev
+    secrets: inherit
+
+  release-preview:
+    name: Semantic Release Preview
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/semantic-release.yml
+    with:
+      dry_run: true
+      target_branch: ${{ github.base_ref }}
+      pr_title: ${{ github.event.pull_request.title }}
+    secrets: inherit
 
   release:
-    needs: [lint, ci-gnu, ci-intel, docker-develop]
+    needs: [lint, ci-gnu, ci-intel, docker-develop, verify-docker-tag]
     if: github.event_name == 'push'
     uses: ./.github/workflows/semantic-release.yml
+    with:
+      dry_run: false
+      target_branch: ${{ github.ref_name }}
     secrets: inherit
 
   docker-release:
@@ -58,7 +86,7 @@ jobs:
     uses: ./.github/workflows/docker-release.yml
     with:
       release_version: ${{ needs.release.outputs.new_release_version }}
-      base_project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.base_project_name_dev || needs.docker-setup.outputs.base_project_name }}
+      base_image: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.base_image_dev || needs.docker-setup.outputs.base_image_prod }}
       project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.project_name_dev || needs.docker-setup.outputs.project_name }}
     secrets: inherit
 
