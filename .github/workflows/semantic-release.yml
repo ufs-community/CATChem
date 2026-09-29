@@ -65,18 +65,7 @@ jobs:
           PR_TITLE: ${{ inputs.pr_title }}
           TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
         run: |
-          echo "Evaluating release against target branch: $TARGET"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -n "$PR_TITLE" ]; then
-            PR_HEAD="$(git rev-parse HEAD)"
-            git checkout -B "$TARGET" "origin/$TARGET"
-            git merge --squash "$PR_HEAD" || git merge --abort || true
-            echo "Applying synthetic squash-merge commit from PR title: $PR_TITLE"
-            git commit --allow-empty -m "$PR_TITLE"
-          else
-            git checkout -B "$TARGET"
-          fi
+          python3 .github/workflows/scripts/prepare_release_preview.py
 
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@v10
@@ -88,73 +77,14 @@ jobs:
           push: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
           vcs_release: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
 
-      - name: Evaluate Release Information
+      - name: Evaluate and Report Release
         id: eval
         if: always()
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          TAG: ${{ steps.release.outputs.tag }}
+          RELEASED: ${{ steps.release.outputs.released }}
+          TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
+          DRY_RUN: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
         run: |
-          VERSION="${{ steps.release.outputs.version }}"
-          RELEASED="${{ steps.release.outputs.released }}"
-          TARGET="${{ inputs.target_branch || github.base_ref || github.ref_name }}"
-          IS_PRERELEASE="false"
-          if [[ "$VERSION" == *"-"* ]] || [[ "$TARGET" == "develop" ]]; then
-            IS_PRERELEASE="true"
-          fi
-          echo "is_prerelease=$IS_PRERELEASE" >> "$GITHUB_OUTPUT"
-          echo "target_branch=$TARGET" >> "$GITHUB_OUTPUT"
-
-      - name: Report Release Actions
-        if: always()
-        run: |-
-          TARGET="${{ steps.eval.outputs.target_branch }}"
-          VERSION="${{ steps.release.outputs.version }}"
-          TAG="${{ steps.release.outputs.tag }}"
-          RELEASED="${{ steps.release.outputs.released }}"
-          IS_PRERELEASE="${{ steps.eval.outputs.is_prerelease }}"
-          REPORT_FILE=$(mktemp)
-          {
-            echo "### 🚀 Semantic Release Plan"
-            if [ "${{ inputs.dry_run || github.event_name == 'pull_request' }}" = "true" ]; then
-              echo "**Mode**: Preview (Dry Run / No-op) — No tags or releases created in this run."
-            else
-              echo "**Mode**: Production Execution"
-            fi
-            echo ""
-            echo "| Parameter | Value |"
-            echo "|---|---|"
-            echo "| Target Branch | \`$TARGET\` |"
-            echo "| Next Version | \`${VERSION:-None}\` |"
-            echo "| Git Tag | \`${TAG:-None}\` |"
-            echo "| Will Release? | \`$RELEASED\` |"
-            echo "| Is Prerelease? | \`$IS_PRERELEASE\` |"
-            echo ""
-            if [ "$RELEASED" = "true" ]; then
-              echo "#### 📦 Actions on Merge to \`$TARGET\`:"
-              echo "- Git tag \`$TAG\` will be created."
-              echo "- Release notes and \`CHANGELOG.md\` will be published."
-              if [ "$IS_PRERELEASE" = "true" ]; then
-                echo "- Container \`catchem-ubuntu-gcc-13-dev:$VERSION\` will be built and pushed."
-                echo "- Docker tag \`:latest\` will be updated on \`catchem-ubuntu-gcc-13-dev\`."
-              else
-                echo "- Container \`catchem-ubuntu-gcc-13:$VERSION\` will be built and pushed."
-                echo "- Docker tag \`:latest\` will be updated on \`catchem-ubuntu-gcc-13\`."
-              fi
-              if [ "${{ inputs.dry_run || github.event_name == 'pull_request' }}" = "true" ]; then
-                DIFF_OUTPUT="$(git diff HEAD)"
-                if [ -n "$DIFF_OUTPUT" ]; then
-                  echo ""
-                  echo "#### 📝 Projected Repository Diff"
-                  echo "<details open>"
-                  echo "<summary>Click to collapse projected file changes</summary>"
-                  echo ""
-                  echo "\`\`\`diff"
-                  printf '%s\n' "$DIFF_OUTPUT"
-                  echo "\`\`\`"
-                  echo "</details>"
-                fi
-              fi
-            else
-              echo "#### ℹ️ No release will be triggered on merge based on current commit history."
-            fi
-          } > "$REPORT_FILE"
-          cat "$REPORT_FILE"
-          cat "$REPORT_FILE" >> "$GITHUB_STEP_SUMMARY"
+          python3 .github/workflows/scripts/report_release.py
