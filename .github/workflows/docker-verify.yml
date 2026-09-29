@@ -1,0 +1,24 @@
+name: Verify Dockerfile
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      target:
+        description: 'Target branch context'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Verify Dockerfile base image tag
+        env:
+          TARGET: ${{ inputs.target || github.base_ref || github.ref_name }}
+        run: |
+          python3 .github/workflows/scripts/verify_docker_tag.py

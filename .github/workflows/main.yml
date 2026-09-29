@@ -16,42 +16,15 @@ permissions:
 
 jobs:
   docker-verify:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Verify Dockerfile base image tag
-        env:
-          TARGET: ${{ github.base_ref || github.ref_name }}
-        run: |
-          python3 .github/workflows/scripts/verify_docker_tag.py
+    uses: ./.github/workflows/docker-verify.yml
+    with:
+      target: ${{ github.base_ref || github.ref_name }}
 
   docker-setup:
-    runs-on: ubuntu-latest
-    outputs:
-      base_image_dev: ${{ steps.vars.outputs.base_image_dev }}
-      base_image_prod: ${{ steps.vars.outputs.base_image_prod }}
-      base_image: ${{ steps.vars.outputs.base_image }}
-      project_name_dev: ${{ steps.vars.outputs.project_name_dev }}
-      project_name: ${{ steps.vars.outputs.project_name }}
-    steps:
-      - id: vars
-        env:
-          DOCKER_ORG: ${{ vars.DOCKER_ORG }}
-          TARGET: ${{ github.base_ref || github.ref_name }}
-        run: |
-          BASE_DEV="${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13-dev:latest"
-          BASE_PROD="${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13:latest"
-          echo "base_image_dev=${BASE_DEV}" >> "$GITHUB_OUTPUT"
-          echo "base_image_prod=${BASE_PROD}" >> "$GITHUB_OUTPUT"
-          if [ "$TARGET" = "main" ]; then
-            echo "base_image=${BASE_PROD}" >> "$GITHUB_OUTPUT"
-          else
-            echo "base_image=${BASE_DEV}" >> "$GITHUB_OUTPUT"
-          fi
-          echo "project_name_dev=catchem-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
-          echo "project_name=catchem-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
+    uses: ./.github/workflows/docker-setup.yml
+    with:
+      docker_org: ${{ vars.DOCKER_ORG }}
+      target: ${{ github.base_ref || github.ref_name }}
 
   lint:
     uses: ./.github/workflows/lint.yml

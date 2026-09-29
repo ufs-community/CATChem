@@ -1,0 +1,62 @@
+name: Docker Setup
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      docker_org:
+        description: 'Docker organization'
+        required: true
+        type: string
+      target:
+        description: 'Target branch context'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      base_image_dev:
+        description: 'Base image for develop branch'
+        value: ${{ jobs.setup.outputs.base_image_dev }}
+      base_image_prod:
+        description: 'Base image for main/production branch'
+        value: ${{ jobs.setup.outputs.base_image_prod }}
+      base_image:
+        description: 'Resolved base image for target branch'
+        value: ${{ jobs.setup.outputs.base_image }}
+      project_name_dev:
+        description: 'Project name for dev container'
+        value: ${{ jobs.setup.outputs.project_name_dev }}
+      project_name:
+        description: 'Project name for production container'
+        value: ${{ jobs.setup.outputs.project_name }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      base_image_dev: ${{ steps.vars.outputs.base_image_dev }}
+      base_image_prod: ${{ steps.vars.outputs.base_image_prod }}
+      base_image: ${{ steps.vars.outputs.base_image }}
+      project_name_dev: ${{ steps.vars.outputs.project_name_dev }}
+      project_name: ${{ steps.vars.outputs.project_name }}
+    steps:
+      - id: vars
+        env:
+          DOCKER_ORG: ${{ inputs.docker_org }}
+          TARGET: ${{ inputs.target || github.base_ref || github.ref_name }}
+        run: |
+          if [ -z "${DOCKER_ORG}" ]; then
+            echo "::error::Repository variable DOCKER_ORG is not set. Please configure DOCKER_ORG in repository variables (e.g. noaaepic)."
+            exit 1
+          fi
+          BASE_DEV="${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13-dev:latest"
+          BASE_PROD="${DOCKER_ORG}/ufschem-spack-base-ubuntu-gcc-13:latest"
+          echo "base_image_dev=${BASE_DEV}" >> "$GITHUB_OUTPUT"
+          echo "base_image_prod=${BASE_PROD}" >> "$GITHUB_OUTPUT"
+          if [ "$TARGET" = "main" ]; then
+            echo "base_image=${BASE_PROD}" >> "$GITHUB_OUTPUT"
+          else
+            echo "base_image=${BASE_DEV}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "project_name_dev=catchem-ubuntu-gcc-13-dev" >> "$GITHUB_OUTPUT"
+          echo "project_name=catchem-ubuntu-gcc-13" >> "$GITHUB_OUTPUT"
