@@ -15,8 +15,7 @@ permissions:
   id-token: write
 
 jobs:
-  verify-docker-tag:
-    name: Verify Docker Base Tag
+  docker-verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -73,7 +72,6 @@ jobs:
     secrets: inherit
 
   release-preview:
-    name: Semantic Release Preview
     if: github.event_name == 'pull_request'
     uses: ./.github/workflows/semantic-release.yml
     with:
@@ -83,7 +81,7 @@ jobs:
     secrets: inherit
 
   release:
-    needs: [lint, ci-gnu, ci-intel, docker-develop, verify-docker-tag]
+    needs: [lint, ci-gnu, ci-intel, docker-develop, docker-verify]
     if: github.event_name == 'push'
     uses: ./.github/workflows/semantic-release.yml
     with:
