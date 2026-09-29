@@ -59,22 +59,14 @@ def is_prerelease(version: str, target: str) -> bool:
 
 def write_github_output(outputs: dict[str, str]) -> None:
     """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    output_path = os.environ.get("GITHUB_OUTPUT")
-    if not output_path:
-        return
+    output_path = os.environ["GITHUB_OUTPUT"]
     with open(output_path, "a", encoding="utf-8") as f:
-        for k, v in outputs.items():
-            f.write(f"{k}={v}\n")
+        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
 def get_git_diff() -> str:
     """Capture prospective git diff from dry run file modifications."""
-    try:
-        res = subprocess.run(["git", "diff", "HEAD"], capture_output=True, text=True, check=True)
-        return res.stdout.strip()
-    except Exception as exc:
-        logger.warning("Failed to capture git diff: %s", exc)
-        return ""
+    return subprocess.check_output(["git", "diff", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
 
 
 def generate_report(target: str, version: str, tag: str, released: bool, dry_run: bool, prerelease: bool) -> str:
@@ -142,13 +134,17 @@ def main() -> int:
     )
 
     # 2. Build and publish report
-    report_content = generate_report(target, version, tag, released, dry_run, prerelease)
+    try:
+        report_content = generate_report(target, version, tag, released, dry_run, prerelease)
+    except subprocess.CalledProcessError as exc:
+        logger.error("Git command failed (exit %d): %s\nStderr: %s", exc.returncode, exc.cmd, exc.stderr)
+        return exc.returncode
+
     print(report_content)
 
-    step_summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
-    if step_summary_path:
-        with open(step_summary_path, "a", encoding="utf-8") as f:
-            f.write(report_content)
+    step_summary_path = os.environ["GITHUB_STEP_SUMMARY"]
+    with open(step_summary_path, "a", encoding="utf-8") as f:
+        f.write(report_content)
 
     return 0
 

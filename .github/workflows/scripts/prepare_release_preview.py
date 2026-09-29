@@ -37,8 +37,7 @@ def run_git(args: list[str], check: bool = True) -> subprocess.CompletedProcess[
 def prepare_preview(target: str, pr_title: str) -> None:
     """Prepare repository branch and synthetic squash merge commit if PR title is present."""
     if not target:
-        logger.warning("No target branch specified; skipping branch preparation.")
-        return
+        raise ValueError("Target branch must be specified for release preview.")
 
     logger.info("Evaluating prospective release against target branch: %s", target)
     run_git(["config", "user.name", "github-actions[bot]"])
@@ -70,6 +69,9 @@ def main() -> int:
     except subprocess.CalledProcessError as exc:
         logger.error("Git command failed (exit %d): %s\nStderr: %s", exc.returncode, exc.cmd, exc.stderr)
         return exc.returncode
+    except ValueError as exc:
+        logger.error("%s", exc)
+        return 1
     return 0
 
 
