@@ -1,3 +1,9 @@
+# check=skip=InvalidDefaultArgInFrom
+# BASE_IMAGE is intentionally un-defaulted to enforce explicit external base image
+# selection at build time (e.g. develop vs production Spack environment).
+# Example build-args:
+#   Develop:    --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:latest
+#   Production: --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
