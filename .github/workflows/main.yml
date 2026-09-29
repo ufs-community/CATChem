@@ -23,7 +23,7 @@ jobs:
   docker-setup:
     uses: ./.github/workflows/docker-setup.yml
     with:
-      docker_org: ${{ vars.DOCKER_ORG }}
+      docker_org: ${{ vars.DOCKER_ORG || 'noaaepic' }}
       target: ${{ github.base_ref || github.ref_name }}
 
   lint:
