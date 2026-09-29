@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:latest
+ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 SHELL ["/bin/bash", "-c"]

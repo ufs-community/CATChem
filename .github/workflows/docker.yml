@@ -7,6 +7,10 @@ on:
         description: 'The project name'
         required: true
         type: string
+      base_image:
+        description: 'The external base image'
+        required: true
+        type: string
 
 jobs:
   build-test:
@@ -41,6 +45,8 @@ jobs:
           file: ./docker/Dockerfile
           push: false
           platforms: linux/amd64
+          build-args: |
+            BASE_IMAGE=${{ inputs.base_image }}
           tags: ${{ inputs.project_name }}
           cache-from: |
             type=gha,scope=catchem
