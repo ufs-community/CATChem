@@ -2,10 +2,13 @@
 """Verify Dockerfile base image argument and target branch tag compliance."""
 
 import argparse
+import logging
 import os
 import re
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
@@ -39,6 +42,12 @@ def parse_args() -> argparse.Namespace:
         "--dockerfile",
         default="docker/Dockerfile",
         help="Path to Dockerfile (default: docker/Dockerfile).",
+    )
+    parser.add_argument(
+        "--log-level",
+        default=os.environ.get("LOG_LEVEL", "INFO").upper(),
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help="Set the logging level (default: INFO).",
     )
     return parser.parse_args()
 
@@ -141,6 +150,11 @@ def verify_image_tag(target: str, image: str) -> tuple[bool, str]:
 
 def main() -> int:
     args = parse_args()
+    logging.basicConfig(
+        level=getattr(logging, args.log_level, logging.INFO),
+        format="%(levelname)s: %(message)s",
+    )
+
     target = args.target.strip()
     dockerfile_path = Path(args.dockerfile)
     build_arg = args.build_arg.strip()
@@ -148,32 +162,33 @@ def main() -> int:
 
     prescribed_image = resolve_prescribed_image(target, args.image, docker_org)
 
-    print(f"Evaluating Dockerfile: {dockerfile_path}")
-    print(f"Target branch: {target or '(none)'}")
-    print(f"Required build argument: {build_arg}")
-    print(f"Prescribed base image from CI: {prescribed_image}")
+    logger.info("Evaluating Dockerfile: %s", dockerfile_path)
+    logger.info("Target branch: %s", target or "(none)")
+    logger.info("Required build argument: %s", build_arg)
+    logger.info("Prescribed base image from CI: %s", prescribed_image)
 
     # 1. Verify Dockerfile requires the build arg and uses it in FROM
     df_ok, df_err = verify_dockerfile(dockerfile_path, build_arg)
     if not df_ok:
-        print(f"::error file={dockerfile_path}::{df_err}")
+        logger.error("%s", df_err)
         return 1
-    print(f"Success: Dockerfile requires '{build_arg}' build argument without default.")
-    print(f"Success: FROM instruction consumes '${{{build_arg}}}'.")
+    logger.info("Success: Dockerfile requires '%s' build argument without default.", build_arg)
+    logger.info("Success: FROM instruction consumes '${%s}'.", build_arg)
 
     # 2. Verify prescribed base image complies with target branch requirements
     if target:
         tag_ok, tag_msg = verify_image_tag(target, prescribed_image)
         if not tag_ok:
-            print(f"::error file={dockerfile_path}::{tag_msg}")
+            logger.error("%s", tag_msg)
             return 1
-        print(f"Success: {tag_msg}")
+        logger.info("Success: %s", tag_msg)
     else:
-        print("Notice: No target branch specified; skipping branch-specific tag enforcement.")
+        logger.warning("No target branch specified; skipping branch-specific tag enforcement.")
 
-    print(
-        f'Success: Dockerfile will appropriately accept the prescribed base image argument '
-        f'({build_arg}={prescribed_image}).'
+    logger.info(
+        "Success: Dockerfile will appropriately accept the prescribed base image argument (%s=%s).",
+        build_arg,
+        prescribed_image,
     )
     return 0
 
