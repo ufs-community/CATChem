@@ -1507,12 +1507,17 @@ CONTAINS
             return
          endif
 
-         ! Calculate dry air density: ρ = P / (R_dry * T)
+         ! GOCART-parity test: moist air density using virtual temperature,
+         ! matching GOCART/UFS AIRDENS = P / (Rd * T * (1 + fv*q)), fv = Rv/Rd-1 = AIRMW/H2OMW-1.
          do k = 1, nz
             do j = 1, ny
                do i = 1, nx
-                  this%MAIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
-                  this%AIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
+                  this%MAIRDEN(i, j, k) = this%PMID(i, j, k) / rd / &
+                     ( this%T(i, j, k) * (1.0_fp + (AIRMW/H2OMW - 1.0_fp) * this%QV(i, j, k)) )
+                  this%AIRDEN(i, j, k) = this%MAIRDEN(i, j, k)
+                  ! Original CATChem (dry-air formula P/(Rd*T)), kept for reference:
+                  ! this%MAIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
+                  ! this%AIRDEN(i, j, k) = this%PMID(i, j, k) / rd / this%T(i, j, k)
                enddo
             enddo
          enddo
@@ -1636,12 +1641,17 @@ CONTAINS
             return
          endif
 
-         ! Calculate OBK from met_utility module
+         ! Calculate OBK, aligned with GOCART ObukhovLength2G: moist air density and
+         ! lowest-layer air temperature (k=1 = surface here), not skin temp TS.
          do j = 1, ny
             do i = 1, nx
-               airden = this%PMID(i, j, 1) / rd / this%T(i, j, 1)
                !!!! Note we cannot use this%AIRDEN here because it may not be calculated yet
-               this%OBK(i, j) = monin_obukhov_length(this%USTAR(i, j), this%TS(i, j), this%HFLUX(i, j), airden)
+               airden = this%PMID(i, j, 1) / rd / &
+                  ( this%T(i, j, 1) * (1.0_fp + (AIRMW/H2OMW - 1.0_fp) * this%QV(i, j, 1)) )
+               this%OBK(i, j) = monin_obukhov_length(this%USTAR(i, j), this%T(i, j, 1), this%HFLUX(i, j), airden)
+               ! Original CATChem (dry density + skin temp TS), kept for reference:
+               ! airden = this%PMID(i, j, 1) / rd / this%T(i, j, 1)
+               ! this%OBK(i, j) = monin_obukhov_length(this%USTAR(i, j), this%TS(i, j), this%HFLUX(i, j), airden)
             enddo
          enddo
 
