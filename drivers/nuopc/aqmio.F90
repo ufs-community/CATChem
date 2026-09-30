@@ -3790,22 +3790,51 @@ contains
    !! nf90_redef directly.  Attributes are idempotent: calling this again
    !! with the same values simply overwrites them.
    !!
+   !! Only the root PET of the owning virtual machine touches the file.
+   !! Entering define mode is a metadata write, and HDF5 does not support
+   !! concurrent writers on one file: if every PET stamped the same per-tile
+   !! file the superblock was left truncated or invalid.  Callers on a
+   !! multi-PET grid must pass \p iocomp so ownership is resolved against the
+   !! same VM that AQMIO_Write1D uses; without it the current VM is used.
+   !!
    !! \param filename NetCDF filename (must exist)
    !! \param names    Attribute names, names(1:n)
    !! \param values   Attribute values, values(1:n)
    !! \param n        Number of attributes
    !! \param rc       Return code
-   subroutine AQMIO_WriteGlobalAttrs(filename, names, values, n, rc)
+   !! \param iocomp   ESMF GridComp whose VM decides the owning PET - optional
+   subroutine AQMIO_WriteGlobalAttrs(filename, names, values, n, rc, iocomp)
       character(len=*), intent(in) :: filename
       character(len=*), intent(in) :: names(:)
       character(len=*), intent(in) :: values(:)
       integer, intent(in) :: n
       integer, intent(out), optional :: rc
+      type(ESMF_GridComp), intent(inout), optional :: iocomp
 
 #if HAVE_NETCDF
       integer :: localrc, ncid, k
+      type(ESMF_VM) :: vm
+      integer :: localPet
 
       if (present(rc)) rc = ESMF_SUCCESS
+
+      ! MPI coordination: only the root PET may open the file in define mode
+      ! (mirrors AQMIO_Write1D).
+      if (present(iocomp)) then
+         call ESMF_GridCompGet(iocomp, vm=vm, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) then
+            call ESMF_VMGetCurrent(vm, rc=localrc)
+         end if
+      else
+         call ESMF_VMGetCurrent(vm, rc=localrc)
+      end if
+      if (localrc == ESMF_SUCCESS) then
+         call ESMF_VMGet(vm, localPet=localPet, rc=localrc)
+         if (localrc == ESMF_SUCCESS .and. localPet /= 0) then
+            ! Non-root PETs: the owner stamps the attributes, nothing to do here
+            return
+         end if
+      end if
 
       localrc = nf90_open(trim(filename), NF90_WRITE, ncid)
       if (localrc /= NF90_NOERR) then

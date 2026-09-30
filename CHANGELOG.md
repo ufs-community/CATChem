@@ -46,6 +46,17 @@
   `RSTARG = 8.3144598` J/K/mol, `H2O_MW = 18.016` g/mol, `Rd = 287.0` J/K/kg
   (both the C++ `catchem_constants.hpp` and the Fortran
   `catchem_bridge_constants` copies).
+- **nuopc/aqmio**: `AQMIO_WriteGlobalAttrs` now performs its open/redef/put_att
+  sequence only on the root PET of the VM it is given (new optional `iocomp`
+  argument, same guard `AQMIO_Write1D` already used). Previously every PET ran
+  the loop over per-tile files, so on a multi-tile cubed-sphere run all ranks
+  entered define mode on the same HDF5 file concurrently; the losing file was
+  left truncated or invalid and every later write to it failed with
+  `NetCDF: HDF error`, `NetCDF: Unknown file format` and a misleading
+  `Permission denied` from the `NF90_CLOBBER` fallback. `write_global_attributes`
+  drops its own (uninitialized `localPet`) rank guard and adds an
+  `ESMF_VMBarrier` so the other PETs do not open the files for field data until
+  the root PET has left define mode and closed them.
 
 ### Testing
 
