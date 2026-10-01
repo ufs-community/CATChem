@@ -4,6 +4,7 @@
 import argparse
 import logging
 import os
+import re
 import subprocess
 import sys
 
@@ -49,6 +50,11 @@ def parse_args() -> argparse.Namespace:
         default=os.environ.get("DRY_RUN", "false"),
         help="Whether the run was in dry-run / preview mode (true/false).",
     )
+    parser.add_argument(
+        "--current-version",
+        default=os.environ.get("CURRENT_VERSION", ""),
+        help="Current release version being evaluated against.",
+    )
     return parser.parse_args()
 
 
@@ -59,17 +65,75 @@ def is_prerelease(version: str, target: str) -> bool:
 
 def write_github_output(outputs: dict[str, str]) -> None:
     """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    output_path = os.environ["GITHUB_OUTPUT"]
-    with open(output_path, "a", encoding="utf-8") as f:
-        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
+    if out := os.environ.get("GITHUB_OUTPUT"):
+        with open(out, "a", encoding="utf-8") as f:
+            f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
 def get_git_diff() -> str:
     """Capture prospective git diff from dry run file modifications."""
-    return subprocess.check_output(["git", "diff", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
+    try:
+        return subprocess.check_output(["git", "diff", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
+    except subprocess.CalledProcessError:
+        return ""
 
 
-def generate_report(target: str, version: str, tag: str, released: bool, dry_run: bool, prerelease: bool) -> str:
+def extract_version_from_toml(text: str) -> str:
+    """Extract project version from TOML content using regex."""
+    match = re.search(r'^\s*version\s*=\s*["\']([^"\']+)["\']', text, re.MULTILINE)
+    return match.group(1).strip().lstrip("v") if match else ""
+
+
+def determine_current_version(target: str, released: bool, dry_run: bool) -> str:
+    """Determine the current version before this release evaluation."""
+    refs = (
+        ["HEAD~1", "HEAD~2"]
+        if (not dry_run and released)
+        else ([f"origin/{target}", target] if target else []) + ["HEAD~1", "HEAD"]
+    )
+    for ref in refs:
+        try:
+            return (
+                subprocess.check_output(
+                    ["git", "describe", "--tags", "--abbrev=0", ref],
+                    text=True,
+                    stderr=subprocess.DEVNULL,
+                )
+                .strip()
+                .lstrip("v")
+            )
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            pass
+        try:
+            content = subprocess.check_output(
+                ["git", "show", f"{ref}:pyproject.toml"],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+            if ver := extract_version_from_toml(content):
+                return ver
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            pass
+
+    try:
+        with open("pyproject.toml", encoding="utf-8") as f:
+            if ver := extract_version_from_toml(f.read()):
+                return ver
+    except OSError:
+        pass
+
+    return "None"
+
+
+def generate_report(
+    target: str,
+    current_version: str,
+    version: str,
+    tag: str,
+    released: bool,
+    dry_run: bool,
+    prerelease: bool,
+) -> str:
     """Build Markdown report content."""
     lines = ["### 🚀 Semantic Release Plan"]
     if dry_run:
@@ -77,13 +141,15 @@ def generate_report(target: str, version: str, tag: str, released: bool, dry_run
     else:
         lines.append("**Mode**: Production Execution\n")
 
-    lines.append("| Parameter | Value |")
-    lines.append("|---|---|")
-    lines.append(f"| Target Branch | `{target}` |")
-    lines.append(f"| Next Version | `{version or 'None'}` |")
-    lines.append(f"| Git Tag | `{tag or 'None'}` |")
-    lines.append(f"| Will Release? | `{str(released).lower()}` |")
-    lines.append(f"| Is Prerelease? | `{str(prerelease).lower()}` |\n")
+    table_rows = [
+        ("Target Branch", target),
+        ("Current Version", current_version or "None"),
+        ("Next Version", version or "None"),
+        ("Git Tag", tag or "None"),
+        ("Will Release?", str(released).lower()),
+        ("Is Prerelease?", str(prerelease).lower()),
+    ]
+    lines.extend(["| Parameter | Value |", "|---|---|"] + [f"| {p} | `{v}` |" for p, v in table_rows] + [""])
 
     if released:
         lines.append(f"#### 📦 Actions on Merge to `{target}`:")
@@ -122,6 +188,7 @@ def main() -> int:
     tag = args.tag.strip()
     released = str_to_bool(args.released)
     dry_run = str_to_bool(args.dry_run)
+    current_version = args.current_version.strip() or determine_current_version(target, released, dry_run)
 
     prerelease = is_prerelease(version, target)
 
@@ -130,21 +197,22 @@ def main() -> int:
         {
             "is_prerelease": "true" if prerelease else "false",
             "target_branch": target,
+            "current_version": current_version,
         }
     )
 
     # 2. Build and publish report
     try:
-        report_content = generate_report(target, version, tag, released, dry_run, prerelease)
+        report_content = generate_report(target, current_version, version, tag, released, dry_run, prerelease)
     except subprocess.CalledProcessError as exc:
         logger.error("Git command failed (exit %d): %s\nStderr: %s", exc.returncode, exc.cmd, exc.stderr)
         return exc.returncode
 
     print(report_content)
 
-    step_summary_path = os.environ["GITHUB_STEP_SUMMARY"]
-    with open(step_summary_path, "a", encoding="utf-8") as f:
-        f.write(report_content)
+    if step_summary_path := os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(step_summary_path, "a", encoding="utf-8") as f:
+            f.write(report_content)
 
     return 0
 

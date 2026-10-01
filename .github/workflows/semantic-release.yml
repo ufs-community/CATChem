@@ -19,6 +19,9 @@ on:
         type: string
         default: ''
     outputs:
+      current_version:
+        description: "The current version before release evaluation"
+        value: ${{ jobs.release.outputs.current_version }}
       new_release_version:
         description: "The version of the new release"
         value: ${{ jobs.release.outputs.new_release_version }}
@@ -28,6 +31,9 @@ on:
       is_prerelease:
         description: "Whether this is a pre-release"
         value: ${{ jobs.release.outputs.is_prerelease }}
+      tag:
+        description: "The git tag produced by PSR"
+        value: ${{ jobs.release.outputs.tag }}
 
 jobs:
   release:
@@ -36,9 +42,11 @@ jobs:
       id-token: write
       contents: write
     outputs:
+      current_version: ${{ steps.eval.outputs.current_version }}
       new_release_version: ${{ steps.release.outputs.version }}
       new_release_published: ${{ steps.release.outputs.released }}
       is_prerelease: ${{ steps.eval.outputs.is_prerelease }}
+      tag: ${{ steps.release.outputs.tag }}
     env:
       SEMVER_APP_ID: ${{ secrets.SEMVER_APP_ID }}
       SEMVER_APP_PRIVATE_KEY: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
