@@ -73,7 +73,7 @@ jobs:
     uses: ./.github/workflows/docker-release.yml
     with:
       release_version: ${{ needs.release.outputs.new_release_version }}
-      base_image: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.base_image_dev || needs.docker-setup.outputs.base_image_prod }}
+      base_image: ${{ needs.docker-setup.outputs.base_image }}
       project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.project_name_dev || needs.docker-setup.outputs.project_name }}
     secrets: inherit
 
