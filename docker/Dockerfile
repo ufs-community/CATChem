@@ -5,7 +5,7 @@
 # Example build-args:
 #   Develop:    --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:latest
 #   Production: --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
-# Latest upstream release: v0.2.0-rc.3 (noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:0.2.0-rc.3)
+# Latest upstream release: v0.2.0 (noaaepic/ufschem-spack-base-ubuntu-gcc-13:0.2.0)
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 

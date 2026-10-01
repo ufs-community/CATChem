@@ -43,10 +43,19 @@ jobs:
       contents: write
     outputs:
       current_version: ${{ steps.eval.outputs.current_version }}
-      new_release_version: ${{ steps.release.outputs.version }}
-      new_release_published: ${{ steps.release.outputs.released }}
+      new_release_version: >-
+        ${{ steps.release-prod.outputs.version ||
+            steps.release-merge.outputs.version ||
+            steps.release-squash.outputs.version }}
+      new_release_published: >-
+        ${{ steps.release-prod.outputs.released ||
+            steps.release-merge.outputs.released ||
+            steps.release-squash.outputs.released }}
       is_prerelease: ${{ steps.eval.outputs.is_prerelease }}
-      tag: ${{ steps.release.outputs.tag }}
+      tag: >-
+        ${{ steps.release-prod.outputs.tag ||
+            steps.release-merge.outputs.tag ||
+            steps.release-squash.outputs.tag }}
     env:
       SEMVER_APP_ID: ${{ secrets.SEMVER_APP_ID }}
       SEMVER_APP_PRIVATE_KEY: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
@@ -67,32 +76,83 @@ jobs:
           token: ${{ steps.app-token.outputs.token || github.token }}
           persist-credentials: true
 
-      - name: Synthetic Squash Merge for PR Preview
+      - name: Prepare branch for merge preview
         if: inputs.dry_run || github.event_name == 'pull_request'
         env:
           PR_TITLE: ${{ inputs.pr_title }}
           TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
         run: |
-          python3 .github/workflows/scripts/prepare_release_preview.py
+          python3 .github/workflows/scripts/prepare_release_preview.py --strategy merge
 
-      - name: Python Semantic Release
+      - name: Python Semantic Release (Merge Preview)
+        if: inputs.dry_run || github.event_name == 'pull_request'
         uses: python-semantic-release/python-semantic-release@v10
-        id: release
+        id: release-merge
         with:
           github_token: ${{ steps.app-token.outputs.token || github.token }}
-          commit: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
-          tag: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
-          push: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
-          vcs_release: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
+          commit: false
+          tag: false
+          push: false
+          vcs_release: false
+
+      - name: Capture merge preview diff
+        if: inputs.dry_run || github.event_name == 'pull_request'
+        run: |
+          git diff HEAD > /tmp/merge_preview.diff || true
+
+      - name: Prepare branch for squash preview
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        env:
+          PR_TITLE: ${{ inputs.pr_title }}
+          TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
+        run: |
+          python3 .github/workflows/scripts/prepare_release_preview.py --strategy squash
+
+      - name: Python Semantic Release (Squash Preview)
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        uses: python-semantic-release/python-semantic-release@v10
+        id: release-squash
+        with:
+          github_token: ${{ steps.app-token.outputs.token || github.token }}
+          commit: false
+          tag: false
+          push: false
+          vcs_release: false
+
+      - name: Capture squash preview diff
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        run: |
+          git diff HEAD > /tmp/squash_preview.diff || true
+
+      - name: Python Semantic Release (Production)
+        if: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
+        uses: python-semantic-release/python-semantic-release@v10
+        id: release-prod
+        with:
+          github_token: ${{ steps.app-token.outputs.token || github.token }}
+          commit: true
+          tag: true
+          push: true
+          vcs_release: true
 
       - name: Evaluate and Report Release
         id: eval
         if: always()
         env:
-          VERSION: ${{ steps.release.outputs.version }}
-          TAG: ${{ steps.release.outputs.tag }}
-          RELEASED: ${{ steps.release.outputs.released }}
           TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
           DRY_RUN: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
+          DOCKER_ORG: ${{ vars.DOCKER_ORG || secrets.DOCKER_ORG || 'noaaepic' }}
+          IMAGE_NAME: catchem-ubuntu-gcc-13
+          VERSION: ${{ steps.release-prod.outputs.version }}
+          TAG: ${{ steps.release-prod.outputs.tag }}
+          RELEASED: ${{ steps.release-prod.outputs.released }}
+          VERSION_MERGE: ${{ steps.release-merge.outputs.version }}
+          TAG_MERGE: ${{ steps.release-merge.outputs.tag }}
+          RELEASED_MERGE: ${{ steps.release-merge.outputs.released }}
+          VERSION_SQUASH: ${{ steps.release-squash.outputs.version }}
+          TAG_SQUASH: ${{ steps.release-squash.outputs.tag }}
+          RELEASED_SQUASH: ${{ steps.release-squash.outputs.released }}
+          DIFF_MERGE_FILE: /tmp/merge_preview.diff
+          DIFF_SQUASH_FILE: /tmp/squash_preview.diff
         run: |
           python3 .github/workflows/scripts/report_release.py
