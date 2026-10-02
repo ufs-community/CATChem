@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 def write_github_output(outputs: dict[str, str]) -> None:
     """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    if out := os.environ.get("GITHUB_OUTPUT"):
-        with open(out, "a", encoding="utf-8") as f:
-            f.writelines(f"{k}={v}\n" for k, v in outputs.items())
+    out = os.environ["GITHUB_OUTPUT"]
+    with open(out, "a", encoding="utf-8") as f:
+        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
 def check_secrets(app_id: str, private_key: str, allow_missing: bool) -> int:

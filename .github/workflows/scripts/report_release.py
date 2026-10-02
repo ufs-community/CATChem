@@ -112,16 +112,22 @@ def is_prerelease(version: str, target: str) -> bool:
 
 def write_github_output(outputs: dict[str, str]) -> None:
     """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    if out := os.environ.get("GITHUB_OUTPUT"):
-        with open(out, "a", encoding="utf-8") as f:
-            f.writelines(f"{k}={v}\n" for k, v in outputs.items())
+    out = os.environ["GITHUB_OUTPUT"]
+    with open(out, "a", encoding="utf-8") as f:
+        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
 def get_git_diff() -> str:
     """Capture prospective git diff from dry run file modifications."""
     try:
         return subprocess.check_output(["git", "diff", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as exc:
+        err_msg = (
+            exc.stderr.decode("utf-8", errors="replace").strip()
+            if isinstance(exc.stderr, bytes)
+            else (exc.stderr.strip() if exc.stderr else str(exc))
+        )
+        logger.warning("Failed to capture git diff from HEAD (exit %d): %s", exc.returncode, err_msg)
         return ""
 
 

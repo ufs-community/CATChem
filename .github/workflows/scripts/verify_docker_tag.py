@@ -32,12 +32,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def verify_dockerfile(dockerfile_path: Path, build_arg: str = BUILD_ARG) -> None:
-    """Verify that Dockerfile requires the build argument without default and consumes it in FROM.
-
-    Raises:
-        FileNotFoundError: If the Dockerfile does not exist.
-        ValueError: If ARG or FROM requirements are violated.
-    """
+    """Verify that Dockerfile requires the build argument without default and consumes it in FROM."""
     if not dockerfile_path.is_file():
         raise FileNotFoundError(f"Dockerfile not found at {dockerfile_path}")
 

@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 
 def write_github_output(outputs: dict[str, str]) -> None:
     """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    if out := os.environ.get("GITHUB_OUTPUT"):
-        with open(out, "a", encoding="utf-8") as f:
-            f.writelines(f"{k}={v}\n" for k, v in outputs.items())
+    out = os.environ["GITHUB_OUTPUT"]
+    with open(out, "a", encoding="utf-8") as f:
+        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
 def check_secrets(org: str, username: str, token: str, allow_missing: bool) -> int:
@@ -47,11 +47,7 @@ def check_secrets(org: str, username: str, token: str, allow_missing: bool) -> i
 
 
 def get_docker_auth_token(repo: str, username: str, token: str) -> str:
-    """Obtain a scoped bearer token from Docker authentication service.
-
-    Raises:
-        ValueError: If unable to obtain or parse the token.
-    """
+    """Obtain a scoped bearer token from Docker authentication service."""
     url = f"https://auth.docker.io/token?service=registry.docker.io&scope=repository:{repo}:push,pull"
     basic_auth = base64.b64encode(f"{username}:{token}".encode()).decode("utf-8")
     req = urllib.request.Request(
