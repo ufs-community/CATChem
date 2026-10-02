@@ -284,8 +284,12 @@ contains
                ext_emis_data%categories(i)%irec = ext_emis_data%categories(i)%irec + 1
             end if
 
+            ! Isolate pure input reading (disk read + regrid) so ESMF profiling/
+            ! tracing reports it separately from the emission apply/derive work.
+            call ESMF_TraceRegionEnter("CATCHEM:emis_read")
             call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
                met_state%NLEVS, current_time, localrc)
+            call ESMF_TraceRegionExit("CATCHEM:emis_read")
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
