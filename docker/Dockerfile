@@ -4,7 +4,7 @@
 # Maintained externally by https://github.com/ufs-community/ufs-chem-container
 # Example build-arg:
 #   --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
-# Upstream base image: noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest (release v0.2.0)
+# Upstream base image: noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 

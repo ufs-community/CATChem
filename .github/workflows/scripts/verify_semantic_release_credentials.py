@@ -30,7 +30,7 @@ def check_secrets(app_id: str, private_key: str, allow_missing: bool) -> int:
             logger.info("Skipping credential verification for preview run.")
             write_github_output({"skip_verification": "true"})
             return 0
-        print(f"::error::Missing required Semantic Release repository secrets: {missing_str}")
+        logger.error("Missing required Semantic Release repository secrets: %s", missing_str)
         return 1
 
     key = private_key.strip()
@@ -50,7 +50,7 @@ def check_secrets(app_id: str, private_key: str, allow_missing: bool) -> int:
     ]
     for failed, err in checks:
         if failed:
-            print(f"::error::{err}")
+            logger.error("%s", err)
             return 1
 
     write_github_output({"skip_verification": "false"})
@@ -74,17 +74,17 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
 
     code, out = run_gh_api("/installation/repositories")
     if code != 0:
-        print(f"::error::Failed to query installation repositories: {out.strip()}")
+        logger.error("Failed to query installation repositories: %s", out.strip())
         return 1
 
     try:
         data = json.loads(out)
         repo_names = [r.get("full_name") for r in data.get("repositories", [])]
         if repo not in repo_names:
-            print(f"::error::GitHub App is not installed on repository {repo}.")
+            logger.error("GitHub App is not installed on repository %s.", repo)
             return 1
-    except json.JSONDecodeError:
-        print(f"::error::Invalid JSON returned from installation repositories API: {out.strip()}")
+    except json.JSONDecodeError as exc:
+        logger.error("Invalid JSON returned from installation repositories API: %s\nOutput: %s", exc, out.strip())
         return 1
 
     logger.info("GitHub App repository access confirmed for %s.", repo)
@@ -93,7 +93,7 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
     logger.info("Testing Git ref creation (%s)...", test_ref)
     code, out = run_gh_api(f"repos/{repo}/git/refs", method="POST", fields={"ref": f"refs/{test_ref}", "sha": sha})
     if code != 0:
-        print(f"::error::Failed to create test Git ref on {repo}. Verify App has 'Contents: Read and write'.\n{out}")
+        logger.error("Failed to create test Git ref on %s. Verify App has 'Contents: Read and write'.\n%s", repo, out)
         return 1
 
     logger.info("Git ref creation succeeded. Cleaning up test ref...")
@@ -101,38 +101,51 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
 
     # Check ruleset bypass configuration
     code, out = run_gh_api(f"repos/{repo}/rulesets")
-    if code == 0:
+    if code != 0:
+        logger.warning("Failed to query repository rulesets for %s (exit %d): %s", repo, code, out.strip())
+    else:
         try:
-            for rs in json.loads(out):
-                if not (rs_id := rs.get("id")):
-                    continue
-                d_code, d_out = run_gh_api(f"repos/{repo}/rulesets/{rs_id}")
-                if d_code != 0:
-                    continue
+            rulesets_data = json.loads(out)
+        except json.JSONDecodeError as exc:
+            logger.error("Failed to parse JSON response from rulesets API: %s\nOutput: %s", exc, out.strip())
+            return 1
+
+        for rs in rulesets_data:
+            if not (rs_id := rs.get("id")):
+                continue
+            d_code, d_out = run_gh_api(f"repos/{repo}/rulesets/{rs_id}")
+            if d_code != 0:
+                logger.warning("Failed to query detail for ruleset %s (exit %d): %s", rs_id, d_code, d_out.strip())
+                continue
+            try:
                 detail = json.loads(d_out)
-                if not any(r.get("type") == "pull_request" for r in detail.get("rules", [])):
-                    continue
+            except json.JSONDecodeError as exc:
+                logger.error("Failed to parse JSON for ruleset %s: %s\nOutput: %s", rs_id, exc, d_out.strip())
+                continue
 
-                rs_name = detail.get("name", str(rs_id))
-                can_bypass = detail.get("current_user_can_bypass") == "always"
-                has_bypass = can_bypass or any(
-                    a.get("actor_type") == "Integration" and a.get("bypass_mode") == "always"
-                    for a in detail.get("bypass_actors", [])
-                )
+            if not any(r.get("type") == "pull_request" for r in detail.get("rules", [])):
+                continue
 
-                actor_desc = app_slug or f"ID {app_id}"
-                for branch in branches:
-                    if has_bypass:
-                        logger.info(
-                            "Ruleset '%s' includes App (%s) in bypass list for %s.", rs_name, actor_desc, branch
-                        )
-                    else:
-                        print(
-                            f"::warning::Ruleset '{rs_name}' requires PRs on {branch}; "
-                            f"App ({actor_desc}) not in bypass list."
-                        )
-        except json.JSONDecodeError:
-            pass
+            rs_name = detail.get("name", str(rs_id))
+            can_bypass = detail.get("current_user_can_bypass") == "always"
+            has_bypass = can_bypass or any(
+                a.get("actor_type") == "Integration" and a.get("bypass_mode") == "always"
+                for a in detail.get("bypass_actors", [])
+            )
+
+            actor_desc = app_slug or f"ID {app_id}"
+            for branch in branches:
+                if has_bypass:
+                    logger.info(
+                        "Ruleset '%s' includes App (%s) in bypass list for %s.", rs_name, actor_desc, branch
+                    )
+                else:
+                    logger.warning(
+                        "Ruleset '%s' requires PRs on %s; App (%s) not in bypass list.",
+                        rs_name,
+                        branch,
+                        actor_desc,
+                    )
 
     logger.info("Semantic release credential verification completed successfully.")
     return 0

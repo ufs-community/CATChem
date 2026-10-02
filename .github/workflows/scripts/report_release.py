@@ -169,18 +169,29 @@ def determine_current_version(target: str, released: bool, dry_run: bool) -> str
     except OSError:
         pass
 
-    return "None"
+    raise RuntimeError(
+        "Unable to determine current repository version from git tags or pyproject.toml."
+    )
 
 
 def read_diff_file(path: str) -> str:
     """Read diff content from file path if it exists."""
-    if path and os.path.isfile(path):
-        try:
-            with open(path, encoding="utf-8") as f:
-                return f.read().strip()
-        except OSError:
-            pass
-    return ""
+    if not path:
+        return ""
+
+    if not os.path.isfile(path):
+        logger.info("Diff file '%s' does not exist; no difference to report.", path)
+        return ""
+
+    try:
+        with open(path, encoding="utf-8") as f:
+            content = f.read().strip()
+            if not content:
+                logger.info("Diff file '%s' contains no changes (zero difference).", path)
+            return content
+    except OSError as exc:
+        logger.warning("Failed to read diff file '%s': %s", path, exc)
+        return ""
 
 
 def describe_actions(
@@ -233,7 +244,7 @@ def generate_report(
     diff_squash: str = "",
 ) -> str:
     """Build Markdown report content."""
-    is_dual = dry_run and bool(version_squash or tag_squash or released_squash)
+    is_dual = dry_run
     lines = ["### 🚀 Semantic Release Plan"]
     if dry_run:
         lines.append("**Mode**: Preview (Dry Run / No-op) — No tags or releases created in this run.\n")
@@ -336,9 +347,13 @@ def main() -> int:
     diff_merge = read_diff_file(args.diff_merge_file)
     diff_squash = read_diff_file(args.diff_squash_file)
 
-    current_version = args.current_version.strip() or determine_current_version(
-        target, released or released_merge, dry_run
-    )
+    try:
+        current_version = args.current_version.strip() or determine_current_version(
+            target, released or released_merge, dry_run
+        )
+    except RuntimeError as exc:
+        logger.error("%s", exc)
+        return 1
 
     primary_version = version if not dry_run else (version_merge or version_squash or version)
     primary_released = released if not dry_run else (released_merge or released_squash or released)

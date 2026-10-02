@@ -38,7 +38,7 @@ def check_secrets(org: str, username: str, token: str, allow_missing: bool) -> i
             logger.info("Skipping Docker Hub credential verification for local build.")
             write_github_output({"skip_verification": "true"})
             return 0
-        print(f"::error::Missing required Docker repository secrets: {missing_str}")
+        logger.error("Missing required Docker repository secrets: %s", missing_str)
         return 1
 
     write_github_output({"skip_verification": "false"})
@@ -83,7 +83,7 @@ def check_single_repository_push(repo: str, username: str, token: str) -> bool:
     try:
         bearer_token = get_docker_auth_token(repo, username, token)
     except ValueError as exc:
-        print(f"::error::{exc}")
+        logger.error("%s", exc)
         return False
 
     upload_url = f"https://registry-1.docker.io/v2/{repo}/blobs/uploads/"
@@ -110,14 +110,14 @@ def check_single_repository_push(repo: str, username: str, token: str) -> bool:
                     except (urllib.error.URLError, TimeoutError, OSError):
                         pass
                 return True
-            print(f"::error::Unexpected status {resp.status} checking push for {repo}.")
+            logger.error("Unexpected status %s checking push for %s.", resp.status, repo)
             return False
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
-        print(f"::error::Registry push check failed for {repo} (HTTP {exc.code}): {body}")
+        logger.error("Registry push check failed for %s (HTTP %s): %s", repo, exc.code, body)
         return False
     except urllib.error.URLError as exc:
-        print(f"::error::Network error checking registry push for {repo}: {exc.reason}")
+        logger.error("Network error checking registry push for %s: %s", repo, exc.reason)
         return False
 
 
@@ -125,7 +125,7 @@ def check_push(repositories: list[str], username: str, token: str) -> int:
     """Verify push permissions for a list of repositories."""
     valid_repos = [r.strip() for r in repositories if r.strip()]
     if not valid_repos:
-        print("::error::No repositories specified for push access verification.")
+        logger.error("No repositories specified for push access verification.")
         return 1
 
     results = [check_single_repository_push(r, username, token) for r in valid_repos]
