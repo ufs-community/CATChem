@@ -126,3 +126,7 @@ ctest --test-dir build/tests
 There [are options](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html#testing-using-ctest) for selecting specific tests.
 
 Edit `tests/CMakelists.txt` to add new tests.
+
+## AI Disclosure
+
+Portions of this code were generated/augmented using agentic AI models and has been reviewed and validated consistent with NOAA's [AI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).
