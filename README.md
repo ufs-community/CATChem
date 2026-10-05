@@ -129,4 +129,4 @@ Edit `tests/CMakelists.txt` to add new tests.
 
 ## AI Disclosure
 
-Portions of this code were generated/augmented using Gemini, GitHub Copilot, and Amazon Bedrock Generative AI models and has been reviewed and validated consistent with NOAA’s [AI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).
+Portions of this code were generated/augmented using agentic AI models and has been reviewed and validated consistent with NOAA's [AI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).
