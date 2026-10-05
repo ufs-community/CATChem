@@ -2,6 +2,21 @@
 
 <!-- version list -->
 
+## v2.1.0-rc.3 (2026-09-23)
+
+### Bug Fixes
+
+- Update license and notice; fix broken links; enable strict mkdocs build
+  ([#201](https://github.com/ufs-community/CATChem/pull/201),
+  [`dbcefd7`](https://github.com/ufs-community/CATChem/commit/dbcefd7664c5e21f157c97687cb98d9259f399bb))
+
+### Continuous Integration
+
+- Tell PSR to not parse full squash commit message
+  ([#197](https://github.com/ufs-community/CATChem/pull/197),
+  [`aa3fd6b`](https://github.com/ufs-community/CATChem/commit/aa3fd6bd0c2c21e822b4566a9ec2157564627833))
+
+
 ## v2.1.0-rc.2 (2026-09-10)
 
 ### Bug Fixes
