@@ -8,7 +8,7 @@ on:
         description: 'Pull Request title for conventional commits validation'
         required: false
         type: string
-        default: ''
+        default: ${{ github.event.pull_request.title || '' }}
 
 jobs:
   lint:
@@ -19,12 +19,14 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
+      # pre-commit/action is maintenance-only and pins actions/cache@v4 (node20);
+      # these steps replicate it on actions/cache@v6.
       - name: Cache pre-commit environments
         uses: actions/cache@v6
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-      - name: Run pre-commit
+      - name: Install and run pre-commit
         run: |
           python -m pip install pre-commit
           pre-commit run --show-diff-on-failure --color=always --all-files

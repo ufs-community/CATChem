@@ -1,11 +1,4 @@
 repos:
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.4.0
-    hooks:
-      - id: conventional-pre-commit
-        stages:
-          - commit-msg
-
   - repo: meta
     hooks:
       - id: check-hooks-apply
@@ -82,3 +75,10 @@ repos:
         language: pygrep
         files: ^\.github/CODEOWNERS$
         entry: ^(?!\s*(#|$))(?!.*@ufs-community/chem-core-team).*$
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [--verbose]

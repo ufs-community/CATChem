@@ -17,7 +17,11 @@ on:
         description: 'PR title for synthetic squash-merge commit evaluation'
         required: false
         type: string
-        default: ''
+        default: ${{ github.event.pull_request.title || '' }}
+      docker_org:
+        description: 'Docker Hub organization for published images'
+        required: true
+        type: string
     outputs:
       current_version:
         description: "The current version before release evaluation"
@@ -141,7 +145,7 @@ jobs:
         env:
           TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
           DRY_RUN: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
-          DOCKER_ORG: ${{ vars.DOCKER_ORG || secrets.DOCKER_ORG || 'noaaepic' }}
+          DOCKER_ORG: ${{ inputs.docker_org }}
           IMAGE_NAME: catchem-ubuntu-gcc-13
           VERSION: ${{ steps.release-prod.outputs.version }}
           TAG: ${{ steps.release-prod.outputs.tag }}

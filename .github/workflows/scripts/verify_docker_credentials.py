@@ -20,16 +20,14 @@ def write_github_output(outputs: dict[str, str]) -> None:
         f.writelines(f"{k}={v}\n" for k, v in outputs.items())
 
 
-def check_secrets(org: str, username: str, token: str, allow_missing: bool) -> int:
+def check_secrets(username: str, token: str, allow_missing: bool) -> int:
     """Validate presence of Docker repository secrets.
 
     Returns:
         int: 0 if valid or gracefully skipped, 1 if missing required secrets.
     """
     missing = [
-        name
-        for name, val in [("DOCKER_ORG", org), ("DOCKER_USERNAME", username), ("DOCKERHUB_TOKEN", token)]
-        if not val.strip()
+        name for name, val in [("DOCKER_USERNAME", username), ("DOCKERHUB_TOKEN", token)] if not val.strip()
     ]
     if missing:
         missing_str = " ".join(missing)
@@ -42,7 +40,7 @@ def check_secrets(org: str, username: str, token: str, allow_missing: bool) -> i
         return 1
 
     write_github_output({"skip_verification": "false"})
-    logger.info("All required Docker secrets are present: DOCKER_ORG=%s, DOCKER_USERNAME=%s", org, username)
+    logger.info("All required Docker secrets are present: DOCKER_USERNAME=%s", username)
     return 0
 
 
@@ -139,11 +137,6 @@ def parse_args() -> argparse.Namespace:
     # Subcommand: check-secrets
     secrets_parser = subparsers.add_parser("check-secrets", help="Check presence of required secrets.")
     secrets_parser.add_argument(
-        "--org",
-        default=os.environ.get("DOCKER_ORG", ""),
-        help="Docker Hub organization.",
-    )
-    secrets_parser.add_argument(
         "--username",
         default=os.environ.get("DOCKER_USERNAME", ""),
         help="Docker Hub username.",
@@ -187,7 +180,7 @@ def main() -> int:
     args = parse_args()
 
     if args.command == "check-secrets":
-        return check_secrets(args.org, args.username, args.token, args.allow_missing)
+        return check_secrets(args.username, args.token, args.allow_missing)
 
     if args.command == "check-push":
         repos = [item for r in args.repositories for item in r.replace(",", " ").split() if item]

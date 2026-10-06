@@ -89,8 +89,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--org",
-        default=os.environ.get("DOCKER_ORG", "noaaepic"),
-        help="Target Docker Hub organization namespace (default: noaaepic).",
+        default=os.environ["DOCKER_ORG"],
+        help="Target Docker Hub organization namespace (from DOCKER_ORG).",
     )
     parser.add_argument(
         "--image-name",
