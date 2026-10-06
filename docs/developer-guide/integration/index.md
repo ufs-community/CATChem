@@ -2,7 +2,7 @@
 
 This section covers integrating CATChem with external modeling systems.
 
-!!! note "We are actively integrating CATChem into the UFS. Please check back frequently for updates to this Integration Guide. Further updates on this section will be coming soon!"
+!!! note "CATChem is integrated into the **[UFS Weather Model](https://github.com/ufs-community/ufs-weather-model)** as a **[NUOPC](https://earthsystemmodeling.org/nuopc/)** component. See **[UFS-Chem](../../ufschem/index.md)** for details."
 
 
 ## Overview
@@ -198,5 +198,5 @@ diagnostics:
 ## See Also
 
 - [Process Development](../processes/index.md)
-- [Core Systems](../core/index.md)
-- [Configuration Guide](../core/configuration.md)
+- [Core Concepts](../../core-concepts/index.md)
+- [Configuration Guide](../../core-concepts/configuration.md)

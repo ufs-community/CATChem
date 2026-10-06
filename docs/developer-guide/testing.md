@@ -80,7 +80,7 @@ System tests involve running the full CATChem model with a specific configuratio
 - **Purpose**: To benchmark the performance of the model and track it over time.
 - **Location**: `tests/performance/`
 
-Performance tests are used to identify performance regressions and to evaluate the impact of optimizations. See the [Performance Guide](performance.md) for more details.
+Performance tests are used to identify performance regressions and to evaluate the impact of optimizations.
 
 ## How to Write a Good Test
 

@@ -4,13 +4,15 @@
 
 ### Version 2.0.0 (Latest)
 
+CATChem version 2.0 was released in July 2026 (**[v2.0.0](https://github.com/ufs-community/CATChem/releases/tag/v2.0.0)**) and is integrated into the **[UFS Weather Model](https://github.com/ufs-community/ufs-weather-model)** as a NUOPC component. See **[UFS-Chem](ufschem/index.md)** for details.
+
 #### 🚀 Major Features
 - **Modernized Process Infrastructure** - Complete overhaul of process and scheme architecture
 - **Stokes Settling Scheme** - Advanced physics-based settling with slip correction
 - **Improved Documentation** - Comprehensive user and developer guides with API references
 - **YAML Configuration** - Flexible, modern configuration system
 - **StateContainer** - All core states use a common interface and are accessible through a common "container"
-- **ConfigManger** -
+- **ConfigManager** - Hierarchical YAML configuration loading with file inheritance, environment variable substitution, and validation
 
 #### 🔧 Process Updates
 - **Settling Process** - Renamed from `settlingvelocity` to `settling` with new Stokes scheme
@@ -23,6 +25,7 @@
 - **API Documentation** - Auto-generated API docs with MkDoxy integration
 - **User Guides** - Comprehensive process documentation and tutorials
 - **Developer Resources** - Architecture guides and contribution guidelines
+- **Consolidated Process Docs** - Process documentation reorganized to one page per implemented process, with verified DOI citations
 
 #### 🛠️ Technical Improvements
 - **CMake Modernization** - Updated build system for modular components

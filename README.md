@@ -16,7 +16,6 @@
 Comprehensive documentation is available in the `docs/` directory:
 
 - **[Documentation Home](docs/index.md)** - Complete documentation portal
-- **[Quick Start Guide](docs/quick-start/index.md)** - Get started quickly
 - **[User Guide](docs/user-guide/index.md)** - Complete user documentation
 - **[Developer Guide](docs/developer-guide/index.md)** - Technical documentation for developers
 - **[API Reference](docs/api/index.md)** - Complete API documentation

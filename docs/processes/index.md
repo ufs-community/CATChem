@@ -21,8 +21,8 @@ Processes that convert species through chemical or physical mechanisms:
 
 ### Emission Processes
 Source processes that add species to the atmosphere:
-- **[Dust](dust/index.md)** - Mineral dust emission and transport.
-- **[SeaSalt](seasalt/index.md)** - Marine aerosol processes.
+- **[Dust](dust/dust.md)** - Mineral dust emission and transport.
+- **[SeaSalt](seasalt/seasalt.md)** - Marine aerosol processes.
 - Anthropogenic and biogenic emissions.
 
 ### Loss Processes
@@ -35,11 +35,26 @@ Removal processes that remove species from the atmosphere:
 
 ## Available Processes
 
-- **[GasChem](gaschem/index.md)** - C++ native Gas-phase chemistry process (MICM)
-- **[Photolysis](photolysis/index.md)** - C++ native Photolysis rate calculation process (TUV-x)
-- **[SeaSalt](seasalt/index.md)** - SeaSalt atmospheric process
-- **[Dust](dust/index.md)** - Dust atmospheric process
-- **[TestProcess](testprocess/index.md)** - Emission process (sources)
+**Emission**
+
+- **[Dust](dust/dust.md)** - Windblown mineral dust emission (FENGSHA, GINOUX)
+- **[Sea Salt](seasalt/seasalt.md)** - Marine aerosol emission (GEOS12, GONG03, GONG97)
+
+**Chemistry**
+
+- **[Carbon Chemistry](carbchem/carbchem.md)** - Carbonaceous aerosol chemistry (GOCART)
+- **[Sulfate Chemistry](so4chem/so4chem.md)** - Sulfate aerosol chemistry (GOCART)
+- **[Gas-phase Chemistry](gaschem/index.md)** - Gas-phase chemistry (MICM via MUSICA)
+- **[Photolysis](photolysis/index.md)** - Photolysis rates (TUV-x via MUSICA)
+
+**Deposition**
+
+- **[Dry Deposition](drydep/drydep.md)** - Surface dry deposition (GOCART, WESELY, ZHANG)
+- **[Wet Deposition](wetdep/wetdep.md)** - Precipitation scavenging (JACOB)
+
+**Transport**
+
+- **[Settling](settling/settling.md)** - Gravitational settling (GOCART)
 
 ---
 

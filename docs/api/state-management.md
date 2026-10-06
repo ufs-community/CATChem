@@ -147,7 +147,7 @@ state->sync_to_host();
 
 ---
 
-**Auto-Generated Documentation:** [Complete State Management Reference](../CATChem/namespacestatemanager__mod.md)
+**Auto-Generated Documentation:** [Fortran API Reference](../CATChem/namespacecatchem__api.md)
 # Dataflow ownership and freshness
 
 Shared meteorology and unified chemistry use non-owning `InteropField` views. Each view has immutable extents, a generation, availability, and a latest-writer state. A NUOPC import generation invalidates the preceding generation before current fields are rebound. Missing optional fields therefore cannot silently retain a current pointer.

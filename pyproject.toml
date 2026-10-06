@@ -4,11 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catchem-docs"
-version = "2.1.0-rc.2"
+version = "2.1.0-rc.3"
 description = "CATChem (Configurable Atmospheric Chemistry) Documentation"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
 authors = [
     {name = "CATChem Development Team"},
 ]

@@ -17,7 +17,7 @@ High-level APIs for the main CATChem systems:
 
 ## 🔗 Auto-Generated Documentation
 
-**[→ Complete Auto-Generated API Reference](../CATChem/group__catchem.md)**
+**[→ Complete Auto-Generated API Reference](../CATChem/modules.md)**
 
 The complete API documentation includes:
 
@@ -30,15 +30,13 @@ The complete API documentation includes:
 
 **Core System Modules and Processes:**
 
-- **[CATChem Directory](../CATChem/group__catchem.md)** - Main CATChem Directory
-- **[Core CATChem API](../CATChem/group__catchem__api.md)** - Core CATChem API functions and data types
-- **[Core Modules](../CATChem/group__core__modules.md)** - Core modules and data types for CATChem
-- **[Processes](../CATChem/group__process__modules.md)** - All atmospheric chemistry processes
+- **[Fortran API](../CATChem/namespacecatchem__api.md)** - `CATChem_API` module: the Fortran proxy over the C++ core
+- **[Data Types](../CATChem/annotated.md)** - Derived types and interfaces
 
 **Utilities:**
 
-- **[Constants](../CATChem/constants_8_f90.md)** - Physical and mathematical constants
-- **[Utilities](../CATChem/utilities__mod_8_f90.md)** - Common utility functions and tools
+- **[Constants](../CATChem/namespacecatchem__bridge__constants.md)** - Physical and mathematical constants shared with the science bridges
+- **[Utilities](../CATChem/catchem__bridge__utilities_8_f90.md)** - Precision, error, and constants modules used by the Fortran bridges
 
 
 ## Quick Reference

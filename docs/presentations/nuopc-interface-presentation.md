@@ -462,7 +462,7 @@ ctest -R nuopc_performance
 
 - **[NUOPC Layer Documentation](https://earthsystemmodeling.org/docs/release/latest/NUOPC_refdoc/)**
 - **[ESMF Reference Manual](https://earthsystemmodeling.org/docs/release/latest/ESMF_refdoc/)**
-- **[CATChem NUOPC Integration Guide](developer-guide/integration/nuopc.md)**
+- **[CATChem NUOPC Integration Guide](../developer-guide/integration/nuopc.md)**
 
 ---
 
