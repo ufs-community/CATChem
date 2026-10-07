@@ -153,10 +153,11 @@ References for the schemes implemented in the [CATChem processes](processes/inde
 ### Wet Deposition
 
 36. **Liu, H., Jacob, D. J., Bey, I., & Yantosca, R. M.** (2001). Constraints from 210Pb and 7Be on wet deposition and transport in a global three-dimensional chemical tracer model driven by assimilated meteorological fields. *Journal of Geophysical Research*, 106(D11), 12109-12128. <https://doi.org/10.1029/2000JD900839>
+37. **Chin, M., R. B. Rood, S.-J. Lin, J.-F. Müller, and A. M. Thompson** (2000), Atmospheric sulfur cycle simulated in the global model GOCART: Model description and global properties, J. Geophys. Res., 105(D20), 24671–24687. < https://doi.org/10.1029/2000JD900384>.
 
 ### Chemistry and Settling (GOCART-2G)
 
-37. **Collow, A. B., et al.** (2024). Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS). *Geoscientific Model Development*, 17, 1443-1468. <https://doi.org/10.5194/gmd-17-1443-2024>
+38. **Collow, A. B., et al.** (2024). Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS). *Geoscientific Model Development*, 17, 1443-1468. <https://doi.org/10.5194/gmd-17-1443-2024>
 
 ## Contributing References
 

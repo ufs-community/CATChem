@@ -505,19 +505,16 @@ contains
 
       integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/wetdep/jacob/ in master YAML
+      ! Load scheme parameters from processes/wetdep/jacob/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/wetdep/jacob/scale_factor", &
          this%jacob_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%scale_factor = 1.0_fp
       call config_manager%get_real("processes/wetdep/jacob/radius_threshold", &
          this%jacob_config%radius_threshold, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%radius_threshold = 1.0_fp
       call config_manager%get_logical("processes/wetdep/jacob/so4_gocart_resusp", &
          this%jacob_config%so4_gocart_resusp, rc, .true.)
-      if (rc /= CC_SUCCESS) this%jacob_config%so4_gocart_resusp = .true.
       call config_manager%get_real("processes/wetdep/jacob/so4_washout_eff", &
          this%jacob_config%so4_washout_eff, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%so4_washout_eff = 1.0_fp
 
 
    end subroutine load_jacob_config
@@ -530,16 +527,14 @@ contains
 
       integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/wetdep/gocart/ in master YAML
+      ! Load scheme parameters from processes/wetdep/gocart/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/wetdep/gocart/scale_factor", &
          this%gocart_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%scale_factor = 1.0_fp
       call config_manager%get_real("processes/wetdep/gocart/washout_tuning", &
          this%gocart_config%washout_tuning, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%washout_tuning = 1.0_fp
       call config_manager%get_real("processes/wetdep/gocart/radius_threshold", &
          this%gocart_config%radius_threshold, rc, 0.05_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%radius_threshold = 0.05_fp
 
 
    end subroutine load_gocart_config

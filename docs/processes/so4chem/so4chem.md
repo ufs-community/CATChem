@@ -25,22 +25,22 @@ The SO4chem process implements Process for computing chemical production of sulf
 
 #### Required Meteorological Fields
 
-- `T` - Meteorological field required for scheme computation
-- `CLDF` - Meteorological field required for scheme computation
-- `DELP` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `PMID` - Meteorological field required for scheme computation
-- `Z` - Meteorological field required for scheme computation
-- `Z0H` - Meteorological field required for scheme computation
-- `USTAR` - Meteorological field required for scheme computation
-- `PBLH` - Meteorological field required for scheme computation
-- `HFLUX` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
+- `T` - Temperature [K]
+- `CLDF` - 3-D cloud fraction [1]
+- `DELP` - Delta-P (wet) across box [Pa]
+- `TSTEP` - Model time step [s]
+- `AIRDEN` - Wet air density [kg/m3]
+- `PMID` - Average wet air pressure [Pa] defined as arithmetic average of edge pressures
+- `Z` - Geopotential Height @ level edges [m] (nx,ny,nz+1)
+- `Z0H` - Surface roughness height, for heat (thermal roughness) [m]
+- `USTAR` - Friction velocity [m/s]
+- `PBLH` - PBL height [m]
+- `HFLUX` - Sensible heat flux [W/m2]
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `LAT` - Latitude
+- `LON` - Longitude
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
 
 
 

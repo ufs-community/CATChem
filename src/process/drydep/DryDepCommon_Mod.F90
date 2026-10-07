@@ -596,22 +596,18 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/drydep/wesely/ in master YAML
+      ! Load scheme parameters from processes/drydep/wesely/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/drydep/wesely/scale_factor", &
          this%wesely_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%wesely_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/drydep/wesely/co2_effect", &
          this%wesely_config%co2_effect, rc, .true.)
-      if (rc /= CC_SUCCESS) this%wesely_config%co2_effect = .true.
       call config_manager%get_real("processes/drydep/wesely/co2_level", &
          this%wesely_config%co2_level, rc, 600.0_fp)
-      if (rc /= CC_SUCCESS) this%wesely_config%co2_level = 600.0_fp
       call config_manager%get_real("processes/drydep/wesely/co2_reference", &
          this%wesely_config%co2_reference, rc, 380.0_fp)
-      if (rc /= CC_SUCCESS) this%wesely_config%co2_reference = 380.0_fp
       call config_manager%get_logical("processes/drydep/wesely/skip_so2", &
          this%wesely_config%skip_so2, rc, .false.)
-      if (rc /= CC_SUCCESS) this%wesely_config%skip_so2 = .false.
 
 
    end subroutine load_wesely_config
@@ -624,19 +620,16 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/drydep/gocart/ in master YAML
+      ! Load scheme parameters from processes/drydep/gocart/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/drydep/gocart/scale_factor", &
          this%gocart_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/drydep/gocart/resuspension", &
          this%gocart_config%resuspension, rc, .false.)
-      if (rc /= CC_SUCCESS) this%gocart_config%resuspension = .false.
       call config_manager%get_logical("processes/drydep/gocart/dust_resuspension_only", &
          this%gocart_config%dust_resuspension_only, rc, .true.)
-      if (rc /= CC_SUCCESS) this%gocart_config%dust_resuspension_only = .true.
       call config_manager%get_logical("processes/drydep/gocart/skip_sulfate_aero", &
          this%gocart_config%skip_sulfate_aero, rc, .false.)
-      if (rc /= CC_SUCCESS) this%gocart_config%skip_sulfate_aero = .false.
 
 
    end subroutine load_gocart_config
@@ -649,10 +642,10 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/drydep/zhang/ in master YAML
+      ! Load scheme parameters from processes/drydep/zhang/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/drydep/zhang/scale_factor", &
          this%zhang_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%zhang_config%scale_factor = 1.0_fp
 
 
    end subroutine load_zhang_config

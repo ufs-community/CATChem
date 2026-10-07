@@ -28,14 +28,14 @@ The WetDep process implements Process for computing wet deposition of gas and ae
 
 #### Required Meteorological Fields
 
-- `T` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `AIRDEN_DRY` - Meteorological field required for scheme computation
-- `MAIRDEN` - Meteorological field required for scheme computation
-- `PFLLSAN` - Meteorological field required for scheme computation
-- `PFILSAN` - Meteorological field required for scheme computation
-- `PEDGE` - Meteorological field required for scheme computation
-- `REEVAPLS` - Meteorological field required for scheme computation
+- `T` - Temperature [K]
+- `TSTEP` - Model time step [s]
+- `AIRDEN_DRY` - Dry air density [kg/m3]
+- `MAIRDEN` - Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
+- `PFLLSAN` - Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PFILSAN` - Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PEDGE` - Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+- `REEVAPLS` - Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
 
 
 ### GOCART Scheme
@@ -43,7 +43,7 @@ The WetDep process implements Process for computing wet deposition of gas and ae
 **Name:** `gocart`
 **Description:** GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species
 **Author:** Wei Li
-**Reference:** GOCART2G Process Library (Randles et al.; GEOS-ESM/GOCART): SU_Wet_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme)
+**Reference:** GOCART2G Process Library: SU_Wet_Removal (Chin et al. [2000], J. Geophys. Res., 105(D20), 24671–24687, <https://doi.org/10.1029/2000JD900384>) and WetRemovalUFS (Liu et al. [2001], J. Geophys. Res., 106(D11), 12109–12128, <https://doi.org/10.1029/2000JD900839>)
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -54,14 +54,14 @@ The WetDep process implements Process for computing wet deposition of gas and ae
 
 #### Required Meteorological Fields
 
-- `T` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `MAIRDEN` - Meteorological field required for scheme computation
-- `PEDGE` - Meteorological field required for scheme computation
-- `PFLLSAN` - Meteorological field required for scheme computation
-- `PFILSAN` - Meteorological field required for scheme computation
-- `PRECCON` - Meteorological field required for scheme computation
-- `PRECLSC` - Meteorological field required for scheme computation
+- `T` - Temperature [K]
+- `TSTEP` - Model time step [s]
+- `MAIRDEN` - Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
+- `PEDGE` - Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+- `PFLLSAN` - Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PFILSAN` - Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PRECCON` - Conv  precip @ ground [kg/m2/s] -> [mm/day]
+- `PRECLSC` - Large-scale precip @ ground kg/m2/s] -> [mm/day]
 
 
 

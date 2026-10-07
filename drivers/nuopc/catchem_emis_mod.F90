@@ -286,15 +286,23 @@ contains
 
             ! Isolate pure input reading (disk read + regrid) so ESMF profiling/
             ! tracing reports it separately from the emission apply/derive work.
-            call ESMF_TraceRegionEnter("CATCHEM:emis_read")
+#ifdef CATCHEM_TRACE_NUOPC
+            call ESMF_TraceRegionEnter("CATCHEM:emis_read", rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+#endif
             call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
                met_state%NLEVS, current_time, localrc)
-            call ESMF_TraceRegionExit("CATCHEM:emis_read")
             if (localrc /= CC_SUCCESS) then
                write(msg, '(A,A,A)') trim(pName), ': Failed to read data for category: ', &
                   trim(ext_emis_data%categories(i)%category_name)
                call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
             end if
+#ifdef CATCHEM_TRACE_NUOPC
+            call ESMF_TraceRegionExit("CATCHEM:emis_read", rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+#endif
 
             ext_emis_data%categories(i)%last_period_key = period_key
          end if
@@ -1053,6 +1061,13 @@ contains
                   category%bt2_date = d2a(1)
                   category%bt2_secs = s2a(1)
                   category%bt_valid = .true.
+               else
+                  ! Next-file valid-time unreadable: leave bt_valid=.false. so blend_time
+                  ! falls back to calendar-based (mid-month) interpolation rather than failing.
+                  write(msg, '(A,A,A)') trim(pName), &
+                     ': could not read time coord from next file, using calendar interp: ', &
+                     trim(filename_next)
+                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
                end if
                if (allocated(d2a)) deallocate(d2a)
                if (allocated(s2a)) deallocate(s2a)

@@ -292,9 +292,19 @@ contains
 
       !initialize extemission data here
       config_manager => state_mgr%get_config_ptr()
-      call ESMF_TraceRegionEnter("CATCHEM:emis_init")
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("CATCHEM:emis_init", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
       call catchem_emis_init(cc_wrap%ext_emis, config_manager, nx, ny, nlev, clock, rc)
-      call ESMF_TraceRegionExit("CATCHEM:emis_init")
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("CATCHEM:emis_init", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       !get output information from config
       cc_wrap%output_frequency = config_manager%config_data%runtime%Output_Frequency
@@ -708,12 +718,20 @@ contains
       ! "MET_" mappings this reads/applies nothing extra and leaves imported met
       ! untouched (catchem_emis_update derives DELP/AIRDEN only when they were not
       ! already provided this timestep, so host-imported values are preserved).
-      call ESMF_TraceRegionEnter("CATCHEM:emis_update")
-      call catchem_emis_update(cc_wrap%ext_emis, currTime, state_mgr, &
-         cc_wrap%iocomp, cc_wrap%grid, real(timestep_seconds, fp), rc)
-      call ESMF_TraceRegionExit("CATCHEM:emis_update")
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionEnter("CATCHEM:emis_update", rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+#endif
+      call catchem_emis_update(cc_wrap%ext_emis, currTime, state_mgr, &
+         cc_wrap%iocomp, cc_wrap%grid, real(timestep_seconds, fp), rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_TraceRegionExit("CATCHEM:emis_update", rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+#endif
 
       ! Derive any still-missing required met fields and verify completeness. This
       ! single, unconditional call serves both run forms: import-provided and
