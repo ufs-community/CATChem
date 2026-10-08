@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: |
           . /entrypoint.sh
-          cmake --build build -j2
+          cmake --build build -j$(nproc)
 
       - name: Test
         run: |

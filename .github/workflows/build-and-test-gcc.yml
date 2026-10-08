@@ -33,7 +33,7 @@ jobs:
           CXX: g++-${{ matrix.gcc-version }}
 
       - name: Build
-        run: cmake --build $BUILD_DIR -j2
+        run: cmake --build $BUILD_DIR -j$(nproc)
 
       - name: Test
         run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
