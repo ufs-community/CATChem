@@ -2,6 +2,7 @@
 """Validate GitHub App credentials, repository permissions, and ruleset bypass for Semantic Release."""
 
 import argparse
+import fnmatch
 import json
 import logging
 import os
@@ -11,26 +12,13 @@ import sys
 logger = logging.getLogger(__name__)
 
 
-def write_github_output(outputs: dict[str, str]) -> None:
-    """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    out = os.environ["GITHUB_OUTPUT"]
-    with open(out, "a", encoding="utf-8") as f:
-        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
-
-
-def check_secrets(app_id: str, private_key: str, allow_missing: bool) -> int:
+def check_secrets(app_id: str, private_key: str) -> int:
     """Validate presence and structure of Semantic Release GitHub App secrets."""
     missing = [
         name for name, val in [("SEMVER_APP_ID", app_id), ("SEMVER_APP_PRIVATE_KEY", private_key)] if not val.strip()
     ]
     if missing:
-        missing_str = " ".join(missing)
-        if allow_missing:
-            logger.info("Semantic Release secrets not provided (%s).", missing_str)
-            logger.info("Skipping credential verification for preview run.")
-            write_github_output({"skip_verification": "true"})
-            return 0
-        logger.error("Missing required Semantic Release repository secrets: %s", missing_str)
+        logger.error("Missing required Semantic Release repository secrets: %s", " ".join(missing))
         return 1
 
     key = private_key.strip()
@@ -53,7 +41,6 @@ def check_secrets(app_id: str, private_key: str, allow_missing: bool) -> int:
             logger.error("%s", err)
             return 1
 
-    write_github_output({"skip_verification": "false"})
     logger.info("All required Semantic Release secrets are present and formatted properly.")
     return 0
 
@@ -66,6 +53,31 @@ def run_gh_api(endpoint: str, method: str = "GET", fields: dict[str, str] | None
             cmd.extend(["-f", f"{k}={v}"])
     res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     return res.returncode, res.stdout or res.stderr
+
+
+def get_default_branch(repo: str) -> str:
+    """Return the repository's default branch name."""
+    code, out = run_gh_api(f"repos/{repo}")
+    if code != 0:
+        raise RuntimeError(f"Failed to query repository {repo}: {out.strip()}")
+    return str(json.loads(out).get("default_branch", ""))
+
+
+def ruleset_targets_branch(detail: dict, branch: str, default_branch: str) -> bool:
+    """Return True when a branch ruleset's ref_name conditions apply to ``branch``."""
+    ref = f"refs/heads/{branch}"
+    cond = detail.get("conditions", {}).get("ref_name", {})
+
+    def matches(pattern: str) -> bool:
+        if pattern == "~ALL":
+            return True
+        if pattern == "~DEFAULT_BRANCH":
+            return branch == default_branch
+        return fnmatch.fnmatchcase(ref, pattern)
+
+    included = any(matches(p) for p in cond.get("include", []))
+    excluded = any(matches(p) for p in cond.get("exclude", []))
+    return included and not excluded
 
 
 def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app_id: str, app_slug: str) -> int:
@@ -97,7 +109,17 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
         return 1
 
     logger.info("Git ref creation succeeded. Cleaning up test ref...")
-    run_gh_api(f"repos/{repo}/git/refs/{test_ref}", method="DELETE")
+    code, out = run_gh_api(f"repos/{repo}/git/refs/{test_ref}", method="DELETE")
+    if code != 0:
+        logger.error(
+            "Failed to delete test Git ref refs/%s on %s; delete it manually. "
+            "Verify App has 'Contents: Read and write'.\n%s",
+            test_ref,
+            repo,
+            out,
+        )
+        return 1
+    logger.info("Test ref refs/%s deleted.", test_ref)
 
     # Check ruleset bypass configuration
     code, out = run_gh_api(f"repos/{repo}/rulesets")
@@ -110,6 +132,13 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
             logger.error("Failed to parse JSON response from rulesets API: %s\nOutput: %s", exc, out.strip())
             return 1
 
+        try:
+            default_branch = get_default_branch(repo)
+        except RuntimeError as exc:
+            logger.error("%s", exc)
+            return 1
+
+        missing_bypass: list[str] = []
         for rs in rulesets_data:
             if not (rs_id := rs.get("id")):
                 continue
@@ -127,6 +156,11 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
                 continue
 
             rs_name = detail.get("name", str(rs_id))
+            governed = [b for b in branches if ruleset_targets_branch(detail, b, default_branch)]
+            if not governed:
+                logger.info("Ruleset '%s' does not govern any of %s; skipping.", rs_name, branches)
+                continue
+
             can_bypass = detail.get("current_user_can_bypass") == "always"
             has_bypass = can_bypass or any(
                 a.get("actor_type") == "Integration" and a.get("bypass_mode") == "always"
@@ -134,18 +168,25 @@ def check_permissions(repo: str, sha: str, run_id: str, branches: list[str], app
             )
 
             actor_desc = app_slug or f"ID {app_id}"
-            for branch in branches:
+            for branch in governed:
                 if has_bypass:
                     logger.info(
                         "Ruleset '%s' includes App (%s) in bypass list for %s.", rs_name, actor_desc, branch
                     )
                 else:
-                    logger.warning(
+                    logger.error(
                         "Ruleset '%s' requires PRs on %s; App (%s) not in bypass list.",
                         rs_name,
                         branch,
                         actor_desc,
                     )
+                    missing_bypass.append(f"{rs_name}:{branch}")
+
+        if missing_bypass:
+            logger.error(
+                "Semantic release cannot push to protected branches without bypass: %s", ", ".join(missing_bypass)
+            )
+            return 1
 
     logger.info("Semantic release credential verification completed successfully.")
     return 0
@@ -167,11 +208,6 @@ def parse_args() -> argparse.Namespace:
         "--private-key",
         default=os.environ.get("SEMVER_APP_PRIVATE_KEY", ""),
         help="Semantic release GitHub App RSA private key.",
-    )
-    secrets_parser.add_argument(
-        "--allow-missing",
-        action="store_true",
-        help="Gracefully skip if secrets are missing (e.g. preview dry run).",
     )
 
     # Subcommand: check-permissions
@@ -217,7 +253,7 @@ def main() -> int:
     args = parse_args()
 
     if args.command == "check-secrets":
-        return check_secrets(args.app_id, args.private_key, args.allow_missing)
+        return check_secrets(args.app_id, args.private_key)
 
     if args.command == "check-permissions":
         branches = [item for b in args.branches for item in b.replace(",", " ").split() if item]

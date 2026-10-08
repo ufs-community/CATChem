@@ -13,33 +13,19 @@ import urllib.request
 logger = logging.getLogger(__name__)
 
 
-def write_github_output(outputs: dict[str, str]) -> None:
-    """Write key-value pairs to GITHUB_OUTPUT environment file."""
-    out = os.environ["GITHUB_OUTPUT"]
-    with open(out, "a", encoding="utf-8") as f:
-        f.writelines(f"{k}={v}\n" for k, v in outputs.items())
-
-
-def check_secrets(username: str, token: str, allow_missing: bool) -> int:
+def check_secrets(username: str, token: str) -> int:
     """Validate presence of Docker repository secrets.
 
     Returns:
-        int: 0 if valid or gracefully skipped, 1 if missing required secrets.
+        int: 0 if valid, 1 if missing required secrets.
     """
     missing = [
         name for name, val in [("DOCKER_USERNAME", username), ("DOCKERHUB_TOKEN", token)] if not val.strip()
     ]
     if missing:
-        missing_str = " ".join(missing)
-        if allow_missing:
-            logger.info("Docker repository secrets not provided (%s).", missing_str)
-            logger.info("Skipping Docker Hub credential verification for local build.")
-            write_github_output({"skip_verification": "true"})
-            return 0
-        logger.error("Missing required Docker repository secrets: %s", missing_str)
+        logger.error("Missing required Docker repository secrets: %s", " ".join(missing))
         return 1
 
-    write_github_output({"skip_verification": "false"})
     logger.info("All required Docker secrets are present: DOCKER_USERNAME=%s", username)
     return 0
 
@@ -101,8 +87,12 @@ def check_single_repository_push(repo: str, username: str, token: str) -> bool:
                     try:
                         with urllib.request.urlopen(del_req, timeout=10):
                             pass
-                    except (urllib.error.URLError, TimeoutError, OSError):
-                        pass
+                    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+                        logger.warning(
+                            "Could not cancel upload session for %s (%s); Docker Hub expires it automatically.",
+                            repo,
+                            exc,
+                        )
                 return True
             logger.error("Unexpected status %s checking push for %s.", resp.status, repo)
             return False
@@ -146,11 +136,6 @@ def parse_args() -> argparse.Namespace:
         default=os.environ.get("DOCKERHUB_TOKEN", ""),
         help="Docker Hub token.",
     )
-    secrets_parser.add_argument(
-        "--allow-missing",
-        action="store_true",
-        help="Gracefully skip if secrets are missing (e.g. fork PRs).",
-    )
 
     # Subcommand: check-push
     push_parser = subparsers.add_parser("check-push", help="Verify push permissions for repositories.")
@@ -180,7 +165,7 @@ def main() -> int:
     args = parse_args()
 
     if args.command == "check-secrets":
-        return check_secrets(args.username, args.token, args.allow_missing)
+        return check_secrets(args.username, args.token)
 
     if args.command == "check-push":
         repos = [item for r in args.repositories for item in r.replace(",", " ").split() if item]

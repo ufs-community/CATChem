@@ -97,11 +97,6 @@ def parse_args() -> argparse.Namespace:
         default=os.environ.get("IMAGE_NAME", "catchem-ubuntu-gcc-13"),
         help="Base container image name (default: catchem-ubuntu-gcc-13).",
     )
-    parser.add_argument(
-        "--current-version",
-        default=os.environ.get("CURRENT_VERSION", ""),
-        help="Current release version being evaluated against.",
-    )
     return parser.parse_args()
 
 
@@ -115,20 +110,6 @@ def write_github_output(outputs: dict[str, str]) -> None:
     out = os.environ["GITHUB_OUTPUT"]
     with open(out, "a", encoding="utf-8") as f:
         f.writelines(f"{k}={v}\n" for k, v in outputs.items())
-
-
-def get_git_diff() -> str:
-    """Capture prospective git diff from dry run file modifications."""
-    try:
-        return subprocess.check_output(["git", "diff", "HEAD"], text=True, stderr=subprocess.PIPE).strip()
-    except subprocess.CalledProcessError as exc:
-        err_msg = (
-            exc.stderr.decode("utf-8", errors="replace").strip()
-            if isinstance(exc.stderr, bytes)
-            else (exc.stderr.strip() if exc.stderr else str(exc))
-        )
-        logger.warning("Failed to capture git diff from HEAD (exit %d): %s", exc.returncode, err_msg)
-        return ""
 
 
 def extract_version_from_toml(text: str) -> str:
@@ -316,15 +297,6 @@ def generate_report(
         ]
         lines.extend(["| Parameter | Value |", "|---|---|"] + [f"| {p} | `{v}` |" for p, v in table_rows_single] + [""])
         lines.extend(describe_actions("", eff_released, eff_version, eff_tag, prerelease, org, image_name))
-        diff_text = diff_merge or get_git_diff()
-        if dry_run and diff_text:
-            lines.append("\n#### 📝 Projected Repository Diff")
-            lines.append("<details open>")
-            lines.append("<summary>Click to collapse projected file changes</summary>\n")
-            lines.append("```diff")
-            lines.append(diff_text)
-            lines.append("```")
-            lines.append("</details>")
 
     return "\n".join(lines) + "\n"
 
@@ -354,9 +326,7 @@ def main() -> int:
     diff_squash = read_diff_file(args.diff_squash_file)
 
     try:
-        current_version = args.current_version.strip() or determine_current_version(
-            target, released or released_merge, dry_run
-        )
+        current_version = determine_current_version(target, released or released_merge, dry_run)
     except RuntimeError as exc:
         logger.error("%s", exc)
         return 1
@@ -370,7 +340,6 @@ def main() -> int:
     write_github_output(
         {
             "is_prerelease": "true" if prerelease else "false",
-            "target_branch": target,
             "current_version": current_version,
             "new_release_version": primary_version,
             "new_release_published": "true" if primary_released else "false",

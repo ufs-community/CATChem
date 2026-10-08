@@ -13,6 +13,10 @@ on:
       project_name:
         required: true
         type: string
+      docker_org:
+        description: 'Docker Hub organization for published images'
+        required: true
+        type: string
 
 jobs:
   retag-and-push:
@@ -42,8 +46,8 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ inputs.base_image }}
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.project_name }}:${{ inputs.release_version }}
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.project_name }}:latest
+            ${{ inputs.docker_org }}/${{ inputs.project_name }}:${{ inputs.release_version }}
+            ${{ inputs.docker_org }}/${{ inputs.project_name }}:latest
           cache-from: |
             type=gha,scope=catchem
           cache-to: |

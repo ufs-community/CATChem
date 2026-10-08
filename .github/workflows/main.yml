@@ -22,8 +22,6 @@ env:
 jobs:
   docker-verify:
     uses: ./.github/workflows/docker-verify.yml
-    with:
-      target: ${{ github.base_ref || github.ref_name }}
 
   # Workflow-level env cannot be passed to reusable workflows via `with:`, so this
   # job re-emits DOCKER_ORG and derived names as outputs for downstream jobs.
@@ -91,6 +89,7 @@ jobs:
       release_version: ${{ needs.release.outputs.new_release_version }}
       base_image: ${{ needs.docker-setup.outputs.base_image }}
       project_name: ${{ needs.release.outputs.is_prerelease == 'true' && needs.docker-setup.outputs.project_name_dev || needs.docker-setup.outputs.project_name }}
+      docker_org: ${{ needs.docker-setup.outputs.docker_org }}
     secrets: inherit
 
   docs:

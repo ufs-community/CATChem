@@ -3,7 +3,6 @@
 
 import argparse
 import logging
-import os
 import re
 import sys
 from pathlib import Path
@@ -22,11 +21,6 @@ def parse_args() -> argparse.Namespace:
         "--dockerfile",
         default="docker/Dockerfile",
         help="Path to Dockerfile (default: docker/Dockerfile).",
-    )
-    parser.add_argument(
-        "--target",
-        default=os.environ.get("TARGET") or os.environ.get("GITHUB_BASE_REF") or os.environ.get("GITHUB_REF_NAME", ""),
-        help="Target branch being evaluated (e.g. develop, main).",
     )
     return parser.parse_args()
 
@@ -58,7 +52,8 @@ def verify_dockerfile(dockerfile_path: Path, build_arg: str = BUILD_ARG) -> None
                     arg_has_default = True
                     default_val = default.strip()
 
-        from_match = re.match(r"^FROM\s+([^\s]+)", stripped)
+        # Allow instruction flags such as `--platform=...` before the image reference.
+        from_match = re.match(r"^FROM(?:\s+--[a-z]+=\S+)*\s+(\S+)", stripped)
         if from_match:
             from_image = from_match.group(1)
             expected_patterns = [
@@ -94,11 +89,8 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     dockerfile_path = Path(args.dockerfile)
-    target = args.target.strip()
 
     logger.info("Evaluating Dockerfile: %s", dockerfile_path)
-    if target:
-        logger.info("Target branch context: %s", target)
     logger.info("Required build argument: %s", BUILD_ARG)
 
     try:
