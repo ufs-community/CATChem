@@ -3,7 +3,7 @@
 **Process Type:** Deposition
 **Description:** Process for computing wet deposition of gas and aerosol species
 **Author:** Wei Li
-**Generated:** 2025-12-15T16:30:33.934868
+**Generated:** 2026-09-22T13:06:55.756402
 
 ## Overview
 
@@ -23,17 +23,45 @@ The WetDep process implements Process for computing wet deposition of gas and ae
 |-----------|---------|--------|-------------|
 | `scale_factor` | 1.0 |  -  | Washout tuning factor |
 | `radius_threshold` | 1.0 |  -  | Radius threshold for aerosol wet deposition (um) |
+| `so4_gocart_resusp` | True |  -  | Sulfate-only GOCART-style resuspension toggle (default on) |
+| `so4_washout_eff` | 1.0 |  -  | Sulfate-only below-cloud washout efficiency (1.0=unchanged); reduce to cut excess SO4 washout |
 
 #### Required Meteorological Fields
 
-- `T` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `AIRDEN_DRY` - Meteorological field required for scheme computation
-- `MAIRDEN` - Meteorological field required for scheme computation
-- `PFLLSAN` - Meteorological field required for scheme computation
-- `PFILSAN` - Meteorological field required for scheme computation
-- `PEDGE` - Meteorological field required for scheme computation
-- `REEVAPLS` - Meteorological field required for scheme computation
+- `T` - Temperature [K]
+- `TSTEP` - Model time step [s]
+- `AIRDEN_DRY` - Dry air density [kg/m3]
+- `MAIRDEN` - Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
+- `PFLLSAN` - Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PFILSAN` - Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PEDGE` - Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+- `REEVAPLS` - Evap of precip LS+anvil [kg/kg/s] (assume per dry air)
+
+
+### GOCART Scheme
+
+**Name:** `gocart`
+**Description:** GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species
+**Author:** Wei Li
+**Reference:** GOCART2G Process Library: SU_Wet_Removal (Chin et al. [2000], J. Geophys. Res., 105(D20), 24671–24687, <https://doi.org/10.1029/2000JD900384>) and WetRemovalUFS (Liu et al. [2001], J. Geophys. Res., 106(D11), 12109–12128, <https://doi.org/10.1029/2000JD900839>)
+#### Parameters
+
+| Parameter | Default | Range | Description |
+|-----------|---------|--------|-------------|
+| `scale_factor` | 1.0 |  -  | Overall washout tuning factor |
+| `washout_tuning` | 1.0 |  -  | WetRemovalUFS below-cloud washout tuning factor (wtune) |
+| `radius_threshold` | 1.0 |  -  | Radius threshold for aerosol washout (um) (WetRemovalUFS radius_thr) |
+
+#### Required Meteorological Fields
+
+- `T` - Temperature [K]
+- `TSTEP` - Model time step [s]
+- `MAIRDEN` - Moist air density (same as AIRDEN to cover possible use cases) [kg/m3]
+- `PEDGE` - Air partial pressure @ level edges [Pa] (nx,ny,nz+1)
+- `PFLLSAN` - Dwn flux liq prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PFILSAN` - Dwn flux ice prec:LS+anv [kg/m2/s] (nx,ny,nz+1)
+- `PRECCON` - Conv  precip @ ground [kg/m2/s] -> [mm/day]
+- `PRECLSC` - Large-scale precip @ ground kg/m2/s] -> [mm/day]
 
 
 
@@ -79,6 +107,10 @@ The process supports multiple schemes. Select your desired scheme:
 ! Use JACOB scheme
 process%scheme_name = "jacob"
 ```
+```fortran
+! Use GOCART scheme
+process%scheme_name = "gocart"
+```
 
 ## Implementation Details
 
@@ -91,6 +123,13 @@ Each scheme is implemented as a pure science kernel with no infrastructure depen
 pure subroutine compute_jacob( &
    num_layers, num_species, params, &
    T, &   TSTEP, &   AIRDEN_DRY, &   MAIRDEN, &   PFLLSAN, &   PFILSAN, &   PEDGE, &   REEVAPLS, &
+   species_conc, emission_flux)
+```
+```fortran
+! GOCART scheme
+pure subroutine compute_gocart( &
+   num_layers, num_species, params, &
+   T, &   TSTEP, &   MAIRDEN, &   PEDGE, &   PFLLSAN, &   PFILSAN, &   PRECCON, &   PRECLSC, &
    species_conc, emission_flux)
 ```
 
@@ -116,6 +155,8 @@ processes:
     parameters:
       scale_factor: 1.0
       radius_threshold: 1.0
+      so4_gocart_resusp: True
+      so4_washout_eff: 1.0
     diagnostics:
       enabled: true
       output_frequency: "daily"
@@ -137,6 +178,7 @@ processes:
 - `src/process/wetdep/WetDepCommon_Mod.F90` - Common types and parameters
 - `src/process/wetdep/WetDepProcessCreator_Mod.F90` - Process factory
 - `src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90` - Jacob et al. [2000] wet deposition scheme
+- `src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90` - GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species
 
 ### Tests
 - `tests/process/wetdep/unit/` - Unit tests
@@ -160,4 +202,4 @@ When modifying or extending this process:
 - JACOB: Jacob, D. J. et al., [2000] Harvard wet deposition scheme for GMI; peer-reviewed description in Liu, H., Jacob, D. J., Bey, I., & Yantosca, R. M. [2001], J. Geophys. Res., 106(D11), 12109–12128, <https://doi.org/10.1029/2000JD900839>
 
 ---
-*This documentation was automatically generated by the CATChem Process Generator on 2025-12-15T16:30:33.934868*
+*This documentation was automatically generated by the CATChem Process Generator on 2026-09-22T13:06:55.756402*

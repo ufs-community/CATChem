@@ -384,10 +384,10 @@ contains
 
       integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/carbchem/gocart/ in master YAML
+      ! Load scheme parameters from processes/carbchem/gocart/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/carbchem/gocart/time_days_hydrophobic_to_hydrophilic", &
          this%gocart_config%time_days_hydrophobic_to_hydrophilic, rc, 2.5_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%time_days_hydrophobic_to_hydrophilic = 2.5_fp
 
 
    end subroutine load_gocart_config

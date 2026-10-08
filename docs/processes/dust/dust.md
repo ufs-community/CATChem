@@ -33,21 +33,21 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 #### Required Meteorological Fields
 
-- `USTAR` - Meteorological field required for scheme computation
-- `TSKIN` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `SOILM` - Meteorological field required for scheme computation
-- `Z0` - Meteorological field required for scheme computation
-- `GVF` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `LAI` - Meteorological field required for scheme computation
-- `FRLAKE` - Meteorological field required for scheme computation
-- `FRSNO` - Meteorological field required for scheme computation
-- `CLAYFRAC` - Meteorological field required for scheme computation
-- `SANDFRAC` - Meteorological field required for scheme computation
-- `RDRAG` - Meteorological field required for scheme computation
-- `SSM` - Meteorological field required for scheme computation
-- `USTAR_THRESHOLD` - Meteorological field required for scheme computation
+- `USTAR` - Friction velocity [m/s]
+- `TSKIN` - Surface skin temperature [K]
+- `AIRDEN` - Wet air density [kg/m3]
+- `SOILM` - Volumetric Soil moisture [m3/m3] (nx,ny,nsoil)
+- `Z0` - Surface roughness height [m]
+- `GVF` - Green Vegetative Fraction
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `LAI` - Leaf area index [m2/m2] (online) Dominant
+- `FRLAKE` - Fraction of lake [1]
+- `FRSNO` - Sfc snow fraction
+- `CLAYFRAC` - Fraction of clay [1]
+- `SANDFRAC` - Fraction of sand [1]
+- `RDRAG` - Drag Partition [1]
+- `SSM` - Sediment Supply Map [1]
+- `USTAR_THRESHOLD` - Threshold friction velocity [m/s]
 
 
 ### GINOUX Scheme
@@ -64,15 +64,15 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 #### Required Meteorological Fields
 
-- `FRLAKE` - Meteorological field required for scheme computation
-- `FRSNO` - Meteorological field required for scheme computation
-- `TSKIN` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `GWETTOP` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `SSM` - Meteorological field required for scheme computation
+- `FRLAKE` - Fraction of lake [1]
+- `FRSNO` - Sfc snow fraction
+- `TSKIN` - Surface skin temperature [K]
+- `AIRDEN` - Wet air density [kg/m3]
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `GWETTOP` - Top soil moisture [1]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `SSM` - Sediment Supply Map [1]
 
 
 
@@ -86,7 +86,7 @@ The dust process operates on the following chemical species:
 ### Required Inputs
 
 #### Meteorological Fields
-- `DELP` - Required meteorological input
+- `DELP` - Delta-P (wet) across box [Pa]
 
 
 ### Process Diagnostics

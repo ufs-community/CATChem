@@ -404,7 +404,10 @@ contains
       !https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/Process_Library/GOCART2G_Process.F90#L3124
       !Five functions need to be customized here if we want to turn it off compleltely.
       !This is to ensure dry deposition does not run twice for SO2 and SO4
-      GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
+      !Only applied when so4chem drydep is OFF (default); when do_drydep is on, SulfateChemDriver deposits SO2/SO4/MSA like GOCART.
+      if (.not. params%do_drydep) then
+         GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
+      end if
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
          nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init_gocart, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
          GOCART_rhoa, GOCART_HGHTE, GOCART_USTAR, GOCART_HFLUX, GOCART_LWI, GOCART_PBLH, GOCART_Z0H, SU_dep, SU_PSO2, SU_PMSA, SU_PSO4, SU_PSO4g, &

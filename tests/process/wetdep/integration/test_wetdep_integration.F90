@@ -4,7 +4,7 @@
 !! This file contains comprehensive integration tests for the wetdep process implementation
 !! using the centralized CATChemCore framework. Tests complete workflow: core initialization,
 !! configuration loading, process registration, and all scheme validation.
-!! Generated on: 2025-12-15T16:30:33.888881
+!! Generated on: 2026-09-22T13:06:55.704905
 
 program test_wetdep_integration
    use precision_mod, only: fp, rae
@@ -43,14 +43,15 @@ program test_wetdep_integration
    real(fp), parameter :: dt = 3600.0_fp   ! 1 hour timestep
 
    ! Test schemes
-   character(len=20) :: schemes(1)
+   character(len=20) :: schemes(2)
 
    integer :: rc, i_scheme, i_time
    logical :: all_tests_passed = .true.
 
    ! Initialize scheme array
    schemes = [ &
-      'jacob               ']
+      'jacob               ', &
+      'gocart              ']
 
    write(output_unit,'(A)') '=================================='
    write(output_unit,'(A)') '=== WETDEP INTEGRATION TESTS ==='
@@ -183,7 +184,7 @@ contains
       type(MetStateType), pointer :: met_state
       type(GridManagerType), pointer :: grid_mgr
       integer :: nx, ny, nz, i, j, k
-      real(fp) :: lat, altitude_km, edge_altitude_km
+      real(fp) :: lat, wind_speed, altitude_km, edge_altitude_km
 
       rc_arg = CC_SUCCESS
 
@@ -202,7 +203,8 @@ contains
          ! Calculate latitude for realistic gradients
          lat = -30.0_fp + (j-1) * 60.0_fp / max(1, ny-1)  ! -30°S to 30°N
          do i = 1, nx
-
+            met_state%PRECCON(i,j) = 0.0_fp                    ! Convective precipitation [kg/m2/s]
+            met_state%PRECLSC(i,j) = 0.0_fp                    ! Large-scale precipitation [kg/m2/s]
          end do
       end do
 
@@ -214,6 +216,7 @@ contains
                ! Approximate altitude in km (assuming ~1 km per level near surface)
                altitude_km = real(k-1, fp) * 1.0_fp
                met_state%T(i,j,k) = 288.15_fp - 6.5_fp * altitude_km  ! Temperature lapse rate [K]
+               met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
                met_state%AIRDEN_DRY(i,j,k) = 1.2_fp * exp(-altitude_km / 8.0_fp)    ! Dry air density [kg/m3]
                met_state%MAIRDEN(i,j,k) = met_state%AIRDEN_DRY(i,j,k) * 1.01_fp     ! Moist air density [kg/m3]
                met_state%REEVAPLS(i,j,k) = 1.0e-6_fp * (1.0_fp + 0.1_fp * altitude_km)  ! Evaporation of large-scale precipitation [kg/kg/s]
@@ -292,6 +295,8 @@ contains
       select case (trim(scheme_name))
        case ('jacob')
          call wetdep_interface%process_config%load_jacob_config(config_mgr, error_mgr)
+       case ('gocart')
+         call wetdep_interface%process_config%load_gocart_config(config_mgr, error_mgr)
        case default
          call error_mgr%report_error(1004, &
             'Unknown scheme: ' // trim(scheme_name), rc_arg)
@@ -369,6 +374,7 @@ contains
       real(fp), pointer :: array_3d_ptr(:,:,:) => null()
       logical :: validation_passed
       character(len=64) :: field_name
+      character(len=20) :: type_name
 
       rc_arg = CC_SUCCESS
       validation_passed = .true.

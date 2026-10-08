@@ -94,6 +94,7 @@ contains
       species_radius, &
       species_is_dust, &
       species_is_seasalt, &
+      species_short_name, &
       species_conc, &
       species_tendencies, &
       is_gas, &
@@ -125,6 +126,7 @@ contains
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
       logical, intent(in) :: species_is_dust(num_species)  ! Species is dust property
       logical, intent(in) :: species_is_seasalt(num_species)  ! Species is seasalt property
+      character(len=32), intent(in) :: species_short_name(num_species)  ! Species short_name property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       logical, intent(in) :: is_gas(num_species)  ! Species type flags (true=gas, false=aerosol)
@@ -200,6 +202,10 @@ contains
          do species_idx = 1, num_species
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (is_gas(species_idx)) cycle
+            ! Optionally skip SO4/MSA so their dry deposition is handled by so4chem (GOCART SulfateChemDriver) instead.
+            if (params%skip_sulfate_aero .and. (trim(species_short_name(species_idx)) == 'SO4' .or. &
+               trim(species_short_name(species_idx)) == 'so4' .or. trim(species_short_name(species_idx)) == 'MSA' .or. &
+               trim(species_short_name(species_idx)) == 'msa')) cycle
 
             ! Apply resuspension based on config flags:
             ! - dust_resuspension_only=true (default): resuspension only for dust (matches GOCART)

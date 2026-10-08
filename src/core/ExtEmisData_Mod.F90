@@ -144,6 +144,24 @@ MODULE ExtEmisData_Mod
       LOGICAL                                   :: diurnal_bb = .false. !< Apply diurnal cycle to biomass burning emissions?
       CHARACTER(LEN=16)                         :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
       LOGICAL                                   :: needs_time_blend = .false. !< Per-timestep temporal blending needed
+      LOGICAL                                   :: daily_hold = .false. !< Match MAPL ExtData refresh cadence for daily linear data: recompute the [D-1,D] 12Z-knot blend only at 00Z and hold it constant all day (piecewise-constant daily value = 0.5*(emis(D-1)+emis(D))), instead of ramping smoothly through the day.
+      CHARACTER(LEN=16)                         :: monthly_anchor = 'mid_month' !< Monthly-climatology interpolation anchoring: 'mid_month' = value valid at the middle of each month (GEOS GriddedComp convention); 'file' = interpolate by the file's actual record timestamps (matches MAPL ExtData, e.g. month-start-stamped FENGSHA inputs).
+      ! Valid-times of the two records that bracket the current model time, used ONLY by the
+      ! multi-file monthly_anchor='file' path (one record per file, e.g. MEGAN_...._%m2.nc).
+      ! bt1 = lower/earlier record (current-month file), bt2 = upper/later record (next-month
+      ! file); each stored as (date=yyyymmdd, secs=second-of-day). blend_time interpolates by
+      ! these actual timestamps so the result does NOT depend on how the climatology is stored.
+      !   Example (MEGAN, month-start files, model time = Jan 20):
+      !     bt1_date=20210101 bt1_secs=0  (January file's record)
+      !     bt2_date=20210201 bt2_secs=0  (February file's record)
+      !     -> w_next = (Jan20 - Jan1)/(Feb1 - Jan1) = 19/31
+      ! Single-file climatologies leave bt_valid=.false. (their record times come straight from
+      ! the cached tc_dates/tc_secs inside catchem_emis_file_time_bracket instead).
+      INTEGER                                   :: bt1_date = 0  !< lower bracket record date (yyyymmdd)
+      INTEGER                                   :: bt1_secs = 0  !< lower bracket record second-of-day
+      INTEGER                                   :: bt2_date = 0  !< upper bracket record date (yyyymmdd)
+      INTEGER                                   :: bt2_secs = 0  !< upper bracket record second-of-day
+      LOGICAL                                   :: bt_valid = .false. !< .true. only for a multi-file file-anchored monthly category (bt1_*/bt2_* populated)
 
    CONTAINS
       !> \brief Initialize emission category with metadata

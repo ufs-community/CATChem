@@ -4,7 +4,7 @@
 !! This module defines the configuration types used by the
 !! wetdep process and its schemes.
 !!
-!! Generated on: 2025-12-15T16:30:33.593509
+!! Generated on: 2026-09-22T13:06:55.472385
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -24,6 +24,7 @@ module WetDepCommon_Mod
    public :: WetDepProcessConfig  ! New unified process config
    public :: WetDepConfig
    public :: WetDepSchemeJACOBConfig
+   public :: WetDepSchemeGOCARTConfig
 
    ! Export utility functions
    public :: int_to_string
@@ -60,8 +61,8 @@ module WetDepCommon_Mod
       logical, allocatable :: species_wd_LiqAndGas(:)      ! wd_LiqAndGas for each species
       real(fp), allocatable :: species_wd_convfacI2G(:)      ! wd_convfacI2G for each species
       real(fp), allocatable :: species_wd_rainouteff(:,:)      ! wd_rainouteff for each species
-      real(fp), allocatable :: species_wd_retfactor(:)      ! wd_retfactor for each species
       real(fp), allocatable :: species_wd_reevap_frac(:)      ! wd_reevap_frac for each species
+      real(fp), allocatable :: species_wd_retfactor(:)      ! wd_retfactor for each species
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -88,8 +89,8 @@ module WetDepCommon_Mod
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! Washout tuning factor
       real(fp) :: radius_threshold = 1.0  ! Radius threshold for aerosol wet deposition (um)
-      logical :: so4_gocart_resusp = .true.  ! Use GOCART SU_Wet_Removal resuspension (alpha) for sulfate (SO4/SO2) only
-      real(fp) :: so4_washout_eff = 1.0  ! Sulfate-only below-cloud washout efficiency multiplier (SO4 column tuning; 1.0 = unchanged)
+      logical :: so4_gocart_resusp = .true.  ! Sulfate-only GOCART-style resuspension toggle (default on)
+      real(fp) :: so4_washout_eff = 1.0  ! Sulfate-only below-cloud washout efficiency (1.0=unchanged); reduce to cut excess SO4 washout
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 8
@@ -101,6 +102,34 @@ module WetDepCommon_Mod
    end type WetDepSchemeJACOBConfig
 
    ! jacob scheme uses local variables only - no persistent state type needed
+
+   !> Configuration type for gocart scheme
+   type :: WetDepSchemeGOCARTConfig
+
+      ! Scheme metadata
+      character(len=64) :: scheme_name = 'gocart'
+      character(len=256) :: description = 'GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species'
+      character(len=64) :: author = 'Wei Li'
+      character(len=16) :: algorithm_type = 'explicit'
+
+      ! Process configuration
+      logical :: affects_full_column = .true.  ! Full column processing
+
+      ! Scheme parameters
+      real(fp) :: scale_factor = 1.0  ! Overall washout tuning factor
+      real(fp) :: washout_tuning = 1.0  ! WetRemovalUFS below-cloud washout tuning factor (wtune); GOCART default 1.0
+      real(fp) :: radius_threshold = 0.05  ! Radius threshold for aerosol washout (um) (WetRemovalUFS radius_thr); GOCART default 0.05
+
+      ! Required meteorological fields
+      integer :: n_required_met_fields = 8
+      character(len=32) :: required_met_fields(8)
+
+   contains
+      procedure, public :: validate => validate_gocart_config
+      procedure, public :: finalize => finalize_gocart_config
+   end type WetDepSchemeGOCARTConfig
+
+   ! gocart scheme uses local variables only - no persistent state type needed
 
 
    !> Unified process configuration type that bridges ConfigManager and process-specific configs
@@ -117,6 +146,8 @@ module WetDepCommon_Mod
 
       ! Scheme configurations
       type(WetDepSchemeJACOBConfig) :: jacob_config
+      type(WetDepSchemeGOCARTConfig) :: gocart_config
+
 
    contains
       procedure, public :: load_from_config => wetdep_process_load_config
@@ -125,6 +156,7 @@ module WetDepCommon_Mod
       procedure, public :: finalize => wetdep_process_finalize
       procedure, public :: get_active_scheme_config => get_active_scheme_config
       procedure, public :: load_jacob_config
+      procedure, public :: load_gocart_config
       procedure, public :: map_diagnostic_species_indices
    end type WetDepProcessConfig
 
@@ -154,6 +186,7 @@ contains
       ! Validate active scheme(s)
       ! Validate scheme
       if (trim(this%scheme) /= 'jacob' .and. &
+         trim(this%scheme) /= 'gocart' .and. &
          .true.) then
          write(error_msg, '(A)') "Invalid scheme: " // trim(this%scheme)
          call error_handler%report_error(ERROR_INVALID_CONFIG, error_msg, rc)
@@ -218,11 +251,11 @@ contains
       if (allocated(this%species_wd_rainouteff)) then
          deallocate(this%species_wd_rainouteff)
       end if
-      if (allocated(this%species_wd_retfactor)) then
-         deallocate(this%species_wd_retfactor)
-      end if
       if (allocated(this%species_wd_reevap_frac)) then
          deallocate(this%species_wd_reevap_frac)
+      end if
+      if (allocated(this%species_wd_retfactor)) then
+         deallocate(this%species_wd_retfactor)
       end if
 
 
@@ -256,6 +289,24 @@ contains
    end subroutine finalize_jacob_config
 
 
+   !> Validate gocart scheme configuration
+   subroutine validate_gocart_config(this, error_handler)
+      class(WetDepSchemeGOCARTConfig), intent(inout) :: this
+      type(ErrorManagerType), intent(inout) :: error_handler
+
+      ! TODO: Add scheme-specific validation
+
+   end subroutine validate_gocart_config
+
+   !> Finalize gocart scheme configuration
+   subroutine finalize_gocart_config(this)
+      class(WetDepSchemeGOCARTConfig), intent(inout) :: this
+
+      ! Nothing to deallocate for basic configuration
+
+   end subroutine finalize_gocart_config
+
+
 
    !> Convert integer to string (utility function)
    function int_to_string(int_val) result(str_val)
@@ -276,7 +327,7 @@ contains
       type(ErrorManagerType), intent(inout) :: error_handler
 
       character(len=256) :: scheme_name
-      integer :: rc
+      integer :: ierr, rc
 
       ! Process reads directly from master YAML structure: processes.wetdep
       ! ConfigManager provides generic YAML access, process handles its own configuration
@@ -330,6 +381,8 @@ contains
       select case (scheme_name)
        case ('jacob')
          call this%load_jacob_config(config_manager, error_handler)
+       case ('gocart')
+         call this%load_gocart_config(config_manager, error_handler)
        case default
          call error_handler%report_error(ERROR_INVALID_STATE, &
             "Unknown wetdep scheme: " // trim(scheme_name), rc)
@@ -404,8 +457,8 @@ contains
       allocate(this%wetdep_config%species_wd_LiqAndGas(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_convfacI2G(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_rainouteff(this%wetdep_config%n_species, 3))
-      allocate(this%wetdep_config%species_wd_retfactor(this%wetdep_config%n_species))
       allocate(this%wetdep_config%species_wd_reevap_frac(this%wetdep_config%n_species))
+      allocate(this%wetdep_config%species_wd_retfactor(this%wetdep_config%n_species))
 
       ! by_metadata mode: Copy indices from metadata-specific index array using dynamic mapping
       ! Dynamic mapping: is_wetdep -> WetdepIndex
@@ -437,8 +490,8 @@ contains
          this%wetdep_config%species_wd_LiqAndGas(i) = chem_state%ChemSpecies(species_idx)%wd_LiqAndGas
          this%wetdep_config%species_wd_convfacI2G(i) = chem_state%ChemSpecies(species_idx)%wd_convfacI2G
          this%wetdep_config%species_wd_rainouteff(i, :) = chem_state%ChemSpecies(species_idx)%wd_rainouteff(:)
-         this%wetdep_config%species_wd_retfactor(i) = chem_state%ChemSpecies(species_idx)%wd_retfactor
          this%wetdep_config%species_wd_reevap_frac(i) = chem_state%ChemSpecies(species_idx)%wd_reevap_frac
+         this%wetdep_config%species_wd_retfactor(i) = chem_state%ChemSpecies(species_idx)%wd_retfactor
       end do
 
    end subroutine load_species_from_chem_state
@@ -450,27 +503,41 @@ contains
       type(ConfigManagerType), intent(inout) :: config_manager
       type(ErrorManagerType), intent(inout) :: error_handler
 
-      integer :: rc
+      integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/wetdep/jacob/ in master YAML
+      ! Load scheme parameters from processes/wetdep/jacob/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/wetdep/jacob/scale_factor", &
          this%jacob_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%scale_factor = 1.0_fp
       call config_manager%get_real("processes/wetdep/jacob/radius_threshold", &
          this%jacob_config%radius_threshold, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%radius_threshold = 1.0_fp
-      ! Sulfate-only GOCART-style resuspension toggle (default on)
       call config_manager%get_logical("processes/wetdep/jacob/so4_gocart_resusp", &
          this%jacob_config%so4_gocart_resusp, rc, .true.)
-      if (rc /= CC_SUCCESS) this%jacob_config%so4_gocart_resusp = .true.
-
-      ! Sulfate-only below-cloud washout efficiency multiplier (default 1.0 = unchanged)
       call config_manager%get_real("processes/wetdep/jacob/so4_washout_eff", &
          this%jacob_config%so4_washout_eff, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%jacob_config%so4_washout_eff = 1.0_fp
 
 
    end subroutine load_jacob_config
+
+   !> Load gocart scheme configuration from master YAML
+   subroutine load_gocart_config(this, config_manager, error_handler)
+      class(WetDepProcessConfig), intent(inout) :: this
+      type(ConfigManagerType), intent(inout) :: config_manager
+      type(ErrorManagerType), intent(inout) :: error_handler
+
+      integer :: ierr, rc
+
+      ! Load scheme parameters from processes/wetdep/gocart/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
+      call config_manager%get_real("processes/wetdep/gocart/scale_factor", &
+         this%gocart_config%scale_factor, rc, 1.0_fp)
+      call config_manager%get_real("processes/wetdep/gocart/washout_tuning", &
+         this%gocart_config%washout_tuning, rc, 1.0_fp)
+      call config_manager%get_real("processes/wetdep/gocart/radius_threshold", &
+         this%gocart_config%radius_threshold, rc, 0.05_fp)
+
+
+   end subroutine load_gocart_config
 
 
    !> Validate unified process configuration
@@ -486,6 +553,8 @@ contains
       select case (trim(this%wetdep_config%scheme))
        case ('jacob')
          call this%jacob_config%validate(error_handler)
+       case ('gocart')
+         call this%gocart_config%validate(error_handler)
       end select
 
    end subroutine wetdep_process_validate
@@ -494,10 +563,13 @@ contains
    subroutine wetdep_process_finalize(this)
       class(WetDepProcessConfig), intent(inout) :: this
 
+
       call this%wetdep_config%finalize()
       call this%jacob_config%finalize()
+      call this%gocart_config%finalize()
 
    end subroutine wetdep_process_finalize
+
 
    !> Get active scheme configuration (polymorphic return)
    function get_active_scheme_config(this) result(scheme_config)
@@ -507,6 +579,8 @@ contains
       select case (trim(this%wetdep_config%scheme))
        case ('jacob')
          allocate(scheme_config, source=this%jacob_config)
+       case ('gocart')
+         allocate(scheme_config, source=this%gocart_config)
        case default
          ! Return null
       end select
