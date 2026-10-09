@@ -1,0 +1,9 @@
+valid:
+  expected_status: success
+  storage: separate
+  host_owned_tracers: [sphum]
+invalid:
+  missing_required: inst_pres_interface
+  wrong_rank: inst_tracer_mass_frac
+  wrong_extent: inst_tracer_mass_frac
+  wrong_units: inst_temp_levels

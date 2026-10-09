@@ -10,8 +10,8 @@
 
 module {{ config.class_name }}ProcessCreator_Mod
 
-   use precision_mod, only: fp
-   use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType
+   use catchem_bridge_precision, only: fp
+   use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType
    use ProcessInterface_Mod
    use Process{{ config.class_name }}Interface_Mod
 

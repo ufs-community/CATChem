@@ -1,0 +1,46 @@
+name: Platform integrity
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: '17 4 * * 1'
+
+jobs:
+  gcc-integrity:
+    name: core-${{ matrix.profile }} [mechanism/contracts/lifecycle/physical/boundary]
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [host, openmp, sanitizer, bounds]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - run: sudo apt-get update && sudo apt-get install -y gfortran libyaml-cpp-dev libkokkos-dev
+      - name: Configure
+        run: |
+          args=(-DCATCHEM_BUILD_TESTING=ON -DCATCHEM_BUILD_MUSICA=OFF -DCATCHEM_BUILD_NUOPC=OFF)
+          case "${{ matrix.profile }}" in
+            openmp) args+=(-DCATCHEM_ENABLE_KOKKOS=ON -DKokkos_ENABLE_OPENMP=ON) ;;
+            sanitizer) args+=(-DCATCHEM_ENABLE_SANITIZERS=ON) ;;
+            bounds) args+=(-DCATCHEM_ENABLE_BOUNDS_CHECK=ON) ;;
+          esac
+          cmake -S . -B "build-${{ matrix.profile }}" "${args[@]}"
+      - run: cmake --build "build-${{ matrix.profile }}" --parallel 2
+      - run: ctest --test-dir "build-${{ matrix.profile }}" --output-on-failure
+      - name: Feature contract labels
+        run: ctest --test-dir "build-${{ matrix.profile }}" -L "mechanism|process-contract|lifecycle|physical-validation|boundary" --output-on-failure
+
+  separate-memory:
+    name: core-device [separate-memory/contracts]
+    if: ${{ vars.CATCHEM_DEVICE_RUNNER != '' }}
+    runs-on: ${{ vars.CATCHEM_DEVICE_RUNNER }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - run: cmake -S . -B build-device -DCATCHEM_BUILD_TESTING=ON -DCATCHEM_ENABLE_KOKKOS=ON
+      - run: cmake --build build-device --parallel 2
+      - run: ctest --test-dir build-device -L separate-memory --output-on-failure

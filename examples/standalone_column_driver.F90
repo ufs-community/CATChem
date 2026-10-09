@@ -14,7 +14,7 @@
 !!
 program standalone_column_driver
    use CATChemAPI_Mod
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    implicit none
 
    ! Main driver components

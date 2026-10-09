@@ -1,0 +1,27 @@
+simulation:
+  name: configured-process-disabled
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 1
+
+grid:
+  number_of_levels: 3
+
+diagnostics:
+  output:
+    enabled: false
+  collection:
+    enabled: false
+
+# Scheduling a process is not enough to activate it: process enablement is
+# intentionally controlled by the runtime YAML process block.
+run_phases:
+  emissions:
+    processes: [seasalt]
+
+processes:
+  seasalt:
+    activate: false

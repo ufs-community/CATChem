@@ -1,44 +1,37 @@
 # CATChem Processes
 
-This section contains documentation for all available CATChem processes.
+This section contains documentation for all available CATChem physical and chemical processes.
 
 ## Overview
 
 CATChem processes are modular components that implement specific atmospheric physics or chemistry mechanisms. Each process follows a standardized interface and can be configured independently.
 
+Under the modernized C++ core, processes are implemented as native C++ classes extending `catchem::ProcessInterface`, allowing them to execute in parallel on CPU host and GPU devices via Kokkos.
+
+---
+
 ## Process Categories
+
+### Chemistry & Transformation Processes
+Processes that convert species through chemical or physical mechanisms:
+- **[GasChem](gaschem/index.md)** - Gas-phase chemistry utilizing NCAR's C++ MICM solver via the musica library.
+- **[Photolysis](photolysis/index.md)** - Photolysis rates determination utilizing NCAR's C++ TUV-x engine.
+- **Particle settling** - Gravitational settling with Cunningham slip correction and Sutherland viscosity.
+- Aerosol chemistry, coagulation, and phase transitions.
 
 ### Emission Processes
 Source processes that add species to the atmosphere:
-- Anthropogenic emissions
-- Biogenic emissions
-- Dust emissions
-- Sea salt emissions
-
-### Transformation Processes
-Processes that convert species through chemical or physical mechanisms:
-- Gas-phase chemistry
-- Aerosol chemistry
-- Particle settling
-- Coagulation
+- **[Dust](dust/dust.md)** - Mineral dust emission and transport.
+- **[SeaSalt](seasalt/seasalt.md)** - Marine aerosol processes.
+- Anthropogenic and biogenic emissions.
 
 ### Loss Processes
 Removal processes that remove species from the atmosphere:
 - Dry deposition
+- Wet deposition
 - Radioactive decay
-- Photolysis
 
-### Transport Processes
-Processes that move species spatially:
-- Advection
-- Turbulent mixing
-- Convective transport
-
-### Multi-Phase Processes
-Processes involving multiple atmospheric phases:
-- Aqueous chemistry (gas-liquid)
-- Heterogeneous chemistry (gas-solid)
-- Phase transitions
+---
 
 ## Available Processes
 
@@ -51,6 +44,8 @@ Processes involving multiple atmospheric phases:
 
 - **[Carbon Chemistry](carbchem/carbchem.md)** - Carbonaceous aerosol chemistry (GOCART)
 - **[Sulfate Chemistry](so4chem/so4chem.md)** - Sulfate aerosol chemistry (GOCART)
+- **[Gas-phase Chemistry](gaschem/index.md)** - Gas-phase chemistry (MICM via MUSICA)
+- **[Photolysis](photolysis/index.md)** - Photolysis rates (TUV-x via MUSICA)
 
 **Deposition**
 
@@ -61,45 +56,54 @@ Processes involving multiple atmospheric phases:
 
 - **[Settling](settling/settling.md)** - Gravitational settling (GOCART)
 
+---
+
 ## Using Processes
 
-### Basic Configuration
+### Configuration
 
-All processes are configured through YAML files:
+All processes are configured through CATChem's YAML configuration files:
 
 ```yaml
 processes:
-  - name: process_name
+  - name: "photolysis"
     enabled: true
-    scheme: scheme_name
-    species: [species_list]
     parameters:
-      param1: value1
-      param2: value2
-    diagnostics: [diagnostic_list]
+      config_file: "src/external/musica/configs/tuvx/tuv_5_4.yml"
+  - name: "gaschem"
+    enabled: true
+    parameters:
+      config_dir: "src/external/musica/configs/tuvx/from_host/"
 ```
 
-### Process Interface
+### Process Interface (C++)
 
-All processes implement the standard interface:
+All native processes extend the standard C++ interface:
 
-```fortran
-type, extends(ProcessInterface) :: MyProcessType
-contains
-  procedure :: init => my_process_init
-  procedure :: run => my_process_run
-  procedure :: finalize => my_process_finalize
-end type
+```cpp
+namespace catchem {
+
+    class ProcessInterface {
+    public:
+        virtual ~ProcessInterface() = default;
+        virtual std::string get_name() const = 0;
+        virtual void init(std::shared_ptr<StateManager> state) = 0;
+        virtual void run(std::shared_ptr<StateManager> state) = 0;
+        virtual void finalize() = 0;
+    };
+
+} // namespace catchem
 ```
 
-## Creating New Processes
+---
 
-See the [Process Generator Tutorial](../developer-guide/processes/process-generator.md) for detailed instructions on creating new processes.
+## Process Development & Architecture Guides
 
-## Process Development
+For information on developing and integrating processes:
 
-For information on developing processes manually or extending generated processes:
+- **[Modernized Processes Overview](MODERNIZED_PROCESSES.md)** - Summary of newly migrated C++ processes.
+- **[Developer Architecture Guide](../developer-guide/architecture.md)** - C++ Core and memory layout.
+- **[Process Interface API Reference](../api/process-interface.md)** - Details on ProcessRegistry and linker callbacks.
+- **[Process Generator Tutorial](../developer-guide/processes/process-generator.md)** - Creating new processes with the generator.
 
-- [Process Architecture](../developer-guide/processes/architecture.md)
-- [Creating Processes](../developer-guide/processes/creating.md)
-- [Testing Guide](../developer-guide/processes/testing.md)
+---

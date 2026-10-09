@@ -1,0 +1,25 @@
+simulation:
+  nx: 0
+  ny: -1
+  nz: 0
+  timestep: -5
+  nsteps: 0
+grid:
+  number_of_levels: 0
+  number_of_soil_layers: -2
+timesteps:
+  transport_timestep_in_s: -1
+  chemistry_timestep_in_s: -2
+diagnostics:
+  output:
+    enabled: true
+    frequency: 0
+    format: unsupported
+    compress_lev: 12
+  collection:
+    enabled: true
+    buffer_size: 0
+run_phases:
+  bad:
+    processes: [unknown_process]
+unknown_section: true

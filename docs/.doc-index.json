@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "generated_by": "doc-superpowers",
+  "generated_at": "2026-07-28T13:50:22Z",
+  "build_commit": "c83df338e61b28b2e2f8f34c207af63f7777aa3f",
+  "docs": {
+    "docs/index.md": {
+      "content_hash": "sha256:c470a9e3bfb04500cc286eb620dadc610ddf16458aa4b5b7d7d458205d7c61c4",
+      "code_refs": [
+        "src/core/catchem_api.hpp",
+        "src/core/catchem_api.cpp"
+      ],
+      "code_commit": "be208f84069e25ffb5d8baf3cee353bde9fd9fbe",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/api/index.md": {
+      "content_hash": "sha256:84885dc38e6971d8e25ca95abb7b73531a79220e012443ce3146ad956d436018",
+      "code_refs": [
+        "src/core/catchem_api.hpp"
+      ],
+      "code_commit": "be208f84069e25ffb5d8baf3cee353bde9fd9fbe",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/api/process-interface.md": {
+      "content_hash": "sha256:7a209155b60c80d268871dad5a23eaa1a656d1cf563f7dcde869465fd862316c",
+      "code_refs": [
+        "src/core/catchem_process_interface.hpp",
+        "src/core/catchem_process_registry.hpp"
+      ],
+      "code_commit": "87f5f6db5175bfebe3448791ffbda67ff4e34eeb",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-28T13:50:22Z",
+      "implementation": []
+    },
+    "docs/api/state-management.md": {
+      "content_hash": "sha256:f958152a837f4c7f38ef3d09626694c366a9ba12be522cccd1dc53576b4eef8d",
+      "code_refs": [
+        "src/core/catchem_state_manager.hpp",
+        "src/core/catchem_chem_state.hpp",
+        "src/core/catchem_met_state.hpp"
+      ],
+      "code_commit": "7f7224a9580251749262d5b4a7dc2d2dbd5eb0f4",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/api/configuration.md": {
+      "content_hash": "sha256:aecd99b182c74c3ece7bb03f6eab03d64e660ea885163577a0ce92ff3d0fecfa",
+      "code_refs": [
+        "src/core/catchem_config_manager.hpp",
+        "src/core/catchem_config_manager.cpp"
+      ],
+      "code_commit": "7f7224a9580251749262d5b4a7dc2d2dbd5eb0f4",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-28T13:43:44Z",
+      "implementation": []
+    },
+    "docs/api/column-interface.md": {
+      "content_hash": "sha256:af65bed6078dce977cbb120074d7334d70aab03a6a60f65f966303be6391f2a8",
+      "code_refs": [
+        "src/core/catchem_grid_manager.hpp",
+        "src/core/catchem_grid_manager.cpp"
+      ],
+      "code_commit": "87f5f6db5175bfebe3448791ffbda67ff4e34eeb",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/developer-guide/architecture.md": {
+      "content_hash": "sha256:5a0f43beeb4d5cd2717c329c9351888c903d7de0753e41af6e961b9bbbfb5df1",
+      "code_refs": [
+        "src/core/"
+      ],
+      "code_commit": "ee3c753626b365a4d4799f0b2099cfe67182d155",
+      "doc_type": "architecture",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/processes/index.md": {
+      "content_hash": "sha256:9395334804c56ab1a8ce2d98fff34c7bca1abf8bb1f40e516e996387814e0085",
+      "code_refs": [
+        "src/process/"
+      ],
+      "code_commit": "8d0bf3e5627d5d2f1277f0543a9d31c82203bd99",
+      "doc_type": "processes",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/processes/MODERNIZED_PROCESSES.md": {
+      "content_hash": "sha256:2137e9a8bb4f42261c09e48d310c84f9912313920e812d6c5193bb303ae9ce72",
+      "code_refs": [
+        "src/process/"
+      ],
+      "code_commit": "8d0bf3e5627d5d2f1277f0543a9d31c82203bd99",
+      "doc_type": "processes",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:46:05Z",
+      "implementation": []
+    },
+    "docs/processes/gaschem/index.md": {
+      "content_hash": "sha256:9e4d874f251bfbf2f280e92085dc9ceb2da81617f9f11bd2112cc4232fc8c24d",
+      "code_refs": [
+        "src/process/gaschem/catchem_process_gaschem.hpp",
+        "src/process/gaschem/catchem_process_gaschem.cpp"
+      ],
+      "code_commit": "8d0bf3e5627d5d2f1277f0543a9d31c82203bd99",
+      "doc_type": "processes",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:27:15Z"
+    },
+    "docs/processes/photolysis/index.md": {
+      "content_hash": "sha256:47dd1ac92a06bb2a6261c45ac8d33909ea9c81b783bc1971d3b78d014d0399bd",
+      "code_refs": [
+        "src/process/photolysis/catchem_process_photolysis.hpp",
+        "src/process/photolysis/catchem_process_photolysis.cpp"
+      ],
+      "code_commit": "8d0bf3e5627d5d2f1277f0543a9d31c82203bd99",
+      "doc_type": "processes",
+      "status": "current",
+      "replaces": null,
+      "superseded_by": null,
+      "last_verified": "2026-07-27T18:27:15Z"
+    }
+  }
+}

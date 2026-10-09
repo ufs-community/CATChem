@@ -22,9 +22,9 @@
 !! Reference: GOCART2G process library SulfateChemDriver function
 module SO4chemScheme_GOCART_Mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use SO4chemCommon_Mod, only: SO4chemSchemeGOCARTConfig
-   use error_mod, only: CC_SUCCESS, CC_Error
+   use catchem_bridge_error, only: CC_SUCCESS, CC_Error
    use GOCART2G_Process, only: SulfateUpdateOxidants, SulfateChemDriver, DMSemission
 
    implicit none
@@ -78,8 +78,9 @@ contains
    !! @param[in]  z0h    Z0H field [appropriate units]
    !! @param[in]  species_mw_g    Species mw_g property
    !! @param[in]  species_short_name    Species short_name property
-   !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
-   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[in]  species_conc   Species concentrations: DMS/SO2 in ppmv,
+   !!                            SO4/MSA in ug/kg (num_layers, num_species)
+   !! @param[out] species_tendencies  Updated concentrations in the same units
    !! Persistent state variables (per-column):
    !! @param[inout] firsttime    flag for first time step
    !! @param[inout] nymd_last    last day of H2O2 update
@@ -246,6 +247,13 @@ contains
       thisLoc = ' -> at compute_gocart (in SO4chemScheme_GOCART_Mod.F90)'
       !RC = CC_SUCCESS
       RC = 0 !try not to rely on CC_SUCCESS
+      ! This is a replacement-state interface.  Preserve every species the
+      ! sulfate scheme does not own, then overwrite the eight sulfur/oxidant
+      ! species below.  The legacy interface passed only this process's
+      ! species and initialized its output to zero; the C++ bridge passes the
+      ! full chemistry state, so copying here prevents unrelated tracers from
+      ! being cleared while still allowing a managed species to reach zero.
+      species_tendencies = species_conc
       !drydepf = 0.0_fp
 
       rad2deg = 180.0_fp/PI
@@ -380,11 +388,9 @@ contains
       fMassDMS = species_mw_g(nDMS)
       fMassSO2 = species_mw_g(nSO2)
       fMassSO4 = species_mw_g(nSO4)
-      !dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg
       dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-6_fp * fMassDMS / AIRMW  !ppm ==> kg/kg
       so2(1,1,:) = species_conc(num_layers:1:-1, nSO2) * 1.0e-6_fp * fMassSO2 / AIRMW  ! ppm ==> kg/kg
       so4(1,1,:) = species_conc(num_layers:1:-1, nSO4) * 1.0e-9_fp  !ug/kg ==> kg/kg
-      !msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
       msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-9_fp  ! ug/kg ==> kg/kg
 
       !run DMS emission scheme
@@ -404,7 +410,11 @@ contains
       !https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/Process_Library/GOCART2G_Process.F90#L3124
       !Five functions need to be customized here if we want to turn it off compleltely.
       !This is to ensure dry deposition does not run twice for SO2 and SO4
-      GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
+      !Only applied when so4chem drydep is OFF (default); when do_drydep is on,
+      !SulfateChemDriver deposits SO2/SO4/MSA like GOCART.
+      if (.not. params%do_drydep) then
+         GOCART_HGHTE(:,:,num_layers - 1) = GOCART_HGHTE(:,:,num_layers) + 1.0e38_fp
+      end if
       call SulfateChemDriver(num_layers, klid, tstep, PI, rad2deg, VON_KARMAN, AIRMW, AVO, Cpd, g0, fMassMSA,fMassDMS,fMassSO2,fMassSO4,&
          nymd, nhms, lonRad, latRad, dms, so2, so4, msa, nDMS, nSO2, nSO4, nMSA, xoh, xno3, xh2o2, xh2o2_init_gocart, GOCART_DELP, GOCART_tmpu, GOCART_cloud, &
          GOCART_rhoa, GOCART_HGHTE, GOCART_USTAR, GOCART_HFLUX, GOCART_LWI, GOCART_PBLH, GOCART_Z0H, SU_dep, SU_PSO2, SU_PMSA, SU_PSO4, SU_PSO4g, &
@@ -480,6 +490,7 @@ contains
       if (associated(GOCART_PRESS)) deallocate(GOCART_PRESS); nullify(GOCART_PRESS)
       if (associated(GOCART_LWI)) deallocate(GOCART_LWI); nullify(GOCART_LWI)
       if (associated(GOCART_USTAR)) deallocate(GOCART_USTAR); nullify(GOCART_USTAR)
+      if (associated(GOCART_PBLH)) deallocate(GOCART_PBLH); nullify(GOCART_PBLH)
       if (associated(GOCART_HFLUX)) deallocate(GOCART_HFLUX); nullify(GOCART_HFLUX)
       if (associated(GOCART_U10M)) deallocate(GOCART_U10M); nullify(GOCART_U10M)
       if (associated(GOCART_V10M)) deallocate(GOCART_V10M); nullify(GOCART_V10M)

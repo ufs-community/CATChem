@@ -1,0 +1,73 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "platform-integrity-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CATCHEM_BUILD_TESTING": "ON",
+        "CATCHEM_BUILD_NUOPC": "ON",
+        "CATCHEM_BUILD_CCPP": "ON"
+      }
+    },
+    {
+      "name": "platform-integrity-host",
+      "displayName": "Platform integrity: serial host",
+      "inherits": "platform-integrity-base",
+      "binaryDir": "${sourceDir}/build-platform-host",
+      "cacheVariables": {
+        "CATCHEM_ENABLE_KOKKOS": "OFF"
+      }
+    },
+    {
+      "name": "platform-integrity-openmp",
+      "displayName": "Platform integrity: Kokkos/OpenMP host",
+      "inherits": "platform-integrity-base",
+      "binaryDir": "${sourceDir}/build-platform-openmp",
+      "cacheVariables": {
+        "CATCHEM_ENABLE_KOKKOS": "ON",
+        "Kokkos_ENABLE_OPENMP": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "platform-integrity-host",
+      "configurePreset": "platform-integrity-host",
+      "jobs": 4
+    },
+    {
+      "name": "platform-integrity-openmp",
+      "configurePreset": "platform-integrity-openmp",
+      "jobs": 4
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "platform-integrity-host",
+      "configurePreset": "platform-integrity-host",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "platform-integrity-openmp",
+      "configurePreset": "platform-integrity-openmp",
+      "environment": {
+        "OMP_NUM_THREADS": "4",
+        "KOKKOS_NUM_THREADS": "4",
+        "OMP_PROC_BIND": "false"
+      },
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

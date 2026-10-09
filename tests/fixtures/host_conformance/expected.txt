@@ -1,0 +1,7 @@
+mechanism_count=3
+species_1=unfamiliar_alpha
+species_2=unfamiliar_beta
+species_3=unfamiliar_gamma
+extent_mismatch_status=4
+invalid_policy_status=8
+empty_physical_issue_count=0

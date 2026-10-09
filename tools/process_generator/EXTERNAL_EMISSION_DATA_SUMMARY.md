@@ -35,8 +35,8 @@ Using the CATChem process generator, we successfully created a comprehensive ext
   - `elevated_3d`: 3D elevated emissions with vertical distribution
   - `temporal_profiles`: Time-varying profiles and scaling factors
 
-### 2. Integration with Existing ExtEmisData_Mod
-- Works alongside the existing `ExtEmisData_Mod.F90` core module
+### 2. Integration with Existing catchem_emis_data_mod
+- Works alongside the existing `catchem_emis_data_mod.F90` core module
 - Provides process interface for external emission data structures
 - Maintains separation of concerns between data and computation
 

@@ -95,9 +95,9 @@ touch src/process/myprocess/schemes/CMakeLists.txt
 
 ```fortran
 module myprocessProcess_Mod
-   use precision_mod
+   use catchem_bridge_precision
    use state_mod, only : StateContainerType
-   use error_mod
+   use catchem_bridge_error
    use ProcessInterface_Mod
    use myprocessCommon_Mod
 
@@ -176,9 +176,9 @@ Schemes provide interchangeable algorithms within a process:
 
 ```fortran
 module MyScheme_Mod
-   use precision_mod
+   use catchem_bridge_precision
    use state_mod, only : StateContainerType
-   use error_mod
+   use catchem_bridge_error
 
    implicit none
    private

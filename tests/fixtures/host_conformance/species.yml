@@ -1,0 +1,14 @@
+- name: unfamiliar_alpha
+  long_name: Unfamiliar alpha
+  molecular weight [kg mol-1]: 0.010
+  roles: [test.primary]
+- name: unfamiliar_beta
+  long_name: Unfamiliar beta
+  molecular weight [kg mol-1]: 0.020
+  roles: [test.secondary]
+- name: unfamiliar_gamma
+  long_name: Unfamiliar gamma
+  molecular weight [kg mol-1]: 0.030
+  is_aerosol: true
+  density: 1700.0
+  radius: 1.0e-6

@@ -7,8 +7,8 @@
 set(
   SO4CHEM_PROCESS_SOURCES
   SO4chemCommon_Mod.F90
-  ProcessSO4chemInterface_Mod.F90
-  SO4chemProcessCreator_Mod.F90
+  catchem_process_so4chem.cpp
+  SO4chemScienceBridge.F90
 )
 
 # Define so4chem scheme sources
@@ -21,8 +21,9 @@ set(SO4CHEM_ALL_SOURCES ${SO4CHEM_PROCESS_SOURCES} ${SO4CHEM_SCHEME_SOURCES})
 set(_lib CATChem_process_so4chem)
 add_library(${_lib} ${SO4CHEM_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 # Chemistry processes may need additional math libraries
@@ -39,14 +40,17 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
   # Chemistry processes may benefit from aggressive optimization
   target_compile_options(
     ${_lib}
     PRIVATE $<$<CONFIG:Release>:-O3;-funroll-loops>
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
   target_compile_options(${_lib} PRIVATE $<$<CONFIG:Release>:-O3;-unroll>)
 endif()
 

@@ -6,7 +6,7 @@
 !!
 program advanced_field_mapping_example
    use CATChemAPI_Mod
-   use precision_mod
+   use catchem_bridge_precision
    implicit none
 
    ! CATChem components

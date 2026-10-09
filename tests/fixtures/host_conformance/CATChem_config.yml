@@ -1,0 +1,26 @@
+simulation:
+  name: host-conformance
+  species_filename: species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 1
+grid:
+  number_of_levels: 3
+  number_of_soil_layers: 0
+diagnostics:
+  output:
+    enabled: false
+    directory: output
+    prefix: conformance
+    frequency: 60
+    format: netcdf
+    compress_lev: 0
+  collection:
+    enabled: false
+    buffer_size: 0
+physical_validation:
+  policy: reject
+run_phases: {}
+processes: {}
