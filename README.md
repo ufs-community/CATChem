@@ -24,7 +24,7 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ### Container
 
-The official UFS-Chem and CATChem images are recommended for developers and interested users.
+The official UFS-Chem and CATChem container images are recommended for developers and interested users. The foundational Spack base environment is maintained and published externally by [ufs-chem-container](https://github.com/ufs-community/ufs-chem-container).
 
 1. Base image for developers:
 

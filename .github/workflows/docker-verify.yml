@@ -1,0 +1,16 @@
+name: Verify Dockerfile
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Verify Dockerfile base image tag
+        run: |
+          python3 .github/workflows/scripts/verify_docker_tag.py

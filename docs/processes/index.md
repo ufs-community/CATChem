@@ -104,5 +104,6 @@ For information on developing and integrating processes:
 - **[Modernized Processes Overview](MODERNIZED_PROCESSES.md)** - Summary of newly migrated C++ processes.
 - **[Developer Architecture Guide](../developer-guide/architecture.md)** - C++ Core and memory layout.
 - **[Process Interface API Reference](../api/process-interface.md)** - Details on ProcessRegistry and linker callbacks.
+- **[Process Generator Tutorial](../developer-guide/processes/process-generator.md)** - Creating new processes with the generator.
 
 ---

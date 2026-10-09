@@ -6,10 +6,15 @@ on:
       release_version:
         required: true
         type: string
-      base_project_name:
+      base_image:
+        description: 'The external base image'
         required: true
         type: string
       project_name:
+        required: true
+        type: string
+      docker_org:
+        description: 'Docker Hub organization for published images'
         required: true
         type: string
 
@@ -31,21 +36,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Push Spack Base image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./docker/Dockerfile-Spack-Base
-          push: true
-          platforms: linux/amd64
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.base_project_name }}:${{ inputs.release_version }}
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.base_project_name }}:latest
-          cache-from: |
-            type=gha,scope=spack-base
-          cache-to: |
-            type=inline
-
       - name: Push CATChem image
         uses: docker/build-push-action@v7
         with:
@@ -54,11 +44,12 @@ jobs:
           push: true
           platforms: linux/amd64
           build-args: |
-            BASE_IMAGE=${{ secrets.DOCKER_USERNAME }}/${{ inputs.base_project_name }}:${{ inputs.release_version }}
+            BASE_IMAGE=${{ inputs.base_image }}
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.project_name }}:${{ inputs.release_version }}
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.project_name }}:latest
+            ${{ inputs.docker_org }}/${{ inputs.project_name }}:${{ inputs.release_version }}
+            ${{ inputs.docker_org }}/${{ inputs.project_name }}:latest
           cache-from: |
             type=gha,scope=catchem
           cache-to: |
+            type=gha,scope=catchem,mode=max
             type=inline
