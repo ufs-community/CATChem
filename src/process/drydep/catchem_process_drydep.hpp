@@ -22,6 +22,8 @@ namespace catchem {
         double gocart_scale_factor = 1.0;
         bool gocart_resuspension = false;
         bool gocart_dust_resuspension_only = true;
+        bool wesely_skip_so2 = false;
+        bool gocart_skip_sulfate_aero = false;
         double zhang_scale_factor = 1.0;
 
     public:

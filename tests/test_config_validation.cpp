@@ -62,6 +62,27 @@ int main() {
     all_sector_config.load_emission_mapping_file(default_config_dir + "CATChem_emission.yml");
     const auto& all_sector_report = all_sector_config.validate();
     assert(all_sector_report.format().find("active emission sector has no mapping entry") == std::string::npos);
+    // The shipped default config must validate cleanly with the new emission
+    // temporal options absent (they default to daily_hold=false and
+    // monthly_anchor='climatological').
+    assert(!all_sector_report.has_errors());
+
+    // An unknown monthly_anchor value must fail loudly and list the allowed
+    // values (feature 014, US4, FR-018).
+    catchem::ConfigManager bogus_anchor;
+    bogus_anchor.load_from_file(fixtures + "emission_bogus_monthly_anchor.yml");
+    const auto& bogus_report = bogus_anchor.validate();
+    assert(bogus_report.has_errors());
+    const std::string bogus_text = bogus_report.format();
+    assert(bogus_text.find("unknown monthly_anchor value: bogus") != std::string::npos);
+    assert(bogus_text.find("climatological") != std::string::npos && bogus_text.find("file") != std::string::npos);
+
+    // A valid 'file' anchor must not raise the enum error.
+    catchem::ConfigManager file_anchor;
+    file_anchor.load_from_file(fixtures + "emission_file_monthly_anchor.yml");
+    assert(file_anchor.data.emission_categories.at("anthro1").monthly_anchor == "file");
+    assert(file_anchor.data.emission_categories.at("anthro1").daily_hold == false);
+    assert(file_anchor.validate().format().find("unknown monthly_anchor") == std::string::npos);
 
     void* core = reinterpret_cast<void*>(1);
     assert(catchem_core_create_from_config_checked((fixtures + "platform_integrity_invalid.yml").c_str(), &core) !=

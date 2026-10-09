@@ -173,6 +173,40 @@ int main(int argc, char* argv[]) {
             registry.validate_settings("settling", cfg.data.processes.at("settling"));
             std::cout << "SUCCESS: Accepted options passed validation." << std::endl;
         }
+
+        // 4. Emission temporal options (feature 014, US4) parse into the
+        //    runtime EmissionCategory mirror.  daily_hold is a boolean and
+        //    monthly_anchor an enumerated string; both default when absent so a
+        //    legacy configuration is unaffected.
+        {
+            catchem::ConfigManager cfg;
+            std::ofstream out("opt_prop_emis.yml");
+            out << "processes:\n"
+                << "  extemis:\n"
+                << "    activate: true\n"
+                << "    anthro1:\n"
+                << "      activate: true\n"
+                << "      frequency: 'daily'\n"
+                << "      time_interpolation: linear\n"
+                << "      daily_hold: true\n"
+                << "      monthly_anchor: 'file'\n"
+                << "    biomass:\n"
+                << "      activate: true\n"
+                << "      frequency: 'monthly'\n"; // legacy: no new keys
+            out.close();
+            cfg.load_from_file("opt_prop_emis.yml");
+            const auto& categories = cfg.data.emission_categories;
+            auto it = categories.find("anthro1");
+            assert(it != categories.end() && "daily_hold/monthly_anchor category must be mirrored");
+            assert(it->second.daily_hold && "daily_hold: true must parse to true");
+            assert(it->second.monthly_anchor == "file" && "monthly_anchor: file must parse to 'file'");
+            auto legacy = categories.find("biomass");
+            assert(legacy != categories.end() && "legacy category must be mirrored");
+            assert(!legacy->second.daily_hold && "absent daily_hold defaults to false");
+            assert(legacy->second.monthly_anchor == "climatological" &&
+                   "absent monthly_anchor defaults to 'climatological'");
+            std::cout << "SUCCESS: Emission temporal options propagate into EmissionCategory." << std::endl;
+        }
     }
     Kokkos::finalize();
     std::cout << "=== ALL OPTION PROPAGATION CHECKS PASSED ===" << std::endl;

@@ -12,7 +12,11 @@ set(
 )
 
 # Define wetdep scheme sources
-set(WETDEP_SCHEME_SOURCES schemes/WetDepScheme_JACOB_Mod.F90)
+set(
+  WETDEP_SCHEME_SOURCES
+  schemes/WetDepScheme_JACOB_Mod.F90
+  schemes/WetDepScheme_GOCART_Mod.F90
+)
 
 # Combine all sources
 set(WETDEP_ALL_SOURCES ${WETDEP_PROCESS_SOURCES} ${WETDEP_SCHEME_SOURCES})

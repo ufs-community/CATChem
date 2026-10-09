@@ -13,6 +13,7 @@ contains
       gas_scheme, aero_scheme, diagnostics, &
       wesely_scale_factor, wesely_co2_effect, wesely_co2_level, wesely_co2_reference, &
       gocart_scale_factor, gocart_resuspension, gocart_dust_resusp_only, zhang_scale_factor, &
+      wesely_skip_so2, gocart_skip_sulfate_aero, &
    ! 3D Met Pointers
       c_bxheight, c_airden, c_t_air, c_z_edges, c_rh, &
    ! 2D/1D Met Pointers
@@ -42,6 +43,7 @@ contains
       integer(c_int), value :: wesely_co2_effect
       real(c_double), value :: gocart_scale_factor, zhang_scale_factor
       integer(c_int), value :: gocart_resuspension, gocart_dust_resusp_only
+      integer(c_int), value :: wesely_skip_so2, gocart_skip_sulfate_aero
 
       ! C pointers
       type(c_ptr), value :: c_bxheight, c_airden, c_t_air, c_z_edges, c_rh
@@ -84,7 +86,7 @@ contains
       integer :: icol, ispec
       character(len=64) :: local_gas, local_aero
       character(len=255) :: local_lucname = "NOAH"
-      character(len=30) :: dummy_sp_names(n_species)
+      character(len=32) :: dummy_sp_names(n_species)
 
       ! Local arrays in native solver precision (fp) to avoid double-float mismatches
       real(fp) :: f_bxheight(1), f_airden(1), f_t_air(1), f_z_edges(2), f_rh(1)
@@ -153,6 +155,8 @@ contains
       gocart_config%scale_factor = real(gocart_scale_factor, fp)
       gocart_config%resuspension = (gocart_resuspension /= 0)
       gocart_config%dust_resuspension_only = (gocart_dust_resusp_only /= 0)
+      wesely_config%skip_so2 = (wesely_skip_so2 /= 0)
+      gocart_config%skip_sulfate_aero = (gocart_skip_sulfate_aero /= 0)
       zhang_config%scale_factor = real(zhang_scale_factor, fp)
 
       ! Associate pointers
@@ -206,8 +210,10 @@ contains
       endif
 
       ! Keep the canonical chemistry catalog with the concentration and
-      ! metadata arrays.  The legacy routines accept fixed-width labels;
-      ! names longer than their 30-character ABI are safely truncated.
+      ! metadata arrays.  The schemes declare len=32 dummies, so the marshalled
+      ! buffer must use the same element length: sequence association between
+      ! different character lengths silently corrupts every name past the
+      ! first.  Names longer than 32 characters are truncated safely.
       do ispec = 1, n_species
          do icol = 1, len(dummy_sp_names(ispec))
             if (icol > size(species_names, 1)) exit
@@ -294,7 +300,7 @@ contains
                f_airden, f_frlake, f_gwettop, f_hflux, &
                f_lwi, f_pblh, f_t_air, real(dt, fp), &
                f_u10m, f_ustar, f_v10m, f_z_edges, f_z0h, &
-               f_density, f_radius, f_is_dust, f_is_seasalt, &
+               f_density, f_radius, f_is_dust, f_is_seasalt, dummy_sp_names, &
                f_conc, col_tendencies, f_is_gas_arr, col_diag_con, col_diag_vel, &
                diagnostic_species_id)
          else if (trim(local_aero) == "zhang") then

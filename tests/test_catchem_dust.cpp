@@ -226,6 +226,61 @@ int main(int argc, char* argv[]) {
         assert(suppressed_total == 0.0 && "FENGSHA must not emit dust when saltation is suppressed");
         std::cout << "  Scenario B (suppressed): total surface dust = " << suppressed_total << std::endl;
 
+        // --- Scenario C: fracland regression guard (PR #206 exclusion) -------
+        // PR #206 proposed replacing the additive land fraction
+        //   fracland = max(0, min(1, 1 - frsno - frlake))
+        // with the GOCART-style product of separately-clamped terms
+        //   fracland = max(0, min(1, 1 - frlake)) * max(0, min(1, 1 - frsno)).
+        // That variant is deliberately NOT ported: when snow and lake
+        // fractions together cover (or over-cover) the column
+        // (frsno + frlake > 1), the product still yields a positive land
+        // fraction (0.6/0.6 -> 0.16) and emits dust over a fully
+        // snow/water-locked surface, while the additive form clamps to
+        // exactly zero there.  Emission scales linearly with fracland, so
+        // these assertions pin the additive behaviour and would fail loudly
+        // if the buggy product were ever reintroduced.
+        std::fill(ustar.begin(), ustar.end(), 0.8);
+        std::fill(ustar_threshold.begin(), ustar_threshold.end(), 0.15);
+        std::fill(rdrag.begin(), rdrag.end(), 1.0);
+
+        // Over-covered column: frsno + frlake = 1.2 > 1 -> fracland == 0 -> no emission.
+        std::fill(snow_fraction.begin(), snow_fraction.end(), 0.6);
+        std::fill(lake_fraction.begin(), lake_fraction.end(), 0.6);
+        reset_chem();
+        dust->run(state);
+        state->sync_to_host();
+        assert(total_dust() == 0.0 && "frsno+frlake>1 must clamp fracland to zero (no 1-frlake product path)");
+        std::cout << "  Scenario C (snow+lake>1): total surface dust = 0 (additive fracland clamp)" << std::endl;
+
+        // Uncovered column: frsno = frlake = 0 -> fracland == 1 -> identical to
+        // the Scenario A emission (same gating inputs, deterministic scheme).
+        std::fill(snow_fraction.begin(), snow_fraction.end(), 0.0);
+        std::fill(lake_fraction.begin(), lake_fraction.end(), 0.0);
+        reset_chem();
+        dust->run(state);
+        state->sync_to_host();
+        const double uncovered_total = total_dust();
+        assert(uncovered_total > 0.0 && "frsno=frlake=0 must give fracland=1 and emit");
+        assert(uncovered_total == emitting_total && "fracland(0,0) must equal the Scenario A baseline exactly");
+
+        // In-range discriminator: frsno=0.5, frlake=0.4.  Additive:
+        // fracland = 1-0.5-0.4 = 0.10; the PR #206 product would give
+        // (1-0.4)*(1-0.5) = 0.30 — three times the emission.  Linear scaling
+        // of the total pins the additive formula.
+        std::fill(snow_fraction.begin(), snow_fraction.end(), 0.5);
+        std::fill(lake_fraction.begin(), lake_fraction.end(), 0.4);
+        reset_chem();
+        dust->run(state);
+        state->sync_to_host();
+        const double partial_total = total_dust();
+        const double expected_partial = 0.1 * emitting_total;
+        assert(std::abs(partial_total - expected_partial) <= 1.0e-9 * std::abs(emitting_total) &&
+               "fracland must follow the additive 1-frsno-frlake form, not the product variant");
+        std::cout << "  Scenario C (0.5/0.4): frac-emission ratio = " << (partial_total / emitting_total)
+                  << " (additive 0.1, product would be 0.3)" << std::endl;
+        std::fill(snow_fraction.begin(), snow_fraction.end(), 0.0);
+        std::fill(lake_fraction.begin(), lake_fraction.end(), 0.0);
+
         std::cout << "SUCCESS: Dust process emits under favorable inputs and is silent when suppressed." << std::endl;
     }
     Kokkos::finalize();

@@ -1,12 +1,22 @@
+#include "catchem_config_manager.hpp"
 #include "catchem_core_architecture_test_helpers.hpp"
 #include "catchem_execution_plan.hpp"
 #include "catchem_process_drydep.hpp"
 #include "catchem_process_dust.hpp"
+#include "catchem_process_registry.hpp"
 #include "catchem_process_seasalt.hpp"
 #include "catchem_process_so4chem.hpp"
 #include "catchem_process_wetdep.hpp"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
+#include <string>
+#include <yaml-cpp/yaml.h>
+
+extern "C" {
+void catchem_register_drydep_cpp();
+void catchem_register_so4chem_cpp();
+}
 
 class ContractProcess : public catchem::test::RecordingProcess {
 public:
@@ -84,5 +94,50 @@ int main() {
     ordered.push_back(std::make_shared<ConsumerProcess>("consumer", events));
     plan.compile(ordered, nullptr);
     assert(!plan.validation().has_errors());
+
+    // --- US2 settings-validator allowlists (FR-021, contract K-3) ------------
+    // The three GOCART-faithful routing keys must be accepted by the
+    // registered per-process validators, and a misspelled sibling in the same
+    // scheme block must still be rejected, so a typo cannot silently leave a
+    // scheme on its compiled default.
+    catchem_register_drydep_cpp();
+    catchem_register_so4chem_cpp();
+    auto& registry = catchem::ProcessRegistry::get_instance();
+    auto accept = [&](const char* process, const YAML::Node& settings) {
+        catchem::ProcessConfig config;
+        config.activate = true;
+        config.set_settings_node(settings);
+        try {
+            registry.validate_settings(process, config);
+        } catch (const std::exception& error) {
+            std::cerr << "FAIL: validator rejected legal option for " << process << ": " << error.what() << '\n';
+            return false;
+        }
+        return true;
+    };
+    auto reject = [&](const char* process, const YAML::Node& settings, const std::string& expected_key) {
+        catchem::ProcessConfig config;
+        config.activate = true;
+        config.set_settings_node(settings);
+        try {
+            registry.validate_settings(process, config);
+        } catch (const std::exception& error) {
+            return std::string(error.what()).find(expected_key) != std::string::npos;
+        }
+        return false;
+    };
+    YAML::Node drydep_ok;
+    drydep_ok["wesely"]["skip_so2"] = true;
+    drydep_ok["gocart"]["skip_sulfate_aero"] = true;
+    assert(accept("drydep", drydep_ok));
+    YAML::Node drydep_bad;
+    drydep_bad["wesely"]["skip_so3"] = true;
+    assert(reject("drydep", drydep_bad, "wesely/skip_so3"));
+    YAML::Node so4chem_ok;
+    so4chem_ok["gocart"]["do_drydep"] = true;
+    assert(accept("so4chem", so4chem_ok));
+    YAML::Node so4chem_bad;
+    so4chem_bad["gocart"]["do_wetdep"] = true;
+    assert(reject("so4chem", so4chem_bad, "gocart/do_wetdep"));
     return 0;
 }

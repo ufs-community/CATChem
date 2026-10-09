@@ -39,6 +39,8 @@ module catchem_nuopc_emis_mod
    use catchem_regrid_mod, only: RegridCache, catchem_regrid_field, catchem_regrid_cleanup
    use catchem_bridge_precision, only: fp, is_exact_zero
    use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE
+   use catchem_emis_time, only: catchem_emis_doy_fraction, catchem_emis_time_weight, &
+      catchem_emis_file_time_bracket, catchem_emis_dt_weight, CATCHEM_EMIS_NO_KEY
    use catchem_nuopc_emis_data_mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
 
@@ -367,7 +369,9 @@ contains
       ! Local variables
       integer :: localrc, i, period_key
       integer :: blo_year, blo_month
+      integer :: lo_yy, lo_mm, lo_dd
       real(fp) :: bfrac
+      type(ESMF_TimeInterval) :: half_day
       character(len=EMIS_MAXSTR) :: msg, timeString
       character(len=*), parameter :: pName = 'catchem_emis_update'
 
@@ -386,13 +390,48 @@ contains
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
 
+         ! For a single multi-record monthly climatology with linear time
+         ! interpolation, the interpolation bracket changes at mid-month (not at
+         ! the month start), so re-read the two bracketing slices at mid-month.
+         ! With monthly_anchor=='file' the bracket follows the file's record
+         ! timestamps (MAPL ExtData match); key on the lower record's month.
          if (trim(ext_emis_data%categories(i)%frequency) == 'monthly' .and. &
             trim(ext_emis_data%categories(i)%time_interpolation) == 'linear' .and. &
             ext_emis_data%categories(i)%n_times >= 2) then
-            call catchem_emis_month_bracket(current_time, blo_year, blo_month, bfrac, localrc)
+            if (trim(ext_emis_data%categories(i)%monthly_anchor) == 'file') then
+               call emis_file_time_bracket(ext_emis_data%categories(i), current_time, blo_month, bfrac, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               call ESMF_TimeGet(current_time, yy=blo_year, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               period_key = blo_year*100 + blo_month
+            else
+               call catchem_emis_month_bracket(current_time, blo_year, blo_month, bfrac, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               period_key = blo_year*100 + blo_month
+            end if
+         end if
+
+         ! Daily-mean files interpolated linearly are valid at 12Z, so the bracket of two
+         ! consecutive-day 12Z knots changes at noon.  Key on the lower knot's day
+         ! (= date of curr_time - 12h) so the re-read fires at 12Z, not midnight.
+         ! With daily_hold (MAPL ExtData refresh-cadence match), the [D-1,D] bracket
+         ! is held for the whole day and refreshed at 00Z, so key on curr_time's date.
+         if (trim(ext_emis_data%categories(i)%frequency) == 'daily' .and. &
+            trim(ext_emis_data%categories(i)%time_interpolation) == 'linear') then
+            if (ext_emis_data%categories(i)%daily_hold) then
+               call ESMF_TimeGet(current_time, yy=lo_yy, mm=lo_mm, dd=lo_dd, rc=localrc)
+            else
+               call ESMF_TimeIntervalSet(half_day, h=12, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               call ESMF_TimeGet(current_time - half_day, yy=lo_yy, mm=lo_mm, dd=lo_dd, rc=localrc)
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
-            period_key = blo_year*100 + blo_month
+            period_key = lo_yy*10000 + lo_mm*100 + lo_dd
          end if
 
          if (period_key /= ext_emis_data%categories(i)%last_period_key) then
@@ -772,12 +811,14 @@ contains
       integer :: irec_next
       integer :: nx, ny
       character(len=EMIS_MAXSTR) :: filename_next
+      character(len=EMIS_MAXSTR) :: filename_cur     ! t1 file (12Z-shifted for daily)
       type(ESMF_Time) :: next_time
-      type(ESMF_TimeInterval) :: period_step
-      logical :: next_file_exists
+      type(ESMF_TimeInterval) :: period_step, half_day
+      logical :: next_file_exists, cur_file_exists
 
       rc = CC_SUCCESS
       category_name = trim(category%category_name)
+      filename_cur = trim(filename)   ! current-slice file; overridden below for daily 12Z bracket
 
       ! Determine if temporal interpolation is needed.
       ! Two modes:
@@ -817,6 +858,27 @@ contains
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
             next_time = curr_time + period_step
+            ! Daily-mean files are valid at 12Z (GEOS/ExtData): bracket the two 12Z knots
+            ! straddling curr_time so the morning blends [yesterday, today] and the afternoon
+            ! [today, tomorrow], matching MAPL ExtData rather than a 00Z ramp.
+            if (trim(category%frequency) == 'daily') then
+               call ESMF_TimeIntervalSet(half_day, h=12, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               if (category%daily_hold) then
+                  ! MAPL refresh-cadence match: hold the [D-1, D] bracket for the whole
+                  ! day (t1=previous day, t2=current day) instead of flipping at 12Z.
+                  call resolve_filename_template(category%source_file, curr_time - period_step, filename_cur, localrc)
+                  next_time = curr_time
+               else
+                  call resolve_filename_template(category%source_file, curr_time - half_day, filename_cur, localrc)
+                  next_time = curr_time + half_day
+               end if
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               inquire(file=trim(filename_cur), exist=cur_file_exists)
+               if (.not. cur_file_exists) filename_cur = trim(filename)  ! fall back to curr-day file
+            end if
             call resolve_filename_template(category%source_file, next_time, filename_next, localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -850,6 +912,39 @@ contains
          end if
       end if
 
+      ! For monthly file-anchored categories, cache the bracketing records' valid-times
+      ! so blend_time interpolates by actual timestamps regardless of storage pattern.
+      ! Single-file categories read them directly from tc_dates in the bracket helper, so
+      ! only the multi-file (one-record-per-file) case needs the next file's time here.
+      ! Example (MEGAN, model time in January): filename_cur=MEGAN_..._01.nc (record 20210101),
+      ! filename_next=MEGAN_..._02.nc (record 20210201) -> bt1=(20210101,0), bt2=(20210201,0).
+      if (trim(category%frequency) == 'monthly' .and. trim(category%monthly_anchor) == 'file') then
+         category%bt_valid = .false.
+         if (do_time_interp .and. multi_file_interp .and. next_file_exists .and. category%n_times >= 1) then
+            category%bt1_date = category%tc_dates(1)
+            category%bt1_secs = category%tc_secs(1)
+            block
+               integer :: nt2
+               integer, allocatable :: d2a(:), s2a(:)
+               call AQMIO_ReadTimeCoord(trim(filename_next), nt2, d2a, s2a, rc=localrc)
+               if (localrc == ESMF_SUCCESS .and. nt2 >= 1) then
+                  category%bt2_date = d2a(1)
+                  category%bt2_secs = s2a(1)
+                  category%bt_valid = .true.
+               else
+                  ! Next-file valid-time unreadable: leave bt_valid=.false. so blend_time
+                  ! falls back to calendar-based (mid-month) interpolation rather than failing.
+                  write(msg, '(A,A,A)') trim(pName), &
+                     ': could not read time coord from next file, using calendar interp: ', &
+                     trim(filename_next)
+                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
+               end if
+               if (allocated(d2a)) deallocate(d2a)
+               if (allocated(s2a)) deallocate(s2a)
+            end block
+         end if
+      end if
+
       do ifield = 1, category%n_fields
          ! Create 2D destination field on the model grid
          esmf_field = ESMF_FieldCreate(grid, &
@@ -862,7 +957,7 @@ contains
             ! --- 2D field ---
             call catchem_regrid_field( &
                cache     = regrid_cache, &
-               filename  = trim(filename), &
+               filename  = trim(filename_cur), &
                varname   = trim(category%fields(ifield)%field_name), &
                dstField  = esmf_field, &
                latname   = trim(category%latname), &
@@ -946,7 +1041,7 @@ contains
             do klev = 1, nlev_f
                call catchem_regrid_field( &
                   cache     = regrid_cache, &
-                  filename  = trim(filename), &
+                  filename  = trim(filename_cur), &
                   varname   = trim(category%fields(ifield)%field_name), &
                   dstField  = esmf_field, &
                   latname   = trim(category%latname), &
@@ -1371,15 +1466,19 @@ contains
    !! \param[in]    lons         2D longitude array [degrees]
    !! \param[in]    lats         2D latitude array [degrees]
    !! \param[in]    current_time ESMF_Time for current model time
+   !! \param[in]    dt           Model timestep in seconds; the normalization
+   !!                            stride is ndt = max(1, nint(dt/DT_DIURNAL)),
+   !!                            following GOCART Chem_BiomassDiurnal
    !! \param[in]    nx, ny       Grid dimensions
    !! \param[out]   rc           Return code
-   subroutine apply_biomass_diurnal(emission_2d, lons, lats, current_time, nx, ny, rc)
+   subroutine apply_biomass_diurnal(emission_2d, lons, lats, current_time, dt, nx, ny, rc)
       implicit none
 
       real(fp), intent(inout) :: emission_2d(:,:)
       real(fp), intent(in)    :: lons(:,:)
       real(fp), intent(in)    :: lats(:,:)
       type(ESMF_Time), intent(in) :: current_time
+      real(fp), intent(in)    :: dt  !< Model timestep in seconds
       integer, intent(in)     :: nx, ny
       integer, intent(out)    :: rc
 
@@ -1448,9 +1547,9 @@ contains
 
       nhms = hh * 10000 + mm * 100 + ss
 
-      ! Compute normalization factors (depend on model timestep via ndt=1 for 360s bins)
-      ! Use ndt=1 since we sample one bin per call (consistent with GOCART default)
-      ndt = 1
+      ! Normalization stride follows GOCART Chem_BiomassDiurnal (ndt = max(1,nint(dt/DT))):
+      ! average the 360s bins actually visited by a model timestep of dt seconds.
+      ndt = max(1, nint(dt / DT_DIURNAL))
       fBoreal = 0.0_fp
       fNonBoreal = 0.0_fp
       NN = 0
@@ -1656,7 +1755,7 @@ contains
          emission_flux = emission_flux * category%global_scale * global_scale
 
          if (category%diurnal_bb .and. c_associated(c_lon) .and. c_associated(c_lat)) then
-            call apply_biomass_diurnal(emission_flux(:,:,1), real(f_lon, fp), real(f_lat, fp), current_time, nx, ny, localrc)
+            call apply_biomass_diurnal(emission_flux(:,:,1), real(f_lon, fp), real(f_lat, fp), current_time, dt, nx, ny, localrc)
          end if
 
          if (trim(category%vertical_dist) /= 'none' .and. trim(category%vertical_dist) /= '') then
@@ -2621,8 +2720,8 @@ contains
       integer, intent(out) :: rc
       character(len=64), optional, allocatable, intent(out) :: diag_species(:)
 
-      integer :: i, n_diag
-      character(len=EMIS_MAXSTR) :: config_path, item_path, c_buf, clean_cat_name
+      integer :: i, n_diag, localrc
+      character(len=EMIS_MAXSTR) :: config_path, item_path, c_buf, clean_cat_name, msg
 
       rc = CC_SUCCESS
 
@@ -2735,6 +2834,29 @@ contains
       call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'add' // c_null_char)
       call clean_c_string(c_buf)
       category%apply_method = trim(c_buf)
+
+      ! MAPL ExtData-compatible temporal options (feature 014, US4).  Both
+      ! default to the pre-feature behaviour so a configuration written before
+      ! this feature is unchanged: daily_hold=.false. ramps smoothly, and the
+      ! monthly climatology is anchored by day-of-year ('climatological').
+      item_path = trim(config_path) // '/daily_hold'
+      category%daily_hold = (catchem_config_get_yaml_bool(core_ptr, trim(item_path) // c_null_char, 0_c_int) /= 0)
+
+      item_path = trim(config_path) // '/monthly_anchor'
+      call catchem_config_get_yaml_string(core_ptr, trim(item_path) // c_null_char, c_buf, 256_c_int, 'climatological' // c_null_char)
+      call clean_c_string(c_buf)
+      category%monthly_anchor = trim(c_buf)
+
+      ! Fail loudly on an unknown monthly_anchor (FR-018): silently falling
+      ! back to the default would pick the wrong interpolation bracket.
+      if (trim(category%monthly_anchor) /= 'climatological' .and. &
+         trim(category%monthly_anchor) /= 'file') then
+         write(msg, '(A,A,A)') 'parse_emission_category: FATAL ERROR: unknown monthly_anchor "', &
+            trim(category%monthly_anchor), '" for category (allowed: climatological, file)'
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_ERROR, rc=localrc)
+         rc = CC_FAILURE
+         return
+      end if
 
       ! Diagnostic species list
       item_path = trim(config_path) // '/diag_list'
@@ -3120,6 +3242,14 @@ contains
          ! uses irec+1 (with Dec->Jan wrap) as the upper. For non-interpolated or
          ! template data, select the slice for the current calendar month.
          if (trim(category%time_interpolation) == 'linear' .and. category%n_times >= 2) then
+            if (trim(category%monthly_anchor) == 'file') then
+               ! Anchor at the file's actual record timestamps (MAPL ExtData match):
+               ! the lower bracketing record index is returned directly.
+               call emis_file_time_bracket(category, curr_time, irec, frac_dummy, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               return
+            end if
             call catchem_emis_month_bracket(curr_time, target_year, target_month, frac_dummy, localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -3187,19 +3317,39 @@ contains
             ! Single multi-record climatology: mid-month interpolation. The value
             ! passes through each monthly mean exactly at the middle of its month,
             ! so the monthly mean is preserved (GEOS/GOCART ExtData convention).
-            call catchem_emis_month_bracket(curr_time, blo_year, blo_month, w_next, localrc)
+            ! With monthly_anchor=='file', anchor at the file's actual record
+            ! timestamps instead (MAPL ExtData match).
+            if (trim(category%monthly_anchor) == 'file') then
+               call emis_file_time_bracket(category, curr_time, blo_month, w_next, localrc)
+            else
+               call catchem_emis_month_bracket(curr_time, blo_year, blo_month, w_next, localrc)
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
          else
-            ! Multi-file template (one record per file): legacy start-of-month ramp
-            dim_days = days_in_month_func(curr_yy, curr_mm)
-            w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
-               real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
-               real(dim_days, fp)
+            ! Multi-file template (one record per file). With monthly_anchor='file',
+            ! interpolate by the bracketing files' actual record timestamps (cached at
+            ! read time) so the result is independent of storage pattern; otherwise use
+            ! the legacy start-of-month ramp.
+            if (trim(category%monthly_anchor) == 'file' .and. category%bt_valid) then
+               call emis_time_weight(curr_time, category%bt1_date, category%bt1_secs, &
+                  category%bt2_date, category%bt2_secs, w_next, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+            else
+               dim_days = days_in_month_func(curr_yy, curr_mm)
+               w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
+                  real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
+                  real(dim_days, fp)
+            end if
          end if
        case ('daily')
-         w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
-            real(curr_ss, fp)/3600.0_fp) / 24.0_fp
+         ! Daily-mean valid at 12Z (GEOS/ExtData): knots are consecutive-day 12Z means,
+         ! so shift fraction-of-day by half a day and wrap into [0,1).
+         ! With daily_hold (MAPL ExtData refresh-cadence match) the [D-1,D] bracket is
+         ! held constant all day at the 00Z blend (weight=0.5), giving a piecewise-constant
+         ! daily value 0.5*(emis(D-1)+emis(D)) instead of a smooth intra-day ramp.
+         w_next = catchem_emis_dt_weight(curr_hh, curr_mn, curr_ss, category%daily_hold)
        case ('hourly')
          w_next = (real(curr_mn, fp) + real(curr_ss, fp)/60.0_fp) / 60.0_fp
        case default
@@ -3282,6 +3432,75 @@ contains
       if (frac < 0.0_fp) frac = 0.0_fp
       if (frac > 1.0_fp) frac = 1.0_fp
    end subroutine catchem_emis_month_bracket
+
+   !> \brief Convert an ESMF_Time to the pure helpers' (key, day-of-year) arguments
+   !!
+   !! The interpolation math lives in the ESMF-free module catchem_emis_time so it
+   !! can be unit-tested without the framework (tests/test_emis_time_weight.f90).
+   !! These adapters only unpack ESMF_Time: curr_key is the strict datetime ordering
+   !! key (yyyymmdd*1e5 + secs, 8-byte because the product exceeds int32) and
+   !! curr_dn the fractional day-of-year on the fixed 365-day climatological axis.
+   subroutine emis_time_args(curr_time, curr_key, curr_dn)
+      type(ESMF_Time), intent(in)  :: curr_time
+      integer(8),      intent(out) :: curr_key
+      real(fp),        intent(out) :: curr_dn
+
+      integer :: yy, mm, dd, hh, mn, ss
+
+      call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, m=mn, s=ss)
+      curr_key = int(yy * 10000 + mm * 100 + dd, 8) * 100000_8 + &
+         int(hh * 3600 + mn * 60 + ss, 8)
+      curr_dn = catchem_emis_doy_fraction(mm, dd, hh * 3600 + mn * 60 + ss)
+   end subroutine emis_time_args
+
+   !> \brief Monthly bracket anchored at the file's actual record timestamps (MAPL match)
+   !!
+   !! ESMF adapter around catchem_emis_file_time_bracket (see catchem_emis_time):
+   !! selects the lower bracketing record (1-based) and the upper-record weight from
+   !! a single multi-record file, honouring the records' own time coordinate, with
+   !! spanning vs cyclic-climatology regimes and fallback on unreadable record times.
+   !! \param[in]  category Emission category with cached tc_dates/tc_secs
+   !! \param[in]  curr_time Current model time
+   !! \param[out] lo_rec   1-based lower bracketing record index
+   !! \param[out] w_next   Weight of the upper record, clamped to [0,1]
+   !! \param[out] rc       Return code
+   subroutine emis_file_time_bracket(category, curr_time, lo_rec, w_next, rc)
+      type(ExtEmisCategoryType), intent(in)  :: category
+      type(ESMF_Time),           intent(in)  :: curr_time
+      integer,                   intent(out) :: lo_rec
+      real(fp),                  intent(out) :: w_next
+      integer,                   intent(out) :: rc
+
+      integer(8) :: curr_key
+      real(fp) :: curr_dn
+
+      rc = CC_SUCCESS
+      lo_rec = 1
+      w_next = 0.0_fp
+      if (category%n_times < 2 .or. .not. allocated(category%tc_dates)) return
+
+      call emis_time_args(curr_time, curr_key, curr_dn)
+      call catchem_emis_file_time_bracket(curr_key, curr_dn, category%n_times, &
+         category%tc_dates, category%tc_secs, lo_rec, w_next)
+   end subroutine emis_file_time_bracket
+
+   !> \brief Linear interpolation weight between two record valid-times
+   !!
+   !! ESMF adapter around the pure catchem_emis_time_weight helper (365-day
+   !! day-of-year axis with cyclic year-end wrap).
+   subroutine emis_time_weight(curr_time, d1, s1, d2, s2, w_next, rc)
+      type(ESMF_Time), intent(in)  :: curr_time
+      integer,         intent(in)  :: d1, s1, d2, s2
+      real(fp),        intent(out) :: w_next
+      integer,         intent(out) :: rc
+
+      integer(8) :: curr_key
+      real(fp) :: curr_dn
+
+      rc = CC_SUCCESS
+      call emis_time_args(curr_time, curr_key, curr_dn)
+      call catchem_emis_time_weight(curr_dn, d1, s1, d2, s2, w_next)
+   end subroutine emis_time_weight
 
    !> \brief Return the number of days in a given month/year
    pure function days_in_month_func(year, month) result(ndays)

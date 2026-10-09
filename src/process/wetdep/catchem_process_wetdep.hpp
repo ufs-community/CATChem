@@ -19,6 +19,14 @@ namespace catchem {
         bool jacob_so4_gocart_resusp = true;
         double jacob_so4_washout_eff = 1.0;
 
+        // GOCART2G wet-removal scheme tuning options read from
+        // processes.wetdep.gocart.* during init() and forwarded to the GOCART
+        // bridge entry on every run().  Defaults mirror
+        // WetDepSchemeGOCARTConfig in WetDepCommon_Mod.F90 (GOCART2G values).
+        double gocart_scale_factor = 1.0;
+        double gocart_washout_tuning = 1.0;
+        double gocart_radius_threshold = 0.05;
+
     public:
         WetDepProcess();
         std::string get_name() const override { return "wetdep"; }

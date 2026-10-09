@@ -61,6 +61,7 @@ namespace catchem {
                 {"PRESSURE_EDGE", "PEDGE"},
                 {"AIR_DENSITY", "AIRDEN"},
                 {"AIR_DENSITY_DRY", "AIRDEN_DRY"},
+                {"MAIRDEN", "AIRDEN"},
                 {"BOX_HEIGHT", "BXHEIGHT"},
                 {"DZ", "BXHEIGHT"},
                 {"DELZ", "BXHEIGHT"},
@@ -609,9 +610,13 @@ namespace catchem {
             met.AIRDEN_DRY->set_generation(import_generation);
         }
 
-        // Maintain the legacy metstate definition of AIRDEN: pressure divided
-        // by dry-air gas constant and temperature.  AIRDEN_DRY is the
-        // humidity-corrected quantity and is derived separately above.
+        // AIRDEN is the GOCART moist air density (the value GOCART2G calls
+        // MAIRDEN):  P / (R_d * T * (1 + (AIRMW/H2OMW - 1) * QV)).  AIRDEN_DRY
+        // is the separate humidity-corrected dry quantity derived above, so the
+        // two names never alias.  MAIRDEN canonicalises to AIRDEN, so hosts and
+        // schemes that bind or read MAIRDEN resolve to this same storage.
+        // When the host supplies no current QV the moisture term is zero, which
+        // reproduces the previous dry value rather than failing.
         void derive_airden() {
             if (met.AIRDEN && met.AIRDEN->is_current(import_generation))
                 return;
@@ -627,11 +632,20 @@ namespace catchem {
             }
             met.PMID->sync_to_host();
             met.T->sync_to_host();
+            const bool have_qv = met.QV && met.QV->is_current(import_generation);
+            if (have_qv)
+                met.QV->sync_to_host();
             const double* p = met.PMID->host_data();
             const double* t = met.T->host_data();
+            const double* qv = have_qv ? met.QV->host_data() : nullptr;
+            // Moisture coefficient from the authoritative molecular weights,
+            // not a hardcoded literal (AIRMW/H2OMW - 1).
+            const double moist_factor = constants::AIR_MW / constants::H2O_MW - 1.0;
             double* output = airden->host_write();
-            for (int i = 0; i < n_cols * n_levels; ++i)
-                output[i] = p[i] / (constants::RD * t[i]);
+            for (int i = 0; i < n_cols * n_levels; ++i) {
+                const double w = qv ? qv[i] : 0.0;
+                output[i] = p[i] / (constants::RD * t[i] * (1.0 + moist_factor * w));
+            }
             airden->mark_host_modified();
             airden->set_generation(import_generation);
         }
@@ -668,11 +682,15 @@ namespace catchem {
         void derive_obk() {
             if (const auto obk = find_field<2>("OBK"); obk && obk->is_current(import_generation))
                 return;
-            if (!met.USTAR || !met.TS || !met.HFLUX || !met.PMID || !met.T ||
-                !met.USTAR->is_current(import_generation) || !met.TS->is_current(import_generation) ||
+            // GOCART-aligned input selection: the lowest model layer temperature
+            // (level index 0, bottom-to-top) replaces the surface skin
+            // temperature TS, and the moist AIRDEN (contract section 2) replaces
+            // the dry P/(R_d*T).  TS is therefore no longer a required input;
+            // a missing profile T is reported rather than substituted with TS.
+            if (!met.USTAR || !met.HFLUX || !met.PMID || !met.T || !met.USTAR->is_current(import_generation) ||
                 !met.HFLUX->is_current(import_generation) || !met.PMID->is_current(import_generation) ||
                 !met.T->is_current(import_generation))
-                throw std::runtime_error("Cannot derive OBK: requires current USTAR, TS, HFLUX, PMID, and T");
+                throw std::runtime_error("Cannot derive OBK: requires current USTAR, HFLUX, PMID, and T");
             auto obk = find_field<2>("OBK");
             if (!obk) {
                 auto buffer = std::make_shared<std::vector<double>>(n_cols, 0.0);
@@ -680,20 +698,24 @@ namespace catchem {
                 bind_met_field_2d("OBK", buffer->data());
                 obk = find_field<2>("OBK");
             }
+            // Ensure the moist density is available; a host-provided AIRDEN is
+            // preserved by derive_airden's own precedence guard.
+            derive_airden();
+            const auto airden = find_field<3>("AIRDEN");
+            if (!airden)
+                throw std::runtime_error("Cannot derive OBK: AIRDEN is unavailable");
             met.USTAR->sync_to_host();
-            met.TS->sync_to_host();
             met.HFLUX->sync_to_host();
-            met.PMID->sync_to_host();
             met.T->sync_to_host();
+            airden->sync_to_host();
             const double* ustar = met.USTAR->host_data();
-            const double* ts = met.TS->host_data();
             const double* hflux = met.HFLUX->host_data();
-            const double* p = met.PMID->host_data();
             const double* t = met.T->host_data();
+            const double* rho = airden->host_data();
             double* output = obk->host_write();
             for (int c = 0; c < n_cols; ++c)
-                output[c] =
-                    met_utilities::monin_obukhov_length(ustar[c], ts[c], hflux[c], p[c] / (constants::RD * t[c]));
+                // Column-major (col, level): index c is the lowest layer of column c.
+                output[c] = met_utilities::monin_obukhov_length(ustar[c], t[c], hflux[c], rho[c]);
             obk->mark_host_modified();
             obk->set_generation(import_generation);
         }

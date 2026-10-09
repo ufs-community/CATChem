@@ -2,6 +2,45 @@
 
 <!-- version list -->
 
+## Unreleased
+
+Port of PR #206's science changes onto the C++ core (feature 014), in four
+workstreams:
+
+- **Wetdep GOCART scheme (US1/WS1)**: `processes/wetdep/scheme: gocart` runs
+  GOCART2G wet removal (sulfate group via `SU_Wet_Removal`, other aerosols via
+  `WetRemovalUFS`) through the C++ core with tuning options
+  `gocart/scale_factor`, `gocart/washout_tuning`, `gocart/radius_threshold`.
+  The Jacob bridge surface (`run_wetdep_science_bridge`) is byte-identical;
+  GOCART uses a separate bind(C) entry.
+- **Sulfate dry-deposition routing trio (US2/WS2)**: `drydep/wesely/skip_so2`,
+  `drydep/gocart/skip_sulfate_aero`, and `so4chem/gocart/do_drydep` let the
+  sulfate driver own SO2/SO4/MSA dry deposition for GOCART/GCAFS parity. All
+  three default `false` (previous routing unchanged).
+- **GOCART-aligned derived meteorology (US3/WS3)**: deliberate numerical
+  change — `RH` now uses the Magnus (Alduchov–Eskridge) formulation clamped to
+  [0.005, 0.99]; `AIRDEN`/`MAIRDEN` are moist (humidity-corrected) and equal;
+  `OBK` uses lowest-layer air temperature and moist density instead of skin
+  temperature and dry density. Host-supplied values stay authoritative.
+  Legacy parity baselines must be re-pinned; expected differences are
+  confined to RH/AIRDEN/OBK-dependent magnitudes (hygroscopic seasalt/sulfate;
+  gases and dust unchanged).
+- **Emission time handling (US4/WS4)**: per-category `daily_hold` (MAPL
+  refresh-cadence match: piecewise-constant daily value from the 00Z blend of
+  the [D−1, D] 12Z-knot bracket) and `monthly_anchor: climatological|file`
+  (file-record-timestamp interpolation, spanning vs cyclic regimes,
+  fail-loud on unknown values and warning-fallback on unreadable record
+  times). Biomass-burning diurnal normalisation now follows the model timestep
+  (`ndt = max(1, nint(dt/360))`) instead of a hardcoded stride of 1.
+
+### Exclusions
+
+- The PR #206 Fengsha `fracland` variant (product of separately-clamped
+  `1 - frlake` and `1 - frsno` terms) is **deliberately not ported**: it emits
+  dust over columns fully covered by snow+lake (`frsno + frlake > 1`), while
+  the retained additive form `max(0, min(1, 1 - frsno - frlake))` clamps there.
+  A regression assertion in `tests/test_catchem_dust.cpp` enforces this.
+
 ## v2.1.0-rc.3 (2026-09-23)
 
 ### Bug Fixes

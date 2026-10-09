@@ -11,6 +11,7 @@ contains
       n_cols, n_levels, n_species, dt, &
       diagnostics, &
       gocart_update_so2, &
+      gocart_do_drydep, &
    ! Date & Time
       year, month, day, hour, minute, second, &
    ! 3D Met Pointers
@@ -36,6 +37,7 @@ contains
       ! YAML.  The C++ layer owns parsing and validation; the bridge only
       ! applies them onto the GOCART configuration type.
       integer(c_int), value :: gocart_update_so2
+      integer(c_int), value :: gocart_do_drydep
 
       integer(c_int), value :: year, month, day, hour, minute, second
 
@@ -112,6 +114,7 @@ contains
       ! Apply the YAML tuning options staged by the C++ process layer so the
       ! scheme no longer runs on compiled defaults alone.
       gocart_config%update_so2 = (gocart_update_so2 /= 0)
+      gocart_config%do_drydep = (gocart_do_drydep /= 0)
 
       ! Associate pointers
       call c_f_pointer(c_airden,   airden,   [n_cols, n_levels])

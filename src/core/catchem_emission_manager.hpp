@@ -53,6 +53,12 @@ namespace catchem {
         std::string regrid_method = "none";
         std::string time_interpolation = "none";
         std::string vertical_dist = "none";
+        // MAPL ExtData temporal options (feature 014, US4).  These mirror the
+        // driver's ExtEmisCategoryType for configuration validation and option
+        // propagation; the interpolation behaviour itself lives in the Fortran
+        // NUOPC driver (drivers/nuopc/catchem_emis_mod.F90).
+        bool daily_hold = false;
+        std::string monthly_anchor = "climatological";
 
         std::map<std::string, EmissionField> fields;
     };

@@ -221,6 +221,11 @@ endmacro()
 # test_catchem_properties and the C++ suite.
 add_fortran_test(test_Constants)
 
+# Emission time-interpolation parity gate (feature 014, US4): exercises the
+# pure catchem_emis_time helpers (DOY weight, record-timestamp bracket, daily
+# 12Z knots + daily_hold) against hand-computed reference weights.
+add_fortran_test(test_emis_time_weight)
+
 # High-level API init-sequence test — mirrors the NUOPC cap's usage of
 # CATChem_Model (facade construction, met binding, timestep)
 if(TARGET CATChem)

@@ -61,12 +61,21 @@ namespace catchem {
             return 243.5 / (17.67 / math::log(ed / 611.2) - 1.0) + 273.15;
         }
 
+        // GOCART-aligned relative humidity in the Alduchov-Eskridge Magnus form:
+        //   es [Pa] = 610.94 * exp(17.625 * tc / (tc + 243.04)),  tc = T - 273.15
+        //   e  [Pa] = p * qv / (0.622 + qv)
+        //   RH      = clip(e / es, 0.005, 0.99)
+        // This replaces the former Bolton form and the [0, 1] clamp. The change
+        // is O(1 %) in the mid-troposphere and is applied unconditionally (not
+        // config-gated). Negative qv or non-positive p are validation errors at
+        // import, not clamped here; the floor keeps qv = 0 finite at 0.005.
         KOKKOS_INLINE_FUNCTION
         fp relative_humidity(fp T, fp qv, fp p) {
-            fp e = qv * p / (0.622 + 0.378 * qv);
-            fp es = saturation_vapor_pressure(T);
-            fp rh = e / es;
-            return math::max(static_cast<fp>(0.0), math::min(static_cast<fp>(1.0), rh));
+            const fp tc = T - 273.15;
+            const fp es = 610.94 * math::exp(17.625 * tc / (tc + 243.04));
+            const fp e = qv * p / (0.622 + qv);
+            const fp rh = e / es;
+            return math::max(static_cast<fp>(0.005), math::min(static_cast<fp>(0.99), rh));
         }
 
         // Pointwise derived-meteorology kernels. StateManager owns field

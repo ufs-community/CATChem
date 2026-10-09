@@ -14,6 +14,7 @@ namespace catchem {
         // GOCART scheme options staged from the runtime configuration
         // (processes/so4chem/gocart/*) and forwarded to the science bridge.
         bool gocart_update_so2 = true;
+        bool gocart_do_drydep = false;
 
         // Persistent column states
         // Stored as C int rather than char/bool so the Fortran bridge has an

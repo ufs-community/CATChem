@@ -6,21 +6,19 @@
 #include <iostream>
 
 extern "C" {
-void run_drydep_science_bridge(int n_cols, int n_levels, int n_species, double dt, const char* gas_scheme,
-                               const char* aero_scheme, int diagnostics, double wesely_scale_factor,
-                               int wesely_co2_effect, double wesely_co2_level, double wesely_co2_reference,
-                               double gocart_scale_factor, int gocart_resuspension, int gocart_dust_resusp_only,
-                               double zhang_scale_factor, double* bxheight, double* airden, double* t_air,
-                               double* z_edges, double* rh, double* cldfrc, double* frlai, double* frlanduse,
-                               int* iland, bool* is_ice, bool* is_land, bool* is_snow, double* lat, double* lon,
-                               double* obk, double* ps, double* salinity, double* suncosmid, double* swgdn, double* ts,
-                               double* tskin, double* ustar, double* z0, double* frlake, double* gwettop, double* hflux,
-                               int* lwi, double* pblh, double* u10m, double* v10m, double* z0h, double* mw_g,
-                               double* dd_f0, double* dd_hstar, double* dd_DvzAerSnow, double* dd_DvzMinVal_snow,
-                               double* dd_DvzMinVal_land, double* density, double* radius, bool* is_seasalt,
-                               bool* is_dust, double* lower_radius, double* upper_radius, bool* is_gas, double* conc,
-                               double* tendency, const char* species_names, double* diag_con, double* diag_vel,
-                               const int* diagnostic_species_id, int n_diag_species);
+void run_drydep_science_bridge(
+    int n_cols, int n_levels, int n_species, double dt, const char* gas_scheme, const char* aero_scheme,
+    int diagnostics, double wesely_scale_factor, int wesely_co2_effect, double wesely_co2_level,
+    double wesely_co2_reference, double gocart_scale_factor, int gocart_resuspension, int gocart_dust_resusp_only,
+    double zhang_scale_factor, int wesely_skip_so2, int gocart_skip_sulfate_aero, double* bxheight, double* airden,
+    double* t_air, double* z_edges, double* rh, double* cldfrc, double* frlai, double* frlanduse, int* iland,
+    bool* is_ice, bool* is_land, bool* is_snow, double* lat, double* lon, double* obk, double* ps, double* salinity,
+    double* suncosmid, double* swgdn, double* ts, double* tskin, double* ustar, double* z0, double* frlake,
+    double* gwettop, double* hflux, int* lwi, double* pblh, double* u10m, double* v10m, double* z0h, double* mw_g,
+    double* dd_f0, double* dd_hstar, double* dd_DvzAerSnow, double* dd_DvzMinVal_snow, double* dd_DvzMinVal_land,
+    double* density, double* radius, bool* is_seasalt, bool* is_dust, double* lower_radius, double* upper_radius,
+    bool* is_gas, double* conc, double* tendency, const char* species_names, double* diag_con, double* diag_vel,
+    const int* diagnostic_species_id, int n_diag_species);
 }
 
 namespace catchem {
@@ -98,6 +96,8 @@ namespace catchem {
         gocart_dust_resuspension_only =
             settings.get_bool("gocart/dust_resuspension_only", gocart_dust_resuspension_only);
         zhang_scale_factor = settings.get_double("zhang/scale_factor", zhang_scale_factor);
+        wesely_skip_so2 = settings.get_bool("wesely/skip_so2", wesely_skip_so2);
+        gocart_skip_sulfate_aero = settings.get_bool("gocart/skip_sulfate_aero", gocart_skip_sulfate_aero);
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
@@ -111,6 +111,8 @@ namespace catchem {
                        {"gocart/scale_factor", std::to_string(gocart_scale_factor)},
                        {"gocart/resuspension", gocart_resuspension ? "true" : "false"},
                        {"gocart/dust_resuspension_only", gocart_dust_resuspension_only ? "true" : "false"},
+                       {"wesely/skip_so2", wesely_skip_so2 ? "true" : "false"},
+                       {"gocart/skip_sulfate_aero", gocart_skip_sulfate_aero ? "true" : "false"},
                        {"zhang/scale_factor", std::to_string(zhang_scale_factor)}});
 
         // 1. Setup diagnostic species ID dynamically based on the is_drydep metadata switch
@@ -320,20 +322,21 @@ namespace catchem {
             gas_scheme.c_str(), aero_scheme.c_str(), diagnostics_enabled ? 1 : 0, wesely_scale_factor,
             wesely_co2_effect ? 1 : 0, wesely_co2_level, wesely_co2_reference, gocart_scale_factor,
             gocart_resuspension ? 1 : 0, gocart_dust_resuspension_only ? 1 : 0, zhang_scale_factor,
-            const_cast<double*>(bxheight_ptr), const_cast<double*>(airden_ptr), const_cast<double*>(t_ptr),
-            const_cast<double*>(z_ptr), const_cast<double*>(rh_ptr), const_cast<double*>(cldfrc), frlai.data_handle(),
-            frlanduse.data_handle(), iland.data_handle(), (bool*)is_ice.data(), (bool*)is_land.data(),
-            (bool*)is_snow.data(), const_cast<double*>(lat_ptr), const_cast<double*>(lon_ptr),
-            const_cast<double*>(obk_ptr), const_cast<double*>(ps_ptr), const_cast<double*>(salinity_ptr),
-            const_cast<double*>(suncosmid), const_cast<double*>(swgdn_ptr), const_cast<double*>(ts_ptr),
-            const_cast<double*>(ts_ptr), const_cast<double*>(ustar_ptr), const_cast<double*>(z0_ptr),
-            const_cast<double*>(frlake_ptr), const_cast<double*>(gwettop_ptr), const_cast<double*>(hflux_ptr),
-            lwi.data(), const_cast<double*>(pblh_ptr), const_cast<double*>(u10m_ptr), const_cast<double*>(v10m_ptr),
-            const_cast<double*>(z0_ptr), mw_g.data(), dd_f0.data(), dd_hstar.data(), dd_DvzAerSnow.data(),
-            dd_DvzMinVal_snow.data(), dd_DvzMinVal_land.data(), density.data(), radius.data(), (bool*)is_seasalt.data(),
-            (bool*)is_dust.data(), lower_radius.data(), upper_radius.data(), (bool*)is_gas.data(), conc_ptr,
-            mock_tendency.data(), state->chemistry().species_names_c_arr.data(), diag_con, diag_vel,
-            diagnostic_species_id.data(), diagnostic_species_id.size());
+            wesely_skip_so2 ? 1 : 0, gocart_skip_sulfate_aero ? 1 : 0, const_cast<double*>(bxheight_ptr),
+            const_cast<double*>(airden_ptr), const_cast<double*>(t_ptr), const_cast<double*>(z_ptr),
+            const_cast<double*>(rh_ptr), const_cast<double*>(cldfrc), frlai.data_handle(), frlanduse.data_handle(),
+            iland.data_handle(), (bool*)is_ice.data(), (bool*)is_land.data(), (bool*)is_snow.data(),
+            const_cast<double*>(lat_ptr), const_cast<double*>(lon_ptr), const_cast<double*>(obk_ptr),
+            const_cast<double*>(ps_ptr), const_cast<double*>(salinity_ptr), const_cast<double*>(suncosmid),
+            const_cast<double*>(swgdn_ptr), const_cast<double*>(ts_ptr), const_cast<double*>(ts_ptr),
+            const_cast<double*>(ustar_ptr), const_cast<double*>(z0_ptr), const_cast<double*>(frlake_ptr),
+            const_cast<double*>(gwettop_ptr), const_cast<double*>(hflux_ptr), lwi.data(), const_cast<double*>(pblh_ptr),
+            const_cast<double*>(u10m_ptr), const_cast<double*>(v10m_ptr), const_cast<double*>(z0_ptr), mw_g.data(),
+            dd_f0.data(), dd_hstar.data(), dd_DvzAerSnow.data(), dd_DvzMinVal_snow.data(), dd_DvzMinVal_land.data(),
+            density.data(), radius.data(), (bool*)is_seasalt.data(), (bool*)is_dust.data(), lower_radius.data(),
+            upper_radius.data(), (bool*)is_gas.data(), conc_ptr, mock_tendency.data(),
+            state->chemistry().species_names_c_arr.data(), diag_con, diag_vel, diagnostic_species_id.data(),
+            diagnostic_species_id.size());
 
         if (state->chemistry().conc)
             state->chemistry().conc->mark_host_modified();
@@ -345,9 +348,9 @@ extern "C" {
 void catchem_register_drydep_cpp() {
     catchem::ProcessRegistry::get_instance().register_process(
         "drydep", []() { return std::make_shared<catchem::DryDepProcess>(); }, {},
-        catchem::make_settings_validator("drydep",
-                                         {"wesely/scale_factor", "wesely/co2_effect", "wesely/co2_level",
-                                          "wesely/co2_reference", "gocart/scale_factor", "gocart/resuspension",
-                                          "gocart/dust_resuspension_only", "zhang/scale_factor"}));
+        catchem::make_settings_validator("drydep", {"wesely/scale_factor", "wesely/co2_effect", "wesely/co2_level",
+                                                    "wesely/co2_reference", "wesely/skip_so2", "gocart/scale_factor",
+                                                    "gocart/resuspension", "gocart/dust_resuspension_only",
+                                                    "gocart/skip_sulfate_aero", "zhang/scale_factor"}));
 }
 }

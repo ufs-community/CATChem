@@ -9,14 +9,14 @@
 
 extern "C" {
 void run_so4chem_science_bridge(int n_cols, int n_levels, int n_species, double dt, int diagnostics,
-                                int gocart_update_so2, int year, int month, int day, int hour, int minute, int second,
-                                double* airden, double* cldf, double* delp, double* pmid, double* t_air,
-                                double* z_edges, double* hflux, double* lat, double* lon, int* lwi, double* pblh,
-                                double* u10m, double* ustar, double* v10m, double* z0h, double* species_mw_g,
-                                const char* species_names, double* conc, double* tendency, int* c_firsttime,
-                                int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init, double* c_pso4_g_so2,
-                                double* c_pso4_aq_so2, double* c_pso2_dms, double* c_dms_flux, double* c_diag_prod_rate,
-                                const int* diagnostic_species_id, int n_diag_species);
+                                int gocart_update_so2, int gocart_do_drydep, int year, int month, int day, int hour,
+                                int minute, int second, double* airden, double* cldf, double* delp, double* pmid,
+                                double* t_air, double* z_edges, double* hflux, double* lat, double* lon, int* lwi,
+                                double* pblh, double* u10m, double* ustar, double* v10m, double* z0h,
+                                double* species_mw_g, const char* species_names, double* conc, double* tendency,
+                                int* c_firsttime, int* c_nymd_last, int* c_nhms_last_recycle, double* c_xh2o2_init,
+                                double* c_pso4_g_so2, double* c_pso4_aq_so2, double* c_pso2_dms, double* c_dms_flux,
+                                double* c_diag_prod_rate, const int* diagnostic_species_id, int n_diag_species);
 }
 
 namespace catchem {
@@ -57,11 +57,14 @@ namespace catchem {
         // configuration that omits the option keeps current behavior.
         const auto& settings = configured->second;
         gocart_update_so2 = settings.get_bool("gocart/update_so2", gocart_update_so2);
+        gocart_do_drydep = settings.get_bool("gocart/do_drydep", gocart_do_drydep);
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
         Logger::debug(state.get(), "SO4Chem scheme options",
-                      {{"scheme", active_scheme}, {"gocart/update_so2", gocart_update_so2 ? "true" : "false"}});
+                      {{"scheme", active_scheme},
+                       {"gocart/update_so2", gocart_update_so2 ? "true" : "false"},
+                       {"gocart/do_drydep", gocart_do_drydep ? "true" : "false"}});
 
         // Preserve the unit contract of ProcessSO4chemInterface_Mod and
         // SO4chemScheme_GOCART_Mod: gases are carried in ppmv, while SO4 and
@@ -281,13 +284,13 @@ namespace catchem {
         std::vector<double> diag_prod_rate(static_cast<size_t>(slab) * (forward_diag ? n_diag_species : 1), 0.0);
         run_so4chem_science_bridge(
             state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
-            diagnostics_enabled ? 1 : 0, gocart_update_so2 ? 1 : 0, state->clock().year, state->clock().month,
-            state->clock().day, state->clock().hour, state->clock().minute, state->clock().second, airden_ptr, cldf_ptr,
-            delp_ptr, pmid_ptr, t_ptr, z_ptr, hflux_ptr, lat_ptr, lon_ptr, lwi.data(), pblh_ptr, u10m_ptr, ustar_ptr,
-            v10m_ptr, const_cast<double*>(z0h_ptr), mw_g.data(), state->chemistry().species_names_c_arr.data(),
-            conc_ptr, mock_tendency.data(), firsttime.data(), nymd_last.data(), nhms_last_recycle.data(),
-            xh2o2_init.data(), pso4_g_so2.data(), pso4_aq_so2.data(), pso2_dms.data(), dms_flux.data(),
-            diag_prod_rate.data(), diag_ids, n_diag_species);
+            diagnostics_enabled ? 1 : 0, gocart_update_so2 ? 1 : 0, gocart_do_drydep ? 1 : 0, state->clock().year,
+            state->clock().month, state->clock().day, state->clock().hour, state->clock().minute, state->clock().second,
+            airden_ptr, cldf_ptr, delp_ptr, pmid_ptr, t_ptr, z_ptr, hflux_ptr, lat_ptr, lon_ptr, lwi.data(), pblh_ptr,
+            u10m_ptr, ustar_ptr, v10m_ptr, const_cast<double*>(z0h_ptr), mw_g.data(),
+            state->chemistry().species_names_c_arr.data(), conc_ptr, mock_tendency.data(), firsttime.data(),
+            nymd_last.data(), nhms_last_recycle.data(), xh2o2_init.data(), pso4_g_so2.data(), pso4_aq_so2.data(),
+            pso2_dms.data(), dms_flux.data(), diag_prod_rate.data(), diag_ids, n_diag_species);
 
         // 6. Map persistent column diagnostics straight to registered C++ Diagnostics Views
         if (state->diagnostic_manager() && diagnostics_enabled) {
@@ -327,6 +330,6 @@ extern "C" {
 void catchem_register_so4chem_cpp() {
     catchem::ProcessRegistry::get_instance().register_process(
         "so4chem", []() { return std::make_shared<catchem::SO4chemProcess>(); }, {},
-        catchem::make_settings_validator("so4chem", {"gocart/update_so2"}));
+        catchem::make_settings_validator("so4chem", {"gocart/update_so2", "gocart/do_drydep"}));
 }
 }

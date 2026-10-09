@@ -413,10 +413,15 @@ processes:
     aero_scheme: 'gocart'
     wesely:
       scale_factor: 1.0
+      # skip_so2: true  # exclude SO2 from Wesely gas drydep so so4chem owns it.
+      # GOCART-faithful sulfate drydep = this + gocart/skip_sulfate_aero +
+      # so4chem/gocart/do_drydep all true (default false keeps current routing)
     gocart:
       scale_factor: 1.0
       resuspension: false
       dust_resuspension_only: true   # default
+      # skip_sulfate_aero: true  # exclude SO4/MSA from GOCART aerosol drydep
+      # so so4chem owns them (GOCART-faithful: set true; default false)
     zhang:
       scale_factor: 1.0
   wetdep:
@@ -429,6 +434,13 @@ processes:
       radius_threshold: 0.05
       so4_gocart_resusp: true #sulfate-only GOCART-style resuspension toggle (default on)
       so4_washout_eff: 0.3 #wash out factor for SO4 only
+    # GOCART2G wet removal (opt-in: set scheme: 'gocart' above). Values shown
+    # are the scheme defaults; the wetdep validator rejects gocart/* keys unless
+    # scheme: 'gocart' is selected.
+    # gocart:
+    #   scale_factor: 1.0        # overall washout tuning factor
+    #   washout_tuning: 1.0      # WetRemovalUFS below-cloud washout tuning (wtune); GOCART default 1.0
+    #   radius_threshold: 0.05   # radius threshold for aerosol washout (um); GOCART default 0.05
   settling:
     activate: true
     diagnostics: true
@@ -451,6 +463,9 @@ processes:
     scheme: 'gocart'
     gocart:
       update_so2: true #whether to update SO2 concentration based on chemical production/loss
+      # do_drydep: true  #compute SO2/SO4/MSA drydep inside SulfateChemDriver.
+      # GOCART-faithful: set true together with drydep wesely/skip_so2 +
+      # gocart/skip_sulfate_aero (default false keeps the suppression sentinel)
   carbchem:
     activate: true
     diagnostics: true

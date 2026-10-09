@@ -1,7 +1,11 @@
 # External dependencies
 
 # Create a basic utilities library that other modules can depend on
-add_library(catchem_utilities ../process/catchem_bridge_utilities.F90)
+add_library(
+  catchem_utilities
+  ../process/catchem_bridge_utilities.F90
+  ../process/catchem_emis_time_mod.F90
+)
 
 set_target_properties(
   catchem_utilities

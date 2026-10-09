@@ -49,6 +49,7 @@ module SO4chemCommon_Mod
 
       ! Scheme parameters
       logical :: update_so2 = .true.  ! whether to update SO2 concentration based on chemical production/loss
+      logical :: do_drydep = .false.  ! whether to compute SO2/SO4/MSA dry deposition inside SulfateChemDriver (GOCART behavior)
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 16

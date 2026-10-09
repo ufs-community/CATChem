@@ -157,6 +157,34 @@ namespace catchem {
             }
         }
 
+        // Mirror the runtime external-emission categories from
+        // processes/extemis/<category> so the C++ config surface carries the
+        // MAPL ExtData temporal options (feature 014, US4).  Only category
+        // sub-maps are considered; framework keys (activate, global_diagnostics)
+        // are skipped.  daily_hold defaults to false and monthly_anchor to
+        // "climatological", so a config written before this feature parses
+        // unchanged and yields the previous behaviour.
+        void parse_emission_categories(const YAML::Node& extemis_node, ConfigData& data) {
+            if (!extemis_node || !extemis_node.IsMap()) {
+                return;
+            }
+            static const std::set<std::string> framework_keys = {"activate", "global_diagnostics"};
+            for (const auto& entry : extemis_node) {
+                const std::string category_name = entry.first.as<std::string>();
+                if (framework_keys.count(category_name) || !entry.second.IsMap())
+                    continue;
+                EmissionCategory category;
+                category.category_name = category_name;
+                category.daily_hold = value_or<bool>(entry.second["daily_hold"], false);
+                category.monthly_anchor = value_or<std::string>(entry.second["monthly_anchor"], "climatological");
+                if (entry.second["frequency"])
+                    category.frequency = entry.second["frequency"].as<std::string>();
+                if (entry.second["time_interpolation"])
+                    category.time_interpolation = entry.second["time_interpolation"].as<std::string>();
+                data.emission_categories[category_name] = category;
+            }
+        }
+
     } // namespace
 
     bool ProcessConfig::get_bool(std::string_view key, bool default_val) const {
@@ -527,6 +555,7 @@ namespace catchem {
             const YAML::Node& config = root_node;
             data.active_processes.clear();
             data.processes.clear();
+            data.emission_categories.clear();
             if (config["simulation"]) {
                 auto sim = config["simulation"];
                 data.simulation.name = value_or<std::string>(sim["name"], "");
@@ -648,6 +677,10 @@ namespace catchem {
             }
             parse_processes(config["processes"], data);
             parse_processes(config["process"], data);
+            if (config["processes"] && config["processes"]["extemis"])
+                parse_emission_categories(config["processes"]["extemis"], data);
+            if (config["process"] && config["process"]["extemis"])
+                parse_emission_categories(config["process"]["extemis"], data);
             if (config["run_phases"]) {
                 for (const auto& phase : config["run_phases"]) {
                     const YAML::Node processes = phase.second["processes"];
@@ -907,6 +940,21 @@ namespace catchem {
         };
         validate_emission_categories(root_node["processes"], "processes");
         validate_emission_categories(root_node["process"], "process");
+
+        // The MAPL ExtData monthly anchoring mode is an enumerated option
+        // (feature 014, US4).  Fail loudly on an unknown value and list the
+        // accepted ones, matching the driver's behaviour contract; a missing
+        // key keeps the "climatological" default so legacy configs are
+        // unaffected.  daily_hold is a plain boolean resolved by yaml-cpp at
+        // parse time, so no range check applies.
+        {
+            static const std::set<std::string> allowed_monthly_anchor = {"climatological", "file"};
+            for (const auto& [category_name, category] : data.emission_categories) {
+                if (allowed_monthly_anchor.find(category.monthly_anchor) == allowed_monthly_anchor.end())
+                    add("emissions", "processes/extemis/" + category_name + "/monthly_anchor",
+                        "unknown monthly_anchor value: " + category.monthly_anchor, "use one of: climatological, file");
+            }
+        }
 
         for (const auto& [category_name, category] : data.emission_mappings) {
             for (const auto& [field_name, field] : category.fields) {

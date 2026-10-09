@@ -141,6 +141,15 @@ MODULE catchem_nuopc_emis_data_mod
       CHARACTER(LEN=256)                        :: last_resolved_file = '' !< last resolved filename (cache key)
       ! Calendar-period tracking — drives file/slice updates without alarm drift
       INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
+      ! MAPL ExtData-compatible temporal options (feature 014, US4)
+      LOGICAL                                   :: daily_hold = .false. !< Hold daily data constant between 00Z updates (piecewise-constant blend)
+      CHARACTER(LEN=32)                         :: monthly_anchor = 'climatological' !< Monthly anchoring: 'climatological' (day-of-year climatology) or 'file' (bracket from file valid-times)
+      ! File-time bracket cache for monthly 'file' anchor across multi-file interpolation
+      INTEGER                                   :: bt1_date = -1       !< yyyymmdd of earlier bracket record (-1 = unset)
+      INTEGER                                   :: bt1_secs = -1       !< seconds-of-day of earlier bracket record
+      INTEGER                                   :: bt2_date = -1       !< yyyymmdd of later bracket record (-1 = unset)
+      INTEGER                                   :: bt2_secs = -1       !< seconds-of-day of later bracket record
+      LOGICAL                                   :: bt_valid = .false.  !< Bracket cache populated from readable file valid-times
       ! Organic carbon emission factor (BB AOT limiter, following GOCART2G CAEmission)
       LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
       ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
@@ -562,6 +571,13 @@ CONTAINS
       this%n_times = 0
       this%last_resolved_file = ''
       this%last_period_key = -1
+      this%daily_hold = .false.
+      this%monthly_anchor = 'climatological'
+      this%bt1_date = -1
+      this%bt1_secs = -1
+      this%bt2_date = -1
+      this%bt2_secs = -1
+      this%bt_valid = .false.
 
    end subroutine extemicat_cleanup
 

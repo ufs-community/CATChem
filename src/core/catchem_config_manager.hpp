@@ -1,4 +1,5 @@
 #pragma once
+#include "catchem_emission_manager.hpp"
 #include "catchem_physical_validation.hpp"
 #include <map>
 #include <string>
@@ -207,6 +208,11 @@ namespace catchem {
         std::vector<std::string> mechanism_capabilities;
         PhysicalValidationPolicy physical_validation_policy = PhysicalValidationPolicy::Reject;
         std::map<std::string, EmissionCategoryMapping> emission_mappings;
+        /// Runtime emission-category mirror parsed from processes/extemis/*.
+        /// Holds the MAPL ExtData temporal options (daily_hold, monthly_anchor)
+        /// so configuration validation and option-propagation tests can inspect
+        /// them; the interpolation behaviour lives in the Fortran NUOPC driver.
+        std::map<std::string, EmissionCategory> emission_categories;
         MieConfig mie;
     };
 

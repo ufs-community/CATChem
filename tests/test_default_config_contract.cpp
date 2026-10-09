@@ -33,6 +33,12 @@ int main() {
     assert(config.data.processes.at("drydep").get_string("aero_scheme") == "gocart");
 
     assert(config.is_process_active("extemis"));
+    // US2 GOCART-faithful routing keys are commented out in the shipped
+    // Default configuration: their absence must resolve to the compiled
+    // defaults (false), reproducing current deposition routing (SC-003).
+    assert(!config.data.processes.at("drydep").get_bool("wesely/skip_so2", false));
+    assert(!config.data.processes.at("drydep").get_bool("gocart/skip_sulfate_aero", false));
+    assert(!config.data.processes.at("so4chem").get_bool("gocart/do_drydep", false));
     // Diagnostics output is disabled in the Default configuration (upstream
     // ddf07c50, "Disable diagnostics output in configuration file"); the
     // rest of the output block (compression level etc.) stays as configured.
