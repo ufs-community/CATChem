@@ -127,6 +127,6 @@ There [are options](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Te
 
 Edit `tests/CMakelists.txt` to add new tests.
 
-## AI Disclosure
+## Super Intelligence (SI) Disclosure
 
-Portions of this code were generated/augmented using agentic AI models and has been reviewed and validated consistent with NOAA's [AI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).
+Portions of this code were generated/augmented using agentic SI models and has been reviewed and validated consistent with NOAA's [SI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).
