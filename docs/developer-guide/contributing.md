@@ -71,7 +71,7 @@ feat(chemistry): add support for aqueous-phase reactions
 Closes #123
 ```
 
-**How releases are computed.** Pull requests into `develop` are squash-merged, and the pre-release version is determined from the squash commit **title** only: the PR title for multi-commit PRs, or the commit's own subject for single-commit PRs. Promotions from `develop` to `main` use a merge commit, not a squash; the release on `main` is computed from the titles of the commits brought over (the squash commits from `develop`), and the merge commit itself is ignored. Commit bodies and footers are never parsed. Signal a breaking change with `!` in the title, for example `feat!: drop the legacy driver`; a `BREAKING CHANGE:` footer in a body has no effect. Adding `[ci skip]` to a commit message skips CI for that push to your PR only and has no effect on the merge or the release.
+**How releases are computed.** Pull requests into `develop` are squash-merged using the **pull request title only** (repository setting), so the pre-release version is determined by your PR title. Promotions from `develop` to `main` use a merge commit; the release on `main` is computed from the squash commits brought over, and the merge commit itself is ignored. Signal a breaking change with `!` in the title, for example `feat!: drop the legacy driver`; a `BREAKING CHANGE:` footer in a body has no effect. Adding `[ci skip]` to a commit message skips CI for that push to your PR only and has no effect on the merge or the release.
 
 ### 4. Create a Pull Request
 
