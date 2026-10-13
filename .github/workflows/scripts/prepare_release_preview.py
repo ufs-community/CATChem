@@ -44,13 +44,15 @@ def run_git(args: list[str], check: bool = True, input: str | None = None) -> su
 
 
 def squash_message(target: str, pr_title: str, pr_number: str) -> str:
-    """Emulate GitHub's default squash-merge message: '<title> (#N)' plus one bullet per squashed commit."""
-    subject = f"{pr_title} (#{pr_number})" if pr_number else pr_title
-    log = run_git(["log", "--reverse", "--no-merges", "--format=%B%x00", f"origin/{target}..pr-source-ref"]).stdout
-    bodies = [m.strip() for m in log.split("\x00") if m.strip()]
-    if not bodies:
-        return subject + "\n"
-    return subject + "\n\n" + "\n\n".join(f"* {m}" for m in bodies) + "\n"
+    """Emulate the subject GitHub writes for a default squash merge.
+
+    Multi-commit PRs use the PR title; single-commit PRs use that commit's subject.
+    The body is intentionally omitted: PSR evaluates the title only.
+    """
+    subjects = run_git(["log", "--reverse", "--no-merges", "--format=%s", f"origin/{target}..pr-source-ref"]).stdout
+    commits = [s for s in subjects.splitlines() if s.strip()]
+    subject = commits[0].strip() if len(commits) == 1 else pr_title
+    return (f"{subject} (#{pr_number})" if pr_number else subject) + "\n"
 
 
 def prepare_preview(target: str, pr_title: str, strategy: str = "merge", pr_number: str = "") -> None:
