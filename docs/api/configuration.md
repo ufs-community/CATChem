@@ -8,7 +8,7 @@ The configuration system has been fully elevated to the C++ core to unify runtim
 
 - **catchem::ConfigManager**: C++ class managing YAML-based settings using the `yaml-cpp` library.
 - **Unified Metadata Parsing**: Species configurations (`CATChem_species.yml`) parsed natively in C++ to populate species attributes (e.g. molecular weights).
-- **C-API Interface**: Exposes BIND(C) parameters so host models can configure dimensions and timestep thresholds seamlessly.
+- **C-API Interface**: Exposes `extern "C"` functions that host models can use via the ISO C binding module and BIND(C) interface to configure dimensions and timestep thresholds seamlessly.
 
 ---
 

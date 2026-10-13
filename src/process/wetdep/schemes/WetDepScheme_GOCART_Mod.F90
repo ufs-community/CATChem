@@ -148,6 +148,7 @@ contains
       integer :: nDMS, nSO2, nSO4, nMSA, nH2O2  ! species-array indices (by name)
       integer :: klid, rc
       real(fp) :: fMassSO4, fMassSO2, fMassDMS
+      real(fp) :: rainout_eff(3)
       character(len=512) :: thisLoc, errMsg
 
       ! Local bin indices used INSIDE SU_Wet_Removal to index its DC/fluxout arrays (not species-array indices)
@@ -290,9 +291,10 @@ contains
 
          aerosol(1,1,:) = species_conc(num_layers:1:-1, species_idx) * 1.0e-9_fp  ! ug/kg -> kg/kg
          aerosol0 = aerosol
+         rainout_eff = species_wd_rainouteff(species_idx, :)
 
          call WetRemovalUFS(num_layers, klid, 1, tstep, trim(species_short_name(species_idx)), .true., g0, &
-            species_radius(species_idx), species_wd_rainouteff(species_idx, :), &
+            species_radius(species_idx), rainout_eff, &
             params%washout_tuning, params%radius_threshold, aerosol, &
             GOCART_ple, GOCART_tmpu, GOCART_rhoa, GOCART_pfllsan, GOCART_pfilsan, ufs_flux, rc)
 
