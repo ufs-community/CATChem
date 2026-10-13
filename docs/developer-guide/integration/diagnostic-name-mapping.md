@@ -41,7 +41,7 @@ writes one child per selected species:
 Current internal packed fields are `drydep_con_per_species` and
 `drydep_velocity_per_species`, with a `Species` axis. The NUOPC writer unpacks
 them into the current child names. See the current registration in
-[catchem_process_drydep.cpp](../../../src/process/drydep/catchem_process_drydep.cpp:125).
+[catchem_process_drydep.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/drydep/catchem_process_drydep.cpp#L125).
 
 ## Sea-salt emission
 
@@ -55,7 +55,7 @@ them into the current child names. See the current registration in
 The current packed parent fields are `seasalt_mass_emission_bins` and
 `seasalt_number_emission_bins`; those parent names are not written as final
 NetCDF variables. The current totals and packed fields are registered in
-[catchem_process_seasalt.cpp](../../../src/process/seasalt/catchem_process_seasalt.cpp:146).
+[catchem_process_seasalt.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/seasalt/catchem_process_seasalt.cpp#L146).
 
 The canonical default bins are `seas1`, `seas2`, `seas3`, `seas4`, and
 `seas5`.
@@ -69,7 +69,7 @@ The canonical default bins are `seas1`, `seas2`, `seas3`, `seas4`, and
 
 Current internal packed fields are `settling_velocity_per_species_per_level`
 and `settling_flux_per_species`, with a `Species` axis. See
-[catchem_process_settling.cpp](../../../src/process/settling/catchem_process_settling.cpp:228).
+[catchem_process_settling.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/settling/catchem_process_settling.cpp#L228).
 
 ## Sulfate chemistry
 
@@ -84,7 +84,7 @@ These names are unchanged between legacy and current:
 
 The current per-species `Production_rate_<species>` fields are registered
 individually rather than exposed through a packed parent. See
-[catchem_process_so4chem.cpp](../../../src/process/so4chem/catchem_process_so4chem.cpp:137).
+[catchem_process_so4chem.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/so4chem/catchem_process_so4chem.cpp#L137).
 
 ## Wet deposition
 
@@ -99,9 +99,9 @@ Legacy also declares the internal parent names
 through the Fortran bridge but exposes only the per-species fields.
 
 The current registration is in
-[catchem_process_wetdep.cpp](../../../src/process/wetdep/catchem_process_wetdep.cpp:92),
+[catchem_process_wetdep.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/wetdep/catchem_process_wetdep.cpp#L92),
 and the scheme fills the mass and flux diagnostics in
-[WetDepScheme_JACOB_Mod.F90](../../../src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90:439).
+[WetDepScheme_JACOB_Mod.F90](https://github.com/ufs-community/CATChem/blob/develop/src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90#L439).
 
 With the default species metadata, the possible suffixes are:
 
@@ -125,7 +125,7 @@ Dust diagnostics are current-only relative to `upstream/develop`:
 | `dust_utar_threshold_<bin>` | `m/s` | Unpacked from current parent `dust_utar_threshold` |
 
 The canonical default bins are `dust1` through `dust5`. See
-[catchem_process_dust.cpp](../../../src/process/dust/catchem_process_dust.cpp:216).
+[catchem_process_dust.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/dust/catchem_process_dust.cpp#L216).
 
 ## Carbon chemistry
 
@@ -138,7 +138,7 @@ Carbon chemistry is current-only relative to `upstream/develop`:
 | `carbchem_phobic_mass_<species>` | `kg/kg` | Unpacked from `carbchem_phobic_mass` |
 | `carbchem_phobic_flux_<species>` | `kg/m2/s` | Unpacked from `carbchem_phobic_flux` |
 
-See [catchem_process_carbchem.cpp](../../../src/process/carbchem/catchem_process_carbchem.cpp:109).
+See [catchem_process_carbchem.cpp](https://github.com/ufs-community/CATChem/blob/develop/src/process/carbchem/catchem_process_carbchem.cpp#L109).
 
 ## Photolysis and gas chemistry
 
