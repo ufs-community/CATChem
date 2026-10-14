@@ -2,6 +2,26 @@
 
 <!-- version list -->
 
+## v2.1.0-rc.5 (2026-10-14)
+
+### Continuous Integration
+
+- **fix**: Concurrency settings for pushes
+  ([#209](https://github.com/ufs-community/CATChem/pull/209),
+  [`5aa949e`](https://github.com/ufs-community/CATChem/commit/5aa949eced990720508585237422768b52f01952))
+
+### Documentation
+
+- Add SI disclosure statement ([#205](https://github.com/ufs-community/CATChem/pull/205),
+  [`0fed95c`](https://github.com/ufs-community/CATChem/commit/0fed95ce9acdf7c8df6eba95b5fb2bc9b32e4ecb))
+
+### Features
+
+- Add new wetdep scheme for GCAFS reproduction
+  ([#206](https://github.com/ufs-community/CATChem/pull/206),
+  [`f7e9ac0`](https://github.com/ufs-community/CATChem/commit/f7e9ac0597308c2ce3a68c70ac8cac528b1ef75e))
+
+
 ## v2.1.0-rc.4 (2026-10-14)
 
 ### Bug Fixes
