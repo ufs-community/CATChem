@@ -28,13 +28,13 @@ The Settling process implements Process for computing gravitational settling of 
 
 #### Required Meteorological Fields
 
-- `T` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `RH` - Meteorological field required for scheme computation
-- `Z` - Meteorological field required for scheme computation
-- `PMID` - Meteorological field required for scheme computation
-- `DELP` - Meteorological field required for scheme computation
+- `T` - Temperature [K]
+- `TSTEP` - Model time step [s]
+- `AIRDEN` - Wet air density [kg/m3]
+- `RH` - Relative humidity [fraction, not %]
+- `Z` - Geopotential Height @ level edges [m] (nx,ny,nz+1)
+- `PMID` - Average wet air pressure [Pa] defined as arithmetic average of edge pressures
+- `DELP` - Delta-P (wet) across box [Pa]
 
 
 

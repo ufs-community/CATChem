@@ -161,6 +161,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -175,6 +176,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -189,6 +191,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -203,6 +206,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -217,6 +221,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -231,6 +236,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -245,6 +251,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_lto" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -259,6 +266,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_cds" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -273,6 +281,7 @@ processes:
       gridded: true
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "lat"
       lon_name: "lon"
       vertical_dist: "aviation_crs" #options: none, P100, P500, Ppbl, aviation, aviation_lto, aviation_cds, aviation_crs
@@ -322,6 +331,7 @@ processes:
       apply_method: "replace" # "add" to accumulate concentration (default); "replace" to overwrite existing concentration
       regrid_method: conserve
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps, not mid-month
       lat_name: "latitude"
       lon_name: "longitude"
       vertical_dist: "none"
@@ -347,6 +357,7 @@ processes:
       is_2d: true
       regrid_method: conserve
       time_interpolation: linear
+      daily_hold: true   # match MAPL ExtData: hold daily value piecewise-constant per day (recompute at 00Z)
       diurnal_bb: true
       use_oc_fbb: true
       lat_name: "lat"
@@ -379,6 +390,7 @@ processes:
       gridded: true
       regrid_method: neareststod
       time_interpolation: linear
+      monthly_anchor: file   # match MAPL ExtData: interpolate by file record timestamps (month-start), not mid-month
       lat_name: "lat"
       lon_name: "lon"
       is_2d: true
@@ -425,22 +437,28 @@ processes:
     aero_scheme: 'gocart'
     wesely:
       scale_factor: 1.0
+      skip_so2: true  #skip SO2 in wesely so so4chem handles it. GOCART-faithful sulfate drydep = set this + gocart/skip_sulfate_aero + so4chem/do_drydep all true
     gocart:
       scale_factor: 1.0
       resuspension: false
       dust_resuspension_only: true   # default
+      skip_sulfate_aero: true  #skip SO4/MSA in gocart aero drydep so so4chem handles them (GOCART-faithful: set true)
     zhang:
       scale_factor: 1.0
   wetdep:
     activate: true
     diagnostics: true
     diag_species: [so2, so4, seas1, seas3, seas5, oc1,oc2,bc1,bc2]
-    scheme: 'jacob'
+    scheme: 'gocart'
     jacob:
       scale_factor: 1.0
       radius_threshold: 0.05
       so4_gocart_resusp: true #sulfate-only GOCART-style resuspension toggle (default on)
       so4_washout_eff: 0.3 #wash out factor for SO4 only
+    gocart:
+      scale_factor: 1.0 #overall washout tuning factor
+      washout_tuning: 1.0 #WetRemovalUFS below-cloud washout tuning factor (wtune); GOCART default 1.0
+      radius_threshold: 0.05 #radius threshold for aerosol washout (um) (WetRemovalUFS radius_thr); GOCART default 0.05
   settling:
     activate: true
     diagnostics: true
@@ -459,6 +477,7 @@ processes:
     scheme: 'gocart'
     gocart:
       update_so2: true #whether to update SO2 concentration based on chemical production/loss
+      do_drydep: true #compute SO2/SO4/MSA drydep inside SulfateChemDriver (GOCART-faithful: set true together with drydep wesely/skip_so2 + gocart/skip_sulfate_aero)
   carbchem:
     activate: true
     diagnostics: true

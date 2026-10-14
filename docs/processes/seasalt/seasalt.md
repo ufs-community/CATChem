@@ -26,13 +26,13 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 ### GONG03 Scheme
@@ -50,13 +50,13 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 ### GEOS12 Scheme
@@ -74,14 +74,14 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `USTAR` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `USTAR` - Friction velocity [m/s]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 
@@ -95,7 +95,7 @@ The seasalt process operates on the following chemical species:
 ### Required Inputs
 
 #### Meteorological Fields
-- `DELP` - Required meteorological input
+- `DELP` - Delta-P (wet) across box [Pa]
 
 
 ### Process Diagnostics

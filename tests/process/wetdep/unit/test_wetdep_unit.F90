@@ -3,12 +3,12 @@
 !!
 !! This file contains unit tests for the wetdep process implementation
 !! following the same pattern as core tests like test_ConfigManager.F90
-!! Generated on: 2025-12-15T16:30:33.789112
+!! Generated on: 2026-09-22T13:06:55.627599
 
 program test_wetdep_unit
    use testing_mod, only: assert, assert_close
    use precision_mod, only: fp
-   use error_mod, only: CC_SUCCESS, ErrorManagerType
+   use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType
    use StateManager_Mod, only: StateManagerType
    use GridManager_Mod, only: GridManagerType
    use ProcessWetDepInterface_Mod, only: ProcessWetDepInterface
@@ -112,6 +112,10 @@ contains
       call config%validate(error_manager)
       call assert(.true., "JACOB scheme validation completed")
 
+      config%scheme = 'gocart'
+      call config%validate(error_manager)
+      call assert(.true., "GOCART scheme validation completed")
+
 
    end subroutine test_wetdep_config_validation
 
@@ -124,6 +128,10 @@ contains
       config%scheme = 'jacob'
       call config%validate(error_manager)
       call assert(.true., "JACOB scheme validation completed")
+
+      config%scheme = 'gocart'
+      call config%validate(error_manager)
+      call assert(.true., "GOCART scheme validation completed")
 
       config%scheme = 'invalid_scheme'
       call config%validate(error_manager)

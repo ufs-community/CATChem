@@ -28,27 +28,27 @@ The DryDep process implements Process for computing dry deposition of gas and ae
 
 #### Required Meteorological Fields
 
-- `USTAR` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `TS` - Meteorological field required for scheme computation
-- `SWGDN` - Meteorological field required for scheme computation
-- `SUNCOSmid` - Meteorological field required for scheme computation
-- `OBK` - Meteorological field required for scheme computation
-- `CLDFRC` - Meteorological field required for scheme computation
-- `BXHEIGHT` - Meteorological field required for scheme computation
-- `Z0` - Meteorological field required for scheme computation
-- `PS` - Meteorological field required for scheme computation
-- `FRLAI` - Meteorological field required for scheme computation
-- `ILAND` - Meteorological field required for scheme computation
-- `SALINITY` - Meteorological field required for scheme computation
-- `FRLANDUSE` - Meteorological field required for scheme computation
-- `TSKIN` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LUCNAME` - Meteorological field required for scheme computation
-- `IsSnow` - Meteorological field required for scheme computation
-- `IsIce` - Meteorological field required for scheme computation
-- `IsLand` - Meteorological field required for scheme computation
+- `USTAR` - Friction velocity [m/s]
+- `TSTEP` - Model time step [s]
+- `TS` - Surface temperature [K]
+- `SWGDN` - Incident radiation @ ground [W/m2]
+- `SUNCOSmid` - COS(solar zenith angle) at midpoint of chem timestep
+- `OBK` - Monin-Obhukov length [m]
+- `CLDFRC` - Column cloud fraction [1]
+- `BXHEIGHT` - Grid box height [m] (dry air)
+- `Z0` - Surface roughness height [m]
+- `PS` - Surface Pressure [Pa]
+- `FRLAI` - LAI in each Fractional Land use type [m2/m2] (nx,ny,nlanduse)
+- `ILAND` - Land type ID in current grid box (nx,ny,nlanduse)
+- `SALINITY` - Salinity of the ocean [part per thousand]
+- `FRLANDUSE` - Fractional Land Use (nx,ny,nlanduse)
+- `TSKIN` - Surface skin temperature [K]
+- `LON` - Longitude
+- `LAT` - Latitude
+- `LUCNAME` - name of land use category
+- `IsSnow` - Is this a snow grid box?
+- `IsIce` - Is this an ice grid box?
+- `IsLand` - Is this a land grid box?
 
 
 ### GOCART Scheme
@@ -66,19 +66,19 @@ The DryDep process implements Process for computing dry deposition of gas and ae
 
 #### Required Meteorological Fields
 
-- `USTAR` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `T` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `Z` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `PBLH` - Meteorological field required for scheme computation
-- `HFLUX` - Meteorological field required for scheme computation
-- `Z0H` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `FRLAKE` - Meteorological field required for scheme computation
-- `GWETTOP` - Meteorological field required for scheme computation
+- `USTAR` - Friction velocity [m/s]
+- `TSTEP` - Model time step [s]
+- `T` - Temperature [K]
+- `AIRDEN` - Wet air density [kg/m3]
+- `Z` - Geopotential Height @ level edges [m] (nx,ny,nz+1)
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `PBLH` - PBL height [m]
+- `HFLUX` - Sensible heat flux [W/m2]
+- `Z0H` - Surface roughness height, for heat (thermal roughness) [m]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `FRLAKE` - Fraction of lake [1]
+- `GWETTOP` - Top soil moisture [1]
 
 
 ### ZHANG Scheme
@@ -95,21 +95,21 @@ The DryDep process implements Process for computing dry deposition of gas and ae
 
 #### Required Meteorological Fields
 
-- `USTAR` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `TS` - Meteorological field required for scheme computation
-- `OBK` - Meteorological field required for scheme computation
-- `BXHEIGHT` - Meteorological field required for scheme computation
-- `Z0` - Meteorological field required for scheme computation
-- `RH` - Meteorological field required for scheme computation
-- `PS` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `FRLANDUSE` - Meteorological field required for scheme computation
-- `ILAND` - Meteorological field required for scheme computation
-- `LUCNAME` - Meteorological field required for scheme computation
-- `IsSnow` - Meteorological field required for scheme computation
-- `IsIce` - Meteorological field required for scheme computation
+- `USTAR` - Friction velocity [m/s]
+- `TSTEP` - Model time step [s]
+- `TS` - Surface temperature [K]
+- `OBK` - Monin-Obhukov length [m]
+- `BXHEIGHT` - Grid box height [m] (dry air)
+- `Z0` - Surface roughness height [m]
+- `RH` - Relative humidity [fraction, not %]
+- `PS` - Surface Pressure [Pa]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `FRLANDUSE` - Fractional Land Use (nx,ny,nlanduse)
+- `ILAND` - Land type ID in current grid box (nx,ny,nlanduse)
+- `LUCNAME` - name of land use category
+- `IsSnow` - Is this a snow grid box?
+- `IsIce` - Is this an ice grid box?
 
 
 

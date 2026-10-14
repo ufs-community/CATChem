@@ -253,11 +253,19 @@ contains
       real(fp), intent(in) :: T, qv, p
       real(fp) :: rh
       real(fp) :: e, es
-      e = qv * p / (0.622_fp + 0.378_fp * qv)
-      es = saturation_vapor_pressure(T)
-      rh = e / es
-      ! Clip to physical limits
-      rh = max(0.0_fp, min(1.0_fp, rh))
+      real(fp) :: tc
+      ! GOCART-parity test: match GOCART/UFS RH2 (Aerosol_Comp_Mod) exactly so the
+      ! hygroscopic wet radius (sea-salt settling/scavenging) uses the same RH.
+      ! Magnus (Alduchov & Eskridge 1996) + specific-humidity approx, clamp [0.005,0.99].
+      tc = T - 273.15_fp
+      es = 610.94_fp * exp(17.625_fp * tc / (tc + 243.04_fp))
+      e  = p * qv / (0.622_fp + qv)
+      rh = max(0.005_fp, min(0.99_fp, e / es))
+      ! Original CATChem (Bolton) derivation, kept for reference:
+      ! e = qv * p / (0.622_fp + 0.378_fp * qv)
+      ! es = saturation_vapor_pressure(T)
+      ! rh = e / es
+      ! rh = max(0.0_fp, min(1.0_fp, rh))
    end function relative_humidity
 
    !> \brief Calculate saturation vapor pressure (Clausius-Clapeyron)

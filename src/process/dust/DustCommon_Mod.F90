@@ -466,34 +466,26 @@ contains
 
       integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/dust/fengsha/ in master YAML
+      ! Load scheme parameters from processes/dust/fengsha/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/dust/fengsha/alpha", &
          this%fengsha_config%alpha, rc, 0.2_fp)
-      if (rc /= CC_SUCCESS) this%fengsha_config%alpha = 0.2_fp
       call config_manager%get_real("processes/dust/fengsha/gamma", &
          this%fengsha_config%gamma, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%fengsha_config%gamma = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/drylimit_factor", &
          this%fengsha_config%drylimit_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%fengsha_config%drylimit_factor = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/moist_correction_factor", &
          this%fengsha_config%moist_correction_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%fengsha_config%moist_correction_factor = 1.0_fp
       call config_manager%get_real("processes/dust/fengsha/kvhmax", &
          this%fengsha_config%kvhmax, rc, 0.0002_fp)
-      if (rc /= CC_SUCCESS) this%fengsha_config%kvhmax = 0.0002_fp
       call config_manager%get_integer("processes/dust/fengsha/drag_option", &
          this%fengsha_config%drag_option, rc, 1)
-      if (rc /= CC_SUCCESS) this%fengsha_config%drag_option = 1
       call config_manager%get_integer("processes/dust/fengsha/horizflux_option", &
          this%fengsha_config%horizflux_option, rc, 1)
-      if (rc /= CC_SUCCESS) this%fengsha_config%horizflux_option = 1
       call config_manager%get_integer("processes/dust/fengsha/moist_option", &
          this%fengsha_config%moist_option, rc, 1)
-      if (rc /= CC_SUCCESS) this%fengsha_config%moist_option = 1
       call config_manager%get_integer("processes/dust/fengsha/distribution_option", &
          this%fengsha_config%distribution_option, rc, 1)
-      if (rc /= CC_SUCCESS) this%fengsha_config%distribution_option = 1
 
 
    end subroutine load_fengsha_config
@@ -506,7 +498,8 @@ contains
 
       integer :: ierr, rc
 
-      ! Load scheme parameters directly from processes/dust/ginoux/ in master YAML
+      ! Load scheme parameters from processes/dust/ginoux/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       ! Array parameter: Ch_DU
       block
          real(fp), allocatable :: temp_array(:)

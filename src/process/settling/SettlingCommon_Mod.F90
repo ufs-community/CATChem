@@ -415,23 +415,19 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/settling/gocart/ in master YAML
+      ! Load scheme parameters from processes/settling/gocart/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/settling/gocart/scale_factor", &
          this%gocart_config%scale_factor, rc, 1.0_fp)
-      if (rc /= CC_SUCCESS) this%gocart_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/settling/gocart/simple_scheme", &
          this%gocart_config%simple_scheme, rc, .false.)
-      if (rc /= CC_SUCCESS) this%gocart_config%simple_scheme = .false.
       call config_manager%get_integer("processes/settling/gocart/swelling_method", &
          this%gocart_config%swelling_method, rc, 1)
-      if (rc /= CC_SUCCESS) this%gocart_config%swelling_method = 1
       call config_manager%get_logical("processes/settling/gocart/correction_maring", &
          this%gocart_config%correction_maring, rc, .false.)
-      if (rc /= CC_SUCCESS) this%gocart_config%correction_maring = .false.
 
       call config_manager%get_logical("processes/settling/gocart/maring_dust_only", &
          this%gocart_config%maring_dust_only, rc, .true.)
-      if (rc /= CC_SUCCESS) this%gocart_config%maring_dust_only = .true.
 
 
    end subroutine load_gocart_config
