@@ -205,10 +205,8 @@ contains
       end if
 
       ! Calculate land fraction (TODO: I am using 1 - frlake - frsno, not following GOCART below)
-      ! fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frlake)) * &
-      !    max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
-
-      fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frsno - frlake))  ! my calculation
+      !fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frlake)) * max(0.0_fp, min(1.0_fp, 1.0_fp - frsno))
+      fracland = max(0.0_fp, min(1.0_fp, 1.0_fp - frsno - frlake))  ! my calculation is right; a bug is found in GOCART on this
 
       ! Compute vertical-to-horizontal mass flux ratio
       ! B.Marticorena, G.Bergametti, J.Geophys.Res., 1995

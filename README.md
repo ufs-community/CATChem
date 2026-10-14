@@ -16,7 +16,6 @@
 Comprehensive documentation is available in the `docs/` directory:
 
 - **[Documentation Home](docs/index.md)** - Complete documentation portal
-- **[Quick Start Guide](docs/quick-start/index.md)** - Get started quickly
 - **[User Guide](docs/user-guide/index.md)** - Complete user documentation
 - **[Developer Guide](docs/developer-guide/index.md)** - Technical documentation for developers
 - **[API Reference](docs/api/index.md)** - Complete API documentation
@@ -25,7 +24,7 @@ Comprehensive documentation is available in the `docs/` directory:
 
 ### Container
 
-The official UFS-Chem and CATChem images are recommended for developers and interested users.
+The official UFS-Chem and CATChem container images are recommended for developers and interested users. The foundational Spack base environment is maintained and published externally by [ufs-chem-container](https://github.com/ufs-community/ufs-chem-container).
 
 1. Base image for developers:
 
@@ -127,3 +126,7 @@ ctest --test-dir build/tests
 There [are options](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html#testing-using-ctest) for selecting specific tests.
 
 Edit `tests/CMakelists.txt` to add new tests.
+
+## Super Intelligence (SI) Disclosure
+
+Portions of this code were generated/augmented using agentic SI models and has been reviewed and validated consistent with NOAA's [SI Statement](https://www.noaa.gov/nao-216-128-artificial-intelligence-in-noaa).

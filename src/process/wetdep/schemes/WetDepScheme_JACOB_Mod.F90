@@ -359,9 +359,10 @@ contains
             if ( f > zero ) then
                if ( f_rainout > zero ) then
 
+                  ! rainout scales with the forming-precip fraction (f_rainout), not total f (bug fix)
                   call rainout(species_is_aerosol(species_idx), efficiency, species_wd_LiqAndGas(species_idx), &
                      species_henry_k0(species_idx), species_henry_cr(species_idx), species_henry_pKa(species_idx),              &
-                     species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f, k_rain, dt, t(k),  c_h2o(k),     &
+                     species_wd_convfacI2G(species_idx), species_wd_retfactor(species_idx), f_rainout, k_rain, dt, t(k),  c_h2o(k),     &
                      cldice(k), cldliq(k), species_short_name(species_idx), lossfrac, SO2(k), H2O2(k))
 
                   ! -- compute and apply effective loss fraction
@@ -390,7 +391,7 @@ contains
                      lossfrac = lossfrac * params%so4_washout_eff
                   end if
 
-                  ! -- compute and apply effective loss fraction
+                  ! -- compute and apply effective loss fraction (Note: gocart UFS version uses qq, not reevap here)
                   call washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap(k), &
                      delz_cm, dprecip, conc, dconc, species_short_name(species_idx), SO4, &
                      species_wd_reevap_frac(species_idx), params%so4_gocart_resusp )
