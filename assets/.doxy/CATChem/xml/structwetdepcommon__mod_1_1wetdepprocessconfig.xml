@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="111" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="111" bodyend="111"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="140" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="140" bodyend="140"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a463aeb21e10100c953757deb4fcf18f6" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="112" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="112" bodyend="112"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="141" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="141" bodyend="141"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a6db0adaa7c21cecbd124bd90ea0c3a08" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="113" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="113" bodyend="113"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="142" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="142" bodyend="142"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a07655526e5ff3fffc76242ad5b50ada7" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepconfig" kindref="compound">wetdepconfig</ref>)</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="116" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="116" bodyend="116"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="145" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="145" bodyend="145"/>
       </memberdef>
       <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a84b8876d5ee4ec3e0ad42ae62fb0e1dd" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" kindref="compound">wetdepschemejacobconfig</ref>)</type>
@@ -74,7 +74,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="119" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="119" bodyend="119"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="148" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="148" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="variable" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1147cab3c25e94595067ed23ded8dd3e" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig" kindref="compound">wetdepschemegocartconfig</ref>)</type>
+        <definition>type(wetdepschemegocartconfig) wetdepcommon_mod::wetdepprocessconfig::gocart_config</definition>
+        <argsstring></argsstring>
+        <name>gocart_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::gocart_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="149" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="149" bodyend="149"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -103,7 +117,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="122" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="122" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="153" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="153" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a4ab363817ecb73631214e0bd6372ccde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -130,7 +144,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="123" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="123" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="154" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="154" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1aba1f23b9ac6265e31048acd79f3fcd16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -157,7 +171,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="124" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="124" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="155" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="155" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1aed46f834f0fd8111a5b09bbb49a33a41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -176,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="125" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="125" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="156" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="156" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1adb7090a490a928166831fd7d409ab3b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -195,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="126" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="126" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="157" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="157" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1575e13d4623315c2d70a63723cbce12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -222,7 +236,34 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="127" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="127" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="158" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a08f4b50143f722fc5ad217f40bcc55b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, public</type>
+        <definition>procedure, public wetdepcommon_mod::wetdepprocessconfig::load_gocart_config</definition>
+        <argsstring>(this, config_manager, error_handler)</argsstring>
+        <name>load_gocart_config</name>
+        <qualifiedname>wetdepcommon_mod::wetdepprocessconfig::load_gocart_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structwetdepcommon__mod_1_1wetdepprocessconfig" kindref="compound">wetdepprocessconfig</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
+          <defname>config_manager</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>error_handler</defname>
+        </param>
+        <briefdescription>
+<para>Load gocart scheme configuration from master YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="159" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="159" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structwetdepcommon__mod_1_1wetdepprocessconfig_1a744fe334308e65c87855f40adfff225c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -245,7 +286,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="128" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="128" bodyend="-1"/>
+        <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="160" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="160" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -267,19 +308,28 @@
         <childnode refid="3" relation="usage">
           <edgelabel>jacob_config</edgelabel>
         </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>gocart_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>wetdepcommon_mod::wetdepschemegocartconfig</label>
+        <link refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig"/>
       </node>
       <node id="3">
         <label>wetdepcommon_mod::wetdepschemejacobconfig</label>
         <link refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig"/>
       </node>
     </collaborationgraph>
-    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="108" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="108" bodyend="129"/>
+    <location file="src/process/wetdep/WetDepCommon_Mod.F90" line="137" column="1" bodyfile="src/process/wetdep/WetDepCommon_Mod.F90" bodystart="137" bodyend="161"/>
     <listofallmembers>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1aed46f834f0fd8111a5b09bbb49a33a41" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>finalize</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1adb7090a490a928166831fd7d409ab3b2" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>get_active_scheme_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1147cab3c25e94595067ed23ded8dd3e" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>gocart_config</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a6db0adaa7c21cecbd124bd90ea0c3a08" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>is_active</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a84b8876d5ee4ec3e0ad42ae62fb0e1dd" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>jacob_config</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1ad2fc9948125693b880491bd2f34b3607" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_from_config</name></member>
+      <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a08f4b50143f722fc5ad217f40bcc55b3" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_gocart_config</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a1575e13d4623315c2d70a63723cbce12" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_jacob_config</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a4ab363817ecb73631214e0bd6372ccde" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>load_species_from_chem_state</name></member>
       <member refid="structwetdepcommon__mod_1_1wetdepprocessconfig_1a744fe334308e65c87855f40adfff225c" prot="public" virt="non-virtual"><scope>wetdepcommon_mod::wetdepprocessconfig</scope><name>map_diagnostic_species_indices</name></member>

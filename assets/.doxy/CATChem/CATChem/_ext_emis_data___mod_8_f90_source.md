@@ -117,6 +117,24 @@ MODULE extemisdata_mod
       LOGICAL                                   :: diurnal_bb = .false. 
       CHARACTER(LEN=16)                         :: apply_method = 'add'
       LOGICAL                                   :: needs_time_blend = .false. 
+      LOGICAL                                   :: daily_hold = .false. 
+      CHARACTER(LEN=16)                         :: monthly_anchor = 'mid_month'
+      ! Valid-times of the two records that bracket the current model time, used ONLY by the
+      ! multi-file monthly_anchor='file' path (one record per file, e.g. MEGAN_...._%m2.nc).
+      ! bt1 = lower/earlier record (current-month file), bt2 = upper/later record (next-month
+      ! file); each stored as (date=yyyymmdd, secs=second-of-day). blend_time interpolates by
+      ! these actual timestamps so the result does NOT depend on how the climatology is stored.
+      !   Example (MEGAN, month-start files, model time = Jan 20):
+      !     bt1_date=20210101 bt1_secs=0  (January file's record)
+      !     bt2_date=20210201 bt2_secs=0  (February file's record)
+      !     -> w_next = (Jan20 - Jan1)/(Feb1 - Jan1) = 19/31
+      ! Single-file climatologies leave bt_valid=.false. (their record times come straight from
+      ! the cached tc_dates/tc_secs inside catchem_emis_file_time_bracket instead).
+      INTEGER                                   :: bt1_date = 0
+      INTEGER                                   :: bt1_secs = 0
+      INTEGER                                   :: bt2_date = 0
+      INTEGER                                   :: bt2_secs = 0
+      LOGICAL                                   :: bt_valid = .false. 
 
    CONTAINS
       PROCEDURE :: init => extemicat_init

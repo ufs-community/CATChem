@@ -115,7 +115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="88" column="1" bodyfile="src/process/wetdep/WetDepProcessCreator_Mod.F90" bodystart="89" bodyend="112"/>
+        <location file="src/process/wetdep/WetDepProcessCreator_Mod.F90" line="88" column="1" bodyfile="src/process/wetdep/WetDepProcessCreator_Mod.F90" bodystart="89" bodyend="118"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

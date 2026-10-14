@@ -74,6 +74,7 @@ Here is a list of all namespaces with brief descriptions:
 * **namespace** [**virtualcolumn\_mod**](namespacevirtualcolumn__mod.md)     
 * **namespace** [**wetdepcommon\_mod**](namespacewetdepcommon__mod.md)     
 * **namespace** [**wetdepprocesscreator\_mod**](namespacewetdepprocesscreator__mod.md)     
+* **namespace** [**wetdepscheme\_gocart\_mod**](namespacewetdepscheme__gocart__mod.md)     
 * **namespace** [**wetdepscheme\_jacob\_mod**](namespacewetdepscheme__jacob__mod.md)     
 * **namespace** [**yaml\_interface\_mod**](namespaceyaml__interface__mod.md)     
 

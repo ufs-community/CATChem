@@ -489,13 +489,12 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/seasalt/gong97/ in master YAML
+      ! Load scheme parameters from processes/seasalt/gong97/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/seasalt/gong97/scale_factor", &
          this%gong97_config%scale_factor, rc, 1.0_fp)
-      if (rc /= cc_success) this%gong97_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/gong97/weibull_flag", &
          this%gong97_config%weibull_flag, rc, .false.)
-      if (rc /= cc_success) this%gong97_config%weibull_flag = .false.
 
 
    end subroutine load_gong97_config
@@ -507,13 +506,12 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/seasalt/gong03/ in master YAML
+      ! Load scheme parameters from processes/seasalt/gong03/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/seasalt/gong03/scale_factor", &
          this%gong03_config%scale_factor, rc, 1.0_fp)
-      if (rc /= cc_success) this%gong03_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/gong03/weibull_flag", &
          this%gong03_config%weibull_flag, rc, .false.)
-      if (rc /= cc_success) this%gong03_config%weibull_flag = .false.
 
 
    end subroutine load_gong03_config
@@ -525,13 +523,12 @@ contains
 
       integer :: rc
 
-      ! Load scheme parameters directly from processes/seasalt/geos12/ in master YAML
+      ! Load scheme parameters from processes/seasalt/geos12/ in master YAML;
+      ! get_<type> applies the 4th-argument default when a key is absent or unparsable.
       call config_manager%get_real("processes/seasalt/geos12/scale_factor", &
          this%geos12_config%scale_factor, rc, 1.0_fp)
-      if (rc /= cc_success) this%geos12_config%scale_factor = 1.0_fp
       call config_manager%get_logical("processes/seasalt/geos12/weibull_flag", &
          this%geos12_config%weibull_flag, rc, .false.)
-      if (rc /= cc_success) this%geos12_config%weibull_flag = .false.
 
 
    end subroutine load_geos12_config

@@ -681,6 +681,7 @@ contains
             species_radius, &
             species_is_dust, &
             species_is_seasalt, &
+            this%process_config%drydep_config%species_names, &
             species_conc, &
             species_tendencies, &
             this%process_config%drydep_config%is_gas, &
@@ -710,6 +711,7 @@ contains
             species_radius, &
             species_is_dust, &
             species_is_seasalt, &
+            this%process_config%drydep_config%species_names, &
             species_conc, &
             species_tendencies, &
             this%process_config%drydep_config%is_gas &

@@ -138,6 +138,21 @@
         </inbodydescription>
         <location file="src/process/drydep/DryDepCommon_Mod.F90" line="97" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="97" bodyend="97"/>
       </memberdef>
+      <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a6a44d0fddfebab1b98a82a0c6773fe29" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical drydepcommon_mod::drydepschemeweselyconfig::skip_so2</definition>
+        <argsstring></argsstring>
+        <name>skip_so2</name>
+        <qualifiedname>drydepcommon_mod::drydepschemeweselyconfig::skip_so2</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="98" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="98" bodyend="98"/>
+      </memberdef>
       <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa70c4edc9a7b646974fc709635596e19" prot="public" static="no" mutable="no">
         <type>integer</type>
         <definition>integer drydepcommon_mod::drydepschemeweselyconfig::n_required_met_fields</definition>
@@ -151,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="100" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="100" bodyend="100"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="101" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="101" bodyend="101"/>
       </memberdef>
       <memberdef kind="variable" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a3b5d92d16592839c9027f138942bab8a" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(21)</type>
@@ -165,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="101" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="101" bodyend="101"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="102" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="102" bodyend="102"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -190,7 +205,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="104" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="105" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a0f079d6e62e4900166a7f2cd6d7782bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, public</type>
@@ -209,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="105" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="105" bodyend="-1"/>
+        <location file="src/process/drydep/DryDepCommon_Mod.F90" line="106" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="106" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -217,7 +232,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="82" bodyend="106"/>
+    <location file="src/process/drydep/DryDepCommon_Mod.F90" line="82" column="1" bodyfile="src/process/drydep/DryDepCommon_Mod.F90" bodystart="82" bodyend="107"/>
     <listofallmembers>
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1ae449ddbcd91616f8304d3b149f105730" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>affects_full_column</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a052c513c897b7ccb93a9480e1b4d21b7" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>algorithm_type</name></member>
@@ -231,6 +246,7 @@
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a3b5d92d16592839c9027f138942bab8a" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>required_met_fields</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a2ccd3bcd6752a9dee6e97f7419c1516d" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>scale_factor</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a8905a2c3278cc2fe3ea5bf974d84bd05" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>scheme_name</name></member>
+      <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1a6a44d0fddfebab1b98a82a0c6773fe29" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>skip_so2</name></member>
       <member refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig_1aa0a1bee6a1c2e0e0ecc726a4c933e875" prot="public" virt="non-virtual"><scope>drydepcommon_mod::drydepschemeweselyconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>

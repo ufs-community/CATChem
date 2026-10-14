@@ -22,7 +22,6 @@ module processwetdepinterface_mod
    use diagnosticmanager_mod, only: diagnosticmanagertype
    use diagnosticinterface_mod, only: diagnosticregistrytype, diagnosticfieldtype, diagnosticdatatype
    use virtualcolumn_mod, only: virtualcolumntype, virtualmettype
-   use constants, only: g0, airmw  ! Gravitational acceleration for tendency physics and air molecular weight for unit conversion
 
    ! Core utilities (leverage existing infrastructure)
    use configmanager_mod, only: configmanagertype
@@ -34,6 +33,7 @@ module processwetdepinterface_mod
 
    ! Scheme modules
    use wetdepscheme_jacob_mod, only: compute_jacob
+   use wetdepscheme_gocart_mod, only: compute_gocart
 
    implicit none
    private
@@ -86,6 +86,7 @@ module processwetdepinterface_mod
       ! Process-specific implementations (column virtualization)
       procedure, private :: run_active_scheme_column
       procedure, private :: run_jacob_scheme_column
+      procedure, private :: run_gocart_scheme_column
 
       ! Diagnostic procedures (override base class method)
       procedure :: register_diagnostics => register_and_allocate_diagnostics
@@ -137,6 +138,7 @@ contains
       ! Validate the configuration with StateManager
       call this%process_config%validate(container, error_manager)
       ! Note: validate doesn't return rc, but error_manager tracks errors
+
 
       ! Register diagnostics for this process (only if diagnostics enabled)
       call this%register_diagnostics(container, rc)
@@ -282,8 +284,10 @@ contains
       select case (trim(this%process_config%wetdep_config%scheme))
        case ('jacob')
          call this%run_jacob_scheme_column(column, rc)
+       case ('gocart')
+         call this%run_gocart_scheme_column(column, rc)
        case default
-         call cc_error('Unknown wetdep scheme "' // &
+         call cc_error('Unknown wetdep scheme: ' // &
             trim(this%process_config%wetdep_config%scheme), rc, &
             thisloc='run_active_scheme_column (in module ProcessWetDepInterface_Mod.F90)')
       end select
@@ -488,6 +492,204 @@ contains
 
    end subroutine run_jacob_scheme_column
 
+   subroutine run_gocart_scheme_column(this, column, rc)
+      class(ProcessWetDepInterface), intent(inout) :: this
+      type(VirtualColumnType), intent(inout) :: column
+      integer, intent(out) :: rc
+
+      ! Local variables for scheme calculation
+      type(VirtualMetType), pointer :: met => null()  ! Pointer to meteorological data
+      ! Meteorological fields
+      real(fp), allocatable :: mairden(:)
+      real(fp), allocatable :: pedge(:)
+      real(fp), allocatable :: pfilsan(:)
+      real(fp), allocatable :: pfllsan(:)
+      real(fp), allocatable :: preccon(:)
+      real(fp), allocatable :: preclsc(:)
+      real(fp), allocatable :: t(:)
+      real(fp), allocatable :: tstep(:)
+      ! Species properties
+      logical, allocatable :: species_is_aerosol(:)
+      real(fp), allocatable :: species_henry_cr(:)
+      real(fp), allocatable :: species_henry_k0(:)
+      real(fp), allocatable :: species_henry_pKa(:)
+      real(fp), allocatable :: species_wd_retfactor(:)
+      logical, allocatable :: species_wd_LiqAndGas(:)
+      real(fp), allocatable :: species_wd_convfacI2G(:)
+      real(fp), allocatable :: species_wd_rainouteff(:,:)
+      real(fp), allocatable :: species_wd_reevap_frac(:)
+      real(fp), allocatable :: species_radius(:)
+      real(fp), allocatable :: species_mw_g(:)
+      real(fp), allocatable :: species_conc(:,:)
+      real(fp), allocatable :: species_tendencies(:,:)
+      integer :: n_species, n_levels, n_chem, n_emis, i, k
+      integer, allocatable :: species_indices(:)
+
+      rc = cc_success
+
+      ! Get dimensions from virtual column
+      call column%get_dimensions(n_levels, n_chem, n_emis)  ! Full column processing
+
+      ! Get wetdep species information from process configuration
+      n_species = this%process_config%wetdep_config%n_species
+      if (n_species <= 0) then
+         return
+      end if
+
+      ! Get species indices directly from configuration (pre-computed)
+      allocate(species_indices(n_species))
+      species_indices(1:n_species) = this%process_config%wetdep_config%species_indices(1:n_species)
+
+      ! Allocate arrays
+      allocate(species_conc(n_levels, n_species))
+      allocate(species_tendencies(n_levels, n_species))
+      ! Allocate meteorological field arrays based on field type and process configuration
+      allocate(mairden(n_levels))  ! Atmospheric field - always n_levels
+      allocate(pedge(n_levels+1))  ! Edge field - always n_levels+1
+      allocate(pfilsan(n_levels+1))  ! Edge field - always n_levels+1
+      allocate(pfllsan(n_levels+1))  ! Edge field - always n_levels+1
+      allocate(preccon(1))  ! Surface field - always scalar
+      allocate(preclsc(1))  ! Surface field - always scalar
+      allocate(t(n_levels))  ! Atmospheric field - always n_levels
+      allocate(tstep(1))  ! Special timestep field - scalar
+      allocate(species_is_aerosol(n_species))
+      allocate(species_henry_cr(n_species))
+      allocate(species_henry_k0(n_species))
+      allocate(species_henry_pka(n_species))
+      allocate(species_wd_retfactor(n_species))
+      allocate(species_wd_liqandgas(n_species))
+      allocate(species_wd_convfaci2g(n_species))
+      allocate(species_wd_rainouteff(n_species, 3))
+      allocate(species_wd_reevap_frac(n_species))
+      allocate(species_radius(n_species))
+      allocate(species_mw_g(n_species))
+      species_tendencies = 0.0_fp
+
+      ! Get meteorological data pointer from virtual column (VirtualMet pattern)
+      met => column%get_met()
+
+      ! Now allocate categorical fields using the met pointer dimensions
+
+      ! Extract required fields from met pointer based on field type and processing mode
+      mairden(1:n_levels) = met%MAIRDEN(1:n_levels)  ! Atmospheric field - always n_levels
+      pedge(1:n_levels+1) = met%PEDGE(1:n_levels+1)  ! Edge field - always n_levels+1
+      pfilsan(1:n_levels+1) = met%PFILSAN(1:n_levels+1)  ! Edge field - always n_levels+1
+      pfllsan(1:n_levels+1) = met%PFLLSAN(1:n_levels+1)  ! Edge field - always n_levels+1
+      preccon(1) = met%PRECCON  ! Surface field - scalar access
+      preclsc(1) = met%PRECLSC  ! Surface field - scalar access
+      t(1:n_levels) = met%T(1:n_levels)  ! Atmospheric field - always n_levels
+      tstep(1) = this%get_timestep()  ! Special timestep field - retrieved from ProcessInterface
+
+      ! Get species concentrations from virtual column
+      ! Full column processing - get concentrations for all levels
+      do k = 1, n_levels
+         do i = 1, n_species
+            species_conc(k, i) = column%get_chem_field(species_indices(i), k)
+         end do
+      end do
+
+      ! Get species properties from configuration (pre-loaded during initialization)
+      ! Use species properties from process configuration
+      species_is_aerosol(1:n_species) = this%process_config%wetdep_config%species_is_aerosol(1:n_species)
+      ! Use species properties from process configuration
+      species_henry_cr(1:n_species) = this%process_config%wetdep_config%species_henry_cr(1:n_species)
+      ! Use species properties from process configuration
+      species_henry_k0(1:n_species) = this%process_config%wetdep_config%species_henry_k0(1:n_species)
+      ! Use species properties from process configuration
+      species_henry_pka(1:n_species) = this%process_config%wetdep_config%species_henry_pKa(1:n_species)
+      ! Use species properties from process configuration
+      species_wd_retfactor(1:n_species) = this%process_config%wetdep_config%species_wd_retfactor(1:n_species)
+      ! Use species properties from process configuration
+      species_wd_liqandgas(1:n_species) = this%process_config%wetdep_config%species_wd_LiqAndGas(1:n_species)
+      ! Use species properties from process configuration
+      species_wd_convfaci2g(1:n_species) = this%process_config%wetdep_config%species_wd_convfacI2G(1:n_species)
+      ! Use species properties from process configuration
+      species_wd_rainouteff(1:n_species, :) = this%process_config%wetdep_config%species_wd_rainouteff(1:n_species, :)
+      ! Use species properties from process configuration
+      species_wd_reevap_frac(1:n_species) = this%process_config%wetdep_config%species_wd_reevap_frac(1:n_species)
+      ! Use species properties from process configuration
+      species_radius(1:n_species) = this%process_config%wetdep_config%species_radius(1:n_species)
+      ! Use species properties from process configuration
+      species_mw_g(1:n_species) = this%process_config%wetdep_config%species_mw_g(1:n_species)
+
+      ! Call the science scheme with optional diagnostic parameters
+      ! Note: gocart uses the following diagnostic fields (if diagnostics enabled):
+      ! - wetdep_mass_per_species_per_level (Wet deposition mass loss per species per level)
+      ! - wetdep_flux_per_species_per_level (Wet deposition flux per species per level)
+      if (this%process_config%wetdep_config%diagnostics) then
+         ! Call with diagnostic outputs enabled
+         call compute_gocart( &
+            n_levels, &
+            n_species, &
+            this%process_config%gocart_config, &
+            mairden, &
+            pedge, &
+            pfilsan, &
+            pfllsan, &
+            preccon(1), &
+            preclsc(1), &
+            t, &
+            tstep(1)            , &
+            species_is_aerosol, &
+            this%process_config%wetdep_config%species_names, &
+            species_henry_cr, &
+            species_henry_k0, &
+            species_henry_pka, &
+            species_wd_retfactor, &
+            species_wd_liqandgas, &
+            species_wd_convfaci2g, &
+            species_wd_rainouteff, &
+            species_wd_reevap_frac, &
+            species_radius, &
+            species_mw_g, &
+            species_conc, &
+            species_tendencies, &
+            this%column_wetdep_mass_per_species_per_level, &
+            this%column_wetdep_flux_per_species_per_level, &
+            this%process_config%wetdep_config%diagnostic_species_id         )
+      else
+         ! Call without diagnostic outputs (optional parameters not passed)
+         call compute_gocart( &
+            n_levels, &
+            n_species, &
+            this%process_config%gocart_config, &
+            mairden, &
+            pedge, &
+            pfilsan, &
+            pfllsan, &
+            preccon(1), &
+            preclsc(1), &
+            t, &
+            tstep(1)            , &
+            species_is_aerosol, &
+            this%process_config%wetdep_config%species_names, &
+            species_henry_cr, &
+            species_henry_k0, &
+            species_henry_pka, &
+            species_wd_retfactor, &
+            species_wd_liqandgas, &
+            species_wd_convfaci2g, &
+            species_wd_rainouteff, &
+            species_wd_reevap_frac, &
+            species_radius, &
+            species_mw_g, &
+            species_conc, &
+            species_tendencies &
+            )
+      end if
+
+      ! Apply tendencies back to virtual column based on tendency_mode
+      ! Full column processing - apply tendencies to all levels
+      do k = 1, n_levels
+         do i = 1, n_species
+            ! Replacement tendency: new_conc = tendency (tendency is the new value)
+            call column%set_chem_field(k, species_indices(i), &
+               species_tendencies(k, i))
+         end do
+      end do
+
+   end subroutine run_gocart_scheme_column
+
 
 
    subroutine get_required_met_fields(this, field_names)
@@ -516,6 +718,17 @@ contains
          scheme_fields(6) = 'PFILSAN'
          scheme_fields(7) = 'PEDGE'
          scheme_fields(8) = 'REEVAPLS'
+       case ('gocart')
+         scheme_count = 8
+         allocate(scheme_fields(scheme_count))
+         scheme_fields(1) = 'T'
+         scheme_fields(2) = 'TSTEP'
+         scheme_fields(3) = 'MAIRDEN'
+         scheme_fields(4) = 'PEDGE'
+         scheme_fields(5) = 'PFLLSAN'
+         scheme_fields(6) = 'PFILSAN'
+         scheme_fields(7) = 'PRECCON'
+         scheme_fields(8) = 'PRECLSC'
        case default
          scheme_count = 0
          allocate(scheme_fields(0))
@@ -571,7 +784,7 @@ contains
 
 
    subroutine register_and_allocate_diagnostics(this, container, rc)
-      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_3d
+      use diagnosticinterface_mod, only: diagnosticregistrytype, diag_real_2d, diag_real_3d
 
       class(ProcessWetDepInterface), intent(inout) :: this
       type(StateManagerType), intent(inout) :: container
@@ -647,6 +860,8 @@ contains
 
        case ('jacob')
          ! Register jacob-specific diagnostics
+       case ('gocart')
+         ! Register gocart-specific diagnostics
        case default
          ! Unknown scheme - only register common diagnostics
          ! (already done above)
@@ -677,6 +892,8 @@ contains
       select case (trim(this%process_config%wetdep_config%scheme))
        case ('jacob')
          ! Scheme-specific diagnostics for jacob
+       case ('gocart')
+         ! Scheme-specific diagnostics for gocart
        case default
          ! No scheme-specific diagnostics for unknown schemes
       end select
@@ -728,6 +945,8 @@ contains
       select case (trim(this%process_config%wetdep_config%scheme))
        case ("jacob")
          ! Scheme-specific diagnostics for jacob
+       case ("gocart")
+         ! Scheme-specific diagnostics for gocart
       end select
 
    end subroutine calculate_and_update_diagnostics

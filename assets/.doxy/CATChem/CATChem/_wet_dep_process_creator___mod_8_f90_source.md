@@ -85,6 +85,12 @@ contains
          '    parameters:' // new_line('A') // &
          '      scale_factor: 1.0' // new_line('A') // &
          '' // new_line('A') // &
+         '  gocart:' // new_line('A') // &
+         '    description: "GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species"' // new_line('A') // &
+         '    algorithm_type: "explicit"' // new_line('A') // &
+         '    parameters:' // new_line('A') // &
+         '      scale_factor: 1.0' // new_line('A') // &
+         '' // new_line('A') // &
          '# Diagnostic configuration' // new_line('A') // &
          'diagnostics:' // new_line('A') // &
          '  output_frequency: 3600.0  # seconds' // new_line('A') // &

@@ -92,5 +92,6 @@ Here is a list of all files with brief descriptions:
             * **file** [**WetDepCommon\_Mod.F90**](_wet_dep_common___mod_8_f90.md) _Common types and utilities for wetdep process._     
             * **file** [**WetDepProcessCreator\_Mod.F90**](_wet_dep_process_creator___mod_8_f90.md) _Factory for creating wetdep process instances._     
             * **dir** [**schemes**](dir_8ca87c5e2f5cf830ab1a41055168a46b.md)     
+                * **file** [**WetDepScheme\_GOCART\_Mod.F90**](_wet_dep_scheme___g_o_c_a_r_t___mod_8_f90.md) _GOCART2G wet removal scheme: SU\_Wet\_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species._     
                 * **file** [**WetDepScheme\_JACOB\_Mod.F90**](_wet_dep_scheme___j_a_c_o_b___mod_8_f90.md) _Jacob et al._     
 

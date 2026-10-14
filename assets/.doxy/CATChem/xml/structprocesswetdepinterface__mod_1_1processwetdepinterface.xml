@@ -443,7 +443,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="102" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="102" bodyend="-1"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="103" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="103" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -502,6 +502,33 @@
         </inbodydescription>
         <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="99" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="99" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="function" id="structprocesswetdepinterface__mod_1_1processwetdepinterface_1afd27c539b14a79206e1afd56380335c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private processwetdepinterface_mod::processwetdepinterface::run_gocart_scheme_column</definition>
+        <argsstring>(this, column, rc)</argsstring>
+        <name>run_gocart_scheme_column</name>
+        <qualifiedname>processwetdepinterface_mod::processwetdepinterface::run_gocart_scheme_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocesswetdepinterface__mod_1_1processwetdepinterface" kindref="compound">processwetdepinterface</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(inout)</type>
+          <defname>column</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run the gocart scheme for a single virtual column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="100" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="function" id="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a355e35da1608ba2e0446ea020d18e1f5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
         <definition>procedure, private processwetdepinterface_mod::processwetdepinterface::register_and_allocate_diagnostics</definition>
@@ -527,7 +554,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="103" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="103" bodyend="-1"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="104" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="function" id="structprocesswetdepinterface__mod_1_1processwetdepinterface_1aa0eb1011e564f32fcd055f18371ae97a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>procedure, private</type>
@@ -559,7 +586,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="104" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="104" bodyend="-1"/>
+        <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="105" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="105" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -587,30 +614,30 @@
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="7">
+      <node id="8">
         <label>chemstate_mod::chemstatetype</label>
         <link refid="structchemstate__mod_1_1chemstatetype"/>
-        <childnode refid="8" relation="usage">
+        <childnode refid="9" relation="usage">
           <edgelabel>miedata</edgelabel>
         </childnode>
-        <childnode refid="9" relation="usage">
+        <childnode refid="10" relation="usage">
           <edgelabel>chemspecies</edgelabel>
         </childnode>
-        <childnode refid="10" relation="usage">
+        <childnode refid="11" relation="usage">
           <edgelabel>grid</edgelabel>
         </childnode>
       </node>
-      <node id="8">
+      <node id="9">
         <label>gocart2g_mie</label>
       </node>
-      <node id="10">
+      <node id="11">
         <label>gridgeometry_mod::gridgeometrytype</label>
         <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
       </node>
-      <node id="11">
+      <node id="12">
         <label>metstate_mod::metstatetype</label>
         <link refid="structmetstate__mod_1_1metstatetype"/>
-        <childnode refid="10" relation="usage">
+        <childnode refid="11" relation="usage">
           <edgelabel>geometry</edgelabel>
         </childnode>
       </node>
@@ -632,14 +659,14 @@
         <childnode refid="4" relation="usage">
           <edgelabel>process_config</edgelabel>
         </childnode>
-        <childnode refid="7" relation="usage">
+        <childnode refid="8" relation="usage">
           <edgelabel>chem_state</edgelabel>
         </childnode>
-        <childnode refid="11" relation="usage">
+        <childnode refid="12" relation="usage">
           <edgelabel>met_state</edgelabel>
         </childnode>
       </node>
-      <node id="9">
+      <node id="10">
         <label>species_mod::speciestype</label>
         <link refid="structspecies__mod_1_1speciestype"/>
       </node>
@@ -656,13 +683,20 @@
         <childnode refid="6" relation="usage">
           <edgelabel>jacob_config</edgelabel>
         </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>gocart_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>wetdepcommon_mod::wetdepschemegocartconfig</label>
+        <link refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig"/>
       </node>
       <node id="6">
         <label>wetdepcommon_mod::wetdepschemejacobconfig</label>
         <link refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig"/>
       </node>
     </collaborationgraph>
-    <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="54" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="54" bodyend="106"/>
+    <location file="src/process/wetdep/ProcessWetDepInterface_Mod.F90" line="54" column="1" bodyfile="src/process/wetdep/ProcessWetDepInterface_Mod.F90" bodystart="54" bodyend="107"/>
     <listofallmembers>
       <member refid="structprocessinterface__mod_1_1processinterface_1ac012235d81d2353ee4871a2bcd9f164b" prot="public" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>accumulate_emissions</name></member>
       <member refid="structprocessinterface__mod_1_1processinterface_1a709e4f799a18708dff965919e7af0339" prot="public" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>activate</name></member>
@@ -720,6 +754,7 @@
       <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a05c67a85a4aa927ff685b87d90d6c820" prot="private" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>run_active_scheme_column</name></member>
       <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a9b665225eae72552bc898604c3a77ef8" prot="public" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>run_column</name></member>
       <member refid="structprocessinterface__mod_1_1columnprocessinterface_1a1d4326a7c6f7f53476ae1f522cca2976" prot="public" virt="pure-virtual" ambiguityscope="processinterface_mod::columnprocessinterface::"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>run_column</name></member>
+      <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1afd27c539b14a79206e1afd56380335c9" prot="private" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>run_gocart_scheme_column</name></member>
       <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1a4a7d29e481d97285064a9c91d77e9408" prot="private" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>run_jacob_scheme_column</name></member>
       <member refid="structprocessinterface__mod_1_1columnprocessinterface_1ae1bcaf8d46ea1edc26d5bcc089638339" prot="public" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>set_column_batch_size</name></member>
       <member refid="structprocesswetdepinterface__mod_1_1processwetdepinterface_1aa31dcbc46dbca55443f328ba6205bf34" prot="public" virt="non-virtual"><scope>processwetdepinterface_mod::processwetdepinterface</scope><name>set_scheme</name></member>

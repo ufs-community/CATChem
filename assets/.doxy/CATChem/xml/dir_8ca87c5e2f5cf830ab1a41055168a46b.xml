@@ -2,6 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="dir_8ca87c5e2f5cf830ab1a41055168a46b" kind="dir">
     <compoundname>src/process/wetdep/schemes</compoundname>
+    <innerfile refid="_wet_dep_scheme___g_o_c_a_r_t___mod_8_f90">WetDepScheme_GOCART_Mod.F90</innerfile>
     <innerfile refid="_wet_dep_scheme___j_a_c_o_b___mod_8_f90">WetDepScheme_JACOB_Mod.F90</innerfile>
     <briefdescription>
     </briefdescription>
