@@ -1,0 +1,7 @@
+runSequence: |
+  @600
+    DataATM
+    DataATM -> CATChem
+    CATChem
+    CATChem -> DataATM
+  @

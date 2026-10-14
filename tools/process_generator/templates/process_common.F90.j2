@@ -10,9 +10,9 @@
 
 module {{ config.class_name }}Common_Mod
 
-   use precision_mod, only: fp
-   ! use precision_mod, only: fp
-   use error_mod, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
+   use catchem_bridge_precision, only: fp
+   ! use catchem_bridge_precision, only: fp
+   use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE, CC_Error, CC_Warning, ErrorManagerType, &
                         ERROR_INVALID_CONFIG, ERROR_INVALID_STATE, ERROR_NOT_FOUND
 {% if config.process_behavior and config.process_behavior.species_filter and config.process_behavior.species_filter.type == "emission_mapping" %}
    use ConfigManager_Mod, only: ConfigManagerType, EmissionCategoryMapping  ! ConfigManager integration with emission mapping

@@ -23,7 +23,7 @@
 
 module {{ config.class_name }}Scheme_{{ scheme.class_name }}_Mod
 
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    use {{ config.class_name }}Common_Mod, only: {{ config.class_name }}Scheme{{ scheme.class_name }}Config
 {% if scheme.required_species_properties and 'mie_map' in scheme.required_species_properties %}
    use GOCART2G_MieMod, only: GOCART2G_Mie  ! For Mie data in {{ scheme.name }} scheme

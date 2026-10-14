@@ -26,14 +26,27 @@ add_dependencies(catchem_standalone_driver cc_nuopc)
 # cc_nuopc pulls in the CATChem core/process archives by raw file path
 # ($<TARGET_FILE:...>), which deliberately hides them from CMake's dependency
 # graph so the exported cc_nuopc target doesn't drag in the non-exported
-# yaml-cpp. That raw-path trick also drops yaml_interface's transitive yaml-cpp
-# dependency AND the fact that it is C++. By linking yaml_interface here as a
-# real CMake target, CMake restores both usage requirements automatically: it
-# pulls in yaml-cpp and, seeing a C++ library in the link closure, adds the C++
-# standard library to the final (Fortran) link. No library names are hardcoded.
+# yaml-cpp. That raw-path trick also drops the C++ core's transitive yaml-cpp
+# dependency AND the fact that it is C++. By linking yaml-cpp here as a real
+# CMake target, CMake restores both usage requirements automatically: it pulls
+# in the yaml-cpp symbols and, seeing a C++ library in the link closure, adds
+# the C++ standard library to the final (Fortran) link. No library names are
+# hardcoded.
+#
+# MPI::MPI_C is listed after the ESMF target on purpose. cc_nuopc only carries
+# the Fortran MPI usage requirements, which place libmpi.so ahead of the static
+# libesmf.a on the link line; libesmf.a has undefined references to the C MPI
+# symbols (e.g. MPI_Type_indexed) that a left-to-right link order would then
+# miss ("DSO missing from command line"). Naming the C MPI target after ESMF
+# re-adds libmpi.so in a position that satisfies those references.
 target_link_libraries(
   catchem_standalone_driver
-  PUBLIC cc_nuopc yaml_interface ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran
+  PUBLIC
+    cc_nuopc
+    yaml-cpp::yaml-cpp
+    ${CATCHEM_ESMF_TARGET}
+    NetCDF::NetCDF_Fortran
+    MPI::MPI_C
 )
 
 # cc_nuopc writes its Fortran modules to <repo>/mod; CATChem core modules go

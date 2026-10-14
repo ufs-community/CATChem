@@ -1,0 +1,24 @@
+# Minimal mechanism fixture for the MUSICA integration tests
+# (tests/test_catchem_photolysis.cpp, tests/test_catchem_gaschem.cpp).
+# The species mirror the solved chapman v0 species (M is a third-body
+# catalyst and is excluded from the MICM variable map, so it is not tracked
+# here); every CATChem species maps into the MICM variable map, and the
+# photolysis.ozone role satisfies the execution-plan contract requirement
+# declared by the photolysis process.
+- name: o2
+  __description: Molecular oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.03200
+- name: o
+  __description: Atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o1d
+  __description: Excited atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o3
+  __description: Ozone
+  __is_gas: true
+  roles: [photolysis.ozone]
+  molecular weight [kg mol-1]: 0.04800

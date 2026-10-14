@@ -22,7 +22,7 @@
 !! Reference: GOCART2G process library carbonChemLoss function
 module CarbChemScheme_GOCART_Mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use CarbChemCommon_Mod, only: CarbChemSchemeGOCARTConfig
    use GOCART2G_Process, only: carbonChemLoss, phobicToPhilic, Chem_UtilIdow, Chem_UtilCdow
 

@@ -1,0 +1,23 @@
+simulation:
+  name: emission-file-monthly-anchor
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 2
+grid:
+  number_of_levels: 3
+  number_of_soil_layers: 2
+diagnostics:
+  output:
+    enabled: false
+run_phases: {}
+processes:
+  extemis:
+    activate: true
+    anthro1:
+      activate: true
+      frequency: 'monthly'
+      time_interpolation: linear
+      monthly_anchor: file
