@@ -11,7 +11,10 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Cancel stale runs only for pull requests. Pushes to main/develop queue instead:
+  # PSR's release-commit push lands in this same group while the release run is
+  # still publishing, and cancelling it would abort docker-release and docs.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: write
