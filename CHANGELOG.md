@@ -2,6 +2,20 @@
 
 <!-- version list -->
 
+## v2.1.0-rc.4 (2026-10-14)
+
+### Bug Fixes
+
+- Harden against rogue ci skips ([#208](https://github.com/ufs-community/CATChem/pull/208),
+  [`05215e4`](https://github.com/ufs-community/CATChem/commit/05215e4b0c08c7d6689afccae2f912b47cf089af))
+
+### Features
+
+- Initial integration with `ufs-chem-container`
+  ([#204](https://github.com/ufs-community/CATChem/pull/204),
+  [`d72f5aa`](https://github.com/ufs-community/CATChem/commit/d72f5aa1d77afd6ba3fae4d381d3ac9143779ecc))
+
+
 ## v2.1.0-rc.3 (2026-09-23)
 
 ### Bug Fixes
