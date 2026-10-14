@@ -41,6 +41,41 @@ workstreams:
   the retained additive form `max(0, min(1, 1 - frsno - frlake))` clamps there.
   A regression assertion in `tests/test_catchem_dust.cpp` enforces this.
 
+
+## v2.1.0-rc.5 (2026-10-14)
+
+### Continuous Integration
+
+- **fix**: Concurrency settings for pushes
+  ([#209](https://github.com/ufs-community/CATChem/pull/209),
+  [`5aa949e`](https://github.com/ufs-community/CATChem/commit/5aa949eced990720508585237422768b52f01952))
+
+### Documentation
+
+- Add SI disclosure statement ([#205](https://github.com/ufs-community/CATChem/pull/205),
+  [`0fed95c`](https://github.com/ufs-community/CATChem/commit/0fed95ce9acdf7c8df6eba95b5fb2bc9b32e4ecb))
+
+### Features
+
+- Add new wetdep scheme for GCAFS reproduction
+  ([#206](https://github.com/ufs-community/CATChem/pull/206),
+  [`f7e9ac0`](https://github.com/ufs-community/CATChem/commit/f7e9ac0597308c2ce3a68c70ac8cac528b1ef75e))
+
+
+## v2.1.0-rc.4 (2026-10-14)
+
+### Bug Fixes
+
+- Harden against rogue ci skips ([#208](https://github.com/ufs-community/CATChem/pull/208),
+  [`05215e4`](https://github.com/ufs-community/CATChem/commit/05215e4b0c08c7d6689afccae2f912b47cf089af))
+
+### Features
+
+- Initial integration with `ufs-chem-container`
+  ([#204](https://github.com/ufs-community/CATChem/pull/204),
+  [`d72f5aa`](https://github.com/ufs-community/CATChem/commit/d72f5aa1d77afd6ba3fae4d381d3ac9143779ecc))
+
+
 ## v2.1.0-rc.3 (2026-09-23)
 
 ### Bug Fixes

@@ -43,14 +43,9 @@ def run_git(args: list[str], check: bool = True, input: str | None = None) -> su
     return subprocess.run(cmd, capture_output=True, text=True, check=check, input=input)
 
 
-def squash_message(target: str, pr_title: str, pr_number: str) -> str:
-    """Emulate GitHub's default squash-merge message: '<title> (#N)' plus one bullet per squashed commit."""
-    subject = f"{pr_title} (#{pr_number})" if pr_number else pr_title
-    log = run_git(["log", "--reverse", "--no-merges", "--format=%B%x00", f"origin/{target}..pr-source-ref"]).stdout
-    bodies = [m.strip() for m in log.split("\x00") if m.strip()]
-    if not bodies:
-        return subject + "\n"
-    return subject + "\n\n" + "\n\n".join(f"* {m}" for m in bodies) + "\n"
+def squash_message(pr_title: str, pr_number: str) -> str:
+    """Emulate the squash commit GitHub writes with the "Pull request title" setting: title only."""
+    return (f"{pr_title} (#{pr_number})" if pr_number else pr_title) + "\n"
 
 
 def prepare_preview(target: str, pr_title: str, strategy: str = "merge", pr_number: str = "") -> None:
@@ -93,7 +88,7 @@ def prepare_preview(target: str, pr_title: str, strategy: str = "merge", pr_numb
     if run_git(["merge", "--squash", "pr-source-ref"], check=False).returncode != 0:
         logger.warning("Squash merge encountered conflicts; aborting merge.")
         run_git(["merge", "--abort"], check=False)
-    message = squash_message(target, pr_title, pr_number)
+    message = squash_message(pr_title, pr_number)
     logger.info("Applying synthetic squash commit:\n%s", message)
     run_git(["commit", "--allow-empty", "-F", "-"], input=message)
 

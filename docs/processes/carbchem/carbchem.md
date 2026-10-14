@@ -25,10 +25,10 @@ The CarbChem process implements Process for computing chemical production and lo
 
 #### Required Meteorological Fields
 
-- `DELP` - Meteorological field required for scheme computation
-- `TSTEP` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `PMID` - Meteorological field required for scheme computation
+- `DELP` - Delta-P (wet) across box [Pa]
+- `TSTEP` - Model time step [s]
+- `AIRDEN` - Wet air density [kg/m3]
+- `PMID` - Average wet air pressure [Pa] defined as arithmetic average of edge pressures
 
 
 
