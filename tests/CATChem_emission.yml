@@ -3,7 +3,7 @@ anthro:
     long_name: "Nitrogen Oxide"
     units: "kg/m2/s"
     scale: [1.0]
-    map: ["NO"]   #double check upper or lower case
+    map: ["no3"]
   SO2:
     long_name: "Sulfur Dioxide"
     units: "kg/m2/s"

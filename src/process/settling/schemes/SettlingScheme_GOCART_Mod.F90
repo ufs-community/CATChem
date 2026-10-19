@@ -22,10 +22,10 @@
 !! Reference: GOCART2G process library Chem_SettlingSimple function
 module SettlingScheme_GOCART_Mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use SettlingCommon_Mod, only: SettlingSchemeGOCARTConfig
-   use error_mod, only: CC_SUCCESS, CC_Error
-   use Constants, only: g0  !load the constants needed for this scheme
+   use catchem_bridge_error, only: CC_SUCCESS, CC_Error
+   use catchem_bridge_constants, only: g0  !load the constants needed for this scheme
    use GOCART2G_MieMod, only: GOCART2G_Mie  ! For Mie data in gocart scheme
 
    implicit none

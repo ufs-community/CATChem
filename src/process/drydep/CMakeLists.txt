@@ -2,13 +2,12 @@
 # Generated on: 2025-11-14T22:58:26.596456
 # Author: Wei Li
 # Description: Process for computing dry deposition of gas and aerosol species
-
 # Define drydep process sources
 set(
   DRYDEP_PROCESS_SOURCES
   DryDepCommon_Mod.F90
-  ProcessDryDepInterface_Mod.F90
-  DryDepProcessCreator_Mod.F90
+  catchem_process_drydep.cpp
+  DryDepScienceBridge.F90
 )
 
 # Define drydep scheme sources
@@ -26,8 +25,9 @@ set(DRYDEP_ALL_SOURCES ${DRYDEP_PROCESS_SOURCES} ${DRYDEP_SCHEME_SOURCES})
 set(_lib CATChem_process_drydep)
 add_library(${_lib} ${DRYDEP_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 
@@ -42,9 +42,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions
