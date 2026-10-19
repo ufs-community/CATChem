@@ -46,7 +46,7 @@ namespace catchem {
         return contract;
     }
 
-    WetDepProcess::WetDepProcess() : active_scheme("jacob"), diagnostics_enabled(true) {}
+    WetDepProcess::WetDepProcess() : active_scheme_("jacob"), diagnostics_enabled_(true) {}
 
     void WetDepProcess::prepare_inputs(std::shared_ptr<StateManager> state) {
         state->derive_reevapls();
@@ -61,54 +61,54 @@ namespace catchem {
         const auto configured = config->data.processes.find("wetdep");
         if (configured == config->data.processes.end() || configured->second.scheme.empty())
             throw std::invalid_argument("WetDep requires processes.wetdep.scheme in the runtime YAML");
-        active_scheme = configured->second.scheme;
-        diagnostics_enabled = configured->second.diagnostics;
-        if (active_scheme != "jacob" && active_scheme != "gocart")
-            throw std::invalid_argument("WetDep runtime YAML selected unsupported scheme: " + active_scheme);
+        active_scheme_ = configured->second.scheme;
+        diagnostics_enabled_ = configured->second.diagnostics;
+        if (active_scheme_ != "jacob" && active_scheme_ != "gocart")
+            throw std::invalid_argument("WetDep runtime YAML selected unsupported scheme: " + active_scheme_);
 
         // Read Jacob scheme tuning options from the runtime YAML.  Defaults
         // mirror WetDepCommon_Mod.F90; the registered validator rejects any
         // option name the scheme does not declare.
         const auto& settings = configured->second;
-        jacob_scale_factor = settings.get_double("jacob/scale_factor", jacob_scale_factor);
-        jacob_radius_threshold = settings.get_double("jacob/radius_threshold", jacob_radius_threshold);
-        jacob_so4_gocart_resusp = settings.get_bool("jacob/so4_gocart_resusp", jacob_so4_gocart_resusp);
-        jacob_so4_washout_eff = settings.get_double("jacob/so4_washout_eff", jacob_so4_washout_eff);
+        jacob_scale_factor_ = settings.get_double("jacob/scale_factor", jacob_scale_factor_);
+        jacob_radius_threshold_ = settings.get_double("jacob/radius_threshold", jacob_radius_threshold_);
+        jacob_so4_gocart_resusp_ = settings.get_bool("jacob/so4_gocart_resusp", jacob_so4_gocart_resusp_);
+        jacob_so4_washout_eff_ = settings.get_double("jacob/so4_washout_eff", jacob_so4_washout_eff_);
 
         // Read GOCART2G scheme tuning options (processes/wetdep/gocart/*).
         // Defaults follow GEOS-ESM/GOCART GOCART2G_Process (scale 1.0,
         // wtune 1.0, radius threshold 0.05 um).  Values are validated here so
         // a mis-specified tuning fails at init, not mid-column in the kernel.
-        gocart_scale_factor = settings.get_double("gocart/scale_factor", gocart_scale_factor);
-        gocart_washout_tuning = settings.get_double("gocart/washout_tuning", gocart_washout_tuning);
-        gocart_radius_threshold = settings.get_double("gocart/radius_threshold", gocart_radius_threshold);
-        if (active_scheme == "gocart") {
-            if (!(gocart_scale_factor > 0.0))
+        gocart_scale_factor_ = settings.get_double("gocart/scale_factor", gocart_scale_factor_);
+        gocart_washout_tuning_ = settings.get_double("gocart/washout_tuning", gocart_washout_tuning_);
+        gocart_radius_threshold_ = settings.get_double("gocart/radius_threshold", gocart_radius_threshold_);
+        if (active_scheme_ == "gocart") {
+            if (!(gocart_scale_factor_ > 0.0))
                 throw std::invalid_argument("WetDep gocart/scale_factor must be > 0, got " +
-                                            std::to_string(gocart_scale_factor));
-            if (!(gocart_washout_tuning >= 0.0))
+                                            std::to_string(gocart_scale_factor_));
+            if (!(gocart_washout_tuning_ >= 0.0))
                 throw std::invalid_argument("WetDep gocart/washout_tuning must be >= 0, got " +
-                                            std::to_string(gocart_washout_tuning));
-            if (!(gocart_radius_threshold > 0.0))
+                                            std::to_string(gocart_washout_tuning_));
+            if (!(gocart_radius_threshold_ > 0.0))
                 throw std::invalid_argument("WetDep gocart/radius_threshold must be > 0, got " +
-                                            std::to_string(gocart_radius_threshold));
+                                            std::to_string(gocart_radius_threshold_));
         }
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
-        if (active_scheme == "gocart") {
-            Logger::debug(state.get(), "WetDep scheme options",
-                          {{"scheme", active_scheme},
-                           {"gocart/scale_factor", std::to_string(gocart_scale_factor)},
-                           {"gocart/washout_tuning", std::to_string(gocart_washout_tuning)},
-                           {"gocart/radius_threshold", std::to_string(gocart_radius_threshold)}});
+        if (active_scheme_ == "gocart") {
+            Logger::debug(*state, "WetDep scheme options",
+                          {{"scheme", active_scheme_},
+                           {"gocart/scale_factor", std::to_string(gocart_scale_factor_)},
+                           {"gocart/washout_tuning", std::to_string(gocart_washout_tuning_)},
+                           {"gocart/radius_threshold", std::to_string(gocart_radius_threshold_)}});
         } else {
-            Logger::debug(state.get(), "WetDep scheme options",
-                          {{"scheme", active_scheme},
-                           {"jacob/scale_factor", std::to_string(jacob_scale_factor)},
-                           {"jacob/radius_threshold", std::to_string(jacob_radius_threshold)},
-                           {"jacob/so4_gocart_resusp", jacob_so4_gocart_resusp ? "true" : "false"},
-                           {"jacob/so4_washout_eff", std::to_string(jacob_so4_washout_eff)}});
+            Logger::debug(*state, "WetDep scheme options",
+                          {{"scheme", active_scheme_},
+                           {"jacob/scale_factor", std::to_string(jacob_scale_factor_)},
+                           {"jacob/radius_threshold", std::to_string(jacob_radius_threshold_)},
+                           {"jacob/so4_gocart_resusp", jacob_so4_gocart_resusp_ ? "true" : "false"},
+                           {"jacob/so4_washout_eff", std::to_string(jacob_so4_washout_eff_)}});
         }
 
         // Diagnostic species targeting: honor processes.wetdep.diag_species
@@ -129,10 +129,10 @@ namespace catchem {
             }
         }
         for (const auto i : selected) {
-            diagnostic_species_id.push_back(static_cast<int>(i) + 1); // 1-based for Fortran bridge
+            diagnostic_species_id_.push_back(static_cast<int>(i) + 1); // 1-based for Fortran bridge
         }
 
-        if (!diagnostics_enabled)
+        if (!diagnostics_enabled_)
             return;
 
         if (state->diagnostic_manager()) {
@@ -172,7 +172,7 @@ namespace catchem {
         require_field_pointer("WetDep", "T", t_ptr);
         require_field_pointer("WetDep", "PFILSAN", pfilsan_ptr);
         require_field_pointer("WetDep", "PFLLSAN", pfllsan_ptr);
-        if (active_scheme == "jacob") {
+        if (active_scheme_ == "jacob") {
             // The Jacob kernel is the only consumer of the dry-density and
             // re-evaporation fields; the GOCART kernel never reads them.
             require_field_pointer("WetDep", "AIRDEN_DRY", airden_dry_ptr);
@@ -245,7 +245,7 @@ namespace catchem {
         //    gocart -> run_wetdep_gocart_science_bridge (adds PRECCON/PRECLSC
         //             surface fields; kernel divides them by tstep, so the
         //             timestep must be positive).
-        if (active_scheme == "gocart") {
+        if (active_scheme_ == "gocart") {
             const double* preccon_ptr = state->read_field<2>("PRECCON");
             const double* preclsc_ptr = state->read_field<2>("PRECLSC");
             require_field_pointer("WetDep", "PRECCON", preccon_ptr);
@@ -255,22 +255,22 @@ namespace catchem {
                                          std::to_string(state->clock().timestep));
             run_wetdep_gocart_science_bridge(
                 state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
-                diagnostics_enabled ? 1 : 0, gocart_scale_factor, gocart_washout_tuning, gocart_radius_threshold,
+                diagnostics_enabled_ ? 1 : 0, gocart_scale_factor_, gocart_washout_tuning_, gocart_radius_threshold_,
                 airden_ptr, pedge_ptr, pfilsan_ptr, pfllsan_ptr, t_ptr, const_cast<double*>(preccon_ptr),
                 const_cast<double*>(preclsc_ptr), (bool*)is_aerosol.data(), (bool*)is_wetdep.data(),
                 wd_rainouteff.data_handle(), radius.data(), mw_g.data(), state->chemistry().species_names_c_arr.data(),
                 conc_ptr, mock_tendency.data(), diag_mass_bin.data(), diag_flux_bin.data(),
-                diagnostic_species_id.data(), diagnostic_species_id.size());
+                diagnostic_species_id_.data(), diagnostic_species_id_.size());
         } else {
             run_wetdep_science_bridge(
                 state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
-                diagnostics_enabled ? 1 : 0, jacob_scale_factor, jacob_radius_threshold,
-                jacob_so4_gocart_resusp ? 1 : 0, jacob_so4_washout_eff, airden_dry_ptr, airden_ptr, pedge_ptr,
+                diagnostics_enabled_ ? 1 : 0, jacob_scale_factor_, jacob_radius_threshold_,
+                jacob_so4_gocart_resusp_ ? 1 : 0, jacob_so4_washout_eff_, airden_dry_ptr, airden_ptr, pedge_ptr,
                 pfilsan_ptr, pfllsan_ptr, reevapls_ptr, t_ptr, (bool*)is_aerosol.data(), (bool*)is_wetdep.data(),
                 henry_cr.data(), henry_k0.data(), henry_pKa.data(), wd_retfactor.data(), (bool*)wd_LiqAndGas.data(),
                 wd_convfacI2G.data(), wd_rainouteff.data_handle(), wd_reevap_frac.data(), radius.data(), mw_g.data(),
                 state->chemistry().species_names_c_arr.data(), conc_ptr, mock_tendency.data(), diag_mass_bin.data(),
-                diag_flux_bin.data(), diagnostic_species_id.data(), diagnostic_species_id.size());
+                diag_flux_bin.data(), diagnostic_species_id_.data(), diagnostic_species_id_.size());
         }
 
         // 5. Map 3D diagnostics back to the individually registered fields.
@@ -278,9 +278,9 @@ namespace catchem {
         // within diagnostic_species_id (1-based), so the read-back must walk
         // positions rather than global species indices; the two only coincide
         // when the selection is the identity.
-        if (state->diagnostic_manager() && diagnostics_enabled) {
-            for (size_t position = 0; position < diagnostic_species_id.size(); ++position) {
-                const size_t species = static_cast<size_t>(diagnostic_species_id[position]) - 1; // 0-based
+        if (state->diagnostic_manager() && diagnostics_enabled_) {
+            for (size_t position = 0; position < diagnostic_species_id_.size(); ++position) {
+                const size_t species = static_cast<size_t>(diagnostic_species_id_[position]) - 1; // 0-based
                 auto& meta = state->chemistry().species_list[species];
                 std::string mass_name = "wetdep_mass_" + meta.short_name;
                 std::string flux_name = "wetdep_flux_" + meta.short_name;

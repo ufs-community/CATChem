@@ -4,7 +4,7 @@ This section covers the modernized C++ process interface APIs that define how at
 
 ## Overview
 
-Under the modernized C++20 architecture, the Process Interface system provides:
+The Process Interface system provides:
 
 - **catchem::ProcessInterface**: Virtual base class defining execution lifecycles for all processes.
 - **catchem::ProcessRegistry**: Singleton registry utilizing creator lambdas for dynamic process instantiation.

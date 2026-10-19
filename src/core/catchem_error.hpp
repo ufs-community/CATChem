@@ -1,7 +1,7 @@
 #pragma once
 
+#include "catchem_logger.hpp"
 #include <exception>
-#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -74,21 +74,22 @@ namespace catchem {
 
     class ErrorManager {
     private:
-        std::vector<std::string> context_stack;
+        std::vector<std::string> context_stack_;
 
     public:
-        void push_context(const std::string& ctx) { context_stack.push_back(ctx); }
+        void push_context(const std::string& ctx) { context_stack_.push_back(ctx); }
         void pop_context() {
-            if (!context_stack.empty()) {
-                context_stack.pop_back();
+            if (!context_stack_.empty()) {
+                context_stack_.pop_back();
             }
         }
         void report_error(ErrorCode code, const std::string& msg) {
-            std::cerr << "[CATChem C++ Error " << code << "] " << msg << " | Context: ";
-            for (const auto& ctx : context_stack) {
-                std::cerr << ctx << " -> ";
+            std::string context;
+            for (const auto& ctx : context_stack_) {
+                context += ctx + " -> ";
             }
-            std::cerr << "End\n";
+            context += "End";
+            Logger::error(msg, {{"code", std::to_string(static_cast<int>(code))}, {"context", context}});
         }
     };
 

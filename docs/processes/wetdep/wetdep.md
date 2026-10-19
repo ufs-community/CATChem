@@ -87,29 +87,25 @@ The wetdep process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use WetDepProcessCreator_Mod
-use WetDepCommon_Mod
+The process is a C++ class, `catchem::WetDepProcess` (`src/process/wetdep/catchem_process_wetdep.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(WetDepProcess_t) :: process
-call create_wetdep_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  wetdep:
+    activate: true
+    scheme: 'jacob'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `WetdepScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `jacob`, `gocart`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use JACOB scheme
-process%scheme_name = "jacob"
-```
-```fortran
-! Use GOCART scheme
-process%scheme_name = "gocart"
+```yaml
+processes:
+  wetdep:
+    scheme: 'jacob'
 ```
 
 ## Implementation Details
@@ -171,18 +167,18 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/wetdep/ProcessWetDepInterface_Mod.F90` - Main process interface
-- `src/process/wetdep/WetDepCommon_Mod.F90` - Common types and parameters
-- `src/process/wetdep/WetDepProcessCreator_Mod.F90` - Process factory
-- `src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90` - Jacob et al. [2000] wet deposition scheme
+- `src/process/wetdep/WetDepCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/wetdep/WetDepScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/wetdep/catchem_process_wetdep.cpp` - C++ process class `catchem::WetDepProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/wetdep/catchem_process_wetdep.hpp` - C++ process class `catchem::WetDepProcess` (declaration)
 - `src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90` - GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species
+- `src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90` - Jacob et al. [2000] wet deposition scheme
 
 ### Tests
-- `tests/process/wetdep/unit/` - Unit tests
-- `tests/process/wetdep/integration/` - Integration tests
+- `tests/test_catchem_wetdep.cpp`
 
 ### Documentation
 - `docs/processes/wetdep/wetdep.md` - This documentation

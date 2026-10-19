@@ -135,33 +135,25 @@ The drydep process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use DryDepProcessCreator_Mod
-use DryDepCommon_Mod
+The process is a C++ class, `catchem::DryDepProcess` (`src/process/drydep/catchem_process_drydep.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(DryDepProcess_t) :: process
-call create_drydep_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  drydep:
+    activate: true
+    scheme: 'wesely'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `DrydepScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `wesely`, `gocart`, `zhang`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use WESELY scheme
-process%scheme_name = "wesely"
-```
-```fortran
-! Use GOCART scheme
-process%scheme_name = "gocart"
-```
-```fortran
-! Use ZHANG scheme
-process%scheme_name = "zhang"
+```yaml
+processes:
+  drydep:
+    scheme: 'wesely'
 ```
 
 ## Implementation Details
@@ -230,19 +222,19 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/drydep/ProcessDryDepInterface_Mod.F90` - Main process interface
-- `src/process/drydep/DryDepCommon_Mod.F90` - Common types and parameters
-- `src/process/drydep/DryDepProcessCreator_Mod.F90` - Process factory
-- `src/process/drydep/schemes/DryDepScheme_WESELY_Mod.F90` - Wesely 1989 gas dry deposition scheme
+- `src/process/drydep/DryDepCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/drydep/DryDepScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/drydep/catchem_process_drydep.cpp` - C++ process class `catchem::DryDepProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/drydep/catchem_process_drydep.hpp` - C++ process class `catchem::DryDepProcess` (declaration)
 - `src/process/drydep/schemes/DryDepScheme_GOCART_Mod.F90` - GOCART-2G aerosol dry deposition scheme
+- `src/process/drydep/schemes/DryDepScheme_WESELY_Mod.F90` - Wesely 1989 gas dry deposition scheme
 - `src/process/drydep/schemes/DryDepScheme_ZHANG_Mod.F90` - Zhang et al. [2001] scheme with Emerson et al. [2020] updates
 
 ### Tests
-- `tests/process/drydep/unit/` - Unit tests
-- `tests/process/drydep/integration/` - Integration tests
+- `tests/test_catchem_drydep.cpp`
 
 ### Documentation
 - `docs/processes/drydep/drydep.md` - This documentation

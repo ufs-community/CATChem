@@ -41,10 +41,12 @@ int catchem_diag_register_checked(void* core_ptr, const char* name, const char* 
             return CATCHEM_RANK_MISMATCH;
         core->get_diagnostic_manager()->register_field(name, desc, units, type, dims);
         return CATCHEM_SUCCESS;
-    } catch (const std::invalid_argument&) {
-        return CATCHEM_EXTENT_MISMATCH;
+    } catch (const std::invalid_argument& e) {
+        return fail(catchem::BoundaryStatus::ExtentMismatch, "diag_register", name, e.what());
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "diag_register", name, e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_register", name, "unknown exception");
     }
 }
 
@@ -81,10 +83,10 @@ int catchem_diag_register_contract_checked(void* core_ptr, const char* name, con
             name, desc, units, type, dimensions, static_cast<catchem::DiagnosticPolicy>(policy), reset_value,
             semantic_axes, {}, false);
         return CATCHEM_SUCCESS;
-    } catch (const std::invalid_argument&) {
-        return CATCHEM_EXTENT_MISMATCH;
+    } catch (const std::invalid_argument& e) {
+        return fail(catchem::BoundaryStatus::ExtentMismatch, "diag_register_contract", name, e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_register_contract", name, "unknown exception");
     }
 }
 
@@ -106,8 +108,10 @@ int catchem_diag_get_contract(void* core_ptr, const char* name, int* generation,
         *latest_writer = static_cast<int>(field->latest_writer);
         *policy = static_cast<int>(field->reset_policy);
         return CATCHEM_SUCCESS;
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "diag_get_contract", name, e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_get_contract", name, "unknown exception");
     }
 }
 
@@ -190,7 +194,7 @@ int catchem_diag_get_pointer_checked(void* core_ptr, const char* name, int rank,
         *ptr_out = const_cast<void*>(mgr->get_host_read_pointer(name));
         return *ptr_out ? CATCHEM_SUCCESS : CATCHEM_INVALID_STATE;
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_get_pointer", name, "unknown exception");
     }
 }
 
@@ -202,8 +206,10 @@ int catchem_diag_mark_host_modified(void* core_ptr, const char* name) {
         return CATCHEM_SUCCESS;
     } catch (const std::invalid_argument&) {
         return CATCHEM_MISSING_FIELD;
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "diag_mark_host_modified", name, e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_mark_host_modified", name, "unknown exception");
     }
 }
 
@@ -216,7 +222,7 @@ int catchem_diag_mark_device_modified(void* core_ptr, const char* name) {
     } catch (const std::invalid_argument&) {
         return CATCHEM_MISSING_FIELD;
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "diag_mark_device_modified", name, "unknown exception");
     }
 }
 

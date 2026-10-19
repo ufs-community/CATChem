@@ -59,6 +59,7 @@ simulation:
   verbose:
     activate: true               # -> data.simulation.verbose_enabled
     # log_level: debug           # optional; see "Logging" below
+    # watch_species: [so2, so4]  # optional; see "Logging" below
   # The keys below are optional runtime overrides
   nx: 4
   ny: 1
@@ -119,19 +120,6 @@ diagnostics:
     enabled: true
     buffer_size: 1000
 ```
-
-!!! warning
-    `diagnostics.output.latlon_output` and the top-level `mie` block appear in
-    some shipped example configs but are **not read by the current loader**.
-    `mie` is accepted by validation, so it is harmless; `latlon_output` is simply
-    ignored. Do not rely on either key to change behavior.
-
-!!! deprecated
-    `diagnostics.output/process_diagnostics` no longer suppresses process
-    diagnostic output — it is a **deprecated no-op** retained only for
-    configuration compatibility. Remove it from control files; it has no
-    effect. Per-process diagnostics are now controlled entirely by each
-    process's own `diagnostics:` flag (see *Process diagnostics* below).
 
 ### Process diagnostics (all schemes)
 
@@ -378,6 +366,31 @@ simulation:
 
 `Logger::debug()`, `info()`, `warn()`, and `error()` respect the threshold.
 Guard expensive debug-only work with `Logger::enabled(Logger::Level::Debug)`.
+
+### Watching species through the process chain
+
+With `activate: true` and the threshold at `debug`, the core can log the
+minimum, maximum, and sum of chosen species after every process in every
+timestep, which locates the process that introduces a runaway value without
+re-running the coupled model. The species are named in the YAML; nothing is
+watched unless they are:
+
+```yaml
+simulation:
+  verbose:
+    activate: true
+    log_level: debug
+    watch_species: [so2, so4, dms, msa, bc1, bc2, oc1, oc2,
+                    dust1, dust2, dust3, dust4, dust5,
+                    seas1, seas2, seas3, seas4, seas5]
+    # watch_species: all        # every species in the mechanism
+```
+
+Names are matched case-insensitively against the mechanism's short names. A
+name that is not in the loaded mechanism is reported as a validation warning
+at startup. The scan costs one pass over every column and level per watched
+species per process, so `all` on a large mechanism is for short debugging
+runs only.
 
 ## Accessing configuration at runtime
 

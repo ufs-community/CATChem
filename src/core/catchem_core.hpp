@@ -40,12 +40,12 @@ namespace catchem {
      */
     class Core {
     private:
-        RuntimeLease runtime_lease_;                              ///< Process-global execution-runtime lease.
-        std::shared_ptr<ConfigManager> config_mgr;                ///< Shared configuration manager.
-        std::shared_ptr<GridManager> grid_mgr;                    ///< Shared grid details.
-        std::shared_ptr<StateManager> state_mgr;                  ///< Reference-counted memory state.
-        std::shared_ptr<DiagnosticManager> diag_mgr;              ///< Global diagnostics registry.
-        std::vector<std::shared_ptr<ProcessInterface>> processes; ///< Scheduled physics processes.
+        RuntimeLease runtime_lease_;                               ///< Process-global execution-runtime lease.
+        std::shared_ptr<ConfigManager> config_mgr_;                ///< Shared configuration manager.
+        std::shared_ptr<GridManager> grid_mgr_;                    ///< Shared grid details.
+        std::shared_ptr<StateManager> state_mgr_;                  ///< Reference-counted memory state.
+        std::shared_ptr<DiagnosticManager> diag_mgr_;              ///< Global diagnostics registry.
+        std::vector<std::shared_ptr<ProcessInterface>> processes_; ///< Scheduled physics processes.
         TimestepOutcome last_outcome_;
         std::size_t timestep_counter_ = 0;
         bool tainted_ = false;

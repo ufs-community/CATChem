@@ -57,25 +57,25 @@ The carbchem process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use CarbChemProcessCreator_Mod
-use CarbChemCommon_Mod
+The process is a C++ class, `catchem::CarbChemProcess` (`src/process/carbchem/catchem_process_carbchem.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(CarbChemProcess_t) :: process
-call create_carbchem_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  carbchem:
+    activate: true
+    scheme: 'gocart'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `CarbchemScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `gocart`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use GOCART scheme
-process%scheme_name = "gocart"
+```yaml
+processes:
+  carbchem:
+    scheme: 'gocart'
 ```
 
 ## Implementation Details
@@ -127,17 +127,17 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/carbchem/ProcessCarbChemInterface_Mod.F90` - Main process interface
-- `src/process/carbchem/CarbChemCommon_Mod.F90` - Common types and parameters
-- `src/process/carbchem/CarbChemProcessCreator_Mod.F90` - Process factory
+- `src/process/carbchem/CarbChemCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/carbchem/CarbChemScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/carbchem/catchem_process_carbchem.cpp` - C++ process class `catchem::CarbChemProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/carbchem/catchem_process_carbchem.hpp` - C++ process class `catchem::CarbChemProcess` (declaration)
 - `src/process/carbchem/schemes/CarbChemScheme_GOCART_Mod.F90` - GOCART carbon species chemical production and loss scheme
 
 ### Tests
-- `tests/process/carbchem/unit/` - Unit tests
-- `tests/process/carbchem/integration/` - Integration tests
+- `tests/test_catchem_carbchem.cpp`
 
 ### Documentation
 - `docs/processes/carbchem/carbchem.md` - This documentation

@@ -41,7 +41,6 @@ diagnostics:
     frequency: 3600  #output frequency in seconds; e.g., 3600 for hourly output
     format: "netcdf" #only format supported now
     compress_lev: 0 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
-    process_diagnostics: true #write per-process diagnostic variables (dust/seasalt emissions, fluxes, thresholds)
     diag_list: ["dust_emission_total", "settling_flux_per_species", "so2", "no_such_field"]  #field, parent, species, and unmatched selectors
   collection:
     enabled: true

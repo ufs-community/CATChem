@@ -1,8 +1,8 @@
 # External Emission Data
 
 External emission data (anthropogenic, biogenic, fires, volcanoes, aircraft,
-oxidant fields, and similar inputs read from files) is managed by the core
-module `ExtEmisData_Mod` (`src/core/ExtEmisData_Mod.F90`).
+oxidant fields, and similar inputs read from files) is managed by the driver
+module `catchem_emis_data_mod` (`drivers/nuopc/catchem_emis_data_mod.F90`).
 
 This is a **core data structure**, not a process. In the modern CATChem
 architecture the **driver performs all file I/O** (opening NetCDF files,
@@ -85,7 +85,7 @@ which sets `is_loaded` once data is in place.
 
 ## Source
 
-- `src/core/ExtEmisData_Mod.F90` — type definitions and procedures.
+- `drivers/nuopc/catchem_emis_data_mod.F90` — type definitions and procedures.
 
 Full type and procedure listings are available in the auto-generated
 [API Reference](../api/index.md).

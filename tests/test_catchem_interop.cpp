@@ -4,10 +4,18 @@
 #include "catchem_fortran_process.hpp"
 #include "catchem_kokkos_compat.hpp"
 #include "catchem_state_manager.hpp"
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iostream>
 #include <vector>
+
+// The unchecked catchem_state_get_species_index was retired; keep the 1-based
+// index / -1-if-missing convention the assertions below rely on.
+static int species_index_1based(void* state_ptr, const char* name) {
+    int index = 0;
+    return catchem_state_get_species_index_checked(state_ptr, name, &index) == CATCHEM_SUCCESS ? index : -1;
+}
 
 extern "C" {
 void catchem_register_settling_cpp();
@@ -329,7 +337,9 @@ int main(int argc, char* argv[]) {
                 }
             }
             assert(!config_path.empty() && "ERROR: Could not find CATChem_species.yml");
-            catchem_state_load_species_config(state, config_path.c_str());
+            assert(catchem_state_load_species_config(state, config_path.c_str()) == CATCHEM_SUCCESS);
+            assert(catchem_state_load_species_config(nullptr, config_path.c_str()) != CATCHEM_SUCCESS);
+            assert(catchem_state_load_species_config(state, nullptr) != CATCHEM_SUCCESS);
 
             // 2. Validate species counts and offsets
             int count = catchem_state_get_species_count(state);
@@ -337,8 +347,8 @@ int main(int argc, char* argv[]) {
             std::cout << "INFO: Loaded " << count << " species in integration test.\n";
 
             // 3. Translate species names to 1-based indices
-            int idx_so2 = catchem_state_get_species_index(state, "so2");
-            int idx_so4 = catchem_state_get_species_index(state, "so4");
+            int idx_so2 = species_index_1based(state, "so2");
+            int idx_so4 = species_index_1based(state, "so4");
             assert(idx_so2 != -1);
             assert(idx_so4 != -1);
 
@@ -380,6 +390,53 @@ int main(int argc, char* argv[]) {
                     found_so2 = true;
             }
             assert(found_so2);
+
+            // 6. Generic category getters agree with the legacy gas/aerosol ones,
+            //    honour the buffer capacity, and reject bad arguments.
+            const int cat_gas = CATCHEM_SPECIES_CATEGORY_GAS;
+            const int cat_aerosol = CATCHEM_SPECIES_CATEGORY_AEROSOL;
+            const int cat_settling = CATCHEM_SPECIES_CATEGORY_SETTLING;
+            assert(catchem_state_get_category_species_count(state, cat_gas) == gas_count);
+            std::vector<int> gas_again(gas_count, 0);
+            assert(catchem_state_get_category_indices(state, cat_gas, gas_again.data(), gas_count) == gas_count);
+            assert(gas_again == gas_indices);
+
+            const int aerosol_count = catchem_state_get_category_species_count(state, cat_aerosol);
+            assert(aerosol_count == catchem_state_get_aerosol_species_count(state));
+            assert(aerosol_count > 0);
+            std::vector<int> aerosol_indices(aerosol_count, 0);
+            assert(catchem_state_get_category_indices(state, cat_aerosol, aerosol_indices.data(), aerosol_count) ==
+                   aerosol_count);
+            std::vector<int> aerosol_legacy(aerosol_count, 0);
+            catchem_state_get_aerosol_indices(state, aerosol_legacy.data());
+            assert(aerosol_legacy == aerosol_indices);
+
+            // Settling species are the aerosols with do_settling: a subset, in order.
+            const int settling_count = catchem_state_get_category_species_count(state, cat_settling);
+            assert(settling_count >= 0 && settling_count <= aerosol_count);
+            std::vector<int> settling_indices(settling_count, 0);
+            assert(catchem_state_get_category_indices(state, cat_settling, settling_indices.data(), settling_count) ==
+                   settling_count);
+            for (int idx : settling_indices)
+                assert(std::find(aerosol_indices.begin(), aerosol_indices.end(), idx) != aerosol_indices.end());
+            assert(std::is_sorted(settling_indices.begin(), settling_indices.end()));
+
+            // A short buffer gets max_count entries; the return value is still the full count.
+            std::vector<int> one(2, -7);
+            assert(catchem_state_get_category_indices(state, cat_gas, one.data(), 1) == gas_count);
+            assert(one[0] == gas_indices[0]);
+            assert(one[1] == -7);
+            assert(catchem_state_get_category_indices(state, cat_gas, one.data(), 0) == gas_count);
+
+            assert(catchem_state_get_category_species_count(state, CATCHEM_SPECIES_CATEGORY_COUNT) == -1);
+            assert(catchem_state_get_category_species_count(state, -1) == -1);
+            assert(catchem_state_get_category_species_count(nullptr, cat_gas) == -1);
+            assert(catchem_state_get_category_indices(state, cat_gas, nullptr, 1) == -1);
+            assert(catchem_state_get_category_indices(state, cat_gas, one.data(), -1) == -1);
+            assert(catchem_state_get_category_indices(state, 42, one.data(), 1) == -1);
+
+            // A missing species file is reported through the status, not thrown.
+            assert(catchem_state_load_species_config(state, "/nonexistent/CATChem_species.yml") != CATCHEM_SUCCESS);
 
             catchem_core_destroy(core);
             std::cout << "SUCCESS: C++ Species Metadata & State Initialization Validation Passed!\n";
@@ -468,7 +525,7 @@ int main(int argc, char* argv[]) {
             // sea-salt bin (seas5) has a large fall speed and measurably
             // depletes the top layer.  Using a coarse bin makes the sink
             // observable instead of lost in round-off.
-            int idx_1based = catchem_state_get_species_index(state, "seas5");
+            int idx_1based = species_index_1based(state, "seas5");
             assert(idx_1based > 0);
             int idx_0based = idx_1based - 1;
 

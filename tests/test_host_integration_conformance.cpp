@@ -10,6 +10,13 @@
 #include <string>
 #include <vector>
 
+// The unchecked catchem_state_get_species_index was retired; keep the 1-based
+// index / -1-if-missing convention the assertions below rely on.
+static int species_index_1based(void* state_ptr, const char* name) {
+    int index = 0;
+    return catchem_state_get_species_index_checked(state_ptr, name, &index) == CATCHEM_SUCCESS ? index : -1;
+}
+
 // Unlike assert(), CHECK always evaluates its expression: several calls below
 // populate pointers consumed on later lines, and NDEBUG builds must not skip
 // the side effects (or the checks themselves).
@@ -52,8 +59,8 @@ int main() {
     const std::string mechanism_file = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/unfamiliar.yml";
     catchem_state_load_species_config(state, mechanism_file.c_str());
     CHECK(catchem_state_get_species_count(state) == 3);
-    CHECK(catchem_state_get_species_index(state, "aerosol_c") == 3);
-    CHECK(catchem_state_get_species_index(state, "XENON_A") == 1);
+    CHECK(species_index_1based(state, "aerosol_c") == 3);
+    CHECK(species_index_1based(state, "XENON_A") == 1);
 
     // The same checked policy/report boundary is consumed by direct, CCPP, and
     // NUOPC hosts. Exercise its stable status, count, and detail representation.

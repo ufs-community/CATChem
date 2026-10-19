@@ -171,7 +171,7 @@ namespace {
         state->sync_to_host();
 
         const auto mgr = core->get_diagnostic_manager();
-        const int n_aerosol = static_cast<int>(state->chemistry().aerosol_indices.size());
+        const int n_aerosol = static_cast<int>(state->chemistry().indices(catchem::SpeciesCategory::Aerosol).size());
         assert(n_aerosol > 0);
         assert(mgr->has_field("settling_velocity_per_species_per_level"));
         assert(mgr->has_field("settling_flux_per_species"));

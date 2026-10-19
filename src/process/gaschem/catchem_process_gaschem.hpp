@@ -10,13 +10,13 @@ namespace catchem {
 
     class GasChemProcess : public ProcessInterface {
     private:
-        std::string config_dir;
+        std::string config_dir_;
         // Optional explicit single-file MUSICA mechanism (v1 format). When set, it
         // takes precedence over config_dir and is passed directly to MICM.
-        std::string config_file;
-        std::unique_ptr<musica::MICM> micm_instance;
-        std::unique_ptr<musica::State> micm_state;
-        bool initialized = false;
+        std::string config_file_;
+        std::unique_ptr<musica::MICM> micm_instance_;
+        std::unique_ptr<musica::State> micm_state_;
+        bool initialized_ = false;
 
     public:
         GasChemProcess();

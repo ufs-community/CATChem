@@ -24,7 +24,7 @@ namespace catchem {
 
     class ProcessRegistry {
     private:
-        std::unordered_map<std::string, ProcessRegistryEntry> creators;
+        std::unordered_map<std::string, ProcessRegistryEntry> creators_;
         mutable std::mutex mutex_;
 
         // Singleton private constructor
@@ -40,20 +40,20 @@ namespace catchem {
                               ProcessContractFactory contract_factory = {},
                               ProcessSettingsValidator settings_validator = {}) {
             std::lock_guard<std::mutex> lock(mutex_);
-            creators[name] = {std::move(creator), std::move(contract_factory), std::move(settings_validator)};
+            creators_[name] = {std::move(creator), std::move(contract_factory), std::move(settings_validator)};
         }
 
         bool has_process(const std::string& name) const {
             std::lock_guard<std::mutex> lock(mutex_);
-            return creators.find(name) != creators.end();
+            return creators_.find(name) != creators_.end();
         }
 
         std::shared_ptr<ProcessInterface> create(const std::string& name) {
             ProcessCreator creator;
             {
                 std::lock_guard<std::mutex> lock(mutex_);
-                const auto found = creators.find(name);
-                if (found == creators.end())
+                const auto found = creators_.find(name);
+                if (found == creators_.end())
                     throw std::invalid_argument("Process not registered in C++: " + name);
                 creator = found->second.creator;
             }
@@ -64,8 +64,8 @@ namespace catchem {
             ProcessSettingsValidator validator;
             {
                 std::lock_guard<std::mutex> lock(mutex_);
-                const auto found = creators.find(name);
-                if (found == creators.end())
+                const auto found = creators_.find(name);
+                if (found == creators_.end())
                     throw std::invalid_argument("Process not registered in C++: " + name);
                 validator = found->second.settings_validator;
             }
@@ -75,7 +75,7 @@ namespace catchem {
 
         void clear() {
             std::lock_guard<std::mutex> lock(mutex_);
-            creators.clear();
+            creators_.clear();
         }
     };
 

@@ -10,7 +10,6 @@ set(
   catchem_api_state.cpp
   catchem_api_diagnostics.cpp
   catchem_api_config.cpp
-  catchem_api_utilities.cpp
   catchem_diagnostic.cpp
   catchem_config_manager.cpp
   catchem_grid_manager.cpp

@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -8,6 +9,23 @@
 #include <vector>
 
 namespace catchem {
+
+    // Species categories derived from the SpeciesMetadata flags.  ChemState keeps
+    // one index list per category, in species order; Count sizes that container.
+    enum class SpeciesCategory : int {
+        Gas = 0,
+        Aerosol,
+        Settling, // aerosol with do_settling
+        Tracer,
+        Advected,
+        DryDep,
+        WetDep,
+        Photolysis,
+        Dust,
+        SeaSalt,
+        Count
+    };
+    constexpr std::size_t species_category_count = static_cast<std::size_t>(SpeciesCategory::Count);
 
     struct SpeciesMetadata {
         // Names

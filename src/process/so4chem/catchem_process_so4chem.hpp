@@ -7,27 +7,27 @@ namespace catchem {
 
     class SO4chemProcess : public ProcessInterface {
     private:
-        std::string active_scheme;
-        bool diagnostics_enabled;
-        std::vector<int> diagnostic_species_id;
+        std::string active_scheme_;
+        bool diagnostics_enabled_;
+        std::vector<int> diagnostic_species_id_;
 
         // GOCART scheme options staged from the runtime configuration
         // (processes/so4chem/gocart/*) and forwarded to the science bridge.
-        bool gocart_update_so2 = true;
-        bool gocart_do_drydep = false;
+        bool gocart_update_so2_ = true;
+        bool gocart_do_drydep_ = false;
 
         // Persistent column states
         // Stored as C int rather than char/bool so the Fortran bridge has an
         // exact, alias-safe integer(c_int) ABI.  std::vector<bool> is packed
         // and vector<char> cannot legally be reinterpreted as bool*.
-        std::vector<int> firsttime;
-        std::vector<int> nymd_last;
-        std::vector<int> nhms_last_recycle;
-        std::vector<double> xh2o2_init;
-        std::vector<double> pso4_g_so2;
-        std::vector<double> pso4_aq_so2;
-        std::vector<double> pso2_dms;
-        std::vector<double> dms_flux;
+        std::vector<int> firsttime_;
+        std::vector<int> nymd_last_;
+        std::vector<int> nhms_last_recycle_;
+        std::vector<double> xh2o2_init_;
+        std::vector<double> pso4_g_so2_;
+        std::vector<double> pso4_aq_so2_;
+        std::vector<double> pso2_dms_;
+        std::vector<double> dms_flux_;
 
     public:
         SO4chemProcess();

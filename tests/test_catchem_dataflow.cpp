@@ -9,6 +9,13 @@
 #include <stdexcept>
 #include <vector>
 
+// The unchecked catchem_state_get_species_index was retired; keep the 1-based
+// index / -1-if-missing convention the assertions below rely on.
+static int species_index_1based(void* state_ptr, const char* name) {
+    int index = 0;
+    return catchem_state_get_species_index_checked(state_ptr, name, &index) == CATCHEM_SUCCESS ? index : -1;
+}
+
 // Unlike assert(), CHECK always evaluates its expression: several calls below
 // populate pointers consumed on later lines, and NDEBUG builds must not skip
 // the side effects (or the checks themselves).
@@ -91,8 +98,8 @@ int main() {
           CATCHEM_EXTENT_MISMATCH);
     CHECK(catchem_state_bind_unified_chemistry_checked(state, chemistry.data(), nc, nl, ns) == CATCHEM_SUCCESS);
     state_object->chemistry().species_name_to_index["O3"] = 1;
-    CHECK(catchem_state_get_species_index(state, "o3") == 2);
-    CHECK(catchem_state_get_species_index(state, "O3") == 2);
+    CHECK(species_index_1based(state, "o3") == 2);
+    CHECK(species_index_1based(state, "O3") == 2);
     state_object->chemistry().conc->sync_to_device();
     CHECK(state_object->chemistry().conc->latest_writer == catchem::LatestWriter::Synchronized);
     chemistry[0] = 99.0;

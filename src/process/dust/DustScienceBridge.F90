@@ -1,6 +1,7 @@
 module DustScienceBridge_Mod
    use iso_c_binding
    use catchem_bridge_precision, only: fp
+   use catchem_bridge_error, only: CC_Fatal
    use catchem_bridge_constants, only: g0
    use DustScheme_FENGSHA_Mod, only: compute_fengsha
    use DustScheme_GINOUX_Mod, only: compute_ginoux
@@ -167,10 +168,12 @@ contains
       fengsha_config%moist_option = int(fengsha_moist_option)
       fengsha_config%distribution_option = int(fengsha_distribution_option)
       if (n_ginoux_ch_du /= size(ginoux_config%Ch_DU)) then
-         write(*,'(A,I0,A,I0)') 'FATAL ERROR: DustScienceBridge ginoux Ch_DU length ', n_ginoux_ch_du, &
-            ' does not match the scheme bin count ', size(ginoux_config%Ch_DU)
-         call flush(6)
-         error stop "FATAL ERROR: DustScienceBridge ginoux Ch_DU length mismatch"
+         block
+            character(len=512) :: err_msg
+            write(err_msg, '(A,I0,A,I0)') 'DustScienceBridge ginoux Ch_DU length ', n_ginoux_ch_du, &
+               ' does not match the scheme bin count ', size(ginoux_config%Ch_DU)
+            call CC_Fatal(trim(err_msg), 'DustScienceBridge')
+         end block
       end if
       ginoux_config%Ch_DU = real(ginoux_ch_du, fp)
 
@@ -209,9 +212,11 @@ contains
             end if
          end do
          if (target_species(i) == 0) then
-            write(*,'(A,A)') 'FATAL ERROR: DustScienceBridge cannot resolve dust bin ', trim(bin_names(i))
-            call flush(6)
-            error stop "FATAL ERROR: DustScienceBridge unresolved dust bin species"
+            block
+               character(len=512) :: err_msg
+               write(err_msg, '(A,A)') 'DustScienceBridge cannot resolve dust bin ', trim(bin_names(i))
+               call CC_Fatal(trim(err_msg), 'DustScienceBridge')
+            end block
          end if
       end do
 

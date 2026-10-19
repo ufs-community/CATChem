@@ -317,7 +317,7 @@ end program NUOPC_CATChem_App
 
 ## Process diagnostic output
 
-When `diagnostics.output.enabled` and `diagnostics.output.process_diagnostics` are true,
+When `diagnostics.output.enabled` is true,
 the NUOPC run-phase export writes every diagnostic field the C++ process layer registered
 in the `DiagnosticManager` — there is no per-process allowlist. The writer dispatches on
 each field's **semantic axes** (see
@@ -388,7 +388,7 @@ diagnostics:
   output:
     attributes:
       institution: "Example Lab"
-      references: "CATChem v1.0 run"
+      references: "https://github.com/ufs-community/CATChem"
 ```
 
 ## Advanced Features

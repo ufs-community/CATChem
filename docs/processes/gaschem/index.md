@@ -2,7 +2,7 @@
 
 ## Overview
 
-The modernized `GasChemProcess` is a native C++ physics/chemistry process that acts as a core atmospheric transformation node in CATChem. It wraps the C++ Model Independent Chemistry Module (**MICM**) solver using NCAR's **musica** library, completely replacing the legacy Fortran proxy layers and double-buffering.
+The modernized `GasChemProcess` is a native C++ physics/chemistry process that acts as a core atmospheric transformation node in CATChem. It wraps the C++ Model Independent Chemistry Module (**MICM**) solver using NCAR's **MUSICA** library, completely replacing the legacy Fortran proxy layers and double-buffering.
 
 *   **Namespace / Class**: `catchem::GasChemProcess : public catchem::ProcessInterface`
 *   **Header Location**: `src/process/gaschem/catchem_process_gaschem.hpp`

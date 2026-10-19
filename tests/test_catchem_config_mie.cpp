@@ -65,7 +65,7 @@ int main() {
         // (The minimal YAML legitimately fails mechanism validation, which is
         // unrelated to the mie section.)
         {
-            const auto& report = cfg.validate(true);
+            const auto& report = cfg.validate();
             bool mie_rejected = false;
             for (const auto& issue : report.issues)
                 if (issue.category == "schema" && issue.path == "mie")

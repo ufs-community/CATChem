@@ -2,6 +2,7 @@
 module AQMIO
 
    use ESMF
+   use catchem_nuopc_lengths
    use catchem_latlon_output_mod, only: latlon_diag_init, latlon_diag_write_2d, &
       latlon_diag_write_3d, latlon_diag_cleanup, latlon_diag_is_init
 #if HAVE_NETCDF
@@ -3052,7 +3053,7 @@ contains
 
       ! -- local variables
       integer :: lstr
-      character(len=16) :: tileSuffix
+      character(len=NUOPC_SHORT_LEN) :: tileSuffix
       character(len=ESMF_MAXPATHLEN) :: tmpName
 
       ! -- begin
@@ -4045,7 +4046,7 @@ contains
       integer :: dimids(NF90_MAX_VAR_DIMS)
       real(ESMF_KIND_R8), allocatable :: tvar(:)
       real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
-      character(len=256) :: units_str, tmp_str
+      character(len=NUOPC_PATH_LEN) :: units_str, tmp_str
       type(ESMF_Time) :: base_time, abs_time
       type(ESMF_TimeInterval) :: dt_interval
 

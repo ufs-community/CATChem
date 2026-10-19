@@ -73,25 +73,25 @@ The so4chem process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use SO4chemProcessCreator_Mod
-use SO4chemCommon_Mod
+The process is a C++ class, `catchem::SO4chemProcess` (`src/process/so4chem/catchem_process_so4chem.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(SO4chemProcess_t) :: process
-call create_so4chem_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  so4chem:
+    activate: true
+    scheme: 'gocart'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `So4chemScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `gocart`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use GOCART scheme
-process%scheme_name = "gocart"
+```yaml
+processes:
+  so4chem:
+    scheme: 'gocart'
 ```
 
 ## Implementation Details
@@ -143,17 +143,17 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/so4chem/ProcessSO4chemInterface_Mod.F90` - Main process interface
-- `src/process/so4chem/SO4chemCommon_Mod.F90` - Common types and parameters
-- `src/process/so4chem/SO4chemProcessCreator_Mod.F90` - Process factory
+- `src/process/so4chem/SO4chemCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/so4chem/SO4chemScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/so4chem/catchem_process_so4chem.cpp` - C++ process class `catchem::SO4chemProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/so4chem/catchem_process_so4chem.hpp` - C++ process class `catchem::SO4chemProcess` (declaration)
 - `src/process/so4chem/schemes/SO4chemScheme_GOCART_Mod.F90` - GOCART SO2 to SO4 production scheme
 
 ### Tests
-- `tests/process/so4chem/unit/` - Unit tests
-- `tests/process/so4chem/integration/` - Integration tests
+- `tests/test_catchem_so4chem.cpp`
 
 ### Documentation
 - `docs/processes/so4chem/so4chem.md` - This documentation

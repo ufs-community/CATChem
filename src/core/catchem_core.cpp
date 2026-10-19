@@ -3,6 +3,7 @@
 #include "catchem_process_registry.hpp"
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
 #include <iostream>
 #include <limits>
 #include <unordered_set>
@@ -12,12 +13,10 @@ namespace {
     // Resolve a (possibly relative) species path against the config file's
     // directory, so YAML-relative paths work regardless of the host's CWD.
     std::string resolve_against_config(const std::string& config_file, const std::string& path) {
-        if (path.empty() || path.front() == '/')
+        const std::filesystem::path p(path);
+        if (path.empty() || p.is_absolute())
             return path;
-        auto slash = config_file.find_last_of('/');
-        if (slash == std::string::npos)
-            return path;
-        return config_file.substr(0, slash + 1) + path;
+        return (std::filesystem::path(config_file).parent_path() / p).string();
     }
 
     void load_and_validate_configuration(catchem::ConfigManager& config, const std::string& config_file) {
@@ -29,26 +28,33 @@ namespace {
         config.validate_or_throw();
     }
 
-    // Diagnostic-only: reports min/max of a fixed species watch-list after each
-    // process, so a runaway species can be bisected to the introducing process
-    // without re-running the whole coupled model multiple times.
-    void log_watch_species_bounds(catchem::StateManager& state, const std::string& process_name, std::size_t step) {
+    // Diagnostic-only: reports min/max of the species named by
+    // simulation/verbose/watch_species after each process, so a runaway
+    // species can be bisected to the introducing process without re-running
+    // the whole coupled model multiple times.
+    void log_watch_species_bounds(catchem::StateManager& state, const catchem::SimulationConfig& sim,
+                                  const std::string& process_name, std::size_t step) {
         // Per-step, per-process, per-species diagnostics: keep them behind the
-        // DEBUG threshold and skip the full-array sweep when it is off.
+        // DEBUG threshold and skip the full-array sweep when it is off or when
+        // nothing is being watched.
         if (!catchem::Logger::enabled(catchem::Logger::Level::Debug))
             return;
-        static const std::vector<std::string> watch = {"so2",   "so4",   "dms",   "msa",   "bc1",   "bc2",
-                                                       "oc1",   "oc2",   "dust1", "dust2", "dust3", "dust4",
-                                                       "dust5", "seas1", "seas2", "seas3", "seas4", "seas5"};
+        if (!sim.watch_all_species && sim.watch_species.empty())
+            return;
         if (!state.chemistry().conc)
             return;
+        std::unordered_set<std::string> watch;
+        for (std::string name : sim.watch_species) {
+            std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c) { return std::tolower(c); });
+            watch.insert(name);
+        }
         const auto view = state.chemistry().conc->mdspan();
         const int nc = state.column_count();
         const int nl = state.level_count();
         for (std::size_t ispec = 0; ispec < state.chemistry().species_list.size(); ++ispec) {
             std::string lower = state.chemistry().species_list[ispec].short_name;
             std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return std::tolower(c); });
-            if (std::find(watch.begin(), watch.end(), lower) == watch.end())
+            if (!sim.watch_all_species && watch.find(lower) == watch.end())
                 continue;
             double lo = std::numeric_limits<double>::infinity();
             double hi = -std::numeric_limits<double>::infinity();
@@ -60,7 +66,7 @@ namespace {
                     hi = std::max(hi, v);
                     sum += v;
                 }
-            catchem::Logger::debug(&state, "watch-species bounds after process",
+            catchem::Logger::debug(state, "watch-species bounds after process",
                                    {{"step", std::to_string(step)},
                                     {"process", process_name},
                                     {"species", state.chemistry().species_list[ispec].short_name},
@@ -110,7 +116,10 @@ namespace catchem {
     Core::~Core() noexcept {
         try {
             shutdown();
+        } catch (const std::exception& e) {
+            Logger::error("Core shutdown failed during destruction", {{"error", e.what()}});
         } catch (...) {
+            Logger::error("Core shutdown failed during destruction", {{"error", "unknown exception"}});
         }
     }
 
@@ -119,11 +128,11 @@ namespace catchem {
         if (shutdown_)
             return;
         std::exception_ptr first_error;
-        for (std::size_t i = processes.size(); i-- > 0;) {
+        for (std::size_t i = processes_.size(); i-- > 0;) {
             if (i >= initialized_processes_.size() || !initialized_processes_[i])
                 continue;
             try {
-                processes[i]->finalize();
+                processes_[i]->finalize();
             } catch (...) {
                 if (!first_error)
                     first_error = std::current_exception();
@@ -150,7 +159,7 @@ namespace catchem {
     void Core::initialize(const CoreCreateOptions& options) {
         runtime_lease_ = RuntimeLease(RuntimeMode::CATChemOwned);
         try {
-            config_mgr = std::make_shared<ConfigManager>();
+            config_mgr_ = std::make_shared<ConfigManager>();
             const bool configured = !options.config_file.empty();
             int nx = options.columns;
             int ny = 1;
@@ -158,35 +167,35 @@ namespace catchem {
             int species_count = options.species;
 
             if (configured) {
-                config_mgr->load_from_file(options.config_file);
+                config_mgr_->load_from_file(options.config_file);
                 if (options.use_configuration_grid) {
-                    nx = config_mgr->data.runtime.nx;
-                    ny = config_mgr->data.runtime.ny;
-                    nz = config_mgr->data.runtime.nz;
+                    nx = config_mgr_->data.runtime.nx;
+                    ny = config_mgr_->data.runtime.ny;
+                    nz = config_mgr_->data.runtime.nz;
                 } else {
                     // A coupled host owns its local grid; YAML still owns all other settings.
-                    config_mgr->data.runtime.nx = nx;
-                    config_mgr->data.runtime.ny = ny;
-                    config_mgr->data.runtime.nz = nz;
+                    config_mgr_->data.runtime.nx = nx;
+                    config_mgr_->data.runtime.ny = ny;
+                    config_mgr_->data.runtime.nz = nz;
                 }
-                load_and_validate_configuration(*config_mgr, options.config_file);
-                species_count = static_cast<int>(config_mgr->data.species.size());
+                load_and_validate_configuration(*config_mgr_, options.config_file);
+                species_count = static_cast<int>(config_mgr_->data.species.size());
             } else {
-                config_mgr->data.runtime.nx = nx;
-                config_mgr->data.runtime.ny = ny;
-                config_mgr->data.runtime.nz = nz;
+                config_mgr_->data.runtime.nx = nx;
+                config_mgr_->data.runtime.ny = ny;
+                config_mgr_->data.runtime.nz = nz;
             }
 
-            grid_mgr = std::make_shared<GridManager>(nx, ny, nz);
-            state_mgr = std::make_shared<StateManager>(nx * ny, nz, species_count);
+            grid_mgr_ = std::make_shared<GridManager>(nx, ny, nz);
+            state_mgr_ = std::make_shared<StateManager>(nx * ny, nz, species_count);
             if (configured)
-                state_mgr->set_validation_policy(config_mgr->data.physical_validation_policy);
-            state_mgr->attach_config_manager(config_mgr);
-            diag_mgr = std::make_shared<DiagnosticManager>();
-            state_mgr->attach_diagnostic_manager(diag_mgr);
+                state_mgr_->set_validation_policy(config_mgr_->data.physical_validation_policy);
+            state_mgr_->attach_config_manager(config_mgr_);
+            diag_mgr_ = std::make_shared<DiagnosticManager>();
+            state_mgr_->attach_diagnostic_manager(diag_mgr_);
             if (configured) {
-                state_mgr->set_configuration_path(config_mgr->config_file_path);
-                state_mgr->chemistry().load_from_config_manager(*config_mgr);
+                state_mgr_->set_configuration_path(config_mgr_->config_file_path);
+                state_mgr_->chemistry().load_from_config_manager(*config_mgr_);
                 add_configured_processes();
             }
         } catch (...) {
@@ -203,23 +212,23 @@ namespace catchem {
     }
 
     std::shared_ptr<ConfigManager> Core::get_config_manager() {
-        return config_mgr;
+        return config_mgr_;
     }
 
     std::shared_ptr<GridManager> Core::get_grid_manager() {
-        return grid_mgr;
+        return grid_mgr_;
     }
 
     std::shared_ptr<StateManager> Core::get_state_manager() {
-        return state_mgr;
+        return state_mgr_;
     }
 
     std::shared_ptr<DiagnosticManager> Core::get_diagnostic_manager() {
-        return diag_mgr;
+        return diag_mgr_;
     }
 
     std::size_t Core::get_num_processes() const {
-        return processes.size();
+        return processes_.size();
     }
 
     std::vector<std::string> Core::get_required_host_fields() const {
@@ -240,18 +249,18 @@ namespace catchem {
 
     void Core::add_configured_processes() {
         auto& registry = ProcessRegistry::get_instance();
-        for (const auto& process_name : config_mgr->data.active_processes) {
-            const auto settings = config_mgr->data.processes.find(process_name);
+        for (const auto& process_name : config_mgr_->data.active_processes) {
+            const auto settings = config_mgr_->data.processes.find(process_name);
             // run_phases defines schedule order; the process block controls
             // whether that scheduled entry is enabled for this runtime YAML.
             // A missing block defaults to disabled, so mechanisms can retain
             // a common schedule without hardcoding a process selection.
-            if (settings == config_mgr->data.processes.end() || !settings->second.activate)
+            if (settings == config_mgr_->data.processes.end() || !settings->second.activate)
                 continue;
-            if (settings != config_mgr->data.processes.end())
+            if (settings != config_mgr_->data.processes.end())
                 registry.validate_settings(process_name, settings->second);
             auto process = registry.create(process_name);
-            process->init(state_mgr);
+            process->init(state_mgr_);
             try {
                 add_process(process);
             } catch (...) {
@@ -270,14 +279,14 @@ namespace catchem {
         std::lock_guard<std::mutex> lock(lifecycle_mutex_);
         if (shutdown_)
             throw std::logic_error("Cannot add a process after shutdown");
-        processes.push_back(process);
+        processes_.push_back(process);
         initialized_processes_.push_back(true);
-        execution_plan_.compile(processes, state_mgr->chemistry().mechanism.get());
+        execution_plan_.compile(processes_, state_mgr_->chemistry().mechanism.get());
         if (execution_plan_.validation().has_errors()) {
             const auto issue_summary = execution_plan_.validation().format();
-            processes.pop_back();
+            processes_.pop_back();
             initialized_processes_.pop_back();
-            execution_plan_.compile(processes, state_mgr->chemistry().mechanism.get());
+            execution_plan_.compile(processes_, state_mgr_->chemistry().mechanism.get());
             throw std::invalid_argument("Invalid process schedule: " + issue_summary);
         }
     }
@@ -290,7 +299,7 @@ namespace catchem {
         if (shutdown_)
             throw std::logic_error("Cannot run a timestep after shutdown");
         if (tainted_) {
-            if (state_mgr->current_import_generation() > last_outcome_.import_generation) {
+            if (state_mgr_->current_import_generation() > last_outcome_.import_generation) {
                 tainted_ = false;
             } else {
                 throw std::runtime_error(
@@ -300,7 +309,7 @@ namespace catchem {
         last_outcome_ = {};
         last_outcome_.timestep = ++timestep_counter_;
         last_outcome_.duration = dt;
-        last_outcome_.import_generation = state_mgr->current_import_generation();
+        last_outcome_.import_generation = state_mgr_->current_import_generation();
         if (dt <= 0.0 || dt > 86400.0) {
             last_outcome_.status = TimestepStatus::ValidationFailed;
             last_outcome_.state = StateClassification::RequiresReimport;
@@ -310,7 +319,7 @@ namespace catchem {
         }
 
         try {
-            state_mgr->validate_ready_for_execution();
+            state_mgr_->validate_ready_for_execution();
         } catch (const std::exception& error) {
             last_outcome_.status = TimestepStatus::ValidationFailed;
             last_outcome_.state = StateClassification::RequiresReimport;
@@ -318,60 +327,61 @@ namespace catchem {
             throw;
         }
         last_outcome_.status = TimestepStatus::Running;
-        const bool verbose = config_mgr && config_mgr->data.simulation.verbose_enabled;
+        const bool verbose = config_mgr_ && config_mgr_->data.simulation.verbose_enabled;
         if (verbose) {
-            Logger::debug(state_mgr.get(), "Core timestep begin",
+            Logger::debug(*state_mgr_, "Core timestep begin",
                           {{"step", std::to_string(last_outcome_.timestep)},
                            {"dt_s", std::to_string(dt)},
-                           {"processes", std::to_string(processes.size())},
+                           {"processes", std::to_string(processes_.size())},
                            {"import_generation", std::to_string(last_outcome_.import_generation)}});
         }
-        diag_mgr->begin_timestep();
+        diag_mgr_->begin_timestep();
 
-        for (std::size_t index = 0; index < processes.size(); ++index) {
+        for (std::size_t index = 0; index < processes_.size(); ++index) {
             try {
                 if (verbose) {
-                    Logger::debug(state_mgr.get(), "Core process prepare",
+                    Logger::debug(*state_mgr_, "Core process prepare",
                                   {{"step", std::to_string(last_outcome_.timestep)},
                                    {"index", std::to_string(index)},
-                                   {"process", processes[index]->get_name()}});
-                    Logger::debug(state_mgr.get(), "Core process input preparation",
+                                   {"process", processes_[index]->get_name()}});
+                    Logger::debug(*state_mgr_, "Core process input preparation",
                                   {{"step", std::to_string(last_outcome_.timestep)},
                                    {"index", std::to_string(index)},
-                                   {"process", processes[index]->get_name()}});
+                                   {"process", processes_[index]->get_name()}});
                 }
-                processes[index]->prepare_inputs(state_mgr);
-                execution_plan_.prepare(index, *state_mgr);
+                processes_[index]->prepare_inputs(state_mgr_);
+                execution_plan_.prepare(index, *state_mgr_);
                 if (verbose) {
-                    Logger::debug(state_mgr.get(), "Core process run",
+                    Logger::debug(*state_mgr_, "Core process run",
                                   {{"step", std::to_string(last_outcome_.timestep)},
                                    {"index", std::to_string(index)},
-                                   {"process", processes[index]->get_name()}});
+                                   {"process", processes_[index]->get_name()}});
                 }
-                processes[index]->run(state_mgr);
+                processes_[index]->run(state_mgr_);
                 if (verbose) {
-                    log_watch_species_bounds(*state_mgr, processes[index]->get_name(), last_outcome_.timestep);
-                    Logger::debug(state_mgr.get(), "Core process bookkeeping",
+                    log_watch_species_bounds(*state_mgr_, config_mgr_->data.simulation, processes_[index]->get_name(),
+                                             last_outcome_.timestep);
+                    Logger::debug(*state_mgr_, "Core process bookkeeping",
                                   {{"step", std::to_string(last_outcome_.timestep)},
                                    {"index", std::to_string(index)},
-                                   {"process", processes[index]->get_name()}});
+                                   {"process", processes_[index]->get_name()}});
                 }
-                execution_plan_.complete(index, *state_mgr);
+                execution_plan_.complete(index, *state_mgr_);
                 if (verbose) {
-                    Logger::debug(state_mgr.get(), "Core process complete",
+                    Logger::debug(*state_mgr_, "Core process complete",
                                   {{"step", std::to_string(last_outcome_.timestep)},
                                    {"index", std::to_string(index)},
-                                   {"process", processes[index]->get_name()}});
+                                   {"process", processes_[index]->get_name()}});
                 }
             } catch (const std::exception& error) {
                 last_outcome_.status = TimestepStatus::PartialUpdate;
-                last_outcome_.process_name = processes[index]->get_name();
+                last_outcome_.process_name = processes_[index]->get_name();
                 last_outcome_.process_index = index;
                 last_outcome_.cause = error.what();
                 last_outcome_.state = StateClassification::RequiresReimport;
                 tainted_ = true;
-                diag_mgr->mark_generation_failed();
-                Logger::error(state_mgr.get(), "Core process failed",
+                diag_mgr_->mark_generation_failed();
+                Logger::error(*state_mgr_, "Core process failed",
                               {{"step", std::to_string(last_outcome_.timestep)},
                                {"index", std::to_string(index)},
                                {"process", last_outcome_.process_name},
@@ -379,13 +389,13 @@ namespace catchem {
                 throw;
             } catch (...) {
                 last_outcome_.status = TimestepStatus::PartialUpdate;
-                last_outcome_.process_name = processes[index]->get_name();
+                last_outcome_.process_name = processes_[index]->get_name();
                 last_outcome_.process_index = index;
                 last_outcome_.cause = "unknown non-standard exception";
                 last_outcome_.state = StateClassification::RequiresReinitialize;
                 tainted_ = true;
-                diag_mgr->mark_generation_failed();
-                Logger::error(state_mgr.get(), "Core process failed",
+                diag_mgr_->mark_generation_failed();
+                Logger::error(*state_mgr_, "Core process failed",
                               {{"step", std::to_string(last_outcome_.timestep)},
                                {"index", std::to_string(index)},
                                {"process", last_outcome_.process_name},
@@ -396,17 +406,16 @@ namespace catchem {
 
         // Sync diagnostics
         if (verbose)
-            Logger::debug(state_mgr.get(), "Core diagnostics sync", {{"step", std::to_string(last_outcome_.timestep)}});
-        diag_mgr->sync_to_host();
+            Logger::debug(*state_mgr_, "Core diagnostics sync", {{"step", std::to_string(last_outcome_.timestep)}});
+        diag_mgr_->sync_to_host();
         last_outcome_.status = TimestepStatus::Succeeded;
         last_outcome_.state = StateClassification::Reusable;
         if (verbose)
-            Logger::debug(state_mgr.get(), "Core timestep complete",
-                          {{"step", std::to_string(last_outcome_.timestep)}});
+            Logger::debug(*state_mgr_, "Core timestep complete", {{"step", std::to_string(last_outcome_.timestep)}});
     }
 
     void Core::run_timestep() {
-        double dt = config_mgr->data.runtime.dt;
+        double dt = config_mgr_->data.runtime.dt;
         run_timestep(dt);
     }
 

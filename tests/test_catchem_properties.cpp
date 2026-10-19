@@ -6,7 +6,9 @@
 #include "catchem_process_registry.hpp"
 #include "catchem_state_manager.hpp"
 #include "catchem_unit_conversion.hpp"
+#include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -15,6 +17,18 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+// The unchecked catchem_state_get_species_index was retired.  This test builds
+// its StateManager on the stack, outside the handle registry the checked C API
+// requires, so resolve names through the chemistry map directly (1-based index,
+// -1 if missing, as the assertions below expect).
+static int species_index_1based(catchem::StateManager* state, const char* name) {
+    std::string key(name);
+    std::transform(key.begin(), key.end(), key.begin(), [](unsigned char c) { return std::toupper(c); });
+    const auto& map = state->chemistry().species_name_to_index;
+    auto it = map.find(key);
+    return it == map.end() ? -1 : it->second + 1;
+}
 
 extern "C" {
 void catchem_register_seasalt_cpp();
@@ -211,6 +225,40 @@ void CatchemPropertiesTest_ConfigManagerLogLevelDrivesLogger() {
         assert(!catchem::Logger::enabled(Level::Info)); // warn override from step 1 persists
     }
 
+    // 4) simulation/verbose/watch_species: a list of names, the word all
+    //    (any case), absent (nothing watched), or an error for anything else.
+    {
+        auto load = [](const std::string& path, const std::string& body) {
+            std::ofstream f(path);
+            f << "simulation:\n  name: watch\n  verbose:\n    activate: true\n" << body;
+            f.close();
+            catchem::ConfigManager mgr;
+            mgr.load_from_file(path);
+            return mgr.data.simulation;
+        };
+        const auto listed = load("cfg_watch_list.yml", "    watch_species: [SO2, dust1]\n");
+        assert(listed.watch_species == std::vector<std::string>({"SO2", "dust1"}));
+        assert(!listed.watch_all_species);
+        const auto all = load("cfg_watch_all.yml", "    watch_species: ALL\n");
+        assert(all.watch_all_species && all.watch_species.empty());
+        const auto none = load("cfg_watch_absent.yml", "");
+        assert(!none.watch_all_species && none.watch_species.empty());
+        const auto null_value = load("cfg_watch_null.yml", "    watch_species: ~\n");
+        assert(!null_value.watch_all_species && null_value.watch_species.empty());
+        for (const auto& [path, body] :
+             {std::pair<std::string, std::string>{"cfg_watch_scalar.yml", "    watch_species: so2\n"},
+              std::pair<std::string, std::string>{"cfg_watch_nested.yml", "    watch_species: [so2, {a: b}]\n"},
+              std::pair<std::string, std::string>{"cfg_watch_map.yml", "    watch_species: {a: b}\n"}}) {
+            bool threw = false;
+            try {
+                load(path, body);
+            } catch (const std::invalid_argument&) {
+                threw = true;
+            }
+            assert(threw);
+        }
+    }
+
     // Leave the process in the environment-controlled state for later tests.
     catchem::Logger::clear_level();
 
@@ -329,7 +377,7 @@ void CatchemPropertiesTest_SpeciesMetadataAPI() {
     int count = catchem_state_get_species_count(&state);
     assert(count > 20);
 
-    int so2_idx = catchem_state_get_species_index(&state, "so2"); // 1-based
+    int so2_idx = species_index_1based(&state, "so2"); // 1-based
     assert(so2_idx > 0);
 
     char name_buf[128];
@@ -346,7 +394,7 @@ void CatchemPropertiesTest_SpeciesMetadataAPI() {
     assert(catchem_state_is_species_drydep(&state, so2_idx) == 1);
     assert(catchem_state_is_species_wetdep(&state, so2_idx) == 1);
 
-    int msa_idx = catchem_state_get_species_index(&state, "msa");
+    int msa_idx = species_index_1based(&state, "msa");
     assert(msa_idx > 0);
     // The original SO4chem Fortran scheme carries MSA as aerosol mass (ug/kg).
     assert(catchem_state_is_species_gas(&state, msa_idx) == 0);
@@ -360,7 +408,7 @@ void CatchemPropertiesTest_SpeciesMetadataAPI() {
     assert(catchem_state_get_species_radius(&state, msa_idx) == 0.35);
     assert(catchem_state_get_species_density(&state, msa_idx) == 1700.0);
 
-    int dust1_idx = catchem_state_get_species_index(&state, "dust1");
+    int dust1_idx = species_index_1based(&state, "dust1");
     assert(dust1_idx > 0);
     assert(catchem_state_is_species_dust(&state, dust1_idx) == 1);
     assert(catchem_state_is_species_aerosol(&state, dust1_idx) == 1);
@@ -398,8 +446,6 @@ void CatchemPropertiesTest_ConfigManagerLoadsTypedFixtureData() {
     assert(config_mgr.data.diagnostics.output.prefix == "catchem_diag");
     assert(config_mgr.data.diagnostics.output.frequency == 3600);
     assert(config_mgr.data.diagnostics.output.format == "netcdf");
-    // Per-process diagnostic output is opt-in via diagnostics/output/process_diagnostics.
-    assert(config_mgr.data.diagnostics.output.process_diagnostics);
     assert(config_mgr.data.diagnostics.output.diag_list.size() == 7);
     assert(config_mgr.data.diagnostics.output.diag_list[0] == "so2");
     assert(config_mgr.data.diagnostics.collection.enabled);

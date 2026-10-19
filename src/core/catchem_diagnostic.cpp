@@ -250,8 +250,8 @@ namespace catchem {
                     throw std::invalid_argument("Invalid diagnostic contract (duplicate label '" + label +
                                                 "'): " + name);
         }
-        auto existing = fields.find(name);
-        if (existing != fields.end()) {
+        auto existing = fields_.find(name);
+        if (existing != fields_.end()) {
             const auto& field = *existing->second;
             if (field.type != type || field.dimensions != dims || field.units != units || field.description != desc ||
                 field.axes != axes || field.reset_policy != policy || field.reset_value != reset_value ||
@@ -262,46 +262,46 @@ namespace catchem {
         auto field =
             std::make_shared<DiagnosticField>(name, desc, units, type, dims, policy, reset_value, axes, unpack_labels);
         field->registration_generation = generation_;
-        fields[name] = std::move(field);
+        fields_[name] = std::move(field);
         registration_order_.push_back(name);
     }
 
     bool DiagnosticManager::has_field(const std::string& name) const {
-        return fields.find(name) != fields.end();
+        return fields_.find(name) != fields_.end();
     }
 
     std::shared_ptr<DiagnosticField> DiagnosticManager::get_field(const std::string& name) {
         if (!has_field(name))
             throw std::invalid_argument("Field not found: " + name);
-        return fields.at(name);
+        return fields_.at(name);
     }
 
     void DiagnosticManager::sync_to_host() {
-        for (auto& [key, field] : fields) {
+        for (auto& [key, field] : fields_) {
             field->sync_to_host();
         }
     }
 
     void DiagnosticManager::sync_to_device() {
-        for (auto& [key, field] : fields) {
+        for (auto& [key, field] : fields_) {
             field->sync_to_device();
         }
     }
 
     void DiagnosticManager::reset_all() {
-        for (auto& [key, field] : fields) {
+        for (auto& [key, field] : fields_) {
             field->reset();
         }
     }
 
     void DiagnosticManager::begin_timestep() {
         ++generation_;
-        for (auto& [key, field] : fields)
+        for (auto& [key, field] : fields_)
             field->advance_generation(generation_);
     }
 
     void DiagnosticManager::mark_generation_failed() {
-        for (auto& [key, field] : fields) {
+        for (auto& [key, field] : fields_) {
             if (field->generation == generation_)
                 field->generation_failed = true;
         }
@@ -315,15 +315,15 @@ namespace catchem {
     }
 
     const std::vector<SemanticAxis>& DiagnosticManager::get_axes(const std::string& name) const {
-        auto existing = fields.find(name);
-        if (existing == fields.end())
+        auto existing = fields_.find(name);
+        if (existing == fields_.end())
             throw std::invalid_argument("Field not found: " + name);
         return existing->second->axes;
     }
 
     const std::vector<std::string>& DiagnosticManager::get_unpack_labels(const std::string& name) const {
-        auto existing = fields.find(name);
-        if (existing == fields.end())
+        auto existing = fields_.find(name);
+        if (existing == fields_.end())
             throw std::invalid_argument("Field not found: " + name);
         return existing->second->unpack_labels;
     }

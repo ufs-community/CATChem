@@ -2,6 +2,7 @@
 #include "catchem_api_internal.hpp"
 #include "catchem_core.hpp"
 #include "catchem_diagnostic_manager.hpp"
+#include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include "catchem_state_manager.hpp"
 #include "catchem_unit_conversion.hpp"
@@ -14,14 +15,36 @@
 
 using namespace catchem::api_internal;
 
+// The C enum in catchem_api.hpp must mirror catchem::SpeciesCategory exactly.
+#define CATCHEM_ASSERT_CATEGORY(c_name, cpp_name)                                                                      \
+    static_assert(CATCHEM_SPECIES_CATEGORY_##c_name == static_cast<int>(catchem::SpeciesCategory::cpp_name),           \
+                  "catchem_species_category and catchem::SpeciesCategory disagree on " #cpp_name)
+CATCHEM_ASSERT_CATEGORY(GAS, Gas);
+CATCHEM_ASSERT_CATEGORY(AEROSOL, Aerosol);
+CATCHEM_ASSERT_CATEGORY(SETTLING, Settling);
+CATCHEM_ASSERT_CATEGORY(TRACER, Tracer);
+CATCHEM_ASSERT_CATEGORY(ADVECTED, Advected);
+CATCHEM_ASSERT_CATEGORY(DRYDEP, DryDep);
+CATCHEM_ASSERT_CATEGORY(WETDEP, WetDep);
+CATCHEM_ASSERT_CATEGORY(PHOTOLYSIS, Photolysis);
+CATCHEM_ASSERT_CATEGORY(DUST, Dust);
+CATCHEM_ASSERT_CATEGORY(SEASALT, SeaSalt);
+CATCHEM_ASSERT_CATEGORY(COUNT, Count);
+#undef CATCHEM_ASSERT_CATEGORY
+
 extern "C" {
-void catchem_state_load_species_config(void* state_ptr, const char* filename) {
+int catchem_state_load_species_config(void* state_ptr, const char* filename) {
+    if (!state_ptr || !filename)
+        return fail(catchem::BoundaryStatus::NullArgument, "state_load_species_config", "argument",
+                    "state and filename are required");
     try {
         auto* state = static_cast<catchem::StateManager*>(state_ptr);
         state->load_species_config(filename);
+        return CATCHEM_SUCCESS;
     } catch (const std::exception& e) {
-        std::cerr << "CATChem API Error: Failed to load species configuration '" << filename
-                  << "'. Details: " << e.what() << std::endl;
+        return fail(catchem::BoundaryStatus::InvalidConfiguration, "state_load_species_config", filename, e.what());
+    } catch (...) {
+        return fail(catchem::BoundaryStatus::InternalError, "state_load_species_config", filename, "unknown exception");
     }
 }
 
@@ -41,20 +64,6 @@ int catchem_state_get_species_count_checked(void* state_ptr, int* count_out) {
         return status;
     *count_out = static_cast<int>(static_cast<catchem::StateManager*>(state_ptr)->chemistry().species_list.size());
     return CATCHEM_SUCCESS;
-}
-
-int catchem_state_get_species_index(void* state_ptr, const char* name) {
-    if (!state_ptr || !name)
-        return -1;
-    auto* state = static_cast<catchem::StateManager*>(state_ptr);
-    std::string canonical_name(name);
-    std::transform(canonical_name.begin(), canonical_name.end(), canonical_name.begin(),
-                   [](unsigned char c) { return std::toupper(c); });
-    auto it = state->chemistry().species_name_to_index.find(canonical_name);
-    if (it != state->chemistry().species_name_to_index.end()) {
-        return it->second + 1; // Translate 0-based C++ index to 1-based Fortran index
-    }
-    return -1;
 }
 
 int catchem_state_get_species_index_checked(void* state_ptr, const char* name, int* index_out) {
@@ -78,28 +87,44 @@ int catchem_state_get_species_index_checked(void* state_ptr, const char* name, i
     return CATCHEM_SUCCESS;
 }
 
-int catchem_state_get_gas_species_count(void* state_ptr) {
+int catchem_state_get_category_species_count(void* state_ptr, int category) {
+    if (!state_ptr || category < 0 || category >= static_cast<int>(catchem::species_category_count))
+        return -1;
     auto* state = static_cast<catchem::StateManager*>(state_ptr);
-    return static_cast<int>(state->chemistry().gas_indices.size());
+    return static_cast<int>(state->chemistry().indices(static_cast<catchem::SpeciesCategory>(category)).size());
+}
+
+int catchem_state_get_category_indices(void* state_ptr, int category, int* indices_out, int max_count) {
+    if (!state_ptr || !indices_out || max_count < 0 || category < 0 ||
+        category >= static_cast<int>(catchem::species_category_count))
+        return -1;
+    auto* state = static_cast<catchem::StateManager*>(state_ptr);
+    const auto& list = state->chemistry().indices(static_cast<catchem::SpeciesCategory>(category));
+    const size_t n = std::min(list.size(), static_cast<size_t>(max_count));
+    for (size_t i = 0; i < n; ++i) {
+        indices_out[i] = list[i] + 1; // 1-based
+    }
+    return static_cast<int>(list.size());
+}
+
+int catchem_state_get_gas_species_count(void* state_ptr) {
+    return catchem_state_get_category_species_count(state_ptr, CATCHEM_SPECIES_CATEGORY_GAS);
 }
 
 void catchem_state_get_gas_indices(void* state_ptr, int* indices_out) {
-    auto* state = static_cast<catchem::StateManager*>(state_ptr);
-    for (size_t i = 0; i < state->chemistry().gas_indices.size(); ++i) {
-        indices_out[i] = state->chemistry().gas_indices[i] + 1; // 1-based
-    }
+    // Legacy getter: the caller sized the buffer from the count getter.
+    const int count = catchem_state_get_gas_species_count(state_ptr);
+    (void)catchem_state_get_category_indices(state_ptr, CATCHEM_SPECIES_CATEGORY_GAS, indices_out, count);
 }
 
 int catchem_state_get_aerosol_species_count(void* state_ptr) {
-    auto* state = static_cast<catchem::StateManager*>(state_ptr);
-    return static_cast<int>(state->chemistry().aerosol_indices.size());
+    return catchem_state_get_category_species_count(state_ptr, CATCHEM_SPECIES_CATEGORY_AEROSOL);
 }
 
 void catchem_state_get_aerosol_indices(void* state_ptr, int* indices_out) {
-    auto* state = static_cast<catchem::StateManager*>(state_ptr);
-    for (size_t i = 0; i < state->chemistry().aerosol_indices.size(); ++i) {
-        indices_out[i] = state->chemistry().aerosol_indices[i] + 1; // 1-based
-    }
+    // Legacy getter: the caller sized the buffer from the count getter.
+    const int count = catchem_state_get_aerosol_species_count(state_ptr);
+    (void)catchem_state_get_category_indices(state_ptr, CATCHEM_SPECIES_CATEGORY_AEROSOL, indices_out, count);
 }
 
 double catchem_state_get_species_mw(void* state_ptr, int index) {
@@ -528,8 +553,10 @@ void catchem_config_get_emission_species_map_at(void* core_ptr, const char* cate
                 *scale_out = (map_idx < static_cast<int>(fit->second.scale.size())) ? fit->second.scale[map_idx] : 1.0;
             }
             if (species_idx_out) {
-                *species_idx_out =
-                    catchem_state_get_species_index(core->get_state_manager().get(), fit->second.map[map_idx].c_str());
+                int species_index = 0;
+                const int status = catchem_state_get_species_index_checked(
+                    core->get_state_manager().get(), fit->second.map[map_idx].c_str(), &species_index);
+                *species_idx_out = (status == CATCHEM_SUCCESS) ? species_index : -1;
             }
             return;
         }
@@ -608,35 +635,38 @@ void catchem_config_get_yaml_list_at(void* core_ptr, const char* yaml_path, int 
 // =========================================================================
 #define CATCHEM_SPECIES_DOUBLE_PROPERTY(api, member, fallback)                                                         \
     double catchem_state_get_species_##api(void* state_ptr, int index) {                                               \
-        try {                                                                                                          \
+        if (state_ptr) {                                                                                               \
             auto* state = static_cast<catchem::StateManager*>(state_ptr);                                              \
             const int idx_0 = index - 1;                                                                               \
             if (idx_0 >= 0 && idx_0 < static_cast<int>(state->chemistry().species_list.size()))                        \
                 return state->chemistry().species_list[idx_0].member;                                                  \
-        } catch (...) {                                                                                                \
         }                                                                                                              \
+        catchem::Logger::error("species property query failed: null state or index out of range",                      \
+                               {{"property", #api}, {"index", std::to_string(index)}});                                \
         return fallback;                                                                                               \
     }
 #define CATCHEM_SPECIES_BOOL_PROPERTY(api, member)                                                                     \
     int catchem_state_get_species_##api(void* state_ptr, int index) {                                                  \
-        try {                                                                                                          \
+        if (state_ptr) {                                                                                               \
             auto* state = static_cast<catchem::StateManager*>(state_ptr);                                              \
             const int idx_0 = index - 1;                                                                               \
             if (idx_0 >= 0 && idx_0 < static_cast<int>(state->chemistry().species_list.size()))                        \
                 return state->chemistry().species_list[idx_0].member ? 1 : 0;                                          \
-        } catch (...) {                                                                                                \
         }                                                                                                              \
+        catchem::Logger::error("species property query failed: null state or index out of range",                      \
+                               {{"property", #api}, {"index", std::to_string(index)}});                                \
         return 0;                                                                                                      \
     }
 #define CATCHEM_SPECIES_LEGACY_BOOL_PROPERTY(api, member)                                                              \
     int catchem_state_is_species_##api(void* state_ptr, int index) {                                                   \
-        try {                                                                                                          \
+        if (state_ptr) {                                                                                               \
             auto* state = static_cast<catchem::StateManager*>(state_ptr);                                              \
             const int idx_0 = index - 1;                                                                               \
             if (idx_0 >= 0 && idx_0 < static_cast<int>(state->chemistry().species_list.size()))                        \
                 return state->chemistry().species_list[idx_0].member ? 1 : 0;                                          \
-        } catch (...) {                                                                                                \
         }                                                                                                              \
+        catchem::Logger::error("species property query failed: null state or index out of range",                      \
+                               {{"property", #api}, {"index", std::to_string(index)}});                                \
         return 0;                                                                                                      \
     }
 #include "catchem_species_properties.def"
@@ -654,9 +684,12 @@ void catchem_state_get_species_wd_rainouteff(void* state_ptr, int index, double*
                 eff_out[i] = i < eff.size() ? eff[i] : 0.0;
             }
         } else {
+            catchem::Logger::error("species property query failed: index out of range",
+                                   {{"property", "wd_rainouteff"}, {"index", std::to_string(index)}});
             eff_out[0] = eff_out[1] = eff_out[2] = 0.0;
         }
-    } catch (...) {
+    } catch (const std::exception& e) {
+        catchem::Logger::error("species property query failed", {{"property", "wd_rainouteff"}, {"error", e.what()}});
         eff_out[0] = eff_out[1] = eff_out[2] = 0.0;
     }
 }

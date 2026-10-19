@@ -117,7 +117,7 @@ The complete API documentation includes:
 All C-bound procedures use integer return codes following the convention:
 - `CC_SUCCESS = 0` - Successful operation
 - `CC_FAILURE = -1` - Generic failure
-- C++ methods utilize standard exceptions (e.g., `std::runtime_error`) shielded inside BIND(C) boundaries.
+- C++ methods utilize standard exceptions (e.g., `std::runtime_error`) shielded inside `extern "C"` boundaries.
 
 ### Memory Management
 - Central memory managed entirely in C++ `StateManager` using Kokkos Views

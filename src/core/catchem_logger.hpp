@@ -18,10 +18,18 @@ namespace catchem {
         // or unrecognized value selects INFO so production runs stay quiet.
         enum class Level { Debug = 0, Info = 1, Warn = 2, Error = 3 };
 
-        static void debug(const StateManager* state, std::string_view message, ContextList context = {});
-        static void info(const StateManager* state, std::string_view message, ContextList context = {});
-        static void warn(const StateManager* state, std::string_view message, ContextList context = {});
-        static void error(const StateManager* state, std::string_view message, ContextList context = {});
+        // With a state, the line carries that state's runtime trace id; the
+        // no-state overloads are for code that runs before or outside a
+        // StateManager (configuration loading, the C boundary, shutdown) and
+        // print the "global" trace id instead.
+        static void debug(const StateManager& state, std::string_view message, ContextList context = {});
+        static void info(const StateManager& state, std::string_view message, ContextList context = {});
+        static void warn(const StateManager& state, std::string_view message, ContextList context = {});
+        static void error(const StateManager& state, std::string_view message, ContextList context = {});
+        static void debug(std::string_view message, ContextList context = {});
+        static void info(std::string_view message, ContextList context = {});
+        static void warn(std::string_view message, ContextList context = {});
+        static void error(std::string_view message, ContextList context = {});
 
         // Returns true when a message of the given level would be emitted.
         // Call sites with expensive context preparation should check this

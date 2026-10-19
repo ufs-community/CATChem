@@ -18,6 +18,8 @@ simulation:
     activate: true
     # log_level: debug   # optional logger threshold: debug | info | warn | error
     #                    (overrides CATCHEM_LOG_LEVEL; default when unset: info)
+    # watch_species: [so2, so4, dust1]   # optional: log min/max/sum of these
+    #                    species after every process at debug; or `all`
 #============================================================================
 # Grid settings
 #============================================================================
@@ -42,7 +44,6 @@ diagnostics:
     format: "netcdf" #only format supported now
     compress_lev: 2 #compress NC file; 0 for no compression, 1-9 for increasing levels of compression (and run time)
     latlon_output: true #stitch cubed-sphere tiles into a single lat/lon file (only applies when tile count > 1)
-    process_diagnostics: true #write per-process diagnostic variables (dust/seasalt emissions, fluxes, thresholds); per-bin data as 3D (nx,ny,nbin)
     diag_list: [so2, so4, seas1, seas2, seas3, seas4, seas5, bc1, bc2, oc1, oc2, dust1, dust2, dust3, dust4, dust5]  #list of species to output; empty list for all species
   collection:
     enabled: true

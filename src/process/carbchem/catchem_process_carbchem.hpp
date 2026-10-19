@@ -21,13 +21,13 @@ namespace catchem {
         void finalize() override;
 
     private:
-        std::string active_scheme;
-        bool diagnostics_enabled;
-        std::vector<int> diagnostic_species_id;
+        std::string active_scheme_;
+        bool diagnostics_enabled_;
+        std::vector<int> diagnostic_species_id_;
 
         // GOCART scheme options staged from the runtime configuration
         // (processes/carbchem/gocart/*) and forwarded to the science bridge.
-        double gocart_time_days = 2.5;
+        double gocart_time_days_ = 2.5;
     };
 
 } // namespace catchem

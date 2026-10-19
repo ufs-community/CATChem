@@ -71,7 +71,7 @@ namespace catchem {
     ProcessContract DustProcess::get_contract() const {
         std::vector<FieldAccessContract> fields{host_field_interface("PEDGE", "Pa"), host_field_3d("DELP", "Pa"),
                                                 host_field_3d("AIRDEN", "kg/m3"), host_concentration()};
-        if (active_scheme == "fengsha") {
+        if (active_scheme_ == "fengsha") {
             fields.insert(fields.end(),
                           {host_field_soil_layer("SOILM", "m3/m3"), host_field_2d("CLAYFRAC", "1"),
                            host_field_2d("FRLAKE", "1"), host_field_2d("FRSNO", "frac"), host_field_2d("GVF", "frac"),
@@ -79,7 +79,7 @@ namespace catchem {
                            host_field_2d("RDRAG", "1"), host_field_2d("SNDFRC", "1"), host_field_2d("SSM", "1"),
                            host_field_2d("TS", "K"), host_field_2d("USTAR", "m/s"),
                            host_field_2d("USTAR_THRESHOLD", "m/s"), host_field_2d("Z0", "m")});
-        } else if (active_scheme == "ginoux") {
+        } else if (active_scheme_ == "ginoux") {
             fields.insert(fields.end(),
                           {host_field_2d("FRLAKE", "1"), host_field_2d("FRSNO", "frac"), host_field_2d("GWETTOP", "1"),
                            host_field_2d("LWI", "1"), host_field_2d("SSM", "1"), host_field_2d("TS", "K"),
@@ -88,7 +88,7 @@ namespace catchem {
         return make_contract(get_name(), std::move(fields));
     }
 
-    DustProcess::DustProcess() : active_scheme("fengsha"), diagnostics_enabled(true) {}
+    DustProcess::DustProcess() : active_scheme_("fengsha"), diagnostics_enabled_(true) {}
 
     void DustProcess::prepare_inputs(std::shared_ptr<StateManager> state) {
         state->derive_delp();
@@ -106,10 +106,10 @@ namespace catchem {
         const auto configured = config->data.processes.find("dust");
         if (configured == config->data.processes.end() || configured->second.scheme.empty())
             throw std::invalid_argument("Dust requires processes.dust.scheme in the runtime YAML");
-        active_scheme = configured->second.scheme;
-        diagnostics_enabled = configured->second.diagnostics;
-        if (active_scheme != "fengsha" && active_scheme != "ginoux")
-            throw std::invalid_argument("Dust runtime YAML selected unsupported scheme: " + active_scheme);
+        active_scheme_ = configured->second.scheme;
+        diagnostics_enabled_ = configured->second.diagnostics;
+        if (active_scheme_ != "fengsha" && active_scheme_ != "ginoux")
+            throw std::invalid_argument("Dust runtime YAML selected unsupported scheme: " + active_scheme_);
 
         // 2. Read scheme tuning options from the runtime YAML.  Each lookup
         // falls back to the compiled default declared in DustCommon_Mod.F90,
@@ -117,47 +117,47 @@ namespace catchem {
         // Core validates the option names against the registered schema, so a
         // misspelled key fails at initialization rather than being dropped.
         const auto& settings = configured->second;
-        fengsha_alpha = settings.get_double("fengsha/alpha", fengsha_alpha);
-        fengsha_gamma = settings.get_double("fengsha/gamma", fengsha_gamma);
-        fengsha_drylimit_factor = settings.get_double("fengsha/drylimit_factor", fengsha_drylimit_factor);
-        fengsha_moist_correction_factor =
-            settings.get_double("fengsha/moist_correction_factor", fengsha_moist_correction_factor);
-        fengsha_kvhmax = settings.get_double("fengsha/kvhmax", fengsha_kvhmax);
-        fengsha_drag_option = settings.get_int("fengsha/drag_option", fengsha_drag_option);
-        fengsha_horizflux_option = settings.get_int("fengsha/horizflux_option", fengsha_horizflux_option);
-        fengsha_moist_option = settings.get_int("fengsha/moist_option", fengsha_moist_option);
-        fengsha_distribution_option = settings.get_int("fengsha/distribution_option", fengsha_distribution_option);
+        fengsha_alpha_ = settings.get_double("fengsha/alpha", fengsha_alpha_);
+        fengsha_gamma_ = settings.get_double("fengsha/gamma", fengsha_gamma_);
+        fengsha_drylimit_factor_ = settings.get_double("fengsha/drylimit_factor", fengsha_drylimit_factor_);
+        fengsha_moist_correction_factor_ =
+            settings.get_double("fengsha/moist_correction_factor", fengsha_moist_correction_factor_);
+        fengsha_kvhmax_ = settings.get_double("fengsha/kvhmax", fengsha_kvhmax_);
+        fengsha_drag_option_ = settings.get_int("fengsha/drag_option", fengsha_drag_option_);
+        fengsha_horizflux_option_ = settings.get_int("fengsha/horizflux_option", fengsha_horizflux_option_);
+        fengsha_moist_option_ = settings.get_int("fengsha/moist_option", fengsha_moist_option_);
+        fengsha_distribution_option_ = settings.get_int("fengsha/distribution_option", fengsha_distribution_option_);
 
         // Ch_DU carries one multiplier per dust size bin; the scheme type
         // declares exactly five bins, so a provided sequence must match.
         auto ch_du = settings.get_vector("ginoux/Ch_DU");
         if (!ch_du.empty()) {
-            if (ch_du.size() != ginoux_ch_du.size())
-                throw std::invalid_argument("Dust ginoux Ch_DU must declare " + std::to_string(ginoux_ch_du.size()) +
+            if (ch_du.size() != ginoux_ch_du_.size())
+                throw std::invalid_argument("Dust ginoux Ch_DU must declare " + std::to_string(ginoux_ch_du_.size()) +
                                             " values, one per dust size bin");
-            ginoux_ch_du = std::move(ch_du);
+            ginoux_ch_du_ = std::move(ch_du);
         }
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
         {
             std::string ch_du_joined;
-            for (size_t i = 0; i < ginoux_ch_du.size(); ++i) {
+            for (size_t i = 0; i < ginoux_ch_du_.size(); ++i) {
                 if (i)
                     ch_du_joined += ",";
-                ch_du_joined += std::to_string(ginoux_ch_du[i]);
+                ch_du_joined += std::to_string(ginoux_ch_du_[i]);
             }
-            Logger::debug(state.get(), "Dust scheme options",
-                          {{"scheme", active_scheme},
-                           {"fengsha/alpha", std::to_string(fengsha_alpha)},
-                           {"fengsha/gamma", std::to_string(fengsha_gamma)},
-                           {"fengsha/drylimit_factor", std::to_string(fengsha_drylimit_factor)},
-                           {"fengsha/moist_correction_factor", std::to_string(fengsha_moist_correction_factor)},
-                           {"fengsha/kvhmax", std::to_string(fengsha_kvhmax)},
-                           {"fengsha/drag_option", std::to_string(fengsha_drag_option)},
-                           {"fengsha/horizflux_option", std::to_string(fengsha_horizflux_option)},
-                           {"fengsha/moist_option", std::to_string(fengsha_moist_option)},
-                           {"fengsha/distribution_option", std::to_string(fengsha_distribution_option)},
+            Logger::debug(*state, "Dust scheme options",
+                          {{"scheme", active_scheme_},
+                           {"fengsha/alpha", std::to_string(fengsha_alpha_)},
+                           {"fengsha/gamma", std::to_string(fengsha_gamma_)},
+                           {"fengsha/drylimit_factor", std::to_string(fengsha_drylimit_factor_)},
+                           {"fengsha/moist_correction_factor", std::to_string(fengsha_moist_correction_factor_)},
+                           {"fengsha/kvhmax", std::to_string(fengsha_kvhmax_)},
+                           {"fengsha/drag_option", std::to_string(fengsha_drag_option_)},
+                           {"fengsha/horizflux_option", std::to_string(fengsha_horizflux_option_)},
+                           {"fengsha/moist_option", std::to_string(fengsha_moist_option_)},
+                           {"fengsha/distribution_option", std::to_string(fengsha_distribution_option_)},
                            {"ginoux/Ch_DU", ch_du_joined}});
         }
 
@@ -187,10 +187,10 @@ namespace catchem {
                 for (size_t bin = 0; bin < dust_global_indices.size(); ++bin)
                     selected_local.push_back(static_cast<int>(bin) + 1);
             }
-            diagnostic_species_id = selected_local;
+            diagnostic_species_id_ = selected_local;
         }
 
-        if (!diagnostics_enabled)
+        if (!diagnostics_enabled_)
             return;
 
         // 4. Register C++ Diagnostic fields (registering 1D fields as 2D with second dimension of 1).
@@ -198,7 +198,7 @@ namespace catchem {
         // axis and per-slot labels; the NUOPC driver unpacks them into one
         // named 2D variable per bin (feature 013).  The science bridge already
         // writes exactly that column-major shape.
-        const int n_diag = static_cast<int>(diagnostic_species_id.size());
+        const int n_diag = static_cast<int>(diagnostic_species_id_.size());
         std::vector<int> dims_1d_as_2d = {state->column_count(), 1};
         std::vector<int> dims_bins = {state->column_count(), n_diag};
 
@@ -208,7 +208,7 @@ namespace catchem {
         // index (index-space rule, FR-006).
         std::vector<std::string> dust_bin_labels;
         dust_bin_labels.reserve(dust_global_indices.size());
-        for (const int local : diagnostic_species_id)
+        for (const int local : diagnostic_species_id_)
             dust_bin_labels.push_back(
                 state->chemistry().species_list[dust_global_indices[static_cast<size_t>(local) - 1]].short_name);
         const std::vector<SemanticAxis> axes_bin = {SemanticAxis::Column, SemanticAxis::Category};
@@ -267,7 +267,7 @@ namespace catchem {
 
         require_field_pointer("Dust", "AIRDEN", airden_ptr);
         require_field_pointer("Dust", "DELP", delp_ptr);
-        if (active_scheme == "fengsha") {
+        if (active_scheme_ == "fengsha") {
             require_field_pointer("Dust", "CLAYFRAC", clayfrac_ptr);
             require_field_pointer("Dust", "FRLAKE", frlake_ptr);
             require_field_pointer("Dust", "FRSNO", frsno_ptr);
@@ -327,7 +327,7 @@ namespace catchem {
                     }
                 }
             }
-            Logger::debug(state.get(), "Dust layer-mass conversion inputs",
+            Logger::debug(*state, "Dust layer-mass conversion inputs",
                           {{"delp_pa_min", std::to_string(min_delp)},
                            {"delp_pa_max", std::to_string(max_delp)},
                            {"delp_surface_pa_min", std::to_string(surf_min)},
@@ -345,7 +345,7 @@ namespace catchem {
         double* diag_effective_threshold = nullptr;
         double* diag_utar_threshold = nullptr;
 
-        if (state->diagnostic_manager() && diagnostics_enabled) {
+        if (state->diagnostic_manager() && diagnostics_enabled_) {
             diag_emission_total = (double*)state->diagnostic_manager()->get_host_pointer("dust_emission_total");
             diag_emission_bin = (double*)state->diagnostic_manager()->get_host_pointer("dust_emission_bin");
             diag_horizontal_flux = (double*)state->diagnostic_manager()->get_host_pointer("dust_horizontal_flux");
@@ -418,18 +418,18 @@ namespace catchem {
         // scheme, so pass a valid size-1 dummy holding 0 — it matches no
         // 1-based species_idx and the scheme writes nothing (mirrors
         // settling's no_diag_species guard).
-        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        const bool forward_diag = diagnostics_enabled_ && !diagnostic_species_id_.empty();
         static const int no_diag_species = 0;
-        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
-        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id_.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id_.size()) : 0;
 
         // 5. Invoke flat science bridge
         run_dust_science_bridge(
             state->column_count(), state->level_count(), n_dust, n_total_species, n_soil, state->clock().timestep,
-            active_scheme.c_str(), diagnostics_enabled ? 1 : 0, fengsha_alpha, fengsha_gamma, fengsha_drylimit_factor,
-            fengsha_moist_correction_factor, fengsha_kvhmax, fengsha_drag_option, fengsha_horizflux_option,
-            fengsha_moist_option, fengsha_distribution_option, ginoux_ch_du.data(),
-            static_cast<int>(ginoux_ch_du.size()), airden_ptr, delp_ptr, clayfrac_ptr, frlake_ptr, frsno_ptr, gvf_ptr,
+            active_scheme_.c_str(), diagnostics_enabled_ ? 1 : 0, fengsha_alpha_, fengsha_gamma_,
+            fengsha_drylimit_factor_, fengsha_moist_correction_factor_, fengsha_kvhmax_, fengsha_drag_option_,
+            fengsha_horizflux_option_, fengsha_moist_option_, fengsha_distribution_option_, ginoux_ch_du_.data(),
+            static_cast<int>(ginoux_ch_du_.size()), airden_ptr, delp_ptr, clayfrac_ptr, frlake_ptr, frsno_ptr, gvf_ptr,
             lai_ptr, lwi.data(), rdrag_ptr, sandfrac_ptr, soilm_ptr, gwettop_ptr, ssm_ptr, tskin_ptr, u10m_ptr,
             v10m_ptr, ustar_ptr, ustar_th_ptr, z0_ptr, density.data(), radius.data(), lower_radius.data(),
             upper_radius.data(), bin_species_names.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,

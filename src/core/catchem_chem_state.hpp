@@ -3,11 +3,13 @@
 #include "catchem_interop_field.hpp"
 #include "catchem_species_metadata.hpp"
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace catchem {
@@ -21,17 +23,18 @@ namespace catchem {
         std::vector<SpeciesMetadata> species_list;
         std::unordered_map<std::string, int> species_name_to_index; // 0-based indexing
 
-        // Pre-filtered category lists (0-based)
-        std::vector<int> gas_indices;
-        std::vector<int> aerosol_indices;
-        std::vector<int> settling_indices;
-        std::vector<int> tracer_indices;
-        std::vector<int> advected_indices;
-        std::vector<int> drydep_indices;
-        std::vector<int> wetdep_indices;
-        std::vector<int> photolysis_indices;
-        std::vector<int> dust_indices;
-        std::vector<int> seasalt_indices;
+        // Pre-filtered category lists (0-based, in species order), one per
+        // SpeciesCategory.  Read them through indices(); add a category by
+        // extending the enum and the classification table in
+        // load_from_config_manager().
+        std::array<std::vector<int>, species_category_count> category_indices;
+
+        const std::vector<int>& indices(SpeciesCategory category) const {
+            return category_indices[static_cast<std::size_t>(category)];
+        }
+        std::vector<int>& indices(SpeciesCategory category) {
+            return category_indices[static_cast<std::size_t>(category)];
+        }
 
         // Cached flat C-character array of short names
         std::vector<char> species_names_c_arr;
@@ -40,16 +43,8 @@ namespace catchem {
             species_list.clear();
             species_name_to_index.clear();
 
-            gas_indices.clear();
-            aerosol_indices.clear();
-            settling_indices.clear();
-            tracer_indices.clear();
-            advected_indices.clear();
-            drydep_indices.clear();
-            wetdep_indices.clear();
-            photolysis_indices.clear();
-            dust_indices.clear();
-            seasalt_indices.clear();
+            for (auto& list : category_indices)
+                list.clear();
 
             int index = 0;
             auto descriptor = std::make_shared<MechanismDefinition>();
@@ -121,27 +116,23 @@ namespace catchem {
                     throw std::invalid_argument("Chemical mechanism contains duplicate species name: " +
                                                 meta.short_name);
 
-                // Classify species
-                if (meta.is_gas)
-                    gas_indices.push_back(index);
-                if (meta.is_aerosol)
-                    aerosol_indices.push_back(index);
-                if (meta.is_aerosol && meta.do_settling)
-                    settling_indices.push_back(index);
-                if (meta.is_tracer)
-                    tracer_indices.push_back(index);
-                if (meta.is_advected)
-                    advected_indices.push_back(index);
-                if (meta.is_drydep)
-                    drydep_indices.push_back(index);
-                if (meta.is_wetdep)
-                    wetdep_indices.push_back(index);
-                if (meta.is_photolysis)
-                    photolysis_indices.push_back(index);
-                if (meta.is_dust)
-                    dust_indices.push_back(index);
-                if (meta.is_seasalt)
-                    seasalt_indices.push_back(index);
+                // Classify species: one row per category, evaluated in species
+                // order so every list keeps the same order as the catalog.
+                const std::pair<SpeciesCategory, bool> classification[] = {
+                    {SpeciesCategory::Gas, meta.is_gas},
+                    {SpeciesCategory::Aerosol, meta.is_aerosol},
+                    {SpeciesCategory::Settling, meta.is_aerosol && meta.do_settling},
+                    {SpeciesCategory::Tracer, meta.is_tracer},
+                    {SpeciesCategory::Advected, meta.is_advected},
+                    {SpeciesCategory::DryDep, meta.is_drydep},
+                    {SpeciesCategory::WetDep, meta.is_wetdep},
+                    {SpeciesCategory::Photolysis, meta.is_photolysis},
+                    {SpeciesCategory::Dust, meta.is_dust},
+                    {SpeciesCategory::SeaSalt, meta.is_seasalt},
+                };
+                for (const auto& [category, member] : classification)
+                    if (member)
+                        indices(category).push_back(index);
 
                 index++;
             }

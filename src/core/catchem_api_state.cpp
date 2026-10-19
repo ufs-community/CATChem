@@ -119,8 +119,10 @@ int catchem_state_begin_import_generation(void* state_ptr) {
     try {
         static_cast<catchem::StateManager*>(state_ptr)->begin_import_generation();
         return CATCHEM_SUCCESS;
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "state_begin_import_generation", "", e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_begin_import_generation", "", "unknown exception");
     }
 }
 
@@ -172,7 +174,7 @@ int catchem_state_bind_met_2d_checked(void* state_ptr, const char* name, double*
         state->bind_met_field_2d(name, ptr);
         return CATCHEM_SUCCESS;
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_bind_met_2d", name, "unknown exception");
     }
 }
 
@@ -232,8 +234,10 @@ int catchem_state_bind_met_3d_axis_checked(void* state_ptr, const char* name, do
     try {
         state->bind_met_field_3d_contract(name, ptr, dim2, axis);
         return CATCHEM_SUCCESS;
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "state_bind_met_3d_axis", name, e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_bind_met_3d_axis", name, "unknown exception");
     }
 }
 
@@ -260,7 +264,7 @@ int catchem_state_bind_unified_chemistry_checked(void* state_ptr, double* ptr, i
         state->bind_unified_chemistry(ptr);
         return CATCHEM_SUCCESS;
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_bind_unified_chemistry", "", "unknown exception");
     }
 }
 
@@ -276,8 +280,10 @@ int catchem_state_mark_chem_host_modified(void* state_ptr) {
             return CATCHEM_INVALID_STATE;
         state->chemistry().conc->mark_host_modified();
         return CATCHEM_SUCCESS;
+    } catch (const std::exception& e) {
+        return fail(catchem::BoundaryStatus::InternalError, "state_mark_chem_host_modified", "", e.what());
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_mark_chem_host_modified", "", "unknown exception");
     }
 }
 
@@ -435,7 +441,7 @@ int catchem_state_get_species_conc_pointer_checked(void* state_ptr, int species_
         *ptr_out = const_cast<double*>(concentration) + static_cast<std::size_t>(species_index - 1) * dim1 * dim2;
         return CATCHEM_SUCCESS;
     } catch (...) {
-        return CATCHEM_INTERNAL_ERROR;
+        return fail(catchem::BoundaryStatus::InternalError, "state_get_species_conc_pointer", "", "unknown exception");
     }
 }
 

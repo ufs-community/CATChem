@@ -19,20 +19,36 @@ namespace catchem {
         return isatty(fd);
     }
 
-    void Logger::debug(const StateManager* state, std::string_view message, ContextList context) {
-        log(state, "DEBUG", Level::Debug, message, context);
+    void Logger::debug(const StateManager& state, std::string_view message, ContextList context) {
+        log(&state, "DEBUG", Level::Debug, message, context);
     }
 
-    void Logger::info(const StateManager* state, std::string_view message, ContextList context) {
-        log(state, "INFO ", Level::Info, message, context);
+    void Logger::debug(std::string_view message, ContextList context) {
+        log(nullptr, "DEBUG", Level::Debug, message, context);
     }
 
-    void Logger::warn(const StateManager* state, std::string_view message, ContextList context) {
-        log(state, "WARN ", Level::Warn, message, context);
+    void Logger::info(const StateManager& state, std::string_view message, ContextList context) {
+        log(&state, "INFO ", Level::Info, message, context);
     }
 
-    void Logger::error(const StateManager* state, std::string_view message, ContextList context) {
-        log(state, "ERROR", Level::Error, message, context);
+    void Logger::info(std::string_view message, ContextList context) {
+        log(nullptr, "INFO ", Level::Info, message, context);
+    }
+
+    void Logger::warn(const StateManager& state, std::string_view message, ContextList context) {
+        log(&state, "WARN ", Level::Warn, message, context);
+    }
+
+    void Logger::warn(std::string_view message, ContextList context) {
+        log(nullptr, "WARN ", Level::Warn, message, context);
+    }
+
+    void Logger::error(const StateManager& state, std::string_view message, ContextList context) {
+        log(&state, "ERROR", Level::Error, message, context);
+    }
+
+    void Logger::error(std::string_view message, ContextList context) {
+        log(nullptr, "ERROR", Level::Error, message, context);
     }
 
     std::optional<Logger::Level> Logger::level_from_string(std::string_view name) {

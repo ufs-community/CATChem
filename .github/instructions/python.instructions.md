@@ -33,13 +33,13 @@ When writing standard meteorological data pipelines, enforce these four competin
 
 ### A. The "Optional Dask" Architecture
 * **Backend Agnostic:** Functions must accept generic `xr.DataArray` or `xr.Dataset` inputs. Never assume or force data to be exclusively Dask-backed or NumPy-backed.
-* **No Hidden Computes:** NEVER call `.compute()`, `.load()`, or `.values` inside a downstream processing function. This immediately breaks laziness for Dask users and risks memory crashes on the login or compute nodes.
+* **No Hidden Computes:** NEVER call `.compute()`, `.load()`, `.persist()`, or `.values` inside a downstream processing function. This immediately breaks laziness for Dask users and risks memory crashes on the login or compute nodes.
 * **No Forced Chunking:** Do not hardcode explicit `.chunk()` calls inside calculation functions. Chunking operations belong strictly at the initial I/O stage or must be passed as an optional parameter.
 * **High-Performance Vectorization:** Native Python loops are strictly forbidden for numerical operations. Use `xarray.apply_ufunc` with `dask='parallelized'` capability to natively support both eager and lazy backends simultaneously.
 
 ### B. Scientific Hygiene & Documentation
 * **Logging Over Print:** Always use the standard Python `logging` module (with appropriate log levels like `INFO`, `DEBUG`, or `ERROR`) instead of bare `print()` statements to support clean operational logs and robust stdout/stderr filtering.
-* **Documentation Standard:** Every function must feature a strict **NumPy-style docstring** detailing `Parameters`, `Returns`, and `Examples`.
+* **Documentation Standard:** Every function must feature a strict [**NumPy-style docstring**](https://numpydoc.readthedocs.io/en/latest/format.html) detailing `Parameters`, `Returns`, and `Examples`.
 * **Type Hinting:** Use explicit modern type hints (e.g., `xarray.DataArray`, `xarray.Dataset`). Do not use specific internal backend types like `dask.array`.
 * **Provenance Tracking:** Always update metadata attributes (e.g., `ds.attrs['history']`) when modifying or transforming a dataset. Never drop coordinate variables or critical spatial dimensions during processing.
 
@@ -54,7 +54,7 @@ When building or interfacing with modern Machine Learning weather models, shift 
   * **PyTorch:** Utilize `torch.compile()` for PyTorch 2.0+ models to accelerate execution on HPC nodes.
   * **JAX:** Decorate pure mathematical functions with `@jax.jit` to fuse tensor operations.
 * **Dimension & Shape Awareness:**
-  * Always explicitly transpose or assert exact dimension orders (e.g., `[batch, time, lat, lon, level]`) when transitioning from an Xarray structure to a PyTorch/JAX tensor to prevent hidden broadcasting bugs.
+  * Always explicitly transpose or assert exact dimension orders (e.g., the CF/COARDS order `[batch, time, level, lat, lon]`) when transitioning from an Xarray structure to a PyTorch/JAX tensor to prevent hidden broadcasting bugs.
   * **Google-Style Docstrings:** For all ML code blocks, use Google-style docstrings (`Args:`, `Returns:`, `Raises:`). You MUST document the expected tensor shapes using explicit bracket notation (e.g., `[B, T, C, H, W]`).
 
 ---

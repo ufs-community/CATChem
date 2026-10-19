@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
         state->set_runtime_trace_id("testtrac");
 
         // Manual redirect stringstream capture is optional, we assert logger successfully formats and prints
-        catchem::Logger::info(state.get(), "Simulation timestep advanced", {{"step", "12"}, {"dt", "300.0"}});
-        catchem::Logger::error(state.get(), "Division by zero encountered", {{"cell", "4"}});
+        catchem::Logger::info(*state, "Simulation timestep advanced", {{"step", "12"}, {"dt", "300.0"}});
+        catchem::Logger::error(*state, "Division by zero encountered", {{"cell", "4"}});
 
         // level_from_string is case-insensitive and accepts the warn alias.
         using Level = catchem::Logger::Level;

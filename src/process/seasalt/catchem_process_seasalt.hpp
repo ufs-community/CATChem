@@ -7,19 +7,19 @@ namespace catchem {
 
     class SeaSaltProcess : public ProcessInterface {
     private:
-        std::string active_scheme;
-        bool diagnostics_enabled;
-        std::vector<int> diagnostic_species_id;
+        std::string active_scheme_;
+        bool diagnostics_enabled_;
+        std::vector<int> diagnostic_species_id_;
 
         // Per-scheme tuning options read from processes.seasalt.<scheme>.*
         // during init() and forwarded to the science bridge on every run().
         // Defaults mirror the SeaSaltScheme*Config types in SeaSaltCommon_Mod.F90.
-        double gong97_scale_factor = 1.0;
-        bool gong97_weibull_flag = false;
-        double gong03_scale_factor = 1.0;
-        bool gong03_weibull_flag = false;
-        double geos12_scale_factor = 1.0;
-        bool geos12_weibull_flag = false;
+        double gong97_scale_factor_ = 1.0;
+        bool gong97_weibull_flag_ = false;
+        double gong03_scale_factor_ = 1.0;
+        bool gong03_weibull_flag_ = false;
+        double geos12_scale_factor_ = 1.0;
+        bool geos12_weibull_flag_ = false;
 
     public:
         SeaSaltProcess();

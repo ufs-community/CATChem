@@ -7,25 +7,25 @@ namespace catchem {
 
     class WetDepProcess : public ProcessInterface {
     private:
-        std::string active_scheme;
-        bool diagnostics_enabled;
-        std::vector<int> diagnostic_species_id;
+        std::string active_scheme_;
+        bool diagnostics_enabled_;
+        std::vector<int> diagnostic_species_id_;
 
         // Jacob scheme tuning options read from processes.wetdep.jacob.*
         // during init() and forwarded to the science bridge on every run().
         // Defaults mirror WetDepSchemeJACOBConfig in WetDepCommon_Mod.F90.
-        double jacob_scale_factor = 1.0;
-        double jacob_radius_threshold = 1.0;
-        bool jacob_so4_gocart_resusp = true;
-        double jacob_so4_washout_eff = 1.0;
+        double jacob_scale_factor_ = 1.0;
+        double jacob_radius_threshold_ = 1.0;
+        bool jacob_so4_gocart_resusp_ = true;
+        double jacob_so4_washout_eff_ = 1.0;
 
         // GOCART2G wet-removal scheme tuning options read from
         // processes.wetdep.gocart.* during init() and forwarded to the GOCART
         // bridge entry on every run().  Defaults mirror
         // WetDepSchemeGOCARTConfig in WetDepCommon_Mod.F90 (GOCART2G values).
-        double gocart_scale_factor = 1.0;
-        double gocart_washout_tuning = 1.0;
-        double gocart_radius_threshold = 0.05;
+        double gocart_scale_factor_ = 1.0;
+        double gocart_washout_tuning_ = 1.0;
+        double gocart_radius_threshold_ = 0.05;
 
     public:
         WetDepProcess();

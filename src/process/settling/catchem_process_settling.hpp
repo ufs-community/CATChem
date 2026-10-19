@@ -8,8 +8,8 @@ namespace catchem {
 
     class SettlingProcess : public ProcessInterface {
     private:
-        std::string active_scheme;
-        std::function<void(void*)> fortran_callback;
+        std::string active_scheme_;
+        std::function<void(void*)> fortran_callback_;
 
         // GOCART scheme options staged from the runtime configuration
         // (processes/settling/gocart/*).  They are forwarded verbatim to the
@@ -19,34 +19,34 @@ namespace catchem {
         // the optics-table (Mie) path; when true the tables named by the
         // top-level "mie:" section are loaded during init and every settling
         // species must resolve one through its __mie_name.
-        double gocart_scale_factor = 1.0;
-        bool gocart_simple_scheme = false;
-        int gocart_swelling_method = 1;
-        bool gocart_correction_maring = false;
-        bool gocart_maring_dust_only = true;
+        double gocart_scale_factor_ = 1.0;
+        bool gocart_simple_scheme_ = false;
+        int gocart_swelling_method_ = 1;
+        bool gocart_correction_maring_ = false;
+        bool gocart_maring_dust_only_ = true;
 
         // The Fortran science bridge resolves these canonical names against
         // the full chemistry species list.  Do not pass C++ indices across
         // this language boundary: C++ is zero-based and Fortran is one-based.
-        std::vector<char> aerosol_species_names;
-        std::vector<double> host_radius_dry; // micrometres, as configured
-        std::vector<double> host_rhop_dry;
-        std::vector<int> host_is_dust; // 0/1 per settling species
+        std::vector<char> aerosol_species_names_;
+        std::vector<double> host_radius_dry_; // micrometres, as configured
+        std::vector<double> host_rhop_dry_;
+        std::vector<int> host_is_dust_; // 0/1 per settling species
         // Per settling species' __mie_name (32-byte fixed width, same packing as
         // aerosol_species_names).  The Fortran bridge maps these to loaded table
         // indices; empty means unresolved and aborts initialization on the optics path.
-        std::vector<char> aerosol_mie_names;
+        std::vector<char> aerosol_mie_names_;
         // True once run_settling_mie_init has loaded the tables for this process.
-        bool mie_initialized = false;
+        bool mie_initialized_ = false;
 
         // Per-process scheme diagnostics (specs: process-diagnostics-parity).
         // diagnostics_enabled mirrors processes/settling/diagnostics;
         // diagnostic_species_id holds 1-based LOCAL positions within the
         // aerosol subset the bridge gathers (species_mie_map order), matching
         // the species_idx the scheme loops over.
-        bool diagnostics_enabled = false;
-        std::vector<int> diagnostic_species_id;
-        std::vector<std::string> diagnostic_species_names; // parallel to ids, for run() lookups
+        bool diagnostics_enabled_ = false;
+        std::vector<int> diagnostic_species_id_;
+        std::vector<std::string> diagnostic_species_names_; // parallel to ids, for run() lookups
 
     public:
         SettlingProcess();

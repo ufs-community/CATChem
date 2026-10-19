@@ -95,7 +95,7 @@ namespace {
 
         // Sum one aerosol species across the grid; a stronger fall speed must
         // remove more mass from the column top levels.
-        const int probe_species = state->chemistry().aerosol_indices.front();
+        const int probe_species = state->chemistry().indices(catchem::SpeciesCategory::Aerosol).front();
         double total = 0.0;
         for (int col = 0; col < n_cols; ++col)
             for (int lvl = 0; lvl < n_levels; ++lvl)

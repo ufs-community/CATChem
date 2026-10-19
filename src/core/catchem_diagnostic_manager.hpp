@@ -9,7 +9,7 @@ namespace catchem {
 
     class DiagnosticManager {
     private:
-        std::unordered_map<std::string, std::shared_ptr<DiagnosticField>> fields;
+        std::unordered_map<std::string, std::shared_ptr<DiagnosticField>> fields_;
 
     public:
         DiagnosticManager() = default;

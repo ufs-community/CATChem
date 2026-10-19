@@ -13,14 +13,14 @@ namespace catchem {
 
     class FortranProcess : public ProcessInterface {
     private:
-        std::string name;
-        FortranBridgeCallback bridge_callback;
+        std::string name_;
+        FortranBridgeCallback bridge_callback_;
 
     public:
         FortranProcess(const std::string& process_name, FortranBridgeCallback callback)
-            : name(process_name), bridge_callback(callback) {}
+            : name_(process_name), bridge_callback_(callback) {}
 
-        std::string get_name() const override { return name; }
+        std::string get_name() const override { return name_; }
 
         void init([[maybe_unused]] std::shared_ptr<StateManager> state) override {
             // Initial setup if required
@@ -31,8 +31,8 @@ namespace catchem {
             state->sync_to_host();
 
             // 2. Invoke the Fortran bridging callback
-            if (bridge_callback) {
-                bridge_callback(static_cast<void*>(state.get()));
+            if (bridge_callback_) {
+                bridge_callback_(static_cast<void*>(state.get()));
                 if (state->chemistry().conc)
                     state->chemistry().conc->mark_host_modified();
             }

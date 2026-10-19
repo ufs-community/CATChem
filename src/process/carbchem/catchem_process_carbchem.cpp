@@ -24,7 +24,7 @@ namespace catchem {
                                           host_field_3d("AIRDEN", "kg/m3"), host_concentration()});
     }
 
-    CarbChemProcess::CarbChemProcess() : active_scheme("gocart"), diagnostics_enabled(true) {}
+    CarbChemProcess::CarbChemProcess() : active_scheme_("gocart"), diagnostics_enabled_(true) {}
 
     void CarbChemProcess::prepare_inputs(std::shared_ptr<StateManager> state) {
         state->derive_delp();
@@ -38,21 +38,21 @@ namespace catchem {
         const auto configured = config->data.processes.find("carbchem");
         if (configured == config->data.processes.end() || configured->second.scheme != "gocart")
             throw std::invalid_argument("CarbChem requires processes.carbchem.scheme: gocart");
-        diagnostics_enabled = configured->second.diagnostics;
+        diagnostics_enabled_ = configured->second.diagnostics;
 
         // Read scheme tuning options from the runtime YAML.  The lookup falls
         // back to the compiled default declared in CarbChemCommon_Mod.F90, so
         // a configuration that omits the option keeps current behavior.
-        gocart_time_days =
-            configured->second.get_double("gocart/time_days_hydrophobic_to_hydrophilic", gocart_time_days);
-        if (!(gocart_time_days > 0.0))
+        gocart_time_days_ =
+            configured->second.get_double("gocart/time_days_hydrophobic_to_hydrophilic", gocart_time_days_);
+        if (!(gocart_time_days_ > 0.0))
             throw std::invalid_argument("CarbChem gocart time_days_hydrophobic_to_hydrophilic must be positive");
 
         // Surface the effective scheme options so the run log confirms what
         // was parsed from the runtime YAML and will be passed to the bridge.
-        Logger::debug(state.get(), "CarbChem scheme options",
-                      {{"scheme", active_scheme},
-                       {"gocart/time_days_hydrophobic_to_hydrophilic", std::to_string(gocart_time_days)}});
+        Logger::debug(*state, "CarbChem scheme options",
+                      {{"scheme", active_scheme_},
+                       {"gocart/time_days_hydrophobic_to_hydrophilic", std::to_string(gocart_time_days_)}});
 
         // 1. Resolve the diagnostic species set.  The scheme matches
         // diagnostic_species_id(diag_idx) == species_idx where species_idx is
@@ -61,11 +61,11 @@ namespace catchem {
         // scheme writes only the species it handles.  This keeps diagnostic
         // selection mechanism/config driven instead of embedding a species
         // catalog in the process adapter.
-        diagnostic_species_id.clear();
+        diagnostic_species_id_.clear();
         const auto& settings = configured->second;
         if (settings.diag_species.empty()) {
             for (std::size_t index = 0; index < state->chemistry().species_list.size(); ++index)
-                diagnostic_species_id.push_back(static_cast<int>(index) + 1);
+                diagnostic_species_id_.push_back(static_cast<int>(index) + 1);
         } else {
             for (const auto& name : settings.diag_species) {
                 std::string canonical = name;
@@ -74,17 +74,17 @@ namespace catchem {
                 const auto found = state->chemistry().species_name_to_index.find(canonical);
                 if (found == state->chemistry().species_name_to_index.end())
                     throw std::invalid_argument("CarbChem diag_species names an unknown species: " + name);
-                diagnostic_species_id.push_back(found->second + 1); // global, 1-based for the bridge
+                diagnostic_species_id_.push_back(found->second + 1); // global, 1-based for the bridge
             }
         }
 
-        if (!diagnostics_enabled)
+        if (!diagnostics_enabled_)
             return;
         // 2. Register C++ Diagnostic fields.  The species dimension is the
         // (possibly defaulted) diagnostic count, not the full catalog: the
         // scheme scatters each species into its diag_idx slot, so packed
         // [ncol, nz, ndiag] / [ncol, ndiag] layouts match the bridge shape.
-        const int n_diag = static_cast<int>(diagnostic_species_id.size());
+        const int n_diag = static_cast<int>(diagnostic_species_id_.size());
         // A mechanism may configure none of the default carbon species; with an
         // empty packed axis there is nothing to register (matches the seasalt/
         // settling guards).
@@ -97,8 +97,8 @@ namespace catchem {
             // i's label is that species' short_name (FR-006).  The NUOPC driver
             // unpacks each field into one named variable per species (feature 013).
             std::vector<std::string> carbon_labels;
-            carbon_labels.reserve(diagnostic_species_id.size());
-            for (const int gid : diagnostic_species_id)
+            carbon_labels.reserve(diagnostic_species_id_.size());
+            for (const int gid : diagnostic_species_id_)
                 carbon_labels.push_back(state->chemistry().species_list[static_cast<size_t>(gid) - 1].short_name);
             const std::vector<SemanticAxis> axes_3d = {SemanticAxis::Column, SemanticAxis::Level,
                                                        SemanticAxis::Species};
@@ -145,7 +145,7 @@ namespace catchem {
         double* diag_phobic_mass = nullptr;
         double* diag_phobic_flux = nullptr;
 
-        if (state->diagnostic_manager() && diagnostics_enabled) {
+        if (state->diagnostic_manager() && diagnostics_enabled_) {
             diag_prod_mass = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_prod_mass");
             diag_loss_flux = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_loss_flux");
             diag_phobic_mass = (double*)state->diagnostic_manager()->get_host_write_pointer("carbchem_phobic_mass");
@@ -173,13 +173,13 @@ namespace catchem {
         // forwards the array to the scheme, so pass a valid size-1 dummy
         // holding 0 — it matches no 1-based species_idx and the scheme writes
         // nothing (mirrors the settling/dust/seasalt no_diag_species guard).
-        const bool forward_diag = diagnostics_enabled && !diagnostic_species_id.empty();
+        const bool forward_diag = diagnostics_enabled_ && !diagnostic_species_id_.empty();
         static const int no_diag_species = 0;
-        const int* diag_ids = forward_diag ? diagnostic_species_id.data() : &no_diag_species;
-        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id.size()) : 0;
+        const int* diag_ids = forward_diag ? diagnostic_species_id_.data() : &no_diag_species;
+        const int n_diag_species = forward_diag ? static_cast<int>(diagnostic_species_id_.size()) : 0;
         run_carbchem_science_bridge(
             state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
-            active_scheme.c_str(), diagnostics_enabled ? 1 : 0, gocart_time_days, state->clock().year,
+            active_scheme_.c_str(), diagnostics_enabled_ ? 1 : 0, gocart_time_days_, state->clock().year,
             state->clock().month, state->clock().day, state->clock().hour, state->clock().minute, state->clock().second,
             airden_ptr, delp_ptr, pmid_ptr, t_chem_loss.data(), state->chemistry().species_names_c_arr.data(), conc_ptr,
             mock_tendency.data(), diag_prod_mass, diag_loss_flux, diag_phobic_mass, diag_phobic_flux, diag_ids,

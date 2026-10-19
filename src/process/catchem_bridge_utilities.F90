@@ -183,6 +183,7 @@ module catchem_bridge_error
    !
    ! Legacy functions (maintained for backward compatibility)
    PUBLIC :: CC_Error
+   PUBLIC :: CC_Fatal
    PUBLIC :: CC_Warning
    PUBLIC :: CC_CheckVar
 
@@ -304,6 +305,24 @@ module catchem_bridge_error
    end type ErrorManagerType
 
 CONTAINS
+
+   ! \brief Report an unrecoverable science-bridge error and stop the program
+   !!
+   !! Prints the message through CC_Error (which adds the "CATChem ERROR:"
+   !! prefix, the location, and the separators, and flushes the log) and then
+   !! executes ERROR STOP.  The bridges call this instead of repeating the
+   !! CC_Error / flush / error stop sequence at every fatal check.
+   !!
+   !! \param ErrMsg Error message to display (without a "FATAL ERROR" prefix)
+   !! \param ThisLoc Location where the error occurred
+   SUBROUTINE CC_Fatal( ErrMsg, ThisLoc )
+      CHARACTER(LEN=*), INTENT(IN) :: ErrMsg
+      CHARACTER(LEN=*), INTENT(IN) :: ThisLoc
+      INTEGER :: rc
+      rc = CC_SUCCESS
+      CALL CC_Error( ErrMsg, rc, ThisLoc )
+      ERROR STOP 'CATChem science bridge: fatal error, see the message above'
+   END SUBROUTINE CC_Fatal
 
    ! \brief Display error message and set failure return code
    !!

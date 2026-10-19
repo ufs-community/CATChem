@@ -7,24 +7,24 @@ namespace catchem {
 
     class DryDepProcess : public ProcessInterface {
     private:
-        std::string gas_scheme;
-        std::string aero_scheme;
-        bool diagnostics_enabled;
-        std::vector<int> diagnostic_species_id;
+        std::string gas_scheme_;
+        std::string aero_scheme_;
+        bool diagnostics_enabled_;
+        std::vector<int> diagnostic_species_id_;
 
         // Per-scheme tuning options read from processes.drydep.<scheme>.*
         // during init() and forwarded to the science bridge on every run().
         // Defaults mirror the DryDepScheme*Config types in DryDepCommon_Mod.F90.
-        double wesely_scale_factor = 1.0;
-        bool wesely_co2_effect = true;
-        double wesely_co2_level = 600.0;
-        double wesely_co2_reference = 380.0;
-        double gocart_scale_factor = 1.0;
-        bool gocart_resuspension = false;
-        bool gocart_dust_resuspension_only = true;
-        bool wesely_skip_so2 = false;
-        bool gocart_skip_sulfate_aero = false;
-        double zhang_scale_factor = 1.0;
+        double wesely_scale_factor_ = 1.0;
+        bool wesely_co2_effect_ = true;
+        double wesely_co2_level_ = 600.0;
+        double wesely_co2_reference_ = 380.0;
+        double gocart_scale_factor_ = 1.0;
+        bool gocart_resuspension_ = false;
+        bool gocart_dust_resuspension_only_ = true;
+        bool wesely_skip_so2_ = false;
+        bool gocart_skip_sulfate_aero_ = false;
+        double zhang_scale_factor_ = 1.0;
 
     public:
         DryDepProcess();

@@ -16,6 +16,7 @@ MODULE catchem_nuopc_emis_data_mod
    ! Module uses
    !=========================================================================
    use catchem_bridge_error
+   use catchem_nuopc_lengths
    use catchem_regrid_mod, only: RegridCache
    ! USE logging_mod, only: log_message, LOG_ERROR, LOG_WARNING, LOG_INFO, LOG_DEBUG
    use catchem_bridge_precision
@@ -39,10 +40,9 @@ MODULE catchem_nuopc_emis_data_mod
    !! \ingroup core_modules
    !!!>
    TYPE, PUBLIC :: ExtEmisFieldType
-      CHARACTER(LEN=64)             :: field_name = ''     !< Field name (e.g., "EMIS_NO", "EMIS_SO2")
-      CHARACTER(LEN=128)            :: long_name = ''      !< Descriptive name
-      CHARACTER(LEN=32)             :: units = ''          !< Units (typically kg/m2/s)
-      !CHARACTER(LEN=256)            :: source_file = ''    !< Source file path
+      CHARACTER(LEN=NUOPC_NAME_LEN)             :: field_name = ''     !< Field name (e.g., "EMIS_NO", "EMIS_SO2")
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)            :: long_name = ''      !< Descriptive name
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)             :: units = ''          !< Units (typically kg/m2/s)
       INTEGER                       :: nx = 0              !< Number of longitude points
       INTEGER                       :: ny = 0              !< Number of latitude points
       INTEGER                       :: nz = 1              !< Number of vertical levels (usually 1 for surface)
@@ -72,7 +72,7 @@ MODULE catchem_nuopc_emis_data_mod
       REAL(fp), ALLOCATABLE         :: interp_data_t2(:,:,:,:) !< Regridded next time slice for temporal blending
       LOGICAL                       :: is_loaded = .false. !< Data loading status
       LOGICAL                       :: is_valid = .false.  !< Data validation status
-      CHARACTER(LEN=32)             :: interpolation_method = 'bilinear' !< Spatial interpolation method
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)             :: interpolation_method = 'bilinear' !< Spatial interpolation method
    CONTAINS
       !> \brief Initialize emission field with metadata
       !! \copydoc extemifield_init
@@ -102,8 +102,8 @@ MODULE catchem_nuopc_emis_data_mod
    !! \ingroup core_modules
    !!!>
    TYPE, PUBLIC :: ExtEmisCategoryType
-      CHARACTER(LEN=64)                         :: category_name = ''  !< Category name
-      CHARACTER(LEN=256)                        :: description = ''    !< Category description
+      CHARACTER(LEN=NUOPC_NAME_LEN)                         :: category_name = ''  !< Category name
+      CHARACTER(LEN=NUOPC_PATH_LEN)                        :: description = ''    !< Category description
       INTEGER                                   :: n_fields = 0        !< Number of emission fields
       INTEGER                                   :: irec = 0            !< time slice index
       TYPE(ExtEmisFieldType), ALLOCATABLE       :: fields(:)           !< Emission fields array
@@ -114,36 +114,36 @@ MODULE catchem_nuopc_emis_data_mod
       LOGICAL                                   :: diagnostic = .true.  !< Enable diagnostic output for this category?
       REAL(fp)                                  :: global_scale = 1.0_fp !< Global scaling factor
       REAL(fp)                                  :: topfraction = -1.0_fp !< Top fraction for plumerise
-      ! Path buffer must stay >= EMIS_MAXSTR (256) in catchem_nuopc_emis_mod:
+      ! Path buffer must stay >= EMIS_MAXSTR (NUOPC_PATH_LEN) in catchem_nuopc_emis_mod:
       ! the YAML reader hands over a 256-char string, and Fortran assignment
       ! would silently truncate anything longer (breaks long RT run paths).
-      CHARACTER(LEN=256)                        :: source_file = ''    !< Source file path and name
-      CHARACTER(LEN=128)                        :: format = ''         !< Format of file (only netcdf for now)
-      CHARACTER(LEN=128)                        :: frequency = ''      !< Frequency of file (e.g., hourly, daily, weekly, monthly,static)
-      CHARACTER(LEN=128)                        :: latname = ''       !< Latitude variable name in the file
-      CHARACTER(LEN=128)                        :: lonname = ''       !< Longitude variable name in the file
-      CHARACTER(LEN=32)                         :: regrid_method = 'none' !< Regridding method (none, bilinear, neareststod, nearestdtos, conserve, patch)
-      CHARACTER(LEN=32)                         :: time_interpolation = 'none' !< Temporal interpolation (none, linear)
-      CHARACTER(LEN=32)                         :: vertical_dist = 'none' !< Vertical distribution method (none, P100, P500, Ppbl, aviation)
+      CHARACTER(LEN=NUOPC_PATH_LEN)                        :: source_file = ''    !< Source file path and name
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: format = ''         !< Format of file (only netcdf for now)
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: frequency = ''      !< Frequency of file (e.g., hourly, daily, weekly, monthly,static)
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: latname = ''       !< Latitude variable name in the file
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: lonname = ''       !< Longitude variable name in the file
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)                         :: regrid_method = 'none' !< Regridding method (none, bilinear, neareststod, nearestdtos, conserve, patch)
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)                         :: time_interpolation = 'none' !< Temporal interpolation (none, linear)
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)                         :: vertical_dist = 'none' !< Vertical distribution method (none, P100, P500, Ppbl, aviation)
       LOGICAL                                   :: reverse_vertical = .false. !< Reverse vertical levels after reading (e.g. top-down to bottom-up)
       LOGICAL                                   :: vertical_interp = .false. !< Pressure-interpolate 3D fields from the file's native levels onto the model nz grid (instead of truncating). Needed for deep source grids such as the 127-level GMI oxidants.
-      CHARACTER(LEN=32)                         :: vertical_pressure_mode = 'construct' !< How source-level pressures are obtained when vertical_interp is on: 'construct' = P=ak+bk*PS from the built-in hybrid coefficients (met_utilities_mod) for the file's level count; 'file' = read from a file variable (vertical_pressure_var).
-      CHARACTER(LEN=64)                         :: vertical_pressure_var = '' !< Name of the source-file variable holding level pressures (reserved for vertical_pressure_mode=='file').
-      CHARACTER(LEN=128)                        :: stkdmname = ''      !< Stack dimension name in the file
-      CHARACTER(LEN=128)                        :: stkhtname = ''      !< Stack height variable name in the file
-      CHARACTER(LEN=128)                        :: stktkname = ''      !< Stack temperature variable name in the file
-      CHARACTER(LEN=128)                        :: stkvename = ''      !< Stack velocity variable name in the file
-      CHARACTER(LEN=128)                        :: plumerise = ''      !< plumerise scheme
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)                         :: vertical_pressure_mode = 'construct' !< How source-level pressures are obtained when vertical_interp is on: 'construct' = P=ak+bk*PS from the built-in hybrid coefficients (met_utilities_mod) for the file's level count; 'file' = read from a file variable (vertical_pressure_var).
+      CHARACTER(LEN=NUOPC_NAME_LEN)                         :: vertical_pressure_var = '' !< Name of the source-file variable holding level pressures (reserved for vertical_pressure_mode=='file').
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: stkdmname = ''      !< Stack dimension name in the file
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: stkhtname = ''      !< Stack height variable name in the file
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: stktkname = ''      !< Stack temperature variable name in the file
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: stkvename = ''      !< Stack velocity variable name in the file
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: plumerise = ''      !< plumerise scheme
       ! Time coordinate cache — populated on first file open, used for smart time-index matching
       INTEGER                                   :: n_times = 0         !< # of time slices cached from current file
       INTEGER, ALLOCATABLE                      :: tc_dates(:)         !< yyyymmdd for each cached time slice
       INTEGER, ALLOCATABLE                      :: tc_secs(:)          !< seconds-of-day for each cached time slice
-      CHARACTER(LEN=256)                        :: last_resolved_file = '' !< last resolved filename (cache key)
+      CHARACTER(LEN=NUOPC_PATH_LEN)                        :: last_resolved_file = '' !< last resolved filename (cache key)
       ! Calendar-period tracking — drives file/slice updates without alarm drift
       INTEGER                                   :: last_period_key = -1 !< last period key read; -1 forces initial read
       ! MAPL ExtData-compatible temporal options (feature 014, US4)
       LOGICAL                                   :: daily_hold = .false. !< Hold daily data constant between 00Z updates (piecewise-constant blend)
-      CHARACTER(LEN=32)                         :: monthly_anchor = 'climatological' !< Monthly anchoring: 'climatological' (day-of-year climatology) or 'file' (bracket from file valid-times)
+      CHARACTER(LEN=NUOPC_KEYWORD_LEN)                         :: monthly_anchor = 'climatological' !< Monthly anchoring: 'climatological' (day-of-year climatology) or 'file' (bracket from file valid-times)
       ! File-time bracket cache for monthly 'file' anchor across multi-file interpolation
       INTEGER                                   :: bt1_date = -1       !< yyyymmdd of earlier bracket record (-1 = unset)
       INTEGER                                   :: bt1_secs = -1       !< seconds-of-day of earlier bracket record
@@ -154,7 +154,7 @@ MODULE catchem_nuopc_emis_data_mod
       LOGICAL                                   :: use_oc_fbb = .false. !< Apply Mie-based BB emission scaling for OC?
       ! Diurnal biomass burning cycle (following GOCART2G Chem_BiomassDiurnal)
       LOGICAL                                   :: diurnal_bb = .false. !< Apply diurnal cycle to biomass burning emissions?
-      CHARACTER(LEN=16)                         :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
+      CHARACTER(LEN=NUOPC_SHORT_LEN)                         :: apply_method = 'add' !< How to apply data: 'add' (accumulate) or 'replace' (overwrite concentration)
       LOGICAL                                   :: needs_time_blend = .false. !< Per-timestep temporal blending needed
 
    CONTAINS
@@ -188,7 +188,7 @@ MODULE catchem_nuopc_emis_data_mod
       LOGICAL                                   :: is_active = .true.  !< All emissions enabled/disabled
       LOGICAL                                   :: diagnostic = .true.  !< Enable diagnostic output for external emissions?
       INTEGER                                   :: total_fields = 0    !< Total number of emission fields
-      CHARACTER(LEN=128)                        :: data_source = ''    !< Data source information
+      CHARACTER(LEN=NUOPC_LONG_NAME_LEN)                        :: data_source = ''    !< Data source information
       REAL(fp)                                  :: global_scale = 1.0_fp !< Global scaling factor for all emissions
       ! Regridding resources belong to this component instance.  A module-level
       ! cache lets one CATChem instance destroy route handles still used by another.

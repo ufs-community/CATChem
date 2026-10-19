@@ -298,7 +298,7 @@ if(CATCHEM_ENABLE_BOUNDS_CHECK)
       catchem_validation_options
       INTERFACE "$<$<COMPILE_LANGUAGE:Fortran>:-fcheck=bounds>"
     )
-  elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel|IntelLLVM")
+  elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel(LLVM)?$")
     # SHELL: keeps "-check bounds" together. Without it CMake de-duplicates
     # the repeated "-check" token against the Debug list's "-check all,nouninit"
     # and ifx receives a bare "bounds" ("error #10236: File not found: 'bounds'").
@@ -500,6 +500,8 @@ if(CATCHEM_BUILD_NUOPC)
   add_library(
     cc_nuopc
     STATIC
+    drivers/nuopc/catchem_nuopc_lengths.F90
+    drivers/nuopc/catchem_nuopc_strings.F90
     drivers/nuopc/catchem_regrid_mod.F90
     drivers/nuopc/catchem_latlon_output_mod.F90
     drivers/nuopc/aqmio.F90
