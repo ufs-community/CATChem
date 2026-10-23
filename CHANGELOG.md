@@ -2,6 +2,9 @@
 
 <!-- version list -->
 
+## v2.1.0 (2026-10-23)
+
+
 ## v2.1.0-rc.5 (2026-10-14)
 
 ### Continuous Integration
