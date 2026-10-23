@@ -101,6 +101,9 @@ schemes:
       update_so2:
         default: true
         description: "whether to update SO2 concentration based on chemical production/loss"
+      do_drydep:
+        default: false
+        description: "whether to compute SO2/SO4/MSA dry deposition inside SulfateChemDriver (GOCART behavior)"
 
     diagnostics:
       - name: "PSO4_from_gaseous_SO2_per_level"

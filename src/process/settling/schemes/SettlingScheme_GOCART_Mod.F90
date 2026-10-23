@@ -81,6 +81,7 @@ contains
       species_mie_map, &
       species_radius, &
       species_density, &
+      species_is_dust, &
       species_conc, &
       species_tendencies, &
       settling_velocity_per_species_per_level, &
@@ -105,6 +106,7 @@ contains
       integer, intent(in) :: species_mie_map(num_species)  ! Mapping from process species to MieData indices
       real(fp), intent(in) :: species_radius(:)  ! Species radius property
       real(fp), intent(in) :: species_density(:)  ! Species density property
+      logical, intent(in) :: species_is_dust(:)  ! Species is_dust property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       real(fp), intent(inout), optional :: settling_velocity_per_species_per_level(:,:)
@@ -116,6 +118,7 @@ contains
       integer :: diag_idx  ! For diagnostic species indexing
       integer :: bin  ! For bin index
       integer :: klid  ! For pressure lid index
+      logical :: apply_maring  ! per-species Maring correction switch
       ! Local Variables
       real(fp), pointer :: GOCART_tmpu(:,:,:)
       real(fp), pointer :: GOCART_rhoa(:,:,:)
@@ -140,6 +143,12 @@ contains
       allocate(fluxout_temp(1,1))
       SD = 0.0_fp
       fluxout_temp = 0.0_fp
+      ! fluxout is (re)allocated each species iteration below; give it a defined
+      ! disassociated status here so the first associated()/deallocate() guard is
+      ! valid. A pointer without => null()/nullify has UNDEFINED association status
+      ! on entry, so associated() is illegal and compiler-dependent (ifort happened
+      ! to return .false., gfortran .true. -> deallocate of a bogus pointer -> crash).
+      nullify(fluxout)
 
       ! Note: species_tendencies and diagnostic arrays are already initialized
       ! by the host ProcessInterface before calling this subroutine.
@@ -201,11 +210,19 @@ contains
          end if
 
          !initialize fluxout
+         !NOTE: fluxout is a pointer allocated inside this per-species loop; free any
+         !prior iteration's allocation first to avoid orphaning it (memory leak).
+         if (associated(fluxout)) deallocate(fluxout)
          allocate(fluxout(1, 1, bin))
          fluxout = 0.0_fp
 
          !reverse vertical layer and convert from ug/kg to kg/kg
          qa(1,1,:) = species_conc(num_layers:1:-1, species_idx) * 1.0e-9_fp  ! from ug/kg to kg/kg
+
+         ! Maring (2003) correction was derived for dust; GOCART applies it to dust only, not sea salt
+         ! (mirrors drydep dust_resuspension_only logic)
+         apply_maring = (params%maring_dust_only .and. species_is_dust(species_idx)) .or. &
+            (.not. params%maring_dust_only .and. params%correction_maring)
 
          if (params%simple_scheme) then !call gocart simple settling function with mie data provided
             !check mie data is available
@@ -217,7 +234,7 @@ contains
             end if
             call Chem_SettlingSimple (num_layers, klid, mie_data(species_mie_map(species_idx)), bin, tstep, g0, &
                qa, GOCART_tmpu, GOCART_rhoa, GOCART_RH, GOCART_HGHTE, GOCART_DELP, fluxout_temp, &
-               vsettleOut=SD, correctionMaring=params%correction_maring, settling_scheme=2, rc=RC) !hardcode settling_scheme=2 for GOCART scheme
+               vsettleOut=SD, correctionMaring=apply_maring, settling_scheme=2, rc=RC) !hardcode settling_scheme=2 for GOCART scheme
             if (RC /= CC_SUCCESS) then
                ErrMsg = 'Error in running GOCART Chem_SettlingSimple scheme.'
                call CC_Error(trim(ErrMsg), RC, thisLoc)
@@ -227,7 +244,7 @@ contains
          else  !call gocart simple settling function with internal mie calculation
             call Chem_Settling (num_layers, klid, bin, params%swelling_method, tstep, g0, species_radius(species_idx)*1.0e-6_fp,  &  !um to m
                species_density(species_idx), qa, GOCART_tmpu, GOCART_RHOA, GOCART_RH, GOCART_HGHTE, GOCART_DELP, fluxout, &
-               vsettleOut=SD, correctionMaring=params%correction_maring, settling_scheme=2, rc=RC) !hardcode settling_scheme=2 for GOCART scheme
+               vsettleOut=SD, correctionMaring=apply_maring, settling_scheme=2, rc=RC) !hardcode settling_scheme=2 for GOCART scheme
             if (RC /= CC_SUCCESS) then
                ErrMsg = 'Error in running GOCART Chem_Settling scheme.'
                call CC_Error(trim(ErrMsg), RC, thisLoc)

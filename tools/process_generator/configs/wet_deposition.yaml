@@ -80,6 +80,53 @@ schemes:
 
     diagnostics: []
 
+  gocart:
+    name: "gocart"
+    class_name: "GOCART"
+    description: "GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species"
+    #gas_or_aero: both     #gas, aero or both; only applies when gas_aero_differentiation is true
+    algorithm_type: "explicit"
+    affects_full_column: true
+    reference: "GOCART2G Process Library (Randles et al.; GEOS-ESM/GOCART): SU_Wet_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme)"
+    author: "Wei Li"
+
+    required_met_fields: #needed for scheme calculations
+      - T
+      - TSTEP
+      - MAIRDEN       #moist air density (rhoa)
+      - PEDGE         #level-edge air pressure (ple)
+      - PFLLSAN       #3D flux of liquid nonconvective precipitation
+      - PFILSAN       #3D flux of ice nonconvective precipitation
+      - PRECCON       #convective precip at ground (precc) -> used by sulfate SU_Wet_Removal
+      - PRECLSC       #large-scale precip at ground (precl) -> used by sulfate SU_Wet_Removal
+
+    required_species_properties:
+      - is_aerosol       #kin flag: true for aerosol, false for gas
+      - short_name       #used to identify sulfate species (SO4/SO2/DMS/MSA) and H2O2
+      - henry_cr         #Henry's law volatility constant (spc%CR, gases)
+      - henry_k0         #Henry's law solubility constant (spc%K0, gases)
+      - henry_pKa        #Henry's law pH correction factor (spc%pKa, gases)
+      - wd_retfactor     #retention efficiency (spc%retfac)
+      - wd_LiqAndGas     #whether ice-to-gas ratio can be computed
+      - wd_convfacI2G    #ice-to-gas conversion factor (spc%cnvI2G)
+      - wd_rainouteff    #3-element temperature-dependent rainout efficiencies (UFS rainout_eff)
+      - wd_reevap_frac   #fraction of re-evaporated mass resuspended
+      - radius           #particle radius (WetRemovalUFS)
+      - mw_g             #molecular weight (fMassSO4/fMassSO2 for sulfate)
+
+    parameters:
+      scale_factor:
+        default: 1.0
+        description: "Overall washout tuning factor"
+      washout_tuning:
+        default: 1.0
+        description: "WetRemovalUFS below-cloud washout tuning factor (wtune)"
+      radius_threshold:
+        default: 0.05
+        description: "Radius threshold for aerosol washout (um) (WetRemovalUFS radius_thr); GOCART default 0.05"
+
+    diagnostics: []
+
 
 diagnostics:
   - name: "wetdep_mass_per_species_per_level"

@@ -74,12 +74,12 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
 
 | Process Type | Description | Status |
 |--------------|-------------|--------|
-| <span class="process-badge process-badge--chemistry">Chemistry</span> | Gas-phase and aerosol chemistry | 🚧 In development|
-| <span class="process-badge process-badge--emission">Emissions</span> | Anthropogenic and biogenic emissions | 🚧 In development|
-| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | 🚧 In Development |
-| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | 🚧 In Development |
-| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | 🚧 In Development |
-| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | 🚧 In development |
+| <span class="process-badge process-badge--chemistry">Aerosol Chemistry</span> | Carbon and sulfate aerosol chemistry | ✅ Production |
+| <span class="process-badge process-badge--chemistry">Gas-phase Chemistry</span> | Gas-phase chemical mechanisms | 🚧 In development |
+| <span class="process-badge process-badge--transport">Settling</span> | Gravitational settling with slip correction | ✅ Production |
+| <span class="process-badge process-badge--loss">Dry Deposition</span> | Surface deposition processes | ✅ Production |
+| <span class="process-badge process-badge--loss">Wet Deposition</span> | Precipitation scavenging | ✅ Production |
+| <span class="process-badge process-badge--emission">Dust</span> | Mineral dust emission and transport | ✅ Production |
 | <span class="process-badge process-badge--emission">Sea Salt</span> | Marine aerosol processes | ✅ Production |
 
 
@@ -130,12 +130,6 @@ flowchart TB
 ## 📚 Documentation Structure
 
 <div class="grid cards" markdown>
-
-- [:material-rocket-launch-outline: **Quick Start**](old_guides/quick-start/index.md)
-
-  ---
-
-  Get up and running with CATChem in minutes
 
 - [:material-book-open-variant: **User Guide**](user-guide/index.md)
 

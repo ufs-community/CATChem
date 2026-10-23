@@ -416,7 +416,7 @@ output:
 
 - [State Management API](state-management.md) - How configuration integrates with state
 - [Process Interface API](process-interface.md) - Process configuration patterns
-- [Configuration Guide](../user-guide/advanced_topics/configuration-management.md) - Advanced configuration topics
+- [Configuration Guide](../core-concepts/configuration.md) - Configuration system concepts
 - [User Guide: Configuration](../user-guide/configuration.md) - User-level configuration help
 
 ---

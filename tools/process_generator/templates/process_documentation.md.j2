@@ -33,7 +33,7 @@ The {{ config.class_name }} process implements {{ config.description }}. This pr
 #### Required Meteorological Fields
 
 {% for field in scheme.required_met_fields %}
-- `{{ field }}` - Meteorological field required for scheme computation
+- `{{ field }}` - {{ (metfield_desc | default({})).get(field, 'Meteorological field required for scheme computation') }}
 {% endfor %}
 {% endif %}
 
@@ -64,7 +64,7 @@ The {{ config.name }} process operates on the following chemical species:
 {% if config.required_met_fields and config.required_met_fields|length > 0 %}
 #### Meteorological Fields
 {% for field in config.required_met_fields %}
-- `{{ field }}` - Required meteorological input
+- `{{ field }}` - {{ (metfield_desc | default({})).get(field, 'Required meteorological input') }}
 {% endfor %}
 {% endif %}
 

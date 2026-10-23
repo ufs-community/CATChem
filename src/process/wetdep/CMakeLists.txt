@@ -1,5 +1,5 @@
 # WetDep Process CMakeLists.txt
-# Generated on: 2025-12-15T16:30:33.743213
+# Generated on: 2026-09-22T13:06:55.609830
 # Author: Wei Li
 # Description: Process for computing wet deposition of gas and aerosol species
 
@@ -12,7 +12,11 @@ set(
 )
 
 # Define wetdep scheme sources
-set(WETDEP_SCHEME_SOURCES schemes/WetDepScheme_JACOB_Mod.F90)
+set(
+  WETDEP_SCHEME_SOURCES
+  schemes/WetDepScheme_JACOB_Mod.F90
+  schemes/WetDepScheme_GOCART_Mod.F90
+)
 
 # Combine all sources
 set(WETDEP_ALL_SOURCES ${WETDEP_PROCESS_SOURCES} ${WETDEP_SCHEME_SOURCES})
@@ -66,9 +70,6 @@ install(
 
 # Add subdirectories
 # Note: tests are registered via tests/CMakeLists.txt (tests/process/wetdep/)
-if(BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
 
 # Documentation
 if(BUILD_DOCUMENTATION)
@@ -106,10 +107,10 @@ endif()
 # Print configuration summary
 message(STATUS "Configured WetDep process:")
 message(STATUS "  Process type: deposition")
-message(STATUS "  Number of schemes: 1")
+message(STATUS "  Number of schemes: 2")
 message(STATUS "  Default scheme: ")
 message(STATUS "  Has size bins: No")
 message(STATUS "  Multiphase: No")
 message(STATUS "  Generate tests: Yes")
 message(STATUS "  Generate docs: Yes")
-message(STATUS "  Generate examples: Yes")
+message(STATUS "  Generate examples: No")
