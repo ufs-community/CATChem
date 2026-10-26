@@ -90,6 +90,19 @@ if(NOT yaml-cpp_FOUND AND NOT TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
   # This prevents MUSICA from fetching their own copy
   FetchContent_Declare(yaml-cpp SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp)
   FetchContent_MakeAvailable(yaml-cpp)
+
+  # Isolate the vendored yaml-cpp symbols under namespace catchem_yaml so they
+  # never collide with (or suffer ODR/ABI mismatches against) the older
+  # yaml-cpp (~0.6.x) objects embedded inside static libesmf.a on HPC/Spack
+  # builds.
+  target_compile_definitions(yaml-cpp PUBLIC YAML=catchem_yaml)
+  set_property(
+    TARGET yaml-cpp
+    APPEND
+    PROPERTY
+      INTERFACE_SYSTEM_INCLUDE_DIRECTORIES
+        $<TARGET_PROPERTY:yaml-cpp,INTERFACE_INCLUDE_DIRECTORIES>
+  )
 endif()
 
 # Ensure both yaml-cpp and yaml-cpp::yaml-cpp targets exist regardless of how it was found

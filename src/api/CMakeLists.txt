@@ -14,6 +14,13 @@ target_link_libraries(
     CATChem_process_so4chem
     CATChem_process_carbchem
 )
+if(CATCHEM_BUILD_MUSICA)
+  target_link_libraries(
+    CATChem
+    PUBLIC catchem_process_photolysis catchem_process_gaschem
+  )
+  target_compile_definitions(CATChem PRIVATE CATCHEM_BUILD_MUSICA)
+endif()
 set_target_properties(
   CATChem
   PROPERTIES

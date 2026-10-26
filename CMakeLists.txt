@@ -459,8 +459,22 @@ endif()
 # To build single precision, define USE_REAL4 AND drop the -fdefault-real-8 /
 # -r8 promotion from the scheme + utilities targets so the two stay consistent.
 
-# Find yaml-cpp for configuration parsing
-if(NOT TARGET yaml-cpp::yaml-cpp AND NOT TARGET yaml-cpp)
+# Find yaml-cpp for configuration parsing.
+# When CATCHEM_BUILD_NUOPC=ON, static libesmf.a in Spack/UFS environments
+# embeds an internal yaml-cpp (~0.6.x) in the global ::YAML namespace. Always
+# use CATChem's vendored yaml-cpp (whose symbols are isolated under
+# ::catchem_yaml) in NUOPC builds unless CATCHEM_USE_SYSTEM_YAML_CPP is
+# explicitly enabled.
+option(
+  CATCHEM_USE_SYSTEM_YAML_CPP
+  "Prefer system yaml-cpp over the vendored symbol-isolated yaml-cpp even in NUOPC builds"
+  OFF
+)
+if(
+  (NOT CATCHEM_BUILD_NUOPC OR CATCHEM_USE_SYSTEM_YAML_CPP)
+  AND NOT TARGET yaml-cpp::yaml-cpp
+  AND NOT TARGET yaml-cpp
+)
   find_package(yaml-cpp QUIET)
 endif()
 
@@ -468,12 +482,6 @@ add_subdirectory(src)
 
 if(CATCHEM_BUILD_CCPP)
   add_subdirectory(drivers/ccpp)
-endif()
-
-# Enable testing for standalone builds
-if(CATCHEM_BUILD_TESTING)
-  enable_testing()
-  add_subdirectory(tests)
 endif()
 
 if(CATCHEM_BUILD_NUOPC)
@@ -540,8 +548,7 @@ if(CATCHEM_BUILD_NUOPC)
   # list must mirror the full dependency closure of the CATChem targets by
   # hand. CATChem_core_cpp implements the C API the Fortran core and API
   # bind to (host-only or Kokkos flavor); yaml-cpp (below) is its config
-  # parser. A Kokkos-enabled UFS build will additionally need
-  # Kokkos::kokkos here.
+  # parser.
   target_link_libraries(
     cc_nuopc
     PRIVATE
@@ -553,9 +560,59 @@ if(CATCHEM_BUILD_NUOPC)
       $<TARGET_FILE:CATChem_process_settling>
       $<TARGET_FILE:CATChem_process_so4chem>
       $<TARGET_FILE:CATChem_process_carbchem>
-      $<TARGET_FILE:CATChem_core_cpp>
-      $<TARGET_FILE:catchem_utilities>
   )
+
+  if(CATCHEM_BUILD_MUSICA)
+    target_link_libraries(
+      cc_nuopc
+      PRIVATE
+        $<TARGET_FILE:catchem_process_photolysis>
+        $<TARGET_FILE:catchem_process_gaschem>
+    )
+  endif()
+
+  target_link_libraries(cc_nuopc PRIVATE $<TARGET_FILE:CATChem_core_cpp>)
+
+  if(CATCHEM_BUILD_MUSICA)
+    foreach(_musica_lib musica-fortran musica mechanism_configuration fmt)
+      if(TARGET ${_musica_lib})
+        target_link_libraries(cc_nuopc PRIVATE $<TARGET_FILE:${_musica_lib}>)
+      endif()
+    endforeach()
+    if(TARGET NetCDF::NetCDF_C)
+      target_link_libraries(cc_nuopc PRIVATE NetCDF::NetCDF_C)
+    elseif(TARGET netCDF::netcdf)
+      target_link_libraries(cc_nuopc PRIVATE netCDF::netcdf)
+    elseif(TARGET PkgConfig::netcdfc)
+      target_link_libraries(cc_nuopc PRIVATE PkgConfig::netcdfc)
+    endif()
+    target_link_libraries(cc_nuopc PRIVATE ${CMAKE_DL_LIBS})
+  endif()
+
+  if(CATCHEM_ENABLE_KOKKOS)
+    foreach(
+      _kokkos_lib
+      Kokkos::kokkoscore
+      Kokkos::kokkoscontainers
+      Kokkos::kokkosalgorithms
+      Kokkos::kokkossimd
+    )
+      if(TARGET ${_kokkos_lib})
+        target_link_libraries(cc_nuopc PRIVATE $<TARGET_FILE:${_kokkos_lib}>)
+      endif()
+    endforeach()
+    if(Kokkos_ENABLE_OPENMP OR "OPENMP" IN_LIST Kokkos_DEVICES)
+      find_package(OpenMP COMPONENTS Fortran QUIET)
+      if(TARGET OpenMP::OpenMP_Fortran)
+        target_link_libraries(cc_nuopc PRIVATE OpenMP::OpenMP_Fortran)
+      elseif(TARGET OpenMP::OpenMP_CXX)
+        target_link_libraries(cc_nuopc PRIVATE OpenMP::OpenMP_CXX)
+      endif()
+    endif()
+    target_link_libraries(cc_nuopc PRIVATE ${CMAKE_DL_LIBS})
+  endif()
+
+  target_link_libraries(cc_nuopc PRIVATE $<TARGET_FILE:catchem_utilities>)
 
   # yaml-cpp for the C++ core's config parsing. Prefer target-based linking
   # here (not $<TARGET_FILE:...>) so both real and ALIAS/imported targets work
@@ -638,6 +695,13 @@ if(CATCHEM_BUILD_NUOPC)
   if(CATCHEM_BUILD_STANDALONE)
     add_subdirectory(drivers/standalone)
   endif()
+endif()
+
+# Enable testing for standalone builds (after cc_nuopc is defined so NUOPC
+# test executables can link against cc_nuopc directly).
+if(CATCHEM_BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
 endif()
 
 # Install module files to both locations for compatibility

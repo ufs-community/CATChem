@@ -806,9 +806,12 @@ if(CATCHEM_BUILD_NUOPC)
   # them explicitly (the cap static library never resolves them itself).
   find_package(MPI COMPONENTS Fortran CXX REQUIRED)
   add_executable(test_nuopc_transform test_nuopc_transform.f90)
+  # Link cc_nuopc without CATChem/CATChem_core on the target line so the test
+  # exercises cc_nuopc's self-contained archive closure (including Kokkos and
+  # MUSICA when enabled) the same way UFS ufs_model does.
   target_link_libraries(
     test_nuopc_transform
-    PRIVATE cc_nuopc CATChem CATChem_core MPI::MPI_Fortran MPI::MPI_CXX
+    PRIVATE cc_nuopc catchem_validation_options MPI::MPI_Fortran MPI::MPI_CXX
   )
   set_target_properties(
     test_nuopc_transform
@@ -846,8 +849,18 @@ if(CATCHEM_BUILD_NUOPC)
   add_executable(nuopc_contract_harness nuopc_contract_harness.F90)
   target_link_libraries(
     nuopc_contract_harness
-    PRIVATE cc_nuopc CATChem CATChem_core MPI::MPI_Fortran MPI::MPI_CXX
+    PRIVATE cc_nuopc catchem_validation_options MPI::MPI_Fortran MPI::MPI_CXX
   )
+  # Force the linker to extract libesmf.a(node_data.o) (when present in static
+  # ESMF builds) alongside CATChem's vendored libyaml-cpp.a, reproducing the
+  # UFS ufs_model link condition where ESMF's internal yaml-cpp (~0.6.x) and
+  # CATChem's yaml-cpp (0.8.0) are both linked into the same executable.
+  if(UNIX AND NOT APPLE AND NOT CATCHEM_USE_SYSTEM_YAML_CPP)
+    target_link_options(
+      nuopc_contract_harness
+      PRIVATE "LINKER:-u,_ZN4YAML6detail9node_data8set_nullEv"
+    )
+  endif()
   set_target_properties(
     nuopc_contract_harness
     PROPERTIES

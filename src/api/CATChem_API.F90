@@ -84,6 +84,14 @@ module CATChem_API
       subroutine catchem_register_wetdep_cpp() bind(C, name="catchem_register_wetdep_cpp")
       end subroutine
 
+#ifdef CATCHEM_BUILD_MUSICA
+      subroutine catchem_register_photolysis_cpp() bind(C, name="catchem_register_photolysis_cpp")
+      end subroutine
+
+      subroutine catchem_register_gaschem_cpp() bind(C, name="catchem_register_gaschem_cpp")
+      end subroutine
+#endif
+
       type(c_ptr) function catchem_core_get_state_manager(core_ptr) bind(C, name="catchem_core_get_state_manager")
          import :: c_ptr
          type(c_ptr), value :: core_ptr
@@ -596,6 +604,10 @@ contains
       call catchem_register_settling_cpp()
       call catchem_register_so4chem_cpp()
       call catchem_register_wetdep_cpp()
+#ifdef CATCHEM_BUILD_MUSICA
+      call catchem_register_photolysis_cpp()
+      call catchem_register_gaschem_cpp()
+#endif
 
       ! Retain the C++ configuration error if construction fails.  This is a
       ! plain C pointer output, so no ESMF descriptor crosses the ABI.
