@@ -4,7 +4,7 @@
 !! This module provides the factory functions for creating wetdep
 !! process instances following the CATChem Process Factory pattern.
 !!
-!! Generated on: 2025-12-15T16:30:33.627354
+!! Generated on: 2026-09-22T13:06:55.506733
 !! Author: Wei Li
 !! Version: 1.0.0
 
@@ -101,6 +101,12 @@ contains
          'schemes:' // new_line('A') // &
          '  jacob:' // new_line('A') // &
          '    description: "Jacob et al. [2000] wet deposition scheme"' // new_line('A') // &
+         '    algorithm_type: "explicit"' // new_line('A') // &
+         '    parameters:' // new_line('A') // &
+         '      scale_factor: 1.0' // new_line('A') // &
+         '' // new_line('A') // &
+         '  gocart:' // new_line('A') // &
+         '    description: "GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species"' // new_line('A') // &
          '    algorithm_type: "explicit"' // new_line('A') // &
          '    parameters:' // new_line('A') // &
          '      scale_factor: 1.0' // new_line('A') // &

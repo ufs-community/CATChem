@@ -118,13 +118,14 @@ contains
       this%lon = lon
       this%area = area
 
-      ! Allocate meteorological field arrays for testing
-      if (nlev > 0) then
-         if (.not. associated(this%met%T)) then
-            allocate(this%met%T(nlev))
-            this%met%T = 288.15_fp  ! Initialize with default temperature value
-         endif
-      endif
+      ! NOTE: Do NOT allocate met%T (or any other VirtualMetType pointer) here.
+      ! In production, populate_virtual_column re-points met%T => MetState data
+      ! immediately after init. Any storage allocated here would be orphaned
+      ! (leaked) by that re-point on every column, every timestep, because
+      ! VirtualMetType pointers are default-initialized to null() when the
+      ! virtual column is passed as intent(out) to create_virtual_column.
+      ! Met pointers are therefore left null(); callers that need standalone
+      ! met data (e.g. unit tests) must allocate the specific field themselves.
 
       ! Allocate chemical and emission data arrays
       if (nlev > 0 .and. nspec_chem > 0) then

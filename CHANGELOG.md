@@ -2,6 +2,101 @@
 
 <!-- version list -->
 
+## v2.1.0 (2026-10-23)
+
+
+## v2.1.0-rc.5 (2026-10-14)
+
+### Continuous Integration
+
+- **fix**: Concurrency settings for pushes
+  ([#209](https://github.com/ufs-community/CATChem/pull/209),
+  [`5aa949e`](https://github.com/ufs-community/CATChem/commit/5aa949eced990720508585237422768b52f01952))
+
+### Documentation
+
+- Add SI disclosure statement ([#205](https://github.com/ufs-community/CATChem/pull/205),
+  [`0fed95c`](https://github.com/ufs-community/CATChem/commit/0fed95ce9acdf7c8df6eba95b5fb2bc9b32e4ecb))
+
+### Features
+
+- Add new wetdep scheme for GCAFS reproduction
+  ([#206](https://github.com/ufs-community/CATChem/pull/206),
+  [`f7e9ac0`](https://github.com/ufs-community/CATChem/commit/f7e9ac0597308c2ce3a68c70ac8cac528b1ef75e))
+
+
+## v2.1.0-rc.4 (2026-10-14)
+
+### Bug Fixes
+
+- Harden against rogue ci skips ([#208](https://github.com/ufs-community/CATChem/pull/208),
+  [`05215e4`](https://github.com/ufs-community/CATChem/commit/05215e4b0c08c7d6689afccae2f912b47cf089af))
+
+### Features
+
+- Initial integration with `ufs-chem-container`
+  ([#204](https://github.com/ufs-community/CATChem/pull/204),
+  [`d72f5aa`](https://github.com/ufs-community/CATChem/commit/d72f5aa1d77afd6ba3fae4d381d3ac9143779ecc))
+
+
+## v2.1.0-rc.3 (2026-09-23)
+
+### Bug Fixes
+
+- Update license and notice; fix broken links; enable strict mkdocs build
+  ([#201](https://github.com/ufs-community/CATChem/pull/201),
+  [`dbcefd7`](https://github.com/ufs-community/CATChem/commit/dbcefd7664c5e21f157c97687cb98d9259f399bb))
+
+### Continuous Integration
+
+- Tell PSR to not parse full squash commit message
+  ([#197](https://github.com/ufs-community/CATChem/pull/197),
+  [`aa3fd6b`](https://github.com/ufs-community/CATChem/commit/aa3fd6bd0c2c21e822b4566a9ec2157564627833))
+
+
+## v2.1.0-rc.2 (2026-09-10)
+
+### Bug Fixes
+
+- Use pygrep to be platform agnostic ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+### Chores
+
+- Add initial CODEOWNERS ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+- Add initial CODEOWNERS file ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+- **modulefiles**: 🤖 sync from ufs-weather-model
+  ([#189](https://github.com/ufs-community/CATChem/pull/189),
+  [`91edb9a`](https://github.com/ufs-community/CATChem/commit/91edb9a5064192bbca3c9c608f18831686f42a81))
+
+### Documentation
+
+- Add info for a specific user ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+### Features
+
+- Add standalone driver for offline simulation
+  ([#169](https://github.com/ufs-community/CATChem/pull/169),
+  [`d228c8b`](https://github.com/ufs-community/CATChem/commit/d228c8b16b8b6e8542ffe81f9913cb25759c7c8e))
+
+- Rename to chem-core-team ([#194](https://github.com/ufs-community/CATChem/pull/194),
+  [`d0d3138`](https://github.com/ufs-community/CATChem/commit/d0d31388969c98fe1549243677866ecba315c782))
+
+
+## v2.1.0-rc.1 (2026-08-24)
+
+### Features
+
+- Enhance the modulefile sync workflow following CECE
+  ([#188](https://github.com/ufs-community/CATChem/pull/188),
+  [`8c924bc`](https://github.com/ufs-community/CATChem/commit/8c924bc7f0abf54f91b0ba5abc650b969018e9ab))
+
+
 ## v2.0.0 (2026-07-20)
 
 

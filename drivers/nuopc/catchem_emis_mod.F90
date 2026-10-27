@@ -43,6 +43,8 @@ module catchem_emis_mod
    use StateManager_Mod, only: StateManagerType
    use ChemState_Mod, only: ChemStateType
    use MetState_Mod, only: MetStateType
+   use Met_Utilities_Mod, only: hybrid_grid_supported, get_pedge, get_pmid, vertical_interp_pressure
+   use TimeState_Mod, only: TimeStateType
    use ExtEmisData_Mod, only: ExtEmisDataType, ExtEmisCategoryType, ExtEmisFieldType
    use Constants, only: AIRMW, AVO
 
@@ -144,6 +146,9 @@ contains
 
             call catchem_emis_setup_timing(ext_emis_data%categories(icat), clock, localrc)
 
+            ! Cache the (static) meteorology-provider classification once here.
+            ext_emis_data%categories(icat)%is_met = emis_category_is_met(config_manager, icat)
+
          end if
       end do
 
@@ -176,9 +181,12 @@ contains
       type(ErrorManagerType), pointer :: error_manager
       type(MetStateType), pointer :: met_state
       type(ChemStateType), pointer :: chem_state
+      type(TimeStateType), pointer :: time_state
       integer :: localrc, i, period_key
       integer :: blo_year, blo_month
+      integer :: lo_yy, lo_mm, lo_dd
       real(fp) :: bfrac
+      type(ESMF_TimeInterval) :: half_day
       character(len=EMIS_MAXSTR) :: msg, timeString
       character(len=*), parameter :: pName = 'catchem_emis_update'
 
@@ -192,8 +200,14 @@ contains
       error_manager => state_manager%get_error_manager()
       met_state => state_manager%get_met_state_ptr()
       chem_state => state_manager%get_chem_state_ptr()
+      time_state => state_manager%get_time_state_ptr()
 
-      ! Loop through all emission categories and check if updates are needed
+      ! Pass 1: read/blend every active category and apply ONLY the
+      ! meteorology-providing categories (those whose mappings all target
+      ! met_state via MET_ prefixes).  This guarantees the primary met fields
+      ! (PS, T, QV, ...) are populated before the pressure-derived fields
+      ! (PEDGE/PMID/DELP/AIRDEN) that the emission tendencies below require.
+      ! Applying emissions first would divide by an unpopulated (zero) DELP.
       do i = 1, ext_emis_data%n_categories
          if (.not. ext_emis_data%categories(i)%is_active) cycle
 
@@ -212,13 +226,45 @@ contains
          ! For a single multi-record monthly climatology with linear time
          ! interpolation, the interpolation bracket changes at mid-month (not at
          ! the month start), so re-read the two bracketing slices at mid-month.
+         ! With monthly_anchor=='file' the bracket follows the file's record
+         ! timestamps (MAPL ExtData match); key on the lower record index.
          if (trim(ext_emis_data%categories(i)%frequency) == 'monthly' .and. &
             trim(ext_emis_data%categories(i)%time_interpolation) == 'linear' .and. &
             ext_emis_data%categories(i)%n_times >= 2) then
-            call catchem_emis_month_bracket(current_time, blo_year, blo_month, bfrac, localrc)
+            if (trim(ext_emis_data%categories(i)%monthly_anchor) == 'file') then
+               call catchem_emis_file_time_bracket(ext_emis_data%categories(i), current_time, blo_month, bfrac, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               call ESMF_TimeGet(current_time, yy=blo_year, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               period_key = blo_year*100 + blo_month
+            else
+               call catchem_emis_month_bracket(current_time, blo_year, blo_month, bfrac, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               period_key = blo_year*100 + blo_month
+            end if
+         end if
+
+         ! Daily-mean files interpolated linearly are valid at 12Z, so the bracket of two
+         ! consecutive-day 12Z knots changes at noon.  Key on the lower knot's day
+         ! (= date of curr_time - 12h) so the re-read fires at 12Z, not midnight.
+         ! With daily_hold (MAPL ExtData refresh-cadence match), the [D-1,D] bracket
+         ! is held for the whole day and refreshed at 00Z, so key on curr_time's date.
+         if (trim(ext_emis_data%categories(i)%frequency) == 'daily' .and. &
+            trim(ext_emis_data%categories(i)%time_interpolation) == 'linear') then
+            if (ext_emis_data%categories(i)%daily_hold) then
+               call ESMF_TimeGet(current_time, yy=lo_yy, mm=lo_mm, dd=lo_dd, rc=localrc)
+            else
+               call ESMF_TimeIntervalSet(half_day, h=12, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
+               call ESMF_TimeGet(current_time - half_day, yy=lo_yy, mm=lo_mm, dd=lo_dd, rc=localrc)
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return
-            period_key = blo_year*100 + blo_month
+            period_key = lo_yy*10000 + lo_mm*100 + lo_dd
          end if
 
          if (period_key /= ext_emis_data%categories(i)%last_period_key) then
@@ -238,6 +284,13 @@ contains
                ext_emis_data%categories(i)%irec = ext_emis_data%categories(i)%irec + 1
             end if
 
+            ! Isolate pure input reading (disk read + regrid) so ESMF profiling/
+            ! tracing reports it separately from the emission apply/derive work.
+#ifdef CATCHEM_TRACE_NUOPC
+            call ESMF_TraceRegionEnter("CATCHEM:emis_read", rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+#endif
             call catchem_emis_read(ext_emis_data%categories(i), IO, grid, &
                met_state%NLEVS, current_time, localrc)
             if (localrc /= CC_SUCCESS) then
@@ -245,6 +298,11 @@ contains
                   trim(ext_emis_data%categories(i)%category_name)
                call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
             end if
+#ifdef CATCHEM_TRACE_NUOPC
+            call ESMF_TraceRegionExit("CATCHEM:emis_read", rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+#endif
 
             ext_emis_data%categories(i)%last_period_key = period_key
          end if
@@ -259,8 +317,61 @@ contains
             end if
          end if
 
-         ! Apply emissions to chemical state every timestep
-         ! (data is read only when the period changes, but applied every step)
+         ! Apply meteorology-providing categories now (pass 1) so that every
+         ! met_state primary they supply (PS, T, QV, ...) is populated before we
+         ! ensure the pressure-derived fields below.  Non-met (emission)
+         ! categories are deferred to pass 2.
+         if (ext_emis_data%categories(i)%is_met) then
+            call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
+            if (localrc /= CC_SUCCESS) then
+               write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
+                  trim(ext_emis_data%categories(i)%category_name)
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            end if
+         end if
+      end do
+
+      ! Ensure the pressure-derived met fields used by the emission unit
+      ! conversions are available before the chemistry categories (pass 2) apply:
+      ! DELP (for kg/m2/s mass-flux -> mixing-ratio) and AIRDEN (for #/cm3
+      ! number-flux).  Derive each ONLY when it was not already populated this
+      ! timestep, which keeps the logic source-agnostic rather than keyed to any
+      ! particular category/field:
+      !   * coupled runs: the NUOPC import transform (run immediately before this
+      !     routine) already set DELP/AIRDEN, so is_field_set is .true. and the
+      !     imported values are left untouched;
+      !   * standalone/offline runs: the met categories above populated the
+      !     primaries and derive_field self-resolves the PS -> PEDGE -> PMID ->
+      !     {DELP, AIRDEN} chain from whichever category supplied them.
+      ! MetState's registry is reset each timestep, so this re-derives every step
+      ! from the current PS/T in the offline case (no staleness).
+      if (.not. met_state%is_field_set('DELP')) then
+         call met_state%derive_field('DELP', error_manager, time_state, localrc)
+         if (localrc /= CC_SUCCESS) then
+            call ESMF_LogWrite(trim(pName)//': could not derive DELP (surface pressure '// &
+               'PS may be unavailable); kg/m2/s emission unit conversion may be invalid', &
+               ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
+         end if
+      end if
+      if (.not. met_state%is_field_set('AIRDEN')) then
+         call met_state%derive_field('AIRDEN', error_manager, time_state, localrc)
+         if (localrc /= CC_SUCCESS) then
+            call ESMF_LogWrite(trim(pName)//': could not derive AIRDEN (PMID/T may be '// &
+               'unavailable); #/cm3 emission unit conversion may be invalid', &
+               ESMF_LOGMSG_ERROR, rc=localrc)
+            rc = CC_FAILURE
+            return
+         end if
+      end if
+
+      ! Pass 2: apply the remaining (non-met) emission categories to the chemical
+      ! state.  DELP/AIRDEN are now valid for the mass-flux unit conversions.
+      do i = 1, ext_emis_data%n_categories
+         if (.not. ext_emis_data%categories(i)%is_active) cycle
+         if (ext_emis_data%categories(i)%is_met) cycle
+
          call catchem_emis_apply(ext_emis_data%categories(i), i, ext_emis_data%global_scale, config_manager, error_manager, chem_state, met_state, dt, current_time, localrc)
          if (localrc /= CC_SUCCESS) then
             write(msg, '(A,A,A)') trim(pName), ': Failed to apply emissions for category: ', &
@@ -268,12 +379,294 @@ contains
             call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
          end if
       end do
-      nullify(config_manager, met_state, chem_state) ! Clean up pointers
+      nullify(config_manager, met_state, chem_state, time_state) ! Clean up pointers
 
       call ESMF_LogWrite(trim(pName)//': Emission data updated', &
          ESMF_LOGMSG_INFO, rc=localrc)
 
    end subroutine catchem_emis_update
+
+   !> \brief Classify an emission-mapping category as meteorology-providing.
+   !!
+   !! Returns .true. when every species mapping in the category targets a
+   !! meteorological field (name prefixed with 'MET_'/'met_'), meaning the
+   !! category populates met_state rather than the chemical state.  Such met
+   !! categories must be applied before the chemistry emission categories so
+   !! that the primary met fields (PS, T, QV, ...) are available for deriving
+   !! DELP/AIRDEN used in the emission unit conversions.
+   logical function emis_category_is_met(config_manager, icat) result(is_met)
+      type(ConfigManagerType), pointer, intent(in) :: config_manager
+      integer, intent(in) :: icat
+      integer :: ifield, ispec, nmap
+      character(len=64) :: tgt
+
+      is_met = .false.
+      if (.not. associated(config_manager)) return
+      if (.not. config_manager%config_data%emission_mapping%is_loaded) return
+      if (icat < 1 .or. icat > config_manager%config_data%emission_mapping%n_categories) return
+
+      associate (cat => config_manager%config_data%emission_mapping%categories(icat))
+         ! A category with no mappings is not treated as meteorology-providing.
+         if (cat%n_emission_species <= 0) return
+         do ifield = 1, cat%n_emission_species
+            nmap = cat%species_mappings(ifield)%n_mappings
+            if (nmap <= 0) return
+            do ispec = 1, nmap
+               tgt = adjustl(cat%species_mappings(ifield)%map(ispec))
+               if (len_trim(tgt) <= 4) return
+               if (tgt(1:4) /= 'MET_' .and. tgt(1:4) /= 'met_') return
+            end do
+         end do
+         is_met = .true.
+      end associate
+   end function emis_category_is_met
+
+   subroutine catchem_emis_detect_field_ranks(category, filename, rc)
+      !> \brief Auto-detect each field's 2D/3D rank from the NetCDF file.
+      !!
+      !! Opens the file for metadata inspection only (no data is read) and, for
+      !! every field in the category, sets \c field%is_2d based on the actual
+      !! variable rank after stripping a trailing time/record dimension.  This
+      !! lets a single file/category mix 2D and 3D variables while still being
+      !! read in a single data-open.  If the file or a variable cannot be
+      !! inspected, the field keeps the category-level \c is_2d as a fallback.
+      type(ExtEmisCategoryType), intent(inout) :: category
+      character(len=*),          intent(in)    :: filename
+      integer,                   intent(out)   :: rc
+
+      integer :: ncStatus, ncid, ifield, varId, ndims, uid, spatial_ndims
+      integer :: nlev_var
+      integer, allocatable :: dimids(:)
+      character(len=NF90_MAX_NAME) :: dimName
+      logical :: is_time
+
+      rc = CC_SUCCESS
+
+      ! Default every field to the category setting first, so any field we
+      ! cannot inspect below simply inherits the configured is_2d.
+      do ifield = 1, category%n_fields
+         category%fields(ifield)%is_2d = category%is_2d
+      end do
+
+      ncStatus = nf90_open(trim(filename), NF90_NOWRITE, ncid)
+      ! Non-fatal: this pass only refines is_2d. If the file can't be opened
+      ! for inspection, fields keep the category-level is_2d and the real
+      ! data-open (AQMIO_Open in catchem_emis_read) reports any genuine I/O
+      ! error via ESMF_LogFoundError, so we return rc=success here.
+      if (ncStatus /= NF90_NOERR) return
+
+      ! Identify the unlimited (record) dimension, if any
+      uid = -1
+      ncStatus = nf90_inquire(ncid, unlimitedDimId=uid)
+
+      do ifield = 1, category%n_fields
+         ncStatus = nf90_inq_varid(ncid, trim(category%fields(ifield)%field_name), varId)
+         if (ncStatus /= NF90_NOERR) cycle  ! variable absent -> keep default
+
+         ncStatus = nf90_inquire_variable(ncid, varId, ndims=ndims)
+         if (ncStatus /= NF90_NOERR .or. ndims < 1) cycle
+
+         allocate(dimids(ndims))
+         ncStatus = nf90_inquire_variable(ncid, varId, dimIds=dimids)
+         if (ncStatus /= NF90_NOERR) then
+            deallocate(dimids)
+            cycle
+         end if
+
+         ! Strip a trailing time/record dimension (unlimited or name-based)
+         spatial_ndims = ndims
+         is_time = .false.
+         if (uid /= -1 .and. dimids(ndims) == uid) then
+            is_time = .true.
+         else
+            dimName = ''
+            ncStatus = nf90_inquire_dimension(ncid, dimids(ndims), name=dimName)
+            if (ncStatus == NF90_NOERR) then
+               call to_lower_str(dimName)
+               if (index(dimName, 'time') > 0 .or. index(dimName, 'month') > 0 .or. &
+                  index(dimName, 'record') > 0) is_time = .true.
+            end if
+         end if
+         if (is_time) spatial_ndims = ndims - 1
+
+         category%fields(ifield)%is_2d = (spatial_ndims <= 2)
+
+         ! Record the source variable's vertical extent so 3D fields can be read
+         ! at their native resolution.  Storage order is (lon, lat, lev[, time]),
+         ! so the vertical is the last spatial dimension.  This lets edge met
+         ! fields (nz+1 levels, e.g. PFILSAN/PFLLSAN) be read at full size and
+         ! copied cleanly into the MetState without truncation.
+         if (spatial_ndims >= 3) then
+            ncStatus = nf90_inquire_dimension(ncid, dimids(spatial_ndims), len=nlev_var)
+            if (ncStatus == NF90_NOERR) then
+               category%fields(ifield)%nlev_file = nlev_var
+            else
+               category%fields(ifield)%nlev_file = 0
+            end if
+         else
+            category%fields(ifield)%nlev_file = 1
+         end if
+
+         deallocate(dimids)
+      end do
+
+      ncStatus = nf90_close(ncid)
+
+   end subroutine catchem_emis_detect_field_ranks
+
+   !> \brief Ensure a 3D field's storage matches its native file vertical size.
+   !!
+   !! Returns the vertical level count the field should be read at (\c nlev_f)
+   !! and, if the field's \c emission_data is sized differently, reallocates it
+   !! (preserving nx/ny/n_times) so the file's native levels can be stored
+   !! without truncation.  This lets edge met fields with nz+1 levels
+   !! (e.g. PFILSAN/PFLLSAN) be read and copied verbatim into the MetState,
+   !! mirroring the coupled path.  For 2D fields, or when the vertical size
+   !! could not be detected, the model default \c nlev_default is used and no
+   !! reallocation occurs.
+   subroutine catchem_emis_size_field_vertical(field, nlev_default, nlev_f)
+      implicit none
+      type(ExtEmisFieldType), intent(inout) :: field
+      integer,                intent(in)    :: nlev_default
+      integer,                intent(out)   :: nlev_f
+      integer :: exnx, exny, ext
+
+      nlev_f = nlev_default
+      if (field%is_2d) return
+      if (field%nlev_file > 0) nlev_f = field%nlev_file
+
+      if (allocated(field%emission_data)) then
+         if (size(field%emission_data, 3) /= nlev_f) then
+            exnx = size(field%emission_data, 1)
+            exny = size(field%emission_data, 2)
+            ext  = size(field%emission_data, 4)
+            deallocate(field%emission_data)
+            allocate(field%emission_data(exnx, exny, nlev_f, ext))
+            field%emission_data = 0.0_fp
+            field%nz = nlev_f
+         end if
+      end if
+   end subroutine catchem_emis_size_field_vertical
+
+   !> \brief Pressure-interpolate a 3D field from file levels onto the model grid
+   !!
+   !! Fills \c field%emission_data_model (nx,ny,nz,1) by remapping the current
+   !! slice \c field%emission_data(:,:,:,1) from its native file levels to the
+   !! model's \c nz layers using linear-in-pressure interpolation.  Source-layer
+   !! pressures are reconstructed for \c vertical_pressure_mode=='construct' as
+   !! P = ap + bp*PS from the built-in hybrid coefficients (met_utilities_mod)
+   !! for the file's level count; the target pressures are the model mid-layer
+   !! pressures (\c met_state%PMID, or reconstructed from PS when unavailable).
+   !!
+   !! On any inability to build the pressures (unsupported grid, mismatched
+   !! horizontal shape, or the not-yet-implemented 'file' mode) it falls back to
+   !! a size-safe level copy so the field is still delivered at the model nz
+   !! (never wider than nz), which keeps the collective diagnostic write valid.
+   subroutine catchem_emis_vinterp_field(category, field, met_state, nz, rc)
+      implicit none
+      type(ExtEmisCategoryType), intent(in)    :: category
+      type(ExtEmisFieldType),    intent(inout) :: field
+      type(MetStateType),        intent(in)    :: met_state
+      integer,                   intent(in)    :: nz
+      integer,                   intent(out)   :: rc
+
+      integer :: localrc, nx, ny, nsrc, kcopy
+      logical :: ok, have_src, have_dst
+      real(fp), allocatable :: src_pmid(:,:,:), dst_pmid(:,:,:)
+      character(len=EMIS_MAXSTR) :: msg
+      character(len=32) :: pmode
+      character(len=*), parameter :: pName = 'catchem_emis_vinterp_field'
+
+      rc = CC_SUCCESS
+      if (.not. allocated(field%emission_data)) return
+
+      nx   = size(field%emission_data, 1)
+      ny   = size(field%emission_data, 2)
+      nsrc = size(field%emission_data, 3)
+
+      ! (Re)allocate the model-level buffer to (nx,ny,nz,1).
+      if (allocated(field%emission_data_model)) then
+         if (size(field%emission_data_model,1) /= nx .or. &
+            size(field%emission_data_model,2) /= ny .or. &
+            size(field%emission_data_model,3) /= nz) then
+            deallocate(field%emission_data_model)
+         end if
+      end if
+      if (.not. allocated(field%emission_data_model)) &
+         allocate(field%emission_data_model(nx, ny, nz, 1))
+      field%emission_data_model = 0.0_fp
+
+      ! The horizontal grid of the field must match met_state (PS/PMID) for the
+      ! per-column pressures to be meaningful.  Otherwise fall back to a copy.
+      have_src = .false.
+      have_dst = .false.
+      if (allocated(met_state%PS)) then
+         if (size(met_state%PS,1) == nx .and. size(met_state%PS,2) == ny) then
+
+            ! ---- Source-layer pressures --------------------------------------
+            pmode = adjustl(category%vertical_pressure_mode)
+            call to_lower_str(pmode)
+            select case (trim(pmode))
+             case ('construct', 'hybrid', '')
+               if (hybrid_grid_supported(nsrc)) then
+                  src_pmid = get_pmid(get_pedge(met_state%PS, nsrc))
+                  have_src = (size(src_pmid,3) == nsrc)
+               else
+                  write(msg,'(A,A,I0,A,A)') trim(pName), ': no built-in hybrid grid for ', &
+                     nsrc, ' levels (category ', trim(category%category_name)//')'
+                  call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+               end if
+             case default
+               write(msg,'(A,A,A,A)') trim(pName), &
+                  ': vertical_pressure_mode="', trim(category%vertical_pressure_mode), &
+                  '" not implemented; falling back to a level copy'
+               call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+            end select
+
+            ! ---- Target (model) layer pressures ------------------------------
+            if (have_src) then
+               if (allocated(met_state%PMID)) then
+                  if (size(met_state%PMID,1) == nx .and. size(met_state%PMID,2) == ny .and. &
+                     size(met_state%PMID,3) == nz .and. met_state%is_field_set('PMID')) then
+                     dst_pmid = met_state%PMID
+                     have_dst = .true.
+                  end if
+               end if
+               if (.not. have_dst .and. hybrid_grid_supported(nz)) then
+                  dst_pmid = get_pmid(get_pedge(met_state%PS, nz))
+                  have_dst = (size(dst_pmid,3) == nz)
+               end if
+            end if
+         end if
+      end if
+
+      if (have_src .and. have_dst) then
+         call vertical_interp_pressure(src_pmid, field%emission_data(:,:,:,1), &
+            dst_pmid, field%emission_data_model(:,:,:,1))
+      else
+         ! Safe fallback: copy the lowest min(nz,nsrc) levels so the field is
+         ! still nz-sized (avoids a native-depth collective write) even though
+         ! the pressures could not be built.
+         kcopy = min(nz, nsrc)
+         field%emission_data_model(:,:,1:kcopy,1) = field%emission_data(:,:,1:kcopy,1)
+         write(msg,'(A,A,A)') trim(pName), &
+            ': pressure interpolation unavailable, used level copy for ', &
+            trim(category%category_name)//'/'//trim(field%field_name)
+         call ESMF_LogWrite(msg, ESMF_LOGMSG_WARNING, rc=localrc)
+      end if
+
+   end subroutine catchem_emis_vinterp_field
+
+   !> \brief Lowercase an in-place string (ASCII)
+   subroutine to_lower_str(s)
+      implicit none
+      character(len=*), intent(inout) :: s
+      integer :: i, ic
+      do i = 1, len_trim(s)
+         ic = iachar(s(i:i))
+         if (ic >= iachar('A') .and. ic <= iachar('Z')) s(i:i) = achar(ic + 32)
+      end do
+   end subroutine to_lower_str
 
    !> \brief Read emission data from files
    !!
@@ -295,6 +688,7 @@ contains
 
       ! Local variables
       integer :: localrc,   ifield
+      integer :: nlev_f
       character(len=EMIS_MAXSTR) :: msg, filename
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -362,6 +756,12 @@ contains
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
+      ! Detect each field's rank (2D vs 3D) from the actual NetCDF variable so a
+      ! single file/category can mix 2D and 3D fields and still be read in one
+      ! open.  Falls back to the category-level is_2d when a variable cannot be
+      ! inspected.  This is a cheap metadata-only open (no data is read here).
+      call catchem_emis_detect_field_ranks(category, filename, localrc)
+
       ! Determine if this category needs runtime regridding.
       ! When regrid_method is set to anything other than 'none' (e.g.
       ! bilinear, neareststod, conserve, ...) the file is assumed to be
@@ -391,14 +791,18 @@ contains
 
       do ifield = 1, category%n_fields
          !create field to receive data
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
                typekind=ESMF_TYPEKIND_R4, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          else !3D field
+            ! Read at the file's native vertical size so nz+1 edge fields
+            ! (e.g. PFILSAN/PFLLSAN) are stored in full; falls back to the model
+            ! nlev when the file's vertical extent was not detected.
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
             esmf_field = ESMF_FieldCreate(grid, name=trim(category%fields(ifield)%field_name), &
-               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev/), rc=localrc)
+               typekind=ESMF_TYPEKIND_R4, ungriddedLBound=(/1/), ungriddedUBound=(/nlev_f/), rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
          end if
@@ -408,18 +812,38 @@ contains
             timeSlice=category % irec, iofmt=AQMIO_FMT_NETCDF, rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-            ! Clean up field before returning
-            call ESMF_FieldDestroy(esmf_field, rc=localrc)
+            ! Clean up field and close file before returning; log any cleanup
+            ! failure at the point of failure (still close the file afterward).
+            call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__)) then
+               ! cleanup error already logged; still close the file below
+            end if
+            call AQMIO_Close(IO, rc=localrc)
+            if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__,  file=__FILE__)) then
+               ! close error already logged; fall through to bail out
+            end if
             return  ! bail out
          end if
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             !get data pointer and assign to emission field array
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field before returning
-               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               ! Clean up field and close file before returning; log any cleanup
+               ! failure at the point of failure (still close the file afterward).
+               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! cleanup error already logged; still close the file below
+               end if
+               call AQMIO_Close(IO, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! close error already logged; fall through to bail out
+               end if
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
@@ -429,13 +853,23 @@ contains
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__,  file=__FILE__,  rcToReturn=rc)) then
-               ! Clean up field before returning
-               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               ! Clean up field and close file before returning; log any cleanup
+               ! failure at the point of failure (still close the file afterward).
+               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! cleanup error already logged; still close the file below
+               end if
+               call AQMIO_Close(IO, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__,  file=__FILE__)) then
+                  ! close error already logged; fall through to bail out
+               end if
                return  ! bail out
             end if
             !!TODO: We should check unit conversion in the future. Here we make sure the gridded emission is in kg/m2/s already
             if (category%reverse_vertical) then
-               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev:1:-1), fp)  !reverse vertical level
+               category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,nlev_f:1:-1), fp)  !reverse vertical level
             else
                category%fields(ifield)%emission_data(:,:,:,1) = real(field_data_3d(:,:,:), fp)
             end if
@@ -443,8 +877,9 @@ contains
 
          category%fields(ifield)%is_loaded = .true.   !set to true; otherwise diagnostics will not be saved.
 
-         ! Clean up ESMF field after data transfer
-         call ESMF_FieldDestroy(esmf_field, rc=localrc)
+         ! Clean up ESMF field after data transfer. noGarbage=.true. forces ESMF
+         ! to release the field memory now instead of deferring to ESMF_Finalize.
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
 
@@ -452,6 +887,14 @@ contains
          field_data_2d => null()
          field_data_3d => null()
       end do
+
+      ! Close the NetCDF file opened by AQMIO_Open above. Without this the
+      ! nf90_open handle (and its HDF5 buffers) leaks on every emission-period
+      ! read, growing RSS for the life of the run. AQMIO is CATChem-specific,
+      ! which is why the GOCART configuration does not exhibit this leak.
+      call AQMIO_Close(IO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__,  file=__FILE__,  rcToReturn=rc)) return  ! bail out
 
       !!not sure why this write will crash the model
       write(msg, '(A,A,A)') trim(pName), ': Successfully read emission data for category ', &
@@ -477,6 +920,7 @@ contains
 
       ! Local variables
       integer :: localrc, ifield, klev
+      integer :: nlev_f
       character(len=EMIS_MAXSTR) :: msg
       character(len=64) :: category_name
       type(ESMF_Field) :: esmf_field
@@ -489,13 +933,16 @@ contains
       logical :: multi_file_interp   ! t2 comes from a different file
       integer :: irec_next
       integer :: nx, ny
+      integer :: n_hours
       character(len=EMIS_MAXSTR) :: filename_next
+      character(len=EMIS_MAXSTR) :: filename_cur     ! t1 file (12Z-shifted for daily)
       type(ESMF_Time) :: next_time
-      type(ESMF_TimeInterval) :: period_step
-      logical :: next_file_exists
+      type(ESMF_TimeInterval) :: period_step, half_day
+      logical :: next_file_exists, cur_file_exists
 
       rc = CC_SUCCESS
       category_name = trim(category%category_name)
+      filename_cur = trim(filename)   ! current-slice file; overridden below for daily 12Z bracket
 
       ! Determine if temporal interpolation is needed.
       ! Two modes:
@@ -529,12 +976,39 @@ contains
              case ('hourly')
                call ESMF_TimeIntervalSet(period_step, h=1, rc=localrc)
              case default
-               call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+               n_hours = parse_hourly_interval(category%frequency)
+               if (n_hours > 0) then
+                  call ESMF_TimeIntervalSet(period_step, h=n_hours, rc=localrc)
+               else
+                  call ESMF_TimeIntervalSet(period_step, mm=1, rc=localrc)
+               end if
             end select
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
-            next_time = curr_time + period_step
+            ! Daily-mean files are valid at 12Z (GEOS/ExtData): bracket the two 12Z knots
+            ! straddling curr_time so the morning blends [yesterday, today] and the afternoon
+            ! [today, tomorrow], matching MAPL ExtData rather than a 00Z ramp.
+            if (trim(category%frequency) == 'daily') then
+               call ESMF_TimeIntervalSet(half_day, h=12, rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               if (category%daily_hold) then
+                  ! MAPL refresh-cadence match: hold the [D-1, D] bracket for the whole
+                  ! day (t1=previous day, t2=current day) instead of flipping at 12Z.
+                  call resolve_filename_template(category%source_file, curr_time - period_step, filename_cur, localrc)
+                  next_time = curr_time
+               else
+                  call resolve_filename_template(category%source_file, curr_time - half_day, filename_cur, localrc)
+                  next_time = curr_time + half_day
+               end if
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               inquire(file=trim(filename_cur), exist=cur_file_exists)
+               if (.not. cur_file_exists) filename_cur = trim(filename)  ! fall back to curr-day file
+            else
+               next_time = curr_time + period_step
+            end if
             call resolve_filename_template(category%source_file, next_time, filename_next, localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -568,6 +1042,39 @@ contains
          end if
       end if
 
+      ! For monthly file-anchored categories, cache the bracketing records' valid-times
+      ! so blend_time interpolates by actual timestamps regardless of storage pattern.
+      ! Single-file categories read them directly from tc_dates in the bracket helper, so
+      ! only the multi-file (one-record-per-file) case needs the next file's time here.
+      ! Example (MEGAN, model time in January): filename_cur=MEGAN_..._01.nc (record 20210101),
+      ! filename_next=MEGAN_..._02.nc (record 20210201) -> bt1=(20210101,0), bt2=(20210201,0).
+      if (trim(category%frequency) == 'monthly' .and. trim(category%monthly_anchor) == 'file') then
+         category%bt_valid = .false.
+         if (do_time_interp .and. multi_file_interp .and. next_file_exists .and. category%n_times >= 1) then
+            category%bt1_date = category%tc_dates(1)
+            category%bt1_secs = category%tc_secs(1)
+            block
+               integer :: nt2
+               integer, allocatable :: d2a(:), s2a(:)
+               call AQMIO_ReadTimeCoord(trim(filename_next), nt2, d2a, s2a, rc=localrc)
+               if (localrc == ESMF_SUCCESS .and. nt2 >= 1) then
+                  category%bt2_date = d2a(1)
+                  category%bt2_secs = s2a(1)
+                  category%bt_valid = .true.
+               else
+                  ! Next-file valid-time unreadable: leave bt_valid=.false. so blend_time
+                  ! falls back to calendar-based (mid-month) interpolation rather than failing.
+                  write(msg, '(A,A,A)') trim(pName), &
+                     ': could not read time coord from next file, using calendar interp: ', &
+                     trim(filename_next)
+                  call ESMF_LogWrite(trim(msg), ESMF_LOGMSG_WARNING, rc=localrc)
+               end if
+               if (allocated(d2a)) deallocate(d2a)
+               if (allocated(s2a)) deallocate(s2a)
+            end block
+         end if
+      end if
+
       do ifield = 1, category%n_fields
          ! Create 2D destination field on the model grid
          esmf_field = ESMF_FieldCreate(grid, &
@@ -576,11 +1083,11 @@ contains
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
-         if (category%is_2d) then
+         if (category%fields(ifield)%is_2d) then
             ! --- 2D field ---
             call catchem_regrid_field( &
                cache     = emis_regrid_cache, &
-               filename  = trim(filename), &
+               filename  = trim(filename_cur), &
                varname   = trim(category%fields(ifield)%field_name), &
                dstField  = esmf_field, &
                latname   = trim(category%latname), &
@@ -591,14 +1098,22 @@ contains
                rc        = localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__)) then
+                  ! cleanup error already logged; fall through to bail out
+               end if
                return
             end if
 
             call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-               call ESMF_FieldDestroy(esmf_field, rc=localrc)
+               call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__)) then
+                  ! cleanup error already logged; fall through to bail out
+               end if
                return
             end if
 
@@ -639,7 +1154,11 @@ contains
                end if
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
@@ -660,10 +1179,13 @@ contains
             end if
          else
             ! --- 3D field: regrid each vertical level as a 2D slab ---
-            do klev = 1, nlev
+            ! Size storage to the file's native vertical extent so nz+1 edge
+            ! fields are held in full (falls back to model nlev if undetected).
+            call catchem_emis_size_field_vertical(category%fields(ifield), nlev, nlev_f)
+            do klev = 1, nlev_f
                call catchem_regrid_field( &
                   cache     = emis_regrid_cache, &
-                  filename  = trim(filename), &
+                  filename  = trim(filename_cur), &
                   varname   = trim(category%fields(ifield)%field_name), &
                   dstField  = esmf_field, &
                   latname   = trim(category%latname), &
@@ -675,14 +1197,22 @@ contains
                   rc        = localrc)
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
                call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=localrc)
                if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                   line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                  call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                  call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                  if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) then
+                     ! cleanup error already logged; fall through to bail out
+                  end if
                   return
                end if
 
@@ -690,7 +1220,7 @@ contains
                   nx = size(field_data_2d, 1)
                   ny = size(field_data_2d, 2)
                   if (.not. allocated(category%fields(ifield)%interp_data_t1)) then
-                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t1(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t1(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -723,12 +1253,16 @@ contains
                   end if
                   if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                      line=__LINE__, file=__FILE__, rcToReturn=rc)) then
-                     call ESMF_FieldDestroy(esmf_field, rc=localrc)
+                     call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
+                     if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                        line=__LINE__, file=__FILE__)) then
+                        ! cleanup error already logged; fall through to bail out
+                     end if
                      return
                   end if
 
                   if (.not. allocated(category%fields(ifield)%interp_data_t2)) then
-                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev, 1))
+                     allocate(category%fields(ifield)%interp_data_t2(nx, ny, nlev_f, 1))
                   end if
                   category%fields(ifield)%interp_data_t2(:,:,klev,1) = real(field_data_2d(:,:), fp)
 
@@ -743,19 +1277,19 @@ contains
             ! Reverse vertical levels if configured (apply to both stored slices)
             if (category%reverse_vertical) then
                category%fields(ifield)%emission_data(:,:,:,1) = &
-                  category%fields(ifield)%emission_data(:,:,nlev:1:-1,1)
+                  category%fields(ifield)%emission_data(:,:,nlev_f:1:-1,1)
                if (do_time_interp) then
                   category%fields(ifield)%interp_data_t1(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t1(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t1(:,:,nlev_f:1:-1,1)
                   category%fields(ifield)%interp_data_t2(:,:,:,1) = &
-                     category%fields(ifield)%interp_data_t2(:,:,nlev:1:-1,1)
+                     category%fields(ifield)%interp_data_t2(:,:,nlev_f:1:-1,1)
                end if
             end if
          end if
 
          category%fields(ifield)%is_loaded = .true.
 
-         call ESMF_FieldDestroy(esmf_field, rc=localrc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=localrc)
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
@@ -1130,13 +1664,14 @@ contains
    !! \param[in]    current_time ESMF_Time for current model time
    !! \param[in]    nx, ny       Grid dimensions
    !! \param[out]   rc           Return code
-   subroutine apply_biomass_diurnal(emission_2d, lons, lats, current_time, nx, ny, rc)
+   subroutine apply_biomass_diurnal(emission_2d, lons, lats, current_time, dt, nx, ny, rc)
       implicit none
 
       real(fp), intent(inout) :: emission_2d(:,:)
       real(fp), intent(in)    :: lons(:,:)
       real(fp), intent(in)    :: lats(:,:)
       type(ESMF_Time), intent(in) :: current_time
+      real(fp), intent(in)    :: dt
       integer, intent(in)     :: nx, ny
       integer, intent(out)    :: rc
 
@@ -1206,9 +1741,9 @@ contains
 
       nhms = hh * 10000 + mm * 100 + ss
 
-      ! Compute normalization factors (depend on model timestep via ndt=1 for 360s bins)
-      ! Use ndt=1 since we sample one bin per call (consistent with GOCART default)
-      ndt = 1
+      ! Normalization stride follows GOCART Chem_BiomassDiurnal (ndt = max(1,nint(cdt/DT)),
+      ! DT=360 s) so the applied factor averages to 1 over the timesteps sampled in a day.
+      ndt = max(1, nint(dt / DT_DIURNAL))
       fBoreal = 0.0_fp
       fNonBoreal = 0.0_fp
       NN = 0
@@ -1281,6 +1816,7 @@ contains
       ! Local variables
       integer :: localrc, ifield, ispec, n_mapped_species, species_idx
       integer :: nx, ny, nz, n_species, i, j, k
+      integer :: nlev_f, kcopy
       character(len=EMIS_MAXSTR) :: msg, field_name, category_name
       character(len=64) :: mapped_species_name  ! Single species name
       real(fp) :: scale_factor  ! Single scale factor
@@ -1334,9 +1870,34 @@ contains
 
          field_name = trim(category%fields(ifield)%field_name)
 
+         ! Optionally remap a native-level 3D field (e.g. a 127-level oxidant)
+         ! onto the model nz grid by linear-in-pressure interpolation.  This
+         ! (re)builds emission_data_model each timestep from the current PS/PMID
+         ! and the (possibly time-blended) emission_data, so the field is used
+         ! and diagnosed on the model grid rather than truncated.
+         if (category%vertical_interp .and. .not. category%fields(ifield)%is_2d .and. &
+            size(category%fields(ifield)%emission_data, 3) /= nz) then
+            call catchem_emis_vinterp_field(category, category%fields(ifield), met_state, nz, localrc)
+         else if (allocated(category%fields(ifield)%emission_data_model)) then
+            ! No longer needed (config changed or size now matches) -> drop it.
+            deallocate(category%fields(ifield)%emission_data_model)
+         end if
+
          ! Get emission data for entire domain [kg/m2/s]
-         ! Assuming surface emissions (k=1, t=1) for now
-         emission_flux(:,:,:) = category%fields(ifield)%emission_data(:,:,:,1)
+         ! Prefer the model-grid buffer when a pressure remap was performed;
+         ! otherwise copy up to the model's nz levels into the working buffer.
+         ! Fields read at their native vertical size (e.g. nz+1 edge met fields)
+         ! can have more levels than nz; those are passed straight from
+         ! emission_data in the MET_ 3D branch below, so a size-safe partial copy
+         ! here keeps the chemistry/2D paths (which operate on nz) valid.
+         if (allocated(category%fields(ifield)%emission_data_model)) then
+            emission_flux(:,:,:) = category%fields(ifield)%emission_data_model(:,:,:,1)
+         else
+            nlev_f = size(category%fields(ifield)%emission_data, 3)
+            kcopy = min(nz, nlev_f)
+            emission_flux(:,:,:) = 0.0_fp
+            emission_flux(:,:,1:kcopy) = category%fields(ifield)%emission_data(:,:,1:kcopy,1)
+         end if
 
          ! Apply category and global scaling factors
          emission_flux = emission_flux * category%global_scale * global_scale
@@ -1344,7 +1905,7 @@ contains
          ! Apply diurnal biomass burning cycle if enabled (before vertical distribution)
          if (category%diurnal_bb) then
             call apply_biomass_diurnal(emission_flux(:,:,1), met_state%LON, met_state%LAT, &
-               current_time, nx, ny, localrc)
+               current_time, dt, nx, ny, localrc)
          end if
 
          ! Apply vertical distribution if configured (redistributes 2D surface emission to 3D)
@@ -1406,10 +1967,24 @@ contains
                !and set the met state instead of chem state. The rest of the name after "MET_" should match the field name in met state.
                if (len_trim(mapped_species_name) > 4 .and. (trim(mapped_species_name(1:4)) == 'MET_' .or. trim(mapped_species_name(1:4)) == 'met_')) then
                   ! This is a mapping to a meteorological variable, not a chemical species. Skip applying to chem_state.
-                  if (category%is_2d) then
+                  if (category%fields(ifield)%is_2d) then
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux(:,:,1) * scale_factor, error_manager, localrc)
-                  else
+                  else if (allocated(category%fields(ifield)%emission_data_model) .or. &
+                     size(category%fields(ifield)%emission_data, 3) == nz) then
+                     ! Model-grid data: either pressure-interpolated into
+                     ! emission_data_model (already in emission_flux above) or a
+                     ! native nz-level field.  Both are nz-sized in emission_flux.
                      call met_state%set_field(trim(mapped_species_name(5:)), emission_flux * scale_factor, error_manager, localrc)
+                  else
+                     ! Native-size 3D met field (e.g. nz+1 edge fields like
+                     ! PFILSAN/PFLLSAN): pass the full column straight from
+                     ! emission_data so set_field copies every level verbatim,
+                     ! matching the coupled path.  Apply the same category/global
+                     ! scaling that emission_flux received above.
+                     call met_state%set_field(trim(mapped_species_name(5:)), &
+                        category%fields(ifield)%emission_data(:,:,:,1) &
+                        * category%global_scale * global_scale * scale_factor, &
+                        error_manager, localrc)
                   end if
                   if (localrc /= CC_SUCCESS) then
                      write(msg, '(A,A)') trim(pName), ': Failed to set met_state'
@@ -2035,10 +2610,19 @@ contains
             units = trim(ext_emis_data%categories(icat)%fields(ifield)%units)
 
             ! Write field based on whether it's gridded (2D) or not (3D)
-            if (ext_emis_data%categories(icat)%gridded .and. ext_emis_data%categories(icat)%is_2d) then
+            if (ext_emis_data%categories(icat)%gridded .and. &
+               ext_emis_data%categories(icat)%fields(ifield)%is_2d) then
                ! 2D gridded emission field
                call write_emission_field_2d(IO, grid, field_name, &
                   ext_emis_data%categories(icat)%fields(ifield)%emission_data(:,:,1,1), &
+                  description, units, filename, time_slice, localrc)
+            else if (allocated(ext_emis_data%categories(icat)%fields(ifield)%emission_data_model)) then
+               ! 3D field remapped onto the model grid (pressure interpolation):
+               ! write the model-level buffer so the field's vertical dimension
+               ! matches the model nz (and the diagnostic file), keeping the
+               ! collective parallel write consistent across PEs.
+               call write_emission_field_3d(IO, grid, field_name, &
+                  ext_emis_data%categories(icat)%fields(ifield)%emission_data_model(:,:,:,1), &
                   description, units, filename, time_slice, localrc)
             else
                ! 3D point source or vertical emission field
@@ -2096,7 +2680,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_2d(:,:) => null()
-      integer :: i, j
       !character(len=*), parameter :: pName = 'write_emission_field_2d'
 
       rc = CC_SUCCESS
@@ -2118,23 +2701,22 @@ contains
       ! Get field data pointer and copy emission data
       call ESMF_FieldGet(esmf_field, farrayPtr=field_data_2d, rc=rc)
       if (rc /= ESMF_SUCCESS) then
-         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
          return
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do j = 1, size(emission_data, 2)
-         do i = 1, size(emission_data, 1)
-            field_data_2d(i, j) = real(emission_data(i, j), ESMF_KIND_R4)
-         end do
-      end do
+      ! Whole-array (shape-based) copy: on a decomposed grid the ESMF field
+      ! pointer has DE-local/global index bounds (lower bound /= 1) while
+      ! emission_data is 1-based; intrinsic assignment copies by position.
+      field_data_2d(:,:) = real(emission_data(:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
          iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
-      ! Clean up
-      call ESMF_FieldDestroy(esmf_field, rc=rc)
+      ! Clean up. noGarbage=.true. releases memory now instead of at ESMF_Finalize.
+      call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
 
    end subroutine write_emission_field_2d
 
@@ -2169,7 +2751,6 @@ contains
       type(ESMF_Field) :: esmf_field
       type(ESMF_Info) :: info
       real(ESMF_KIND_R4), pointer :: field_data_3d(:,:,:) => null()
-      integer :: i, j, k
       !character(len=*), parameter :: pName = 'write_emission_field_3d'
 
       rc = CC_SUCCESS
@@ -2193,25 +2774,21 @@ contains
       ! Get field data pointer and copy emission data
       call ESMF_FieldGet(esmf_field, farrayPtr=field_data_3d, rc=rc)
       if (rc /= ESMF_SUCCESS) then
-         call ESMF_FieldDestroy(esmf_field, rc=rc)
+         call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
          return
       end if
 
       ! Copy data (convert from fp to ESMF_KIND_R4)
-      do k = 1, size(emission_data, 3)
-         do j = 1, size(emission_data, 2)
-            do i = 1, size(emission_data, 1)
-               field_data_3d(i, j, k) = real(emission_data(i, j, k), ESMF_KIND_R4)
-            end do
-         end do
-      end do
+      ! Whole-array (shape-based) copy: see write_emission_field_2d. The
+      ! decomposed ESMF field pointer has non-1 horizontal lower bounds.
+      field_data_3d(:,:,:) = real(emission_data(:,:,:), ESMF_KIND_R4)
 
       ! Write to NetCDF using AQMIO
       call AQMIO_Write(IO, (/esmf_field/), timeSlice=time_slice, fileName=trim(filename), &
          iofmt=AQMIO_FMT_NETCDF, rc=rc)
 
-      ! Clean up
-      call ESMF_FieldDestroy(esmf_field, rc=rc)
+      ! Clean up. noGarbage=.true. releases memory now instead of at ESMF_Finalize.
+      call ESMF_FieldDestroy(esmf_field, noGarbage=.true., rc=rc)
 
    end subroutine write_emission_field_3d
 
@@ -2294,6 +2871,22 @@ contains
       call config_manager%get_string(trim(config_path)//'/time_interpolation', category%time_interpolation, localrc, 'none')
       call config_manager%get_string(trim(config_path)//'/vertical_dist', category%vertical_dist, localrc, 'none')
       call config_manager%get_logical(trim(config_path)//'/reverse_vertical', category%reverse_vertical, localrc, .false.)
+
+      ! MAPL ExtData refresh-cadence match for daily linear data: hold the daily
+      ! value piecewise-constant per day (recomputed at 00Z) instead of ramping.
+      call config_manager%get_logical(trim(config_path)//'/daily_hold', category%daily_hold, localrc, .false.)
+
+      ! Monthly-climatology anchoring: 'mid_month' (default) or 'file' (interpolate
+      ! by the file's actual record timestamps, matching MAPL ExtData).
+      call config_manager%get_string(trim(config_path)//'/monthly_anchor', category%monthly_anchor, localrc, 'mid_month')
+
+      ! Pressure-based vertical interpolation of 3D fields onto the model grid.
+      call config_manager%get_logical(trim(config_path)//'/vertical_interp', &
+         category%vertical_interp, localrc, .false.)
+      call config_manager%get_string(trim(config_path)//'/vertical_pressure_mode', &
+         category%vertical_pressure_mode, localrc, 'construct')
+      call config_manager%get_string(trim(config_path)//'/vertical_pressure_var', &
+         category%vertical_pressure_var, localrc, '')
 
       ! Read stack parameter names (for point sources)
       call config_manager%get_string(trim(config_path)//'/stack_diameter', category%stkdmname, localrc, '')
@@ -2443,6 +3036,7 @@ contains
 
       integer            :: localrc
       integer            :: curr_month, curr_year, start_month, start_year
+      integer            :: n_hours
       type(ESMF_Time)         :: startTime, currTime
       type(ESMF_TimeInterval) :: timeInterval
       character(len=*), parameter :: pName = 'catchem_emis_setup_timing'
@@ -2486,7 +3080,13 @@ contains
          select case (trim(category%frequency))
           case ('hourly');  call ESMF_TimeIntervalSet(timeInterval, h=1,   rc=localrc)
           case ('weekly');  call ESMF_TimeIntervalSet(timeInterval, d=7,   rc=localrc)
-          case default;     call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
+          case default
+            n_hours = parse_hourly_interval(category%frequency)
+            if (n_hours > 0) then
+               call ESMF_TimeIntervalSet(timeInterval, h=n_hours, rc=localrc)
+            else
+               call ESMF_TimeIntervalSet(timeInterval, d=1,   rc=localrc)
+            end if
          end select
          if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -2591,18 +3191,24 @@ contains
    !! last_period_key) always differs from a real key, forcing the first read.
    !!
    !! Key encoding:
-   !!   hourly   -> yyyymmddhh
-   !!   daily    -> yyyymmdd
-   !!   weekly   -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
+   !!   hourly            -> yyyymmddhh
+   !!   <N>hourly         -> yyyymmdd * 100 + (hh / N)  (e.g. 3hourly, 6hourly, 12hourly)
+   !!   daily             -> yyyymmdd
+   !!   weekly            -> yyyy * 1000 + week_of_year  (1-based, ISO-like)
    !!   monthly / yearmonth -> yyyymm
-   !!   static   -> 0  (constant; first read triggered by last_period_key=-1)
+   !!   static            -> 0  (constant; first read triggered by last_period_key=-1)
+   !!
+   !! Note: the gate only controls WHEN a re-read is triggered.  The actual time
+   !! slice is always chosen by catchem_emis_find_time_index via time-coordinate
+   !! matching, so it is correct for any cadence; the frequency just avoids
+   !! redundant reads (e.g. "3hourly" re-reads only on 3-hour boundaries).
    subroutine catchem_emis_period_key(frequency, curr_time, key, rc)
       character(len=*), intent(in)  :: frequency
       type(ESMF_Time),  intent(in)  :: curr_time
       integer,          intent(out) :: key
       integer,          intent(out) :: rc
 
-      integer :: localrc, yy, mm, dd, hh, doy
+      integer :: localrc, yy, mm, dd, hh, doy, n_hours
       character(len=*), parameter :: pName = 'catchem_emis_period_key'
 
       rc = CC_SUCCESS
@@ -2625,10 +3231,54 @@ contains
        case ('static')
          key = 0   ! never changes; first read triggered by last_period_key = -1
        case default
-         key = yy*10000 + mm*100 + dd   ! treat unknown as daily
+         ! Sub-daily "<N>hourly" cadence (e.g. 3hourly, 6hourly): change the key
+         ! only when the model crosses an N-hour boundary.  Unrecognized strings
+         ! fall back to daily (previous behavior).
+         n_hours = parse_hourly_interval(frequency)
+         if (n_hours > 0) then
+            key = yy*1000000 + mm*10000 + dd*100 + (hh / n_hours)
+         else
+            key = yy*10000 + mm*100 + dd   ! treat unknown as daily
+         end if
       end select
 
    end subroutine catchem_emis_period_key
+
+   !> \brief Parse a sub-daily "<N>hourly" frequency string.
+   !!
+   !! Recognizes strings of the form \c "<int>hourly" (case-insensitive suffix),
+   !! such as "3hourly", "6hourly", "12hourly".  Returns the integer N (>0) on
+   !! success, or -1 when the string is not of that form.
+   pure integer function parse_hourly_interval(frequency) result(nhr)
+      character(len=*), intent(in) :: frequency
+      integer :: i, ndig, ios
+      character(len=len(frequency)) :: f, suffix
+
+      nhr = -1
+      f = adjustl(frequency)
+
+      ! Count the leading run of digits
+      ndig = 0
+      do i = 1, len_trim(f)
+         if (f(i:i) >= '0' .and. f(i:i) <= '9') then
+            ndig = i
+         else
+            exit
+         end if
+      end do
+      if (ndig == 0 .or. ndig >= len_trim(f)) return
+
+      ! Case-insensitive check that the remainder is exactly "hourly"
+      suffix = f(ndig+1:len_trim(f))
+      do i = 1, len_trim(suffix)
+         if (suffix(i:i) >= 'A' .and. suffix(i:i) <= 'Z') &
+            suffix(i:i) = achar(iachar(suffix(i:i)) + 32)
+      end do
+      if (trim(suffix) /= 'hourly') return
+
+      read(f(1:ndig), *, iostat=ios) nhr
+      if (ios /= 0 .or. nhr <= 0) nhr = -1
+   end function parse_hourly_interval
 
    !> \brief Replace all occurrences of old_str with new_str in str (in-place)
    subroutine str_replace_all(str, old_str, new_str)
@@ -2769,6 +3419,14 @@ contains
          ! uses irec+1 (with Dec->Jan wrap) as the upper. For non-interpolated or
          ! template data, select the slice for the current calendar month.
          if (trim(category%time_interpolation) == 'linear' .and. category%n_times >= 2) then
+            if (trim(category%monthly_anchor) == 'file') then
+               ! Anchor at the file's actual record timestamps (MAPL ExtData match):
+               ! the lower bracketing record index is returned directly.
+               call catchem_emis_file_time_bracket(category, curr_time, irec, frac_dummy, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+               return
+            end if
             call catchem_emis_month_bracket(curr_time, target_year, target_month, frac_dummy, localrc)
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
@@ -2836,19 +3494,44 @@ contains
             ! Single multi-record climatology: mid-month interpolation. The value
             ! passes through each monthly mean exactly at the middle of its month,
             ! so the monthly mean is preserved (GEOS/GOCART ExtData convention).
-            call catchem_emis_month_bracket(curr_time, blo_year, blo_month, w_next, localrc)
+            if (trim(category%monthly_anchor) == 'file') then
+               ! Anchor at the file's actual record timestamps (MAPL ExtData match).
+               call catchem_emis_file_time_bracket(category, curr_time, blo_month, w_next, localrc)
+            else
+               call catchem_emis_month_bracket(curr_time, blo_year, blo_month, w_next, localrc)
+            end if
             if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__, rcToReturn=rc)) return
          else
-            ! Multi-file template (one record per file): legacy start-of-month ramp
-            dim_days = days_in_month_func(curr_yy, curr_mm)
-            w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
-               real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
-               real(dim_days, fp)
+            ! Multi-file template (one record per file). With monthly_anchor='file',
+            ! interpolate by the bracketing files' actual record timestamps (stored at
+            ! read time) so the result is independent of storage pattern; otherwise use
+            ! the legacy start-of-month ramp.
+            if (trim(category%monthly_anchor) == 'file' .and. category%bt_valid) then
+               call catchem_emis_time_weight(curr_time, category%bt1_date, category%bt1_secs, &
+                  category%bt2_date, category%bt2_secs, w_next, localrc)
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+            else
+               dim_days = days_in_month_func(curr_yy, curr_mm)
+               w_next = (real(curr_dd - 1, fp) + real(curr_hh, fp)/24.0_fp + &
+                  real(curr_mn, fp)/1440.0_fp + real(curr_ss, fp)/86400.0_fp) / &
+                  real(dim_days, fp)
+            end if
          end if
        case ('daily')
-         w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
-            real(curr_ss, fp)/3600.0_fp) / 24.0_fp
+         ! Daily-mean valid at 12Z (GEOS/ExtData): knots are consecutive-day 12Z means,
+         ! so shift fraction-of-day by half a day and wrap into [0,1).
+         ! With daily_hold (MAPL ExtData refresh-cadence match) the [D-1,D] bracket is
+         ! held constant all day at the 00Z blend (alpha=0.5), giving a piecewise-constant
+         ! daily value 0.5*(emis(D-1)+emis(D)) instead of a smooth intra-day ramp.
+         if (category%daily_hold) then
+            w_next = 0.5_fp
+         else
+            w_next = (real(curr_hh, fp) + real(curr_mn, fp)/60.0_fp + &
+               real(curr_ss, fp)/3600.0_fp) / 24.0_fp - 0.5_fp
+            if (w_next < 0.0_fp) w_next = w_next + 1.0_fp
+         end if
        case ('hourly')
          w_next = (real(curr_mn, fp) + real(curr_ss, fp)/60.0_fp) / 60.0_fp
        case default
@@ -2932,6 +3615,142 @@ contains
       if (frac < 0.0_fp) frac = 0.0_fp
       if (frac > 1.0_fp) frac = 1.0_fp
    end subroutine catchem_emis_month_bracket
+
+   !> \brief Linear interpolation weight between two record valid-times (climatological)
+   !!
+   !! Storage-independent: given two bracketing record timestamps (yyyymmdd, sec-of-day)
+   !! and the current model time, returns the weight `w_next` (0..1) of the upper record
+   !! (so emission = (1-w_next)*record1 + w_next*record2). It maps every time onto a fixed
+   !! 365-day "day-of-year" axis and wraps cyclically across the year end, so it works for
+   !! single-file records (tc_dates) and multi-file bracket times alike, and for any record
+   !! stamping. day-of-year fraction == true elapsed-time fraction for ~monthly spacing.
+   !!   Examples (d=yyyymmdd, s=sec-of-day):
+   !!     month-start (MEGAN): d1=20210101 d2=20210201, now=Jan20 -> w_next=(19)/(31)=0.61
+   !!     mid-month (DMS):     d1=20111214@12Z d2=20120114@12Z, now=Dec20 -> ~0.17
+   !!     year wrap (Dec->Jan):d1=Dec record d2=Jan record -> d2 shifted +365 before dividing
+   subroutine catchem_emis_time_weight(curr_time, d1, s1, d2, s2, w_next, rc)
+      type(ESMF_Time), intent(in)  :: curr_time
+      integer,         intent(in)  :: d1, s1, d2, s2
+      real(fp),        intent(out) :: w_next
+      integer,         intent(out) :: rc
+
+      integer :: localrc, yy, mm, dd, hh, mn, ss
+      real(fp) :: dn, d1f, d2f
+      integer,  parameter :: cum(12) = (/0,31,59,90,120,151,181,212,243,273,304,334/)
+      real(fp), parameter :: YEARLEN = 365.0_fp
+
+      rc = CC_SUCCESS
+      w_next = 0.0_fp
+      call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, m=mn, s=ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      dn  = doy_of(mm, dd, hh*3600 + mn*60 + ss)
+      d1f = doy_of(mod(d1/100,100), mod(d1,100), s1)
+      d2f = doy_of(mod(d2/100,100), mod(d2,100), s2)
+      if (d2f <= d1f) d2f = d2f + YEARLEN   ! upper record wraps past year end
+      if (dn   <  d1f) dn  = dn  + YEARLEN   ! current time is before the lower knot
+      if (d2f > d1f) w_next = (dn - d1f) / (d2f - d1f)
+      if (w_next < 0.0_fp) w_next = 0.0_fp
+      if (w_next > 1.0_fp) w_next = 1.0_fp
+
+   contains
+      pure real(fp) function doy_of(m, d, secs)
+         integer, intent(in) :: m, d, secs
+         integer :: m2
+         m2 = m
+         if (m2 < 1 .or. m2 > 12) m2 = 1
+         doy_of = real(cum(m2), fp) + real(d - 1, fp) + real(secs, fp)/86400.0_fp
+      end function doy_of
+   end subroutine catchem_emis_time_weight
+
+   !> \brief Monthly bracket anchored at the file's actual record timestamps (MAPL match)
+   !!
+   !! Selects the lower bracketing record (1-based) and the upper-record weight from a
+   !! single multi-record file, honoring the records' own time coordinate. Two regimes:
+   !!   - spanning file: current model time lies within [first,last] record. Bracket by the
+   !!     records' real datetime (integer key = date*1e5 + secs, so it is strictly ordered).
+   !!     Needed for files that repeat months, e.g. the padded 14-record GMI oxidant file
+   !!     A2_..._t14.2021.nc with real years Dec2020, Jan2021 ... Dec2021, Jan2022.
+   !!       Example: now=Dec20 2021 -> lo_rec=13 (Dec2021), up=14 (Jan2022), w_next~=0.07.
+   !!   - cyclic climatology: current time is OUTSIDE the file's years (e.g. a 12-record 2018
+   !!     climatology used in a 2021 run). Bracket by day-of-year, wrapping Dec->Jan.
+   !!       Example (FENGSHA, month-start): now=Dec20 -> lo_rec=12 (Dec 1), up=1 (Jan 1),
+   !!       w_next=(19)/(31)=0.61.
+   !! The upper-record index used by read_regrid is lo_rec+1 (wrapping to 1 for the cyclic
+   !! Dec->Jan case). The weight itself is delegated to catchem_emis_time_weight.
+   subroutine catchem_emis_file_time_bracket(category, curr_time, lo_rec, w_next, rc)
+      type(ExtEmisCategoryType), intent(in)  :: category
+      type(ESMF_Time),           intent(in)  :: curr_time
+      integer,                   intent(out) :: lo_rec
+      real(fp),                  intent(out) :: w_next
+      integer,                   intent(out) :: rc
+
+      integer :: localrc, i, n, up, mm, dd, yy, hh, mn, ss, curr_secs
+      integer(ESMF_KIND_I8) :: curr_key, key_i, key_lo, key_hi
+      real(fp) :: dn, doy_i
+      integer, parameter :: cum(12) = (/0,31,59,90,120,151,181,212,243,273,304,334/)
+      logical :: spanning
+
+      rc = CC_SUCCESS
+      lo_rec = 1
+      w_next = 0.0_fp
+      n = category%n_times
+      if (n < 2 .or. .not. allocated(category%tc_dates)) return
+
+      call ESMF_TimeGet(curr_time, yy=yy, mm=mm, dd=dd, h=hh, m=mn, s=ss, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+      curr_secs = hh*3600 + mn*60 + ss
+      curr_key = int(yy*10000 + mm*100 + dd, ESMF_KIND_I8)*100000_ESMF_KIND_I8 + int(curr_secs, ESMF_KIND_I8)
+      key_lo = int(category%tc_dates(1), ESMF_KIND_I8)*100000_ESMF_KIND_I8 + int(category%tc_secs(1), ESMF_KIND_I8)
+      key_hi = int(category%tc_dates(n), ESMF_KIND_I8)*100000_ESMF_KIND_I8 + int(category%tc_secs(n), ESMF_KIND_I8)
+      spanning = (curr_key >= key_lo .and. curr_key <= key_hi)
+
+      if (spanning) then
+         ! Regime B: bracket by actual record datetime (padded/spanning file, e.g. GMI t14)
+         lo_rec = 1
+         do i = 1, n
+            key_i = int(category%tc_dates(i), ESMF_KIND_I8)*100000_ESMF_KIND_I8 + int(category%tc_secs(i), ESMF_KIND_I8)
+            if (key_i <= curr_key) then
+               lo_rec = i
+            else
+               exit
+            end if
+         end do
+      else
+         ! Regime A: cyclic climatology — day-of-year bracket (records in calendar order)
+         dn = real(cum(mm), fp) + real(dd - 1, fp) + real(curr_secs, fp)/86400.0_fp
+         lo_rec = 0
+         do i = 1, n
+            doy_i = doy_rec(i)
+            if (doy_i <= dn) then
+               lo_rec = i
+            else
+               exit
+            end if
+         end do
+         if (lo_rec == 0) lo_rec = n   ! before the first record -> wrap to last
+      end if
+
+      up = lo_rec + 1
+      if (up > n) up = 1
+      call catchem_emis_time_weight(curr_time, &
+         category%tc_dates(lo_rec), category%tc_secs(lo_rec), &
+         category%tc_dates(up), category%tc_secs(up), w_next, localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+   contains
+      pure real(fp) function doy_rec(k)
+         integer, intent(in) :: k
+         integer :: m2, d2
+         m2 = mod(category%tc_dates(k)/100, 100)
+         d2 = mod(category%tc_dates(k), 100)
+         if (m2 < 1 .or. m2 > 12) m2 = 1
+         doy_rec = real(cum(m2), fp) + real(d2 - 1, fp) + real(category%tc_secs(k), fp)/86400.0_fp
+      end function doy_rec
+   end subroutine catchem_emis_file_time_bracket
 
    !> \brief Return the number of days in a given month/year
    pure function days_in_month_func(year, month) result(ndays)

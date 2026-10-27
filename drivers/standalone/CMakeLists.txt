@@ -1,139 +1,111 @@
-# CMakeLists.txt for CATChem Standalone Column Driver
-cmake_minimum_required(VERSION 3.12)
+# =====================================================================
+# CATChem standalone ESMF/NUOPC driver and application
+# =====================================================================
+# Builds:
+#   - catchem_standalone_driver : library with the grid utilities and the
+#     NUOPC_Driver component (catchem_driver)
+#   - catchem_app               : standalone executable (main program)
+#
+# Requires the CATChem NUOPC cap target `cc_nuopc` to have been defined by
+# the top-level CMakeLists (i.e. CATCHEM_BUILD_NUOPC=ON).
+# =====================================================================
 
-project(
-  CATChem_Standalone_Driver
-  VERSION 2.0.0
-  DESCRIPTION "Standalone column driver for CATChem atmospheric chemistry"
-  LANGUAGES Fortran
-)
-
-# Set Fortran standard
-set(CMAKE_Fortran_STANDARD 2008)
-set(CMAKE_Fortran_STANDARD_REQUIRED ON)
-
-# Find required packages
-find_package(PkgConfig REQUIRED)
-
-# Check for NetCDF (optional for output)
-find_package(PkgConfig QUIET)
-if(PkgConfig_FOUND)
-  pkg_check_modules(NETCDF QUIET netcdf-fortran)
-endif()
-
-# Set compiler flags
-if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  set(
-    CMAKE_Fortran_FLAGS
-    "${CMAKE_Fortran_FLAGS} -Wall -Wextra -fdefault-real-8 -fdefault-double-8"
+if(NOT TARGET cc_nuopc)
+  message(
+    FATAL_ERROR
+    "drivers/standalone requires the CATChem NUOPC cap (cc_nuopc). "
+    "Enable it with -DCATCHEM_BUILD_NUOPC=ON."
   )
-  set(CMAKE_Fortran_FLAGS_DEBUG "-g -O0 -fcheck=all -fbacktrace")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -funroll-loops")
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -warn all -r8")
-  set(CMAKE_Fortran_FLAGS_DEBUG "-g -O0 -check all -traceback")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -unroll")
 endif()
 
-# Include directories
-include_directories(
-  ${CATCHEM_SRC_DIR}/core
-  ${CATCHEM_SRC_DIR}/api
-  ${CATCHEM_SRC_DIR}/process
+set(_srcs catchem_standalone_grid_mod.F90 catchem_driver.F90)
+
+add_library(catchem_standalone_driver STATIC ${_srcs})
+add_dependencies(catchem_standalone_driver cc_nuopc)
+
+# cc_nuopc pulls in the CATChem core/process archives by raw file path
+# ($<TARGET_FILE:...>), which deliberately hides them from CMake's dependency
+# graph so the exported cc_nuopc target doesn't drag in the non-exported
+# yaml-cpp. That raw-path trick also drops yaml_interface's transitive yaml-cpp
+# dependency AND the fact that it is C++. By linking yaml_interface here as a
+# real CMake target, CMake restores both usage requirements automatically: it
+# pulls in yaml-cpp and, seeing a C++ library in the link closure, adds the C++
+# standard library to the final (Fortran) link. No library names are hardcoded.
+target_link_libraries(
+  catchem_standalone_driver
+  PUBLIC cc_nuopc yaml_interface ${CATCHEM_ESMF_TARGET} NetCDF::NetCDF_Fortran
 )
 
-# Define source files for the standalone driver
-set(DRIVER_SOURCES standalone_column_driver.F90)
-
-# Define CATChem library sources (would link to actual CATChem library in real build)
-set(
-  CATCHEM_CORE_SOURCES
-  ${CATCHEM_SRC_DIR}/core/precision_mod.F90
-  ${CATCHEM_SRC_DIR}/core/error_mod.F90
-  ${CATCHEM_SRC_DIR}/core/constants.F90
-  ${CATCHEM_SRC_DIR}/core/config_mod.F90
-  ${CATCHEM_SRC_DIR}/core/ConfigManager_Mod.F90
-  ${CATCHEM_SRC_DIR}/core/state_mod.F90
-  ${CATCHEM_SRC_DIR}/core/metstate_mod.F90
-  ${CATCHEM_SRC_DIR}/core/chemstate_mod.F90
-  ${CATCHEM_SRC_DIR}/core/emisstate_mod.F90
-  ${CATCHEM_SRC_DIR}/core/diagstate_mod.F90
-  ${CATCHEM_SRC_DIR}/api/CATChemAPI_Mod.F90
-  ${CATCHEM_SRC_DIR}/process/ProcessManager_Mod.F90
-  ${CATCHEM_SRC_DIR}/process/ProcessInterface_Mod.F90
-  ${CATCHEM_SRC_DIR}/process/ProcessFactory_Mod.F90
-)
-
-# Create CATChem library
-add_library(catchem_core ${CATCHEM_CORE_SOURCES})
-
-# Set module output directory
-set_target_properties(
-  catchem_core
-  PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-)
-
-# Create standalone driver executable
-add_executable(standalone_column_driver ${DRIVER_SOURCES})
-
-# Link libraries
-target_link_libraries(standalone_column_driver catchem_core ${NETCDF_LIBRARIES})
-
-# Include module directory
+# cc_nuopc writes its Fortran modules to <repo>/mod; CATChem core modules go
+# to <build>/include. Make both visible.
 target_include_directories(
-  standalone_column_driver
-  PRIVATE ${CMAKE_BINARY_DIR}/modules ${NETCDF_INCLUDE_DIRS}
+  catchem_standalone_driver
+  PRIVATE ${CMAKE_BINARY_DIR}/include ${CMAKE_BINARY_DIR}/../mod
 )
 
-# Set output directory
 set_target_properties(
-  standalone_column_driver
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+  catchem_standalone_driver
+  PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
 )
 
-# Installation
-install(
-  TARGETS standalone_column_driver
-  RUNTIME DESTINATION bin COMPONENT drivers
+target_compile_options(
+  catchem_standalone_driver
+  PRIVATE ${_catchem_compiler_options}
 )
 
-# Create configuration files for testing
+# ---------------------------------------------------------------------
+# Standalone executable
+# ---------------------------------------------------------------------
+add_executable(catchem_app catchem_app.F90)
+target_link_libraries(catchem_app PRIVATE catchem_standalone_driver)
+target_include_directories(catchem_app PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_compile_options(catchem_app PRIVATE ${_catchem_compiler_options})
+
+# Force the Fortran linker. The main program is Fortran, but the C++ yaml-cpp
+# dependency in the link closure would otherwise make CMake pick the C++ linker
+# (C++ has a higher linker preference than Fortran), which then rejects
+# gfortran-only flags such as -fopenmp. With the Fortran linker, CMake still
+# adds the C++ runtime automatically because yaml_interface is linked as a
+# C++ target. This mirrors the existing CATChem process tests.
+set_target_properties(
+  catchem_app
+  PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    LINKER_LANGUAGE Fortran
+)
+
+# Copy the example driver configure file next to the build for convenience
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/column_driver_config.yml.in
-  ${CMAKE_BINARY_DIR}/column_driver_config.yml
-  @ONLY
+  ${CMAKE_CURRENT_SOURCE_DIR}/catchem_standalone.configure
+  ${CMAKE_BINARY_DIR}/catchem_standalone.configure
+  COPYONLY
 )
 
-# Add custom target for running the driver
-add_custom_target(
-  run_column_driver
-  COMMAND ${CMAKE_BINARY_DIR}/bin/standalone_column_driver
-  DEPENDS standalone_column_driver
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  COMMENT "Running standalone column driver"
+# Copy the CATChem science configuration YAML files (config + species +
+# emissions) next to the binary's working directory so a standalone run can
+# find them. catchem_app resolves catchem_config_file: (and the species /
+# emission paths it references) relative to the current working directory,
+# which is the build root where catchem_standalone.configure lives. The
+# canonical set lives under tests/Configs/Default, the same files the process
+# tests use.
+file(
+  GLOB _catchem_standalone_yml
+  "${PROJECT_SOURCE_DIR}/tests/Configs/Default/*.yml"
+)
+foreach(_yml ${_catchem_standalone_yml})
+  get_filename_component(_yml_name ${_yml} NAME)
+  configure_file(${_yml} ${CMAKE_BINARY_DIR}/${_yml_name} COPYONLY)
+endforeach()
+
+# ---------------------------------------------------------------------
+# Installation
+# ---------------------------------------------------------------------
+install(TARGETS catchem_app RUNTIME DESTINATION bin COMPONENT drivers)
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/catchem_standalone.configure
+  DESTINATION share/catchem
+  COMPONENT drivers
 )
 
-# Documentation target
-find_program(DOXYGEN_EXECUTABLE doxygen)
-if(DOXYGEN_EXECUTABLE)
-  add_custom_target(
-    driver_docs
-    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Generating driver documentation"
-  )
-endif()
-
-# Print configuration summary
-message(STATUS "")
-message(STATUS "CATChem Standalone Driver Configuration:")
-message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "  Fortran compiler: ${CMAKE_Fortran_COMPILER_ID}")
-message(STATUS "  Fortran flags: ${CMAKE_Fortran_FLAGS}")
-if(NETCDF_FOUND)
-  message(STATUS "  NetCDF support: YES")
-else()
-  message(STATUS "  NetCDF support: NO")
-endif()
-message(STATUS "  Install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "")
+message(STATUS "CATChem: standalone driver/app (catchem_app) enabled")

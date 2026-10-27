@@ -1,4 +1,4 @@
-# SeaSalt Process
+# Sea Salt Process
 
 **Process Type:** Emission
 **Description:** Process for computing sea salt aerosol emissions over ocean surfaces
@@ -16,7 +16,7 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 **Name:** `gong97`
 **Description:** Gong 1997 sea salt emission scheme
 **Author:** Barry Baker
-**Reference:** Gong et al. [1997]
+**Reference:** Gong et al. [1997], J. Geophys. Res., 102(D3), 3805–3818, <https://doi.org/10.1029/96JD02953>
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -26,13 +26,13 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 ### GONG03 Scheme
@@ -40,7 +40,7 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 **Name:** `gong03`
 **Description:** Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment
 **Author:** Barry Baker
-**Reference:** Gong [2003]
+**Reference:** Gong [2003], Global Biogeochem. Cycles, 17(4), 1097, <https://doi.org/10.1029/2003GB002079>
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -50,13 +50,13 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 ### GEOS12 Scheme
@@ -64,7 +64,7 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 **Name:** `geos12`
 **Description:** GEOS-Chem 2012 sea salt emission scheme with observational constraints
 **Author:** Barry Baker
-**Reference:** Jaeglé et al. [2011]
+**Reference:** Jaeglé et al. [2011], Atmos. Chem. Phys., 11(7), 3137–3157, <https://doi.org/10.5194/acp-11-3137-2011>
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -74,14 +74,14 @@ The SeaSalt process implements Process for computing sea salt aerosol emissions 
 
 #### Required Meteorological Fields
 
-- `FROCEAN` - Meteorological field required for scheme computation
-- `FRSEAICE` - Meteorological field required for scheme computation
-- `SST` - Meteorological field required for scheme computation
-- `USTAR` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `LAT` - Meteorological field required for scheme computation
-- `LON` - Meteorological field required for scheme computation
+- `FROCEAN` - Fraction of ocean [1]
+- `FRSEAICE` - Sfc sea ice fraction
+- `SST` - Sea surface temperature [K]
+- `USTAR` - Friction velocity [m/s]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `LAT` - Latitude
+- `LON` - Longitude
 
 
 
@@ -95,7 +95,7 @@ The seasalt process operates on the following chemical species:
 ### Required Inputs
 
 #### Meteorological Fields
-- `DELP` - Required meteorological input
+- `DELP` - Delta-P (wet) across box [Pa]
 
 
 ### Process Diagnostics
@@ -231,9 +231,9 @@ When modifying or extending this process:
 
 ## References
 
-- GONG97: Gong et al. [1997]
-- GONG03: Gong [2003]
-- GEOS12: Jaeglé et al. [2011]
+- GONG97: Gong, S. L., Barrie, L. A., & Blanchet, J.-P. [1997] Modeling sea-salt aerosols in the atmosphere: 1. Model development, J. Geophys. Res., 102(D3), 3805–3818, <https://doi.org/10.1029/96JD02953>
+- GONG03: Gong, S. L. [2003] A parameterization of sea-salt aerosol source function for sub- and super-micron particles, Global Biogeochem. Cycles, 17(4), 1097, <https://doi.org/10.1029/2003GB002079>
+- GEOS12: Jaeglé, L., et al. [2011] Global distribution of sea salt aerosols, Atmos. Chem. Phys., 11(7), 3137–3157, <https://doi.org/10.5194/acp-11-3137-2011>
 
 ---
 *This documentation was automatically generated by the CATChem Process Generator on 2026-05-28T17:43:34.503330*
