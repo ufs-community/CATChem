@@ -295,58 +295,251 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="90" bodyend="298"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="65" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="90" bodyend="304"/>
       </memberdef>
-      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1ac09cc3e8dab33327e43ca0c559f9418a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>pure real(fp) function</type>
-        <definition>pure real(fp) function seasaltscheme_geos12_mod::compute_environmental_response_geos12</definition>
-        <argsstring>(met_value, reference_value)</argsstring>
-        <name>compute_environmental_response_geos12</name>
-        <qualifiedname>seasaltscheme_geos12_mod::compute_environmental_response_geos12</qualifiedname>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a4231dab43f4b89f9b4286973bc927688" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure subroutine</type>
+        <definition>pure subroutine seasaltscheme_geos12_mod::jeaglesstcorrection</definition>
+        <argsstring>(fsstemis, sst, sstflag, rc)</argsstring>
+        <name>jeaglesstcorrection</name>
+        <qualifiedname>seasaltscheme_geos12_mod::jeaglesstcorrection</qualifiedname>
         <param>
-          <type>real(fp), intent(in)</type>
-          <defname>met_value</defname>
+          <type>real(fp), intent(inout)</type>
+          <defname>fsstemis</defname>
         </param>
         <param>
           <type>real(fp), intent(in)</type>
-          <defname>reference_value</defname>
+          <defname>sst</defname>
         </param>
-        <briefdescription>
-<para>Example helper function for environmental response. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="308" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="309" bodyend="315"/>
-      </memberdef>
-      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a5e210a9eaea6598c219d08e9b56c104d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>pure real(fp) function</type>
-        <definition>pure real(fp) function seasaltscheme_geos12_mod::compute_species_scaling_geos12</definition>
-        <argsstring>(species_idx, params)</argsstring>
-        <name>compute_species_scaling_geos12</name>
-        <qualifiedname>seasaltscheme_geos12_mod::compute_species_scaling_geos12</qualifiedname>
         <param>
           <type>integer, intent(in)</type>
-          <defname>species_idx</defname>
+          <defname>sstflag</defname>
         </param>
         <param>
-          <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>), intent(in)</type>
-          <defname>params</defname>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Example helper function for species-specific scaling. </para>
+<para>Jeagle et al. </para>
         </briefdescription>
         <detaileddescription>
+<para>2012 SST correction</para>
+<para>Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157, <ulink url="https://doi.org/10.5194/acp-11-3137-2011">https://doi.org/10.5194/acp-11-3137-2011</ulink>, 2011.</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote></para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="319" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="320" bodyend="333"/>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="317" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="318" bodyend="354"/>
       </memberdef>
-      <member refid="group__catchem__seasalt__process_1ga4231dab43f4b89f9b4286973bc927688" kind="function"><name>jeaglesstcorrection</name></member>
-      <member refid="group__catchem__seasalt__process_1gaf00a5baf0452c8cdf568fbf90eb335ac" kind="function"><name>seasaltemissiongong</name></member>
-      <member refid="group__catchem__seasalt__process_1ga1c9253f7a0a5f329eb6d9b4917554121" kind="function"><name>weibulldistribution</name></member>
-      <member refid="group__catchem__seasalt__process_1ga39f0e23516bfb86049ef258b8ce3be75" kind="function"><name>igamma</name></member>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1af00a5baf0452c8cdf568fbf90eb335ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pure real(fp) function</type>
+        <definition>pure real(fp) function seasaltscheme_geos12_mod::seasaltemissiongong</definition>
+        <argsstring>(r, dr, w, scalefac, afac, bfac, rpow, exppow, wpow)</argsstring>
+        <name>seasaltemissiongong</name>
+        <qualifiedname>seasaltscheme_geos12_mod::seasaltemissiongong</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>r</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dr</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>w</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>scalefac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>afac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>bfac</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rpow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>exppow</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wpow</defname>
+        </param>
+        <briefdescription>
+<para>Function to compute sea salt emissions following the Gong style parameterization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Functional form is from Gong 2003: <formula id="0">$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))$</formula> where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed</para>
+<para><blockquote><para><zwj/> </para>
+</blockquote><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle radius [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wet particle bin width [um] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Grid box mean wind speed [m s-1] (10-m or ustar wind) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scalefac</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>scale factor </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="366" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="367" bodyend="387"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a1c9253f7a0a5f329eb6d9b4917554121" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine seasaltscheme_geos12_mod::weibulldistribution</definition>
+        <argsstring>(gweibull, weibullflag, wm, rc)</argsstring>
+        <name>weibulldistribution</name>
+        <qualifiedname>seasaltscheme_geos12_mod::weibulldistribution</qualifiedname>
+        <param>
+          <type>real(fp), intent(inout)</type>
+          <defname>gweibull</defname>
+        </param>
+        <param>
+          <type>logical, intent(in)</type>
+          <defname>weibullflag</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>wm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the weibull distribution for 10m wind speed (u10, v10) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The Weibull distribution correction ends up being a multiplicative constant (g) times our present source function (see Eq. 12 in Fan &amp; Toon, 2011 and notes for (9/22/11). This constant is derived from the incomplete and complete forms of the gamma function, hence the utilities pasted below. The Weibull function and shape parameters (k, c) assumed are from Justus 1978.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">gweibull</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Multiplicative constant </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">weibullFlag</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Flag for weibull correction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>10m wind speed </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return Code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="406" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="407" bodyend="446"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltscheme__geos12__mod_1a39f0e23516bfb86049ef258b8ce3be75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function seasaltscheme_geos12_mod::igamma</definition>
+        <argsstring>(a, x, rc)</argsstring>
+        <name>igamma</name>
+        <qualifiedname>seasaltscheme_geos12_mod::igamma</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate the incomplete Gamma function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The incomplete Gamma function is defined as \int_x^\infty t^{A-1}\exp(-t) dt</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">X</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">RC</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" line="461" column="1" bodyfile="src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90" bodystart="462" bodyend="506"/>
+      </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>

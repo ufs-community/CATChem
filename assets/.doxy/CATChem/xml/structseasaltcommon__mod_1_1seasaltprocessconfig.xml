@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="158" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="158" bodyend="158"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="111" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="111" bodyend="111"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a6bd95fa1e7983a64628e84f60a7e2a1f" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="159" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="159" bodyend="159"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="112" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="112" bodyend="112"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a91a9506bca1c1cfb2b0bfb3a88b3d9a4" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="160" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="160" bodyend="160"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="113" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="113" bodyend="113"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1afd69c21c908488f02667115bf894fce5" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltconfig" kindref="compound">seasaltconfig</ref>)</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="163" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="163" bodyend="163"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="116" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="116" bodyend="116"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a3b90006899fef1b86affed6c81072662" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong97config" kindref="compound">seasaltschemegong97config</ref>)</type>
@@ -74,7 +74,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="166" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="166" bodyend="166"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="119" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="119" bodyend="119"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a97f81cfbfdb39a7b6a05a91e80c5960a" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong03config" kindref="compound">seasaltschemegong03config</ref>)</type>
@@ -88,7 +88,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="167" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="167" bodyend="167"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="120" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="120" bodyend="120"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a85f359b2a6e0f6868b18481d83cb1920" prot="public" static="no" mutable="no">
         <type>type(<ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref>)</type>
@@ -102,236 +102,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="168" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="168" bodyend="168"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a4a9389ccc8c8daa8a16e880bbb2467fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::load_from_config</definition>
-        <argsstring>(this, config_manager, error_handler)</argsstring>
-        <name>load_from_config</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::load_from_config</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
-          <defname>config_manager</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Load unified process configuration from ConfigManager This is the main function that ProcessInterface.parse_process_config should call Process reads its configuration directly from the master YAML via ConfigManager. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="172" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="172" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a9c0abe6a594fdc54688689d2dd20f86f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::load_species_from_chem_state</definition>
-        <argsstring>(this, chem_state, error_handler)</argsstring>
-        <name>load_species_from_chem_state</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::load_species_from_chem_state</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), pointer</type>
-          <defname>chem_state</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Load species from ChemState This function is used for dynamic species discovery (by_metadata or all_species) For &apos;all_species&apos; mode: loads all species using nSpecies and SpeciesIndex For &apos;by_metadata&apos; mode: loads species by type using nSpeciesSeaSalt and SeaSaltIndex. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="173" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="173" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1aeea9e8bd7ec8d2670527bbac5c23587d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::validate</definition>
-        <argsstring>(this, state_manager, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(in)</type>
-          <defname>state_manager</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate unified process configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="174" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="174" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a266df71f304d4ca6ce276d28a6fc8222" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize unified process configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="175" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="175" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a460dd308ec95860e5604ef06ef52769e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::get_active_scheme_config</definition>
-        <argsstring>(this)</argsstring>
-        <name>get_active_scheme_config</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::get_active_scheme_config</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(in)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Get active scheme configuration (polymorphic return) </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="176" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="176" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a615040b71fae598296a03123fbbb7beb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::load_gong97_config</definition>
-        <argsstring>(this, config_manager, error_handler)</argsstring>
-        <name>load_gong97_config</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::load_gong97_config</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
-          <defname>config_manager</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Load gong97 scheme configuration from master YAML. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="177" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="177" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a008ec94cb11b75316630d4f3e5bf681c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::load_gong03_config</definition>
-        <argsstring>(this, config_manager, error_handler)</argsstring>
-        <name>load_gong03_config</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::load_gong03_config</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
-          <defname>config_manager</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Load gong03 scheme configuration from master YAML. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="178" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="178" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1a5688950cf0e9d3e053863c13502a23bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::load_geos12_config</definition>
-        <argsstring>(this, config_manager, error_handler)</argsstring>
-        <name>load_geos12_config</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::load_geos12_config</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>), intent(inout)</type>
-          <defname>config_manager</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Load geos12 scheme configuration from master YAML. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="179" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="179" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltprocessconfig_1ab08154602f26b8ca1cb002d01912761c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltprocessconfig::map_diagnostic_species_indices</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>map_diagnostic_species_indices</name>
-        <qualifiedname>seasaltcommon_mod::seasaltprocessconfig::map_diagnostic_species_indices</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltprocessconfig" kindref="compound">seasaltprocessconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Map diagnostic species names to indices in the species_names array This function creates the diagnostic_species_id array that maps each diagnostic species to its corresponding index in the full species_names array. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="180" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="180" bodyend="-1"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="121" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="121" bodyend="121"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Unified process configuration type that bridges ConfigManager and process-specific configs This is the main configuration type that ProcessInterface should use. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
@@ -369,24 +143,15 @@
         <link refid="structseasaltcommon__mod_1_1seasaltschemegong97config"/>
       </node>
     </collaborationgraph>
-    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="155" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="155" bodyend="181"/>
+    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="108" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="108" bodyend="124"/>
     <listofallmembers>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a266df71f304d4ca6ce276d28a6fc8222" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>finalize</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a85f359b2a6e0f6868b18481d83cb1920" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>geos12_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a460dd308ec95860e5604ef06ef52769e" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>get_active_scheme_config</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a97f81cfbfdb39a7b6a05a91e80c5960a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>gong03_config</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a3b90006899fef1b86affed6c81072662" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>gong97_config</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a91a9506bca1c1cfb2b0bfb3a88b3d9a4" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>is_active</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a4a9389ccc8c8daa8a16e880bbb2467fa" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>load_from_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a5688950cf0e9d3e053863c13502a23bd" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>load_geos12_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a008ec94cb11b75316630d4f3e5bf681c" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>load_gong03_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a615040b71fae598296a03123fbbb7beb" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>load_gong97_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a9c0abe6a594fdc54688689d2dd20f86f" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>load_species_from_chem_state</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1ab08154602f26b8ca1cb002d01912761c" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>map_diagnostic_species_indices</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1aa47e11e4f9e8f87d1fc226929fba4621" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>process_name</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1a6bd95fa1e7983a64628e84f60a7e2a1f" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>process_version</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1afd69c21c908488f02667115bf894fce5" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>seasalt_config</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltprocessconfig_1aeea9e8bd7ec8d2670527bbac5c23587d" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltprocessconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

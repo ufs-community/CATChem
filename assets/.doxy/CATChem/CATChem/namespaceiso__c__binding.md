@@ -77,5 +77,5 @@
 
 
 ------------------------------
-The documentation for this class was generated from the following file `src/external/yaml_interface/yaml_interface_mod.F90`
+The documentation for this class was generated from the following file `src/api/CATChem_API.F90`
 

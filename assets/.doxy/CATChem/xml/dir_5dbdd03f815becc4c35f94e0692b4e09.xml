@@ -4,8 +4,7 @@
     <compoundname>src/process/carbchem</compoundname>
     <innerdir refid="dir_2aa0506a6ee0350ff25dc7952f19a30f">src/process/carbchem/schemes</innerdir>
     <innerfile refid="_carb_chem_common___mod_8_f90">CarbChemCommon_Mod.F90</innerfile>
-    <innerfile refid="_carb_chem_process_creator___mod_8_f90">CarbChemProcessCreator_Mod.F90</innerfile>
-    <innerfile refid="_process_carb_chem_interface___mod_8_f90">ProcessCarbChemInterface_Mod.F90</innerfile>
+    <innerfile refid="_carb_chem_science_bridge_8_f90">CarbChemScienceBridge.F90</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

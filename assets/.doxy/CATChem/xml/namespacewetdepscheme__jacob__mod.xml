@@ -140,10 +140,10 @@
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a42d728ba6a054ecf2d73f2b0630ff052" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1af569a008f0696ebbdfdfc2b9a5ac77f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public wetdepscheme_jacob_mod::compute_jacob</definition>
-        <argsstring>(num_layers, num_species, params, airden_dry, mairden, pedge, pfilsan, pfllsan, reevapls, t, tstep, species_is_aerosol, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_wd_reevap_frac, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
+        <argsstring>(num_layers, num_species, params, airden_dry, mairden, pedge, pfilsan, pfllsan, reevapls, t, tstep, species_is_aerosol, species_is_wetdep, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_wd_reevap_frac, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
         <name>compute_jacob</name>
         <qualifiedname>wetdepscheme_jacob_mod::compute_jacob</qualifiedname>
         <param>
@@ -193,6 +193,10 @@
         <param>
           <type>logical, dimension(:), intent(in)</type>
           <defname>species_is_aerosol</defname>
+        </param>
+        <param>
+          <type>logical, dimension(:), intent(in)</type>
+          <defname>species_is_wetdep</defname>
         </param>
         <param>
           <type>character(len=32), dimension(:), intent(in)</type>
@@ -361,6 +365,14 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">species_is_wetdep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species is_wetdep participation flag </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">species_short_name</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -500,7 +512,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="91" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="121" bodyend="517"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="92" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="123" bodyend="523"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1af307da7d5e4119228d08c898d565d3a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>integer function</type>
@@ -523,7 +535,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="527" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="528" bodyend="545"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="533" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="534" bodyend="551"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae1714cc88cf0808f25bb60f24af2bcf9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -922,7 +934,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="573" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="574" bodyend="699"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="579" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="580" bodyend="705"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aeace337974ab33c9edd078b02706d19d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1281,7 +1293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="726" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="727" bodyend="837"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="732" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="733" bodyend="843"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a78e3462f1160a2f85e70b7d5955ed828" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1360,7 +1372,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="849" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="850" bodyend="858"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="855" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="856" bodyend="864"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a3474f3af4fb555b60da841cba80e5192" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1479,7 +1491,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="873" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="874" bodyend="897"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="879" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="880" bodyend="903"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aabdac1bad6bd731152117d4052edabbf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1638,7 +1650,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="913" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="914" bodyend="955"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="919" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="920" bodyend="961"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1aa3a5e4c4e27f9e1e3a5c007e260d3ad8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>real(fp) function</type>
@@ -1737,7 +1749,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="968" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="969" bodyend="986"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="974" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="975" bodyend="992"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ac18ce2a4d102e591cca3d026d3ff31d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -1956,7 +1968,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1005" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1006" bodyend="1056"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1011" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1012" bodyend="1062"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1a50c5047734777471251b34ef0d9d4d21" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2055,7 +2067,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1069" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1070" bodyend="1099"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1075" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1076" bodyend="1105"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1abe20bd695ee2b868cd92781165aad0a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2350,7 +2362,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1120" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1121" bodyend="1233"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1126" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1127" bodyend="1239"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__jacob__mod_1ae9afb1ac4fc9fc90e634ff50939f4a0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -2469,7 +2481,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1247" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1248" bodyend="1277"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" line="1253" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_JACOB_Mod.F90" bodystart="1254" bodyend="1283"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

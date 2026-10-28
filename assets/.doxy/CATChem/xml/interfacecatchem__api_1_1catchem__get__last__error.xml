@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__get__last__error" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_get_last_error</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__get__last__error_1aee9b14471e23e7b3ad533f40a30f6922" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_get_last_error::catchem_get_last_error</definition>
+        <argsstring>(buffer, max_len)</argsstring>
+        <name>catchem_get_last_error</name>
+        <qualifiedname>catchem_api::catchem_get_last_error::catchem_get_last_error</qualifiedname>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>buffer</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>max_len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="43" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="44" bodyend="46"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="43" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="43" bodyend="46"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__get__last__error_1aee9b14471e23e7b3ad533f40a30f6922" prot="public" virt="non-virtual"><scope>catchem_api::catchem_get_last_error</scope><name>catchem_get_last_error</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

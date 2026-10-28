@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__get__state__manager" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_get_state_manager</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__get__state__manager_1ae4b5f74183fce4f678118e01b2939fcf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(c_ptr) function</type>
+        <definition>type(c_ptr) function catchem_api::catchem_core_get_state_manager::catchem_core_get_state_manager</definition>
+        <argsstring>(core_ptr)</argsstring>
+        <name>catchem_core_get_state_manager</name>
+        <qualifiedname>catchem_api::catchem_core_get_state_manager::catchem_core_get_state_manager</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="95" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="96" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="95" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="95" bodyend="97"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__get__state__manager_1ae4b5f74183fce4f678118e01b2939fcf" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_get_state_manager</scope><name>catchem_core_get_state_manager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

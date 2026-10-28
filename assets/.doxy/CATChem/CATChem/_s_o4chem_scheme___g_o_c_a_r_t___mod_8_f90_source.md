@@ -11,9 +11,9 @@
 
 module so4chemscheme_gocart_mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use so4chemcommon_mod, only: so4chemschemegocartconfig
-   use error_mod, only: cc_success, cc_error
+   use catchem_bridge_error, only: cc_success, cc_error
    use gocart2g_process, only: sulfateupdateoxidants, sulfatechemdriver, dmsemission
 
    implicit none
@@ -183,6 +183,13 @@ contains
       thisloc = ' -> at compute_gocart (in SO4chemScheme_GOCART_Mod.F90)'
       !RC = CC_SUCCESS
       rc = 0 !try not to rely on CC_SUCCESS
+      ! This is a replacement-state interface.  Preserve every species the
+      ! sulfate scheme does not own, then overwrite the eight sulfur/oxidant
+      ! species below.  The legacy interface passed only this process's
+      ! species and initialized its output to zero; the C++ bridge passes the
+      ! full chemistry state, so copying here prevents unrelated tracers from
+      ! being cleared while still allowing a managed species to reach zero.
+      species_tendencies = species_conc
       !drydepf = 0.0_fp
 
       rad2deg = 180.0_fp/pi
@@ -317,11 +324,9 @@ contains
       fmassdms = species_mw_g(ndms)
       fmassso2 = species_mw_g(nso2)
       fmassso4 = species_mw_g(nso4)
-      !dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-9_fp  !ug/kg ==> kg/kg
       dms(1,1,:) = species_conc(num_layers:1:-1, ndms) * 1.0e-6_fp * fmassdms / airmw  !ppm ==> kg/kg
       so2(1,1,:) = species_conc(num_layers:1:-1, nso2) * 1.0e-6_fp * fmassso2 / airmw  ! ppm ==> kg/kg
       so4(1,1,:) = species_conc(num_layers:1:-1, nso4) * 1.0e-9_fp  !ug/kg ==> kg/kg
-      !msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-6_fp * fMassMSA / AIRMW  ! ppm ==> kg/kg
       msa(1,1,:) = species_conc(num_layers:1:-1, nmsa) * 1.0e-9_fp  ! ug/kg ==> kg/kg
 
       !run DMS emission scheme
@@ -341,7 +346,8 @@ contains
       !https://github.com/GEOS-ESM/GOCART/blob/9ff3df9545dd582f415f682d3297e8c6c841e5cb/Process_Library/GOCART2G_Process.F90#L3124
       !Five functions need to be customized here if we want to turn it off compleltely.
       !This is to ensure dry deposition does not run twice for SO2 and SO4
-      !Only applied when so4chem drydep is OFF (default); when do_drydep is on, SulfateChemDriver deposits SO2/SO4/MSA like GOCART.
+      !Only applied when so4chem drydep is OFF (default); when do_drydep is on,
+      !SulfateChemDriver deposits SO2/SO4/MSA like GOCART.
       if (.not. params%do_drydep) then
          gocart_hghte(:,:,num_layers - 1) = gocart_hghte(:,:,num_layers) + 1.0e38_fp
       end if
@@ -420,6 +426,7 @@ contains
       if (associated(gocart_press)) deallocate(gocart_press); nullify(gocart_press)
       if (associated(gocart_lwi)) deallocate(gocart_lwi); nullify(gocart_lwi)
       if (associated(gocart_ustar)) deallocate(gocart_ustar); nullify(gocart_ustar)
+      if (associated(gocart_pblh)) deallocate(gocart_pblh); nullify(gocart_pblh)
       if (associated(gocart_hflux)) deallocate(gocart_hflux); nullify(gocart_hflux)
       if (associated(gocart_u10m)) deallocate(gocart_u10m); nullify(gocart_u10m)
       if (associated(gocart_v10m)) deallocate(gocart_v10m); nullify(gocart_v10m)

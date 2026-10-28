@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__state__bind__met__2d__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_state_bind_met_2d_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__state__bind__met__2d__checked_1a9ad7a987b706cf2c5b72fb5bb64d4594" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_state_bind_met_2d_checked::catchem_state_bind_met_2d_checked</definition>
+        <argsstring>(state_ptr, name, ptr, dim1, dim2)</argsstring>
+        <name>catchem_state_bind_met_2d_checked</name>
+        <qualifiedname>catchem_api::catchem_state_bind_met_2d_checked::catchem_state_bind_met_2d_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>state_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>ptr</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim1</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim2</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="169" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="171" bodyend="174"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="169" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="169" bodyend="174"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__state__bind__met__2d__checked_1a9ad7a987b706cf2c5b72fb5bb64d4594" prot="public" virt="non-virtual"><scope>catchem_api::catchem_state_bind_met_2d_checked</scope><name>catchem_state_bind_met_2d_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

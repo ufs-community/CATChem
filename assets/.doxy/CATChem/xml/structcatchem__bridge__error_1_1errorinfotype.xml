@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__bridge__error_1_1errorinfotype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_error::errorinfotype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1a8d55ab295018717164a5fe5b698516af" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errorinfotype::error_code</definition>
+        <argsstring></argsstring>
+        <name>error_code</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::error_code</qualifiedname>
+        <initializer>= ERROR_NONE</initializer>
+        <briefdescription>
+<para>Error code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="256" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="256" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1a5cf4a0805d31908ddc9a3ef61331f2d0" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) catchem_bridge_error::errorinfotype::message</definition>
+        <argsstring></argsstring>
+        <name>message</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::message</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Error message. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="257" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="257" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1a6d5aaef9a972d44d17c54a7f2a5dee04" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errorinfotype::severity</definition>
+        <argsstring></argsstring>
+        <name>severity</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::severity</qualifiedname>
+        <initializer>= SEVERITY_INFO</initializer>
+        <briefdescription>
+<para>Error severity level. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="258" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="258" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1abda611d0680a4ef92201bb4169f30271" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errorinfotype::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::category</qualifiedname>
+        <initializer>= CATEGORY_GENERAL</initializer>
+        <briefdescription>
+<para>Error category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="259" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="259" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1aa240803b4cad0bbda07ae9fb6887b8cc" prot="public" static="no" mutable="no">
+        <type>character(len=100)</type>
+        <definition>character(len=100) catchem_bridge_error::errorinfotype::location</definition>
+        <argsstring></argsstring>
+        <name>location</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::location</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Error location. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="260" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="260" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1a3a86d3bea15e86a2374cd696f87d0d66" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) catchem_bridge_error::errorinfotype::suggestion</definition>
+        <argsstring></argsstring>
+        <name>suggestion</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::suggestion</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Suggested solution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="261" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="261" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorinfotype_1a991b33aaec2e1096584bedda8107c64d" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_bridge_error::errorinfotype::timestamp</definition>
+        <argsstring></argsstring>
+        <name>timestamp</name>
+        <qualifiedname>catchem_bridge_error::errorinfotype::timestamp</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Error timestamp. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="262" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="262" bodyend="262"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Error information structure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Stores information about a specific error including code, message, severity, category, and optional context information. </para>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="255" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="255" bodyend="263"/>
+    <listofallmembers>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1abda611d0680a4ef92201bb4169f30271" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>category</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1a8d55ab295018717164a5fe5b698516af" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>error_code</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1aa240803b4cad0bbda07ae9fb6887b8cc" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>location</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1a5cf4a0805d31908ddc9a3ef61331f2d0" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>message</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1a6d5aaef9a972d44d17c54a7f2a5dee04" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>severity</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1a3a86d3bea15e86a2374cd696f87d0d66" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>suggestion</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorinfotype_1a991b33aaec2e1096584bedda8107c64d" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorinfotype</scope><name>timestamp</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

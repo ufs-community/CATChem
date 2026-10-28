@@ -21,9 +21,8 @@
 
 | Type | Name |
 | ---: | :--- |
-| file | [**DryDepCommon\_Mod.F90**](_dry_dep_common___mod_8_f90.md) <br>_Common types and utilities for drydep process._  |
-| file | [**DryDepProcessCreator\_Mod.F90**](_dry_dep_process_creator___mod_8_f90.md) <br>_Factory for creating drydep process instances._  |
-| file | [**ProcessDryDepInterface\_Mod.F90**](_process_dry_dep_interface___mod_8_f90.md) <br> |
+| file | [**DryDepCommon\_Mod.F90**](_dry_dep_common___mod_8_f90.md) <br> |
+| file | [**DryDepScienceBridge.F90**](_dry_dep_science_bridge_8_f90.md) <br> |
 
 
 ## Directories

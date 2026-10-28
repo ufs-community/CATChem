@@ -21,9 +21,8 @@
 
 | Type | Name |
 | ---: | :--- |
-| file | [**ProcessSO4chemInterface\_Mod.F90**](_process_s_o4chem_interface___mod_8_f90.md) <br> |
-| file | [**SO4chemCommon\_Mod.F90**](_s_o4chem_common___mod_8_f90.md) <br>_Common types and utilities for so4chem process._  |
-| file | [**SO4chemProcessCreator\_Mod.F90**](_s_o4chem_process_creator___mod_8_f90.md) <br>_Factory for creating so4chem process instances._  |
+| file | [**SO4chemCommon\_Mod.F90**](_s_o4chem_common___mod_8_f90.md) <br> |
+| file | [**SO4chemScienceBridge.F90**](_s_o4chem_science_bridge_8_f90.md) <br> |
 
 
 ## Directories

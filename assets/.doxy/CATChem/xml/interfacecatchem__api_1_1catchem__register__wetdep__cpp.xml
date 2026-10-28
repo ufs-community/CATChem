@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__register__wetdep__cpp" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_register_wetdep_cpp</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__register__wetdep__cpp_1a441ae8bc9ebd65dce34ecc7ac5f909bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_register_wetdep_cpp::catchem_register_wetdep_cpp</definition>
+        <argsstring>()</argsstring>
+        <name>catchem_register_wetdep_cpp</name>
+        <qualifiedname>catchem_api::catchem_register_wetdep_cpp::catchem_register_wetdep_cpp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="84" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="85" bodyend="84"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="84" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="84" bodyend="84"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__register__wetdep__cpp_1a441ae8bc9ebd65dce34ecc7ac5f909bf" prot="public" virt="non-virtual"><scope>catchem_api::catchem_register_wetdep_cpp</scope><name>catchem_register_wetdep_cpp</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

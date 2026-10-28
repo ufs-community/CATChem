@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecarbchemsciencebridge__mod" kind="namespace" language="Fortran">
+    <compoundname>carbchemsciencebridge_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecarbchemsciencebridge__mod_1a94a6d1ef615594377011543e45bf70ec" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine carbchemsciencebridge_mod::run_carbchem_science_bridge</definition>
+        <argsstring>(n_cols, n_levels, n_species, dt, active_scheme, diagnostics, gocart_time_days_hydrophobic_to_hydrophilic, year, month, day, hour, minute, second, airden, delp, pmid, species_t_chem_loss, species_names_char, conc, tendency, diag_prod_mass, diag_loss_flux, diag_phobic_mass, diag_phobic_flux, diagnostic_species_id, n_diag_species)</argsstring>
+        <name>run_carbchem_science_bridge</name>
+        <qualifiedname>carbchemsciencebridge_mod::run_carbchem_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_cols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>active_scheme</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>gocart_time_days_hydrophobic_to_hydrophilic</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>day</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>hour</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>minute</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>second</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>species_t_chem_loss</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>species_names_char</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>conc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>tendency</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_prod_mass</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_loss_flux</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_phobic_mass</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_phobic_flux</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(max(n_diag_species,1)), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/carbchem/CarbChemScienceBridge.F90" line="13" column="1" bodyfile="src/process/carbchem/CarbChemScienceBridge.F90" bodystart="24" bodyend="185"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/carbchem/CarbChemScienceBridge.F90" line="1" column="1"/>
+  </compounddef>
+</doxygen>

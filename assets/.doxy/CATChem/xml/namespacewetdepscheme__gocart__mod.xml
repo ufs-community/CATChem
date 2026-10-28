@@ -16,14 +16,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="28" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="28" bodyend="28"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="39" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="39" bodyend="39"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="namespacewetdepscheme__gocart__mod_1a9e6c70f0e43d2ac919d7b734bf564d78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="namespacewetdepscheme__gocart__mod_1a3e522553cdba40af7ae3111a83c95cb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine, public</type>
         <definition>subroutine, public wetdepscheme_gocart_mod::compute_gocart</definition>
-        <argsstring>(num_layers, num_species, params, mairden, pedge, pfilsan, pfllsan, preccon, preclsc, t, tstep, species_is_aerosol, species_short_name, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_wd_reevap_frac, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
+        <argsstring>(num_layers, num_species, params, mairden, pedge, pfilsan, pfllsan, preccon, preclsc, t, tstep, species_is_aerosol, species_is_wetdep, species_short_name, species_wd_rainouteff, species_radius, species_mw_g, species_conc, species_tendencies, wetdep_mass_per_species_per_level, wetdep_flux_per_species_per_level, diagnostic_species_id)</argsstring>
         <name>compute_gocart</name>
         <qualifiedname>wetdepscheme_gocart_mod::compute_gocart</qualifiedname>
         <param>
@@ -75,40 +75,16 @@
           <defname>species_is_aerosol</defname>
         </param>
         <param>
+          <type>logical, dimension(:), intent(in)</type>
+          <defname>species_is_wetdep</defname>
+        </param>
+        <param>
           <type>character(len=32), dimension(:), intent(in)</type>
           <defname>species_short_name</defname>
         </param>
         <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_henry_cr</defname>
-        </param>
-        <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_henry_k0</defname>
-        </param>
-        <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_henry_pka</defname>
-        </param>
-        <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_wd_retfactor</defname>
-        </param>
-        <param>
-          <type>logical, dimension(:), intent(in)</type>
-          <defname>species_wd_liqandgas</defname>
-        </param>
-        <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_wd_convfaci2g</defname>
-        </param>
-        <param>
           <type>real(fp), dimension(:,:), intent(in)</type>
           <defname>species_wd_rainouteff</defname>
-        </param>
-        <param>
-          <type>real(fp), dimension(:), intent(in)</type>
-          <defname>species_wd_reevap_frac</defname>
         </param>
         <param>
           <type>real(fp), dimension(:), intent(in)</type>
@@ -241,6 +217,14 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
+<parametername direction="in">species_is_wetdep</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Species is_wetdep participation flag (non-participants echoed unchanged) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
 <parametername direction="in">species_short_name</parametername>
 </parameternamelist>
 <parameterdescription>
@@ -249,66 +233,10 @@
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">species_henry_cr</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species henry_cr property (unused; GOCART routines carry their own) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_henry_k0</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species henry_k0 property (unused) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_henry_pKa</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species henry_pKa property (unused) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_wd_retfactor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species wd_retfactor property (unused) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_wd_LiqAndGas</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species wd_LiqAndGas property (unused) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_wd_convfacI2G</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species wd_convfacI2G property (unused) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
 <parametername direction="in">species_wd_rainouteff</parametername>
 </parameternamelist>
 <parameterdescription>
 <para>Species wd_rainouteff property (3 temperature-dependent efficiencies) (num_species,3) </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">species_wd_reevap_frac</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Species wd_reevap_frac property (unused) </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
@@ -372,7 +300,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="66" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="96" bodyend="318"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="71" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="95" bodyend="334"/>
       </memberdef>
       <memberdef kind="function" id="namespacewetdepscheme__gocart__mod_1abc85711f9323fad5735e5c5a05f28aca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>
@@ -438,13 +366,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="333" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="334" bodyend="380"/>
+        <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="349" column="1" bodyfile="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" bodystart="350" bodyend="396"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="14" column="1"/>
+    <location file="src/process/wetdep/schemes/WetDepScheme_GOCART_Mod.F90" line="24" column="1"/>
   </compounddef>
 </doxygen>

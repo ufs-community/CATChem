@@ -1,0 +1,335 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__bridge__error_1_1errormanagertype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_error::errormanagertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a4e9a87f9cb535caf1921bc5d8ec2e449" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), dimension(:), allocatable</type>
+        <definition>type(errorcontexttype), dimension(:), allocatable catchem_bridge_error::errormanagertype::context_stack</definition>
+        <argsstring></argsstring>
+        <name>context_stack</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::context_stack</qualifiedname>
+        <briefdescription>
+<para>Context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="287" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="287" bodyend="287"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1adf5b8c898c9d4043dedbf1d40282dbbb" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errormanagertype::stack_depth</definition>
+        <argsstring></argsstring>
+        <name>stack_depth</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::stack_depth</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Current stack depth. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="288" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="288" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a01a7ed42089022a7bbde027fb48a66b0" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errormanagertype::total_errors</definition>
+        <argsstring></argsstring>
+        <name>total_errors</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::total_errors</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Total error count. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="289" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="289" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a8e2ed7bfe4796b6f29ff75bd81a12146" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errormanagertype::total_warnings</definition>
+        <argsstring></argsstring>
+        <name>total_warnings</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::total_warnings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Total warning count. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="290" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="290" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a338b002757049283e080041cf873844d" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errormanagertype::max_stack_depth</definition>
+        <argsstring></argsstring>
+        <name>max_stack_depth</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::max_stack_depth</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+<para>Maximum stack depth. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="291" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="291" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1af876691078156b3411bc0814458605cf" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errormanagertype::max_errors_before_abort</definition>
+        <argsstring></argsstring>
+        <name>max_errors_before_abort</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::max_errors_before_abort</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+<para>Error limit before abort. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="292" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="292" bodyend="292"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a80bb50fd634acac1700025e7454815a0" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_bridge_error::errormanagertype::verbose_errors</definition>
+        <argsstring></argsstring>
+        <name>verbose_errors</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::verbose_errors</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Verbose error reporting. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="293" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="293" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1af4850e691dcecb3fdd6acb3fe2a2a4d1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_bridge_error::errormanagertype::track_performance</definition>
+        <argsstring></argsstring>
+        <name>track_performance</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::track_performance</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Performance tracking. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="294" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="294" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a4190fed3f0dab4f0419d7169227a5648" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_bridge_error::errormanagertype::abort_on_critical</definition>
+        <argsstring></argsstring>
+        <name>abort_on_critical</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::abort_on_critical</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Abort on critical errors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="295" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="295" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1af789101427f2e8f211aa62b924465286" prot="public" static="no" mutable="no">
+        <type>integer, dimension(0:4)</type>
+        <definition>integer, dimension(0:4) catchem_bridge_error::errormanagertype::errors_by_severity</definition>
+        <argsstring></argsstring>
+        <name>errors_by_severity</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::errors_by_severity</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Errors by severity. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="298" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="298" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errormanagertype_1a770e4109273eafaf33ca46fef59e0840" prot="public" static="no" mutable="no">
+        <type>integer, dimension(0:6)</type>
+        <definition>integer, dimension(0:6) catchem_bridge_error::errormanagertype::errors_by_category</definition>
+        <argsstring></argsstring>
+        <name>errors_by_category</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::errors_by_category</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Errors by category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="299" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="299" bodyend="299"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errormanagertype_1aae7ff3fe9f13f6a30c30f06ce6c6343f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errormanagertype::init</definition>
+        <argsstring>(this, verbose, track_performance, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>verbose</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>track_performance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="301" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errormanagertype_1ac51bccb267c8d5b270a2e102ce355758" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errormanagertype::push_context</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>push_context</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::push_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Push context onto error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="302" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="302" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errormanagertype_1a22fb58fa05706d62e871b1cc098838e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errormanagertype::pop_context</definition>
+        <argsstring>(this)</argsstring>
+        <name>pop_context</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::pop_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Pop context from error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="303" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="303" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errormanagertype_1a3a943240747271b9c2797207cbd6f608" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errormanagertype::report_error</definition>
+        <argsstring>(this, error_code, message, rc, location, suggestion)</argsstring>
+        <name>report_error</name>
+        <qualifiedname>catchem_bridge_error::errormanagertype::report_error</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>message</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>location</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>suggestion</defname>
+        </param>
+        <briefdescription>
+<para>Report error with enhanced information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="304" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="304" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Enhanced error manager. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Provides comprehensive error handling with context tracking, severity levels, categories, and performance monitoring. </para>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="285" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="285" bodyend="305"/>
+    <listofallmembers>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a4190fed3f0dab4f0419d7169227a5648" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>abort_on_critical</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a4e9a87f9cb535caf1921bc5d8ec2e449" prot="private" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>context_stack</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a770e4109273eafaf33ca46fef59e0840" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>errors_by_category</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1af789101427f2e8f211aa62b924465286" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>errors_by_severity</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1aae7ff3fe9f13f6a30c30f06ce6c6343f" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>init</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1af876691078156b3411bc0814458605cf" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>max_errors_before_abort</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a338b002757049283e080041cf873844d" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>max_stack_depth</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a22fb58fa05706d62e871b1cc098838e4" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>pop_context</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1ac51bccb267c8d5b270a2e102ce355758" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>push_context</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a3a943240747271b9c2797207cbd6f608" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>report_error</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1adf5b8c898c9d4043dedbf1d40282dbbb" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>stack_depth</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a01a7ed42089022a7bbde027fb48a66b0" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>total_errors</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a8e2ed7bfe4796b6f29ff75bd81a12146" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>total_warnings</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1af4850e691dcecb3fdd6acb3fe2a2a4d1" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>track_performance</name></member>
+      <member refid="structcatchem__bridge__error_1_1errormanagertype_1a80bb50fd634acac1700025e7454815a0" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errormanagertype</scope><name>verbose_errors</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

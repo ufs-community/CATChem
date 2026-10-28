@@ -149,6 +149,7 @@ This is a pure computational kernel implementing GOCART-2G aerosol dry depositio
 * `species_density` Species density property 
 * `species_radius` Species radius property 
 * `species_is_seasalt` Species is\_seasalt property 
+* `species_short_name` Species short\_name property 
 * `species_conc` Species concentrations [mol/mol] (num\_layers, num\_species) 
 * `species_tendencies` Species tendency terms [mol/mol/s] (num\_layers, num\_species) 
 * `drydep_con_per_species` Dry deposition concentration per species [ug/kg or ppm] (num\_species) 

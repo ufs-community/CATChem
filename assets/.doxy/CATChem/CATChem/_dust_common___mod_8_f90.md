@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_dust_common___mod_8_f90_source.md)
 
-_Common types and utilities for dust process._ [More...](#detailed-description)
+
 
 
 
@@ -80,16 +80,6 @@ _Common types and utilities for dust process._ [More...](#detailed-description)
 
 
 
-## Detailed Description
-
-
-This module defines the configuration types used by the dust process and its schemes.
-
-
-Generated on: 2026-04-17T13:57:10.131486 Author: Wei Li & Barry Baker Version: 1.0.0 
-
-
-    
 
 ------------------------------
 The documentation for this class was generated from the following file `src/process/dust/DustCommon_Mod.F90`

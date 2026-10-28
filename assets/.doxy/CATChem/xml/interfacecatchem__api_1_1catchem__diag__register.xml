@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__register" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_diag_register</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__register_1ac88dce15cbd64c9c4a73186ee8b08408" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_diag_register::catchem_diag_register</definition>
+        <argsstring>(core_ptr, name, desc, units, rank, dim1, dim2, dim3)</argsstring>
+        <name>catchem_diag_register</name>
+        <qualifiedname>catchem_api::catchem_diag_register::catchem_diag_register</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>desc</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>rank</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim1</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim2</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim3</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="404" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="406" bodyend="411"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="404" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="404" bodyend="411"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__register_1ac88dce15cbd64c9c4a73186ee8b08408" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_register</scope><name>catchem_diag_register</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__add__process__by__name" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_add_process_by_name</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__add__process__by__name_1adc6a412b750e1de00e02a3ac28576946" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_core_add_process_by_name::catchem_core_add_process_by_name</definition>
+        <argsstring>(core_ptr, name)</argsstring>
+        <name>catchem_core_add_process_by_name</name>
+        <qualifiedname>catchem_api::catchem_core_add_process_by_name::catchem_core_add_process_by_name</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="100" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="101" bodyend="103"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="100" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="100" bodyend="103"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__add__process__by__name_1adc6a412b750e1de00e02a3ac28576946" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_add_process_by_name</scope><name>catchem_core_add_process_by_name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

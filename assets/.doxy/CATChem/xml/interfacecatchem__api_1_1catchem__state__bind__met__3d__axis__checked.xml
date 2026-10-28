@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__state__bind__met__3d__axis__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_state_bind_met_3d_axis_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__state__bind__met__3d__axis__checked_1aac51fa72187ff090e1e0111a10eb78ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_state_bind_met_3d_axis_checked::catchem_state_bind_met_3d_axis_checked</definition>
+        <argsstring>(state_ptr, name, ptr, dim1, dim2, dim3, axis)</argsstring>
+        <name>catchem_state_bind_met_3d_axis_checked</name>
+        <qualifiedname>catchem_api::catchem_state_bind_met_3d_axis_checked::catchem_state_bind_met_3d_axis_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>state_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>ptr</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim1</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim2</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>dim3</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>axis</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="154" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="156" bodyend="159"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="154" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="154" bodyend="159"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__state__bind__met__3d__axis__checked_1aac51fa72187ff090e1e0111a10eb78ff" prot="public" virt="non-virtual"><scope>catchem_api::catchem_state_bind_met_3d_axis_checked</scope><name>catchem_state_bind_met_3d_axis_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

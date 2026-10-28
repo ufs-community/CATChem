@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
-  <compounddef id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate" kind="type" language="Fortran" prot="private">
+  <compounddef id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate" kind="type" language="Fortran" prot="public">
     <compoundname>so4chemcommon_mod::so4chemgocartpersistentstate</compoundname>
     <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1a6fbff9101f46e63f34d9c689b97dbb68" prot="public" static="no" mutable="no">
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="94" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="94" bodyend="94"/>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="62" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="62" bodyend="62"/>
       </memberdef>
       <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1a9ea112711f1a7daa739cadf81a9671c1" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="95" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="95" bodyend="95"/>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="63" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="63" bodyend="63"/>
       </memberdef>
       <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1aaac692fc7fdadb12cb65582d4dc1a9f3" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="96" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="96" bodyend="96"/>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="64" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="64" bodyend="64"/>
       </memberdef>
       <memberdef kind="variable" id="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1ac20707cf83a6a11cf645673762dffc7b" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -57,15 +57,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="97" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="97" bodyend="97"/>
+        <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="65" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="65" bodyend="65"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Persistent state type for gocart scheme Contains variables that persist across time steps for each column. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="93" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="93" bodyend="98"/>
+    <location file="src/process/so4chem/SO4chemCommon_Mod.F90" line="61" column="1" bodyfile="src/process/so4chem/SO4chemCommon_Mod.F90" bodystart="61" bodyend="67"/>
     <listofallmembers>
       <member refid="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1a6fbff9101f46e63f34d9c689b97dbb68" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemgocartpersistentstate</scope><name>firsttime</name></member>
       <member refid="structso4chemcommon__mod_1_1so4chemgocartpersistentstate_1aaac692fc7fdadb12cb65582d4dc1a9f3" prot="public" virt="non-virtual"><scope>so4chemcommon_mod::so4chemgocartpersistentstate</scope><name>nhms_last_recycle</name></member>

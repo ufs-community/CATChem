@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_sea_salt_common___mod_8_f90_source.md)
 
-_Common types and utilities for seasalt process._ [More...](#detailed-description)
+
 
 
 
@@ -80,16 +80,6 @@ _Common types and utilities for seasalt process._ [More...](#detailed-descriptio
 
 
 
-## Detailed Description
-
-
-This module defines the configuration types used by the seasalt process and its schemes.
-
-
-Generated on: 2026-05-28T17:43:34.271954 Author: Barry Baker & Wei Li Version: 1.0.0 
-
-
-    
 
 ------------------------------
 The documentation for this class was generated from the following file `src/process/seasalt/SeaSaltCommon_Mod.F90`

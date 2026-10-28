@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__get__required__host__field__name__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_get_required_host_field_name_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__get__required__host__field__name__checked_1ae0a18d9c04f2a15368fbe1623d07468a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_core_get_required_host_field_name_checked::catchem_core_get_required_host_field_name_checked</definition>
+        <argsstring>(core_ptr, index, name_out, name_out_len)</argsstring>
+        <name>catchem_core_get_required_host_field_name_checked</name>
+        <qualifiedname>catchem_api::catchem_core_get_required_host_field_name_checked::catchem_core_get_required_host_field_name_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>index</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>name_out</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>name_out_len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="125" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="127" bodyend="130"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="125" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="125" bodyend="130"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__get__required__host__field__name__checked_1ae0a18d9c04f2a15368fbe1623d07468a" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_get_required_host_field_name_checked</scope><name>catchem_core_get_required_host_field_name_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

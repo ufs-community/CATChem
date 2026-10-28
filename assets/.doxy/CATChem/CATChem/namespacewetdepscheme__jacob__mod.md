@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine, public | [**compute\_jacob**](#function-compute_jacob) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**wetdepschemejacobconfig**](namespacewetdepcommon__mod.md#none-wetdepschemejacobconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden\_dry, real(fp), dimension(num\_layers), intent(in) mairden, real(fp), dimension(num\_layers+1), intent(in) pedge, real(fp), dimension(num\_layers+1), intent(in) pfilsan, real(fp), dimension(num\_layers+1), intent(in) pfllsan, real(fp), dimension(num\_layers), intent(in) reevapls, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, logical, dimension(:), intent(in) species\_is\_aerosol, character(len=32), dimension(:), intent(in) species\_short\_name, real(fp), dimension(:), intent(in) species\_henry\_cr, real(fp), dimension(:), intent(in) species\_henry\_k0, real(fp), dimension(:), intent(in) species\_henry\_pka, real(fp), dimension(:), intent(in) species\_wd\_retfactor, logical, dimension(:), intent(in) species\_wd\_liqandgas, real(fp), dimension(:), intent(in) species\_wd\_convfaci2g, real(fp), dimension(:,:), intent(in) species\_wd\_rainouteff, real(fp), dimension(:), intent(in) species\_wd\_reevap\_frac, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_mw\_g, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional wetdep\_mass\_per\_species\_per\_level, real(fp), dimension(:,:), intent(inout), optional wetdep\_flux\_per\_species\_per\_level, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for jacob scheme._  |
+|  subroutine, public | [**compute\_jacob**](#function-compute_jacob) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**wetdepschemejacobconfig**](namespacewetdepcommon__mod.md#none-wetdepschemejacobconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) airden\_dry, real(fp), dimension(num\_layers), intent(in) mairden, real(fp), dimension(num\_layers+1), intent(in) pedge, real(fp), dimension(num\_layers+1), intent(in) pfilsan, real(fp), dimension(num\_layers+1), intent(in) pfllsan, real(fp), dimension(num\_layers), intent(in) reevapls, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, logical, dimension(:), intent(in) species\_is\_aerosol, logical, dimension(:), intent(in) species\_is\_wetdep, character(len=32), dimension(:), intent(in) species\_short\_name, real(fp), dimension(:), intent(in) species\_henry\_cr, real(fp), dimension(:), intent(in) species\_henry\_k0, real(fp), dimension(:), intent(in) species\_henry\_pka, real(fp), dimension(:), intent(in) species\_wd\_retfactor, logical, dimension(:), intent(in) species\_wd\_liqandgas, real(fp), dimension(:), intent(in) species\_wd\_convfaci2g, real(fp), dimension(:,:), intent(in) species\_wd\_rainouteff, real(fp), dimension(:), intent(in) species\_wd\_reevap\_frac, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_mw\_g, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional wetdep\_mass\_per\_species\_per\_level, real(fp), dimension(:,:), intent(inout), optional wetdep\_flux\_per\_species\_per\_level, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Pure science computation for jacob scheme._  |
 
 
 
@@ -102,6 +102,7 @@ subroutine, public wetdepscheme_jacob_mod::compute_jacob (
     real(fp), dimension(num_layers), intent(in) t,
     real(fp), intent(in) tstep,
     logical, dimension(:), intent(in) species_is_aerosol,
+    logical, dimension(:), intent(in) species_is_wetdep,
     character(len=32), dimension(:), intent(in) species_short_name,
     real(fp), dimension(:), intent(in) species_henry_cr,
     real(fp), dimension(:), intent(in) species_henry_k0,
@@ -143,6 +144,7 @@ This is a pure computational kernel implementing Jacob et al. [2000] wet deposit
 * `t` T field [appropriate units] 
 * `tstep` Time step [s] - retrieved from process interface 
 * `species_is_aerosol` Species is\_aerosol property 
+* `species_is_wetdep` Species is\_wetdep participation flag 
 * `species_short_name` Species short\_name property 
 * `species_henry_cr` Species henry\_cr property 
 * `species_henry_k0` Species henry\_k0 property 

@@ -11,10 +11,10 @@
 
 module drydepscheme_wesely_mod
 
-   use precision_mod, only: fp, rae
-   use error_mod, only: cc_success, cc_error
+   use catchem_bridge_precision, only: fp, rae
+   use catchem_bridge_error, only: cc_success, cc_error
    use drydepcommon_mod, only: drydepschemeweselyconfig
-   use constants, only: pi, h2omw, avo, von_karman, rstarg  !load the constants needed for this scheme
+   use catchem_bridge_constants, only: pi, h2omw, avo, von_karman, rstarg  !load the constants needed for this scheme
 
    implicit none
    private
@@ -205,7 +205,10 @@ contains
          do species_idx = 1, num_species
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (.not. is_gas(species_idx)) cycle
-            ! Optionally skip SO2 so its dry deposition is handled by so4chem (GOCART SulfateChemDriver) instead.
+            ! Optionally skip SO2 so its dry deposition is handled by so4chem
+            ! (GOCART SulfateChemDriver) instead.  The core marshals species
+            ! labels upper-cased, so the lowercase branch keeps the gate
+            ! correct for direct Fortran callers that pass catalog names.
             if (params%skip_so2 .and. (trim(species_short_name(species_idx)) == 'SO2' .or. &
                trim(species_short_name(species_idx)) == 'so2')) cycle
             ! Add option for non-local PBL mixing scheme: THIK must be the first box height.
@@ -845,6 +848,10 @@ contains
       !=================================================================
       ! DIFFG begins here!
       !=================================================================
+      if (xm <= 0.0_fp .or. tk <= 0.0_fp) then
+         diff_g = 1.0e-5_fp
+         return
+      end if
 
       ! Air density [molec/m3]
       airden = ( press * avo ) / ( rstarg * tk )

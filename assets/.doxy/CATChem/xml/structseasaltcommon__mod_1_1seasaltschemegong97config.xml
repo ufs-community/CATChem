@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="75" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="45" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="45" bodyend="45"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a575a88fd646c057235ff9de62534da75" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="76" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="76" bodyend="76"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="46" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a61907e318806dc51de69bbaff7001699" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="77" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="77" bodyend="77"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="47" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="47" bodyend="47"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac7fcca1a4d8ca68c31866ee600d6c32a" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="78" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="78" bodyend="78"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="48" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a06b97fe7c4a0f412f47686b64a2644c8" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="81" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="81" bodyend="81"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="51" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="51" bodyend="51"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a95c8e032462ccb5d7ce2ab86f09988e5" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="84" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="84" bodyend="84"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="54" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="54" bodyend="54"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a5ca73922913953a25915e7fd37478ea6" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="85" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="85" bodyend="85"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="55" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="55" bodyend="55"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac5f74119c3a857379623744e32e9d656" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="88" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="88" bodyend="88"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="58" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a2efa127ae144b9dc5d678b39f3b31f81" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(7)</type>
@@ -135,70 +135,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="89" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="89" bodyend="89"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1adee98f9d109ce63edb7d57ca8cf99c01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltschemegong97config::validate</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>seasaltcommon_mod::seasaltschemegong97config::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong97config" kindref="compound">seasaltschemegong97config</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate gong97 scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="92" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="92" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltschemegong97config_1a9a34911ed62242c4e5d13dede61cc7e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltschemegong97config::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>seasaltcommon_mod::seasaltschemegong97config::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltschemegong97config" kindref="compound">seasaltschemegong97config</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize gong97 scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="93" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="93" bodyend="-1"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="59" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="59" bodyend="59"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Configuration type for gong97 scheme. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="72" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="72" bodyend="94"/>
+    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="42" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="42" bodyend="61"/>
     <listofallmembers>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a06b97fe7c4a0f412f47686b64a2644c8" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>affects_full_column</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac7fcca1a4d8ca68c31866ee600d6c32a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>algorithm_type</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a61907e318806dc51de69bbaff7001699" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>author</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a575a88fd646c057235ff9de62534da75" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>description</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a9a34911ed62242c4e5d13dede61cc7e1" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>finalize</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1ac5f74119c3a857379623744e32e9d656" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>n_required_met_fields</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a2efa127ae144b9dc5d678b39f3b31f81" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>required_met_fields</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a95c8e032462ccb5d7ce2ab86f09988e5" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>scale_factor</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a93bff33a8fd19eee15b019ba0ead6e8a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>scheme_name</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1adee98f9d109ce63edb7d57ca8cf99c01" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>validate</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltschemegong97config_1a5ca73922913953a25915e7fd37478ea6" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltschemegong97config</scope><name>weibull_flag</name></member>
     </listofallmembers>
   </compounddef>

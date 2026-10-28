@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceso4chemsciencebridge__mod" kind="namespace" language="Fortran">
+    <compoundname>so4chemsciencebridge_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceso4chemsciencebridge__mod_1ab41703e092e04b1652c015036d9954d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine so4chemsciencebridge_mod::run_so4chem_science_bridge</definition>
+        <argsstring>(n_cols, n_levels, n_species, dt, diagnostics, gocart_update_so2, gocart_do_drydep, year, month, day, hour, minute, second, c_airden, c_cldf, c_delp, c_pmid, c_t_air, c_z_edges, c_hflux, c_lat, c_lon, c_lwi, c_pblh, c_u10m, c_ustar, c_v10m, c_z0h, species_mw_g, species_names, c_conc, c_tendency, c_firsttime, c_nymd_last, c_nhms_last_recycle, c_xh2o2_init, c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux, c_diag_prod_rate, diagnostic_species_id, n_diag_species)</argsstring>
+        <name>run_so4chem_science_bridge</name>
+        <qualifiedname>so4chemsciencebridge_mod::run_so4chem_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_cols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>gocart_update_so2</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>gocart_do_drydep</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>year</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>month</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>day</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>hour</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>minute</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>second</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_airden</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_cldf</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_delp</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pmid</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_t_air</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_z_edges</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_hflux</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lat</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lon</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lwi</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pblh</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_u10m</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_ustar</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_v10m</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_z0h</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32, n_species), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_conc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_tendency</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_firsttime</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_nymd_last</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_nhms_last_recycle</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_xh2o2_init</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pso4_g_so2</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pso4_aq_so2</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pso2_dms</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_dms_flux</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_prod_rate</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(max(n_diag_species,1)), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/so4chem/SO4chemScienceBridge.F90" line="10" column="1" bodyfile="src/process/so4chem/SO4chemScienceBridge.F90" bodystart="31" bodyend="256"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/so4chem/SO4chemScienceBridge.F90" line="1" column="1"/>
+  </compounddef>
+</doxygen>

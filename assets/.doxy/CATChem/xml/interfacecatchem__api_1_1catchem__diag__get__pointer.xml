@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__get__pointer" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_diag_get_pointer</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__get__pointer_1a4e7411257c640e0cce8e67a8b31c97cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(c_ptr) function</type>
+        <definition>type(c_ptr) function catchem_api::catchem_diag_get_pointer::catchem_diag_get_pointer</definition>
+        <argsstring>(core_ptr, name)</argsstring>
+        <name>catchem_diag_get_pointer</name>
+        <qualifiedname>catchem_api::catchem_diag_get_pointer::catchem_diag_get_pointer</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="358" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="359" bodyend="361"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="358" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="358" bodyend="361"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__get__pointer_1a4e7411257c640e0cce8e67a8b31c97cf" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_get_pointer</scope><name>catchem_diag_get_pointer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

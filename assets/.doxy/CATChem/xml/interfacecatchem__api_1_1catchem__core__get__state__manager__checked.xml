@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__get__state__manager__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_get_state_manager_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__get__state__manager__checked_1a3a256a18ab2c764ebb03755dd7b93eff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_core_get_state_manager_checked::catchem_core_get_state_manager_checked</definition>
+        <argsstring>(core_ptr, state_out)</argsstring>
+        <name>catchem_core_get_state_manager_checked</name>
+        <qualifiedname>catchem_api::catchem_core_get_state_manager_checked::catchem_core_get_state_manager_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), intent(out)</type>
+          <defname>state_out</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="36" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="38" bodyend="40"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="36" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="36" bodyend="40"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__get__state__manager__checked_1a3a256a18ab2c764ebb03755dd7b93eff" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_get_state_manager_checked</scope><name>catchem_core_get_state_manager_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="36" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="36" bodyend="36"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="11" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="11" bodyend="11"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a7ff704c57921e63205cf19616317d185" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="37" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="37" bodyend="37"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="12" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="12" bodyend="12"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a2baf0283eaf5082cb4fbb7248ee0322f" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="38" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="38" bodyend="38"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="13" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="13" bodyend="13"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1af22c4822d6ea808a117526870f6c9172" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="41" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="41" bodyend="41"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="16" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="16" bodyend="16"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a83429fa74bce154dc6351ec239019fb1" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(:), allocatable</type>
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="42" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="42" bodyend="42"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="17" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="17" bodyend="17"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad14091dce65ca5ea56cbcbf80f033c5d" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="43" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="43" bodyend="43"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="18" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="18" bodyend="18"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a252d0e15dac515122a525f637579f236" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="44" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="44" bodyend="44"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="19" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="19" bodyend="19"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a70e483e6df2810576fab7d836d3eb8fa" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="45" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="45" bodyend="45"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="20" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="20" bodyend="20"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ab3143f741274d08bcbeae87b3a2ec548" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="48" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="48" bodyend="48"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="23" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="23" bodyend="23"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ac5a7e11a193ea4427878436d33fcaea9" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(:), allocatable</type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="49" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="49" bodyend="49"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="24" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="24" bodyend="24"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a6dc676f4ad6b02adf9fc0acd67eccf36" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="50" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="50" bodyend="50"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="25" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="25" bodyend="25"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad02ab6b5ccc239994292d736c612b06e" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -176,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="55" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="55" bodyend="55"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="30" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="30" bodyend="30"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1ad5959151e041ad0603e2449cb9a46767" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -190,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="56" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="56" bodyend="56"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="31" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="31" bodyend="31"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a3d16cf60de3ed533047b35fdf56c4e95" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -204,7 +204,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="57" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="57" bodyend="57"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="32" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="32" bodyend="32"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a2051db5f97466bc8f781e56d48cc88b4" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -218,7 +218,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="58" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="58" bodyend="58"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="33" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="33" bodyend="33"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a7769932eb78ce2fdeff45d37070a4051" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -233,7 +233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="61" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="61" bodyend="61"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="36" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="36" bodyend="36"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustconfig_1a155acccafc39d16b6599a45189117261" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -248,78 +248,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="62" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="62" bodyend="62"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1a65088b2257c30b96a0d12a9f00041203" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustconfig::validate</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>dustcommon_mod::dustconfig::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate dust configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="65" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="65" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1aba87ee429005e9f079acfae687151780" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustconfig::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>dustcommon_mod::dustconfig::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize dust configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="66" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="66" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustconfig_1a3e7fe7a4284ef1daecaacb67f348f3cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustconfig::print_summary</definition>
-        <argsstring>(this)</argsstring>
-        <name>print_summary</name>
-        <qualifiedname>dustcommon_mod::dustconfig::print_summary</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustconfig" kindref="compound">dustconfig</ref>), intent(in)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Print configuration summary. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="67" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="67" bodyend="-1"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="37" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="37" bodyend="37"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Main configuration type for dust process. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/dust/DustCommon_Mod.F90" line="33" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="33" bodyend="68"/>
+    <location file="src/process/dust/DustCommon_Mod.F90" line="8" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="8" bodyend="39"/>
     <listofallmembers>
       <member refid="structdustcommon__mod_1_1dustconfig_1a155acccafc39d16b6599a45189117261" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostic_frequency</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a83429fa74bce154dc6351ec239019fb1" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostic_species</name></member>
@@ -327,12 +263,10 @@
       <member refid="structdustcommon__mod_1_1dustconfig_1a2baf0283eaf5082cb4fbb7248ee0322f" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>diagnostics</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a70e483e6df2810576fab7d836d3eb8fa" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>dt_max</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a252d0e15dac515122a525f637579f236" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>dt_min</name></member>
-      <member refid="structdustcommon__mod_1_1dustconfig_1aba87ee429005e9f079acfae687151780" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>finalize</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a7ff704c57921e63205cf19616317d185" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>is_active</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1af22c4822d6ea808a117526870f6c9172" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>n_diagnostic_species</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1ab3143f741274d08bcbeae87b3a2ec548" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>n_species</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a7769932eb78ce2fdeff45d37070a4051" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>output_diagnostics</name></member>
-      <member refid="structdustcommon__mod_1_1dustconfig_1a3e7fe7a4284ef1daecaacb67f348f3cd" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>print_summary</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1aa4ec37a5669c304689dc4f7e492612fc" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>scheme</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1ad02ab6b5ccc239994292d736c612b06e" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_density</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a6dc676f4ad6b02adf9fc0acd67eccf36" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_indices</name></member>
@@ -340,7 +274,6 @@
       <member refid="structdustcommon__mod_1_1dustconfig_1ac5a7e11a193ea4427878436d33fcaea9" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_names</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a3d16cf60de3ed533047b35fdf56c4e95" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_radius</name></member>
       <member refid="structdustcommon__mod_1_1dustconfig_1a2051db5f97466bc8f781e56d48cc88b4" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>species_upper_radius</name></member>
-      <member refid="structdustcommon__mod_1_1dustconfig_1a65088b2257c30b96a0d12a9f00041203" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

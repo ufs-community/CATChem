@@ -11,10 +11,10 @@
 
 module drydepscheme_zhang_mod
 
-   use precision_mod, only: fp, rae, f8
-   use error_mod, only: cc_success, cc_error
+   use catchem_bridge_precision, only: fp, rae, f8
+   use catchem_bridge_error, only: cc_success, cc_error
    use drydepcommon_mod, only: drydepschemezhangconfig
-   use constants, only: pi, avo, von_karman, rstarg, g0, boltz  !load the constants needed for this scheme
+   use catchem_bridge_constants, only: pi, avo, von_karman, rstarg, g0, boltz  !load the constants needed for this scheme
 
    implicit none
    private
@@ -677,6 +677,16 @@ contains
          rhbl = 0.98_fp
       ENDIF
 
+      ! KNOWN ASYMMETRY (TODO): #195 this hygroscopic-growth gate keys off IS_DUST
+      ! only, so every non-dust aerosol is grown here -- including the fresh
+      ! hydrophobic carbon bins (oc1/bc1).  The settling process instead selects
+      ! swelling per species via the __hydrophilic attribute (hydrophobic ->
+      ! no growth).  For consistency this Zhang path should also honor
+      ! __hydrophilic (skip growth when a species is hydrophobic), i.e. change
+      ! the guard to `IF (IS_HYDROPHILIC) THEN`.  Deferred: the production dry
+      ! deposition parity config uses the GOCART aero scheme (which does not
+      ! swell at all), so this only affects the Zhang path.  See the settling
+      ! spec note on per-species swelling.
       IF (.NOT. is_dust) THEN
          !update DIAM and DEN after hygroscopic growth for non-dust species
          call new_diam_den( spc, is_seasalt, rhbl, rdry, rwet, diam, den, rc)
@@ -840,7 +850,6 @@ contains
 
       !add error check here to make sure RS below is not a infinite value
       IF (rae(r1, 0.0_fp) .or. rae(ustar, 0.0_fp)) THEN
-         !write(*,*) 'DEBUG INFO: SPC=', trim(SPC), LUC, USTAR, R1, ST, AA, VTS, CONST, DEN, DIAM, RHBL, RHB, AIRVS
          errmsg = 'USTAR or R1 is zero. Check met field or diameter (in m) of aerosol is too big.'
          CALL cc_error( errmsg, rc, thisloc )
          RETURN
@@ -1025,7 +1034,6 @@ contains
             ! add some protection against infinite loop
             i = i+1
             IF ( i .GT. 500 ) THEN
-               !write(*,*) 'Test NEW_DIAM_DEN output: ', trim(SPC), RHBL, RDRY, RWET, DIAM, DEN0, DEN,DEN1
                errmsg = 'Error in calculating new density for sea salt aerosol due to very low RH input!'
                CALL cc_error( errmsg, rc, thisloc )
                RETURN
@@ -1157,6 +1165,10 @@ contains
       !=================================================================
       ! DIFFG begins here!
       !=================================================================
+      if (xm <= 0.0_fp .or. tk <= 0.0_fp) then
+         diff_g = 1.0e-5_fp
+         return
+      end if
 
       ! Air density [molec/m3]
       airden = ( press * avo ) / ( rstarg * tk )

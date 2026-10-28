@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchem__bridge__constants" kind="namespace" language="Fortran">
+    <compoundname>catchem_bridge_constants</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a1229e8b5c2a3a8995c6077227d555f89" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::avo</definition>
+        <argsstring></argsstring>
+        <name>avo</name>
+        <qualifiedname>catchem_bridge_constants::avo</qualifiedname>
+        <initializer>= 6.022140857<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+23_fp</initializer>
+        <briefdescription>
+<para>Avogadro&apos;s number [particles/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="715" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="715" bodyend="715"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1ab9ef840caf76fe094223bb9c116cfaee" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::g0</definition>
+        <argsstring></argsstring>
+        <name>g0</name>
+        <qualifiedname>catchem_bridge_constants::g0</qualifiedname>
+        <initializer>= 9.80665<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+0_fp</initializer>
+        <briefdescription>
+<para>Standard gravity acceleration [m/s^2]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="716" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="716" bodyend="716"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a35ec5ae3c85cbfd13f8cc96fa71a2e0d" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::g0_100</definition>
+        <argsstring></argsstring>
+        <name>g0_100</name>
+        <qualifiedname>catchem_bridge_constants::g0_100</qualifiedname>
+        <initializer>= 100.0_fp / <ref refid="namespacecatchem__bridge__constants_1ab9ef840caf76fe094223bb9c116cfaee" kindref="member">g0</ref></initializer>
+        <briefdescription>
+<para>100 divided by standard gravity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="717" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="717" bodyend="717"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a6303a36520cb112f097cb5ddff86db39" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::re</definition>
+        <argsstring></argsstring>
+        <name>re</name>
+        <qualifiedname>catchem_bridge_constants::re</qualifiedname>
+        <initializer>= 6.3710072<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+6_fp</initializer>
+        <briefdescription>
+<para>Earth&apos;s radius [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="718" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="718" bodyend="718"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1abbd65e49c12afe2f7b31c05d6021f860" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::rstarg</definition>
+        <argsstring></argsstring>
+        <name>rstarg</name>
+        <qualifiedname>catchem_bridge_constants::rstarg</qualifiedname>
+        <initializer>= 8.3144598_fp</initializer>
+        <briefdescription>
+<para>Universal gas constant [J/K/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="719" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="719" bodyend="719"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1afcaa3199563f4d8a63cbd82c05be03a3" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::boltz</definition>
+        <argsstring></argsstring>
+        <name>boltz</name>
+        <qualifiedname>catchem_bridge_constants::boltz</qualifiedname>
+        <initializer>= 1.38064852<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-23_fp</initializer>
+        <briefdescription>
+<para>Boltzmann&apos;s constant [J/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="720" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="720" bodyend="720"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a8d390a2e59a9bf692502f3f06ca6d4ce" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::planck</definition>
+        <argsstring></argsstring>
+        <name>planck</name>
+        <qualifiedname>catchem_bridge_constants::planck</qualifiedname>
+        <initializer>= 6.62606957<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-34_fp</initializer>
+        <briefdescription>
+<para>Planck&apos;s constant [J⋅s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="721" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="721" bodyend="721"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a08c3732676fb7f53d36847689ed695f1" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::cconst</definition>
+        <argsstring></argsstring>
+        <name>cconst</name>
+        <qualifiedname>catchem_bridge_constants::cconst</qualifiedname>
+        <initializer>= 2.99792458<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+8_fp</initializer>
+        <briefdescription>
+<para>Speed of light in vacuum [m/s]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="722" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="722" bodyend="722"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1afb4e696dbedb5d2020871a9053d3ee55" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::cp</definition>
+        <argsstring></argsstring>
+        <name>cp</name>
+        <qualifiedname>catchem_bridge_constants::cp</qualifiedname>
+        <initializer>= 1.0046<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="728" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="728" bodyend="728"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1aa8347e015599825c26ea55e5c52906fc" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::cpd</definition>
+        <argsstring></argsstring>
+        <name>cpd</name>
+        <qualifiedname>catchem_bridge_constants::cpd</qualifiedname>
+        <initializer>= 1.00416<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="729" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="729" bodyend="729"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a14f4c254c6b504354aed9564dd215696" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::cpm</definition>
+        <argsstring></argsstring>
+        <name>cpm</name>
+        <qualifiedname>catchem_bridge_constants::cpm</qualifiedname>
+        <initializer>= 1.00464<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+3_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="730" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="730" bodyend="730"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1accb170e23543fc183a408d16b096d8aa" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::cv</definition>
+        <argsstring></argsstring>
+        <name>cv</name>
+        <qualifiedname>catchem_bridge_constants::cv</qualifiedname>
+        <initializer>= 7.1760e+2_fp</initializer>
+        <briefdescription>
+<para>Specific heat of dry air at constant volume [J/kg/K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="731" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="731" bodyend="731"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1ae8b5b1f511634ca22511d8623226c6ba" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::airmw</definition>
+        <argsstring></argsstring>
+        <name>airmw</name>
+        <qualifiedname>catchem_bridge_constants::airmw</qualifiedname>
+        <initializer>= 28.9644_fp</initializer>
+        <briefdescription>
+<para>Average molecular weight of dry air [g/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="732" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="732" bodyend="732"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a8777b5468043725019d4bdd57f7a51f4" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::h2omw</definition>
+        <argsstring></argsstring>
+        <name>h2omw</name>
+        <qualifiedname>catchem_bridge_constants::h2omw</qualifiedname>
+        <initializer>= 18.016_fp</initializer>
+        <briefdescription>
+<para>Molecular weight of water [g/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="733" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="733" bodyend="733"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a9f5a943d51eea5ab20db5f89f8c17e48" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::rd</definition>
+        <argsstring></argsstring>
+        <name>rd</name>
+        <qualifiedname>catchem_bridge_constants::rd</qualifiedname>
+        <initializer>= 287.0_fp</initializer>
+        <briefdescription>
+<para>Gas constant for dry air [J/K/kg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="734" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="734" bodyend="734"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a040aa5d329c02f2353af0f994350fb1e" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::rdg0</definition>
+        <argsstring></argsstring>
+        <name>rdg0</name>
+        <qualifiedname>catchem_bridge_constants::rdg0</qualifiedname>
+        <initializer>= Rd / <ref refid="namespacecatchem__bridge__constants_1ab9ef840caf76fe094223bb9c116cfaee" kindref="member">g0</ref></initializer>
+        <briefdescription>
+<para>Gas constant for dry air divided by gravity. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="735" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="735" bodyend="735"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a492e0c8a0bfb54883aa0cc00cbd25ef5" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::rv</definition>
+        <argsstring></argsstring>
+        <name>rv</name>
+        <qualifiedname>catchem_bridge_constants::rv</qualifiedname>
+        <initializer>= 461.00_fp</initializer>
+        <briefdescription>
+<para>Gas constant for water vapor [J/K/kg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="736" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="736" bodyend="736"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a6c4ac043138b7de705de12b97fa01d8c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::scale_height</definition>
+        <argsstring></argsstring>
+        <name>scale_height</name>
+        <qualifiedname>catchem_bridge_constants::scale_height</qualifiedname>
+        <initializer>= 7600.0_fp</initializer>
+        <briefdescription>
+<para>Atmospheric scale height [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="737" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="737" bodyend="737"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a41631e157ee941485f66074a239c2902" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::von_karman</definition>
+        <argsstring></argsstring>
+        <name>von_karman</name>
+        <qualifiedname>catchem_bridge_constants::von_karman</qualifiedname>
+        <initializer>= 0.41_fp</initializer>
+        <briefdescription>
+<para>Von Karman&apos;s constant (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="738" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="738" bodyend="738"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1ad28bee71a9d06c9ac8fbc03a1083679c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::atm</definition>
+        <argsstring></argsstring>
+        <name>atm</name>
+        <qualifiedname>catchem_bridge_constants::atm</qualifiedname>
+        <initializer>= 1.01325<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+5_fp</initializer>
+        <briefdescription>
+<para>Standard atmospheric pressure [Pa]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="739" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="739" bodyend="739"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a53934d3a037f9b9cdb00cfae2aff176c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::xnumolair</definition>
+        <argsstring></argsstring>
+        <name>xnumolair</name>
+        <qualifiedname>catchem_bridge_constants::xnumolair</qualifiedname>
+        <initializer>= AVO / ( AIRMW * 1.<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-3_fp )</initializer>
+        <briefdescription>
+<para>Molecules of dry air per kg dry air. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="740" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="740" bodyend="740"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a5f51f3238ef97f1e4024e2820f218bb3" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::pi</definition>
+        <argsstring></argsstring>
+        <name>pi</name>
+        <qualifiedname>catchem_bridge_constants::pi</qualifiedname>
+        <initializer>= 3.14159265358979323_fp</initializer>
+        <briefdescription>
+<para>Pi (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="746" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="746" bodyend="746"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a3daae5641ba6eb40d1a5b7ea3e6dbc25" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::pi_180</definition>
+        <argsstring></argsstring>
+        <name>pi_180</name>
+        <qualifiedname>catchem_bridge_constants::pi_180</qualifiedname>
+        <initializer>= PI / 180.0_fp</initializer>
+        <briefdescription>
+<para>Radians per degree conversion factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="747" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="747" bodyend="747"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::e</definition>
+        <argsstring></argsstring>
+        <name>e</name>
+        <qualifiedname>catchem_bridge_constants::e</qualifiedname>
+        <initializer>= 2.718281828459045235360287471352_fp</initializer>
+        <briefdescription>
+<para>Euler&apos;s number (dimensionless) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="748" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="748" bodyend="748"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1ae21adacf9b26fbbdb22ff961a8be848c" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::consvap</definition>
+        <argsstring></argsstring>
+        <name>consvap</name>
+        <qualifiedname>catchem_bridge_constants::consvap</qualifiedname>
+        <initializer>= 6.1078<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+03_fp / ( BOLTZ * 1<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+7_fp )</initializer>
+        <briefdescription>
+<para>Condensation vapor pressure factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="754" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="754" bodyend="754"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1ad39e1ff2f6bb7da1d8443e20a4059629" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::rgaslatm</definition>
+        <argsstring></argsstring>
+        <name>rgaslatm</name>
+        <qualifiedname>catchem_bridge_constants::rgaslatm</qualifiedname>
+        <initializer>= 8.2057<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-2_fp</initializer>
+        <briefdescription>
+<para>Gas constant in L⋅atm/(K⋅mol) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="755" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="755" bodyend="755"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a21b48b82485c32e2f3c4f35ffd0f906e" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_constants::mwcarb</definition>
+        <argsstring></argsstring>
+        <name>mwcarb</name>
+        <qualifiedname>catchem_bridge_constants::mwcarb</qualifiedname>
+        <initializer>= 12.01<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-3_fp</initializer>
+        <briefdescription>
+<para>Molecular weight of carbon [kg/mol]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="756" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="756" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a7e8879e59aa44312bf58f24c7b0009bf" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_constants::max_len_name</definition>
+        <argsstring></argsstring>
+        <name>max_len_name</name>
+        <qualifiedname>catchem_bridge_constants::max_len_name</qualifiedname>
+        <initializer>= 256</initializer>
+        <briefdescription>
+<para>Maximum length for names (fields, config keys, etc.) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="762" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="762" bodyend="762"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1aa49d7b6c05b230fe4ea9698f08a235bf" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_constants::max_len_desc</definition>
+        <argsstring></argsstring>
+        <name>max_len_desc</name>
+        <qualifiedname>catchem_bridge_constants::max_len_desc</qualifiedname>
+        <initializer>= 1024</initializer>
+        <briefdescription>
+<para>Maximum length for descriptions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="763" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="763" bodyend="763"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__constants_1a21d156d3590474f9cc87713dd56e0867" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_constants::max_len_path</definition>
+        <argsstring></argsstring>
+        <name>max_len_path</name>
+        <qualifiedname>catchem_bridge_constants::max_len_path</qualifiedname>
+        <initializer>= 512</initializer>
+        <briefdescription>
+<para>Maximum length for file paths. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="764" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="764" bodyend="764"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchem__bridge__constants_1aba6672e6fd61a9a2051930e44c2ce36a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_constants::validate_atmospheric_constants</definition>
+        <argsstring>(rc)</argsstring>
+        <name>validate_atmospheric_constants</name>
+        <qualifiedname>catchem_bridge_constants::validate_atmospheric_constants</qualifiedname>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate atmospheric constants for physical consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine performs runtime validation of atmospheric constants to ensure physical consistency and catch any compilation issues.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="775" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="776" bodyend="811"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="706" column="1"/>
+  </compounddef>
+</doxygen>

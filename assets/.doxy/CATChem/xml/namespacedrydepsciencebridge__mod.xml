@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacedrydepsciencebridge__mod" kind="namespace" language="Fortran">
+    <compoundname>drydepsciencebridge_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacedrydepsciencebridge__mod_1a141ad6119a229593066da6a2e3003e3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine drydepsciencebridge_mod::run_drydep_science_bridge</definition>
+        <argsstring>(n_cols, n_levels, n_species, dt, gas_scheme, aero_scheme, diagnostics, wesely_scale_factor, wesely_co2_effect, wesely_co2_level, wesely_co2_reference, gocart_scale_factor, gocart_resuspension, gocart_dust_resusp_only, zhang_scale_factor, wesely_skip_so2, gocart_skip_sulfate_aero, c_bxheight, c_airden, c_t_air, c_z_edges, c_rh, c_cldfrc, c_frlai, c_frlanduse, c_iland, c_is_ice, c_is_land, c_is_snow, c_lat, c_lon, c_obk, c_ps, c_salinity, c_suncosmid, c_swgdn, c_ts, c_tskin, c_ustar, c_z0, c_frlake, c_gwettop, c_hflux, c_lwi, c_pblh, c_u10m, c_v10m, c_z0h, species_mw_g, species_dd_f0, species_dd_hstar, species_dd_dvzaersnow, species_dd_dvzminval_snow, species_dd_dvzminval_land, species_density, species_radius, species_is_seasalt, species_is_dust, species_lower_radius, species_upper_radius, is_gas_arr, c_conc, c_tendency, species_names, c_diag_con, c_diag_vel, diagnostic_species_id, n_diag_species)</argsstring>
+        <name>run_drydep_science_bridge</name>
+        <qualifiedname>drydepsciencebridge_mod::run_drydep_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_cols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>gas_scheme</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>aero_scheme</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>wesely_scale_factor</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>wesely_co2_effect</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>wesely_co2_level</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>wesely_co2_reference</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>gocart_scale_factor</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>gocart_resuspension</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>gocart_dust_resusp_only</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>zhang_scale_factor</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>wesely_skip_so2</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>gocart_skip_sulfate_aero</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_bxheight</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_airden</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_t_air</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_z_edges</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_rh</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_cldfrc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_frlai</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_frlanduse</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_iland</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_is_ice</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_is_land</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_is_snow</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lat</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lon</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_obk</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_ps</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_salinity</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_suncosmid</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_swgdn</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_ts</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_tskin</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_ustar</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_z0</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_frlake</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_gwettop</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_hflux</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_lwi</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pblh</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_u10m</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_v10m</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_z0h</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_dd_f0</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_dd_hstar</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_dd_dvzaersnow</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_dd_dvzminval_snow</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_dd_dvzminval_land</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_density</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_seasalt</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_dust</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_lower_radius</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_upper_radius</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>is_gas_arr</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_conc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_tendency</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32,n_species), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_con</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_vel</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(n_diag_species), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/drydep/DryDepScienceBridge.F90" line="11" column="1" bodyfile="src/process/drydep/DryDepScienceBridge.F90" bodystart="32" bodyend="336"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/drydep/DryDepScienceBridge.F90" line="1" column="1"/>
+  </compounddef>
+</doxygen>

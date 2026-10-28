@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="37" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="37" bodyend="37"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="11" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="11" bodyend="11"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a7996b1a13d85a75a0d5caf276494f1e2" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="38" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="38" bodyend="38"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="12" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="12" bodyend="12"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a52dbe41034b909a97e10840602bfb74a" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="39" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="39" bodyend="39"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="13" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="13" bodyend="13"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a477bab605e0f869ad9b7155bc3fcfe32" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="42" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="42" bodyend="42"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="16" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="16" bodyend="16"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a2fe7a57ea23151e2c30b02baf87c75ed" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(:), allocatable</type>
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="43" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="43" bodyend="43"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="17" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="17" bodyend="17"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a9dcaaf9b005d18144be5f5c148b25c61" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="44" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="44" bodyend="44"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="18" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="18" bodyend="18"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a00ba41e7352353a9b3ced58bfdfd12e7" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="45" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="45" bodyend="45"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="19" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="19" bodyend="19"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a5e0f117e9e0057c28eb02775d196208b" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="46" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="46" bodyend="46"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="20" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="20" bodyend="20"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1ac3f46395fc41e4ca6901068f123bd9e3" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="49" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="49" bodyend="49"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="23" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="23" bodyend="23"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a13e3eb6bf07d679d5ac0feb82331eac2" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(:), allocatable</type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="50" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="50" bodyend="50"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="24" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="24" bodyend="24"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1ab64f87acc8509eb1e2b529ac7d0d4643" prot="public" static="no" mutable="no">
         <type>integer, dimension(:), allocatable</type>
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="51" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="51" bodyend="51"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="25" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="25" bodyend="25"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1aead403523968047e529acaff14aec946" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -176,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="56" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="56" bodyend="56"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="30" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="30" bodyend="30"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a36f675bdae4139c02b4d79295f324fdb" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -190,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="57" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="57" bodyend="57"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="31" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="31" bodyend="31"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1ab90fa11cd3f6a29ee0cf6da29e28047e" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -204,7 +204,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="58" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="58" bodyend="58"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="32" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="32" bodyend="32"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a455161242e4d95b3f28edc0c72920465" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(:), allocatable</type>
@@ -218,7 +218,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="59" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="59" bodyend="59"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="33" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="33" bodyend="33"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a0ce3b0eeb5f489d2212767d1d1570181" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -233,7 +233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="62" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="62" bodyend="62"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="36" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="36" bodyend="36"/>
       </memberdef>
       <memberdef kind="variable" id="structseasaltcommon__mod_1_1seasaltconfig_1a308f40e09c9f322c9f9e5d415350c284" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -248,78 +248,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="63" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="63" bodyend="63"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltconfig_1a3e5c934ad371fff68bf7e7d920a05e4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltconfig::validate</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>seasaltcommon_mod::seasaltconfig::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltconfig" kindref="compound">seasaltconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate seasalt configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="66" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="66" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltconfig_1ae008203fd2fef0a65622e60bc8347d78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltconfig::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>seasaltcommon_mod::seasaltconfig::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltconfig" kindref="compound">seasaltconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize seasalt configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="67" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="67" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structseasaltcommon__mod_1_1seasaltconfig_1a218a63d9721fa62d48f0e30cd7296d59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public seasaltcommon_mod::seasaltconfig::print_summary</definition>
-        <argsstring>(this)</argsstring>
-        <name>print_summary</name>
-        <qualifiedname>seasaltcommon_mod::seasaltconfig::print_summary</qualifiedname>
-        <param>
-          <type>class(<ref refid="structseasaltcommon__mod_1_1seasaltconfig" kindref="compound">seasaltconfig</ref>), intent(in)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Print configuration summary. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="68" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="68" bodyend="-1"/>
+        <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="37" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="37" bodyend="37"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Main configuration type for seasalt process. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="34" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="34" bodyend="69"/>
+    <location file="src/process/seasalt/SeaSaltCommon_Mod.F90" line="8" column="1" bodyfile="src/process/seasalt/SeaSaltCommon_Mod.F90" bodystart="8" bodyend="39"/>
     <listofallmembers>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a308f40e09c9f322c9f9e5d415350c284" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>diagnostic_frequency</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a2fe7a57ea23151e2c30b02baf87c75ed" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>diagnostic_species</name></member>
@@ -327,12 +263,10 @@
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a52dbe41034b909a97e10840602bfb74a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>diagnostics</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a5e0f117e9e0057c28eb02775d196208b" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>dt_max</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a00ba41e7352353a9b3ced58bfdfd12e7" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>dt_min</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltconfig_1ae008203fd2fef0a65622e60bc8347d78" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>finalize</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a7996b1a13d85a75a0d5caf276494f1e2" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>is_active</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a477bab605e0f869ad9b7155bc3fcfe32" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>n_diagnostic_species</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1ac3f46395fc41e4ca6901068f123bd9e3" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>n_species</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a0ce3b0eeb5f489d2212767d1d1570181" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>output_diagnostics</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a218a63d9721fa62d48f0e30cd7296d59" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>print_summary</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a016487b75f92d342a64e459101da1114" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>scheme</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1aead403523968047e529acaff14aec946" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>species_density</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1ab64f87acc8509eb1e2b529ac7d0d4643" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>species_indices</name></member>
@@ -340,7 +274,6 @@
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a13e3eb6bf07d679d5ac0feb82331eac2" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>species_names</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1ab90fa11cd3f6a29ee0cf6da29e28047e" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>species_radius</name></member>
       <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a455161242e4d95b3f28edc0c72920465" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>species_upper_radius</name></member>
-      <member refid="structseasaltcommon__mod_1_1seasaltconfig_1a3e5c934ad371fff68bf7e7d920a05e4a" prot="public" virt="non-virtual"><scope>seasaltcommon_mod::seasaltconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

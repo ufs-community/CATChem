@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__config__get__output__directory" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_config_get_output_directory</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__config__get__output__directory_1a5e441256d5c44cc98c9f9d77c783b759" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_config_get_output_directory::catchem_config_get_output_directory</definition>
+        <argsstring>(core_ptr, buffer, max_len)</argsstring>
+        <name>catchem_config_get_output_directory</name>
+        <qualifiedname>catchem_api::catchem_config_get_output_directory::catchem_config_get_output_directory</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>buffer</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>max_len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="250" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="252" bodyend="255"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="250" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="250" bodyend="255"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__config__get__output__directory_1a5e441256d5c44cc98c9f9d77c783b759" prot="public" virt="non-virtual"><scope>catchem_api::catchem_config_get_output_directory</scope><name>catchem_config_get_output_directory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

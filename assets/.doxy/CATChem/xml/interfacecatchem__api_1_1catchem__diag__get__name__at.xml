@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__get__name__at" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_diag_get_name_at</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__get__name__at_1a10ea502c00b6cc1380ce9f4a1c6c74e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_diag_get_name_at::catchem_diag_get_name_at</definition>
+        <argsstring>(core_ptr, index, name_out)</argsstring>
+        <name>catchem_diag_get_name_at</name>
+        <qualifiedname>catchem_api::catchem_diag_get_name_at::catchem_diag_get_name_at</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>index</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>name_out</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="458" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="459" bodyend="462"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="458" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="458" bodyend="462"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__get__name__at_1a10ea502c00b6cc1380ce9f4a1c6c74e3" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_get_name_at</scope><name>catchem_diag_get_name_at</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

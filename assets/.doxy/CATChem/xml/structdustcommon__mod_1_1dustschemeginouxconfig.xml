@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="108" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="108" bodyend="108"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="74" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="74" bodyend="74"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1ad47ab6a39fa9dc1e485d40be504d6c26" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="109" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="109" bodyend="109"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="75" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="75" bodyend="75"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1ad17bd78e565f46633bc27c8fe43ef669" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="110" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="110" bodyend="110"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="76" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1ad40baea1636730ca7b463ab1786bb442" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="111" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="111" bodyend="111"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="77" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="77" bodyend="77"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1a804def066738c9b4aac88def41d0fd9d" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="114" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="114" bodyend="114"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="80" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="80" bodyend="80"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1a3a74f29d35827504ad8c2f8e92b5ad6b" prot="public" static="no" mutable="no">
         <type>real(fp), dimension(5)</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="117" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="117" bodyend="117"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="83" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="83" bodyend="83"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1afa08c9c7b832a29b2e7557327ca587c3" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="120" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="120" bodyend="120"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="86" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="86" bodyend="86"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemeginouxconfig_1ad71441e6fa19a0745a3936de2ecb427f" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(9)</type>
@@ -120,70 +120,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="121" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="121" bodyend="121"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustschemeginouxconfig_1a29804ef756f95f56579d878de0495a34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustschemeginouxconfig::validate</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>dustcommon_mod::dustschemeginouxconfig::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate ginoux scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="124" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="124" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustschemeginouxconfig_1abc64e4f13a530942fae803f8af1e821d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustschemeginouxconfig::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>dustcommon_mod::dustschemeginouxconfig::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize ginoux scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="125" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="125" bodyend="-1"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="87" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="87" bodyend="87"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Configuration type for ginoux scheme. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/dust/DustCommon_Mod.F90" line="105" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="105" bodyend="126"/>
+    <location file="src/process/dust/DustCommon_Mod.F90" line="71" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="71" bodyend="89"/>
     <listofallmembers>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a804def066738c9b4aac88def41d0fd9d" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>affects_full_column</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad40baea1636730ca7b463ab1786bb442" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>algorithm_type</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad17bd78e565f46633bc27c8fe43ef669" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>author</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a3a74f29d35827504ad8c2f8e92b5ad6b" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>ch_du</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad47ab6a39fa9dc1e485d40be504d6c26" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>description</name></member>
-      <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1abc64e4f13a530942fae803f8af1e821d" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>finalize</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1afa08c9c7b832a29b2e7557327ca587c3" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>n_required_met_fields</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1ad71441e6fa19a0745a3936de2ecb427f" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>required_met_fields</name></member>
       <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1aa9d06babd22e5775c5cae051ab119338" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>scheme_name</name></member>
-      <member refid="structdustcommon__mod_1_1dustschemeginouxconfig_1a29804ef756f95f56579d878de0495a34" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemeginouxconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

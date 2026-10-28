@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacesettlingsciencebridge__mod" kind="namespace" language="Fortran">
+    <compoundname>settlingsciencebridge_mod</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacesettlingsciencebridge__mod_1ad4405906ad65598a6d95b7bed8f2b8ec" prot="public" static="no" mutable="no">
+        <type>type(gocart2g_mie), dimension(:), allocatable, target, save</type>
+        <definition>type(gocart2g_mie), dimension(:), allocatable, target, save settlingsciencebridge_mod::mie_store</definition>
+        <argsstring></argsstring>
+        <name>mie_store</name>
+        <qualifiedname>settlingsciencebridge_mod::mie_store</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="30" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacesettlingsciencebridge__mod_1a130620e07ce4ed399503814433d6ef05" prot="public" static="no" mutable="no">
+        <type>character(len=32), dimension(:), allocatable, target, save</type>
+        <definition>character(len=32), dimension(:), allocatable, target, save settlingsciencebridge_mod::mie_names_store</definition>
+        <argsstring></argsstring>
+        <name>mie_names_store</name>
+        <qualifiedname>settlingsciencebridge_mod::mie_names_store</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="31" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacesettlingsciencebridge__mod_1a12a1ec03175da689b568962106057fa5" prot="public" static="no" mutable="no">
+        <type>type(gocart2g_mie), dimension(0), target, save</type>
+        <definition>type(gocart2g_mie), dimension(0), target, save settlingsciencebridge_mod::empty_mie</definition>
+        <argsstring></argsstring>
+        <name>empty_mie</name>
+        <qualifiedname>settlingsciencebridge_mod::empty_mie</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="34" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="34" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacesettlingsciencebridge__mod_1a1e3e984219de9dea091d6b3a59d4fd94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingsciencebridge_mod::run_emission_mie_factor</definition>
+        <argsstring>(n_columns, n_levels, mie_name_c, emission_flux, rh, scale_factor, dt, factor, limiter_rc)</argsstring>
+        <name>run_emission_mie_factor</name>
+        <qualifiedname>settlingsciencebridge_mod::run_emission_mie_factor</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_columns</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(64), intent(in)</type>
+          <defname>mie_name_c</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>emission_flux</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>rh</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>scale_factor</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns), intent(out)</type>
+          <defname>factor</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>limiter_rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="39" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="41" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingsciencebridge__mod_1ae77ffdaaad2154df66823cd8871a9f89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingsciencebridge_mod::run_settling_mie_init</definition>
+        <argsstring>(n_files, type_names, file_paths, init_rc)</argsstring>
+        <name>run_settling_mie_init</name>
+        <qualifiedname>settlingsciencebridge_mod::run_settling_mie_init</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_files</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32,n_files), intent(in)</type>
+          <defname>type_names</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(512,n_files), intent(in)</type>
+          <defname>file_paths</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>init_rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="115" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="117" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingsciencebridge__mod_1a5a90ba084c720aaf3ed17e6a4b3af561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine settlingsciencebridge_mod::run_settling_science_bridge</definition>
+        <argsstring>(n_columns, n_levels, n_aerosols, n_total_species, dt, scale_factor, swelling_method, correction_maring, maring_dust_only, airden, delp, pmid, rh, temperature, z_edge, aerosol_species_names, species_names, species_is_dust, radius, density, concentration, simple_scheme, aerosol_mie_names, diag_velocity, diag_flux, diagnostic_species_id, n_diag_species, bridge_rc)</argsstring>
+        <name>run_settling_science_bridge</name>
+        <qualifiedname>settlingsciencebridge_mod::run_settling_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_columns</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_aerosols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_total_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>scale_factor</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>swelling_method</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>correction_maring</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>maring_dust_only</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>airden</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>delp</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>pmid</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>rh</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels+1), intent(in)</type>
+          <defname>z_edge</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32,n_aerosols), intent(in)</type>
+          <defname>aerosol_species_names</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32,n_total_species), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(n_aerosols), intent(in)</type>
+          <defname>species_is_dust</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_aerosols), intent(in)</type>
+          <defname>radius</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_aerosols), intent(in)</type>
+          <defname>density</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_columns,n_levels,n_total_species), intent(inout)</type>
+          <defname>concentration</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>simple_scheme</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32,n_aerosols), intent(in)</type>
+          <defname>aerosol_mie_names</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_velocity</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>diag_flux</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(max(n_diag_species,1)), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>bridge_rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingScienceBridge.F90" line="165" column="1" bodyfile="src/process/settling/SettlingScienceBridge.F90" bodystart="172" bodyend="365"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/SettlingScienceBridge.F90" line="13" column="1"/>
+  </compounddef>
+</doxygen>

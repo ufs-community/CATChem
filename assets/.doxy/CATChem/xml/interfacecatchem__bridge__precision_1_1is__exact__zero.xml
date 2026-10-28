@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__bridge__precision_1_1is__exact__zero" kind="interface" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_precision::is_exact_zero</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1is__exact__zero_1aa5b2d91bb21db78c2c2555cf3ed9bd26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::is_exact_zero::is_exact_zero_f4</definition>
+        <argsstring>(x)</argsstring>
+        <name>is_exact_zero_f4</name>
+        <qualifiedname>catchem_bridge_precision::is_exact_zero::is_exact_zero_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <briefdescription>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="160" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="161" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1is__exact__zero_1aff4aefd2403a609acd41583f6b406082" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::is_exact_zero::is_exact_zero_f8</definition>
+        <argsstring>(x)</argsstring>
+        <name>is_exact_zero_f8</name>
+        <qualifiedname>catchem_bridge_precision::is_exact_zero::is_exact_zero_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <briefdescription>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="166" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="167" bodyend="168"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Exact test for zero: exact_equal(x, 0). </para>
+    </briefdescription>
+    <detaileddescription>
+<para>True for +0 and -0 only. </para>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="123" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="123" bodyend="124"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__bridge__precision_1_1is__exact__zero_1aa5b2d91bb21db78c2c2555cf3ed9bd26" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::is_exact_zero</scope><name>is_exact_zero_f4</name></member>
+      <member refid="interfacecatchem__bridge__precision_1_1is__exact__zero_1aff4aefd2403a609acd41583f6b406082" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::is_exact_zero</scope><name>is_exact_zero_f8</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

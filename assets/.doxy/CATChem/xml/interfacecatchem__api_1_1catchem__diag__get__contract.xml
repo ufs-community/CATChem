@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__get__contract" kind="interface" language="Fortran" prot="public">
+    <compoundname>catchem_api::catchem_diag_get_contract</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__get__contract_1a485d754f4c50fd3248d923c1cbd2f871" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_diag_get_contract::catchem_diag_get_contract</definition>
+        <argsstring>(core_ptr, name, generation, availability, latest_writer, policy)</argsstring>
+        <name>catchem_diag_get_contract</name>
+        <qualifiedname>catchem_api::catchem_diag_get_contract::catchem_diag_get_contract</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>generation</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>availability</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>latest_writer</defname>
+        </param>
+        <param>
+          <type>integer(c_int), intent(out)</type>
+          <defname>policy</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="433" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="435" bodyend="438"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="433" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="433" bodyend="438"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__get__contract_1a485d754f4c50fd3248d923c1cbd2f871" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_get_contract</scope><name>catchem_diag_get_contract</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
