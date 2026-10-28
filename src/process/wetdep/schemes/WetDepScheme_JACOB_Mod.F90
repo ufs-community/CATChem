@@ -28,10 +28,10 @@
 !!
 module WetDepScheme_JACOB_Mod
 
-   use precision_mod, only: fp, zero, one, rae, TINY_
-   use error_mod, only: CC_Warning, CC_SUCCESS !CC_Error
+   use catchem_bridge_precision, only: fp, zero, one, rae, TINY_
+   use catchem_bridge_error, only: CC_Warning, CC_SUCCESS !CC_Error
    use WetDepCommon_Mod, only: WetDepSchemeJACOBConfig
-   use Constants, only: g0, AIRMW  !load the constants needed for this scheme
+   use catchem_bridge_constants, only: g0, AIRMW  !load the constants needed for this scheme
 
    implicit none
    private
@@ -71,6 +71,7 @@ contains
    !! @param[in]  t    T field [appropriate units]
    !! @param[in]  tstep    Time step [s] - retrieved from process interface
    !! @param[in]  species_is_aerosol    Species is_aerosol property
+   !! @param[in]  species_is_wetdep     Species is_wetdep participation flag
    !! @param[in]  species_short_name    Species short_name property
    !! @param[in]  species_henry_cr    Species henry_cr property
    !! @param[in]  species_henry_k0    Species henry_k0 property
@@ -101,6 +102,7 @@ contains
       t, &
       tstep, &
       species_is_aerosol, &
+      species_is_wetdep, &
       species_short_name, &
       species_henry_cr, &
       species_henry_k0, &
@@ -126,12 +128,13 @@ contains
       real(fp), intent(in) :: airden_dry(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: mairden(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: pedge(num_layers+1)  ! Edge field - requires nz+1 dimensions
-      real(fp), intent(in) :: pfilsan(num_layers+1)    ! 3D atmospheric field
-      real(fp), intent(in) :: pfllsan(num_layers+1)    ! 3D atmospheric field
+      real(fp), intent(in) :: pfilsan(num_layers+1)  ! interface ice nonconvective precipitation flux
+      real(fp), intent(in) :: pfllsan(num_layers+1)  ! interface liquid nonconvective precipitation flux
       real(fp), intent(in) :: reevapls(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
       logical, intent(in) :: species_is_aerosol(:)  ! Species is_aerosol property
+      logical, intent(in) :: species_is_wetdep(:)  ! Species wet-deposition participation flag
       character(len=32), intent(in) :: species_short_name(:)  ! Species short_name property
       real(fp), intent(in) :: species_henry_cr(:)  ! Species henry_cr property
       real(fp), intent(in) :: species_henry_k0(:)  ! Species henry_k0 property
@@ -265,10 +268,6 @@ contains
          delz = dpog(k) / mairden(k) ! thickness of layer [m]
          delz_cm(k) = delz * m_to_cm  ! thickness of layer [cm]
 
-         ! -- liquid/ice precipitation formation in grid cell (kg/m2/s)
-         !dqls = pfllsan(k) - pfllsan(km1)
-         !dqis = pfilsan(k) - pfilsan(km1)
-
          ! -- convert from kg/m2/s to kg (H2O) / m3(air) / s
          dqls_kgm3s = dqls / delz
          dqis_kgm3s = dqis / delz
@@ -278,9 +277,6 @@ contains
          ! -- the precipitation (ice or liquid)
          qq(k) =  dqls_kgm3s / density_liq +  dqis_kgm3s / density_ice
          reevap(k) = reevapls(k) * (airden_dry(k) / 1000.0_fp) ! convert from kg/kg/s to cm3/cm3/s
-
-         ! -- precipitation flux from upper level (convert from kg/m2/s to cm3/cm2/s)
-         !pdwn(k) = kg_to_cm3_liq * pfllsan(km1) + kg_to_cm3_ice * pfilsan(km1)
 
          ! -- initialize concentrations array, converting from kg/kg to kg/m2
          !this seems for both gas and aerosol
@@ -304,6 +300,16 @@ contains
 
       ! loop each species for wet deposition calculation
       do species_idx = 1, num_species
+         ! Species outside the wet-deposition subset are untouched.  The legacy
+         ! ProcessWetDepInterface builds its scheme input from ChemState's
+         ! WetdepIndex (is_wetdep filter), so non-participating species are
+         ! neither scavenged nor reported.  The science bridge copies the
+         ! tendency back onto the concentration (replacement contract), so
+         ! echoing the input here leaves the tracer exactly unchanged.
+         if (.not. species_is_wetdep(species_idx)) then
+            species_tendencies(:, species_idx) = species_conc(:, species_idx)
+            cycle
+         end if
          !get input concentration for this species
          ! -- initialize concentrations array, converting from ug/kg or ppmv to kg/m2
          if (species_is_aerosol(species_idx)) then

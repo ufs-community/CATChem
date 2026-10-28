@@ -75,3 +75,31 @@ prerelease = false
 [tool.semantic_release.branches.develop]
 match = "(^develop$)"
 prerelease = true
+
+[tool.ruff]
+exclude = [
+    ".git",
+    "build*",
+    "dist",
+    "tools",
+    "util",
+    "src/external"
+]
+
+[tool.ruff.lint]
+select = ["PLR0915", "C901"]
+
+[tool.ruff.lint.pylint]
+max-statements = 60
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.pyscn.analysis]
+exclude_patterns = [
+    "**/build*/**",
+    "**/dist/**",
+    "**/tools/**",
+    "**/util/**",
+    "**/src/external/**",
+]

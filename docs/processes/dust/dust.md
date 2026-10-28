@@ -100,29 +100,25 @@ The dust process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use DustProcessCreator_Mod
-use DustCommon_Mod
+The process is a C++ class, `catchem::DustProcess` (`src/process/dust/catchem_process_dust.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(DustProcess_t) :: process
-call create_dust_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  dust:
+    activate: true
+    scheme: 'fengsha'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `DustScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `fengsha`, `ginoux`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use FENGSHA scheme
-process%scheme_name = "fengsha"
-```
-```fortran
-! Use GINOUX scheme
-process%scheme_name = "ginoux"
+```yaml
+processes:
+  dust:
+    scheme: 'fengsha'
 ```
 
 ## Implementation Details
@@ -189,18 +185,18 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/dust/ProcessDustInterface_Mod.F90` - Main process interface
-- `src/process/dust/DustCommon_Mod.F90` - Common types and parameters
-- `src/process/dust/DustProcessCreator_Mod.F90` - Process factory
+- `src/process/dust/DustCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/dust/DustScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/dust/catchem_process_dust.cpp` - C++ process class `catchem::DustProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/dust/catchem_process_dust.hpp` - C++ process class `catchem::DustProcess` (declaration)
 - `src/process/dust/schemes/DustScheme_FENGSHA_Mod.F90` - Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS
 - `src/process/dust/schemes/DustScheme_GINOUX_Mod.F90` - Ginoux dust emission scheme
 
 ### Tests
-- `tests/process/dust/unit/` - Unit tests
-- `tests/process/dust/integration/` - Integration tests
+- `tests/test_catchem_dust.cpp`
 
 ### Documentation
 - `docs/processes/dust/dust.md` - This documentation

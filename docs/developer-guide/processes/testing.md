@@ -424,7 +424,7 @@ Common utilities for test setup:
 
 ```fortran
 module test_utilities
-   use precision_mod
+   use catchem_bridge_precision
    use state_mod
 
    implicit none

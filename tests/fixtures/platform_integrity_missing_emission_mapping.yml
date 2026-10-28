@@ -1,0 +1,20 @@
+simulation:
+  name: platform-integrity-missing-emission-mapping
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 2
+grid:
+  number_of_levels: 3
+run_phases: {}
+processes:
+  extemis:
+    activate: true
+    diagnostics: true
+    fire:
+      activate: true
+      source_file: fire_emis.nc
+      format: netcdf
+      frequency: hourly

@@ -109,33 +109,25 @@ The seasalt process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use SeaSaltProcessCreator_Mod
-use SeaSaltCommon_Mod
+The process is a C++ class, `catchem::SeaSaltProcess` (`src/process/seasalt/catchem_process_seasalt.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(SeaSaltProcess_t) :: process
-call create_seasalt_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  seasalt:
+    activate: true
+    scheme: 'geos12'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `SeasaltScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `gong97`, `gong03`, `geos12`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use GONG97 scheme
-process%scheme_name = "gong97"
-```
-```fortran
-! Use GONG03 scheme
-process%scheme_name = "gong03"
-```
-```fortran
-! Use GEOS12 scheme
-process%scheme_name = "geos12"
+```yaml
+processes:
+  seasalt:
+    scheme: 'geos12'
 ```
 
 ## Implementation Details
@@ -202,19 +194,20 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/seasalt/ProcessSeaSaltInterface_Mod.F90` - Main process interface
-- `src/process/seasalt/SeaSaltCommon_Mod.F90` - Common types and parameters
-- `src/process/seasalt/SeaSaltProcessCreator_Mod.F90` - Process factory
-- `src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod.F90` - Gong 1997 sea salt emission scheme
-- `src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90` - Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment
+- `src/process/seasalt/SeaSaltCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/seasalt/SeaSaltScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/seasalt/catchem_process_seasalt.cpp` - C++ process class `catchem::SeaSaltProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/seasalt/catchem_process_seasalt.hpp` - C++ process class `catchem::SeaSaltProcess` (declaration)
 - `src/process/seasalt/schemes/SeaSaltScheme_GEOS12_Mod.F90` - GEOS-Chem 2012 sea salt emission scheme with observational constraints
+- `src/process/seasalt/schemes/SeaSaltScheme_GONG03_Mod.F90` - Gong 2003 sea salt emission scheme with improved sub- and super-micron treatment
+- `src/process/seasalt/schemes/SeaSaltScheme_GONG97_Mod.F90` - Gong 1997 sea salt emission scheme
 
 ### Tests
-- `tests/process/seasalt/unit/` - Unit tests
-- `tests/process/seasalt/integration/` - Integration tests
+- `tests/build_seasalt_integration_profile.py`
+- `tests/test_catchem_seasalt.cpp`
 
 ### Documentation
 - `docs/processes/seasalt/seasalt.md` - This documentation

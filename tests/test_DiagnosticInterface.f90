@@ -5,8 +5,8 @@
 program test_DiagnosticInterface
    use testing_mod, only: assert, assert_close
    use DiagnosticInterface_Mod
-   use Precision_Mod
-   use error_mod, only: ErrorManagerType, CC_SUCCESS
+   use catchem_bridge_precision
+   use catchem_bridge_error, only: ErrorManagerType, CC_SUCCESS
 
    implicit none
 

@@ -4,10 +4,10 @@
 !!!>
 program test_ProcessFactory
    use testing_mod, only: assert, assert_close
-   use constants, only: MAX_LEN_NAME
+   use catchem_bridge_constants, only: MAX_LEN_NAME
    use ProcessFactory_Mod
    use StateManager_Mod, only: StateManagerType
-   use Error_Mod, only: CC_SUCCESS
+   use catchem_bridge_error, only: CC_SUCCESS
    use ProcessInterface_Mod
 
    implicit none

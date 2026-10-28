@@ -2,6 +2,7 @@
 module AQMIO
 
    use ESMF
+   use catchem_nuopc_lengths
    use catchem_latlon_output_mod, only: latlon_diag_init, latlon_diag_write_2d, &
       latlon_diag_write_3d, latlon_diag_cleanup, latlon_diag_is_init
 #if HAVE_NETCDF
@@ -49,6 +50,7 @@ module AQMIO
    public :: AQMIO_Write1D
    public :: AQMIO_Read1D
    public :: AQMIO_ReadTimeCoord
+   public :: AQMIO_WriteGlobalAttrs
 
    ! Lat/lon stitched output support
    public :: AQMIO_LatlonInit
@@ -365,7 +367,7 @@ contains
       ! -- local variables
       integer :: localrc
       integer :: ncStatus
-      integer :: item, localDe, localDeCount, tileCount
+      integer :: localDe, localDeCount, tileCount
       integer :: liofmt
       integer :: cmode
       logical :: create
@@ -533,7 +535,7 @@ contains
       ! -- local variables
       integer :: localrc
       integer :: ncStatus
-      integer :: item, localDe, localDeCount
+      integer :: localDe, localDeCount
       type(ioWrapper) :: is
 
       ! -- begin
@@ -606,7 +608,7 @@ contains
       ! -- local variables
       integer :: localrc
       integer :: ncStatus
-      integer :: item, localDe, localDeCount, tileCount, pathLen
+      integer :: localDe, localDeCount, tileCount, pathLen
       integer :: liofmt
       logical :: isFileOpen
       character(len=ESMF_MAXPATHLEN) :: fullName, pathIn
@@ -697,7 +699,7 @@ contains
       ! -- local variables
       integer :: localrc
       integer :: ncStatus
-      integer :: item, localDe, localDeCount
+      integer :: localDe, localDeCount
       type(ioWrapper) :: is
 
       ! -- begin
@@ -752,7 +754,7 @@ contains
 
       ! -- local variables
       integer :: localrc
-      integer :: item, localDe, localDeCount
+      integer :: item, localDeCount
       integer :: liofmt
       type(ioWrapper) :: is
 
@@ -876,7 +878,7 @@ contains
 
       ! -- local variables
       integer :: localrc
-      integer :: item, localDe, localDeCount
+      integer :: item, localDeCount
       logical :: isOpen
       type(ioWrapper) :: is
 
@@ -973,7 +975,7 @@ contains
 
       ! -- local variables
       integer :: localrc
-      integer :: item, localDe, localDeCount
+      integer :: localDeCount
       logical :: isOpen
       type(ioWrapper) :: is
 
@@ -1061,7 +1063,6 @@ contains
       integer :: localrc
       integer :: localDe, localDeCount, rank
       integer :: de, deCount, dimCount, tile, tileCount, ungriddedCount
-      integer :: iofmt
       integer, dimension(:),   pointer     :: ungriddedLBound, ungriddedUBound
       integer, dimension(:),   allocatable :: deToTileMap, localDeToDeMap
       integer, dimension(:,:), allocatable :: minIndexPDe, maxIndexPDe
@@ -1069,7 +1070,6 @@ contains
       type(ioWrapper) :: is
       type(ESMF_Grid) :: grid, iogrid
       type(ESMF_DistGrid) :: distgrid
-      type(ESMF_VM) :: vm
       type(ESMF_GeomType_flag)      :: geomtype
       type(ESMF_StaggerLoc)         :: staggerloc
       type(ESMF_TypeKind_Flag)      :: typekind
@@ -2069,7 +2069,6 @@ contains
       integer :: yy, mm, dd, h, m, s
       integer, dimension(:), allocatable :: dimIds, dimLen
       character(len=19), dimension(:), allocatable :: timeStrings
-      type(ESMF_VM) :: vm
 
       ! -- begin
       if (present(rc)) rc = ESMF_SUCCESS
@@ -2961,6 +2960,10 @@ contains
       type(ESMF_State)     :: importState, exportState
       type(ESMF_Clock)     :: clock
       integer, intent(out) :: rc
+      ! ESMF entry-point signature; this no-op touches none of its arguments.
+      associate(unused_gcomp => gcomp, unused_import => importState, &
+         unused_export => exportState, unused_clock => clock)
+      end associate
       rc = ESMF_SUCCESS
    end subroutine IOCompNoOp
 
@@ -3050,7 +3053,7 @@ contains
 
       ! -- local variables
       integer :: lstr
-      character(len=16) :: tileSuffix
+      character(len=NUOPC_SHORT_LEN) :: tileSuffix
       character(len=ESMF_MAXPATHLEN) :: tmpName
 
       ! -- begin
@@ -3106,7 +3109,7 @@ contains
       integer :: ncStatus
       integer :: rank, lrank
       integer :: dimCount, tileCount, tile
-      integer :: item, length, dimId, lvarId, uid, ndims, xtype
+      integer :: item, length, lvarId, uid, ndims, xtype
       integer, dimension(:),   allocatable :: dimIds, dimLen
       integer, dimension(:),   allocatable :: ungriddedLBound, ungriddedUBound
       integer, dimension(:,:), allocatable :: minIndexPTile, maxIndexPTile
@@ -3779,6 +3782,117 @@ contains
 
    end subroutine AQMIO_Write1D
 
+   !> \brief Write run-level global attributes to an existing NetCDF file.
+   !!
+   !! Global attributes must be set while the file is in define mode, which
+   !! AQMIO owns internally (research D7): this routine opens the file,
+   !! enters define mode, writes every (name, value) pair, and leaves
+   !! define mode again.  The driver layer never calls nf90_create or
+   !! nf90_redef directly.  Attributes are idempotent: calling this again
+   !! with the same values simply overwrites them.
+   !!
+   !! Only the root PET of the owning virtual machine touches the file.
+   !! Entering define mode is a metadata write, and HDF5 does not support
+   !! concurrent writers on one file: if every PET stamped the same per-tile
+   !! file the superblock was left truncated or invalid.  Callers on a
+   !! multi-PET grid must pass \p iocomp so ownership is resolved against the
+   !! same VM that AQMIO_Write1D uses; without it the current VM is used.
+   !!
+   !! \param filename NetCDF filename (must exist)
+   !! \param names    Attribute names, names(1:n)
+   !! \param values   Attribute values, values(1:n)
+   !! \param n        Number of attributes
+   !! \param rc       Return code
+   !! \param iocomp   ESMF GridComp whose VM decides the owning PET - optional
+   subroutine AQMIO_WriteGlobalAttrs(filename, names, values, n, rc, iocomp)
+      character(len=*), intent(in) :: filename
+      character(len=*), intent(in) :: names(:)
+      character(len=*), intent(in) :: values(:)
+      integer, intent(in) :: n
+      integer, intent(out), optional :: rc
+      type(ESMF_GridComp), intent(inout), optional :: iocomp
+
+#if HAVE_NETCDF
+      integer :: localrc, ncid, k
+      type(ESMF_VM) :: vm
+      integer :: localPet
+
+      if (present(rc)) rc = ESMF_SUCCESS
+
+      ! MPI coordination: only the root PET may open the file in define mode
+      ! (mirrors AQMIO_Write1D).
+      if (present(iocomp)) then
+         call ESMF_GridCompGet(iocomp, vm=vm, rc=localrc)
+         if (localrc /= ESMF_SUCCESS) then
+            call ESMF_VMGetCurrent(vm, rc=localrc)
+         end if
+      else
+         call ESMF_VMGetCurrent(vm, rc=localrc)
+      end if
+      if (localrc == ESMF_SUCCESS) then
+         call ESMF_VMGet(vm, localPet=localPet, rc=localrc)
+         if (localrc == ESMF_SUCCESS .and. localPet /= 0) then
+            ! Non-root PETs: the owner stamps the attributes, nothing to do here
+            return
+         end if
+      end if
+
+      localrc = nf90_open(trim(filename), NF90_WRITE, ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_OPEN, &
+            msg="Error opening NetCDF file for global attributes: "//trim(filename)// &
+            ": "//trim(nf90_strerror(localrc)), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return  ! bail out
+      end if
+
+      localrc = nf90_redef(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error entering define mode for global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         localrc = nf90_close(ncid)
+         return  ! bail out
+      end if
+
+      do k = 1, n
+         localrc = nf90_put_att(ncid, NF90_GLOBAL, trim(names(k)), trim(values(k)))
+         if (localrc /= NF90_NOERR) then
+            call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+               msg="Error writing global attribute "//trim(names(k))//" in "//trim(filename), &
+               line=__LINE__, file=__FILE__, rcToReturn=rc)
+            localrc = nf90_enddef(ncid)
+            localrc = nf90_close(ncid)
+            return  ! bail out
+         end if
+      end do
+
+      localrc = nf90_enddef(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error leaving define mode after global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         localrc = nf90_close(ncid)
+         return  ! bail out
+      end if
+
+      localrc = nf90_close(ncid)
+      if (localrc /= NF90_NOERR) then
+         call ESMF_LogSetError(ESMF_RC_FILE_WRITE, &
+            msg="Error closing file after global attributes: "//trim(filename), &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         if (present(rc)) rc = ESMF_FAILURE
+         return  ! bail out
+      end if
+#else
+      if (present(rc)) rc = ESMF_FAILURE
+      call ESMF_LogSetError(ESMF_RC_LIB_NOT_PRESENT, &
+         msg="NetCDF not available", &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)
+#endif
+
+   end subroutine AQMIO_WriteGlobalAttrs
+
    !> \brief Read 1D data directly from NetCDF file (consolidated function)
    !!
    !! This subroutine provides NetCDF I/O for reading 1D data arrays
@@ -3932,12 +4046,19 @@ contains
       integer :: dimids(NF90_MAX_VAR_DIMS)
       real(ESMF_KIND_R8), allocatable :: tvar(:)
       real(ESMF_KIND_R8) :: unit_to_secs, tsecs_r8
-      character(len=256) :: units_str, tmp_str
+      character(len=NUOPC_PATH_LEN) :: units_str, tmp_str
       type(ESMF_Time) :: base_time, abs_time
       type(ESMF_TimeInterval) :: dt_interval
 
       if (present(rc)) rc = ESMF_SUCCESS
       n_times = 0
+
+      if (len_trim(filename) == 0 .or. trim(filename) == 'null' .or. &
+         trim(filename) == 'NULL' .or. trim(filename) == 'none' .or. &
+         trim(filename) == 'NONE') then
+         if (present(rc)) rc = ESMF_FAILURE
+         return
+      end if
 
       ! Open file read-only
       localrc = nf90_open(trim(filename), NF90_NOWRITE, ncid)

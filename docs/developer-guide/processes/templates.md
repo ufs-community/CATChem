@@ -71,9 +71,9 @@ This template generates the main process module:
 !! {{ detailed_description }}
 !!
 module {{ module_name }}
-   use precision_mod
+   use catchem_bridge_precision
    use state_mod, only : StateContainerType
-   use error_mod
+   use catchem_bridge_error
    use ProcessInterface_Mod
 {%- for scheme in schemes %}
    use {{ scheme|title }}Scheme_Mod
@@ -302,9 +302,9 @@ Generates individual scheme implementations:
 !! {{ scheme_description }}
 !!
 module {{ module_name }}
-   use precision_mod
+   use catchem_bridge_precision
    use state_mod, only : StateContainerType
-   use error_mod
+   use catchem_bridge_error
    use {{ process_name }}Common_Mod
 
    implicit none

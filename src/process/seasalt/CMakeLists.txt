@@ -7,8 +7,8 @@
 set(
   SEASALT_PROCESS_SOURCES
   SeaSaltCommon_Mod.F90
-  ProcessSeaSaltInterface_Mod.F90
-  SeaSaltProcessCreator_Mod.F90
+  catchem_process_seasalt.cpp
+  SeaSaltScienceBridge.F90
 )
 
 # Define seasalt scheme sources
@@ -26,8 +26,9 @@ set(SEASALT_ALL_SOURCES ${SEASALT_PROCESS_SOURCES} ${SEASALT_SCHEME_SOURCES})
 set(_lib CATChem_process_seasalt)
 add_library(${_lib} ${SEASALT_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 
@@ -42,9 +43,12 @@ target_include_directories(${_lib} PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 # Compiler-specific flags
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
-  target_compile_options(${_lib} PRIVATE -fdefault-real-8 -fdefault-double-8)
+  target_compile_options(
+    ${_lib}
+    PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-fdefault-real-8;-fdefault-double-8>
+  )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  target_compile_options(${_lib} PRIVATE -r8)
+  target_compile_options(${_lib} PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-r8>)
 endif()
 
 # Add preprocessor definitions

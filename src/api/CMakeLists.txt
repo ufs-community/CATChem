@@ -1,20 +1,30 @@
 set(_srcs CATChem_API.F90)
-
-set(_lib CATChem)
-
-add_library(${_lib} ${_srcs})
-target_link_libraries(${_lib} PUBLIC CATChem_core)
-target_link_libraries(${_lib} PUBLIC CATChem_process_dust)
-target_link_libraries(${_lib} PUBLIC CATChem_process_seasalt)
-# target_link_libraries(${_lib} PUBLIC CATChem_process_plumerise)
-target_link_libraries(${_lib} PUBLIC CATChem_process_drydep)
-target_link_libraries(${_lib} PUBLIC CATChem_process_wetdep)
-target_link_libraries(${_lib} PUBLIC CATChem_process_settling)
-target_link_libraries(${_lib} PUBLIC CATChem_process_so4chem)
-target_link_libraries(${_lib} PUBLIC CATChem_process_carbchem)
-# target_link_libraries(${_lib} PUBLIC CATChem_process_chem)
-set_target_properties(
-  ${_lib}
-  PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+add_library(CATChem ${_srcs})
+target_link_libraries(
+  CATChem
+  PUBLIC
+    CATChem_core
+    catchem_validation_options
+    CATChem_core_cpp
+    CATChem_process_seasalt
+    CATChem_process_dust
+    CATChem_process_drydep
+    CATChem_process_wetdep
+    CATChem_process_settling
+    CATChem_process_so4chem
+    CATChem_process_carbchem
 )
-target_compile_options(${_lib} PRIVATE ${_catchem_compiler_options})
+if(CATCHEM_BUILD_MUSICA)
+  target_link_libraries(
+    CATChem
+    PUBLIC catchem_process_photolysis catchem_process_gaschem
+  )
+  target_compile_definitions(CATChem PRIVATE CATCHEM_BUILD_MUSICA)
+endif()
+set_target_properties(
+  CATChem
+  PROPERTIES
+    Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include
+    LINKER_LANGUAGE Fortran
+)
+target_include_directories(CATChem PUBLIC ${CMAKE_BINARY_DIR}/include)

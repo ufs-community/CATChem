@@ -9,13 +9,24 @@
 !!   - SU_Wet_Removal : the sulfate group (DMS/SO2/SO4/MSA) in a single call.
 !!   - WetRemovalUFS  : every other aerosol species, one call per species.
 !!
+!! Ported from ufs-community/CATChem PR #206 (feature/standalone) for the C++ core.
+!! Two deliberate adaptations relative to the PR source:
+!!   1. The PR tree ran on a pre-filtered wetdep species list, so participation was
+!!      implicit.  The C++ core passes the FULL mechanism species list with an
+!!      explicit species_is_wetdep flag (same contract as the Jacob kernel), so this
+!!      kernel gates every removal route on that flag: non-participants are echoed
+!!      bit-exactly into species_tendencies.
+!!   2. Module imports use the rework's bridge precision/constants utilities instead
+!!      of the legacy precision_mod/Constants.
+!!
 !! Author: Wei Li
 !! Reference: GOCART2G Process Library (GEOS-ESM/GOCART): SU_Wet_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme)
 module WetDepScheme_GOCART_Mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
+   use catchem_bridge_error, only: CC_Warning, CC_SUCCESS
    use WetDepCommon_Mod, only: WetDepSchemeGOCARTConfig
-   use Constants, only: g0, AIRMW  ! gravity and dry-air molecular weight for GOCART calls / unit conversion
+   use catchem_bridge_constants, only: g0, AIRMW  ! gravity and dry-air molecular weight for GOCART calls / unit conversion
    use GOCART2G_Process, only: SU_Wet_Removal, WetRemovalUFS
 
    implicit none
@@ -38,31 +49,25 @@ contains
    !! @param[in]  num_layers     Number of vertical layers
    !! @param[in]  num_species    Number of chemical species
    !! @param[in]  params         Scheme parameters (pre-validated by host)
-   !! @param[in]  mairden    MAIRDEN field (moist air density) [kg/m3]
-   !! @param[in]  pedge    PEDGE field (level-edge air pressure) [Pa] (num_layers+1)
-   !! @param[in]  pfilsan    PFILSAN field (3D flux of ice nonconvective precip) [kg/m2/s] (num_layers+1)
-   !! @param[in]  pfllsan    PFLLSAN field (3D flux of liquid nonconvective precip) [kg/m2/s] (num_layers+1)
-   !! @param[in]  preccon    PRECCON field (convective precip at ground) [m] - divided by tstep -> [m/s]
-   !! @param[in]  preclsc    PRECLSC field (large-scale precip at ground) [m] - divided by tstep -> [m/s]
-   !! @param[in]  t    T field (temperature) [K]
-   !! @param[in]  tstep    Time step [s] - retrieved from process interface
-   !! @param[in]  species_is_aerosol    Species is_aerosol property
-   !! @param[in]  species_short_name    Species short_name property
-   !! @param[in]  species_henry_cr    Species henry_cr property (unused; GOCART routines carry their own)
-   !! @param[in]  species_henry_k0    Species henry_k0 property (unused)
-   !! @param[in]  species_henry_pKa    Species henry_pKa property (unused)
-   !! @param[in]  species_wd_retfactor    Species wd_retfactor property (unused)
-   !! @param[in]  species_wd_LiqAndGas    Species wd_LiqAndGas property (unused)
-   !! @param[in]  species_wd_convfacI2G    Species wd_convfacI2G property (unused)
+   !! @param[in]  mairden        MAIRDEN field (moist air density) [kg/m3]
+   !! @param[in]  pedge          PEDGE field (level-edge air pressure) [Pa] (num_layers+1)
+   !! @param[in]  pfilsan        PFILSAN field (3D flux of ice nonconvective precip) [kg/m2/s] (num_layers+1)
+   !! @param[in]  pfllsan        PFLLSAN field (3D flux of liquid nonconvective precip) [kg/m2/s] (num_layers+1)
+   !! @param[in]  preccon        PRECCON field (convective precip at ground) [m] - divided by tstep -> [m/s]
+   !! @param[in]  preclsc        PRECLSC field (large-scale precip at ground) [m] - divided by tstep -> [m/s]
+   !! @param[in]  t              T field (temperature) [K]
+   !! @param[in]  tstep          Time step [s] - retrieved from process interface
+   !! @param[in]  species_is_aerosol       Species is_aerosol property
+   !! @param[in]  species_is_wetdep        Species is_wetdep participation flag (non-participants echoed unchanged)
+   !! @param[in]  species_short_name       Species short_name property
    !! @param[in]  species_wd_rainouteff    Species wd_rainouteff property (3 temperature-dependent efficiencies) (num_species,3)
-   !! @param[in]  species_wd_reevap_frac    Species wd_reevap_frac property (unused)
-   !! @param[in]  species_radius    Species radius property [um]
-   !! @param[in]  species_mw_g    Species mw_g property
-   !! @param[in]  species_conc   Species concentrations [ppm for gases, ug/kg for aerosols] (num_layers, num_species)
-   !! @param[inout] species_tendencies  Updated species concentrations (replacement mode) (num_layers, num_species)
-   !! @param[inout] wetdep_mass_per_species_per_level    Wet deposition mass loss per species per level [kg/m2] (num_layers, num_species)
-   !! @param[inout] wetdep_flux_per_species_per_level    Wet deposition flux per species per level [kg/m2/s] (num_layers, num_species)
-   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
+   !! @param[in]  species_radius           Species radius property [um]
+   !! @param[in]  species_mw_g             Species mw_g property
+   !! @param[in]  species_conc             Species concentrations [ppm for gases, ug/kg for aerosols] (num_layers, num_species)
+   !! @param[inout] species_tendencies     Updated species concentrations (replacement mode) (num_layers, num_species)
+   !! @param[inout] wetdep_mass_per_species_per_level  Wet deposition mass loss per species per level [kg/m2] (num_layers, num_species)
+   !! @param[inout] wetdep_flux_per_species_per_level  Wet deposition flux per species per level [kg/m2/s] (num_layers, num_species)
+   !! @param[in]  diagnostic_species_id    Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_gocart( &
       num_layers, &
       num_species, &
@@ -76,15 +81,9 @@ contains
       t, &
       tstep, &
       species_is_aerosol, &
+      species_is_wetdep, &
       species_short_name, &
-      species_henry_cr, &
-      species_henry_k0, &
-      species_henry_pKa, &
-      species_wd_retfactor, &
-      species_wd_LiqAndGas, &
-      species_wd_convfacI2G, &
       species_wd_rainouteff, &
-      species_wd_reevap_frac, &
       species_radius, &
       species_mw_g, &
       species_conc, &
@@ -107,16 +106,10 @@ contains
       real(fp), intent(in) :: t(num_layers)    ! 3D atmospheric field
       real(fp), intent(in) :: tstep  ! Time step [s] - from process interface
       logical, intent(in) :: species_is_aerosol(:)  ! Species is_aerosol property
+      logical, intent(in) :: species_is_wetdep(:)   ! Species is_wetdep participation flag
       character(len=32), intent(in) :: species_short_name(:)  ! Species short_name property
-      real(fp), intent(in) :: species_henry_cr(:)  ! Species henry_cr property
-      real(fp), intent(in) :: species_henry_k0(:)  ! Species henry_k0 property
-      real(fp), intent(in) :: species_henry_pKa(:)  ! Species henry_pKa property
-      real(fp), intent(in) :: species_wd_retfactor(:)  ! Species wd_retfactor property
-      logical, intent(in) :: species_wd_LiqAndGas(:)  ! Species wd_LiqAndGas property
-      real(fp), intent(in) :: species_wd_convfacI2G(:)  ! Species wd_convfacI2G property
       real(fp), intent(in) :: species_wd_rainouteff(:,:)  ! Species wd_rainouteff property (num_species,3)
-      real(fp), intent(in) :: species_wd_reevap_frac(:)  ! Species wd_reevap_frac property
-      real(fp), intent(in) :: species_radius(:)  ! Species radius property
+      real(fp), intent(in) :: species_radius(:)  ! Species radius property [um]
       real(fp), intent(in) :: species_mw_g(:)  ! Species mw_g property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
@@ -155,6 +148,8 @@ contains
       integer :: nDMS, nSO2, nSO4, nMSA, nH2O2  ! species-array indices (by name)
       integer :: klid, rc
       real(fp) :: fMassSO4, fMassSO2, fMassDMS
+      real(fp) :: rainout_eff(3)
+      character(len=512) :: thisLoc, errMsg
 
       ! Local bin indices used INSIDE SU_Wet_Removal to index its DC/fluxout arrays (not species-array indices)
       integer, parameter :: iDMS = 1, iSO2 = 2, iSO4 = 3, iMSA = 4, nbins_su = 4
@@ -163,6 +158,9 @@ contains
       removed_g(:,:) = 0.0_fp
 
       ! Replacement mode -> every species keeps its current value unless overwritten below.
+      ! This echo is also the participation gate: species with is_wetdep = .false. never
+      ! reach an overwrite branch (see route gates), so they return bit-exactly unchanged
+      ! (same contract as the Jacob kernel).
       species_tendencies(:,:) = species_conc(:,:)
 
       ! Identify sulfate group + H2O2 by short name.
@@ -213,8 +211,23 @@ contains
       ! (1) Sulfate group -> SU_Wet_Removal (single call for DMS/SO2/SO4/MSA); requires H2O2.
       ! DMS/MSA are optional: SU_Wet_Removal never removes DMS (DC(nDMS)=0), so DMS need not be carried in
       ! the wetdep list. Requiring it would force is_wetdep on DMS and alter the Jacob scheme's behavior.
+      ! Participation gate: the coupled route runs only when the core sulfur species are enrolled in
+      ! wet deposition; optional partners (DMS/MSA) participate only when enrolled.
+      ! H2O2 is a hard input for the coupled solver (it caps soluble SO2).  When the sulfur pair is
+      ! enrolled but H2O2 is absent, the route is skipped with a loud CC_Warning rather than silently
+      ! producing zero, so a mis-configured mechanism stays observable in the log (this mirrors the
+      ! Jacob kernel's missing-species warnings).  SO2/SO4 echo unchanged in that case.
       ! --------------------------------------------------------------------------------------------------
-      if (nSO2 > 0 .and. nSO4 > 0 .and. nH2O2 > 0) then
+      if (nSO2 > 0 .and. nSO4 > 0 .and. species_is_wetdep(nSO2) .and. species_is_wetdep(nSO4) .and. &
+         nH2O2 <= 0) then
+         thisLoc = 'WetDepScheme_GOCART_Mod.compute_gocart>su_wet_removal'
+         errMsg = 'H2O2 is not a chemical species in the model. GOCART sulfate wet removal is skipped ' // &
+            'for SO2/SO4 this step; species echoed unchanged (no silent zero).'
+         rc = CC_SUCCESS
+         CALL CC_Warning(errMsg, rc, thisLoc)
+      end if
+      if (nSO2 > 0 .and. nSO4 > 0 .and. nH2O2 > 0 .and. &
+         species_is_wetdep(nSO2) .and. species_is_wetdep(nSO4)) then
          fMassSO2 = species_mw_g(nSO2)
          fMassSO4 = species_mw_g(nSO4)
          if (nDMS > 0) then
@@ -224,7 +237,7 @@ contains
          end if
 
          ! Convert to GOCART units (kg/kg mass mixing ratio), top-first.
-         if (nDMS > 0) then
+         if (nDMS > 0 .and. species_is_wetdep(nDMS)) then
             dms(1,1,:) = species_conc(num_layers:1:-1, nDMS) * 1.0e-6_fp * fMassDMS / AIRMW  ! ppm -> kg/kg
          else
             dms(1,1,:) = 0.0_fp
@@ -237,7 +250,7 @@ contains
 
          dms0 = dms; so20 = so2; so40 = so4  ! keep pre-removal copies for diagnostics
 
-         if (nMSA > 0) then
+         if (nMSA > 0 .and. species_is_wetdep(nMSA)) then
             allocate(msa(1,1,num_layers), msa0(1,1,num_layers))
             msa(1,1,:) = species_conc(num_layers:1:-1, nMSA) * 1.0e-9_fp  ! ug/kg -> kg/kg
             msa0 = msa
@@ -255,11 +268,11 @@ contains
          species_tendencies(:, nSO4) = so4(1,1,num_layers:1:-1) * 1.0e9_fp                     ! kg/kg -> ug/kg
          removed_g(:, nSO2) = so20(1,1,:) - so2(1,1,:)
          removed_g(:, nSO4) = so40(1,1,:) - so4(1,1,:)
-         if (nDMS > 0) then
+         if (nDMS > 0 .and. species_is_wetdep(nDMS)) then
             species_tendencies(:, nDMS) = dms(1,1,num_layers:1:-1) * 1.0e6_fp * AIRMW / fMassDMS  ! kg/kg -> ppm
             removed_g(:, nDMS) = dms0(1,1,:) - dms(1,1,:)
          end if
-         if (nMSA > 0) then
+         if (nMSA > 0 .and. species_is_wetdep(nMSA)) then
             species_tendencies(:, nMSA) = msa(1,1,num_layers:1:-1) * 1.0e9_fp  ! kg/kg -> ug/kg
             removed_g(:, nMSA) = msa0(1,1,:) - msa(1,1,:)
          end if
@@ -268,17 +281,20 @@ contains
 
       ! --------------------------------------------------------------------------------------------------
       ! (2) All other aerosol species -> WetRemovalUFS (one call each). Gases (incl. H2O2) are skipped.
+      ! Participation gate: species not enrolled in wet deposition keep their echoed input values.
       ! --------------------------------------------------------------------------------------------------
       do species_idx = 1, num_species
          if (species_idx == nSO2 .or. species_idx == nSO4 .or. species_idx == nDMS .or. &
             species_idx == nMSA .or. species_idx == nH2O2) cycle
          if (.not. species_is_aerosol(species_idx)) cycle  ! WetRemovalUFS supports aerosols (and NH3) only
+         if (.not. species_is_wetdep(species_idx)) cycle   ! participation gate (is_wetdep flag)
 
          aerosol(1,1,:) = species_conc(num_layers:1:-1, species_idx) * 1.0e-9_fp  ! ug/kg -> kg/kg
          aerosol0 = aerosol
+         rainout_eff = species_wd_rainouteff(species_idx, :)
 
          call WetRemovalUFS(num_layers, klid, 1, tstep, trim(species_short_name(species_idx)), .true., g0, &
-            species_radius(species_idx), species_wd_rainouteff(species_idx, :), &
+            species_radius(species_idx), rainout_eff, &
             params%washout_tuning, params%radius_threshold, aerosol, &
             GOCART_ple, GOCART_tmpu, GOCART_rhoa, GOCART_pfllsan, GOCART_pfilsan, ufs_flux, rc)
 
