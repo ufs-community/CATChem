@@ -28,7 +28,7 @@ jobs:
 
       - name: Cache Kokkos
         id: cache-kokkos
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/kokkos-install
           key: kokkos-${{ env.KOKKOS_VERSION }}-ubuntu-24.04-gcc-${{ matrix.gcc-version }}
